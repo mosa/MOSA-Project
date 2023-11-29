@@ -4,10 +4,10 @@ namespace Mosa.Runtime;
 
 public static class StartUp
 {
-	public static void Initialize()
+	public static void Initialize(Pointer stackFrame)
 	{
 		BootOptions();
-		PlatformInitialization();
+		InitializePlatform(stackFrame);
 		InitializeAssembly();
 		InitializeRuntimeMetadata();
 		KernelEntryPoint();
@@ -17,7 +17,7 @@ public static class StartUp
 	public static void BootOptions()
 	{ }
 
-	public static void PlatformInitialization()
+	public static void InitializePlatform(Pointer stackFrame)
 	{ }
 
 	public static void InitializeAssembly()

@@ -16,7 +16,9 @@ public static class Source
 		if (sourceLabel == null)
 			return null;
 
-		var sourceInfo = debugSource.GetSourcePreviousClosest(method.ID, sourceLabel.Label);
+		var label = sourceLabel.Label != 0x10000 ? sourceLabel.Label : 0;
+
+		var sourceInfo = debugSource.GetSourcePreviousClosest(method.ID, label);
 
 		if (sourceInfo == null)
 			return null;

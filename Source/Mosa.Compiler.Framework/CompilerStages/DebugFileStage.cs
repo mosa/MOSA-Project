@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Reflection.Metadata;
+
 namespace Mosa.Compiler.Framework.CompilerStages;
 
 /// <summary>
@@ -169,6 +171,23 @@ public sealed class DebugFileStage : BaseCompilerStage
 				var index = 0;
 
 				var methodData = Compiler.GetMethodData(method);
+
+				if (method.HasThis)
+				{
+					writer.WriteLine(
+						"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
+						method.ID,
+						index,
+						methodData == null || methodData.ParameterOffsets == null ? 0 : methodData.ParameterOffsets[index],
+						"this",
+						"this",
+						0,
+						0,
+						methodData == null || methodData.ParameterSizes == null ? 0 : methodData.ParameterSizes[index]
+					);
+
+					index++;
+				}
 
 				foreach (var parameter in method.Signature.Parameters)
 				{

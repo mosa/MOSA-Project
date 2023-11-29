@@ -93,22 +93,22 @@ public static unsafe class Native
 	public static extern float Roundss2Positive(float destination);
 
 	//[DllImport("Mosa.Compiler.x64.Intrinsic::Popcnt32")]
-	//public static extern uint Popcnt32(uint esp);
+	//public static extern uint Popcnt32(uint rsp);
 
 	//[DllImport("Mosa.Compiler.x64.Intrinsic::Popcnt64")]
-	//public static extern uint Popcnt64(uint esp);
+	//public static extern uint Popcnt64(uint rsp);
 
 	//[DllImport("Mosa.Compiler.x64.Intrinsic::Lzcnt32")]
-	//public static extern uint Lzcnt32(uint esp);
+	//public static extern uint Lzcnt32(uint rsp);
 
 	//[DllImport("Mosa.Compiler.x64.Intrinsic::Lzcnt64")]
-	//public static extern uint Lzcnt64(uint esp);
+	//public static extern uint Lzcnt64(uint rsp);
 
 	//[DllImport("Mosa.Compiler.x64.Intrinsic::Tzcnt32")]
-	//public static extern uint Tzcnt32(uint esp);
+	//public static extern uint Tzcnt32(uint rsp);
 
 	//[DllImport("Mosa.Compiler.x64.Intrinsic::Tzcnt64")]
-	//public static extern uint Tzcnt64(uint esp);
+	//public static extern uint Tzcnt64(uint rsp);
 
 	#endregion Intrinsic Instructions
 
@@ -198,23 +198,17 @@ public static unsafe class Native
 	[DllImport("Mosa.Compiler.x64.Intrinsic::GetIDTJumpLocation")]
 	public static extern long GetIDTJumpLocation(uint irq);
 
-	[DllImport("Mosa.Compiler.x64.Intrinsic::GetMultibootRAX")]
-	public static extern ulong GetMultibootRAX();
-
-	[DllImport("Mosa.Compiler.x64.Intrinsic::GetMultibootRBX")]
-	public static extern ulong GetMultibootRBX();
-
 	[DllImport("Mosa.Compiler.x64.Intrinsic::FrameJump")]
-	public static extern void FrameJump(Pointer eip, Pointer esp, Pointer ebp, int exceptionRegister);
+	public static extern void FrameJump(Pointer rip, Pointer rsp, Pointer rbp, int exceptionRegister);
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::FrameCall")]
-	public static extern void FrameCall(ulong eip);
+	public static extern void FrameCall(ulong rip);
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::FrameCallRetU8")]
-	public static extern ulong FrameCallRetU8(ulong eip);
+	public static extern ulong FrameCallRetU8(ulong rip);
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::FrameCallRetR8")]
-	public static extern ulong FrameCallRetR8(ulong eip);
+	public static extern ulong FrameCallRetR8(ulong rip);
 
 	[DllImport("Mosa.Compiler.x64.Intrinsic::InterruptReturn")]
 	public static extern void InterruptReturn(ulong esp);

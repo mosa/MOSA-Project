@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Kernel.BareMetal.Intel;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 

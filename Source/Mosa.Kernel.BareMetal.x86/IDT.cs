@@ -4,6 +4,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Mosa.Kernel.BareMetal.BootMemory;
+using Mosa.Kernel.BareMetal.Intel;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;

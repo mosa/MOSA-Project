@@ -164,7 +164,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Utility.Configuration"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Tool.Launcher.Console", "Mosa.Tool.Launcher.Console\Mosa.Tool.Launcher.Console.csproj", "{1E16FC87-77BD-4065-A231-9E533D68C7D4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BareMetal", "BareMetal", "{3A538FDC-0226-4971-A3C0-31570CDA340D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BareMetal.Demos", "BareMetal.Demos", "{3A538FDC-0226-4971-A3C0-31570CDA340D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{A4028807-1B21-4D14-9CE3-5FD1AAD9EDD7}"
 	ProjectSection(SolutionItems) = preProject

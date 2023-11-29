@@ -33,7 +33,7 @@ public abstract class ARM32Instruction : BasePlatformInstruction
 	/// </value>
 	public override string FamilyName => "ARM32";
 
-	public static byte GetConditionCode(ConditionCode condition)
+	protected static byte GetConditionCode(ConditionCode condition)
 	{
 		return condition switch
 		{
@@ -61,5 +61,10 @@ public abstract class ARM32Instruction : BasePlatformInstruction
 			ConditionCode.Undefined => 0b1110,
 			_ => throw new NotSupportedException()
 		};
+	}
+
+	protected static uint ToPower2(uint r)
+	{
+		return (uint)(1 << (int)r);
 	}
 }

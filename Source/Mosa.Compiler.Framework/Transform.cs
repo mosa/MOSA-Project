@@ -520,7 +520,7 @@ public sealed class Transform
 
 	public MosaMethod GetMethod(string fullName, string methodName)
 	{
-		var type = TypeSystem.GetTypeByName(fullName);
+		var type = TypeSystem.GetType(fullName);
 
 		if (type == null)
 			return null;

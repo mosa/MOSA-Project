@@ -4,7 +4,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.MultibootSpecification;
 
-public class MultibootV2MemoryMapEntry
+public struct MultibootV2MemoryMapEntry
 {
 	private readonly Pointer Pointer;
 

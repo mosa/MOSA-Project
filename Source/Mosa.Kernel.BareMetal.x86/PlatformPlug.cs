@@ -17,13 +17,22 @@ public static class PlatformPlug
 	public static void ForceInclude()
 	{ }
 
-	[Plug("Mosa.Kernel.BareMetal.Platform::Initialization")]
-	public static void Initialization()
+	[Plug("Mosa.Kernel.BareMetal.Platform::Setup")]
+	public static void Setup(Pointer stackFrame)
 	{
-		var eax = Native.GetMultibootEAX();
-		var ebx = Native.GetMultibootEBX();
+		Debug.WriteLine("x86.PlatformPlug:Setup()");
 
-		Multiboot.Setup(new Pointer(ebx), eax);
+		var eax = stackFrame.Load32(-4);
+		var ebx = stackFrame.LoadPointer(-16);
+
+		Multiboot.Setup(ebx, eax);
+		Debug.WriteLine("x86.PlatformPlug:Setup() [Exit]");
+	}
+
+	[Plug("Mosa.Kernel.BareMetal.Platform::Initialize")]
+	public static void Initialize()
+	{
+		Debug.WriteLine("x86.PlatformPlug:Initialize()");
 
 		SSE.Setup();
 		PIC.Setup();
@@ -33,6 +42,8 @@ public static class PlatformPlug
 		{
 			SerialController.Setup(SerialController.COM1);
 		}
+
+		Debug.WriteLine("x86.PlatformPlug:Initialize() [Exit]");
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
@@ -50,7 +61,9 @@ public static class PlatformPlug
 	public static void DebugWrite(byte c)
 	{
 		if (BootSettings.EnableDebugOutput)
+		{
 			SerialController.Write(SerialController.COM1, c);
+		}
 	}
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::GetTime")]

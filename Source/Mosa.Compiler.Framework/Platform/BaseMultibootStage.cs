@@ -21,13 +21,11 @@ namespace Mosa.Compiler.Framework.Platform;
 /// </remarks>
 public abstract class BaseMultibootStage : BaseCompilerStage
 {
-	private const string MultibootHeaderSymbolName = "<$>mosa-multiboot-header";
+	#region Constants
 
-	public const string MultibootEAX = "<$>mosa-multiboot-eax";
-	public const string MultibootEBX = "<$>mosa-multiboot-ebx";
 	public const string MultibootInitialStack = "<$>mosa-multiboot-initial-stack";
 
-	#region Constants
+	private const string MultibootHeaderSymbolName = "<$>mosa-multiboot-header";
 
 	/// <summary>
 	/// This is the size of the initial kernel stack. (8KiB)
@@ -113,8 +111,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 	{
 		multibootHeader = Linker.DefineSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
 
-		Linker.DefineSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
-		Linker.DefineSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 		Linker.DefineSymbol(MultibootInitialStack, SectionKind.BSS, Architecture.NativeAlignment, StackSize);
 
 		multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
@@ -127,8 +123,7 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 		MethodScanner.MethodInvoked(multibootMethod, multibootMethod);
 
-		var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime.StartUp");
-		var initializeMethod = startUpType?.FindMethodByName("Initialize");
+		var initializeMethod = TypeSystem.GetMethod("Mosa.Runtime.StartUp", "Initialize");
 
 		Compiler.GetMethodData(initializeMethod).DoNotInline = true;
 
@@ -148,14 +143,19 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 
 		var writer = new BinaryWriter(multibootHeader.Stream, Encoding.ASCII);
 
-		if (!IsV2) throw new CompilerException("Multiboot.Version != v2");
+		if (!IsV2)
+			throw new CompilerException("Multiboot.Version != v2");
 
 		// Header size + entry tag size + (framebuffer size if chosen) + end tag size
 		var headerLength = MultibootV2Constants.HeaderSize + MultibootV2Constants.EntryTagSize + sizeof(uint);
 		if (HasVideo) headerLength += MultibootV2Constants.FramebufferTagSize;
 
 		// Header
-		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		while (writer.BaseStream.Position % 8 != 0)
+		{
+			writer.Write((byte)0);
+		}
+
 		writer.Write(MultibootV2Constants.HeaderMbMagic);
 		writer.Write(MultibootV2Constants.HeaderMbArchitecture);
 		writer.Write(headerLength);
@@ -174,14 +174,22 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 		}
 
 		// Entry tag
-		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		while (writer.BaseStream.Position % 8 != 0)
+		{
+			writer.Write((byte)0);
+		}
+
 		writer.Write(MultibootV2Constants.EntryTag);
 		writer.Write(MultibootV2Constants.RequiredFlag);
 		writer.Write(MultibootV2Constants.EntryTagSize);
 		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, multibootHeader, writer.BaseStream.Position, entryPoint, 0);
 
 		// End tag
-		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		while (writer.BaseStream.Position % 8 != 0)
+		{
+			writer.Write((byte)0);
+		}
+
 		writer.Write((ushort)0);
 		writer.Write((ushort)0);
 	}

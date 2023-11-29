@@ -511,7 +511,7 @@ public abstract class BaseMethodCompilerStage
 
 	protected MosaMethod GetMethod(string fullName, string methodName)
 	{
-		var type = TypeSystem.GetTypeByName(fullName);
+		var type = TypeSystem.GetType(fullName);
 		var method = type?.FindMethodByName(methodName);
 
 		return method;

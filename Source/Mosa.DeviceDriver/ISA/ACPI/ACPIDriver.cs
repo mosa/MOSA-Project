@@ -44,9 +44,45 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 	public override void Initialize()
 	{
 		Device.Name = "ACPI";
+	}
 
-		var rsdp = HAL.GetRSDP();
-		var version2 = HAL.IsACPIVersion2();
+	/// <summary>
+	/// Probes this instance.
+	/// </summary>
+	public override void Probe()
+	{
+		//Device.Status = DeviceStatus.Available;
+		Device.Status = DeviceStatus.Offline;
+		//Setup();
+	}
+
+	/// <summary>
+	/// Starts this hardware device.
+	/// </summary>
+	public override void Start()
+	{
+		SMI_CommandPort.Write8(FADT.AcpiEnable);
+		HAL.Sleep(3000);
+		Device.Status = DeviceStatus.Online;
+	}
+
+	/// <summary>
+	/// Stops this hardware device.
+	/// </summary>
+	public override void Stop()
+	{
+		SMI_CommandPort.Write8(FADT.AcpiDisable);
+		HAL.Sleep(3000);
+		Device.Status = DeviceStatus.Offline;
+	}
+
+	private void Setup()
+	{
+		// TODO: Find the multiboot service
+		// Multiboot.V2.RSDPv1
+
+		var rsdp = Pointer.Zero; // HAL.GetRSDP();
+		var version2 = true; // HAL.IsACPIVersion2();
 
 		if (version2)
 		{
@@ -62,7 +98,8 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 		FADT = new FADT(HAL.GetPhysicalMemory(FindBySignature("FACP"), 0xFFFF).Address);
 		MADT = new MADT(HAL.GetPhysicalMemory(FindBySignature("APIC"), 0xFFFF).Address);
 
-		if (FADT.Pointer.IsNull) return;
+		if (FADT.Pointer.IsNull)
+			return;
 
 		if (!MADT.Pointer.IsNull)
 		{
@@ -74,28 +111,30 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 
 			for (ptr += 0x2C; ptr < ptr2;)
 			{
-				var entry = (MADTEntry*)ptr;
+				var entry = new MADTEntry(ptr);
 
-				switch (entry->Type)
+				switch (entry.Type)
 				{
 					case 0: // Processor Local APIC
-						var plan = (ProcessorLocalAPICEntry*)ptr;
-						if ((plan->Flags & 1) != 0)
-							ProcessorIDs[ProcessorCount++] = plan->ApicID;
+						var plan = new ProcessorLocalAPICEntry(ptr);
+
+						if ((plan.Flags & 1) != 0)
+							ProcessorIDs[ProcessorCount++] = plan.ApicID;
+
 						break;
 
 					case 1: // I/O APIC
-						var ipe = (IOAPICEntry*)ptr;
-						IOApicAddress = ipe->ApicAddress;
+						var ipe = new IOAPICEntry(ptr);
+						IOApicAddress = ipe.ApicAddress;
 						break;
 
 					case 5: // 64-bit LAPIC
-						var llpe = (LongLocalAPICEntry*)ptr;
-						LocalApicAddress = llpe->ApicAddress;
+						var llpe = new LongLocalAPICEntry(ptr);
+						LocalApicAddress = llpe.ApicAddress;
 						break;
 				}
 
-				ptr += entry->Length;
+				ptr += entry.Length;
 			}
 		}
 
@@ -155,34 +194,6 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 				}
 			}
 		}
-	}
-
-	/// <summary>
-	/// Probes this instance.
-	/// </summary>
-	/// <remarks>
-	/// Override for ISA devices, if example
-	/// </remarks>
-	public override void Probe() => Device.Status = DeviceStatus.Available;
-
-	/// <summary>
-	/// Starts this hardware device.
-	/// </summary>
-	public override void Start()
-	{
-		SMI_CommandPort.Write8(FADT.AcpiEnable);
-		HAL.Sleep(3000);
-		Device.Status = DeviceStatus.Online;
-	}
-
-	/// <summary>
-	/// Stops this hardware device.
-	/// </summary>
-	public override void Stop()
-	{
-		SMI_CommandPort.Write8(FADT.AcpiDisable);
-		HAL.Sleep(3000);
-		Device.Status = DeviceStatus.Offline;
 	}
 
 	private Pointer FindBySignature(string signature)

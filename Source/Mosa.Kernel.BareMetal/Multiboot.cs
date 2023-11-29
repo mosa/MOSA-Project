@@ -9,7 +9,7 @@ public static class Multiboot
 {
 	public static MultibootV2 V2 { get; private set; }
 
-	public static Pointer CommandLinePointer => V2.CommandLinePointer;
+	public static Pointer CommandLinePointer => V2.CommandLine;
 
 	public static void Setup(Pointer location, uint magic)
 	{

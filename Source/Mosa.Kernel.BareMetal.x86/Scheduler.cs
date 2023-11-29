@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.CompilerServices;
+using Mosa.Kernel.BareMetal.Intel;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 

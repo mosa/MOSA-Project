@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x64.CompilerStages;
+namespace Mosa.Compiler.ARM32.CompilerStages;
 
 public sealed class MultibootStage : Framework.Platform.BaseMultibootStage
 {
@@ -27,8 +27,11 @@ public sealed class MultibootStage : Framework.Platform.BaseMultibootStage
 		var initializeMethod = TypeSystem.GetMethod("Mosa.Runtime.StartUp", "Initialize");
 		var entryPoint = Operand.CreateLabel(initializeMethod, Architecture.Is32BitPlatform);
 
-		var rbp = transform.PhysicalRegisters.Allocate64(CPURegister.RBP);
-		var rsp = transform.PhysicalRegisters.Allocate64(CPURegister.RSP);
+		var lr = transform.PhysicalRegisters.Allocate64(CPURegister.LR);
+		var sp = transform.PhysicalRegisters.Allocate64(CPURegister.SP);
+
+		var d10 = transform.PhysicalRegisters.Allocate64(CPURegister.d10);
+		var d11 = transform.PhysicalRegisters.Allocate64(CPURegister.d11);
 
 		var stackBottom = Operand.CreateLabel(MultibootInitialStack, Architecture.Is32BitPlatform);
 
@@ -37,19 +40,22 @@ public sealed class MultibootStage : Framework.Platform.BaseMultibootStage
 		var context = new Context(prologueBlock);
 
 		// Set stack location
-		context.AppendInstruction(X64.Mov32, rsp, stackBottom);
+		context.AppendInstruction(ARM32.Movw, sp, stackBottom);
+		context.AppendInstruction(ARM32.Movt, sp, sp, stackBottom);
 
 		// Create stack sentinel
-		context.AppendInstruction(X64.Push64, null, Operand.Constant32_0);
-		context.AppendInstruction(X64.Push64, null, Operand.Constant32_0);
+		context.AppendInstruction(ARM32.Movw, lr, Operand.Constant32_0);
+		context.AppendInstruction(ARM32.Stm, null, sp, Operand.Constant32_0, lr);
+		context.AppendInstruction(ARM32.Stm, null, sp, Operand.Constant32_0, lr);
 
-		// Push registers onto the new stack
-		context.AppendInstruction(X64.Mov32, rbp, rsp);
-		context.AppendInstruction(X64.Pushad);
-		context.AppendInstruction(X64.Push64, null, rbp);
+		//// Push registers onto the new stack
+		context.AppendInstruction(ARM32.Mov, lr, sp);
+		context.AppendInstruction(ARM32.Stm, null, sp, Operand.Constant32_0, Operand.Constant32_FFFF);
+		context.AppendInstruction(ARM32.Stm, null, sp, Operand.Constant32_0, sp);
 
-		context.AppendInstruction(X64.Call, null, entryPoint);
-		context.AppendInstruction(X64.Ret);
+		// Call entry point
+		context.AppendInstruction(ARM32.Bl, null, entryPoint);
+		context.AppendInstruction(ARM32.Pop, null, Operand.Constant32_0);
 
 		Compiler.CompileMethod(multibootMethod);
 	}

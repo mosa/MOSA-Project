@@ -15,14 +15,20 @@ public class BootInfo : IApp
 
 	public void Execute()
 	{
-		Console.WriteLine("Command line           : " + NullTermString(Multiboot.V2.CommandLinePointer));
-		Console.WriteLine("Bootloader name        : " + NullTermString(Multiboot.V2.BootloaderNamePointer));
+		Console.WriteLine("Command line           : " + NullTermString(Multiboot.V2.CommandLine));
+		Console.WriteLine("Bootloader name        : " + NullTermString(Multiboot.V2.BootloaderName));
 		Console.WriteLine("Memory lower           : " + Multiboot.V2.MemoryLower / 1024 + " MiB");
 		Console.WriteLine("Memory upper           : " + Multiboot.V2.MemoryUpper / 1024 + " MiB");
 		Console.WriteLine("Memory map entries     : " + Multiboot.V2.Entries);
-		Console.WriteLine("Framebuffer available  : " + Multiboot.V2.FramebufferAvailable);
-		if (Multiboot.V2.FramebufferAvailable) Console.WriteLine("Framebuffer resolution : " + Multiboot.V2.Framebuffer.Width + "x" + Multiboot.V2.Framebuffer.Height);
-		Console.WriteLine("ACPI version           : " + (Multiboot.V2.ACPIv2 ? "2" : "1"));
+		Console.WriteLine("Framebuffer available  : " + !Multiboot.V2.FrameBuffer.IsNull);
+
+		if (!Multiboot.V2.FrameBuffer.IsNull)
+		{
+			Console.WriteLine("Framebuffer resolution : " + Multiboot.V2.FrameBufferWidth + "x" + Multiboot.V2.FrameBufferHeight);
+		}
+
+		Console.WriteLine("RSDPv1 version           : " + !Multiboot.V2.RSDPv1.IsNull);
+		Console.WriteLine("RSDPv2 version           : " + !Multiboot.V2.RSDPv2.IsNull);
 	}
 
 	private readonly StringBuilder Builder = new();

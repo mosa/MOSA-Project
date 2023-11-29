@@ -19,7 +19,7 @@ public class ZeroString
 	{
 		get
 		{
-			for (int i = 0; ; i++)
+			for (var i = 0; ; i++)
 			{
 				if (Address.Load8(i) == 0)
 					return i + 1;

@@ -193,12 +193,6 @@ public static unsafe class Native
 	[DllImport("Mosa.Compiler.x86.Intrinsic::GetIDTJumpLocation")]
 	public static extern uint GetIDTJumpLocation(uint irq);
 
-	[DllImport("Mosa.Compiler.x86.Intrinsic::GetMultibootEAX")]
-	public static extern uint GetMultibootEAX();
-
-	[DllImport("Mosa.Compiler.x86.Intrinsic::GetMultibootEBX")]
-	public static extern uint GetMultibootEBX();
-
 	[DllImport("Mosa.Compiler.x86.Intrinsic::FrameJump")]
 	public static extern void FrameJump(Pointer eip, Pointer esp, Pointer ebp, int exceptionRegister);
 

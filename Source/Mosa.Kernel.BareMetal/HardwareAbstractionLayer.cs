@@ -10,9 +10,6 @@ namespace Mosa.Kernel.BareMetal;
 /// </summary>
 public class HardwareAbstractionLayer : BaseHardwareAbstraction
 {
-	private Pointer RSDP;
-	private bool ACPIv2;
-
 	public override uint PageSize => Page.Size;
 
 	public override PlatformArchitecture PlatformArchitecture => Platform.GetPlatformArchitecture();
@@ -46,15 +43,6 @@ public class HardwareAbstractionLayer : BaseHardwareAbstraction
 
 	public override void Yield() => Platform.Scheduler.Yield();
 
-	public override void SetRSDP(Pointer pointer, bool version2)
-	{
-		RSDP = pointer;
-		ACPIv2 = version2;
-	}
-
-	public override Pointer GetRSDP() => RSDP;
-
-	public override bool IsACPIVersion2() => ACPIv2;
 
 	public override byte In8(ushort address) => Platform.IO.In8(address);
 

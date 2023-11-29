@@ -333,6 +333,38 @@ public sealed class Node
 	}
 
 	/// <summary>
+	/// Gets or sets a value indicating whether this intruction has a prefix add.
+	/// </summary>
+	public bool IsPrefixAdd
+	{
+		get
+		{
+			return Options.HasFlag(InstructionOption.PrefixAdd
+				);
+		}
+		set
+		{
+			Options |= InstructionOption.PrefixAdd;
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets a value indicating whether this intruction has causes a writeback.
+	/// </summary>
+	public bool IsWriteback
+	{
+		get
+		{
+			return Options.HasFlag(InstructionOption.Writeback
+				);
+		}
+		set
+		{
+			Options |= InstructionOption.Writeback;
+		}
+	}
+
+	/// <summary>
 	/// Gets or sets a value indicating whether this intruction has an up direction.
 	/// </summary>
 	public bool IsDownDirection

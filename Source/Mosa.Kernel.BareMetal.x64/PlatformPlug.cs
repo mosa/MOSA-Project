@@ -18,12 +18,12 @@ public static class PlatformPlug
 	{ }
 
 	[Plug("Mosa.Kernel.BareMetal.Platform::Initialization")]
-	public static void Initialization()
+	public static void Initialization(Pointer stackFrame)
 	{
-		var rax = Native.GetMultibootRAX();
-		var rbx = Native.GetMultibootRBX();
+		var rax = stackFrame.Load32(-8);
+		var rbx = stackFrame.LoadPointer(-32);
 
-		Multiboot.Setup(new Pointer(rbx), (uint)rax);
+		Multiboot.Setup(rbx, rax);
 
 		SSE.Setup();
 		PIC.Setup();

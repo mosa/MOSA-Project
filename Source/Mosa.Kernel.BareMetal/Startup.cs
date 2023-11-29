@@ -13,14 +13,17 @@ using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.BareMetal;
 
-public static class Boot
+public static class Startup
 {
-	[Plug("Mosa.Runtime.StartUp::PlatformInitialization")]
-	public static void PlatformInitialization()
+	[Plug("Mosa.Runtime.StartUp::InitializePlatform")]
+	public static void Initialize(Pointer stackFrame)
 	{
 		Platform.Interrupt.Disable();
+		Platform.Setup(stackFrame);
+		BootOptions.Setup();
+		Debug.Setup();
 
-		Debug.WriteLine("[Platform Initialization]");
+		Debug.WriteLine("Startup.Initialize()");
 
 		BootStatus.Initalize();
 
@@ -33,7 +36,6 @@ public static class Boot
 		Console.WriteLine();
 
 		Console.WriteLine("Initializing kernel...");
-		Debug.Setup(true);
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Initial garbage collection...");
@@ -42,26 +44,22 @@ public static class Boot
 		Console.WriteLine(" [Completed]");
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> Boot options...");
-		BootOptions.Setup();
+		Console.Write("> Platform initialization...");
+		Platform.Initialize();
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
-		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> Platform initialization...");
-		Platform.Initialization();
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.WriteLine(" [Completed]");
+		Debug.WriteLine("Startup.Initialize() [Exit]");
 	}
 
 	[Plug("Mosa.Runtime.StartUp::KernelEntryPoint")]
 	public static void EntryPoint()
 	{
-		Debug.WriteLine("[Kernel Entry Point]");
+		Debug.WriteLine("Startup.EntryPoint()");
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Enabling debug logging...");
-		Debug.Setup(true);
+		Debug.Setup();
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
@@ -130,12 +128,6 @@ public static class Boot
 		var hardware = new HardwareAbstractionLayer();
 		var deviceService = new DeviceService();
 		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.WriteLine(" [Completed]");
-
-		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> Setting ACPI RSDP address...");
-		HAL.SetRSDP(Multiboot.V2.RSDP, Multiboot.V2.ACPIv2);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
@@ -246,12 +238,16 @@ public static class Boot
 		Platform.Interrupt.Enable();
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
+
+		Debug.WriteLine("Startup.EntryPoint() [Exit]");
 	}
 
 	[Plug("Mosa.Runtime.GC::AllocateMemory")]
 	private static Pointer AllocateMemory(uint size)
 	{
-		return BootStatus.IsGCEnabled ? GCMemory.AllocateMemory(size) : InitialGCMemory.AllocateMemory(size);
+		return BootStatus.IsGCEnabled
+			? GCMemory.AllocateMemory(size)
+			: InitialGCMemory.AllocateMemory(size);
 	}
 
 	private static void ProcessInterrupt(uint interrupt, uint errorCode)

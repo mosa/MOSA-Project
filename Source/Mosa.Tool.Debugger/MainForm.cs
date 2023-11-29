@@ -82,6 +82,11 @@ public partial class MainForm : Form
 	{
 		InitializeComponent();
 
+		MosaSettings.LoadAppLocations();
+		MosaSettings.SetDefaultSettings();
+
+		SetDefaultSettings();
+
 		outputView = new OutputView(this);
 		registersView = new RegisterView(this);
 		displayView = new DisplayView(this);
@@ -100,11 +105,6 @@ public partial class MainForm : Form
 		sourceView = new SourceView(this);
 		sourceDataView = new SourceDataView(this);  // only useful when debugging this tool
 		launchView = new LaunchView(this);
-
-		MosaSettings.LoadAppLocations();
-		MosaSettings.SetDefaultSettings();
-
-		SetDefaultSettings();
 
 		AppDomain.CurrentDomain.DomainUnload += (s, e) => { TerminateAll(); };
 		AppDomain.CurrentDomain.ProcessExit += (s, e) => { TerminateAll(); };
@@ -636,7 +636,11 @@ public partial class MainForm : Form
 	{
 		TerminateAll();
 
+		MosaSettings.ResolveDefaults();
 		SetRequiredSettings();
+		MosaSettings.ResolveFileAndPathSettings();
+		MosaSettings.AddStandardPlugs();
+		MosaSettings.ExpandSearchPaths();
 
 		var compilerHooks = new CompilerHooks
 		{
