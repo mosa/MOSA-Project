@@ -68,15 +68,15 @@ public static class BootMemoryMap
 	{
 		Debug.WriteLine("BootMemoryMap::ImportMultibootV2MemoryMap()");
 
-		if (Multiboot.V2.EntrySize == 0)
+		if (Multiboot.V2.MemoryMapEntrySize == 0)
 			return;
 
 		AvailableMemory = new Pointer(Multiboot.V2.MemoryUpper * 1024);
 
 		Debug.WriteLine(" > Available Memory: ", AvailableMemory.ToInt64());
 
-		var entry = Multiboot.V2.FirstEntry;
-		for (var i = 0; i < Multiboot.V2.Entries; i++)
+		var entry = Multiboot.V2.MemoryMapStart;
+		for (var i = 0; i < Multiboot.V2.MemoryMapEntries; i++)
 		{
 			SetMemoryMap(entry.BaseAddress, entry.Length, entry.Type == 1 ? BootMemoryType.Available : BootMemoryType.Reserved);
 			entry = entry.GetNext();

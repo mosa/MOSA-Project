@@ -19,7 +19,7 @@ public class BootInfo : IApp
 		Console.WriteLine("Bootloader name        : " + NullTermString(Multiboot.V2.BootloaderName));
 		Console.WriteLine("Memory lower           : " + Multiboot.V2.MemoryLower / 1024 + " MiB");
 		Console.WriteLine("Memory upper           : " + Multiboot.V2.MemoryUpper / 1024 + " MiB");
-		Console.WriteLine("Memory map entries     : " + Multiboot.V2.Entries);
+		Console.WriteLine("Memory map entries     : " + Multiboot.V2.MemoryMapEntries);
 		Console.WriteLine("Framebuffer available  : " + !Multiboot.V2.FrameBuffer.IsNull);
 
 		if (!Multiboot.V2.FrameBuffer.IsNull)

@@ -19,5 +19,5 @@ public struct MultibootV2MemoryMapEntry
 		Pointer = entry;
 	}
 
-	public MultibootV2MemoryMapEntry GetNext() => new(Pointer + Multiboot.V2.EntrySize);
+	public MultibootV2MemoryMapEntry GetNext() => new(Pointer + Multiboot.V2.MemoryMapEntrySize);
 }

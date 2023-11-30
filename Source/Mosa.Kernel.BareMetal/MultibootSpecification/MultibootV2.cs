@@ -20,24 +20,24 @@ public struct MultibootV2
 
 	public uint MemoryUpper => GetEntryValue32(4, 12);
 
-	public uint EntrySize => GetEntryValue32(6, 8);
+	private uint MemoryMapSize => GetEntryValue32(6, 4);
 
-	public uint EntryVersion => GetEntryValue32(6, 12);
+	public uint MemoryMapEntrySize => GetEntryValue32(6, 8);
 
-	public uint Entries
+	public uint MemoryMapEntryVersion => GetEntryValue32(6, 12);
+
+	public MultibootV2MemoryMapEntry MemoryMapStart => new(GetStructureEntryPointer(6, 16));
+
+	public uint MemoryMapEntries
 	{
 		get
 		{
-			var size = GetEntryValue32(6, 4);
-
-			if (size == 0)
+			if (MemoryMapEntrySize == 0)
 				return 0;
 
-			return (size - 16) / EntrySize;
+			return (MemoryMapSize - 16) / MemoryMapEntrySize;
 		}
 	}
-
-	public MultibootV2MemoryMapEntry FirstEntry => new(GetEntryValuePointer(6, 16));
 
 	public Pointer FrameBuffer => GetEntryValuePointer(8, 8);
 
@@ -60,7 +60,7 @@ public struct MultibootV2
 		Pointer = entry;
 	}
 
-	private Pointer GetStructurePointer(int type)
+	private readonly Pointer GetStructurePointer(int type)
 	{
 		for (var at = Pointer + 8; ;)
 		{
@@ -78,7 +78,7 @@ public struct MultibootV2
 		}
 	}
 
-	private Pointer GetStructureEntryPointer(int type, int offset)
+	private readonly Pointer GetStructureEntryPointer(int type, int offset)
 	{
 		var entry = GetStructurePointer(type);
 
@@ -88,7 +88,7 @@ public struct MultibootV2
 		return entry + offset;
 	}
 
-	private uint GetEntryValue32(int type, int offset)
+	private readonly uint GetEntryValue32(int type, int offset)
 	{
 		var entry = GetStructureEntryPointer(type, offset);
 
@@ -98,7 +98,7 @@ public struct MultibootV2
 		return entry.Load32();
 	}
 
-	private byte GetEntryValue8(int type, int offset)
+	private readonly byte GetEntryValue8(int type, int offset)
 	{
 		var entry = GetStructureEntryPointer(type, offset);
 
@@ -108,13 +108,13 @@ public struct MultibootV2
 		return entry.Load8();
 	}
 
-	private Pointer GetEntryValuePointer(int type, int offset)
+	private readonly Pointer GetEntryValuePointer(int type, int offset)
 	{
 		var entry = GetStructureEntryPointer(type, offset);
 
 		if (entry.IsNull)
 			return Pointer.Zero;
 
-		return entry.LoadPointer();
+		return entry;
 	}
 }

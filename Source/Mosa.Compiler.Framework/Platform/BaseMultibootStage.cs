@@ -23,14 +23,7 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 {
 	#region Constants
 
-	public const string MultibootInitialStack = "<$>mosa-multiboot-initial-stack";
-
 	private const string MultibootHeaderSymbolName = "<$>mosa-multiboot-header";
-
-	/// <summary>
-	/// This is the size of the initial kernel stack. (8KiB)
-	/// </summary>
-	protected const uint StackSize = 0x2000;
 
 	private struct MultibootV2Constants
 	{
@@ -110,8 +103,6 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 	protected override void Setup()
 	{
 		multibootHeader = Linker.DefineSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
-
-		Linker.DefineSymbol(MultibootInitialStack, SectionKind.BSS, Architecture.NativeAlignment, StackSize);
 
 		multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 		var methodData = Compiler.GetMethodData(multibootMethod);
