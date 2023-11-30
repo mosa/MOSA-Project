@@ -17,7 +17,7 @@ public static class PlatformRegistry
 				if (!type.IsAbstract && typeof(BaseArchitecture).IsAssignableFrom(type))
 				{
 					var platform = (BaseArchitecture)Activator.CreateInstance(type);
-					Registry.Add(platform.PlatformName, platform);
+					Add(platform);
 				}
 			}
 		}
@@ -25,12 +25,12 @@ public static class PlatformRegistry
 
 	public static void Add(BaseArchitecture platform)
 	{
-		Registry.Add(platform.PlatformName, platform);
+		Registry.Add(platform.PlatformName.ToLowerInvariant(), platform);
 	}
 
 	public static BaseArchitecture GetPlatform(string platformName)
 	{
-		Registry.TryGetValue(platformName, out BaseArchitecture platform);
+		Registry.TryGetValue(platformName.ToLowerInvariant(), out BaseArchitecture platform);
 
 		return platform;
 	}

@@ -13,6 +13,7 @@ Compiler Settings
 
     Compiler.Platform,"Platform x86, x64, ARM32, ARM64"
     Compiler.BaseAddress,Base address of the compiled application
+	Compiler.InitialStackAddress,Initial address of the stack
     Compiler.TraceLevel,Trace level for debugging
     Compiler.MethodScanner,"If true, enable the experimental method scanner"
     Compiler.Multithreading,"If true, enables multithreading during compiling process"
