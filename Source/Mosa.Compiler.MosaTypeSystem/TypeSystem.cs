@@ -11,25 +11,30 @@ namespace Mosa.Compiler.MosaTypeSystem;
 public class TypeSystem
 {
 	[NotNull]
-	public BuiltInTypes? BuiltIn { get; private set; }
+	public BuiltInTypes BuiltIn { get; private set; }
 
-	private MosaModule? corLib;
+	private MosaModule corLib;
 
 	[NotNull]
-	public MosaModule? CorLib
+	public MosaModule CorLib
 	{
 		get
 		{
 			if (corLib == null)
+			{
 				throw new AssemblyLoadException();
+			}
 
 			return corLib;
 		}
 		set
 		{
 			corLib = value;
+
 			if (corLib == null)
+			{
 				throw new AssemblyLoadException();
+			}
 
 			BuiltIn = new BuiltInTypes(TypeResolver, corLib);
 		}
@@ -42,8 +47,11 @@ public class TypeSystem
 			foreach (var module in Modules)
 			{
 				var types = module?.Types.Values;
+
 				if (types == null)
+				{
 					throw new InvalidOperationCompilerException("Types list is null");
+				}
 
 				foreach (var type in types)
 				{
@@ -56,15 +64,15 @@ public class TypeSystem
 	public IList<MosaModule> Modules { get; }
 
 	[NotNull]
-	public MosaModule? LinkerModule { get; private set; }
+	public MosaModule LinkerModule { get; private set; }
 
 	[NotNull]
-	public MosaType? DefaultLinkerType { get; private set; }
+	public MosaType DefaultLinkerType { get; private set; }
 
-	public MosaMethod? EntryPoint { get; internal set; }
+	public MosaMethod EntryPoint { get; internal set; }
 
 	[NotNull]
-	public ITypeSystemController? Controller { get; private set; }
+	public ITypeSystemController Controller { get; private set; }
 
 	public ITypeResolver TypeResolver { get; }
 
@@ -117,20 +125,30 @@ public class TypeSystem
 	}
 
 	/// <summary>
-	/// Get a type by fullName
+	/// Get a type by name
 	/// </summary>
-	/// <param name="fullName">fullName like namespace.typeName</param>
-	public MosaType? GetTypeByName(string fullName)
+	/// <param name="typeName">fullName like namespace.typeName</param>
+	public MosaType GetType(string typeName)
 	{
-		return string.IsNullOrEmpty(fullName) ? null : TypeResolver.GetTypeByName(Modules, fullName);
+		return string.IsNullOrEmpty(typeName) ? null : TypeResolver.GetTypeByName(Modules, typeName);
 	}
 
-	public MosaType? GetTypeByName(MosaModule module, string fullName)
+	public MosaMethod GetMethod(string typeName, string methodName)
+	{
+		var type = GetType(typeName);
+
+		if (type == null)
+			return null;
+
+		return type.FindMethodByName(methodName);
+	}
+
+	public MosaType GetType(MosaModule module, string fullName)
 	{
 		return string.IsNullOrEmpty(fullName) ? null : TypeResolver.GetTypeByName(module, fullName);
 	}
 
-	public MosaModule? GetModuleByAssembly(string name)
+	public MosaModule GetModuleByAssembly(string name)
 	{
 		foreach (var module in Modules)
 		{
@@ -141,7 +159,7 @@ public class TypeSystem
 		return null;
 	}
 
-	public string? LookupUserString(MosaModule module, uint token)
+	public string LookupUserString(MosaModule module, uint token)
 	{
 		return metadata.LookupUserString(module, token);
 	}

@@ -5,7 +5,7 @@ using Mosa.Runtime;
 namespace Mosa.Kernel.BareMetal;
 
 /// <summary>
-/// Log
+/// Debug
 /// </summary>
 public static class Debug
 {
@@ -15,7 +15,7 @@ public static class Debug
 
 	#region Public API
 
-	public static void Setup(bool enable = false)
+	public static void Setup()
 	{
 		IsEnabled = BootOptions.Contains("serialdebug");
 

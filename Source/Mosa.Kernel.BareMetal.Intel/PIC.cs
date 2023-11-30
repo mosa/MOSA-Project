@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Kernel.BareMetal;
+namespace Mosa.Kernel.BareMetal.Intel;
 
 /// <summary>
 /// Programmable Interrupt Controller (PIC)
@@ -36,7 +36,7 @@ public static class PIC
 
 	public static void Setup()
 	{
-		//Debug.WriteLine("PIC::Setup()");
+		Debug.WriteLine("Intel.PIC::Setup()");
 
 		byte masterMask = Platform.IO.In8(PICConstants.PIC1_Data);
 		byte slaveMask = Platform.IO.In8(PICConstants.PIC2_Data);
@@ -71,7 +71,7 @@ public static class PIC
 		// OCW1
 		Platform.IO.Out8(PICConstants.PIC2_Data, slaveMask);
 
-		//Debug.WriteLine("PIC::Complete()");
+		Debug.WriteLine("Intel.PIC::Setup() [Exit]");
 	}
 
 	/// <summary>

@@ -112,9 +112,9 @@ public partial class MethodParametersView : DebugDockContent
 
 		foreach (var parameter in parameters)
 		{
-			var type = DebugSource.GetTypeInfo(parameter.ParameterTypeID);
+			var type = parameter.ParameterTypeID > 0 ? DebugSource.GetTypeInfo(parameter.ParameterTypeID) : null;
 
-			uint size = (parameter.Size == NativeIntegerSize || parameter.Size == NativeIntegerSize * 2) ? parameter.Size : 0;
+			var size = (parameter.Size == NativeIntegerSize || parameter.Size == NativeIntegerSize * 2) ? parameter.Size : 0;
 
 			if (size == 0 && parameter.Size <= NativeIntegerSize)
 			{
@@ -135,7 +135,7 @@ public partial class MethodParametersView : DebugDockContent
 				Size = size,
 				Value = value,
 				HexValue = BasePlatform.ToHex(value, size),
-				Type = type.FullName,
+				Type = type != null ? type.FullName : "N/A",
 				Info = MainForm.GetAddressInfo(value)
 			};
 

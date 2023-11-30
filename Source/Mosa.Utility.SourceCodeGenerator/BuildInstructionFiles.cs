@@ -834,6 +834,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "reg3not": code = "Append3BitsNot"; postcode = ".Register.RegisterCode"; return;
 			case "reg4not": code = "Append4BitsNot"; postcode = ".Register.RegisterCode"; return;
 			case "reg3s1": code = "Append3Bits"; postcode = ".Register.RegisterCode >> 1"; return;
+			case "reg16pow2": code = "Append16Bits(ToPower2"; postcode = ".Register.RegisterCode)"; return;
+
 			case "imm1": code = "Append1BitImmediate"; return;
 			case "imm2": code = "Append2BitImmediate"; return;
 			case "imm2scale": code = "Append2BitScale"; return;
@@ -856,6 +858,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "status": code = "Append1Bit"; postcode = ".IsSetFlags ? 1 : 0"; return;
 			case "updir": code = "Append1Bit"; postcode = ".IsUpDirection ? 1 : 0"; return;
 			case "downdir": code = "Append1Bit"; postcode = ".IsDownDirection ? 1 : 0"; return;
+			case "writeback": code = "Append1Bit"; postcode = ".IsWriteback ? 1 : 0"; return;
+			case "prefixadd": code = "Append1Bit"; postcode = ".IsPrefixAdd ? 1 : 0"; return;
 			case "fp": code = "Append1Bit"; postcode = ".IsR4 ? 0 : 1"; return;
 			case "int": code = "Append1Bit"; postcode = ".IsInteger ? 1 : 0"; return;
 			case "float": code = "Append1Bit"; postcode = ".IsFloatingPoint ? 1 : 0"; return;

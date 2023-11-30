@@ -31,7 +31,7 @@ internal static partial class IntrinsicMethods
 		var typeFullname = ar[0];
 		var methodName = ar[1];
 
-		var type = transform.TypeSystem.GetTypeByName(typeFullname);
+		var type = transform.TypeSystem.GetType(typeFullname);
 
 		if (type == null)
 			return;

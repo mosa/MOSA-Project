@@ -239,13 +239,13 @@ public static class Setup
 				Factory = () => new PCI.VMware.VMwareSVGA2()
 			},
 
-			new ISADeviceDriverRegistryEntry
-			{
-				Name = "ACPI",
-				Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARM32,
-				AutoLoad = true,
-				Factory = () => new ISA.ACPI.ACPIDriver()
-			},
+			//new ISADeviceDriverRegistryEntry
+			//{
+			//	Name = "ACPI",
+			//	Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARM32,
+			//	AutoLoad = true,
+			//	Factory = () => new ISA.ACPI.ACPIDriver()
+			//},
 		};
 	}
 }

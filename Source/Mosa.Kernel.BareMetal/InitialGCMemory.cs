@@ -25,13 +25,13 @@ public static class InitialGCMemory
 
 	public static Pointer AllocateMemory(uint size)
 	{
-		Debug.WriteLine("+ Initial Allocation Object: size = ", size, " @ ", new Hex(Available));
+		//Debug.WriteLine("+ Initial Allocation Object: size = ", size, " @ ", new Hex(Available));
 
 		var available = Available;
 
 		Available += size;
 
-		Internal.MemoryClear(Available, size);
+		Internal.MemoryClear(available, size);
 
 		return available;
 	}

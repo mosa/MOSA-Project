@@ -21,18 +21,9 @@ namespace Mosa.Compiler.Framework.Platform;
 /// </remarks>
 public abstract class BaseMultibootStage : BaseCompilerStage
 {
-	private const string MultibootHeaderSymbolName = "<$>mosa-multiboot-header";
-
-	public const string MultibootEAX = "<$>mosa-multiboot-eax";
-	public const string MultibootEBX = "<$>mosa-multiboot-ebx";
-	public const string MultibootInitialStack = "<$>mosa-multiboot-initial-stack";
-
 	#region Constants
 
-	/// <summary>
-	/// This is the size of the initial kernel stack. (8KiB)
-	/// </summary>
-	protected const uint StackSize = 0x2000;
+	private const string MultibootHeaderSymbolName = "<$>mosa-multiboot-header";
 
 	private struct MultibootV2Constants
 	{
@@ -84,55 +75,45 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 	/// <summary>
 	/// The multiboot method
 	/// </summary>
-	protected MosaMethod multibootMethod;
+	protected MosaMethod MultibootMethod;
 
 	/// <summary>
 	/// The multiboot header
 	/// </summary>
-	protected LinkerSymbol multibootHeader;
-
-	public bool IsV2 { get; set; }
-
-	public bool HasVideo { get; set; }
-
-	public int Width { get; set; }
-
-	public int Height { get; set; }
+	protected LinkerSymbol MultibootHeader;
 
 	#endregion Data Members
 
-	protected override void Initialization()
-	{
-		IsV2 = MosaSettings.MultibootVersion == "v2";
-		HasVideo = MosaSettings.MultibootVideo;
-		Width = MosaSettings.MultibootVideoWidth;
-		Height = MosaSettings.MultibootVideoHeight;
-	}
-
 	protected override void Setup()
 	{
-		multibootHeader = Linker.DefineSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
+		MultibootHeader = Linker.DefineSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
+		MultibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
-		Linker.DefineSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
-		Linker.DefineSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
-		Linker.DefineSymbol(MultibootInitialStack, SectionKind.BSS, Architecture.NativeAlignment, StackSize);
-
-		multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
-		var methodData = Compiler.GetMethodData(multibootMethod);
+		var methodData = Compiler.GetMethodData(MultibootMethod);
 
 		methodData.DoNotInline = true;
 		methodData.StackFrameRequired = false;
 
-		Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName);
+		Linker.EntryPoint = Linker.GetSymbol(MultibootMethod.FullName);
 
-		MethodScanner.MethodInvoked(multibootMethod, multibootMethod);
+		MethodScanner.MethodInvoked(MultibootMethod, MultibootMethod);
 
-		var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime.StartUp");
-		var initializeMethod = startUpType?.FindMethodByName("Initialize");
+		var initializeMethod = TypeSystem.GetMethod("Mosa.Runtime.StartUp", "Initialize");
 
 		Compiler.GetMethodData(initializeMethod).DoNotInline = true;
 
-		MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
+		MethodScanner.MethodInvoked(initializeMethod, MultibootMethod);
+	}
+
+	protected override void Finalization()
+	{
+		CreateMultibootMethod();
+
+		WriteMultibootHeader(Linker.EntryPoint);
+	}
+
+	protected virtual void CreateMultibootMethod()
+	{
 	}
 
 	#region Internals
@@ -144,44 +125,63 @@ public abstract class BaseMultibootStage : BaseCompilerStage
 	protected void WriteMultibootHeader(LinkerSymbol entryPoint)
 	{
 		// According to the multiboot specification this header must be within the first 8K of the kernel binary.
-		Linker.SetFirst(multibootHeader);
+		Linker.SetFirst(MultibootHeader);
 
-		var writer = new BinaryWriter(multibootHeader.Stream, Encoding.ASCII);
+		var writer = new BinaryWriter(MultibootHeader.Stream, Encoding.ASCII);
 
-		if (!IsV2) throw new CompilerException("Multiboot.Version != v2");
+		if (MosaSettings.MultibootVersion != "v2")
+		{
+			throw new CompilerException("Multiboot.Version != v2");
+		}
 
 		// Header size + entry tag size + (framebuffer size if chosen) + end tag size
 		var headerLength = MultibootV2Constants.HeaderSize + MultibootV2Constants.EntryTagSize + sizeof(uint);
-		if (HasVideo) headerLength += MultibootV2Constants.FramebufferTagSize;
+
+		if (MosaSettings.MultibootVideo)
+		{
+			headerLength += MultibootV2Constants.FramebufferTagSize;
+		}
 
 		// Header
-		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		while (writer.BaseStream.Position % 8 != 0)
+		{
+			writer.Write((byte)0);
+		}
+
 		writer.Write(MultibootV2Constants.HeaderMbMagic);
 		writer.Write(MultibootV2Constants.HeaderMbArchitecture);
 		writer.Write(headerLength);
 		writer.Write((uint)(0x100000000 - (MultibootV2Constants.HeaderMbMagic + MultibootV2Constants.HeaderMbArchitecture + headerLength)));
 
 		// Framebuffer tag
-		if (HasVideo)
+		if (MosaSettings.MultibootVideo)
 		{
 			while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
 			writer.Write(MultibootV2Constants.FramebufferTag);
 			writer.Write(MultibootV2Constants.RequiredFlag);
 			writer.Write(MultibootV2Constants.FramebufferTagSize);
-			writer.Write((uint)Width);
-			writer.Write((uint)Height);
+			writer.Write((uint)MosaSettings.MultibootVideoWidth);
+			writer.Write((uint)MosaSettings.MultibootVideoHeight);
 			writer.Write(32U);
 		}
 
 		// Entry tag
-		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		while (writer.BaseStream.Position % 8 != 0)
+		{
+			writer.Write((byte)0);
+		}
+
 		writer.Write(MultibootV2Constants.EntryTag);
 		writer.Write(MultibootV2Constants.RequiredFlag);
 		writer.Write(MultibootV2Constants.EntryTagSize);
-		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, multibootHeader, writer.BaseStream.Position, entryPoint, 0);
+		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, MultibootHeader, writer.BaseStream.Position, entryPoint, 0);
 
 		// End tag
-		while (writer.BaseStream.Position % 8 != 0) writer.Write((byte)0);
+		while (writer.BaseStream.Position % 8 != 0)
+		{
+			writer.Write((byte)0);
+		}
+
 		writer.Write((ushort)0);
 		writer.Write((ushort)0);
 	}

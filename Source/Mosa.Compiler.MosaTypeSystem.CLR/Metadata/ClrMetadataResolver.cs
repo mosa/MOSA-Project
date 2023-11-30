@@ -628,7 +628,7 @@ internal class ClrMetadataResolver
 			throw new CompilerException("Type must be a SZ Array.");
 
 		var typeSystem = arrayType.TypeSystem;
-		var szHelper = typeSystem.GetTypeByName(typeSystem.CorLib, "System.Array+SZArrayHelper");
+		var szHelper = typeSystem.GetType(typeSystem.CorLib, "System.Array+SZArrayHelper");
 
 		if (szHelper == null)
 			throw new InvalidOperationCompilerException("Type is null or does not exist");
@@ -656,9 +656,9 @@ internal class ClrMetadataResolver
 
 		// Add interfaces to the type and copy properties from interfaces into type so we can expose them
 		var list = new LinkedList<MosaType?>();
-		list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic.IList`1<" + arrayType.ElementType?.FullName + ">"));
-		list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic.ICollection`1<" + arrayType.ElementType?.FullName + ">"));
-		list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic.IEnumerable`1<" + arrayType.ElementType?.FullName + ">"));
+		list.AddLast(typeSystem.GetType(typeSystem.CorLib, "System.Collections.Generic.IList`1<" + arrayType.ElementType?.FullName + ">"));
+		list.AddLast(typeSystem.GetType(typeSystem.CorLib, "System.Collections.Generic.ICollection`1<" + arrayType.ElementType?.FullName + ">"));
+		list.AddLast(typeSystem.GetType(typeSystem.CorLib, "System.Collections.Generic.IEnumerable`1<" + arrayType.ElementType?.FullName + ">"));
 		foreach (var iface in list)
 		{
 			if (iface == null)

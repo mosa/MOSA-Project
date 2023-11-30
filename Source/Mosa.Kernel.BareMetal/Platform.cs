@@ -9,7 +9,10 @@ public static class Platform
 {
 	// These methods will be plugged and implemented elsewhere in the platform specific implementation
 
-	public static void Initialization()
+	public static void Setup(Pointer stackFrame)
+	{ }
+
+	public static void Initialize()
 	{ }
 
 	public static AddressRange GetBootReservedRegion() => new(0, 0);

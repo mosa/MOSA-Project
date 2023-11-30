@@ -249,7 +249,7 @@ public class Builder : BaseLauncher
 
 	private void GenerateASMFile()
 	{
-		OutputStatus($"Executing Reko Disassembler: {MosaSettings.AsmFile}");
+		OutputStatus($"Reko Disassembly: {MosaSettings.AsmFile}");
 
 		var map = new Dictionary<ulong, List<string>>();
 

@@ -28,10 +28,24 @@ public sealed class Stm : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
 			opcodeEncoder.Append1BitImmediate(node.Operand2);
-			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(node.IsWriteback ? 1 : 0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append16BitImmediate(node.Operand2);
+			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			return;
+		}
+
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand3.IsPhysicalRegister)
+		{
+			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+			opcodeEncoder.Append3Bits(0b100);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
+			opcodeEncoder.Append1BitImmediate(node.Operand2);
+			opcodeEncoder.Append1Bit(node.IsWriteback ? 1 : 0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append16Bits(ToPower2(node.Operand3.Register.RegisterCode));
 			return;
 		}
 

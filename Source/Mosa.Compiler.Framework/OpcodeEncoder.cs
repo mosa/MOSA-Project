@@ -187,6 +187,11 @@ public sealed class OpcodeEncoder
 		AppendBits(value, 16);
 	}
 
+	public void Append16Bits(uint value)
+	{
+		AppendBits(value, 16);
+	}
+
 	public void AppendShort(ushort value)
 	{
 		AppendBits(value, 16);

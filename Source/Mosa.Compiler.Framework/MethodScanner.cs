@@ -377,19 +377,19 @@ public class MethodScanner
 			ScheduleMethod(entryPoint);
 		}
 
-		var objectType = TypeSystem.GetTypeByName("System.Object");
+		var objectType = TypeSystem.GetType("System.Object");
 		allocatedTypes.Add(objectType);
 
-		var stringType = TypeSystem.GetTypeByName("System.String");
+		var stringType = TypeSystem.GetType("System.String");
 		allocatedTypes.Add(stringType);
 
-		var typeType = TypeSystem.GetTypeByName("System.Type");
+		var typeType = TypeSystem.GetType("System.Type");
 		allocatedTypes.Add(typeType);
 
-		var exceptionType = TypeSystem.GetTypeByName("System.Exception");
+		var exceptionType = TypeSystem.GetType("System.Exception");
 		allocatedTypes.Add(exceptionType);
 
-		var delegateType = TypeSystem.GetTypeByName("System.Delegate");
+		var delegateType = TypeSystem.GetType("System.Delegate");
 		allocatedTypes.Add(delegateType);
 
 		//var arrayType = TypeSystem.GetTypeByName("System", "Array");

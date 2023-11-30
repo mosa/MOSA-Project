@@ -931,11 +931,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-immediate],u=updir:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=0,offset=imm12:o2"
+					"Encoding": "[arm-single-data-transfer-immediate],u=updir:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=writeback:status,b=0,offset=imm12:o2"
 				},
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-single-data-transfer-shift-register],u=updir:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0"
+					"Encoding": "[arm-single-data-transfer-shift-register],u=updir:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=writeback:status,b=0"
 				}
 			]
 		},
@@ -956,11 +956,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=1,u=updir:status,offset=imm12:o2"
+					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=writeback:status,b=1,u=updir:status,offset=imm12:o2"
 				},
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-single-data-transfer-shift-register],rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=updir:status"
+					"Encoding": "[arm-single-data-transfer-shift-register],rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=writeback:status,b=1,u=updir:status"
 				}
 			]
 		},
@@ -981,11 +981,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=0,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=0,h=1"
 				},
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:r,rn=reg4:o1,h=1,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=updir:status,s=0,h=1"
+					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:r,rn=reg4:o1,h=1,rm=reg4:o2,i=0,p=0,l=1,w=writeback:status,b=1,u=updir:status,s=0,h=1"
 				}
 			]
 		},
@@ -1006,11 +1006,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=1"
 				},
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:r,rn=reg4:o1,h=1,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=updir:status,s=1,h=1"
+					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:r,rn=reg4:o1,h=1,rm=reg4:o2,i=0,p=0,l=1,w=writeback:status,b=0,u=updir:status,s=1,h=1"
 				}
 			]
 		},
@@ -1031,11 +1031,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=0"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=0"
 				},
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:r,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=updir:status,s=1,h=0"
+					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:r,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=1,w=writeback:status,b=0,u=updir:status,s=1,h=0"
 				}
 			]
 		},
@@ -1056,11 +1056,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=updir:status,offset=imm12:o2"
+					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=writeback:status,b=0,u=updir:status,offset=imm12:o2"
 				},
 				{
 					"Condition": "[register][register][register]",
-					"Encoding": "[arm-single-data-transfer-shift-register],rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=updir:status,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-single-data-transfer-shift-register],rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=writeback:status,b=0,u=updir:status,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				}
 			]
 		},
@@ -1081,11 +1081,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=updir:status,offset=imm12:o2"
+					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=writeback:status,b=1,u=updir:status,offset=imm12:o2"
 				},
 				{
 					"Condition": "[register][register][register]",
-					"Encoding": "[arm-single-data-transfer-shift-register],rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=updir:status,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-single-data-transfer-shift-register],rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=writeback:status,b=1,u=updir:status,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				}
 			]
 		},
@@ -1106,11 +1106,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=0,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=0,h=1"
 				},
 				{
 					"Condition": "[register][register][register]",
-					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=0,b=1,u=updir:status,s=0,h=1"
+					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=1,u=updir:status,s=0,h=1"
 				}
 			]
 		},
@@ -1131,11 +1131,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=1"
 				},
 				{
 					"Condition": "[register][register][register]",
-					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=updir:status,s=1,h=1"
+					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=0,u=updir:status,s=1,h=1"
 				}
 			]
 		},
@@ -1156,11 +1156,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=0"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=0"
 				},
 				{
 					"Condition": "[register][register][register]",
-					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=updir:status,s=1,h=0"
+					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=0,u=updir:status,s=1,h=0"
 				}
 			]
 		},
@@ -1366,7 +1366,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][constant]",
-					"Encoding": "[arm-block-transfer],p=0,u=updir:status,s=imm1:o2,w=0,l=1,rn=reg4:o1,list=imm16:o2"
+					"Encoding": "[arm-block-transfer],p=0,u=updir:status,s=imm1:o2,w=writeback:status,l=1,rn=reg4:o1,list=imm16:o2"
 				}
 			]
 		},
@@ -1386,7 +1386,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][constant]",
-					"Encoding": "[arm-block-transfer],p=1,u=updir:status,s=imm1:o2,w=0,l=0,rn=reg4:o1,list=imm16:o2"
+					"Encoding": "[arm-block-transfer],p=1,u=updir:status,s=imm1:o2,w=writeback:status,l=0,rn=reg4:o1,list=imm16:o3"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-block-transfer],p=1,u=updir:status,s=imm1:o2,w=writeback:status,l=0,rn=reg4:o1,list=reg16pow2:o3"
 				}
 			]
 		},
