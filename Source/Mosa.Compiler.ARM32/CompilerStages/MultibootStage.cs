@@ -6,18 +6,11 @@ namespace Mosa.Compiler.ARM32.CompilerStages;
 
 public sealed class MultibootStage : Framework.Platform.BaseMultibootStage
 {
-	protected override void Finalization()
-	{
-		CreateMultibootMethod();
-
-		WriteMultibootHeader(Linker.EntryPoint);
-	}
-
-	private void CreateMultibootMethod()
+	protected override void CreateMultibootMethod()
 	{
 		var basicBlocks = new BasicBlocks();
 
-		var methodCompiler = new MethodCompiler(Compiler, multibootMethod, basicBlocks, 0);
+		var methodCompiler = new MethodCompiler(Compiler, MultibootMethod, basicBlocks, 0);
 		methodCompiler.MethodData.DoNotInline = true;
 
 		var transform = new Transform();
@@ -57,6 +50,6 @@ public sealed class MultibootStage : Framework.Platform.BaseMultibootStage
 		context.AppendInstruction(ARM32.Bl, null, entryPoint);
 		context.AppendInstruction(ARM32.Pop, null, Operand.Constant32_0);
 
-		Compiler.CompileMethod(multibootMethod);
+		Compiler.CompileMethod(transform);
 	}
 }
