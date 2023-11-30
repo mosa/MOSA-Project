@@ -20,6 +20,11 @@ public partial class MosaSettings
 		public const int MaxAttempts = 20;
 		public const int Port = 11110;
 		public const int EmulatorMaxRuntime = 20; // in seconds
+
+		public const int X86StackLocation = 0x30000;
+		public const int X64StackLocation = 0x30000;
+		public const int ARM32StackLocation = 0x30000;
+		public const int ARM64StackLocation = 0x30000;
 	}
 
 	#endregion Constants
@@ -685,6 +690,12 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.BootLoaderTimeout, value);
 	}
 
+	public int InitialStackLocation
+	{
+		get => Settings.GetValue(Name.Compiler_InitialStackAddress, 0);
+		set => Settings.SetValue(Name.Compiler_InitialStackAddress, value);
+	}
+
 	#endregion Properties
 
 	public MosaSettings()
@@ -806,6 +817,8 @@ public partial class MosaSettings
 		LinkerFormat = "elf32";
 
 		ExplorerFilter = "%REGISTRY%";
+
+		InitialStackLocation = 0;
 	}
 
 	public void NormalizeSettings()
@@ -967,6 +980,28 @@ public partial class MosaSettings
 		if (NasmFile == "%DEFAULT%")
 		{
 			NasmFile = Path.Combine(DefaultFolder, $"{baseFilename}.nasm");
+		}
+
+		if (InitialStackLocation == 0)
+		{
+			switch (Platform.ToLowerInvariant())
+			{
+				case "x86":
+					InitialStackLocation = Constant.X86StackLocation;
+					break;
+
+				case "x64":
+					InitialStackLocation = Constant.X64StackLocation;
+					break;
+
+				case "arm32":
+					InitialStackLocation = Constant.ARM32StackLocation;
+					break;
+
+				case "arm64":
+					InitialStackLocation = Constant.ARM64StackLocation;
+					break;
+			}
 		}
 	}
 

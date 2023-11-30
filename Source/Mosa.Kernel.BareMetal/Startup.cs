@@ -22,10 +22,10 @@ public static class Startup
 		Platform.Setup(stackFrame);
 		BootOptions.Setup();
 		Debug.Setup();
+		BootStatus.Initalize();
 
 		Debug.WriteLine("Startup.Initialize()");
-
-		BootStatus.Initalize();
+		Debug.WriteLine(" > Initial Stack @ ", new Hex(stackFrame));
 
 		Console.BackgroundColor = ConsoleColor.Black;
 		Console.ForegroundColor = ConsoleColor.Yellow;

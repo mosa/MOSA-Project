@@ -5,7 +5,7 @@ using Mosa.Runtime;
 namespace Mosa.Kernel.BareMetal;
 
 /// <summary>
-/// Log
+/// Debug
 /// </summary>
 public static class Debug
 {

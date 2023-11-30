@@ -25,6 +25,7 @@ public static class Name
 	public const string AppLocation_VirtualBox = "AppLocation.VirtualBox";
 
 	public const string Compiler_BaseAddress = "Compiler.BaseAddress";
+	public const string Compiler_InitialStackAddress = "Compiler.InitialStackAddress";
 	public const string Compiler_Binary = "Compiler.Binary";
 	public const string Compiler_MethodScanner = "Compiler.MethodScanner";
 	public const string Compiler_Multithreading = "Compiler.Multithreading";

@@ -30,14 +30,14 @@ public sealed class MultibootStage : Framework.Platform.BaseMultibootStage
 		var ebp = transform.PhysicalRegisters.Allocate32(CPURegister.EBP);
 		var esp = transform.PhysicalRegisters.Allocate32(CPURegister.ESP);
 
-		var stackBottom = Operand.CreateLabel(MultibootInitialStack, Architecture.Is32BitPlatform);
+		var stackLocation = Operand.CreateConstant32(MosaSettings.InitialStackLocation);
 
 		var prologueBlock = basicBlocks.CreatePrologueBlock();
 
 		var context = new Context(prologueBlock);
 
 		// Set stack location
-		context.AppendInstruction(X86.Mov32, esp, stackBottom);
+		context.AppendInstruction(X86.Mov32, esp, stackLocation);
 
 		// Create stack sentinel
 		context.AppendInstruction(X86.Push32, null, Operand.Constant32_0);
