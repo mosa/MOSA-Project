@@ -13,4 +13,9 @@ public static class Boot
 
 		Program.EntryPoint();
 	}
+
+	public static void ForceInclude()
+	{
+		Mosa.Kernel.BareMetal.ARM32.PlatformPlug.ForceInclude();
+	}
 }

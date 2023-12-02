@@ -98,14 +98,6 @@ public static class PageFrameAllocator
 			var start = Alignment.AlignDown(entry.StartAddress.ToInt64(), Page.Size);
 			var end = Alignment.AlignUp(entry.EndAddress.ToInt64(), Page.Size);
 
-			//Debug.WriteLine(" > reserve");
-			//Debug.WriteLineHex(" > start:         ", entry.StartAddress.ToInt64());
-			//Debug.WriteLineHex(" > end:           ", entry.EndAddress.ToInt64());
-			//Debug.WriteLine(" > len:           ", entry.Size);
-
-			//Debug.WriteLineHex(" > start-aligned: ", start);
-			//Debug.WriteLineHex(" > end-aligned:   ", end);
-
 			var pages = (uint)(end - start) / Page.Size;
 
 			if (pages <= 0)
@@ -113,10 +105,6 @@ public static class PageFrameAllocator
 
 			var startPage = (uint)(start / Page.Size);
 			var endPage = startPage + pages - 1;
-
-			//Debug.WriteLine(" > pages: ", pages);
-			//Debug.WriteLine(" > startPage: ", startPage);
-			//Debug.WriteLine(" > endPage: ", endPage);
 
 			MinimumReservedPage = Math.Min(MinimumReservedPage, startPage);
 			MaximumReservedPage = Math.Max(MaximumReservedPage, endPage);
@@ -132,8 +120,6 @@ public static class PageFrameAllocator
 
 			if (endPage > TotalPages)
 				pages = TotalPages - startPage;
-
-			//Debug.WriteLine(" > pages2: ", pages);
 
 			Debug.WriteLine(" > reserved: ", startPage, " - ", endPage);
 
@@ -357,9 +343,10 @@ public static class PageFrameAllocator
 		var region = Platform.GetBootReservedRegion();
 		SetPageBitMapEntry((uint)(region.Address.ToInt64() / Page.Size), ((uint)region.Size / Page.Size) + 1, false);
 
-		// Reserve first 24MB
+		// Reserve first 24MB (wide enough to cover initial stack and kernel)
 		SetPageBitMapEntry(0, 24 * 1024 * 1024 / Page.Size, false);
 
+		// TODO - initial stack
 		// TODO - reserve kernel code + memory
 	}
 

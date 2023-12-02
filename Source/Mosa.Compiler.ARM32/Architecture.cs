@@ -1,8 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.ARM32.CompilerStages;
 using Mosa.Compiler.ARM32.Stages;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Utility.Configuration;
@@ -126,6 +128,14 @@ public sealed class Architecture : BaseArchitecture
 	/// <param name="pipeline">The pipeline to extend.</param>
 	public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
+		if (!string.IsNullOrEmpty(mosaSettings.MultibootVersion))
+		{
+			pipeline.InsertAfterFirst<TypeInitializerStage>(
+				new MultibootStage()
+			);
+		}
+
+		pipeline.Add(new StartUpStage());
 	}
 
 	/// <summary>
@@ -136,7 +146,7 @@ public sealed class Architecture : BaseArchitecture
 	public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
 		pipeline.InsertBefore<CallStage>(
-			new Stages.RuntimeCallStage()
+			new RuntimeCallStage()
 		);
 
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(
