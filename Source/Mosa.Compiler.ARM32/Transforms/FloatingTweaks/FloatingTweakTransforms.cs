@@ -17,5 +17,12 @@ public static class FloatingTweakTransforms
 		new ConvertR8ToI64(),
 		new ConvertR4ToU64(),
 		new ConvertR8ToU64(),
+
+		new ConvertR4ToU32(),
+		new ConvertR8ToU32(),
+		new ConvertU32ToR8(),
+
+		new RemR4NotSupported(),
+		new RemR8NotSupported(),
 	};
 }

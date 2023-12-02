@@ -274,7 +274,7 @@ public class Starter : BaseLauncher
 					arg.Append(" -cpu qemu64,+sse4.1,abm,bmi1,bmi2,popcnt");
 					break;
 				}
-			case "ARM32":
+			case "arm32":
 				{
 					qemuApp = MosaSettings.QemuARM32App;
 					qemuUefi = MosaSettings.QemuEdk2ARM32;

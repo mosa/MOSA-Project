@@ -114,7 +114,9 @@ public partial class MainForm : Form
 		if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
 		{
 			if (MosaSettings.Platform == "%DEFAULT%")
+			{
 				MosaSettings.Platform = "%REGISTRY%";
+			}
 
 			openFileDialog.FileName = MosaSettings.GetRegistry(WindowsRegistry.LastOpened, null);
 		}
@@ -1086,6 +1088,7 @@ public partial class MainForm : Form
 			"x86" => 0,
 			"x64" => 1,
 			"arm32" => 2,
+			//"arm64" => 3,
 			_ => cbPlatform.SelectedIndex
 		};
 

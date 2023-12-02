@@ -29,7 +29,7 @@ public partial class MosaSettings
 
 	#endregion Constants
 
-	public Settings Settings { get; } = new Settings();
+	public readonly Settings Settings = new Settings();
 
 	#region Properties
 
@@ -700,7 +700,6 @@ public partial class MosaSettings
 
 	public MosaSettings()
 	{
-		Settings = new Settings();
 	}
 
 	public MosaSettings(Settings settings)
@@ -829,6 +828,14 @@ public partial class MosaSettings
 		Emulator = ToLower(Emulator);
 		Platform = ToLower(Platform);
 		LinkerFormat = ToLower(LinkerFormat);
+
+		switch (Platform.ToLowerInvariant())
+		{
+			case "x86": Platform = "x86"; break;
+			case "x64": Platform = "x64"; break;
+			case "arm32": Platform = "ARM32"; break;
+			case "arm64": Platform = "ARM64"; break;
+		}
 	}
 
 	private string ToLower(string value)
@@ -986,21 +993,10 @@ public partial class MosaSettings
 		{
 			switch (Platform.ToLowerInvariant())
 			{
-				case "x86":
-					InitialStackLocation = Constant.X86StackLocation;
-					break;
-
-				case "x64":
-					InitialStackLocation = Constant.X64StackLocation;
-					break;
-
-				case "arm32":
-					InitialStackLocation = Constant.ARM32StackLocation;
-					break;
-
-				case "arm64":
-					InitialStackLocation = Constant.ARM64StackLocation;
-					break;
+				case "x86": InitialStackLocation = Constant.X86StackLocation; break;
+				case "x64": InitialStackLocation = Constant.X64StackLocation; break;
+				case "arm32": InitialStackLocation = Constant.ARM32StackLocation; break;
+				case "arm64": InitialStackLocation = Constant.ARM64StackLocation; break;
 			}
 		}
 	}

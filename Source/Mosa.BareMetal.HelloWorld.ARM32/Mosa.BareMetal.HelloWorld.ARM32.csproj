@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
+		<StartupObject>Mosa.BareMetal.HelloWorld.ARM32.Boot</StartupObject>
 	</PropertyGroup>
 
 	<Import Project="../Mosa.BareMetal.targets" />
