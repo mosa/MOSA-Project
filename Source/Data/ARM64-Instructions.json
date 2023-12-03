@@ -1,6 +1,7 @@
 {
 	"Encoding": [
-
+		"[arm-format-options]=           [sf]|[op]|[s]|[opcode]|[rm]|[options]|[rn]|[rd]",
+		"[arm-format-imm12]=             [sf]|[op]|[s]|[opcode]|[rm]|[sh]|[imm12]|[rn]|[rd]"
 	],
 	"Instructions": [
 		{
@@ -19,7 +20,28 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "0xBF00"
+					"Encoding": "11010101000000110010000000011111"
+				}
+			]
+		},
+		{
+			"Name": "Adc",
+			"Commutative": "true",
+			"FamilyName": "ARM64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Add with carry",
+			"OpcodeEncodingAppend": "sf=1,opcode=11010000,options=000000",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-format-options],rd=reg5:r,rn=reg5:o1,rm=reg5:o2,s=setflag:status"
 				}
 			]
 		}

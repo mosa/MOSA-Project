@@ -49,7 +49,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[constant][constant][constant][constant][constant]",
-					"Encoding": "[arm-coprocessor-transfer],s=status:status,l=1,rd=reg4:r,crn=imm4:o2,crm=imm4:o3,cpn=imm4:o4,opcode=imm4:o2,cp=imm4:o5"
+					"Encoding": "[arm-coprocessor-transfer],s=setflag:status,l=1,rd=reg4:r,crn=imm4:o2,crm=imm4:o3,cpn=imm4:o4,opcode=imm4:o2,cp=imm4:o5"
 				}
 			]
 		},
@@ -80,7 +80,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[constant][constant][constant][constant][constant]",
-					"Encoding": "[arm-coprocessor-transfer],s=status:status,l=0,rd=reg4:r,crn=imm4:o2,crm=imm4:o3,cpn=imm4:o4,opcode=imm4:o2,cp=imm4:o5"
+					"Encoding": "[arm-coprocessor-transfer],s=setflag:status,l=0,rd=reg4:r,crn=imm4:o2,crm=imm4:o3,cpn=imm4:o4,opcode=imm4:o2,cp=imm4:o5"
 				}
 			]
 		},
@@ -101,11 +101,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=0101,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=0101,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=0101,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=0101,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -122,7 +122,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "Addition with Carry",
-			"OpcodeEncodingAppend": "s=status:status,opcode=0101,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=0101,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -146,11 +146,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=0100,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=0100,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=0100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=0100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -167,7 +167,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "Addition",
-			"OpcodeEncodingAppend": "s=status:status,opcode=0100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=0100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -191,11 +191,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=0000,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=0000,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=0000,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=0000,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -212,7 +212,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "And",
-			"OpcodeEncodingAppend": "s=status:status,opcode=0000,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=0000,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -237,11 +237,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=1110,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=1110,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=1110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=1110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -258,7 +258,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=1110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -376,11 +376,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=0001,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=0001,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=0001,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=0001,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -397,7 +397,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "Exclusive OR",
-			"OpcodeEncodingAppend": "s=status:status,opcode=0001,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=0001,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -422,11 +422,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=1111,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o1"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=1111,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o1"
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=1111,rd=reg4:r,rn=0000,immediate12=imm12:o1"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=1111,rd=reg4:r,rn=0000,immediate12=imm12:o1"
 				}
 			]
 		},
@@ -443,7 +443,7 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Not",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=imm2:o3",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=imm2:o3",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][constant]",
@@ -468,11 +468,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=1100,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=1100,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=1100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=1100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -489,7 +489,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "Or",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=1100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -514,11 +514,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=0011,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=0011,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=0011,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=0011,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -535,7 +535,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,opcode=0011,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=0011,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -560,11 +560,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=0111,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=0111,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=0111,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=0111,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -581,7 +581,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,opcode=0111,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=0111,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -606,11 +606,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=0110,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=0110,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=0110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=0110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -627,7 +627,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "Subtract with Carry",
-			"OpcodeEncodingAppend": "s=status:status,opcode=0110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=0110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -652,11 +652,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=0010,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=0010,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=0010,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=0010,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2"
 				}
 			]
 		},
@@ -673,7 +673,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "Subtraction",
-			"OpcodeEncodingAppend": "s=status:status,opcode=0010,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=0010,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register][constant]",
@@ -1177,7 +1177,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rs=reg4:o1,rm=reg4:o2,rn=0000,a=0",
+			"OpcodeEncodingAppend": "s=setflag:status,rd=reg4:r,rs=reg4:o1,rm=reg4:o2,rn=0000,a=0",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -1198,7 +1198,7 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rs=reg4:o1,rm=reg4:o2,rn=reg4:o3,a=1",
+			"OpcodeEncodingAppend": "s=setflag:status,rd=reg4:r,rs=reg4:o1,rm=reg4:o2,rn=reg4:o3,a=1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register]",
@@ -1219,7 +1219,7 @@
 			"OperandCount": 2,
 			"ResultCount": 2,
 			"Description": "Multiply Long",
-			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0,u=0",
+			"OpcodeEncodingAppend": "s=setflag:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0,u=0",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -1240,7 +1240,7 @@
 			"OperandCount": 3,
 			"ResultCount": 2,
 			"Description": "Multiply Long Accumulate",
-			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1,u=0",
+			"OpcodeEncodingAppend": "s=setflag:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1,u=0",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register]",
@@ -1261,7 +1261,7 @@
 			"OperandCount": 2,
 			"ResultCount": 2,
 			"Description": "Multiply Signed Long",
-			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0,u=1",
+			"OpcodeEncodingAppend": "s=setflag:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0,u=1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -1282,7 +1282,7 @@
 			"OperandCount": 3,
 			"ResultCount": 2,
 			"Description": "Multiply Signed Long Accumulate",
-			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1,u=1",
+			"OpcodeEncodingAppend": "s=setflag:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1,u=1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register]",
@@ -1715,8 +1715,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate]",
-					"note": "conditional|00110100]|[immediate4]|[rd]|[immediate12]"
+					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
 		},
@@ -1757,11 +1756,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=1101,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o1"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o1"
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-data-processing-immediate],s=status:status,opcode=1101,rd=reg4:r,rn=0000,immediate12=imm12:o1"
+					"Encoding": "[arm-data-processing-immediate],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,immediate12=imm12:o1"
 				}
 			]
 		},
@@ -1778,7 +1777,7 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Move Immediate with Register Shift",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=reg4:o3",
+			"OpcodeEncodingAppend": "s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=reg4:o3",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][constant]",
@@ -1803,11 +1802,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-register],s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=00"
+					"Encoding": "[arm-data-processing-shift-register],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=00"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=00"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=00"
 				}
 			]
 		},
@@ -1828,11 +1827,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-register],s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=01"
+					"Encoding": "[arm-data-processing-shift-register],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=01"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=01"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=01"
 				}
 			]
 		},
@@ -1853,11 +1852,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-register],s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=10"
+					"Encoding": "[arm-data-processing-shift-register],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=10"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=10"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=10"
 				}
 			]
 		},
@@ -1878,11 +1877,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-register],s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=11"
+					"Encoding": "[arm-data-processing-shift-register],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=11"
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-shift-amount],s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=11"
+					"Encoding": "[arm-data-processing-shift-amount],s=setflag:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=11"
 				}
 			]
 		},

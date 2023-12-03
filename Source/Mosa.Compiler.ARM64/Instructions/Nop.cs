@@ -21,6 +21,6 @@ public sealed class Nop : ARM64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-		opcodeEncoder.AppendShort(0xBF00);
+		opcodeEncoder.Append32Bits(0b11010101000000110010000000011111);
 	}
 }

@@ -749,43 +749,47 @@ public class BuildInstructionFiles : BuildBaseTemplate
 				switch (binary.Length)
 				{
 					case 1:
-						Lines.AppendLine("opcodeEncoder.Append1Bit(0b" + binary + ");");
+						Lines.AppendLine($"opcodeEncoder.Append1Bit(0b{binary});");
 						break;
 
 					case 2:
-						Lines.AppendLine("opcodeEncoder.Append2Bits(0b" + binary + ");");
+						Lines.AppendLine($"opcodeEncoder.Append2Bits(0b{binary});");
 						break;
 
 					case 3:
-						Lines.AppendLine("opcodeEncoder.Append3Bits(0b" + binary + ");");
+						Lines.AppendLine($"opcodeEncoder.Append3Bits(0b{binary});");
 						break;
 
 					case 4:
-						Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary + ");");
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary});");
 						break;
 
 					case 5:
-						Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..4]});");
 						Lines.Append(tabs);
-						Lines.AppendLine("opcodeEncoder.Append1Bit(0b" + binary.Substring(4) + ");");
+						Lines.AppendLine($"opcodeEncoder.Append1Bit(0b{binary[4..]});");
 						break;
 
 					case 6:
-						Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..4]});");
 						Lines.Append(tabs);
-						Lines.AppendLine("opcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
+						Lines.AppendLine($"opcodeEncoder.Append2Bits(0b{binary[4..]});");
 						break;
 
 					case 7:
-						Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..4]});");
 						Lines.Append(tabs);
-						Lines.AppendLine("opcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
+						Lines.AppendLine($"opcodeEncoder.Append3Bits(0b{binary[4..]});");
 						break;
 
 					case 8:
-						Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..4]});");
 						Lines.Append(tabs);
-						Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(4) + ");");
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[4..]});");
+						break;
+
+					case 32:
+						Lines.AppendLine($"opcodeEncoder.Append32Bits(0b{binary[..32]});");
 						break;
 
 					default: throw new Exception("ERROR!");
@@ -807,11 +811,11 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 				if (operand2 == null)
 				{
-					Lines.AppendLine("opcodeEncoder." + code + "(" + operand + postcode + ");");
+					Lines.AppendLine($"opcodeEncoder.{code}({operand}{postcode});");
 				}
 				else
 				{
-					Lines.AppendLine("opcodeEncoder." + code + "(" + operand + postcode + ", " + operand2 + ");");
+					Lines.AppendLine($"opcodeEncoder.{code}({operand}{postcode}, {operand2});");
 				}
 			}
 		}
@@ -855,7 +859,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "forward32": code = "EmitForward32"; return;
 			case "supress8": code = "SuppressByte"; return;
 			case "conditional": code = "Append4Bits"; postcode = "GetConditionCode(node.ConditionCode)"; return;
-			case "status": code = "Append1Bit"; postcode = ".IsSetFlags ? 1 : 0"; return;
+			//case "status": code = "Append1Bit"; postcode = ".IsSetFlags ? 1 : 0"; return;
+			case "setflag": code = "Append1Bit"; postcode = ".IsSetFlags ? 1 : 0"; return;
 			case "updir": code = "Append1Bit"; postcode = ".IsUpDirection ? 1 : 0"; return;
 			case "downdir": code = "Append1Bit"; postcode = ".IsDownDirection ? 1 : 0"; return;
 			case "writeback": code = "Append1Bit"; postcode = ".IsWriteback ? 1 : 0"; return;
@@ -886,11 +891,11 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 				if (start == 0)
 				{
-					postcode = ".Register.RegisterCode) & 0x" + "111111111111111111111111111111".Substring(0, length);
+					postcode = $".Register.RegisterCode) & 0x{"111111111111111111111111111111"[..length]}";
 				}
 				else
 				{
-					postcode = ".Register.RegisterCode >> " + start + ") & 0x" + "111111111111111111111111111111".Substring(0, length);
+					postcode = $".Register.RegisterCode >> {start}) & 0x{"111111111111111111111111111111"[..length]}";
 				}
 
 				switch (length)
