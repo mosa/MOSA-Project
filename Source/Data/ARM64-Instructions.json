@@ -37,7 +37,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Add with carry",
-			"OpcodeEncodingAppend": "sf=1,opcode=11010000,options=000000",
+			"OpcodeEncodingAppend": "sf=1,opcode=11010000,options=000000,op=0",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",

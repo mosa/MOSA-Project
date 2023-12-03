@@ -26,6 +26,7 @@ public sealed class Adc : ARM64Instruction
 		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(node.IsSetFlags ? 1 : 0);
 			opcodeEncoder.Append4Bits(0b1101);
 			opcodeEncoder.Append4Bits(0b0000);
