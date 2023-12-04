@@ -21,10 +21,8 @@ public sealed class Movdssi32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		opcodeEncoder.Append4Bits(0b0110);
-		opcodeEncoder.Append4Bits(0b0110);
-		opcodeEncoder.Append4Bits(0b0000);
-		opcodeEncoder.Append4Bits(0b1111);
+		opcodeEncoder.Append8Bits(0b01100110);
+		opcodeEncoder.Append8Bits(0b00001111);
 		opcodeEncoder.Append8Bits(0x6E);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);

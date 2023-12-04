@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM64.Instructions;
 
 /// <summary>
-/// Adc - Add with carry
+/// Adc64 - Add with carry
 /// </summary>
-public sealed class Adc : ARM64Instruction
+public sealed class Adc64 : ARM64Instruction
 {
-	internal Adc()
+	internal Adc64()
 		: base(1, 2)
 	{
 	}
@@ -28,8 +28,7 @@ public sealed class Adc : ARM64Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(node.IsSetFlags ? 1 : 0);
-			opcodeEncoder.Append4Bits(0b1101);
-			opcodeEncoder.Append4Bits(0b0000);
+			opcodeEncoder.Append8Bits(0b11010000);
 			opcodeEncoder.Append5Bits(node.Operand2.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(0b0000);
 			opcodeEncoder.Append2Bits(0b00);

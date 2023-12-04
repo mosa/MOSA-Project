@@ -27,10 +27,8 @@ public sealed class Movdi64sd : X64Instruction
 		opcodeEncoder.Append1Bit(node.Operand1.Register.RegisterCode >> 3);
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append1Bit(node.Result.Register.RegisterCode >> 3);
-		opcodeEncoder.Append4Bits(0b0110);
-		opcodeEncoder.Append4Bits(0b0110);
-		opcodeEncoder.Append4Bits(0b0000);
-		opcodeEncoder.Append4Bits(0b1111);
+		opcodeEncoder.Append8Bits(0b01100110);
+		opcodeEncoder.Append8Bits(0b00001111);
 		opcodeEncoder.Append8Bits(0x7E);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);

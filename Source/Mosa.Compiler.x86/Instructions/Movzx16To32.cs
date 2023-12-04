@@ -22,8 +22,7 @@ public sealed class Movzx16To32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 		opcodeEncoder.Append8Bits(0x0F);
-		opcodeEncoder.Append4Bits(0b1011);
-		opcodeEncoder.Append4Bits(0b0111);
+		opcodeEncoder.Append8Bits(0b10110111);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);

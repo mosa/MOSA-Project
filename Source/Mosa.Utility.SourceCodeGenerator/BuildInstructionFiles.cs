@@ -98,12 +98,6 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			Lines.AppendLine("\tpublic override string AlternativeName => \"" + node.AlternativeName + "\";");
 		}
 
-		//if (node.FlowControl != null && node.FlowControl != "Next")
-		//{
-		//	Lines.AppendLine();
-		//	Lines.AppendLine("\tpublic override FlowControl FlowControl => FlowControl." + node.FlowControl + ";");
-		//}
-
 		if (node.FlowControl != null && node.FlowControl != "Next")
 		{
 			Lines.AppendLine();
@@ -446,8 +440,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 				Lines.AppendLine(comment);
 			}
 
-			var condition = DecodeExperimentalCondition(entry.Condition) ?? string.Empty;
-			var encoding = DecodeExperimentalEncoding(entry.Encoding, node.OpcodeEncodingAppend);
+			var condition = DecodeCondition(entry.Condition) ?? string.Empty;
+			var encoding = DecodeEncoding(entry.Encoding, entry.Append, node.OpcodeEncodingAppend);
 
 			encoding = encoding.Replace("\t", string.Empty);
 
@@ -466,6 +460,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 		{
 			Lines.AppendLine();
 			Lines.AppendLine("\t\tthrow new Compiler.Common.Exceptions.CompilerException(\"Invalid Opcode\");");
+			//Lines.AppendLine("\t\tthrow new Common.Exceptions.CompilerException(\"Invalid Opcode\");");
 		}
 	}
 
@@ -517,7 +512,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			}
 			else
 			{
-				if (!part.Contains("="))
+				if (!part.Contains('='))
 				{
 					encoding += part;
 				}
@@ -531,28 +526,33 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			}
 		}
 
-		Debug.Assert(!encoding.Contains("="));
-		Debug.Assert(!encoding.Contains(","));
+		Debug.Assert(!encoding.Contains('='));
+		Debug.Assert(!encoding.Contains(','));
 
 		return encoding;
 	}
 
-	private string DecodeExperimentalEncoding(string line, string append)
+	private string DecodeEncoding(string opcode, string append, string append2)
 	{
-		if (string.IsNullOrWhiteSpace(line))
+		if (string.IsNullOrWhiteSpace(opcode))
 			return null;
 
-		var rawEncoding = line.Trim();
+		var rawEncoding = opcode.Trim();
 
 		if (!string.IsNullOrWhiteSpace(append))
 		{
 			rawEncoding = rawEncoding + "," + append.Trim();
 		}
 
+		if (!string.IsNullOrWhiteSpace(append2))
+		{
+			rawEncoding = rawEncoding + "," + append2.Trim();
+		}
+
 		return ReduceEncoding(rawEncoding);
 	}
 
-	private string DecodeExperimentalCondition(string condition)
+	private string DecodeCondition(string condition)
 	{
 		if (string.IsNullOrWhiteSpace(condition))
 			return null;
@@ -614,16 +614,20 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					case "ebp": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 5"; break;
 					case "esi": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 6"; break;
 					case "edi": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 7"; break;
+					case "rsp": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 4"; break;
+					case "rbp": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 5"; break;
 					case "zero":
 					case "0": cond1 = ".IsConstantZero"; break;
 					case "one":
 					case "1": cond1 = ".IsConstantOne"; break;
 					case "constant_imm8": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue; cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue; break;
+					//case "constant_imm12": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + (short.MinValue >> 4); cond3 = ".ConstantSigned32 <= " + (short.MaxValue >> 4); break;
 					case "constant_imm16": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue; cond3 = ".ConstantSigned32 <= " + short.MaxValue; break;
 					case "constant_imm32": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue; cond3 = ".ConstantSigned32 <= " + int.MaxValue; break;
 					case "constant_1to4": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 4"; break;
 					case "constant_1to8": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 8"; break;
 					case "constant_0or1": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;
+					case "boolean": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;
 				}
 
 				var subexpression = $"node.{operand}{cond1}";
@@ -783,9 +787,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 						break;
 
 					case 8:
-						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..4]});");
-						Lines.Append(tabs);
-						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[4..]});");
+						Lines.AppendLine($"opcodeEncoder.Append8Bits(0b{binary[..8]});");
 						break;
 
 					case 32:
