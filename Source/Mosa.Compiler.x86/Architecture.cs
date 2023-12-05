@@ -108,6 +108,10 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override string PlatformName => "x86";
 
+	public override void UpdateSetting(MosaSettings settings)
+	{
+	}
+
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(8);

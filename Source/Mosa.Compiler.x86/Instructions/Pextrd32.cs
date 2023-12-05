@@ -21,14 +21,10 @@ public sealed class Pextrd32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		opcodeEncoder.Append4Bits(0b0110);
-		opcodeEncoder.Append4Bits(0b0110);
-		opcodeEncoder.Append4Bits(0b0000);
-		opcodeEncoder.Append4Bits(0b1111);
-		opcodeEncoder.Append4Bits(0b0011);
-		opcodeEncoder.Append4Bits(0b1010);
-		opcodeEncoder.Append4Bits(0b0001);
-		opcodeEncoder.Append4Bits(0b0110);
+		opcodeEncoder.Append8Bits(0b01100110);
+		opcodeEncoder.Append8Bits(0b00001111);
+		opcodeEncoder.Append8Bits(0b00111010);
+		opcodeEncoder.Append8Bits(0b00010110);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);

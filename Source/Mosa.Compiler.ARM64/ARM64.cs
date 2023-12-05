@@ -13,4 +13,6 @@ namespace Mosa.Compiler.ARM64;
 public static class ARM64
 {
 	public static readonly BaseInstruction Nop = new Nop();
+	public static readonly BaseInstruction Adc64 = new Adc64();
+	public static readonly BaseInstruction Add64 = new Add64();
 }

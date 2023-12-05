@@ -115,6 +115,10 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override PhysicalRegister ProgramCounter => CPURegister.PC;
 
+	public override void UpdateSetting(MosaSettings settings)
+	{
+	}
+
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(32);

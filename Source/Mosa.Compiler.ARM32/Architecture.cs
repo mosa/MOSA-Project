@@ -117,6 +117,11 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override PhysicalRegister ProgramCounter => CPURegister.PC;
 
+	public override void UpdateSetting(MosaSettings settings)
+	{
+		//settings.LongExpansion = true;  // required for ARM
+	}
+
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(32);
@@ -152,7 +157,7 @@ public sealed class Architecture : BaseArchitecture
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 			new BaseMethodCompilerStage[]
 			{
-				new FloatingTweakTransform(),
+				new AdvanceTransformStage(),
 				new IRTransformStage(),
 				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 				new PlatformTransformStage(),
