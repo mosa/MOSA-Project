@@ -122,9 +122,9 @@ public static class IRTransforms
 		//new ArithShiftRight64Less64(),
 		//new Call(),
 		//new Compare32x64(),
-		//new Compare64x32(),
+		new Compare64x32(),
 		//new Compare64x64(),
-		//new Branch64(),
+		new Branch64(),
 		//new ConvertI64ToR4(),
 		//new ConvertI64ToR8(),
 		new IfThenElse64(),
@@ -160,5 +160,8 @@ public static class IRTransforms
 		new ZeroExtend16x64(),
 		new ZeroExtend32x64(),
 		new ZeroExtend8x64(),
+
+		new Neg32(),
+		new Neg64(),
 	};
 }

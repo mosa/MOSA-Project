@@ -29,7 +29,7 @@ public partial class MosaSettings
 
 	#endregion Constants
 
-	public readonly Settings Settings = new Settings();
+	public readonly Settings Settings = new();
 
 	#region Properties
 

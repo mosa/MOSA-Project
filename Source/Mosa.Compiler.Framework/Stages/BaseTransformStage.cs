@@ -38,6 +38,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	{
 		MaxPasses = maxPasses;
 		EnableTransformOptimizations = false;
+		EnableBlockOptimizations = false;
 	}
 
 	protected override void Initialize()

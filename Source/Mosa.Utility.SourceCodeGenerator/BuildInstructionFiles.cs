@@ -621,9 +621,13 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					case "one":
 					case "1": cond1 = ".IsConstantOne"; break;
 					case "constant_imm8": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue; cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue; break;
-					//case "constant_imm12": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + (short.MinValue >> 4); cond3 = ".ConstantSigned32 <= " + (short.MaxValue >> 4); break;
+					case "constant_imm12": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + (short.MinValue >> 4); cond3 = ".ConstantSigned32 <= " + (short.MaxValue >> 4); break;
 					case "constant_imm16": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue; cond3 = ".ConstantSigned32 <= " + short.MaxValue; break;
 					case "constant_imm32": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue; cond3 = ".ConstantSigned32 <= " + int.MaxValue; break;
+					case "constant_imm8u": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + byte.MaxValue; break;
+					case "constant_imm12u": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 4096"; break;
+					case "constant_imm16u": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + ushort.MaxValue; break;
+					case "constant_imm32u": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + uint.MaxValue; break;
 					case "constant_1to4": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 4"; break;
 					case "constant_1to8": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 8"; break;
 					case "constant_0or1": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;

@@ -68,7 +68,7 @@
 					"Append": "opcode=01011001,rn=reg5:o1,rm=reg5:o2,option=000,imm3=000"
 				},
 				{
-					"Condition": "[register][constant]",
+					"Condition": "[register][constant_imm32u]",
 					"Encoding": "[sf]|[op]|[s]|[opcode]|[shift]|[imm12]|[rn]|[rd]",
 					"Append": "opcode=100010,rn=reg5:o1,shift=0,imm12=imm12:o2"
 				}

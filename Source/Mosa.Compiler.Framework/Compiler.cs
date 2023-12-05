@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
@@ -117,7 +118,7 @@ public sealed class Compiler
 
 	#region Static Methods
 
-	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(MosaSettings mosaSettings, bool is32BitPlatform) => new List<BaseCompilerStage>
+	private static List<BaseCompilerStage> GetDefaultCompilerPipeline(MosaSettings mosaSettings) => new List<BaseCompilerStage>
 	{
 		new InlinedSetupStage(),
 		new UnitTestStage(),
@@ -139,7 +140,7 @@ public sealed class Compiler
 		!string.IsNullOrEmpty(mosaSettings.InlinedFile) ? new InlinedFileStage() : null,
 	};
 
-	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(MosaSettings mosaSettings, bool is64BitPlatform) => new List<BaseMethodCompilerStage>
+	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(MosaSettings mosaSettings) => new List<BaseMethodCompilerStage>
 	{
 		new CILDecoderStage(),
 		new ExceptionStage(),
@@ -205,6 +206,9 @@ public sealed class Compiler
 		MosaSettings = mosaCompiler.MosaSettings;
 		Architecture = mosaCompiler.Platform;
 		CompilerHooks = mosaCompiler.CompilerHooks;
+
+		Architecture.UpdateSetting(MosaSettings);
+
 		TraceLevel = MosaSettings.TraceLevel;
 		Statistics = MosaSettings.EmitStatistics;
 		FullCheckMode = MosaSettings.FullCheckMode;
@@ -213,14 +217,14 @@ public sealed class Compiler
 
 		Linker = new MosaLinker(this);
 
-		ObjectHeaderSize = Architecture.NativePointerSize + 4 + 4; // Hash Value (32-bit) + Lock & Status (32-bit) + Method Table
+		ObjectHeaderSize = Architecture.NativePointerSize + 4 + 4; // Method Table Ptr + Hash Value (32-bit) + Lock & Status (32-bit)
 
 		MethodStagePipelines = new Pipeline<BaseMethodCompilerStage>[MaxThreads];
 
 		MethodScheduler = new MethodScheduler(this);
 		MethodScanner = new MethodScanner(this);
 
-		CollectntrinsicAndStubMethods();
+		CollectIntrinsicAndStubMethods();
 
 		PlugSystem = new PlugSystem(TypeSystem);
 
@@ -228,7 +232,7 @@ public sealed class Compiler
 		InternalRuntimeType = GeInternalRuntimeType();
 
 		// Build the default compiler pipeline
-		CompilerPipeline.Add(GetDefaultCompilerPipeline(MosaSettings, Architecture.Is32BitPlatform));
+		CompilerPipeline.Add(GetDefaultCompilerPipeline(MosaSettings));
 
 		// Call hook to allow for the extension of the pipeline
 		CompilerHooks.ExtendCompilerPipeline?.Invoke(CompilerPipeline);
@@ -239,7 +243,7 @@ public sealed class Compiler
 		HasError = false;
 	}
 
-	private void CollectntrinsicAndStubMethods()
+	private void CollectIntrinsicAndStubMethods()
 	{
 		foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
 		{
@@ -321,7 +325,7 @@ public sealed class Compiler
 
 			MethodStagePipelines[threadID] = pipeline;
 
-			pipeline.Add(GetDefaultMethodPipeline(MosaSettings, Architecture.Is64BitPlatform));
+			pipeline.Add(GetDefaultMethodPipeline(MosaSettings));
 
 			// Call hook to allow for the extension of the pipeline
 			CompilerHooks.ExtendMethodCompilerPipeline?.Invoke(pipeline);
@@ -351,8 +355,7 @@ public sealed class Compiler
 	/// Executes the compiler pre-compiler stages.
 	/// </summary>
 	/// <remarks>
-	/// The method iterates the compilation stage chain and runs each
-	/// stage on the input.
+	/// The method iterates the compilation stage chain and runs each stage on the input.
 	/// </remarks>
 	internal void Setup()
 	{
@@ -480,8 +483,7 @@ public sealed class Compiler
 	/// Executes the compiler post compiler stages.
 	/// </summary>
 	/// <remarks>
-	/// The method iterates the compilation stage chain and runs each
-	/// stage on the input.
+	/// The method iterates the compilation stage chain and runs each stage on the input.
 	/// </remarks>
 	internal void Finalization()
 	{
