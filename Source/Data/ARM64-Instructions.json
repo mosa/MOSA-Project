@@ -26,6 +26,28 @@
 			]
 		},
 		{
+			"Name": "Adc32",
+			"Commutative": "true",
+			"FamilyName": "ARM64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Add with carry",
+			"OpcodeEncodingAppend": "sf=0,opcode=11010000,op=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[sf]|[op]|[s]|[opcode]|[rm]|000000|[rn]|[rd]",
+					"Append": "rd=reg5:r,rn=reg5:o1,rm=reg5:o2,s=setflag:status"
+				}
+			]
+		},
+		{
 			"Name": "Adc64",
 			"Commutative": "true",
 			"FamilyName": "ARM64",
@@ -44,6 +66,33 @@
 					"Condition": "[register][register]",
 					"Encoding": "[sf]|[op]|[s]|[opcode]|[rm]|000000|[rn]|[rd]",
 					"Append": "rd=reg5:r,rn=reg5:o1,rm=reg5:o2,s=setflag:status"
+				}
+			]
+		},
+		{
+			"Name": "Add32",
+			"Commutative": "true",
+			"FamilyName": "ARM64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Add with carry",
+			"OpcodeEncodingAppend": "sf=0,op=0,rd=reg5:r,s=setflag:status",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[sf]|[op]|[s]|[opcode]|[rm]|[option]|[imm3]|[rn]|[rd]",
+					"Append": "opcode=01011001,rn=reg5:o1,rm=reg5:o2,option=000,imm3=000"
+				},
+				{
+					"Condition": "[register][constant_imm32u]",
+					"Encoding": "[sf]|[op]|[s]|[opcode]|[shift]|[imm12]|[rn]|[rd]",
+					"Append": "opcode=100010,rn=reg5:o1,shift=0,imm12=imm12:o2"
 				}
 			]
 		},
@@ -71,6 +120,50 @@
 					"Condition": "[register][constant_imm32u]",
 					"Encoding": "[sf]|[op]|[s]|[opcode]|[shift]|[imm12]|[rn]|[rd]",
 					"Append": "opcode=100010,rn=reg5:o1,shift=0,imm12=imm12:o2"
+				}
+			]
+		},
+		{
+			"Name": "And64",
+			"Commutative": "true",
+			"FamilyName": "ARM64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "sf=1,opc=00,rd=reg5:r",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[sf]|[opc]|[opcode]|[shift]|[n]|[rm]|[imm6]|[rn]|[rd]",
+					"Append": "opcode=01010,shift=00,n=0,imm6=000000,rn=reg5:o1,rm=reg5:o2"
+				}
+			]
+		},
+		{
+			"Name": "And32",
+			"Commutative": "true",
+			"FamilyName": "ARM64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "sf=0,opc=00,rd=reg5:r",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[sf]|[opc]|[opcode]|[shift]|[n]|[rm]|[imm6]|[rn]|[rd]",
+					"Append": "opcode=01010,shift=00,n=0,imm6=000000,rn=reg5:o1,rm=reg5:o2"
 				}
 			]
 		}
