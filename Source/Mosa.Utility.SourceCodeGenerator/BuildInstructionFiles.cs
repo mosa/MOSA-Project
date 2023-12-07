@@ -794,6 +794,14 @@ public class BuildInstructionFiles : BuildBaseTemplate
 						Lines.AppendLine($"opcodeEncoder.Append8Bits(0b{binary[..8]});");
 						break;
 
+					case 13:
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..13]});");
+						break;
+
+					case 14:
+						Lines.AppendLine($"opcodeEncoder.Append14Bits(0b{binary[..14]});");
+						break;
+
 					case 32:
 						Lines.AppendLine($"opcodeEncoder.Append32Bits(0b{binary[..32]});");
 						break;
@@ -852,6 +860,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "imm4": code = "Append4BitImmediate"; return;
 			case "imm4hn": code = "Append4BitImmediateHighNibble"; return;
 			case "imm5": code = "Append5BitImmediate"; return;
+			case "imm6": code = "Append6BitImmediate"; return;
+			case "imm7": code = "Append7BitImmediate"; return;
 			case "imm8": code = "Append8BitImmediate"; return;
 			case "imm12": code = "Append12BitImmediate"; return;
 			case "imm16": code = "Append16BitImmediate"; return;
@@ -859,6 +869,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "imm32+": code = "Append32BitImmediateWithOffset"; return;
 			case "imm64": code = "Append64BitImmediate"; return;
 			case "rel24": code = "EmitRelative24"; return;
+			case "rel26": code = "EmitRelative26"; return;
+			case "rel26x4": code = "EmitRelative26x4"; return;
 			case "rel32": code = "EmitRelative32"; return;
 			case "rel64": code = "EmitRelative64"; return;
 

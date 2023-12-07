@@ -9,56 +9,8 @@ namespace Mosa.Compiler.Framework;
 /// <summary>
 /// Base code emitter.
 /// </summary>
-public sealed class CodeEmitter
+public sealed partial class CodeEmitter
 {
-	#region Patch Type
-
-	/// <summary>
-	/// Patch
-	/// </summary>
-	private struct Patch
-	{
-		/// <summary>
-		/// Patch label
-		/// </summary>
-		public readonly int Label;
-
-		/// <summary>
-		/// The patch's position in the stream
-		/// </summary>
-		public readonly int Position;
-
-		/// <summary>
-		/// The patch size
-		/// </summary>
-		public int Size;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Patch"/> struct.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <param name="position">The position.</param>
-		public Patch(int label, int position, int size)
-		{
-			Label = label;
-			Position = position;
-			Size = size;
-		}
-
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString()
-		{
-			return $"[{Position} -> {Label}]";
-		}
-	}
-
-	#endregion Patch Type
-
 	#region Data Members
 
 	/// <summary>
@@ -79,7 +31,7 @@ public sealed class CodeEmitter
 	/// <summary>
 	/// Patches we need to perform.
 	/// </summary>
-	private readonly List<Patch> Patches = new List<Patch>();
+	private readonly List<LabelPatch> Patches = new();
 
 	#endregion Data Members
 
@@ -155,7 +107,7 @@ public sealed class CodeEmitter
 
 	private void AddPatch(int label, int position, int size)
 	{
-		Patches.Add(new Patch(label, position, size));
+		Patches.Add(new LabelPatch(label, position, size, LabelPatch.PatchType.Normal));
 	}
 
 	public void ResolvePatches(TraceLog trace)
@@ -177,9 +129,6 @@ public sealed class CodeEmitter
 
 			// Write relative offset to stream
 			CodeStream.Write(relOffset);
-
-			//var bytes = BitConverter.GetBytes(relOffset);
-			//CodeStream.Write(bytes, 4 - patch.Size, patch.Size);
 
 			trace?.Log($"Patch L_{patch.Label:X5} @ {patch.Position} with 0x{relOffset:X8}");
 		}
@@ -276,7 +225,7 @@ public sealed class CodeEmitter
 	{
 		if (TryGetLabel(label, out var position))
 		{
-			// Yes, calculate the relative offset
+			// Label: Calculate the relative offset
 			return position - (int)CodeStream.Position - offset;
 		}
 		else

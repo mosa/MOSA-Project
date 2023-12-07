@@ -182,6 +182,11 @@ public sealed class OpcodeEncoder
 		AppendBits(value, 12);
 	}
 
+	public void Append14Bits(uint value)
+	{
+		AppendBits(value, 14);
+	}
+
 	public void Append16Bits(ushort value)
 	{
 		AppendBits(value, 16);
@@ -348,6 +353,36 @@ public sealed class OpcodeEncoder
 		}
 	}
 
+	public void Append6BitImmediate(Operand operand)
+	{
+		Debug.Assert(operand.IsConstant);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendBits(operand.ConstantUnsigned32, 6);
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+			AppendBits(0, 6);
+		}
+	}
+
+	public void Append7BitImmediate(Operand operand)
+	{
+		Debug.Assert(operand.IsConstant);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendBits(operand.ConstantUnsigned32, 7);
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+			AppendBits(0, 7);
+		}
+	}
+
 	public void Append8BitImmediate(Operand operand)
 	{
 		Debug.Assert(operand.IsConstant);
@@ -355,8 +390,6 @@ public sealed class OpcodeEncoder
 		if (operand.IsResolvedConstant)
 		{
 			AppendByte((byte)operand.ConstantUnsigned32);
-
-			//AppendBits(operand.ConstantUnsigned32, 8);
 		}
 		else
 		{
@@ -434,7 +467,6 @@ public sealed class OpcodeEncoder
 
 		if (operand.IsResolvedConstant)
 		{
-			//AppendBits(operand.ConstantUnsigned64, 64);
 			Append64BitImmediate(operand.ConstantUnsigned64);
 		}
 		else
@@ -445,6 +477,13 @@ public sealed class OpcodeEncoder
 	}
 
 	public void EmitRelative24(int label)
+	{
+		// TODO
+		var offset = Emitter.EmitRelative(label, 3, 3);
+		Append24BitImmediate((uint)offset);
+	}
+
+	public void EmitRelative26x4(int label)
 	{
 		// TODO
 		var offset = Emitter.EmitRelative(label, 3, 3);

@@ -166,6 +166,83 @@
 					"Append": "opcode=01010,shift=00,n=0,imm6=000000,rn=reg5:o1,rm=reg5:o2"
 				}
 			]
+		},
+		{
+			"Name": "Asr32",
+			"Commutative": "false",
+			"FamilyName": "ARM64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Arithmetic Shift Right",
+			"OpcodeEncodingAppend": "sf=0,opc=00,rd=reg5:r",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[sf]|[opc]|[opcode]|0|[shift]|011111|[rn]|[rd]",
+					"Append": "opcode=100110,shift=imm6:o2,rn=reg5:o1"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[sf]|[opc]|[opcode]|[rm]|00101|10|[rn]|[rd]",
+					"Append": "opcode=11010110,rm=reg5:o2,rn=reg5:o1"
+				}
+			]
+		},
+		{
+			"Name": "Asr64",
+			"Commutative": "false",
+			"FamilyName": "ARM64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Arithmetic Shift Right",
+			"OpcodeEncodingAppend": "sf=1,opc=00,rd=reg5:r",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[sf]|[opc]|[opcode]|[shift]|111111|[rn]|[rd]",
+					"Append": "opcode=100110,shift=imm7:o2,rn=reg5:o1"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[sf]|[opc]|[opcode]|[rm]|00101|10|[rn]|[rd]",
+					"Append": "opcode=11010110,rm=reg5:o2,rn=reg5:o1"
+				}
+			]
+		},
+		{
+			"Name": "B",
+			"Commutative": "true",
+			"FamilyName": "ARM32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"FlowControl": "ConditionalBranch",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Unconditional branch",
+			"OpcodeEncodingAppend": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[constant]",
+					"Encoding": "000101|[imm26]",
+					"Append": "imm26=rel26x4:label"
+				}
+			]
 		}
 	]
 }
