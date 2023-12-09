@@ -43,6 +43,7 @@ public sealed class CmpXChgLoad32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
+		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstantZero && node.Operand4.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x0F);

@@ -26,7 +26,7 @@ public sealed class Branch32 : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var target = context.BranchTargets[0];
+		var target = context.BranchTarget1;
 		var block = context.Block;
 
 		if (!Compare32(context.ConditionCode, context.Operand1, context.Operand2))

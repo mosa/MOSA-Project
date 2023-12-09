@@ -21,6 +21,7 @@ public sealed class Ucomisd : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
+		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0x66);
 		opcodeEncoder.SuppressByte(0x40);
 		opcodeEncoder.Append4Bits(0b0100);

@@ -420,6 +420,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 		var first = true;
 		var cond = false;
 
+		Lines.AppendLine("\t\topcodeEncoder.StartOpcode();");
+
 		foreach (var entry in node.OpcodeEncoding)
 		{
 			string end = entry.End;
@@ -949,7 +951,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			"r" => "node.Result",
 			"r1" => "node.Result",
 			"r2" => "node.Result2",
-			"label" => "node.BranchTargets[0].Label",
+			"label" => "node.BranchTarget1.Label",
 			"status" => "node",
 			_ => part
 		};

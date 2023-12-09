@@ -23,6 +23,7 @@ public sealed class XChg32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
+		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0x87);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);

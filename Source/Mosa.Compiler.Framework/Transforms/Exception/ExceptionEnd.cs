@@ -19,7 +19,7 @@ public sealed class ExceptionEnd : BaseExceptionTransform
 		//var exceptionManager = transform.GetManager<ExceptionManager>();
 
 		var label = TraverseBackToNativeBlock(context.Block).Label;
-		var target = context.BranchTargets[0];
+		var target = context.BranchTarget1;
 
 		var immediate = FindImmediateExceptionHandler(transform, label);
 

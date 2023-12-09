@@ -51,7 +51,7 @@ public sealed class Phi32Conditional : BasePhiTransform
 		var op2Condition = ctx.Operand2;
 		var condition = ctx.ConditionCode;
 		var instruction = ctx.Instruction;
-		var branch = ctx.BranchTargets[0];
+		var branch = ctx.BranchTarget1;
 
 		var resultCondition = transform.VirtualRegisters.Allocate(result);
 		var conditionInstruction = instruction == IR.Branch32 ? IR.Compare32x32 : IR.Compare64x64;

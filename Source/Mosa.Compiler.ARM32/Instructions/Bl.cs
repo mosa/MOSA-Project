@@ -21,6 +21,7 @@ public sealed class Bl : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
+		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));

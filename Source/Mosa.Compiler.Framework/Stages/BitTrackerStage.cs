@@ -372,7 +372,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			if (!result.HasValue)
 				continue;
 
-			var newBranch = node.BranchTargets[0];
+			var newBranch = node.BranchTarget1;
 
 			trace?.Log($"REMOVED:\t{node}");
 			node.SetNop();

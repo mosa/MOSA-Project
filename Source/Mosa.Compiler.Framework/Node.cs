@@ -382,6 +382,10 @@ public sealed class Node
 	/// </summary>
 	public List<BasicBlock> BranchTargets { get; private set; }
 
+	public BasicBlock BranchTarget1 => BranchTargets[0];
+
+	public BasicBlock BranchTarget2 => BranchTargets[1];
+
 	/// <summary>
 	/// Gets the branch targets count.
 	/// </summary>

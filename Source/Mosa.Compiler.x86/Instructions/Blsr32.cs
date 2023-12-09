@@ -37,6 +37,7 @@ public sealed class Blsr32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
+		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0xC4);
 		opcodeEncoder.Append1Bit(0b1);
 		opcodeEncoder.Append1Bit(0b1);

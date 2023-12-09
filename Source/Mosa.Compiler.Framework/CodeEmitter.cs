@@ -105,9 +105,9 @@ public sealed partial class CodeEmitter
 		return Labels.TryGetValue(label, out position);
 	}
 
-	private void AddPatch(int label, int position, int size)
+	private void AddPatch(int label, int start, int position, int bitPosition, LabelPatchType labelPatchType)
 	{
-		Patches.Add(new LabelPatch(label, position, size, LabelPatch.PatchType.Normal));
+		Patches.Add(new LabelPatch(label, start, position, bitPosition, labelPatchType));
 	}
 
 	public void ResolvePatches(TraceLog trace)
@@ -122,13 +122,7 @@ public sealed partial class CodeEmitter
 				throw new ArgumentException("Missing label while resolving patches.", $"label={labelPosition}");
 			}
 
-			CodeStream.Position = patch.Position;
-
-			// Compute relative branch offset
-			var relOffset = labelPosition - (patch.Position + 4);
-
-			// Write relative offset to stream
-			CodeStream.Write(relOffset);
+			var relOffset = patch.Patch(CodeStream, labelPosition);
 
 			trace?.Log($"Patch L_{patch.Label:X5} @ {patch.Position} with 0x{relOffset:X8}");
 		}
@@ -221,19 +215,10 @@ public sealed partial class CodeEmitter
 		);
 	}
 
-	public int EmitRelative(int label, int offset, int size)
+	internal int EmitRelative(int label, int start, int position, int bitPosition, LabelPatchType labelPatchType)
 	{
-		if (TryGetLabel(label, out var position))
-		{
-			// Label: Calculate the relative offset
-			return position - (int)CodeStream.Position - offset;
-		}
-		else
-		{
-			// Forward jump, we can't resolve yet so store a patch
-			AddPatch(label, (int)CodeStream.Position, size);
+		AddPatch(label, start, position, bitPosition, labelPatchType);
 
-			return 0;
-		}
+		return 0;
 	}
 }

@@ -35,6 +35,7 @@ public sealed class Bt64 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
+		opcodeEncoder.StartOpcode();
 		if (node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.SuppressByte(0x40);

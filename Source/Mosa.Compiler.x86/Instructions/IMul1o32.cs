@@ -40,6 +40,7 @@ public sealed class IMul1o32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
+		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0xF7);

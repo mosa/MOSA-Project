@@ -18,7 +18,7 @@ public sealed class TryEnd : BaseExceptionTransform
 	{
 		var label = TraverseBackToNativeBlock(context.Block).Label;
 		var immediate = FindImmediateExceptionHandler(transform, label);
-		var target = context.BranchTargets[0];
+		var target = context.BranchTarget1;
 
 		Debug.Assert(immediate != null);
 

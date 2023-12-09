@@ -21,6 +21,7 @@ public sealed class Push32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
+		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(0b0101);

@@ -17,7 +17,7 @@ public sealed class Branch32 : BaseIRTransform
 	{
 		MoveConstantRightForComparison(context);
 
-		var target = context.BranchTargets[0];
+		var target = context.BranchTarget1;
 		var condition = context.ConditionCode;
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;

@@ -27,7 +27,7 @@ public sealed class Branch64 : BaseLowerTo32Transform
 
 		var operand1 = context.Operand1;
 		var operand2 = context.Operand2;
-		var target = context.BranchTargets[0];
+		var target = context.BranchTarget1;
 
 		var branch = context.ConditionCode;
 		var branchUnsigned = context.ConditionCode.GetUnsigned();

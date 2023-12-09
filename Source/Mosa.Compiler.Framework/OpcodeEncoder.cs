@@ -7,10 +7,16 @@ namespace Mosa.Compiler.Framework;
 
 public sealed class OpcodeEncoder
 {
+	public int Position => Emitter.CurrentPosition + (BitCount / 8);
+
+	public int BitPosition => BitCount % 8;
+
+	public int OpcodeStartPosition;
+
 	private CodeEmitter Emitter;
 
-	private ulong Bits;
-	private int BitsLength;
+	private ulong DataBits;
+	private int BitCount;
 
 	private readonly int Size = 8;
 
@@ -24,6 +30,13 @@ public sealed class OpcodeEncoder
 		Reset();
 	}
 
+	public void StartOpcode()
+	{
+		Debug.Assert(BitCount % 8 == 0);
+
+		OpcodeStartPosition = Position;
+	}
+
 	public void SetEmitter(CodeEmitter emitter)
 	{
 		Emitter = emitter;
@@ -31,45 +44,45 @@ public sealed class OpcodeEncoder
 
 	private void Reset()
 	{
-		Bits = 0;
-		BitsLength = 0;
+		DataBits = 0;
+		BitCount = 0;
 	}
 
 	private void Emit()
 	{
-		if (BitsLength == 8 && Size == 8)
+		if (BitCount == 8 && Size == 8)
 		{
 			if (SuppressFlag)
 			{
 				SuppressFlag = false;
 
-				if (Bits == SuppressValue)
+				if (DataBits == SuppressValue)
 				{
 					Reset();
 					return;
 				}
 			}
 
-			Emitter.WriteByte((byte)Bits);
+			Emitter.WriteByte((byte)DataBits);
 			Reset();
 		}
-		else if (BitsLength == 32 && Size == 32)
+		else if (BitCount == 32 && Size == 32)
 		{
-			Emitter.WriteByte((byte)Bits);
-			Emitter.WriteByte((byte)(Bits >> 8));
-			Emitter.WriteByte((byte)(Bits >> 16));
-			Emitter.WriteByte((byte)(Bits >> 24));
+			Emitter.WriteByte((byte)DataBits);
+			Emitter.WriteByte((byte)(DataBits >> 8));
+			Emitter.WriteByte((byte)(DataBits >> 16));
+			Emitter.WriteByte((byte)(DataBits >> 24));
 			Reset();
 		}
 	}
 
 	public void AppendBit(bool value)
 	{
-		BitsLength++;
+		BitCount++;
 
 		if (value)
 		{
-			Bits |= 1u << (Size - BitsLength);
+			DataBits |= 1u << (Size - BitCount);
 		}
 
 		Emit();
@@ -77,10 +90,10 @@ public sealed class OpcodeEncoder
 
 	private void AppendBits(ulong value, int size)
 	{
-		if (BitsLength == 0 && size == 8)
+		if (BitCount == 0 && size == 8)
 		{
-			Bits = value;
-			BitsLength = size;
+			DataBits = value;
+			BitCount = size;
 			Emit();
 		}
 		else
@@ -478,21 +491,19 @@ public sealed class OpcodeEncoder
 
 	public void EmitRelative24(int label)
 	{
-		// TODO
-		var offset = Emitter.EmitRelative(label, 3, 3);
+		var offset = Emitter.EmitRelative(label, OpcodeStartPosition, Position, BitPosition, LabelPatchType.Patch_24Bits);
 		Append24BitImmediate((uint)offset);
 	}
 
 	public void EmitRelative26x4(int label)
 	{
-		// TODO
-		var offset = Emitter.EmitRelative(label, 3, 3);
+		var offset = Emitter.EmitRelative(label, OpcodeStartPosition, Position, BitPosition, LabelPatchType.Patch_26Bits_4x);
 		Append24BitImmediate((uint)offset);
 	}
 
 	public void EmitRelative32(int label)
 	{
-		var offset = Emitter.EmitRelative(label, 4, 4);
+		var offset = Emitter.EmitRelative(label, OpcodeStartPosition, Position, BitPosition, LabelPatchType.Patch_32Bits);
 		Append32BitImmediate((uint)offset);
 	}
 

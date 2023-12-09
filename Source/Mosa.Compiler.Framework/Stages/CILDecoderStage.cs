@@ -412,7 +412,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	private bool IsSourceAndTargetWithinSameTryOrException(Node node)
 	{
 		var leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
-		var targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;
+		var targetLabel = TraverseBackToNativeBlock(node.BranchTarget1).Label;
 
 		foreach (var handler in Method.ExceptionHandlers)
 		{
@@ -460,7 +460,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 					|| node.Instruction == IR.ExceptionEnd))
 					continue;
 
-				var target = node.BranchTargets[0];
+				var target = node.BranchTarget1;
 
 				if (IsSourceAndTargetWithinSameTryOrException(node))
 				{

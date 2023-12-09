@@ -27,11 +27,12 @@ public sealed class B : ARM64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
+		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsConstant)
 		{
 			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append2Bits(0b01);
-			opcodeEncoder.EmitRelative26x4(node.BranchTargets[0].Label);
+			opcodeEncoder.EmitRelative26x4(node.BranchTarget1.Label);
 			return;
 		}
 

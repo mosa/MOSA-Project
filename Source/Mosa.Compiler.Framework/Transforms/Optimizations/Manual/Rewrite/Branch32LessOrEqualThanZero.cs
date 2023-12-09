@@ -24,7 +24,7 @@ public sealed class Branch32LessOrEqualThanZero : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var target = context.BranchTargets[0];
+		var target = context.BranchTarget1;
 
 		var phiBlock = GetOtherBranchTarget(context.Block, target);
 

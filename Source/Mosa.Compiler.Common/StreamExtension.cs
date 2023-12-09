@@ -42,18 +42,23 @@ public static class StreamExtension
 		} while (n != 0);
 	}
 
-	public static void Write(this Stream stream, ushort value)
+	public static void Write8(this Stream stream, byte value)
+	{
+		stream.WriteByte(value);
+	}
+
+	public static void Write16(this Stream stream, ushort value)
 	{
 		stream.WriteByte((byte)(value & 0xFF));
 		stream.WriteByte((byte)((value >> 8) & 0xFF));
 	}
 
-	public static void Write(this Stream stream, short value)
+	public static void Write16(this Stream stream, short value)
 	{
-		stream.Write((ushort)value);
+		stream.Write16((ushort)value);
 	}
 
-	public static void Write(this Stream stream, uint value)
+	public static void Write32(this Stream stream, uint value)
 	{
 		stream.WriteByte((byte)(value & 0xFF));
 		stream.WriteByte((byte)((value >> 8) & 0xFF));
@@ -61,12 +66,12 @@ public static class StreamExtension
 		stream.WriteByte((byte)((value >> 24) & 0xFF));
 	}
 
-	public static void Write(this Stream stream, int value)
+	public static void Write32(this Stream stream, int value)
 	{
-		stream.Write((uint)value);
+		stream.Write32((uint)value);
 	}
 
-	public static void Write(this Stream stream, ulong value)
+	public static void Write64(this Stream stream, ulong value)
 	{
 		stream.WriteByte((byte)(value & 0xFF));
 		stream.WriteByte((byte)((value >> 8) & 0xFF));
@@ -78,8 +83,23 @@ public static class StreamExtension
 		stream.WriteByte((byte)((value >> 56) & 0xFF));
 	}
 
-	public static void Write(this Stream stream, long value)
+	public static void Write64(this Stream stream, long value)
 	{
-		stream.Write((ulong)value);
+		stream.Write64((ulong)value);
+	}
+
+	public static int Read8(this Stream stream)
+	{
+		return stream.ReadByte();
+	}
+
+	public static int Read16(this Stream stream)
+	{
+		return stream.ReadByte() | (stream.ReadByte() << 8);
+	}
+
+	public static int Read32(this Stream stream)
+	{
+		return stream.ReadByte() | (stream.ReadByte() << 8) | (stream.ReadByte() << 16) | (stream.ReadByte() << 24);
 	}
 }
