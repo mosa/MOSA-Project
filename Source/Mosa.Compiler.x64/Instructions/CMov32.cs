@@ -35,7 +35,6 @@ public sealed class CMov32 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.SuppressByte(0x40);
 		opcodeEncoder.Append4Bits(0b0100);

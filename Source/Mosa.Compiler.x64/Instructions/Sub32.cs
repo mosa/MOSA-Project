@@ -34,7 +34,6 @@ public sealed class Sub32 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-		opcodeEncoder.StartOpcode();
 		if (node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.SuppressByte(0x40);

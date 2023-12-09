@@ -21,7 +21,6 @@ public sealed class Str32 : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));

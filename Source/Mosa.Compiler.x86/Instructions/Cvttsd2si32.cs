@@ -21,7 +21,6 @@ public sealed class Cvttsd2si32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0xF2);
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.Append8Bits(0x2C);

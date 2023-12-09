@@ -11,8 +11,6 @@ public sealed class OpcodeEncoder
 
 	public int BitPosition => BitCount % 8;
 
-	public int OpcodeStartPosition;
-
 	private CodeEmitter Emitter;
 
 	private ulong DataBits;
@@ -28,13 +26,6 @@ public sealed class OpcodeEncoder
 		Size = size;
 		SuppressFlag = false;
 		Reset();
-	}
-
-	public void StartOpcode()
-	{
-		Debug.Assert(BitCount % 8 == 0);
-
-		OpcodeStartPosition = Position;
 	}
 
 	public void SetEmitter(CodeEmitter emitter)
@@ -491,19 +482,19 @@ public sealed class OpcodeEncoder
 
 	public void EmitRelative24(int label)
 	{
-		var offset = Emitter.EmitRelative(label, OpcodeStartPosition, Position, BitPosition, LabelPatchType.Patch_24Bits);
+		var offset = Emitter.EmitRelative(label, Position, BitPosition, LabelPatchType.Patch_24Bits);
 		Append24BitImmediate((uint)offset);
 	}
 
 	public void EmitRelative26x4(int label)
 	{
-		var offset = Emitter.EmitRelative(label, OpcodeStartPosition, Position, BitPosition, LabelPatchType.Patch_26Bits_4x);
+		var offset = Emitter.EmitRelative(label, Position, BitPosition, LabelPatchType.Patch_26Bits_4x);
 		Append24BitImmediate((uint)offset);
 	}
 
 	public void EmitRelative32(int label)
 	{
-		var offset = Emitter.EmitRelative(label, OpcodeStartPosition, Position, BitPosition, LabelPatchType.Patch_32Bits);
+		var offset = Emitter.EmitRelative(label, Position, BitPosition, LabelPatchType.Patch_32Bits);
 		Append32BitImmediate((uint)offset);
 	}
 

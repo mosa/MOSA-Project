@@ -45,7 +45,6 @@ public sealed class Jmp : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0xE9);
 		opcodeEncoder.EmitRelative32(node.BranchTarget1.Label);
 	}

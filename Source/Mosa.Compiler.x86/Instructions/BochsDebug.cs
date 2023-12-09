@@ -23,7 +23,6 @@ public sealed class BochsDebug : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0x66);
 		opcodeEncoder.Append8Bits(0x87);
 		opcodeEncoder.Append8Bits(0xdb);

@@ -40,7 +40,6 @@ public sealed class IMul32 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.SuppressByte(0x40);
 		opcodeEncoder.Append4Bits(0b0100);
 		opcodeEncoder.Append1Bit(0b0);

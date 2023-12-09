@@ -23,7 +23,6 @@ public sealed class MovCRStore32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.Append8Bits(0x22);
 		opcodeEncoder.Append2Bits(0b11);

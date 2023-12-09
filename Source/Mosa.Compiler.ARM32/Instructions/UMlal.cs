@@ -31,7 +31,6 @@ public sealed class UMlal : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));

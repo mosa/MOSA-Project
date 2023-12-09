@@ -105,9 +105,9 @@ public sealed partial class CodeEmitter
 		return Labels.TryGetValue(label, out position);
 	}
 
-	private void AddPatch(int label, int start, int position, int bitPosition, LabelPatchType labelPatchType)
+	private void AddPatch(int label, int position, int bitPosition, LabelPatchType labelPatchType)
 	{
-		Patches.Add(new LabelPatch(label, start, position, bitPosition, labelPatchType));
+		Patches.Add(new LabelPatch(label, position, bitPosition, labelPatchType));
 	}
 
 	public void ResolvePatches(TraceLog trace)
@@ -215,9 +215,9 @@ public sealed partial class CodeEmitter
 		);
 	}
 
-	internal int EmitRelative(int label, int start, int position, int bitPosition, LabelPatchType labelPatchType)
+	internal int EmitRelative(int label, int position, int bitPosition, LabelPatchType labelPatchType)
 	{
-		AddPatch(label, start, position, bitPosition, labelPatchType);
+		AddPatch(label, position, bitPosition, labelPatchType);
 
 		return 0;
 	}

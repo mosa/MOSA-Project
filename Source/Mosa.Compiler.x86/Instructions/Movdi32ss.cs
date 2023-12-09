@@ -21,7 +21,6 @@ public sealed class Movdi32ss : X86Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append8Bits(0b01100110);
 		opcodeEncoder.Append8Bits(0b00001111);
 		opcodeEncoder.Append8Bits(0x7E);

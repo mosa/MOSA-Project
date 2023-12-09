@@ -23,7 +23,6 @@ public sealed class And32 : ARM64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append1Bit(0b0);

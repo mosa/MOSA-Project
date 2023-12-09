@@ -23,7 +23,6 @@ public sealed class Abs : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));

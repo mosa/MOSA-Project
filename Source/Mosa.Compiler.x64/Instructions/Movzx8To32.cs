@@ -21,7 +21,6 @@ public sealed class Movzx8To32 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.SuppressByte(0x40);
 		opcodeEncoder.Append4Bits(0b0100);
 		opcodeEncoder.Append1Bit(0b1);

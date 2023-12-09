@@ -21,7 +21,6 @@ public sealed class Lea32 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
-		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero && node.Operand3.IsConstant && node.Operand3.ConstantUnsigned32 >= 0 && node.Operand3.ConstantUnsigned32 <= 1 && node.Operand4.IsConstantZero)
 		{
 			opcodeEncoder.SuppressByte(0x40);

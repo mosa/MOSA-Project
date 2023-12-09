@@ -25,7 +25,6 @@ public sealed class Out16 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0xEF);

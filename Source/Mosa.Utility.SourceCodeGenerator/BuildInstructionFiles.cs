@@ -420,8 +420,6 @@ public class BuildInstructionFiles : BuildBaseTemplate
 		var first = true;
 		var cond = false;
 
-		Lines.AppendLine("\t\topcodeEncoder.StartOpcode();");
-
 		foreach (var entry in node.OpcodeEncoding)
 		{
 			string end = entry.End;

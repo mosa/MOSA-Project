@@ -25,7 +25,6 @@ public sealed class B : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 		opcodeEncoder.Append4Bits(0b1010);
 		opcodeEncoder.EmitRelative24(node.BranchTarget1.Label);

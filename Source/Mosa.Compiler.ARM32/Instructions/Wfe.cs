@@ -21,7 +21,6 @@ public sealed class Wfe : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-		opcodeEncoder.StartOpcode();
 		opcodeEncoder.Append32Bits(0x00000000);
 	}
 }

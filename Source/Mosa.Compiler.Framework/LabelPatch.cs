@@ -15,11 +15,6 @@ internal partial class LabelPatch
 	public readonly int Label;
 
 	/// <summary>
-	/// The patch's opcode start position
-	/// </summary>
-	public readonly int Start;
-
-	/// <summary>
 	/// The patch's position in the stream
 	/// </summary>
 	public readonly int Position;
@@ -39,10 +34,9 @@ internal partial class LabelPatch
 	/// </summary>
 	/// <param name="label">The label.</param>
 	/// <param name="position">The position.</param>
-	public LabelPatch(int label, int start, int position, int bitPosition, LabelPatchType type)
+	public LabelPatch(int label, int position, int bitPosition, LabelPatchType type)
 	{
 		Label = label;
-		Start = start;
 		Position = position;
 		BitPosition = bitPosition;
 		Type = type;

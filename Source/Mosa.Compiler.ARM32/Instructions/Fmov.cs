@@ -21,7 +21,6 @@ public sealed class Fmov : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-		opcodeEncoder.StartOpcode();
 		if (node.Operand1.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0b00011110);
