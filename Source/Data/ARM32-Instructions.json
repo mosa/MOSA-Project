@@ -1110,7 +1110,7 @@
 				},
 				{
 					"Condition": "[register][register][register]",
-					"Encoding": "[arm-single-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=1,u=updir:status,s=0,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=1,u=updir:status,s=0,h=1,offset=imm12:o2"
 				}
 			]
 		},
@@ -1135,7 +1135,7 @@
 				},
 				{
 					"Condition": "[register][register][register]",
-					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=0,u=updir:status,s=1,h=1"
+					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=0,u=updir:status,s=1,h=1,offset=imm12:o2"
 				}
 			]
 		},
@@ -1160,7 +1160,7 @@
 				},
 				{
 					"Condition": "[register][register][register]",
-					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=0,u=updir:status,s=1,h=0"
+					"Encoding": "[arm-halfword-data-transfer-register],rd=reg4:o3,rn=reg4:o1,rm=reg4:o2,i=0,p=0,l=0,w=writeback:status,b=0,u=updir:status,s=1,h=0,offset=imm12:o2"
 				}
 			]
 		},
@@ -2277,7 +2277,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0000,e=0,f=fp:r,fn=reg3:r,rd=reg4:o1,gh=00,i=0,fd=reg3:r,fm=000"
+					"Encoding": "[arm-fp-register-transfer],opcode=0000,e=0,fn=reg3:r,rd=reg4:o1,f=fp:r,gh=00,i=0,fm=000"
 				}
 			]
 		},
@@ -2298,7 +2298,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0000,e=0,f=fp:r,gh=00,i=0,fd=reg4:r,fm=reg3:o1,fn=000"
+					"Encoding": "[arm-fp-register-transfer],opcode=0001,e=0,fn=000,fd=reg4:r,f=fp:r,gh=00,i=0,fm=reg3:o1"
 				}
 			]
 		},

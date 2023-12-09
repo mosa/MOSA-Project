@@ -28,7 +28,7 @@ public sealed class Fix : ARM32Instruction
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
-			opcodeEncoder.Append4Bits(0b0000);
+			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append4Bits(0b0001);
