@@ -31,6 +31,7 @@ public sealed class Dec32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.Result.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append4Bits(0b0100);
 		opcodeEncoder.Append1Bit(0b1);

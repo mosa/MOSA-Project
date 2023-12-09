@@ -20,6 +20,7 @@ public sealed class RdMSR : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.Append8Bits(0x32);

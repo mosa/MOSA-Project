@@ -22,6 +22,7 @@ public sealed class Cmfe : ARM32Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand1.IsPhysicalRegister)
 		{

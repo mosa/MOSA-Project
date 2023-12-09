@@ -20,6 +20,7 @@ public sealed class Stos : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0xAB);
 	}

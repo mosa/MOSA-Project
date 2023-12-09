@@ -38,6 +38,7 @@ public sealed class Lzcnt32 : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0xF3);
 		opcodeEncoder.Append8Bits(0x0F);

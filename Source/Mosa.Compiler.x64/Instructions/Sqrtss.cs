@@ -22,6 +22,7 @@ public sealed class Sqrtss : X64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.SuppressByte(0x40);
 		opcodeEncoder.Append4Bits(0b0100);

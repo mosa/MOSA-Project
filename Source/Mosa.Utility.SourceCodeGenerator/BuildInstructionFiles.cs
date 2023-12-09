@@ -393,6 +393,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			Lines.AppendLine();
 			Lines.AppendLine("\tpublic override void Emit(Node node, OpcodeEncoder opcodeEncoder)");
 			Lines.AppendLine("\t{");
+
 			if (node.VariableOperands == null || node.VariableOperands == "false")
 			{
 				Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
@@ -404,6 +405,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);");
 					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);");
 				}
+
+				Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());");
 				Lines.AppendLine();
 			}
 

@@ -38,6 +38,7 @@ public sealed class Mul32 : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0xF7);
 		opcodeEncoder.Append2Bits(0b11);

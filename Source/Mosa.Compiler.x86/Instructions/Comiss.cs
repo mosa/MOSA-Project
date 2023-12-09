@@ -34,6 +34,7 @@ public sealed class Comiss : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0b00001111);
 		opcodeEncoder.Append8Bits(0b00101111);

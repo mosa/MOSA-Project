@@ -25,6 +25,7 @@ public sealed class MovapsLoad : X64Instruction
 		System.Diagnostics.Debug.Assert(node.Result.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 5 && node.Operand2.IsConstantZero)
 		{

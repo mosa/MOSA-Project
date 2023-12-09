@@ -34,6 +34,7 @@ public sealed class Setcc : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.Append4Bits(0b1001);

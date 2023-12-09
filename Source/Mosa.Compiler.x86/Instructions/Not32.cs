@@ -23,6 +23,7 @@ public sealed class Not32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.Result.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0xF7);
 		opcodeEncoder.Append2Bits(0b11);

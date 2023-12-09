@@ -42,6 +42,7 @@ public sealed class CmpXChgLoad64 : X64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 4);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsPhysicalRegister && node.Operand3.IsConstantZero && node.Operand4.IsPhysicalRegister)
 		{

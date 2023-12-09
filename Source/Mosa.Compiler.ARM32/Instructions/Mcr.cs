@@ -22,6 +22,7 @@ public sealed class Mcr : ARM32Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 5);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand1.IsConstant && node.Operand2.IsConstant && node.Operand3.IsConstant && node.Operand4.IsConstant && node.Operand5.IsConstant)
 		{

@@ -39,6 +39,7 @@ public sealed class Xor32 : X64Instruction
 		System.Diagnostics.Debug.Assert(node.Result.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand2.IsPhysicalRegister)
 		{

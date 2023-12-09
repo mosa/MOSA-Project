@@ -28,6 +28,11 @@ public sealed class OpcodeEncoder
 		Reset();
 	}
 
+	public bool CheckOpcodeAlignment()
+	{
+		return BitCount % 8 == 0;
+	}
+
 	public void SetEmitter(CodeEmitter emitter)
 	{
 		Emitter = emitter;
