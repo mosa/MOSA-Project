@@ -36,6 +36,8 @@ public sealed class Mov : ARM32Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -49,6 +51,8 @@ public sealed class Mov : ARM32Instruction
 			opcodeEncoder.Append4Bits(0b0000);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append12BitImmediate(node.Operand1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

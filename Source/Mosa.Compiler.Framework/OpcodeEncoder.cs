@@ -317,6 +317,21 @@ public sealed class OpcodeEncoder
 		}
 	}
 
+	public void Append3BitImmediate(Operand operand)
+	{
+		Debug.Assert(operand.IsConstant);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendBits(operand.ConstantUnsigned32, 3);
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+			AppendBits(0, 3);
+		}
+	}
+
 	public void Append4BitImmediate(Operand operand)
 	{
 		Debug.Assert(operand.IsConstant);

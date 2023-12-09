@@ -32,6 +32,8 @@ public sealed class Bx : ARM32Instruction
 			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode >> 1);
 			opcodeEncoder.Append1Bit(0b0);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

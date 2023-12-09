@@ -36,6 +36,8 @@ public sealed class Uxth : ARM32Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append4Bits(0b0111);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

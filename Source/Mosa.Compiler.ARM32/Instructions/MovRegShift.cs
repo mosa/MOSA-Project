@@ -38,6 +38,8 @@ public sealed class MovRegShift : ARM32Instruction
 			opcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

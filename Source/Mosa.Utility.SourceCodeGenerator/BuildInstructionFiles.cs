@@ -683,6 +683,9 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 		if (end)
 		{
+			Lines.AppendLine();
+			Lines.Append(tabs);
+			Lines.AppendLine("\tSystem.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());");
 			Lines.Append(tabs);
 			Lines.AppendLine("\treturn;");
 		}
@@ -860,6 +863,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "imm1": code = "Append1BitImmediate"; return;
 			case "imm2": code = "Append2BitImmediate"; return;
 			case "imm2scale": code = "Append2BitScale"; return;
+			case "imm3": code = "Append3BitImmediate"; return;
 			case "imm4": code = "Append4BitImmediate"; return;
 			case "imm4hn": code = "Append4BitImmediateHighNibble"; return;
 			case "imm5": code = "Append5BitImmediate"; return;

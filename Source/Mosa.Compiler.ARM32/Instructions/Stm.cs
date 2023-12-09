@@ -33,6 +33,8 @@ public sealed class Stm : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append16BitImmediate(node.Operand3);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -47,6 +49,8 @@ public sealed class Stm : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append16Bits(ToPower2(node.Operand3.Register.RegisterCode));
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

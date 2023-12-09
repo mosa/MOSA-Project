@@ -36,6 +36,8 @@ public sealed class Wfc : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

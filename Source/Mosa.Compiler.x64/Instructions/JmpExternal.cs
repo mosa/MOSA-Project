@@ -58,6 +58,8 @@ public sealed class JmpExternal : X64Instruction
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -65,6 +67,8 @@ public sealed class JmpExternal : X64Instruction
 		{
 			opcodeEncoder.Append8Bits(0xE9);
 			opcodeEncoder.EmitRelative32(node.Operand1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

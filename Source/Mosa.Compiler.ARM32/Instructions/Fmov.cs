@@ -32,6 +32,8 @@ public sealed class Fmov : ARM32Instruction
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append4Bits(0b0000);
 			opcodeEncoder.Append1Bit(0b0);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -46,6 +48,8 @@ public sealed class Fmov : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

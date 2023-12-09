@@ -36,6 +36,8 @@ public sealed class Stf : ARM32Instruction
 			opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append8BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

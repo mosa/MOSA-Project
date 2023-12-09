@@ -37,6 +37,8 @@ public sealed class Lidt : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b011);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -48,6 +50,8 @@ public sealed class Lidt : X64Instruction
 			opcodeEncoder.Append3Bits(0b011);
 			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append64BitImmediate(node.Operand1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

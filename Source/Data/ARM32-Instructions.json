@@ -2156,7 +2156,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0000,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1"
+					"Encoding": "[arm-fp-data-processing],opcode=0000,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
 				}
 			]
 		},
@@ -2181,7 +2181,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0001,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1"
+					"Encoding": "[arm-fp-data-processing],opcode=0001,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
 				}
 			]
 		},
@@ -2206,7 +2206,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0101,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1"
+					"Encoding": "[arm-fp-data-processing],opcode=0101,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
 				}
 			]
 		},
@@ -2231,7 +2231,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0111,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1"
+					"Encoding": "[arm-fp-data-processing],opcode=0111,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
 				}
 			]
 		},
@@ -2256,7 +2256,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0100,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1"
+					"Encoding": "[arm-fp-data-processing],opcode=0100,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
 				}
 			]
 		},
@@ -2277,11 +2277,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0001,e=0,f=fp:r,gh=00,i=0,fd=reg3:r,fm=reg3:o1"
-				},
-				{
-					"Condition": "[constant]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0001,e=0,f=fp:r,gh=00,i=1,fd=reg3:r,fm=imm4:o1"
+					"Encoding": "[arm-fp-register-transfer],opcode=0000,e=0,f=fp:r,fn=reg3:r,rd=reg4:o1,gh=00,i=0,fd=reg3:r,fm=000"
 				}
 			]
 		},
@@ -2302,7 +2298,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0000,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1"
+					"Encoding": "[arm-fp-register-transfer],opcode=0000,e=0,f=fp:r,gh=00,i=0,fd=reg4:r,fm=reg3:o1,fn=000"
 				}
 			]
 		},
@@ -2411,7 +2407,7 @@
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparison],opcode=100,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "[arm-fp-comparison],opcode=100,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm3:o2"
 				}
 			]
 		},
@@ -2436,7 +2432,7 @@
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparison],opcode=101,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "[arm-fp-comparison],opcode=101,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm3:o2"
 				}
 			]
 		},
@@ -2462,7 +2458,7 @@
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparison],opcode=110,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "[arm-fp-comparison],opcode=110,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm3:o2"
 				}
 			]
 		},
@@ -2487,7 +2483,7 @@
 				},
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparison],opcode=111,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "[arm-fp-comparison],opcode=111,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm3:o2"
 				}
 			]
 		},

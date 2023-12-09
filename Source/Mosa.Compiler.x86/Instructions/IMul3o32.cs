@@ -48,6 +48,8 @@ public sealed class IMul3o32 : X86Instruction
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 			opcodeEncoder.Append8BitImmediate(node.Operand3);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -59,6 +61,8 @@ public sealed class IMul3o32 : X86Instruction
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 			opcodeEncoder.Append32BitImmediate(node.Operand3);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

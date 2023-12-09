@@ -36,6 +36,8 @@ public sealed class Mcr : ARM32Instruction
 			opcodeEncoder.Append4BitImmediate(node.Operand5);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4BitImmediate(node.Operand3);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

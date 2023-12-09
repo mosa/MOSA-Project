@@ -29,6 +29,8 @@ public sealed class In8 : X64Instruction
 		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0xEC);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -36,6 +38,8 @@ public sealed class In8 : X64Instruction
 		{
 			opcodeEncoder.Append8Bits(0xE4);
 			opcodeEncoder.Append8BitImmediate(node.Operand1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

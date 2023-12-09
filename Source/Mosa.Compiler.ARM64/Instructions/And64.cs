@@ -37,6 +37,8 @@ public sealed class And64 : ARM64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append5Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

@@ -32,6 +32,8 @@ public sealed class Movw : ARM32Instruction
 			opcodeEncoder.Append4BitImmediateHighNibble(node.Operand1);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append12BitImmediate(node.Operand1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

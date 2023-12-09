@@ -44,6 +44,8 @@ public sealed class Mul : ARM32Instruction
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(0b1001);
 			opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

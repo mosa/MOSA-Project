@@ -35,6 +35,8 @@ public sealed class Add64 : ARM64Instruction
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append5Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -49,6 +51,8 @@ public sealed class Add64 : ARM64Instruction
 			opcodeEncoder.Append12BitImmediate(node.Operand2);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append5Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

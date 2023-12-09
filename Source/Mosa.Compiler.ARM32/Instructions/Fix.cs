@@ -30,12 +30,15 @@ public sealed class Fix : ARM32Instruction
 			opcodeEncoder.Append4Bits(0b1110);
 			opcodeEncoder.Append4Bits(0b0000);
 			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append4Bits(0b0001);
-			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

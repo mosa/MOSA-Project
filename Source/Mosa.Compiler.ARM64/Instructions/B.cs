@@ -33,6 +33,8 @@ public sealed class B : ARM64Instruction
 			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append2Bits(0b01);
 			opcodeEncoder.EmitRelative26x4(node.BranchTarget1.Label);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

@@ -29,6 +29,8 @@ public sealed class Out32 : X86Instruction
 		if (node.Operand1.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0xEF);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -36,6 +38,8 @@ public sealed class Out32 : X86Instruction
 		{
 			opcodeEncoder.Append8Bits(0xE7);
 			opcodeEncoder.Append8BitImmediate(node.Operand1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

@@ -49,6 +49,8 @@ public sealed class Cmp32 : X86Instruction
 			opcodeEncoder.Append3Bits(0b111);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append8BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -56,6 +58,8 @@ public sealed class Cmp32 : X86Instruction
 		{
 			opcodeEncoder.Append8Bits(0x3D);
 			opcodeEncoder.Append32BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -65,6 +69,8 @@ public sealed class Cmp32 : X86Instruction
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -75,6 +81,8 @@ public sealed class Cmp32 : X86Instruction
 			opcodeEncoder.Append3Bits(0b111);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append32BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

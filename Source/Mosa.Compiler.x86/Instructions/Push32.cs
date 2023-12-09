@@ -27,6 +27,8 @@ public sealed class Push32 : X86Instruction
 			opcodeEncoder.Append4Bits(0b0101);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -34,6 +36,8 @@ public sealed class Push32 : X86Instruction
 		{
 			opcodeEncoder.Append8Bits(0x68);
 			opcodeEncoder.Append32BitImmediate(node.Operand1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

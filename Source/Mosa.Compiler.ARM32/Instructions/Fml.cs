@@ -39,6 +39,8 @@ public sealed class Fml : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -57,6 +59,8 @@ public sealed class Fml : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

@@ -33,6 +33,8 @@ public sealed class Pop : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(0b1101);
 			opcodeEncoder.Append16BitImmediate(node.Operand1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

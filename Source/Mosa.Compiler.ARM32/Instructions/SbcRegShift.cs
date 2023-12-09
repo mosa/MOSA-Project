@@ -38,6 +38,8 @@ public sealed class SbcRegShift : ARM32Instruction
 			opcodeEncoder.Append2BitImmediate(node.Operand4);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

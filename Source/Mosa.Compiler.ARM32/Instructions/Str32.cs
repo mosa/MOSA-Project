@@ -35,6 +35,8 @@ public sealed class Str32 : ARM32Instruction
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
 			opcodeEncoder.Append12BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -55,6 +57,8 @@ public sealed class Str32 : ARM32Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 

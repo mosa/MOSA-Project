@@ -47,6 +47,8 @@ public sealed class Sub64 : X64Instruction
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -63,6 +65,8 @@ public sealed class Sub64 : X64Instruction
 			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append32BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
