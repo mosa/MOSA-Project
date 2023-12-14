@@ -462,7 +462,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 		if (cond)
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\t\tthrow new Common.Exceptions.CompilerException(\"Invalid Opcode\");");
+			Lines.AppendLine("\t\tthrow new Common.Exceptions.CompilerException($\"Invalid Opcode: {node}\");");
 		}
 		else
 		{

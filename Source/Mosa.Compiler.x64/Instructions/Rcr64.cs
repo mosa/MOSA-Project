@@ -83,6 +83,6 @@ public sealed class Rcr64 : X64Instruction
 			return;
 		}
 
-		throw new Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

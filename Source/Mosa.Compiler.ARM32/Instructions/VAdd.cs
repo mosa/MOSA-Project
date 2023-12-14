@@ -45,6 +45,6 @@ public sealed class VAdd : ARM32Instruction
 			return;
 		}
 
-		throw new Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

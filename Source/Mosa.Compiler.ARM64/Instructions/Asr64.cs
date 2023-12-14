@@ -54,6 +54,6 @@ public sealed class Asr64 : ARM64Instruction
 			return;
 		}
 
-		throw new Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

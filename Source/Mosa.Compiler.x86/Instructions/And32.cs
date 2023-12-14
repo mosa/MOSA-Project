@@ -85,6 +85,6 @@ public sealed class And32 : X86Instruction
 			return;
 		}
 
-		throw new Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

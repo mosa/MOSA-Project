@@ -168,6 +168,6 @@ public sealed class Lea32 : X86Instruction
 			return;
 		}
 
-		throw new Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

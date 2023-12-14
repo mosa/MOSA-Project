@@ -2082,7 +2082,7 @@
 				{
 					"Condition": "[floatregister][zero]",
 					"Encoding": "conditional|11101|[D]|11|1010|[Vd]|101|[sz]|[E]|1|0|0|0000",
-					"Append": "D=0,Vd=reg4:o1,sz=fp:r,E=0"
+					"Append": "D=0,Vd=reg4:o1,sz=fp:o1,E=0"
 				}
 			]
 		},

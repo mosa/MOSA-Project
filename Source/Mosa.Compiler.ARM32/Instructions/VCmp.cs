@@ -55,7 +55,7 @@ public sealed class VCmp : ARM32Instruction
 			opcodeEncoder.Append4Bits(0b1010);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(0b101);
-			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
+			opcodeEncoder.Append1Bit(node.Operand1.IsR4 ? 0 : 1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
@@ -66,6 +66,6 @@ public sealed class VCmp : ARM32Instruction
 			return;
 		}
 
-		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node} {node.Result} = {node.Operand1} {node.Operand2}");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }
