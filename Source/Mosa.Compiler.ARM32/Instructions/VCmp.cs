@@ -66,6 +66,6 @@ public sealed class VCmp : ARM32Instruction
 			return;
 		}
 
-		throw new Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node} {node.Result} = {node.Operand1} {node.Operand2}");
 	}
 }
