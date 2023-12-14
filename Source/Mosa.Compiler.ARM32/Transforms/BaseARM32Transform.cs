@@ -223,7 +223,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 
 			var source = MoveConstantToRegister(transform, context, label);
 
-			context.InsertBefore().SetInstruction(ARM32.Ldf, v1, source, Operand.Constant32_0);
+			context.InsertBefore().SetInstruction(ARM32.VLdr, v1, source, Operand.Constant32_0);
 
 			return v1;
 		}

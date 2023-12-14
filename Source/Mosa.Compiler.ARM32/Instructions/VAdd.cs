@@ -7,14 +7,16 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Fmov - Copies aloating-point immediate constant into register
+/// VAdd - Addition
 /// </summary>
-public sealed class Fmov : ARM32Instruction
+public sealed class VAdd : ARM32Instruction
 {
-	internal Fmov()
+	internal VAdd()
 		: base(1, 2)
 	{
 	}
+
+	public override bool IsCommutative => true;
 
 	public override void Emit(Node node, OpcodeEncoder opcodeEncoder)
 	{
@@ -22,37 +24,27 @@ public sealed class Fmov : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
-		if (node.Operand1.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
 		{
-			opcodeEncoder.Append8Bits(0b00011110);
+			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+			opcodeEncoder.Append4Bits(0b1110);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
-			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
-			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append4Bits(0b0000);
-			opcodeEncoder.Append1Bit(0b0);
-
-			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
-			return;
-		}
-
-		if (node.Operand1.IsPhysicalRegister)
-		{
-			opcodeEncoder.Append4Bits(0b0011);
-			opcodeEncoder.Append3Bits(0b110);
-			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append2Bits(0b11);
-			opcodeEncoder.Append4Bits(0b0000);
-			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(0b101);
+			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

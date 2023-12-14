@@ -24,5 +24,7 @@ public sealed class Pause : X64Instruction
 
 		opcodeEncoder.Append8Bits(0xF3);
 		opcodeEncoder.Append8Bits(0x90);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

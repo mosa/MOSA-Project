@@ -35,5 +35,7 @@ public sealed class Not32 : X64Instruction
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(0b010);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

@@ -44,5 +44,7 @@ public sealed class Branch : X86Instruction
 		opcodeEncoder.Append4Bits(0b1000);
 		opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 		opcodeEncoder.EmitRelative32(node.BranchTarget1.Label);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

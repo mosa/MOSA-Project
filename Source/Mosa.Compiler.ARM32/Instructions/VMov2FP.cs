@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Rfs - Read Floating-Point Status Register
+/// VMov2FP - Move (ARM core register to scalar)
 /// </summary>
-public sealed class Rfs : ARM32Instruction
+public sealed class VMov2FP : ARM32Instruction
 {
-	internal Rfs()
+	internal VMov2FP()
 		: base(1, 1)
 	{
 	}
@@ -28,19 +28,21 @@ public sealed class Rfs : ARM32Instruction
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
-			opcodeEncoder.Append4Bits(0b0011);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4Bits(0b0001);
+			opcodeEncoder.Append2Bits(0b00);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(0b1011);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(0b0000);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

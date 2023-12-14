@@ -15,6 +15,6 @@ public sealed class MoveR4 : BaseIRTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Translate(transform, context, ARM32.Mvf, true);
+		Translate(transform, context, ARM32.VMov, false);
 	}
 }

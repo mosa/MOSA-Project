@@ -9,17 +9,8 @@
 
 		"[arm-halfword-data-transfer-immediate]=    conditional|000|[p]|[u]|1|[w]|[l]|[rn]|[rd]|[offsethigh]|1|[s]|[h]|1|[offsetlow]",
 		"[arm-halfword-data-transfer-register]=     conditional|000|[p]|[u]|0|[w]|[l]|[rn]|[rd]|0000|1|[s]|[h]|1|[rm]",
-
 		"[arm-extended-register]=                   conditional|01101|[s]|1|[b]|1111|[rd]|[rotate]|00|0111|[rm]",
-
-		"[arm-block-transfer]=                      conditional|100|[p]|[u]|[s]|[w]|[l]|[rn]|[list]",
-
-		"[arm-fp-data-processing]=                  conditional|1110|[opcode]|[e]|[fn]|0|[fd]|0001|[f]|[gh]|0|[i]|[fm]",
-		"[arm-fp-register-transfer]=                conditional|1110|[opcode]|[e]|[fn]|[rd]|0001|[f]|[gh]|1|[i]|[fm]",
-		"[arm-fp-comparison]=                       conditional|1110|[opcode]|1|[e]|[fn]|1111|0001|[f]|[gh]|1|[i]|[fm]",
-		"[arm-fp-data-transfer-register]=           conditional|110|[p]|[u]|[t1]|[wb]|[ls]|[rn]|[t0]|[fd]|0001|[offset]",
-
-		"[arm-coprocessor-transfer]=                conditional|1110|[opcode]|[l]|[crn]|[rd]|[cpn]|[cp]|1|[crm]"
+		"[arm-block-transfer]=                      conditional|100|[p]|[u]|[s]|[w]|[l]|[rn]|[list]"
 	],
 	"Instructions": [
 		{
@@ -37,19 +28,20 @@
 			"Description": "Move from processor register to coprocessor",
 			"OperandDescriptions": [
 				{
-					"Result": "ARM destination register",
-					"Operand1": "Coprocessor number",
-					"Operand2": "Coprocessor operation mode",
-					"Operand3": "Coprocessor operand register",
-					"Operand4": "Coprocessor source/destination register",
-					"Operand5": "Coprocessor information"
+					"Result": "ARM destination register (Rt)",
+					"Operand1": "Coprocessor number (coproc)",
+					"Operand2": "Coprocessor operation mode (opc1)",
+					"Operand3": "Coprocessor operand register (CRn)",
+					"Operand4": "Coprocessor source/destination register (CRm)",
+					"Operand5": "Coprocessor information (opc2)"
 				}
 			],
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[constant][constant][constant][constant][constant]",
-					"Encoding": "[arm-coprocessor-transfer],s=setflag:status,l=1,rd=reg4:r,crn=imm4:o2,crm=imm4:o3,cpn=imm4:o4,opcode=imm4:o2,cp=imm4:o5"
+					"Encoding": "conditional|1110|[opc1]|[l]|[CRn]|[Rt]|[coproc]|[opc2]|1|[CRm]",
+					"Append": "opc1=imm3:o2,l=1,CRn=imm4:o3,Rt=reg4:r,coproc=imm4:o4,opc2=imm3:o5,CRm=imm4:o4"
 				}
 			]
 		},
@@ -68,19 +60,20 @@
 			"Description": "Move from coprocessor to processor register",
 			"OperandDescriptions": [
 				{
-					"Result": "ARM destination register",
-					"Operand1": "Coprocessor number",
-					"Operand2": "Coprocessor operation mode",
-					"Operand3": "Coprocessor operand register",
-					"Operand4": "Coprocessor source/destination register",
-					"Operand5": "Coprocessor information"
+					"Result": "ARM destination register (Rt)",
+					"Operand1": "Coprocessor number (coproc)",
+					"Operand2": "Coprocessor operation mode (opc1)",
+					"Operand3": "Coprocessor operand register (CRn)",
+					"Operand4": "Coprocessor source/destination register (CRm)",
+					"Operand5": "Coprocessor information (opc2)"
 				}
 			],
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[constant][constant][constant][constant][constant]",
-					"Encoding": "[arm-coprocessor-transfer],s=setflag:status,l=0,rd=reg4:r,crn=imm4:o2,crm=imm4:o3,cpn=imm4:o4,opcode=imm4:o2,cp=imm4:o5"
+					"Encoding": "conditional|1110|[opc1]|0|[CRn]|[Rt]|[coproc]|[opc2]|1|[CRm]",
+					"Append": "opc1=imm3:o2,CRn=imm4:o3,Rt=reg4:r,cpn=imm4:o4,coproc=reg4:o1,opc2=imm3:o5,CRm=imm4:o4"
 				}
 			]
 		},
@@ -1886,7 +1879,7 @@
 			]
 		},
 		{
-			"Name": "Adf",
+			"Name": "VAdd",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
@@ -1902,16 +1895,35 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0000,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0000,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "conditional|11100|[D]|11|[Vn]|[Vd]|101|[sz]|[N]|0|[M]|0|[Vm]",
+					"Append": "D=0,Vn=reg4:o1,Vd=reg4:r,sz=fp:r,N=0,M=0,Vm=reg4:o2"
 				}
 			]
 		},
 		{
-			"Name": "Muf",
+			"Name": "VSub",
+			"Commutative": "true",
+			"FamilyName": "ARM32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "conditional|11100|[D]|11|[Vn]|[Vd]|101|[sz]|[N]|1|[M]|0|[Vm]",
+					"Append": "D=0,Vn=reg4:o1,Vd=reg4:r,sz=fp:r,N=0,M=0,Vm=reg4:o2"
+				}
+			]
+		},
+		{
+			"Name": "VMul",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
@@ -1927,66 +1939,13 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0001,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0001,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "conditional|11100|[D]|10|[Vn]|[Vd]|101|[sz]|[N]|0|[M]|0|[Vm]",
+					"Append": "D=0,Vn=reg4:o1,Vd=reg4:r,sz=fp:r,N=0,M=0,Vm=reg4:o2"
 				}
 			]
 		},
 		{
-			"Name": "Suf",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Subtract",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0010,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0010,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
-				}
-			]
-		},
-		{
-			"Name": "Rsf",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Reverse Subtract",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0011,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0011,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
-				}
-			]
-		},
-		{
-			"Name": "Dvr",
+			"Name": "VDiv",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
@@ -2002,141 +1961,13 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0100,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0100,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
+					"Encoding": "conditional|11101|[D]|00|[Vn]|[Vd]|101|[sz]|[N]|0|[M]|0|[Vm]",
+					"Append": "D=0,Vn=reg4:o1,Vd=reg4:r,sz=fp:r,N=0,M=0,Vm=reg4:o2"
 				}
 			]
 		},
 		{
-			"Name": "Dvf",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Reverse Divide",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0101,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0101,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
-				}
-			]
-		},
-		{
-			"Name": "Rmf",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Remainder",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=1000,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=1000,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
-				}
-			]
-		},
-		{
-			"Name": "Fml",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Fast Multiply",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=1001,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=1001,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
-				}
-			]
-		},
-		{
-			"Name": "Fdv",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Fast Divide",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=1010,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=1010,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
-				}
-			]
-		},
-		{
-			"Name": "Frd",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Fast Reverse Divide",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing],opcode=1011,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=1011,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2"
-				}
-			]
-		},
-		{
-			"Name": "Mvf",
+			"Name": "VMov",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
@@ -2151,17 +1982,19 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0000,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1"
+					"Condition": "[floatregister]",
+					"Encoding": "conditional|11101|[D]|11|0000|[Vd]|101|[sz]|0|1|[M]|0|[Vm]",
+					"Append": "D=0,Vd=reg4:r,sz=fp:r,M=0,Vm=reg4:o1"
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0000,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
+					"Encoding": "conditional|11101|[D]|00|[imm4H]|[Vd]|101|[sz]|0|0|0|0|[imm4L]",
+					"Append": "D=0,Vd=reg4:r,sz=fp:r,imm4H=imm4hn:o1,imm4HLimm4:o1"
 				}
 			]
 		},
 		{
-			"Name": "Mnf",
+			"Name": "VMov2FP",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
@@ -2172,21 +2005,89 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"Description": "Move Negated",
+			"Description": "Move (ARM core register to scalar)",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0001,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1"
+					"Encoding": "conditional|1110|0|[opc1]|0|[Vd]|[Rt]|1011|[D]|[opc2]|1|0000",
+					"Append": "D=0,Vd=reg4:r,sz=fp:r,M=0,Rt=reg4:o1,opc1=00,opc2=00"
+				}
+			]
+		},
+		{
+			"Name": "VMov2U",
+			"Commutative": "true",
+			"FamilyName": "ARM32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Move (scalar to ARM core register) [Unsigned]",
+			"OpcodeEncodingAppend": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[floatregister]",
+					"Encoding": "conditional|1110|[U]|[opc1]|1|[Vn]|[Rt]|1011|[N]|[opc2]|1|0000",
+					"Append": "D=0,Rt=reg4:r,sz=fp:r,M=0,Vn=reg4:o1,opc1=00,opc2=00,N=1,U=1"
+				}
+			]
+		},
+		{
+			"Name": "VMov2S",
+			"Commutative": "true",
+			"FamilyName": "ARM32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Move (scalar to ARM core register) [Signed]",
+			"OpcodeEncodingAppend": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[floatregister]",
+					"Encoding": "conditional|1110|[U]|[opc1]|1|[Vn]|[Rt]|1011|[N]|[opc2]|1|0000",
+					"Append": "D=0,Rt=reg4:r,sz=fp:r,M=0,Vn=reg4:o1,opc1=00,opc2=00,N=0,U=0"
+				}
+			]
+		},
+		{
+			"Name": "VCmp",
+			"Commutative": "true",
+			"FamilyName": "ARM32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "Compares two floating-point registers",
+			"OpcodeEncodingAppend": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[floatregister][floatregister]",
+					"Encoding": "conditional|11101|[D]|11|0100|[Vd]|101|[sz]|[E]|1|[M]|0|[Vm]",
+					"Append": "D=0,Vd=reg4:o1,sz=fp:o1,E=0,M=0,Vm=reg4:o2"
 				},
 				{
-					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0001,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
+					"Condition": "[floatregister][zero]",
+					"Encoding": "conditional|11101|[D]|11|1010|[Vd]|101|[sz]|[E]|1|0|0|0000",
+					"Append": "D=0,Vd=reg4:o1,sz=fp:r,E=0"
 				}
 			]
 		},
 		{
-			"Name": "Abs",
+			"Name": "VMrs",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
@@ -2195,224 +2096,41 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Absolute value",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0101,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1"
-				},
-				{
-					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0101,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
-				}
-			]
-		},
-		{
-			"Name": "Rnd",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Round to integral value",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0111,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1"
-				},
-				{
-					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0111,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
-				}
-			]
-		},
-		{
-			"Name": "Sqt",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Square root",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-data-processing],opcode=0100,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1"
-				},
-				{
-					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0100,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm3:o1"
-				}
-			]
-		},
-		{
-			"Name": "Flt",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Convert Integer to Floating-Point",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0000,e=0,fn=reg3:r,rd=reg4:o1,f=fp:r,gh=00,i=0,fm=000"
-				}
-			]
-		},
-		{
-			"Name": "Fix",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Convert Floating-Point to Integer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0001,e=0,fn=000,fd=reg4:r,f=fp:r,gh=00,i=0,fm=reg3:o1"
-				}
-			]
-		},
-		{
-			"Name": "Wfs",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Write Floating-Point Status Register",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0010,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1"
-				}
-			]
-		},
-		{
-			"Name": "Rfs",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Read Floating-Point Status Register",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0011,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1"
-				}
-			]
-		},
-		{
-			"Name": "Wfc",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Write Floating-Point Control Register",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0100,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1"
-				}
-			]
-		},
-		{
-			"Name": "Rfc",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
+			"OperandCount": 0,
 			"ResultCount": 1,
 			"Description": "Read Floating-Point Control Register",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-register-transfer],opcode=0101,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1"
+					"Condition": "",
+					"Encoding": "conditional|111011110001|[Rt]|101000010000",
+					"Append": "Rt=reg4:r"
 				}
 			]
 		},
 		{
-			"Name": "Cmf",
+			"Name": "VMrs_APSR",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
-			"FlagsModified": "",
+			"FlagsModified": "NZCV",
 			"FlagsSet": "",
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 0,
 			"ResultCount": 0,
-			"Description": "Compare floating compare",
+			"Description": "Read Floating-Point Control Register into APSR",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-comparison],opcode=100,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparison],opcode=100,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm3:o2"
+					"Condition": "",
+					"Encoding": "conditional|111011110001|1111|101000010000"
 				}
 			]
 		},
 		{
-			"Name": "Cnf",
+			"Name": "VMsr",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
@@ -2421,136 +2139,59 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 0,
-			"Description": "Compare negated floating compare",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-comparison],opcode=101,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparison],opcode=101,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm3:o2"
-				}
-			]
-		},
-
-		{
-			"Name": "Cmfe",
-			"Commutative": "true",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 0,
-			"Description": "Compare floating with exception compare",
+			"Description": "Read Floating-Point Control Register",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[arm-fp-comparison],opcode=110,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparison],opcode=110,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm3:o2"
+					"Encoding": "conditional|111011100001|[Rt]|101000010000",
+					"Append": "Rt=reg4:o1"
 				}
 			]
 		},
 		{
-			"Name": "Cnfe",
+			"Name": "VLdr",
 			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
 			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 0,
-			"Description": "Compare negated floating with exception compare",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register]",
-					"Encoding": "[arm-fp-comparison],opcode=111,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2"
-				},
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-comparison],opcode=111,e=0,f=fp:o1,gh=00,i=1,fn=reg3:o1,fm=imm3:o2"
-				}
-			]
-		},
-		{
-			"Name": "Ldf",
-			"Commutative": "false",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Load Floating Point Data Transfer",
+			"Description": "Loads a single extension register from memory",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-fp-data-transfer-register],fd=reg3:r,rn=reg4:o1,t1=0,t0=fp:r,ls=1,p=1,wb=0,u=updir:status,offset=imm8:o2"
+					"Encoding": "conditional|1101|[U]|[D]|01|[Rn]|[Vd]|101|[sz]|[imm8]",
+					"Append": "U=0,D=0,Vd=reg4:r,Rn=reg4:o1,sz=fp:r,imm8=imm8:o2"
 				}
 			]
 		},
 		{
-			"Name": "Stf",
-			"Commutative": "false",
+			"Name": "VStr",
+			"Commutative": "true",
 			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
+			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 0,
-			"Description": "Store Floating Point Data Transfer",
+			"Description": "Stores a single extension register to memory",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-fp-data-transfer-register],fd=reg3:o3,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,u=updir:status,offset=imm8:o2"
-				}
-			]
-		},
-		{
-			"Name": "Fmov",
-			"Commutative": "false",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Copies aloating-point immediate constant into register",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[constant]",
-					"Encoding": "00011110|0|[type]|1|[imm]|100|00000|[rd],type=fp:r,imm=imm8:o2,rn=reg4:r"
-				},
-				{
-					"Condition": "[register]",
-					"Encoding": "[sf]|0011110|[type]|1|0|[rmode1]|11|[opcode1]|00000|[rn]|[rd],rd=reg4:r,rn=reg4:o1"
+					"Encoding": "conditional|1101|[U]|[D]|00|[Rn]|[Vd]|101|[sz]|[imm8]",
+					"Append": "U=0,D=0,Vd=reg4:o3,Rn=reg4:o1,sz=fp:o3,imm8=imm8:o2"
 				}
 			]
 		}

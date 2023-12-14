@@ -28,5 +28,7 @@ public sealed class Movss : X86Instruction
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

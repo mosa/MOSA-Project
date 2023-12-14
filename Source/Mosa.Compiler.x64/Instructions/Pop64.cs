@@ -31,5 +31,7 @@ public sealed class Pop64 : X64Instruction
 		opcodeEncoder.Append4Bits(0b0101);
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

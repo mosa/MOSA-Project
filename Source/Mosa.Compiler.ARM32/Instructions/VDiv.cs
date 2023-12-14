@@ -7,12 +7,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Wfs - Write Floating-Point Status Register
+/// VDiv - Divide
 /// </summary>
-public sealed class Wfs : ARM32Instruction
+public sealed class VDiv : ARM32Instruction
 {
-	internal Wfs()
-		: base(1, 1)
+	internal VDiv()
+		: base(1, 2)
 	{
 	}
 
@@ -21,26 +21,30 @@ public sealed class Wfs : ARM32Instruction
 	public override void Emit(Node node, OpcodeEncoder opcodeEncoder)
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
-		if (node.Operand1.IsPhysicalRegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
-			opcodeEncoder.Append4Bits(0b0010);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4Bits(0b0001);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append2Bits(0b00);
+			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(0b101);
+			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

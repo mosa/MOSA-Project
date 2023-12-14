@@ -48,5 +48,7 @@ public sealed class Jmp : X86Instruction
 
 		opcodeEncoder.Append8Bits(0xE9);
 		opcodeEncoder.EmitRelative32(node.BranchTarget1.Label);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

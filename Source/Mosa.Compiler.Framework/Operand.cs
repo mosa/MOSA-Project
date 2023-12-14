@@ -117,6 +117,8 @@ public sealed partial class Operand
 
 	public bool IsFloatingPoint => IsR4 | IsR8;
 
+	public bool IsFloatingPointRegister => IsPhysicalRegister && (IsR4 | IsR8);
+
 	public bool IsInteger => Primitive == PrimitiveType.Int32 || Primitive == PrimitiveType.Int64;
 
 	public bool IsLabel => Constant == ConstantType.Label;

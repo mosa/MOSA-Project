@@ -17,6 +17,6 @@ public sealed class AddR4 : BaseIRTransform
 	{
 		Framework.Transform.MoveConstantRight(context);
 
-		Translate(transform, context, ARM32.Adf, true);
+		Translate(transform, context, ARM32.VAdd, false);
 	}
 }

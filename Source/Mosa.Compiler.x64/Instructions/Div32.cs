@@ -55,5 +55,7 @@ public sealed class Div32 : X64Instruction
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(0b110);
 		opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

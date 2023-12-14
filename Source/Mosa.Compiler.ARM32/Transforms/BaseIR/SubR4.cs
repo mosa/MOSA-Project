@@ -15,6 +15,6 @@ public sealed class SubR4 : BaseIRTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Translate(transform, context, ARM32.Suf, true);
+		Translate(transform, context, ARM32.VSub, false);
 	}
 }

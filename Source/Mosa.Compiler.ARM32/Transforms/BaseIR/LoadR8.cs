@@ -17,6 +17,6 @@ public sealed class LoadR8 : BaseIRTransform
 	{
 		transform.OrderLoadStoreOperands(context);
 
-		TransformFloatingPointLoad(transform, context, ARM32.Ldf, context.Result, context.Operand1, context.Operand2);
+		TransformFloatingPointLoad(transform, context, ARM32.VLdr, context.Result, context.Operand1, context.Operand2);
 	}
 }

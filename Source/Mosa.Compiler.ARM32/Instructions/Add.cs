@@ -58,6 +58,6 @@ public sealed class Add : ARM32Instruction
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }

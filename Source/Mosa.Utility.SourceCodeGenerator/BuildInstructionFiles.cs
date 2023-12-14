@@ -462,8 +462,12 @@ public class BuildInstructionFiles : BuildBaseTemplate
 		if (cond)
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\t\tthrow new Compiler.Common.Exceptions.CompilerException(\"Invalid Opcode\");");
-			//Lines.AppendLine("\t\tthrow new Common.Exceptions.CompilerException(\"Invalid Opcode\");");
+			Lines.AppendLine("\t\tthrow new Common.Exceptions.CompilerException(\"Invalid Opcode\");");
+		}
+		else
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());");
 		}
 	}
 
@@ -608,6 +612,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					case "skip": continue;
 					case "ignore": continue;
 					case "register": cond1 = ".IsPhysicalRegister"; break;
+					case "floatregister": cond1 = ".IsFloatingPointRegister"; break;
 					case "constant": cond1 = ".IsConstant"; break;
 					case "eax": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 0"; break;
 					case "ecx": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 1"; break;
@@ -798,6 +803,10 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 					case 8:
 						Lines.AppendLine($"opcodeEncoder.Append8Bits(0b{binary[..8]});");
+						break;
+
+					case 12:
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..12]});");
 						break;
 
 					case 13:

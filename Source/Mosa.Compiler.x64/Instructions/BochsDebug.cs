@@ -27,5 +27,7 @@ public sealed class BochsDebug : X64Instruction
 		opcodeEncoder.Append8Bits(0x66);
 		opcodeEncoder.Append8Bits(0x87);
 		opcodeEncoder.Append8Bits(0xdb);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

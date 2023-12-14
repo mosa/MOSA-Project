@@ -5,11 +5,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Transforms.Tweak;
 
 /// <summary>
-/// Mvf
+/// VMov
 /// </summary>
-public sealed class Mvf : BaseTransform
+public sealed class VMov : BaseTransform
 {
-	public Mvf() : base(ARM32.Mvf, TransformType.Manual | TransformType.Transform)
+	public VMov() : base(ARM32.VMov, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

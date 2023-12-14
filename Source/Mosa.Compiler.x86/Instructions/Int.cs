@@ -46,5 +46,7 @@ public sealed class Int : X86Instruction
 
 		opcodeEncoder.Append8Bits(0xCD);
 		opcodeEncoder.Append8BitImmediate(node.Operand1);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

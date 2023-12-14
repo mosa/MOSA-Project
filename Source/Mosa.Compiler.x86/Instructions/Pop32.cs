@@ -25,5 +25,7 @@ public sealed class Pop32 : X86Instruction
 		opcodeEncoder.Append4Bits(0b0101);
 		opcodeEncoder.Append1Bit(0b1);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

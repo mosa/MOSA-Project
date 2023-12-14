@@ -28,5 +28,7 @@ public sealed class JmpFar : X86Instruction
 		opcodeEncoder.EmitForward32(6);
 		opcodeEncoder.Append8Bits(0x08);
 		opcodeEncoder.Append8Bits(0x00);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

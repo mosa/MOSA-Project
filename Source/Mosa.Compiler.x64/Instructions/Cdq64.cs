@@ -29,5 +29,7 @@ public sealed class Cdq64 : X64Instruction
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append8Bits(0x99);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

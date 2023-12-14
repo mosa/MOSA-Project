@@ -28,19 +28,19 @@ public sealed class Mcr : ARM32Instruction
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
-			opcodeEncoder.Append4BitImmediate(node.Operand2);
+			opcodeEncoder.Append3BitImmediate(node.Operand2);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4BitImmediate(node.Operand2);
-			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append4BitImmediate(node.Operand4);
-			opcodeEncoder.Append4BitImmediate(node.Operand5);
-			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4BitImmediate(node.Operand3);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append3BitImmediate(node.Operand5);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append4BitImmediate(node.Operand4);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException("Invalid Opcode");
 	}
 }
