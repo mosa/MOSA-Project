@@ -32,6 +32,7 @@ public sealed class AndN32 : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0xC4);
 		opcodeEncoder.Append1Bit(0b1);
@@ -47,5 +48,7 @@ public sealed class AndN32 : X86Instruction
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

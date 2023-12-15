@@ -20,11 +20,14 @@ public sealed class Movaps : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.Append8Bits(0x28);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

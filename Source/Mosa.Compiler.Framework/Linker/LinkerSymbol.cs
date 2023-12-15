@@ -104,10 +104,10 @@ public sealed class LinkerSymbol
 		switch (patchSize)
 		{
 			case 8: Stream.WriteByte((byte)value); return;
-			case 24: Stream.Write((ushort)value); Stream.Write((byte)value >> 16); return;
-			case 16: Stream.Write((ushort)value); return;
-			case 32: Stream.Write((uint)value); return;
-			case 64: Stream.Write(value); return;
+			case 24: Stream.Write16((ushort)value); Stream.Write32((byte)value >> 16); return;
+			case 16: Stream.Write16((ushort)value); return;
+			case 32: Stream.Write32((uint)value); return;
+			case 64: Stream.Write64(value); return;
 		}
 	}
 

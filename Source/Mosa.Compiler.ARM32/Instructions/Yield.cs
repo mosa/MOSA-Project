@@ -20,7 +20,10 @@ public sealed class Yield : ARM32Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append32Bits(0x00000000);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

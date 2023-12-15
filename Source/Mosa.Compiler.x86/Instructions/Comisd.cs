@@ -34,6 +34,7 @@ public sealed class Comisd : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0b01100110);
 		opcodeEncoder.Append8Bits(0b00001111);
@@ -41,5 +42,7 @@ public sealed class Comisd : X86Instruction
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

@@ -20,6 +20,7 @@ public sealed class Pextrd32 : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0b01100110);
 		opcodeEncoder.Append8Bits(0b00001111);
@@ -29,5 +30,7 @@ public sealed class Pextrd32 : X86Instruction
 		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		opcodeEncoder.Append8BitImmediate(node.Operand2);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

@@ -35,14 +35,12 @@ public sealed class Context
 	/// <summary>
 	/// Gets or sets the label.
 	/// </summary>
-	/// <value>The label.</value>
 	public int Label
 	{ get => Node.Label; set => Node.Label = value; }
 
 	/// <summary>
 	/// The order slot number (initialized by some stage)
 	/// </summary>
-	/// <value>The label.</value>
 	public int Offset
 	{ get => Node.Offset; set => Node.Offset = value; }
 
@@ -62,30 +60,33 @@ public sealed class Context
 	/// <summary>
 	/// Gets the branch targets.
 	/// </summary>
-	/// <value>
-	/// The targets.
-	/// </value>
 	public IList<BasicBlock> BranchTargets => Node.BranchTargets;
 
 	/// <summary>
+	/// Get the first branch target
+	/// </summary>
+	public BasicBlock BranchTarget1 => Node.BranchTarget1;
+
+	/// <summary>
+	/// Get the second branch target
+	/// </summary>
+	public BasicBlock BranchTarget2 => Node.BranchTarget2;
+
+	/// <summary>
+	/// <summary>
 	/// Gets the branch targets count.
 	/// </summary>
-	/// <value>
-	/// The branch targets count.
-	/// </value>
 	public int BranchTargetsCount => Node.BranchTargetsCount;
 
 	/// <summary>
 	/// Gets or sets the first operand.
 	/// </summary>
-	/// <value>The first operand.</value>
 	public Operand Operand1
 	{ get => Node.Operand1; set => Node.Operand1 = value; }
 
 	/// <summary>
 	/// Gets or sets the second operand.
 	/// </summary>
-	/// <value>The second operand.</value>
 	public Operand Operand2
 	{ get => Node.Operand2; set => Node.Operand2 = value; }
 

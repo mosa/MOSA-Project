@@ -22,6 +22,7 @@ public sealed class Adc64 : ARM64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
 		{
@@ -34,9 +35,11 @@ public sealed class Adc64 : ARM64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append5Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

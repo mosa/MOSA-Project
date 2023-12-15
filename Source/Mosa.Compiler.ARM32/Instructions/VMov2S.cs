@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Rfc - Read Floating-Point Control Register
+/// VMov2S - Move (scalar to ARM core register) [Signed]
 /// </summary>
-public sealed class Rfc : ARM32Instruction
+public sealed class VMov2S : ARM32Instruction
 {
-	internal Rfc()
+	internal VMov2S()
 		: base(1, 1)
 	{
 	}
@@ -22,22 +22,27 @@ public sealed class Rfc : ARM32Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
-		if (node.Operand1.IsPhysicalRegister)
+		if (node.Operand1.IsFloatingPointRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
-			opcodeEncoder.Append4Bits(0b0101);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(0b1011);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append2Bits(0b00);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append4Bits(0b0000);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

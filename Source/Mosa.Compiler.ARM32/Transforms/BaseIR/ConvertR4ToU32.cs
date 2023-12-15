@@ -2,27 +2,19 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.ARM32.Transforms.FloatingTweaks;
+namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 
 /// <summary>
 /// ConvertR4ToU32
 /// </summary>
-public sealed class ConvertR4ToU32 : BaseTransform
+public sealed class ConvertR4ToU32 : BaseIRTransform
 {
 	public ConvertR4ToU32() : base(IR.ConvertR4ToU32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 
-	public override bool Match(Context context, Transform transform)
-	{
-		return true;
-	}
-
 	public override void Transform(Context context, Transform transform)
 	{
-		var result = context.Result;
-		var operand1 = context.Operand1;
-
-		context.SetInstruction(IR.ConvertR4ToI32, result, operand1);
+		Translate(transform, context, ARM32.VMov2U, false);
 	}
 }

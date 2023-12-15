@@ -32,7 +32,7 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 			//Debug.Assert(node.Instruction.FlowControl == FlowControl.UnconditionalBranch);
 			Debug.Assert(node.BranchTargetsCount != 0);
 
-			var target = node.BranchTargets[0];
+			var target = node.BranchTarget1;
 
 			if (next == target)
 			{
@@ -52,7 +52,7 @@ public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 
 				Debug.Assert(node.BranchTargetsCount == 1);
 
-				var jumpTarget = jumpNode.BranchTargets[0];
+				var jumpTarget = jumpNode.BranchTarget1;
 
 				// reverse condition
 				branchNode.ConditionCode = branchNode.ConditionCode.GetOpposite();

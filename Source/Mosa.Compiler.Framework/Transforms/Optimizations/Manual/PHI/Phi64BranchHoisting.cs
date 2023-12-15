@@ -50,7 +50,7 @@ public sealed class Phi64BranchHoisting : BasePhiTransform
 
 		var targetBlock = result
 			? ctx.BranchTargets[0]
-			: ctx.NextNonEmpty.BranchTargets[0];
+			: ctx.NextNonEmpty.BranchTarget1;
 
 		ReplaceBranchTarget(incomingBlock, ctx.Block, targetBlock);
 

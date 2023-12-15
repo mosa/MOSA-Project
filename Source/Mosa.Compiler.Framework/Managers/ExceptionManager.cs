@@ -51,7 +51,7 @@ public class ExceptionManager : BaseTransformManager
 
 			if (node.Instruction == IR.ExceptionEnd || node.Instruction == IR.TryEnd)
 			{
-				LeaveTargets.AddIfNew(node.BranchTargets[0]);
+				LeaveTargets.AddIfNew(node.BranchTarget1);
 			}
 		}
 	}

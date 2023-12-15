@@ -15,6 +15,6 @@ public sealed class StoreR8 : BaseIRTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		TransformFloatingPointStore(transform, context, ARM32.Stf, context.Operand1, context.Operand2, context.Operand3);
+		TransformFloatingPointStore(transform, context, ARM32.VStr, context.Operand1, context.Operand2, context.Operand3);
 	}
 }

@@ -20,6 +20,7 @@ public sealed class Str16 : ARM32Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand3.IsPhysicalRegister)
 		{
@@ -38,14 +39,15 @@ public sealed class Str16 : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
 		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-			opcodeEncoder.Append2Bits(0b01);
-			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
 			opcodeEncoder.Append1Bit(0b1);
@@ -53,9 +55,15 @@ public sealed class Str16 : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append1Bit(0b1);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

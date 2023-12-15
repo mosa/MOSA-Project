@@ -38,10 +38,13 @@ public sealed class Branch : X64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.Append4Bits(0b1000);
 		opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-		opcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
+		opcodeEncoder.EmitRelative32(node.BranchTarget1.Label);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

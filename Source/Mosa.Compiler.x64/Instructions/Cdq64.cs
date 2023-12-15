@@ -20,6 +20,7 @@ public sealed class Cdq64 : X64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.SuppressByte(0x40);
 		opcodeEncoder.Append4Bits(0b0100);
@@ -28,5 +29,7 @@ public sealed class Cdq64 : X64Instruction
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append1Bit(0b0);
 		opcodeEncoder.Append8Bits(0x99);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

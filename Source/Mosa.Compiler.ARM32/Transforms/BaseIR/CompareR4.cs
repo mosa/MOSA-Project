@@ -25,7 +25,8 @@ public sealed class CompareR4 : BaseIRTransform
 		operand1 = MoveConstantToFloatRegister(transform, context, operand1);
 		operand2 = MoveConstantToFloatRegisterOrImmediate(transform, context, operand2);
 
-		context.SetInstruction(ARM32.Cmf, null, operand1, operand2);
+		context.SetInstruction(ARM32.VCmp, null, operand1, operand2);
+		context.AppendInstruction(ARM32.VMrs_APSR);
 		context.AppendInstruction(ARM32.Mov, condition, result, Operand.Constant32_0);
 		context.AppendInstruction(ARM32.Mov, condition.GetOpposite(), result, Operand.Constant32_1);
 	}

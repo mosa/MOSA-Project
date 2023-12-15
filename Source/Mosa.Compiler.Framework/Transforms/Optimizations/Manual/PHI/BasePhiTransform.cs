@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi
 
 				if (node.Instruction.IsConditionalBranch || node.Instruction.IsUnconditionalBranch)
 				{
-					if (node.BranchTargets[0] == oldTarget)
+					if (node.BranchTarget1 == oldTarget)
 					{
 						node.UpdateBranchTarget(0, newTarget);
 					}

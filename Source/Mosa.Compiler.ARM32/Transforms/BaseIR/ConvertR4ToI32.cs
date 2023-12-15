@@ -15,6 +15,6 @@ public sealed class ConvertR4ToI32 : BaseIRTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		Translate(transform, context, ARM32.Fix, true);
+		Translate(transform, context, ARM32.VMov2S, false);
 	}
 }

@@ -182,7 +182,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 		if (node.Instruction?.IgnoreInstructionBasicBlockTargets == true)
 			return;
 
-		if (node.BranchTargets == null || node.BranchTargetsCount == 0)
+		if (node.BranchTargetsCount == 0)
 			return;
 
 		Debug.Assert(node.Block != null);
@@ -202,7 +202,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 
 	internal void RemoveBranchInstruction(Node node)
 	{
-		if (node.BranchTargets == null || node.BranchTargetsCount == 0)
+		if (node.BranchTargetsCount == 0)
 			return;
 
 		branchInstructions.Remove(node);

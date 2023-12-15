@@ -33,6 +33,7 @@ public sealed class Shr32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.Result.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand2.IsPhysicalRegister)
 		{
@@ -40,6 +41,8 @@ public sealed class Shr32 : X86Instruction
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -49,6 +52,8 @@ public sealed class Shr32 : X86Instruction
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -59,9 +64,11 @@ public sealed class Shr32 : X86Instruction
 			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append8BitImmediate(node.Operand2);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

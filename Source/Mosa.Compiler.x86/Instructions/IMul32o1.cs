@@ -38,10 +38,13 @@ public sealed class IMul32o1 : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0xF7);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(0b101);
 		opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

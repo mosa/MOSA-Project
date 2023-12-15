@@ -9,56 +9,8 @@ namespace Mosa.Compiler.Framework;
 /// <summary>
 /// Base code emitter.
 /// </summary>
-public sealed class CodeEmitter
+public sealed partial class CodeEmitter
 {
-	#region Patch Type
-
-	/// <summary>
-	/// Patch
-	/// </summary>
-	private struct Patch
-	{
-		/// <summary>
-		/// Patch label
-		/// </summary>
-		public readonly int Label;
-
-		/// <summary>
-		/// The patch's position in the stream
-		/// </summary>
-		public readonly int Position;
-
-		/// <summary>
-		/// The patch size
-		/// </summary>
-		public int Size;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Patch"/> struct.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <param name="position">The position.</param>
-		public Patch(int label, int position, int size)
-		{
-			Label = label;
-			Position = position;
-			Size = size;
-		}
-
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString()
-		{
-			return $"[{Position} -> {Label}]";
-		}
-	}
-
-	#endregion Patch Type
-
 	#region Data Members
 
 	/// <summary>
@@ -79,7 +31,7 @@ public sealed class CodeEmitter
 	/// <summary>
 	/// Patches we need to perform.
 	/// </summary>
-	private readonly List<Patch> Patches = new List<Patch>();
+	private readonly List<LabelPatch> Patches = new();
 
 	#endregion Data Members
 
@@ -153,9 +105,9 @@ public sealed class CodeEmitter
 		return Labels.TryGetValue(label, out position);
 	}
 
-	private void AddPatch(int label, int position, int size)
+	private void AddPatch(int label, int position, int bitPosition, LabelPatchType labelPatchType)
 	{
-		Patches.Add(new Patch(label, position, size));
+		Patches.Add(new LabelPatch(label, position, bitPosition, labelPatchType));
 	}
 
 	public void ResolvePatches(TraceLog trace)
@@ -170,16 +122,7 @@ public sealed class CodeEmitter
 				throw new ArgumentException("Missing label while resolving patches.", $"label={labelPosition}");
 			}
 
-			CodeStream.Position = patch.Position;
-
-			// Compute relative branch offset
-			var relOffset = labelPosition - (patch.Position + 4);
-
-			// Write relative offset to stream
-			CodeStream.Write(relOffset);
-
-			//var bytes = BitConverter.GetBytes(relOffset);
-			//CodeStream.Write(bytes, 4 - patch.Size, patch.Size);
+			var relOffset = patch.Patch(CodeStream, labelPosition);
 
 			trace?.Log($"Patch L_{patch.Label:X5} @ {patch.Position} with 0x{relOffset:X8}");
 		}
@@ -272,19 +215,10 @@ public sealed class CodeEmitter
 		);
 	}
 
-	public int EmitRelative(int label, int offset, int size)
+	internal int EmitRelative(int label, int position, int bitPosition, LabelPatchType labelPatchType)
 	{
-		if (TryGetLabel(label, out var position))
-		{
-			// Yes, calculate the relative offset
-			return position - (int)CodeStream.Position - offset;
-		}
-		else
-		{
-			// Forward jump, we can't resolve yet so store a patch
-			AddPatch(label, (int)CodeStream.Position, size);
+		AddPatch(label, position, bitPosition, labelPatchType);
 
-			return 0;
-		}
+		return 0;
 	}
 }

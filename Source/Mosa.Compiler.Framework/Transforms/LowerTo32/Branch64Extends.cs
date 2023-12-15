@@ -39,7 +39,7 @@ public sealed class Branch64Extends : BaseLowerTo32Transform
 		var t1 = context.Operand1.Definitions[0].Operand1;
 		var t2 = context.Operand2.Definitions[0].Operand1;
 		var conditionCode = context.ConditionCode;
-		var target = context.BranchTargets[0];
+		var target = context.BranchTarget1;
 
 		context.SetInstruction(IR.Branch32, conditionCode, null, t1, t2, target);
 	}

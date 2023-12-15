@@ -22,6 +22,7 @@ public sealed class Add64 : ARM64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsPhysicalRegister)
 		{
@@ -34,6 +35,8 @@ public sealed class Add64 : ARM64Instruction
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append5Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -48,9 +51,11 @@ public sealed class Add64 : ARM64Instruction
 			opcodeEncoder.Append12BitImmediate(node.Operand2);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append5Bits(node.Result.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

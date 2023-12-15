@@ -34,6 +34,7 @@ public sealed class CMov64 : X64Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0x0F);
 		opcodeEncoder.SuppressByte(0x40);
@@ -47,5 +48,7 @@ public sealed class CMov64 : X64Instruction
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

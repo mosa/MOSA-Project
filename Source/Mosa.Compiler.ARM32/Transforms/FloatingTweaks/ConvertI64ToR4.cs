@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Transforms.FloatingTweaks;
 
 /// <summary>
-/// ConvertI3ConvertI64ToR42ToR4
+/// ConvertI64ToR4
 /// </summary>
 public sealed class ConvertI64ToR4 : BaseTransform
 {

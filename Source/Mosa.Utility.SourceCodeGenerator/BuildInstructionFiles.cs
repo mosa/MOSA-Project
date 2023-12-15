@@ -393,6 +393,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			Lines.AppendLine();
 			Lines.AppendLine("\tpublic override void Emit(Node node, OpcodeEncoder opcodeEncoder)");
 			Lines.AppendLine("\t{");
+
 			if (node.VariableOperands == null || node.VariableOperands == "false")
 			{
 				Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
@@ -404,6 +405,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsPhysicalRegister);");
 					Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);");
 				}
+
+				Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());");
 				Lines.AppendLine();
 			}
 
@@ -459,8 +462,12 @@ public class BuildInstructionFiles : BuildBaseTemplate
 		if (cond)
 		{
 			Lines.AppendLine();
-			Lines.AppendLine("\t\tthrow new Compiler.Common.Exceptions.CompilerException(\"Invalid Opcode\");");
-			//Lines.AppendLine("\t\tthrow new Common.Exceptions.CompilerException(\"Invalid Opcode\");");
+			Lines.AppendLine("\t\tthrow new Common.Exceptions.CompilerException($\"Invalid Opcode: {node}\");");
+		}
+		else
+		{
+			Lines.AppendLine();
+			Lines.AppendLine("\t\tSystem.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());");
 		}
 	}
 
@@ -605,6 +612,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					case "skip": continue;
 					case "ignore": continue;
 					case "register": cond1 = ".IsPhysicalRegister"; break;
+					case "floatregister": cond1 = ".IsFloatingPointRegister"; break;
 					case "constant": cond1 = ".IsConstant"; break;
 					case "eax": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 0"; break;
 					case "ecx": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 1"; break;
@@ -680,6 +688,9 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 		if (end)
 		{
+			Lines.AppendLine();
+			Lines.Append(tabs);
+			Lines.AppendLine("\tSystem.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());");
 			Lines.Append(tabs);
 			Lines.AppendLine("\treturn;");
 		}
@@ -794,6 +805,18 @@ public class BuildInstructionFiles : BuildBaseTemplate
 						Lines.AppendLine($"opcodeEncoder.Append8Bits(0b{binary[..8]});");
 						break;
 
+					case 12:
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..12]});");
+						break;
+
+					case 13:
+						Lines.AppendLine($"opcodeEncoder.Append4Bits(0b{binary[..13]});");
+						break;
+
+					case 14:
+						Lines.AppendLine($"opcodeEncoder.Append14Bits(0b{binary[..14]});");
+						break;
+
 					case 32:
 						Lines.AppendLine($"opcodeEncoder.Append32Bits(0b{binary[..32]});");
 						break;
@@ -849,9 +872,12 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "imm1": code = "Append1BitImmediate"; return;
 			case "imm2": code = "Append2BitImmediate"; return;
 			case "imm2scale": code = "Append2BitScale"; return;
+			case "imm3": code = "Append3BitImmediate"; return;
 			case "imm4": code = "Append4BitImmediate"; return;
 			case "imm4hn": code = "Append4BitImmediateHighNibble"; return;
 			case "imm5": code = "Append5BitImmediate"; return;
+			case "imm6": code = "Append6BitImmediate"; return;
+			case "imm7": code = "Append7BitImmediate"; return;
 			case "imm8": code = "Append8BitImmediate"; return;
 			case "imm12": code = "Append12BitImmediate"; return;
 			case "imm16": code = "Append16BitImmediate"; return;
@@ -859,6 +885,8 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "imm32+": code = "Append32BitImmediateWithOffset"; return;
 			case "imm64": code = "Append64BitImmediate"; return;
 			case "rel24": code = "EmitRelative24"; return;
+			case "rel26": code = "EmitRelative26"; return;
+			case "rel26x4": code = "EmitRelative26x4"; return;
 			case "rel32": code = "EmitRelative32"; return;
 			case "rel64": code = "EmitRelative64"; return;
 
@@ -937,7 +965,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			"r" => "node.Result",
 			"r1" => "node.Result",
 			"r2" => "node.Result2",
-			"label" => "node.BranchTargets[0].Label",
+			"label" => "node.BranchTarget1.Label",
 			"status" => "node",
 			_ => part
 		};

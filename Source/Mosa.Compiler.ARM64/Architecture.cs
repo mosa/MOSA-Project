@@ -43,11 +43,27 @@ public sealed class Architecture : BaseArchitecture
 		CPURegister.R8,
 		CPURegister.R9,
 		CPURegister.R10,
-		CPURegister.FP,
+		CPURegister.R11,
 		CPURegister.R12,
-		CPURegister.SP,
-		CPURegister.LR,
-		CPURegister.PC,
+		CPURegister.R13,
+		CPURegister.R14,
+		CPURegister.R15,
+		CPURegister.R16,
+		CPURegister.R17,
+		CPURegister.R18,
+		CPURegister.R19,
+		CPURegister.R20,
+		CPURegister.R21,
+		CPURegister.R22,
+		CPURegister.R23,
+		CPURegister.R24,
+		CPURegister.R25,
+		CPURegister.R26,
+		CPURegister.R27,
+		CPURegister.R28,
+		CPURegister.R29,
+		CPURegister.R30,
+		CPURegister.R31,
 
 		////////////////////////////////////////////////////////
 		// Floating Point 128-bit floating point registers
@@ -59,7 +75,31 @@ public sealed class Architecture : BaseArchitecture
 		CPURegister.d4,
 		CPURegister.d5,
 		CPURegister.d6,
-		CPURegister.d7
+		CPURegister.d7,
+		CPURegister.d8,
+		CPURegister.d9,
+		CPURegister.d10,
+		CPURegister.d11,
+		CPURegister.d12,
+		CPURegister.d13,
+		CPURegister.d14,
+		CPURegister.d15,
+		CPURegister.d16,
+		CPURegister.d17,
+		CPURegister.d18,
+		CPURegister.d19,
+		CPURegister.d20,
+		CPURegister.d21,
+		CPURegister.d22,
+		CPURegister.d23,
+		CPURegister.d24,
+		CPURegister.d25,
+		CPURegister.d26,
+		CPURegister.d27,
+		CPURegister.d28,
+		CPURegister.d29,
+		CPURegister.d30,
+		CPURegister.d31,
 	};
 
 	/// <summary>
@@ -113,12 +153,19 @@ public sealed class Architecture : BaseArchitecture
 	/// <summary>
 	/// Retrieves the program counter register of the ARM64.
 	/// </summary>
-	public override PhysicalRegister ProgramCounter => CPURegister.PC;
+	public override PhysicalRegister ProgramCounter => null;
 
+	/// <summary>
+	/// Updates the setting.
+	/// </summary>
+	/// <param name="settings">The settings.</param>
 	public override void UpdateSetting(MosaSettings settings)
 	{
 	}
 
+	/// <summary>
+	/// Gets the opcode encoder.
+	/// </summary>
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(32);

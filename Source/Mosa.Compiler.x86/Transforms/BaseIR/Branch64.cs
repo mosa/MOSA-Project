@@ -18,7 +18,7 @@ public sealed class Branch64 : BaseIRTransform
 		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
 		transform.SplitOperand(context.Operand2, out var op2L, out var op2H);
 
-		var target = context.BranchTargets[0];
+		var target = context.BranchTarget1;
 		var condition = context.ConditionCode;
 
 		var nextBlock = transform.Split(context);

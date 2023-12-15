@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Mnf - Move Negated
+/// VMov - Move
 /// </summary>
-public sealed class Mnf : ARM32Instruction
+public sealed class VMov : ARM32Instruction
 {
-	internal Mnf()
+	internal VMov()
 		: base(1, 1)
 	{
 	}
@@ -22,22 +22,26 @@ public sealed class Mnf : ARM32Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
-		if (node.Operand1.IsPhysicalRegister)
+		if (node.Operand1.IsFloatingPointRegister)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
-			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append4Bits(0b0001);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append4Bits(0b0000);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
-			opcodeEncoder.Append2Bits(0b00);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
@@ -45,20 +49,22 @@ public sealed class Mnf : ARM32Instruction
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
-			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append4Bits(0b0001);
-			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
 			opcodeEncoder.Append2Bits(0b00);
+			opcodeEncoder.Append4BitImmediateHighNibble(node.Operand1);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(0b101);
+			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append4BitImmediate(node.Operand1);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

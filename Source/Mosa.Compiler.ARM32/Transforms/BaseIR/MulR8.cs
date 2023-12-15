@@ -17,6 +17,6 @@ public sealed class MulR8 : BaseIRTransform
 	{
 		Framework.Transform.MoveConstantRight(context);
 
-		Translate(transform, context, ARM32.Muf, true);
+		Translate(transform, context, ARM32.VMul, false);
 	}
 }

@@ -117,11 +117,18 @@ public sealed class Architecture : BaseArchitecture
 	/// </summary>
 	public override PhysicalRegister ProgramCounter => CPURegister.PC;
 
+	/// <summary>
+	/// Updates the setting.
+	/// </summary>
+	/// <param name="settings">The settings.</param>
 	public override void UpdateSetting(MosaSettings settings)
 	{
 		//settings.LongExpansion = true;  // required for ARM
 	}
 
+	/// <summary>
+	/// Gets the opcode encoder.
+	/// </summary>
 	public override OpcodeEncoder GetOpcodeEncoder()
 	{
 		return new OpcodeEncoder(32);
@@ -192,11 +199,11 @@ public sealed class Architecture : BaseArchitecture
 
 		if (destination.IsR4)
 		{
-			instruction = ARM32.Mvf;
+			instruction = ARM32.VMov;
 		}
 		else if (destination.IsR8)
 		{
-			instruction = ARM32.Mvf;
+			instruction = ARM32.VMov;
 		}
 
 		context.AppendInstruction(instruction, destination, source);
@@ -204,16 +211,7 @@ public sealed class Architecture : BaseArchitecture
 
 	public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 	{
-		var instruction = ARM32.Str32;
-
-		if (destination.IsR4)
-		{
-			instruction = ARM32.Stf;
-		}
-		else if (destination.IsR8)
-		{
-			instruction = ARM32.Stf;
-		}
+		var instruction = destination.IsFloatingPoint ? ARM32.VStr : ARM32.Str32;
 
 		context.AppendInstruction(instruction, null, destination, offset, value);
 	}
@@ -228,16 +226,7 @@ public sealed class Architecture : BaseArchitecture
 	/// <exception cref="NotImplementCompilerException"></exception>
 	public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 	{
-		var instruction = ARM32.Ldr32;
-
-		if (destination.IsR4)
-		{
-			instruction = ARM32.Ldf;
-		}
-		else if (destination.IsR8)
-		{
-			instruction = ARM32.Ldf;
-		}
+		var instruction = destination.IsFloatingPoint ? ARM32.VLdr : ARM32.Ldr32;
 
 		context.AppendInstruction(instruction, destination, source, offset);
 	}
@@ -271,7 +260,7 @@ public sealed class Architecture : BaseArchitecture
 	/// <returns></returns>
 	public override bool IsInstructionMove(BaseInstruction instruction)
 	{
-		return instruction == ARM32.Mov || instruction == ARM32.Mvf;
+		return instruction == ARM32.Mov || instruction == ARM32.VMov;
 	}
 
 	/// <summary>

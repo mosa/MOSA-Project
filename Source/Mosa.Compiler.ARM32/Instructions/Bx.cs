@@ -20,6 +20,7 @@ public sealed class Bx : ARM32Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		if (node.Operand1.IsPhysicalRegister)
 		{
@@ -31,9 +32,11 @@ public sealed class Bx : ARM32Instruction
 			opcodeEncoder.Append4Bits(0b0001);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode >> 1);
 			opcodeEncoder.Append1Bit(0b0);
+
+			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		throw new Common.Exceptions.CompilerException($"Invalid Opcode: {node}");
 	}
 }

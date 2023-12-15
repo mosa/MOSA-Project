@@ -34,11 +34,14 @@ public sealed class Comiss : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0b00001111);
 		opcodeEncoder.Append8Bits(0b00101111);
 		opcodeEncoder.Append2Bits(0b11);
 		opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

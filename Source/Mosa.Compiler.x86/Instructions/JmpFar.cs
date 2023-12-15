@@ -22,10 +22,13 @@ public sealed class JmpFar : X86Instruction
 	{
 		System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 		System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
 		opcodeEncoder.Append8Bits(0xEA);
 		opcodeEncoder.EmitForward32(6);
 		opcodeEncoder.Append8Bits(0x08);
 		opcodeEncoder.Append8Bits(0x00);
+
+		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}
 }

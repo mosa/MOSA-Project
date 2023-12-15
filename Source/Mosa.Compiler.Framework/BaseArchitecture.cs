@@ -130,8 +130,15 @@ public abstract class BaseArchitecture
 
 	#region Methods
 
+	/// <summary>
+	/// Updates the setting.
+	/// </summary>
+	/// <param name="settings">The settings.</param>
 	public abstract void UpdateSetting(MosaSettings settings);
 
+	/// <summary>
+	/// Gets the opcode encoder.
+	/// </summary>
 	public abstract OpcodeEncoder GetOpcodeEncoder();
 
 	/// <summary>

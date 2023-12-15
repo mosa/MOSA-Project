@@ -223,48 +223,18 @@ namespace Mosa.Compiler.ARM32.Transforms
 
 			var source = MoveConstantToRegister(transform, context, label);
 
-			context.InsertBefore().SetInstruction(ARM32.Ldf, v1, source, Operand.Constant32_0);
+			context.InsertBefore().SetInstruction(ARM32.VLdr, v1, source, Operand.Constant32_0);
 
 			return v1;
 		}
 
 		public static Operand ConvertFloatToImm(Transform transform, Operand operand)
 		{
-			if (operand.IsPhysicalRegister || operand.IsVirtualRegister || operand.IsUnresolvedConstant)
+			if (operand.IsPhysicalRegister || operand.IsVirtualRegister)
 				return operand;
 
-			if (operand.IsR4)
-			{
-				var value = operand.ConstantFloat;
-
-				switch (value)
-				{
-					case 0.0f: return Operand.Constant32_0b1000;
-					case 1.0f: return Operand.Constant32_0b1001;
-					case 2.0f: return Operand.Constant32_0b1010;
-					case 3.0f: return Operand.Constant32_0b1011;
-					case 4.0f: return Operand.Constant32_0b1100;
-					case 5.0f: return Operand.Constant32_0b1101;
-					case 0.5f: return Operand.Constant32_0b1110;
-					case 10.0f: return Operand.Constant32_0b1111;
-				}
-			}
-			else if (operand.IsR4)
-			{
-				var value = operand.ConstantDouble;
-
-				switch (value)
-				{
-					case 0.0d: return Operand.Constant32_0b1000;
-					case 1.0d: return Operand.Constant32_0b1001;
-					case 2.0d: return Operand.Constant32_0b1010;
-					case 3.0d: return Operand.Constant32_0b1011;
-					case 4.0d: return Operand.Constant32_0b1100;
-					case 5.0d: return Operand.Constant32_0b1101;
-					case 0.5d: return Operand.Constant32_0b1110;
-					case 10.0d: return Operand.Constant32_0b1111;
-				}
-			}
+			if (operand.IsConstantZero)
+				return operand;
 
 			return null;
 		}
