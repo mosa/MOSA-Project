@@ -15,10 +15,11 @@ public sealed class AddOverflowOut64 : BaseIRTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
+		var result2 = context.Result2;
+
 		transform.SplitOperand(context.Result, out var resultLow, out var resultHigh);
 		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
 		transform.SplitOperand(context.Operand2, out var op2L, out var op2H);
-		var result2 = context.Result2;
 
 		var v1 = transform.VirtualRegisters.Allocate32();
 

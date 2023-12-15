@@ -23,5 +23,7 @@ public static class RuntimeCallTransforms
 		new ConvertR8ToR4(),
 		new BitCopyR4To32(),
 		new BitCopy32ToR4(),
+		new MulCarryOut64(),
+		new MulOverflowOut64(),
 	};
 }

@@ -28,7 +28,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
-		public static void Translate(Transform transform, Context context, BaseInstruction instruction, bool allowImmediate)
+		public static void Translate(Transform transform, Context context, BaseInstruction instruction, bool allowImmediate, InstructionOption options = InstructionOption.None)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
@@ -39,7 +39,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 					? MoveConstantToFloatRegisterOrImmediate(transform, context, operand1, allowImmediate)
 					: MoveConstantToRegisterOrImmediate(transform, context, operand1, allowImmediate);
 
-				context.SetInstruction(instruction, result, operand1);
+				context.SetInstruction(instruction, options, result, operand1);
 			}
 			else if (context.OperandCount == 2)
 			{
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 					? MoveConstantToFloatRegisterOrImmediate(transform, context, operand2, allowImmediate)
 					: MoveConstantToRegisterOrImmediate(transform, context, operand2, allowImmediate);
 
-				context.SetInstruction(instruction, result, operand1, operand2);
+				context.SetInstruction(instruction, options, result, operand1, operand2);
 			}
 		}
 
