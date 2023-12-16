@@ -13,8 +13,6 @@ public static class RuntimeCallTransforms
 	{
 		new DivSigned64(),
 		new DivUnsigned64(),
-		new MulCarryOut64(),
-		new MulOverflowOut64(),
 		new RemR4(),
 		new RemR8(),
 		new RemSigned64(),
@@ -23,5 +21,7 @@ public static class RuntimeCallTransforms
 		new ConvertR8ToI64(),
 		new ConvertR4ToU64(),
 		new ConvertR8ToU64(),
+		new MulCarryOut64(),
+		new MulOverflowOut64(),
 	};
 }

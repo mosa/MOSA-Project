@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.x86.Transforms.BaseIR;
+namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 
 /// <summary>
 /// AddCarryOut64
@@ -21,11 +21,9 @@ public sealed class AddCarryOut64 : BaseIRTransform
 		transform.SplitOperand(context.Operand1, out var op1L, out var op1H);
 		transform.SplitOperand(context.Operand2, out var op2L, out var op2H);
 
-		var v1 = transform.VirtualRegisters.Allocate32();
-
-		context.SetInstruction(X86.Add32, resultLow, op1L, op2L);
-		context.AppendInstruction(X86.Adc32, resultHigh, op1H, op2H);
-		context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v1);
-		context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		context.SetInstruction(ARM32.Add, InstructionOption.SetFlags, resultLow, op1L, op2L);
+		context.AppendInstruction(ARM32.Adc, InstructionOption.SetFlags, resultHigh, op1H, op2H);
+		context.AppendInstruction(ARM32.Mov, ConditionCode.Carry, result2, Operand.Constant32_1);
+		context.AppendInstruction(ARM32.Mov, ConditionCode.NoCarry, result2, Operand.Constant32_0);
 	}
 }
