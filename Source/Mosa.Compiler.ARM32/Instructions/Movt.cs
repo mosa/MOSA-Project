@@ -22,7 +22,7 @@ public sealed class Movt : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsResolvedConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append2Bits(0b00);

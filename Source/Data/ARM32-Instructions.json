@@ -1729,7 +1729,7 @@
 			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=reg4:r,rn=imm4s4:o2,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][resolvedconstant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
