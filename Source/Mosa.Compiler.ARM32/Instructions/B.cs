@@ -28,7 +28,7 @@ public sealed class B : ARM32Instruction
 
 		opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 		opcodeEncoder.Append4Bits(0b1010);
-		opcodeEncoder.EmitRelative24(node.BranchTarget1.Label);
+		opcodeEncoder.EmitRelative24x4(node.BranchTarget1.Label);
 
 		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 	}

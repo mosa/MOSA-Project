@@ -126,7 +126,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 
 			if (operand.IsResolvedConstant)
 			{
-				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte _, out byte _))
+				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
 				{
 					var constant = Operand.CreateConstant32(immediate);
 
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.ARM32.Transforms
 					return v1;
 				}
 
-				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out byte _, out byte _))
+				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out _, out _, out _))
 				{
 					var constant = Operand.CreateConstant32(immediate);
 
@@ -175,8 +175,9 @@ namespace Mosa.Compiler.ARM32.Transforms
 
 				var v1 = transform.VirtualRegisters.Allocate32();
 
-				before.SetInstruction(ARM32.Movw, v1, operand);
-				before.AppendInstruction(ARM32.Movt, v1, v1, operand);
+				before.SetInstruction(ARM32.Movwt, v1, operand);
+				//before.SetInstruction(ARM32.Movw, v1, operand);
+				//before.AppendInstruction(ARM32.Movt, v1, v1, operand);
 
 				return v1;
 			}

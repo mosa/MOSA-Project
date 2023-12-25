@@ -28,11 +28,11 @@ public sealed class Stm : ARM32Instruction
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
-			opcodeEncoder.Append1BitImmediate(node.Operand2);
+			opcodeEncoder.AppendNBitImmediate(node.Operand2, 1, 0);
 			opcodeEncoder.Append1Bit(node.IsWriteback ? 1 : 0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendNBitImmediate(node.Operand3, 16, 0);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -44,7 +44,7 @@ public sealed class Stm : ARM32Instruction
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(node.IsUpDirection ? 1 : 0);
-			opcodeEncoder.Append1BitImmediate(node.Operand2);
+			opcodeEncoder.AppendNBitImmediate(node.Operand2, 1, 0);
 			opcodeEncoder.Append1Bit(node.IsWriteback ? 1 : 0);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);

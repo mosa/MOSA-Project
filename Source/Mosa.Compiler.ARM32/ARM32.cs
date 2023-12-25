@@ -87,6 +87,7 @@ public static class ARM32
 	public static readonly BaseInstruction Wfe = new Wfe();
 	public static readonly BaseInstruction Wfi = new Wfi();
 	public static readonly BaseInstruction Yield = new Yield();
+	public static readonly BaseInstruction Movwt = new Movwt();
 	public static readonly BaseInstruction Movt = new Movt();
 	public static readonly BaseInstruction Movw = new Movw();
 	public static readonly BaseInstruction Mov = new Mov();

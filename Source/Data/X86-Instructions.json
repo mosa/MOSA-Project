@@ -7,13 +7,13 @@
 		"[x86-base-load-ebp+zero]=[x86],mod=01,reg=reg3:[dest],rm=101,immediate=0x00",
 		"[x86-base-load-ebp-register]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00",
 		"[x86-base-load-esp+zero]=[x86],mod=00,reg=reg3:[dest],rm=100,scale=00,index=100,base=100",
-		"[x86-base-load-esp+constant8]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=imm8:[offset]",
-		"[x86-base-load-esp+constant]=[x86],mod=10,reg=reg3:[dest],rm=100,immediate=imm8:[offset]",
+		"[x86-base-load-esp+constant8]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=int8:[offset]",
+		"[x86-base-load-esp+constant]=[x86],mod=10,reg=reg3:[dest],rm=100,immediate=int8:[offset]",
 		"[x86-base-load-register+register]=[x86],mod=00,reg=reg3:[dest],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase]",
 		"[x86-base-load-register+zero]=[x86],mod=00,reg=reg3:[dest],rm=reg3:[membase]",
-		"[x86-base-load-register+constant8]=[x86],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=imm8:[offset]",
-		"[x86-base-load-register+constant]=[x86],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=imm32:[offset]",
-		"[x86-base-load-constant+zero]=[x86],mod=00,reg=reg3:[dest],rm=101,immediate=imm32:[membase]",
+		"[x86-base-load-register+constant8]=[x86],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=int8:[offset]",
+		"[x86-base-load-register+constant]=[x86],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=int32:[offset]",
+		"[x86-base-load-constant+zero]=[x86],mod=00,reg=reg3:[dest],rm=101,immediate=int32:[membase]",
 		"[x86-base-load-constant+constant]=[x86],mod=00,reg=reg3:[dest],rm=101,immediate=imm32+:[membase]:[offset]",
 
 		"[x86-common-load-ebp+zero]=[x86-base-load-ebp+zero],dest=r",
@@ -31,13 +31,13 @@
 		"[x86-base-store-register-ebp+zero]=[x86],mod=01,reg=reg3:[value],rm=101,displacement=0x00",
 		"[x86-base-store-register-ebp-register]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00",
 		"[x86-base-store-register-esp+zero]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100",
-		"[x86-base-store-register-esp+constant8]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset]",
-		"[x86-base-store-register-esp+constant]=[x86],mod=10,reg=reg3:[value],rm=100,scale=00,index=100,base=100,immediate=imm32:[offset]",
+		"[x86-base-store-register-esp+constant8]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=int8:[offset]",
+		"[x86-base-store-register-esp+constant]=[x86],mod=10,reg=reg3:[value],rm=100,scale=00,index=100,base=100,immediate=int32:[offset]",
 		"[x86-base-store-register+register-register]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase]",
 		"[x86-base-store-register+register+zero]=[x86],mod=00,reg=reg3:[value],rm=reg3:[membase]",
-		"[x86-base-store-register+register+constant8]=[x86],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset]",
-		"[x86-base-store-register+register+constant]=[x86],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=imm32:[offset]",
-		"[x86-base-store-register-constant+zero]=[x86],mod=00,reg=reg3:[value],rm=101,displacement=imm32:[membase]",
+		"[x86-base-store-register+register+constant8]=[x86],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=int8:[offset]",
+		"[x86-base-store-register+register+constant]=[x86],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=int32:[offset]",
+		"[x86-base-store-register-constant+zero]=[x86],mod=00,reg=reg3:[value],rm=101,displacement=int32:[membase]",
 
 		"[x86-common-store-register-ebp+zero]=[x86-base-store-register-ebp+zero],opcode=[opcode-register],value=o3",
 		"[x86-common-store-register-ebp-register]=[x86-base-store-register-ebp-register],opcode=[opcode-register],value=o3,membase=o2",
@@ -50,17 +50,17 @@
 		"[x86-common-store-register+register+constant]=[x86-base-store-register+register+constant],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-register-constant+zero]=[x86-base-store-register-constant+zero],opcode=[opcode-register],value=o3,membase=o1",
 
-		"[x86-base-store-constant-ebp+zero]=[x86],mod=01,reg=000,rm=101,displacement=0x00,immediate=imm[size]:[value]",
-		"[x86-base-store-constant-ebp-register]=[x86],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=imm[size]:[value]",
-		"[x86-base-store-constant-esp+zero]=[x86],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=imm[size]:[value]",
-		"[x86-base-store-constant-esp+constant8]=[x86],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm[size]:[value]",
-		"[x86-base-store-constant-esp+constant]=[x86],mod=10,reg=000,rm=100,displacement=imm8:[offset],immediate=imm32:[value]",
-		"[x86-base-store-constant-register+register]=[x86],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=imm[size]:[value]",
-		"[x86-base-store-constant-register+zero]=[x86],mod=00,reg=000,rm=reg3:[membase],immediate=imm[size]:[value]",
-		"[x86-base-store-constant-register+constant8]=[x86],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm[size]:[value]",
-		"[x86-base-store-constant-register+constant]=[x86],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm[size]:[value]",
-		"[x86-base-store-constant-constant+zero]=[x86],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm[size]:[value]",
-		"[x86-base-store-constant-constant+constant]=[x86],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm[size]:[value]",
+		"[x86-base-store-constant-ebp+zero]=[x86],mod=01,reg=000,rm=101,displacement=0x00,immediate=int[size]:[value]",
+		"[x86-base-store-constant-ebp-register]=[x86],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=int[size]:[value]",
+		"[x86-base-store-constant-esp+zero]=[x86],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=int[size]:[value]",
+		"[x86-base-store-constant-esp+constant8]=[x86],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=int8:[offset],immediate=int[size]:[value]",
+		"[x86-base-store-constant-esp+constant]=[x86],mod=10,reg=000,rm=100,displacement=int8:[offset],immediate=int32:[value]",
+		"[x86-base-store-constant-register+register]=[x86],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=int[size]:[value]",
+		"[x86-base-store-constant-register+zero]=[x86],mod=00,reg=000,rm=reg3:[membase],immediate=int[size]:[value]",
+		"[x86-base-store-constant-register+constant8]=[x86],mod=01,reg=000,rm=reg3:[membase],displacement=int8:[offset],immediate=int[size]:[value]",
+		"[x86-base-store-constant-register+constant]=[x86],mod=10,reg=000,rm=reg3:[membase],displacement=int32:[offset],immediate=int[size]:[value]",
+		"[x86-base-store-constant-constant+zero]=[x86],mod=00,reg=000,rm=101,displacement=int32:[membase],immediate=int[size]:[value]",
+		"[x86-base-store-constant-constant+constant]=[x86],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=int[size]:[value]",
 		"[x86-base-store-constant-constant-register]=[x86],mod=00,reg=reg3:[value],rm=101,displacement=imm32+:[membase]:[offset]",
 
 		"[x86-common-store-constant-ebp+zero]=[x86-base-store-constant-ebp+zero],opcode=[opcode-constant],value=o3",
@@ -93,11 +93,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0x83,mod=11,reg=010,rm=000,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=010,rm=000,immediate=int8:o2"
 				},
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0x15,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x15,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -105,7 +105,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=010,rm=reg3:r,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=010,rm=reg3:r,immediate=int32:o2"
 				}
 			]
 		},
@@ -125,11 +125,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0x83,mod=11,reg=000,rm=000,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=000,rm=000,immediate=int8:o2"
 				},
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0x05,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x05,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -137,7 +137,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=int32:o2"
 				}
 			]
 		},
@@ -197,11 +197,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0x83,mod=11,reg=100,rm=000,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=100,rm=000,immediate=int8:o2"
 				},
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0x25,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x25,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -209,7 +209,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=int32:o2"
 				}
 			]
 		},
@@ -272,7 +272,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=int8:o2"
 				}
 			]
 		},
@@ -295,7 +295,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=int8:o2"
 				}
 			]
 		},
@@ -318,7 +318,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=int8:o2"
 				}
 			]
 		},
@@ -400,11 +400,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0x83,mod=11,reg=111,rm=000,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=111,rm=000,immediate=int8:o2"
 				},
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0x3D,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x3D,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -412,7 +412,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=int32:o2"
 				}
 			]
 		},
@@ -815,11 +815,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][constant_imm8]",
-					"Encoding": "[x86],opcode=0x6B,mod=11,reg=reg3:r,rm=reg3:o2,immediate=imm8:o3"
+					"Encoding": "[x86],opcode=0x6B,mod=11,reg=reg3:r,rm=reg3:o2,immediate=int8:o3"
 				},
 				{
 					"Condition": "[register][register][constant]",
-					"Encoding": "[x86],opcode=0x69,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,immediate=imm32:o3"
+					"Encoding": "[x86],opcode=0x69,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,immediate=int32:o3"
 				}
 			]
 		},
@@ -844,7 +844,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0xE4,immediate=imm8:o1"
+					"Encoding": "[x86],opcode=0xE4,immediate=int8:o1"
 				}
 			]
 		},
@@ -869,7 +869,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],operand-prefix=0x66,opcode=0xE4,immediate=imm8:o1"
+					"Encoding": "[x86],operand-prefix=0x66,opcode=0xE4,immediate=int8:o1"
 				}
 			]
 		},
@@ -894,7 +894,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0xE5,immediate=imm8:o1"
+					"Encoding": "[x86],opcode=0xE5,immediate=int8:o1"
 				}
 			]
 		},
@@ -933,7 +933,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x86],opcode=0xCD,immediate=imm8:o1"
+					"Encoding": "[x86],opcode=0xCD,immediate=int8:o1"
 				}
 			]
 		},
@@ -957,7 +957,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm32:o1"
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=int32:o1"
 				}
 			]
 		},
@@ -1078,11 +1078,11 @@
 				},
 				{
 					"Condition": "[register][register][constant_1to8][constant_imm8]",
-					"Encoding": "[x86],mod=01,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=imm8:o4"
+					"Encoding": "[x86],mod=01,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=int8:o4"
 				},
 				{
 					"Condition": "[register][register][constant_1to8][constant]",
-					"Encoding": "[x86],mod=10,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=imm32:o4"
+					"Encoding": "[x86],mod=10,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=int32:o4"
 				}
 			]
 		},
@@ -1126,7 +1126,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm32:o1"
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=int32:o1"
 				}
 			]
 		},
@@ -1150,7 +1150,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=101,immediate=imm32:o1"
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=101,immediate=int32:o1"
 				}
 			]
 		},
@@ -1231,7 +1231,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1"
+					"Encoding": "[x86],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=int32:o1"
 				}
 			]
 		},
@@ -2754,11 +2754,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0x83,mod=11,reg=001,rm=000,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=001,rm=000,immediate=int8:o2"
 				},
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0x0D,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x0D,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -2766,7 +2766,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=int32:o2"
 				}
 			]
 		},
@@ -2791,7 +2791,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0xE6,immediate=imm8:o1"
+					"Encoding": "[x86],opcode=0xE6,immediate=int8:o1"
 				}
 			]
 		},
@@ -2816,7 +2816,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0xE7,immediate=imm8:o1"
+					"Encoding": "[x86],opcode=0xE7,immediate=int8:o1"
 				}
 			]
 		},
@@ -2841,7 +2841,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0xE7,immediate=imm8:o1"
+					"Encoding": "[x86],opcode=0xE7,immediate=int8:o1"
 				}
 			]
 		},
@@ -2879,7 +2879,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x86],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=int8:o2"
 				}
 			]
 		},
@@ -2941,7 +2941,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x86],opcode=0x68,immediate=imm32:o1"
+					"Encoding": "[x86],opcode=0x68,immediate=int32:o1"
 				}
 			]
 		},
@@ -3006,7 +3006,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=int8:o2"
 				}
 			]
 		},
@@ -3045,7 +3045,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[x86],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode4=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
+					"Encoding": "[x86],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode4=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=int8:o2"
 				}
 			]
 		},
@@ -3064,7 +3064,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[x86],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode4=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
+					"Encoding": "[x86],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode4=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=int8:o2"
 				}
 			]
 		},
@@ -3091,7 +3091,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=int8:o2"
 				}
 			]
 		},
@@ -3111,11 +3111,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0x83,mod=11,reg=011,rm=000,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=011,rm=000,immediate=int8:o2"
 				},
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0x1D,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x1D,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -3123,7 +3123,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=int32:o2"
 				}
 			]
 		},
@@ -3150,7 +3150,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=int8:o2"
 				}
 			]
 		},
@@ -3173,7 +3173,7 @@
 				},
 				{
 					"Condition": "[#register][#ignore][constant]",
-					"Encoding": "[x86],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3"
+					"Encoding": "[x86],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=int8:o3"
 				}
 			]
 		},
@@ -3200,7 +3200,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=int8:o2"
 				}
 			]
 		},
@@ -3223,7 +3223,7 @@
 				},
 				{
 					"Condition": "[#register][#ignore][constant]",
-					"Encoding": "[x86],opcode=0x0F,opcode2=0xAC,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3"
+					"Encoding": "[x86],opcode=0x0F,opcode2=0xAC,mod=11,reg=reg3:o2,rm=reg3:r,immediate=int8:o3"
 				}
 			]
 		},
@@ -3321,11 +3321,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0x83,mod=11,reg=101,rm=000,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=101,rm=000,immediate=int8:o2"
 				},
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0x2D,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x2D,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -3333,7 +3333,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=int32:o2"
 				}
 			]
 		},
@@ -3392,7 +3392,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0xA9,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0xA9,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -3400,7 +3400,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=int32:o2"
 				}
 			]
 		},
@@ -3594,11 +3594,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][constant_imm8]",
-					"Encoding": "[x86],opcode=0x83,mod=11,reg=110,rm=000,immediate=imm8:o2"
+					"Encoding": "[x86],opcode=0x83,mod=11,reg=110,rm=000,immediate=int8:o2"
 				},
 				{
 					"Condition": "[eax][constant]",
-					"Encoding": "[x86],opcode=0x35,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x35,immediate=int32:o2"
 				},
 				{
 					"Condition": "[#register][register]",
@@ -3606,7 +3606,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=int32:o2"
 				}
 			]
 		},

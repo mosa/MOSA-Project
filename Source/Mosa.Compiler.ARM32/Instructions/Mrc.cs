@@ -28,14 +28,14 @@ public sealed class Mrc : ARM32Instruction
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append4Bits(0b1110);
-			opcodeEncoder.Append3BitImmediate(node.Operand2);
+			opcodeEncoder.AppendNBitImmediate(node.Operand2, 3, 0);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append4BitImmediate(node.Operand3);
+			opcodeEncoder.AppendNBitImmediate(node.Operand3, 4, 0);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append4BitImmediate(node.Operand4);
-			opcodeEncoder.Append3BitImmediate(node.Operand5);
+			opcodeEncoder.AppendNBitImmediate(node.Operand4, 4, 0);
+			opcodeEncoder.AppendNBitImmediate(node.Operand5, 3, 0);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append4BitImmediate(node.Operand4);
+			opcodeEncoder.AppendNBitImmediate(node.Operand4, 4, 0);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

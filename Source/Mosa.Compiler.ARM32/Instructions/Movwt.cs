@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Mvn - Not
+/// Movwt - Movw + Movt
 /// </summary>
-public sealed class Mvn : ARM32Instruction
+public sealed class Movwt : ARM32Instruction
 {
-	internal Mvn()
+	internal Movwt()
 		: base(1, 1)
 	{
 	}
@@ -22,35 +22,20 @@ public sealed class Mvn : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
-		if (node.Operand1.IsPhysicalRegister)
+		if (node.Operand1.IsResolvedConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-			opcodeEncoder.Append2Bits(0b00);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4Bits(0b1111);
-			opcodeEncoder.Append1Bit(node.IsSetFlags ? 1 : 0);
+			opcodeEncoder.Append4Bits(0b0011);
 			opcodeEncoder.Append4Bits(0b0000);
-			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append4Bits(0b0000);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append2Bits(0b00);
-			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-
-			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
-			return;
-		}
-
-		if (node.Operand1.IsConstant)
-		{
-			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-			opcodeEncoder.Append2Bits(0b00);
-			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append4Bits(0b1111);
-			opcodeEncoder.Append1Bit(node.IsSetFlags ? 1 : 0);
-			opcodeEncoder.Append4Bits(0b0000);
+			opcodeEncoder.AppendNBitImmediate(node.Operand1, 4, 12);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.AppendNBitImmediate(node.Operand1, 12, 0);
+			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+			opcodeEncoder.Append4Bits(0b0011);
+			opcodeEncoder.Append4Bits(0b0100);
+			opcodeEncoder.AppendNBitImmediate(node.Operand1, 4, 28);
+			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.AppendNBitImmediate(node.Operand1, 12, 16);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

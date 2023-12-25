@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework;
 /// <summary>
 /// Label Patch
 /// </summary>
-internal partial class LabelPatch
+internal class LabelPatch
 {
 	/// <summary>
 	/// Patch label
@@ -25,15 +25,17 @@ internal partial class LabelPatch
 	public readonly int BitPosition;
 
 	/// <summary>
-	/// The patch's type (future)
+	/// The patch's type
 	/// </summary>
 	public readonly LabelPatchType Type;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="LabelPatch"/> struct.
+	/// Initializes a new instance of the <see cref="LabelPatch" /> struct.
 	/// </summary>
 	/// <param name="label">The label.</param>
 	/// <param name="position">The position.</param>
+	/// <param name="bitPosition"></param>
+	/// <param name="type"></param>
 	public LabelPatch(int label, int position, int bitPosition, LabelPatchType type)
 	{
 		Label = label;
@@ -44,53 +46,56 @@ internal partial class LabelPatch
 
 	public long Patch(Stream stream, int labelPosition)
 	{
-		stream.Position = Position;
-
 		// Compute relative branch offset
 		var relOffset = labelPosition - Position;
 
 		switch (Type)
 		{
-			case LabelPatchType.Patch_64Bits:
-				stream.Write64(relOffset - 8);
-				break;
-
-			case LabelPatchType.Patch_32Bits:
-				stream.Write32(relOffset - 4);
-				break;
-
-			case LabelPatchType.Patch_16Bits:
-				stream.Write16((byte)(relOffset - 2));
-				break;
-
-			case LabelPatchType.Patch_8Bits:
-				stream.WriteByte((byte)(relOffset - 1));
-				break;
-
-			case LabelPatchType.Patch_26Bits:
-				{
-					var data = stream.Read32();
-					stream.Position = Position;
-					stream.Write32((data & 0x3FFFFFF) | (relOffset - 8));
-					break;
-				}
-			case LabelPatchType.Patch_26Bits_4x:
-				{
-					var data = stream.Read32();
-					stream.Position = Position;
-					stream.Write32((data & 0x3FFFFFF) | (relOffset - 8) >> 4);
-					break;
-				}
+			case LabelPatchType.Patch_8Bits: PatchValue(stream, Position, relOffset, 8, -1, 0); break;
+			case LabelPatchType.Patch_16Bits: PatchValue(stream, Position, relOffset, 16, -2, 0); break;
+			case LabelPatchType.Patch_26Bits: PatchValue(stream, Position, relOffset, 26, -8, 0); break;
+			case LabelPatchType.Patch_32Bits: PatchValue(stream, Position, relOffset, 32, -4, 0); break;
+			case LabelPatchType.Patch_64Bits: PatchValue(stream, Position, relOffset, 64, -8, 0); break;
+			case LabelPatchType.Patch_24Bits_4x: PatchValue(stream, Position, relOffset, 24, -8, 4); break;
+			case LabelPatchType.Patch_26Bits_4x: PatchValue(stream, Position, relOffset, 26, -8, 4); break;
 		}
 
 		return relOffset;
 	}
 
-	/// <summary>
-	/// Returns a <see cref="System.String"/> that represents this instance.
-	/// </summary>
-	/// <returns>
-	/// A <see cref="System.String"/> that represents this instance.
-	/// </returns>
+	public static void PatchValue(Stream stream, int position, long value, byte patchSize, int patchVaueOffset, byte patchValueShift = 0)
+	{
+		stream.Position = position;
+
+		value = (value + patchVaueOffset) >> patchValueShift;
+
+		switch (patchSize)
+		{
+			case 64:
+				stream.Write64((uint)value);
+				break;
+
+			case 32:
+				stream.Write32((uint)value);
+				break;
+
+			case 16:
+				stream.Write16((ushort)value);
+				break;
+
+			case 8:
+				stream.WriteByte((byte)value);
+				break;
+
+			case 26:
+				{
+					var data = stream.Read32();
+					stream.Position = position;
+					stream.Write32((data & 0x3FFFFFF) | (int)value);
+					break;
+				}
+		}
+	}
+
 	public override string ToString() => $"[{Position} -> {Label}]";
 }

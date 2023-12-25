@@ -68,7 +68,7 @@ public sealed class Adc64 : X64Instruction
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append64BitImmediate(node.Operand2);
+			opcodeEncoder.AppendInteger64(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

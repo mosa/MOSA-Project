@@ -39,7 +39,7 @@ public sealed class In16 : X64Instruction
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.Append8Bits(0xE4);
-			opcodeEncoder.Append8BitImmediate(node.Operand1);
+			opcodeEncoder.AppendInteger8(node.Operand1);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

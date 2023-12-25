@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework;
 
@@ -9,7 +8,7 @@ public sealed class OpcodeEncoder
 {
 	public int Position => Emitter.CurrentPosition + (BitCount / 8);
 
-	public int BitPosition => BitCount % 8;
+	public byte BitPosition => (byte)(BitCount % 8);
 
 	private CodeEmitter Emitter;
 
@@ -231,14 +230,25 @@ public sealed class OpcodeEncoder
 		AppendBits(value, 64);
 	}
 
-	public void Append24BitImmediate(uint value)
+	public void AppendInteger8(uint value)
+	{
+		AppendByte((byte)value);
+	}
+
+	public void AppendInteger16(uint value)
+	{
+		AppendByte((byte)value);
+		AppendByte((byte)(value >> 8));
+	}
+
+	public void AppendInteger24(uint value)
 	{
 		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
 		AppendByte((byte)(value >> 16));
 	}
 
-	public void Append32BitImmediate(uint value)
+	public void AppendInteger32(uint value)
 	{
 		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
@@ -246,7 +256,7 @@ public sealed class OpcodeEncoder
 		AppendByte((byte)(value >> 24));
 	}
 
-	public void Append64BitImmediate(ulong value)
+	public void AppendInteger64(ulong value)
 	{
 		AppendByte((byte)value);
 		AppendByte((byte)(value >> 8));
@@ -256,6 +266,110 @@ public sealed class OpcodeEncoder
 		AppendByte((byte)(value >> 40));
 		AppendByte((byte)(value >> 48));
 		AppendByte((byte)(value >> 56));
+	}
+
+	public void AppendInteger8(Operand operand)
+	{
+		Debug.Assert(operand.IsConstant);
+		Debug.Assert(BitPosition == 0);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendInteger8(operand.ConstantUnsigned32);
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, operand, 0, operand.ConstantSigned64, 0, 8, 0);
+
+			AppendInteger8(0);
+		}
+	}
+
+	public void AppendInteger16(Operand operand)
+	{
+		Debug.Assert(operand.IsConstant);
+		Debug.Assert(BitPosition == 0);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendInteger16(operand.ConstantUnsigned32);
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, operand, 0, operand.ConstantSigned64, 0, 16, 0);
+
+			AppendInteger16(0);
+		}
+	}
+
+	public void AppendInteger32(Operand operand)
+	{
+		Debug.Assert(operand.IsConstant);
+		Debug.Assert(BitPosition == 0);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendInteger32(operand.ConstantUnsigned32);
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, operand, 0, operand.ConstantSigned64, 0, 32, 0);
+
+			AppendInteger32(0);
+		}
+	}
+
+	public void AppendInteger32WithOffset(Operand operand, Operand offset)
+	{
+		Debug.Assert(operand.IsConstant);
+		Debug.Assert(offset.IsResolvedConstant);
+		Debug.Assert(BitPosition == 0);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendInteger32((uint)(operand.ConstantSigned32 + offset.ConstantSigned32));
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, operand, 0, offset.ConstantSigned32, 0, 32, 0);
+
+			AppendInteger32(0);
+		}
+	}
+
+	public void AppendInteger64WithOffset(Operand operand, Operand offset)
+	{
+		Debug.Assert(operand.IsConstant);
+		Debug.Assert(offset.IsResolvedConstant);
+		Debug.Assert(BitPosition == 0);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendInteger64((ulong)(operand.ConstantSigned64 + offset.ConstantSigned64));
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, operand, 0, offset.ConstantSigned32, 0, 64, 0);
+
+			AppendInteger64(0);
+		}
+	}
+
+	public void AppendInteger64(Operand operand)
+	{
+		Debug.Assert(operand.IsConstant);
+		Debug.Assert(BitPosition == 0);
+
+		if (operand.IsResolvedConstant)
+		{
+			AppendInteger64(operand.ConstantUnsigned32);
+		}
+		else
+		{
+			Emitter.EmitLink(Emitter.CurrentPosition, operand, 0, operand.ConstantSigned64, 0, 64, 0);
+
+			AppendInteger64(0);
+		}
 	}
 
 	public void Append2BitScale(Operand operand)
@@ -271,256 +385,49 @@ public sealed class OpcodeEncoder
 		}
 	}
 
-	public void Append32BitImmediateWithOffset(Operand operand, Operand offset)
-	{
-		Debug.Assert(operand.IsConstant);
-		Debug.Assert(offset.IsResolvedConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			Append32BitImmediate(operand.ConstantUnsigned32 + offset.ConstantUnsigned32);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, offset.ConstantSigned32);
-			Append32Bits(0);
-		}
-	}
-
-	public void Append1BitImmediate(Operand operand)
+	public void AppendNBitImmediate(Operand operand, byte size, byte shift, long offset = 0)
 	{
 		Debug.Assert(operand.IsConstant);
 
 		if (operand.IsResolvedConstant)
 		{
-			AppendBits(operand.ConstantUnsigned32, 1);
+			AppendBits((ulong)((operand.ConstantSigned64 + offset) >> shift), size);
 		}
 		else
 		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 1);
-		}
-	}
+			Emitter.EmitLink(Emitter.CurrentPosition, operand, 0, offset, BitPosition, size, shift);
 
-	public void Append2BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendBits(operand.ConstantUnsigned32, 2);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 2);
-		}
-	}
-
-	public void Append3BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendBits(operand.ConstantUnsigned32, 3);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 3);
-		}
-	}
-
-	public void Append4BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendBits(operand.ConstantUnsigned32, 4);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 4);
-		}
-	}
-
-	public void Append4BitImmediateHighNibble(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendBits(operand.ConstantUnsigned32 >> 4, 4);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 4);
-		}
-	}
-
-	public void Append5BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendBits(operand.ConstantUnsigned32, 5);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 5);
-		}
-	}
-
-	public void Append6BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendBits(operand.ConstantUnsigned32, 6);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 6);
-		}
-	}
-
-	public void Append7BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendBits(operand.ConstantUnsigned32, 7);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 7);
-		}
-	}
-
-	public void Append8BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendByte((byte)operand.ConstantUnsigned32);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 8);
-		}
-	}
-
-	public void Append16BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			//AppendBits(operand.ConstantUnsigned32, 16);
-			AppendByte((byte)operand.ConstantUnsigned32);
-			AppendByte((byte)(operand.ConstantUnsigned32 >> 8));
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 16);
-		}
-	}
-
-	public void Append12BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			AppendBits(operand.ConstantUnsigned32, 12);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
-			AppendBits(0, 12);
-		}
-	}
-
-	public void Append32BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			Append32BitImmediate(operand.ConstantUnsigned32);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, operand.ConstantSigned32);
-			AppendBits(0, 32);
-		}
-	}
-
-	public void Append64BitImmediateWithOffset(Operand operand, Operand offset)
-	{
-		Debug.Assert(operand.IsConstant);
-		Debug.Assert(offset.IsResolvedConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			Append64BitImmediate(operand.ConstantUnsigned64 + offset.ConstantUnsigned64);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, offset.ConstantSigned32);
-			AppendBits(0, 64);
-		}
-	}
-
-	public void Append64BitImmediate(Operand operand)
-	{
-		Debug.Assert(operand.IsConstant);
-
-		if (operand.IsResolvedConstant)
-		{
-			Append64BitImmediate(operand.ConstantUnsigned64);
-		}
-		else
-		{
-			Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, 0);
-			AppendBits(0, 64);
+			AppendBits(0, size);
 		}
 	}
 
 	public void EmitRelative24(int label)
 	{
 		var offset = Emitter.EmitRelative(label, Position, BitPosition, LabelPatchType.Patch_24Bits);
-		Append24BitImmediate((uint)offset);
+		AppendInteger24((uint)offset);
+	}
+
+	public void EmitRelative24x4(int label)
+	{
+		var offset = Emitter.EmitRelative(label, Position, BitPosition, LabelPatchType.Patch_24Bits_4x);
+		AppendInteger24((uint)offset);
 	}
 
 	public void EmitRelative26x4(int label)
 	{
 		var offset = Emitter.EmitRelative(label, Position, BitPosition, LabelPatchType.Patch_26Bits_4x);
-		Append24BitImmediate((uint)offset);
+		AppendInteger24((uint)offset);
 	}
 
 	public void EmitRelative32(int label)
 	{
 		var offset = Emitter.EmitRelative(label, Position, BitPosition, LabelPatchType.Patch_32Bits);
-		Append32BitImmediate((uint)offset);
+		AppendInteger32((uint)offset);
 	}
 
-	public void EmitRelative24(Operand operand)
+	public void EmitRelative24x4(Operand operand)
 	{
-		Emitter.EmitRelative24(operand);
+		Emitter.EmitRelative24x4(operand);
 		Append24Bits(0);
 	}
 
@@ -538,7 +445,7 @@ public sealed class OpcodeEncoder
 
 	public void EmitForward32(int offset)
 	{
-		Emitter.EmitForwardLink(offset);
+		Emitter.EmitForwardLink32(offset);
 		Append32Bits(0);
 	}
 

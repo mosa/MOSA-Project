@@ -15,13 +15,13 @@
 		"[x64-rex32-base-load-ebp+zero]=[x64-rex32],mod=01,reg=reg3:[dest],rm=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 		"[x64-rex32-base-load-ebp+register]=[x64-rex32],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
 		"[x64-rex32-base-load-esp+zero]=[x64-rex32],mod=00,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
-		"[x64-rex32-base-load-esp+sbyte]=[x64-rex32],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
-		"[x64-rex32-base-load-esp+constant]=[x64-rex32],mod=10,reg=reg3:[dest],rm=100,immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex32-base-load-esp+sbyte]=[x64-rex32],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=int8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex32-base-load-esp+constant]=[x64-rex32],mod=10,reg=reg3:[dest],rm=100,immediate=int8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 		"[x64-rex32-base-load-register+register]=[x64-rex32],mod=00,reg=reg3:[dest],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
 		"[x64-rex32-base-load-register+zero]=[x64-rex32],mod=00,reg=reg3:[dest],rm=reg3:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-load-register+sbyte]=[x64-rex32],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-load-register+constant]=[x64-rex32],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=imm32:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-load-constant+zero]=[x64-rex32],mod=00,reg=reg3:[dest],rm=101,immediate=imm32:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex32-base-load-register+sbyte]=[x64-rex32],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=int8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-load-register+constant]=[x64-rex32],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=int32:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-load-constant+zero]=[x64-rex32],mod=00,reg=reg3:[dest],rm=101,immediate=int32:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 		"[x64-rex32-base-load-constant+constant]=[x64-rex32],mod=00,reg=reg3:[dest],rm=101,immediate=imm32+:[membase]:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 
 		"[x64-rex32-common-load-ebp+zero]=[x64-rex32-base-load-ebp+zero],dest=r",
@@ -39,13 +39,13 @@
 		"[x64-rex32-base-store-register-ebp+zero]=[x64-rex32],mod=01,reg=reg3:[value],rm=101,displacement=0x00,rex.r=reg4x:[value],rex.x=0,rex.b=0",
 		"[x64-rex32-base-store-register-ebp+register]=[x64-rex32],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00,rex.r=reg4x:[value],rex.x=reg4x:[membase],rex.b=0",
 		"[x64-rex32-base-store-register-esp+zero]=[x64-rex32],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100,rex.r=reg4x:[value],rex.x=0,rex.b=0",
-		"[x64-rex32-base-store-register-esp+sbyte]=[x64-rex32],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
-		"[x64-rex32-base-store-register-esp+constant]=[x64-rex32],mod=10,reg=reg3:[value],rm=100,immediate=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-register-esp+sbyte]=[x64-rex32],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=int8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-register-esp+constant]=[x64-rex32],mod=10,reg=reg3:[value],rm=100,immediate=int8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
 		"[x64-rex32-base-store-register-register+register]=[x64-rex32],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],rex.r=reg4x:[value],rex.x=reg4x:[offset],rex.b=0",
 		"[x64-rex32-base-store-register-register+zero]=[x64-rex32],mod=00,reg=reg3:[value],rm=reg3:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-store-register-register+sbyte]=[x64-rex32],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-store-register-register+constant]=[x64-rex32],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=imm32:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-store-register-constant+zero]=[x64-rex32],mod=00,reg=reg3:[value],rm=101,displacement=imm32:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-register-register+sbyte]=[x64-rex32],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=int8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-register-register+constant]=[x64-rex32],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=int32:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-register-constant+zero]=[x64-rex32],mod=00,reg=reg3:[value],rm=101,displacement=int32:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=0",
 
 		"[x64-rex32-common-store-register-ebp+zero]=[x64-rex32-base-store-register-ebp+zero],opcode=[opcode-register],value=o3",
 		"[x64-rex32-common-store-register-ebp+register]=[x64-rex32-base-store-register-ebp+register],opcode=[opcode-register],value=o3,membase=o2",
@@ -58,17 +58,17 @@
 		"[x64-rex32-common-store-register-register+constant]=[x64-rex32-base-store-register-register+constant],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
 		"[x64-rex32-common-store-register-constant+zero]=[x64-rex32-base-store-register-constant+zero],opcode=[opcode-register],value=o3,membase=o1",
 
-		"[x64-rex32-base-store-constant-ebp+zero]=[x64-rex32],mod=01,reg=000,rm=101,displacement=0x00,immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex32-base-store-constant-ebp+register]=[x64-rex32],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=imm[size]:[value],rex.r=0,rex.x=reg4x:[membase],rex.b=0",
-		"[x64-rex32-base-store-constant-esp+zero]=[x64-rex32],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex32-base-store-constant-esp+sbyte]=[x64-rex32],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex32-base-store-constant-esp+constant]=[x64-rex32],mod=10,reg=000,rm=100,displacement=imm8:[offset],immediate=imm32:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex32-base-store-constant-register+register]=[x64-rex32],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=reg4x:[offset],rex.b=0",
-		"[x64-rex32-base-store-constant-register+zero]=[x64-rex32],mod=00,reg=000,rm=reg3:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-store-constant-register+sbyte]=[x64-rex32],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-store-constant-register+constant]=[x64-rex32],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex32-base-store-constant-constant+zero]=[x64-rex32],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex32-base-store-constant-constant+constant]=[x64-rex32],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-ebp+zero]=[x64-rex32],mod=01,reg=000,rm=101,displacement=0x00,immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-ebp+register]=[x64-rex32],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=int[size]:[value],rex.r=0,rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex32-base-store-constant-esp+zero]=[x64-rex32],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-esp+sbyte]=[x64-rex32],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=int8:[offset],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-esp+constant]=[x64-rex32],mod=10,reg=000,rm=100,displacement=int8:[offset],immediate=int32:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-register+register]=[x64-rex32],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=int[size]:[value],rex.r=0,rex.x=reg4x:[offset],rex.b=0",
+		"[x64-rex32-base-store-constant-register+zero]=[x64-rex32],mod=00,reg=000,rm=reg3:[membase],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-constant-register+sbyte]=[x64-rex32],mod=01,reg=000,rm=reg3:[membase],displacement=int8:[offset],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-constant-register+constant]=[x64-rex32],mod=10,reg=000,rm=reg3:[membase],displacement=int32:[offset],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-constant-constant+zero]=[x64-rex32],mod=00,reg=000,rm=101,displacement=int32:[membase],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-constant+constant]=[x64-rex32],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
 
 		"[x64-rex32-common-store-constant-ebp+zero]=[x64-rex32-base-store-constant-ebp+zero],opcode=[opcode-constant],value=o3",
 		"[x64-rex32-common-store-constant-ebp+register]=[x64-rex32-base-store-constant-ebp+register],opcode=[opcode-constant],value=o3,membase=o2",
@@ -85,13 +85,13 @@
 		"[x64-rex64-base-load-ebp+zero]=[x64-rex64],mod=01,reg=reg3:[dest],rm=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 		"[x64-rex64-base-load-ebp+register]=[x64-rex64],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
 		"[x64-rex64-base-load-esp+zero]=[x64-rex64],mod=00,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
-		"[x64-rex64-base-load-esp+sbyte]=[x64-rex64],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
-		"[x64-rex64-base-load-esp+constant]=[x64-rex64],mod=10,reg=reg3:[dest],rm=100,immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex64-base-load-esp+sbyte]=[x64-rex64],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=int8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex64-base-load-esp+constant]=[x64-rex64],mod=10,reg=reg3:[dest],rm=100,immediate=int8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 		"[x64-rex64-base-load-register+register]=[x64-rex64],mod=00,reg=reg3:[dest],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
 		"[x64-rex64-base-load-register+zero]=[x64-rex64],mod=00,reg=reg3:[dest],rm=reg3:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-load-register+sbyte]=[x64-rex64],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-load-register+constant]=[x64-rex64],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=imm32:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-load-constant+zero]=[x64-rex64],mod=00,reg=reg3:[dest],rm=101,immediate=imm32:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex64-base-load-register+sbyte]=[x64-rex64],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=int8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-load-register+constant]=[x64-rex64],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=int32:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-load-constant+zero]=[x64-rex64],mod=00,reg=reg3:[dest],rm=101,immediate=int32:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 		"[x64-rex64-base-load-constant+constant]=[x64-rex64],mod=00,reg=reg3:[dest],rm=101,immediate=imm32+:[membase]:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 
 		"[x64-rex64-common-load-ebp+zero]=[x64-rex64-base-load-ebp+zero],dest=r",
@@ -109,13 +109,13 @@
 		"[x64-rex64-base-store-register-ebp+zero]=[x64-rex64],mod=01,reg=reg3:[value],rm=101,displacement=0x00,rex.r=reg4x:[value],rex.x=0,rex.b=0",
 		"[x64-rex64-base-store-register-ebp+register]=[x64-rex64],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00,rex.r=reg4x:[value],rex.x=reg4x:[membase],rex.b=0",
 		"[x64-rex64-base-store-register-esp+zero]=[x64-rex64],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100,rex.r=reg4x:[value],rex.x=0,rex.b=0",
-		"[x64-rex64-base-store-register-esp+sbyte]=[x64-rex64],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
-		"[x64-rex64-base-store-register-esp+constant]=[x64-rex64],mod=10,reg=reg3:[value],rm=100,immediate=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-register-esp+sbyte]=[x64-rex64],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=int8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-register-esp+constant]=[x64-rex64],mod=10,reg=reg3:[value],rm=100,immediate=int8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
 		"[x64-rex64-base-store-register-register+register]=[x64-rex64],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],rex.r=reg4x:[value],rex.x=reg4x:[offset],rex.b=0",
 		"[x64-rex64-base-store-register-register+zero]=[x64-rex64],mod=00,reg=reg3:[value],rm=reg3:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-store-register-register+sbyte]=[x64-rex64],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-store-register-register+constant]=[x64-rex64],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=imm32:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-store-register-constant+zero]=[x64-rex64],mod=00,reg=reg3:[value],rm=101,displacement=imm32:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-register-register+sbyte]=[x64-rex64],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=int8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-register-register+constant]=[x64-rex64],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=int32:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-register-constant+zero]=[x64-rex64],mod=00,reg=reg3:[value],rm=101,displacement=int32:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=0",
 
 		"[x64-rex64-common-store-register-ebp+zero]=[x64-rex64-base-store-register-ebp+zero],opcode=[opcode-register],value=o3",
 		"[x64-rex64-common-store-register-ebp+register]=[x64-rex64-base-store-register-ebp+register],opcode=[opcode-register],value=o3,membase=o2",
@@ -128,17 +128,17 @@
 		"[x64-rex64-common-store-register-register+constant]=[x64-rex64-base-store-register-register+constant],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
 		"[x64-rex64-common-store-register-constant+zero]=[x64-rex64-base-store-register-constant+zero],opcode=[opcode-register],value=o3,membase=o1",
 
-		"[x64-rex64-base-store-constant-ebp+zero]=[x64-rex64],mod=01,reg=000,rm=101,displacement=0x00,immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex64-base-store-constant-ebp+register]=[x64-rex64],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=imm[size]:[value],rex.r=0,rex.x=reg4x:[membase],rex.b=0",
-		"[x64-rex64-base-store-constant-esp+zero]=[x64-rex64],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex64-base-store-constant-esp+sbyte]=[x64-rex64],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex64-base-store-constant-esp+constant]=[x64-rex64],mod=10,reg=000,rm=100,displacement=imm8:[offset],immediate=imm32:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex64-base-store-constant-register+register]=[x64-rex64],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=reg4x:[offset],rex.b=0",
-		"[x64-rex64-base-store-constant-register+zero]=[x64-rex64],mod=00,reg=000,rm=reg3:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-store-constant-register+sbyte]=[x64-rex64],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-store-constant-register+constant]=[x64-rex64],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
-		"[x64-rex64-base-store-constant-constant+zero]=[x64-rex64],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
-		"[x64-rex64-base-store-constant-constant+constant]=[x64-rex64],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-ebp+zero]=[x64-rex64],mod=01,reg=000,rm=101,displacement=0x00,immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-ebp+register]=[x64-rex64],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=int[size]:[value],rex.r=0,rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex64-base-store-constant-esp+zero]=[x64-rex64],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-esp+sbyte]=[x64-rex64],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=int8:[offset],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-esp+constant]=[x64-rex64],mod=10,reg=000,rm=100,displacement=int8:[offset],immediate=int32:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-register+register]=[x64-rex64],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=int[size]:[value],rex.r=0,rex.x=reg4x:[offset],rex.b=0",
+		"[x64-rex64-base-store-constant-register+zero]=[x64-rex64],mod=00,reg=000,rm=reg3:[membase],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-constant-register+sbyte]=[x64-rex64],mod=01,reg=000,rm=reg3:[membase],displacement=int8:[offset],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-constant-register+constant]=[x64-rex64],mod=10,reg=000,rm=reg3:[membase],displacement=int32:[offset],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-constant-constant+zero]=[x64-rex64],mod=00,reg=000,rm=101,displacement=int32:[membase],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-constant+constant]=[x64-rex64],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=int[size]:[value],rex.r=0,rex.x=0,rex.b=0",
 
 		"[x64-rex64-common-store-constant-ebp+zero]=[x64-rex64-base-store-constant-ebp+zero],opcode=[opcode-constant],value=o3",
 		"[x64-rex64-common-store-constant-ebp+register]=[x64-rex64-base-store-constant-ebp+register],opcode=[opcode-constant],value=o3,membase=o2",
@@ -173,7 +173,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -197,7 +197,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm64:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=int64:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -221,7 +221,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -245,7 +245,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -309,7 +309,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -333,7 +333,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -376,7 +376,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -399,7 +399,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -422,7 +422,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -445,7 +445,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -468,7 +468,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -491,7 +491,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -596,7 +596,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=int32:o2,rex.r=0,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -619,7 +619,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=int32:o2,rex.r=0,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -1141,7 +1141,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0xE4,immediate=imm8:o1"
+					"Encoding": "[x64],opcode=0xE4,immediate=int8:o1"
 				}
 			]
 		},
@@ -1166,7 +1166,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],operand-prefix=0x66,opcode=0xE4,immediate=imm8:o1"
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0xE4,immediate=int8:o1"
 				}
 			]
 		},
@@ -1191,7 +1191,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0xE5,immediate=imm8:o1"
+					"Encoding": "[x64],opcode=0xE5,immediate=int8:o1"
 				}
 			]
 		},
@@ -1249,7 +1249,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xCD,immediate=imm8:o1"
+					"Encoding": "[x64],opcode=0xCD,immediate=int8:o1"
 				}
 			]
 		},
@@ -1273,7 +1273,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm64:o1"
+					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=int64:o1"
 				}
 			]
 		},
@@ -1394,11 +1394,11 @@
 				},
 				{
 					"Condition": "[register][register][constant_1to8][constant_imm8]",
-					"Encoding": "[x64-rex32],mod=01,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=imm8:o4,rex.r=reg4x:r,rex.x=reg4x:o2,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex32],mod=01,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=int8:o4,rex.r=reg4x:r,rex.x=reg4x:o2,rex.b=reg4x:o1"
 				},
 				{
 					"Condition": "[register][register][constant_1to8][constant]",
-					"Encoding": "[x64-rex32],mod=10,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=imm32:o4,rex.r=reg4x:r,rex.x=reg4x:o2,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex32],mod=10,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=int32:o4,rex.r=reg4x:r,rex.x=reg4x:o2,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -1454,11 +1454,11 @@
 				},
 				{
 					"Condition": "[register][register][constant_1to8][constant_imm8]",
-					"Encoding": "[x64-rex64],mod=01,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=imm8:o4,rex.r=reg4x:r,rex.x=reg4x:o2,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex64],mod=01,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=int8:o4,rex.r=reg4x:r,rex.x=reg4x:o2,rex.b=reg4x:o1"
 				},
 				{
 					"Condition": "[register][register][constant_1to8][constant]",
-					"Encoding": "[x64-rex64],mod=10,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=imm32:o4,rex.r=reg4x:r,rex.x=reg4x:o2,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex64],mod=10,reg=reg3:r,rm=100,scale=imm2scale:o3,index=reg3:o2,base=reg3:o1,immediate=int32:o4,rex.r=reg4x:r,rex.x=reg4x:o2,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -1502,7 +1502,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm64:o1"
+					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=int64:o1"
 				}
 			]
 		},
@@ -1526,7 +1526,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=101,immediate=imm64:o1"
+					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=101,immediate=int64:o1"
 				}
 			]
 		},
@@ -1645,7 +1645,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64-rex32],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=int32:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1668,7 +1668,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64-rex64],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex64],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=int32:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3700,7 +3700,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=int32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3724,7 +3724,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=int32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3749,7 +3749,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0xE6,immediate=imm8:o1"
+					"Encoding": "[x64],opcode=0xE6,immediate=int8:o1"
 				}
 			]
 		},
@@ -3774,7 +3774,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0xE7,immediate=imm8:o1"
+					"Encoding": "[x64],opcode=0xE7,immediate=int8:o1"
 				}
 			]
 		},
@@ -3799,7 +3799,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0xE7,immediate=imm8:o1"
+					"Encoding": "[x64],opcode=0xE7,immediate=int8:o1"
 				}
 			]
 		},
@@ -3837,7 +3837,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3856,7 +3856,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3917,7 +3917,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0x68,immediate=imm64:o1"
+					"Encoding": "[x64],opcode=0x68,immediate=int64:o1"
 				}
 			]
 		},
@@ -3982,7 +3982,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=int8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4009,7 +4009,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=int8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4048,7 +4048,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -4067,7 +4067,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -4094,7 +4094,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=int8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4121,7 +4121,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4145,7 +4145,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4169,7 +4169,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4196,7 +4196,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=int8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4223,7 +4223,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4246,7 +4246,7 @@
 				},
 				{
 					"Condition": "[#register][#ignore][constant]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=int8:o3,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4269,7 +4269,7 @@
 				},
 				{
 					"Condition": "[#register][#ignore][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=int8:o3,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4296,7 +4296,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4323,7 +4323,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4346,7 +4346,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4369,7 +4369,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=int8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4454,7 +4454,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4477,7 +4477,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4540,7 +4540,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=int32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4563,7 +4563,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=reg4x:o1,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=int32:o2,rex.r=reg4x:o1,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4897,7 +4897,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=int32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4921,7 +4921,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=int32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},

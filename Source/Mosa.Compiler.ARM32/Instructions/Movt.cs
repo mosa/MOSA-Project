@@ -7,7 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Movt - Movt
+/// Movt - Movt [load high portion]
 /// </summary>
 public sealed class Movt : ARM32Instruction
 {
@@ -22,16 +22,16 @@ public sealed class Movt : ARM32Instruction
 		System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsResolvedConstant)
 		{
 			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(0b1010);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4BitImmediateHighNibble(node.Operand2);
+			opcodeEncoder.AppendNBitImmediate(node.Operand2, 4, 4);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append12BitImmediate(node.Operand2);
+			opcodeEncoder.AppendNBitImmediate(node.Operand2, 12, 0);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

@@ -39,13 +39,13 @@ public sealed class Sbb32 : X86Instruction
 		System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 		System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsResolvedConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127)
 		{
 			opcodeEncoder.Append8Bits(0x83);
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b011);
 			opcodeEncoder.Append3Bits(0b000);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			opcodeEncoder.AppendInteger8(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -54,7 +54,7 @@ public sealed class Sbb32 : X86Instruction
 		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 0 && node.Operand2.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x1D);
-			opcodeEncoder.Append32BitImmediate(node.Operand2);
+			opcodeEncoder.AppendInteger32(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -77,7 +77,7 @@ public sealed class Sbb32 : X86Instruction
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append3Bits(0b011);
 			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append32BitImmediate(node.Operand2);
+			opcodeEncoder.AppendInteger32(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

@@ -40,7 +40,7 @@ public sealed class Add32 : ARM64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand2.ConstantUnsigned32 >= 0 && node.Operand2.ConstantUnsigned32 <= 4294967295)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsResolvedConstant && node.Operand2.ConstantUnsigned32 >= 0 && node.Operand2.ConstantUnsigned32 <= 4294967295)
 		{
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b0);
@@ -48,7 +48,7 @@ public sealed class Add32 : ARM64Instruction
 			opcodeEncoder.Append4Bits(0b1000);
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append12BitImmediate(node.Operand2);
+			opcodeEncoder.AppendNBitImmediate(node.Operand2, 12, 0);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append5Bits(node.Result.Register.RegisterCode);
 

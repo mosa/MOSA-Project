@@ -37,7 +37,7 @@ public sealed class In8 : X86Instruction
 		if (node.Operand1.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0xE4);
-			opcodeEncoder.Append8BitImmediate(node.Operand1);
+			opcodeEncoder.AppendInteger8(node.Operand1);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

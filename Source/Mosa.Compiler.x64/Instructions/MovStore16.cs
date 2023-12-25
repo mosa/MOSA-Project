@@ -86,7 +86,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsPhysicalRegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsResolvedConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -102,7 +102,7 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			opcodeEncoder.AppendInteger8(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -121,7 +121,7 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			opcodeEncoder.AppendInteger8(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -166,7 +166,7 @@ public sealed class MovStore16 : X64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsPhysicalRegister)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsResolvedConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsPhysicalRegister)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -179,7 +179,7 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b01);
 			opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			opcodeEncoder.AppendInteger8(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -198,7 +198,7 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append32BitImmediate(node.Operand2);
+			opcodeEncoder.AppendInteger32(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -217,7 +217,7 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(0b101);
-			opcodeEncoder.Append32BitImmediate(node.Operand1);
+			opcodeEncoder.AppendInteger32(node.Operand1);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -237,7 +237,7 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append8Bits(0x00);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -281,13 +281,13 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand1.Register.RegisterCode == 4 && node.Operand2.IsResolvedConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -303,8 +303,8 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b100);
 			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger8(node.Operand2);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -323,8 +323,8 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(0b100);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
-			opcodeEncoder.Append32BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger8(node.Operand2);
+			opcodeEncoder.AppendInteger32(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -346,7 +346,7 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -365,13 +365,13 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsConstant)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsResolvedConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127 && node.Operand3.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x66);
 			opcodeEncoder.SuppressByte(0x40);
@@ -384,8 +384,8 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b01);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger8(node.Operand2);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -404,8 +404,8 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append32BitImmediate(node.Operand2);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger32(node.Operand2);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -424,8 +424,8 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(0b101);
-			opcodeEncoder.Append32BitImmediate(node.Operand1);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger32(node.Operand1);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
@@ -444,8 +444,8 @@ public sealed class MovStore16 : X64Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b000);
 			opcodeEncoder.Append3Bits(0b101);
-			opcodeEncoder.Append32BitImmediateWithOffset(node.Operand1, node.Operand2);
-			opcodeEncoder.Append16BitImmediate(node.Operand3);
+			opcodeEncoder.AppendInteger32WithOffset(node.Operand1, node.Operand2);
+			opcodeEncoder.AppendInteger16(node.Operand3);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

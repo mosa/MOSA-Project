@@ -43,7 +43,7 @@ public sealed class Invlpg : X86Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b010);
 			opcodeEncoder.Append3Bits(0b101);
-			opcodeEncoder.Append32BitImmediate(node.Operand1);
+			opcodeEncoder.AppendInteger32(node.Operand1);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
