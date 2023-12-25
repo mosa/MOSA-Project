@@ -33,9 +33,9 @@ public sealed class MultibootStage : Framework.Platform.BaseMultibootStage
 		var context = new Context(prologueBlock);
 
 		// Set stack location
-		context.AppendInstruction(ARM32.Movwt, sp, stackLocation);
-		//context.AppendInstruction(ARM32.Movw, sp, stackLocation);
-		//context.AppendInstruction(ARM32.Movt, sp, sp, stackLocation);
+		//context.AppendInstruction(ARM32.Movwt, sp, stackLocation);
+		context.AppendInstruction(ARM32.Movw, sp, stackLocation);
+		context.AppendInstruction(ARM32.Movt, sp, sp, stackLocation);
 
 		// Create stack sentinel
 		context.AppendInstruction(ARM32.Movw, lr, Operand.Constant32_0);

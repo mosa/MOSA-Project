@@ -175,9 +175,9 @@ namespace Mosa.Compiler.ARM32.Transforms
 
 				var v1 = transform.VirtualRegisters.Allocate32();
 
-				before.SetInstruction(ARM32.Movwt, v1, operand);
-				//before.SetInstruction(ARM32.Movw, v1, operand);
-				//before.AppendInstruction(ARM32.Movt, v1, v1, operand);
+				//before.SetInstruction(ARM32.Movwt, v1, operand);
+				before.SetInstruction(ARM32.Movw, v1, operand);
+				before.AppendInstruction(ARM32.Movt, v1, v1, operand);
 
 				return v1;
 			}
