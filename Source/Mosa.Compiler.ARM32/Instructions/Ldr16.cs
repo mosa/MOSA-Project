@@ -38,7 +38,7 @@ public sealed class Ldr16 : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b1);
-			opcodeEncoder.Append4BitImmediate(node.Operand2, 0);
+			opcodeEncoder.Append4BitImmediate(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

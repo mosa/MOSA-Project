@@ -31,7 +31,7 @@ public sealed class Movt : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4BitImmediate(node.Operand2, 4);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append12BitImmediate(node.Operand2, 0);
+			opcodeEncoder.Append12BitImmediate(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

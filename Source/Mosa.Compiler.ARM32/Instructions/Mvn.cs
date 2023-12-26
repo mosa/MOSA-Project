@@ -50,7 +50,7 @@ public sealed class Mvn : ARM32Instruction
 			opcodeEncoder.Append1Bit(node.IsSetFlags ? 1 : 0);
 			opcodeEncoder.Append4Bits(0b0000);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append12BitImmediate(node.Operand1, 0);
+			opcodeEncoder.Append12BitImmediate(node.Operand1);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

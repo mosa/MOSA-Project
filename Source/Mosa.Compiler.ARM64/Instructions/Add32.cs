@@ -48,7 +48,7 @@ public sealed class Add32 : ARM64Instruction
 			opcodeEncoder.Append4Bits(0b1000);
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append12BitImmediate(node.Operand2, 0);
+			opcodeEncoder.Append12BitImmediate(node.Operand2);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append5Bits(node.Result.Register.RegisterCode);
 

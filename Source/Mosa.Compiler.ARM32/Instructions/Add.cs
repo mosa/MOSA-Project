@@ -52,7 +52,7 @@ public sealed class Add : ARM32Instruction
 			opcodeEncoder.Append1Bit(node.IsSetFlags ? 1 : 0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append12BitImmediate(node.Operand2, 0);
+			opcodeEncoder.Append12BitImmediate(node.Operand2);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

@@ -877,18 +877,18 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "int32": code = "AppendInteger32"; return;
 			case "int64": code = "AppendInteger64"; return;
 
-			case "imm1": code = "Append1BitImmediate"; postparam = ", 0"; return;
-			case "imm2": code = "Append2BitImmediate"; postparam = ", 0"; return;
-			case "imm3": code = "Append3BitImmediate"; postparam = ", 0"; return;
-			case "imm4": code = "Append4BitImmediate"; postparam = ", 0"; return;
-			case "imm5": code = "Append5BitImmediate"; postparam = ", 0"; return;
-			case "imm6": code = "Append6BitImmediate"; postparam = ", 0"; return;
-			case "imm7": code = "Append7BitImmediate"; postparam = ", 0"; return;
-			case "imm8": code = "Append8BitImmediate"; postparam = ", 0"; return;
-			case "imm12": code = "Append12BitImmediate"; postparam = ", 0"; return;
-			case "imm16": code = "Append16BitImmediate"; postparam = ", 0"; return;
-			case "imm32": code = "Append32BitImmediate"; postparam = ", 0"; return;
-			case "imm64": code = "Append64BitImmediate"; postparam = ", 0"; return;
+			case "imm1": code = "Append1BitImmediate"; return;
+			case "imm2": code = "Append2BitImmediate"; return;
+			case "imm3": code = "Append3BitImmediate"; return;
+			case "imm4": code = "Append4BitImmediate"; return;
+			case "imm5": code = "Append5BitImmediate"; return;
+			case "imm6": code = "Append6BitImmediate"; return;
+			case "imm7": code = "Append7BitImmediate"; return;
+			case "imm8": code = "Append8BitImmediate"; return;
+			case "imm12": code = "Append12BitImmediate"; return;
+			case "imm16": code = "Append16BitImmediate"; return;
+			case "imm32": code = "Append32BitImmediate"; return;
+			case "imm64": code = "Append64BitImmediate"; return;
 
 			//case "imm1": code = "AppendNBitImmediate"; postparam = ", 1, 0"; return;
 			//case "imm2": code = "AppendNBitImmediate"; postparam = ", 2, 0"; return;
