@@ -43,7 +43,7 @@ public sealed class Lidt : X86Instruction
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append3Bits(0b011);
 			opcodeEncoder.Append3Bits(0b101);
-			opcodeEncoder.Append32BitImmediate(node.Operand1);
+			opcodeEncoder.AppendInteger32(node.Operand1);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

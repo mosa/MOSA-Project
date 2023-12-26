@@ -41,7 +41,7 @@ public sealed class Push64 : X64Instruction
 		if (node.Operand1.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0x68);
-			opcodeEncoder.Append64BitImmediate(node.Operand1);
+			opcodeEncoder.AppendInteger64(node.Operand1);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

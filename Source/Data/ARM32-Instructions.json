@@ -769,7 +769,7 @@
 		{
 			"Name": "Bl",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -782,14 +782,14 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[constant]",
-					"Encoding": "conditional|1011|rel24:o1"
+					"Encoding": "conditional|1011|rel24x4:o1"
 				}
 			]
 		},
 		{
 			"Name": "B",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -803,14 +803,14 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "conditional|1010|rel24:label"
+					"Encoding": "conditional|1010|rel24x4:label"
 				}
 			]
 		},
 		{
 			"Name": "Bx",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -830,7 +830,7 @@
 		{
 			"Name": "Bkpt",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -850,7 +850,7 @@
 		{
 			"Name": "Dmb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -870,7 +870,7 @@
 		{
 			"Name": "Dsb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -890,7 +890,7 @@
 		{
 			"Name": "Isb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -974,7 +974,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=0,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=0,offsethigh=imm4s4:o2,offsetlow=imm4:o2,u=updir:status,s=0,h=1"
 				},
 				{
 					"Condition": "[register][register]",
@@ -999,7 +999,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=1,offsethigh=imm4s4:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=1"
 				},
 				{
 					"Condition": "[register][register]",
@@ -1024,7 +1024,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=0"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=writeback:status,b=1,offsethigh=imm4s4:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=0"
 				},
 				{
 					"Condition": "[register][register]",
@@ -1099,7 +1099,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=0,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=0,offsethigh=imm4s4:o2,offsetlow=imm4:o2,u=updir:status,s=0,h=1"
 				},
 				{
 					"Condition": "[register][register][register]",
@@ -1124,7 +1124,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=1"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=1,offsethigh=imm4s4:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=1"
 				},
 				{
 					"Condition": "[register][register][register]",
@@ -1149,7 +1149,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=0"
+					"Encoding": "[arm-halfword-data-transfer-immediate],rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=writeback:status,b=1,offsethigh=imm4s4:o2,offsetlow=imm4:o2,u=updir:status,s=1,h=0"
 				},
 				{
 					"Condition": "[register][register][register]",
@@ -1160,7 +1160,7 @@
 		{
 			"Name": "Mul",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "NZC",
 			"FlagsSet": "",
@@ -1181,7 +1181,7 @@
 		{
 			"Name": "Mla",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "NZC",
 			"FlagsSet": "",
@@ -1202,7 +1202,7 @@
 		{
 			"Name": "UMull",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "NZC",
 			"FlagsSet": "",
@@ -1223,7 +1223,7 @@
 		{
 			"Name": "UMlal",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "NZC",
 			"FlagsSet": "",
@@ -1244,7 +1244,7 @@
 		{
 			"Name": "SMull",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "NZC",
 			"FlagsSet": "",
@@ -1265,7 +1265,7 @@
 		{
 			"Name": "SMlal",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "NZC",
 			"FlagsSet": "",
@@ -1286,7 +1286,7 @@
 		{
 			"Name": "Nop",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1306,7 +1306,7 @@
 		{
 			"Name": "Mrs",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1326,7 +1326,7 @@
 		{
 			"Name": "Msr",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1346,7 +1346,7 @@
 		{
 			"Name": "Ldm",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1366,7 +1366,7 @@
 		{
 			"Name": "Stm",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1390,7 +1390,7 @@
 		{
 			"Name": "Pop",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1410,7 +1410,7 @@
 		{
 			"Name": "Push",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1430,7 +1430,7 @@
 		{
 			"Name": "Rev",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1450,7 +1450,7 @@
 		{
 			"Name": "Rev16",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1470,7 +1470,7 @@
 		{
 			"Name": "Revsh",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1490,7 +1490,7 @@
 		{
 			"Name": "Sev",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1510,7 +1510,7 @@
 		{
 			"Name": "Svc",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1530,7 +1530,7 @@
 		{
 			"Name": "Swi",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1550,7 +1550,7 @@
 		{
 			"Name": "Sxtb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1571,7 +1571,7 @@
 		{
 			"Name": "Sxth",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1592,7 +1592,7 @@
 		{
 			"Name": "Uxtb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1613,7 +1613,7 @@
 		{
 			"Name": "Uxth",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1634,7 +1634,7 @@
 		{
 			"Name": "Wfe",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1654,7 +1654,7 @@
 		{
 			"Name": "Wfi",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1674,7 +1674,7 @@
 		{
 			"Name": "Yield",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1694,7 +1694,7 @@
 		{
 			"Name": "Movt",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1703,8 +1703,8 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Movt",
-			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=reg4:r,rn=imm4hn:o2,immediate12=imm12:o2",
+			"Description": "Movt [load high portion]",
+			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=reg4:r,rn=imm4s4:o2,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
@@ -1715,7 +1715,7 @@
 		{
 			"Name": "Movw",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARM32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1724,8 +1724,8 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"Description": "Movw",
-			"OpcodeEncodingAppend": "s=0,opcode=1101,rd=reg4:r,rn=imm4hn:o1,immediate12=imm12:o1",
+			"Description": "Movw [load low]",
+			"OpcodeEncodingAppend": "s=0,opcode=1101,rd=reg4:r,rn=imm4s4:o1,immediate12=imm12:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[constant]",
@@ -1989,7 +1989,7 @@
 				{
 					"Condition": "[constant]",
 					"Encoding": "conditional|11101|[D]|00|[imm4H]|[Vd]|101|[sz]|0|0|0|0|[imm4L]",
-					"Append": "D=0,Vd=reg4:r,sz=fp:r,imm4H=imm4hn:o1,imm4HLimm4:o1"
+					"Append": "D=0,Vd=reg4:r,sz=fp:r,imm4H=imm4s4:o1,imm4HLimm4:o1"
 				}
 			]
 		},

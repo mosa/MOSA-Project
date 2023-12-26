@@ -66,7 +66,25 @@ public sealed class MosaLinker
 		Sections[(int)linkerSection.SectionKind] = linkerSection;
 	}
 
-	public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, long patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
+	public void Link(LinkType linkType, LinkerSymbol patchSymbol, long patchOffset, LinkerSymbol referenceSymbol, long referenceOffset, byte patchBitOffset, byte patchBitSize, byte patchValueShift)
+	{
+		var linkRequest = new LinkRequest(linkType, patchSymbol, (int)patchOffset, patchBitOffset, patchBitSize, patchValueShift, referenceSymbol, referenceOffset);
+
+		lock (_lock)
+		{
+			patchSymbol.AddPatch(linkRequest);
+		}
+	}
+
+	public void Link(LinkType linkType, string patchSymbolName, long patchOffset, string referenceSymbolName, long referenceOffset, byte patchBitOffset, byte patchBitSize, byte patchValueShift)
+	{
+		var referenceSymbol = GetSymbol(referenceSymbolName);
+		var patchSymbol = GetSymbol(patchSymbolName);
+
+		Link(linkType, patchSymbol, patchOffset, referenceSymbol, referenceOffset, patchBitOffset, patchBitSize, patchValueShift);
+	}
+
+	public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, long patchOffset, LinkerSymbol referenceSymbol, long referenceOffset)
 	{
 		var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, (int)patchOffset, referenceSymbol, referenceOffset);
 
@@ -76,7 +94,7 @@ public sealed class MosaLinker
 		}
 	}
 
-	public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, long patchOffset, string referenceSymbolName, int referenceOffset)
+	public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, long patchOffset, string referenceSymbolName, long referenceOffset)
 	{
 		var referenceSymbol = GetSymbol(referenceSymbolName);
 		var patchObject = GetSymbol(patchSymbolName);
@@ -198,7 +216,7 @@ public sealed class MosaLinker
 		}
 	}
 
-	private void ApplyPatch(LinkRequest linkRequest)
+	private static void ApplyPatch(LinkRequest linkRequest)
 	{
 		ulong value;
 
@@ -229,31 +247,9 @@ public sealed class MosaLinker
 		linkRequest.PatchSymbol.ApplyPatch(
 			linkRequest.PatchOffset,
 			value,
-			GetPatchTypeSize(linkRequest.PatchType),
-			GetPatchTypeShift(linkRequest.PatchType)
+			linkRequest.PatchBitSize,
+			linkRequest.PatchValueShift
 		);
-	}
-
-	private static byte GetPatchTypeSize(PatchType patchType)
-	{
-		return patchType switch
-		{
-			PatchType.I32 => 32,
-			PatchType.I64 => 64,
-			PatchType.I24o8 => 24,
-			_ => throw new CompilerException($"unknown patch type: {patchType}")
-		};
-	}
-
-	private static byte GetPatchTypeShift(PatchType patchType)
-	{
-		return patchType switch
-		{
-			PatchType.I32 => 0,
-			PatchType.I64 => 0,
-			PatchType.I24o8 => 8,
-			_ => throw new CompilerException($"unknown patch type: {patchType}")
-		};
 	}
 
 	private uint ResolveSymbolLocation(SectionKind section, ulong VirtualAddress)

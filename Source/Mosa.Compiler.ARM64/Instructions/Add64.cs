@@ -40,7 +40,7 @@ public sealed class Add64 : ARM64Instruction
 			return;
 		}
 
-		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsConstant && node.Operand2.ConstantUnsigned32 >= 0 && node.Operand2.ConstantUnsigned32 <= 4294967295)
+		if (node.Operand1.IsPhysicalRegister && node.Operand2.IsResolvedConstant && node.Operand2.ConstantUnsigned32 >= 0 && node.Operand2.ConstantUnsigned32 <= 4294967295)
 		{
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);

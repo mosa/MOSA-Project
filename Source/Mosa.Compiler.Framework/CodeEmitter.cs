@@ -122,9 +122,9 @@ public sealed partial class CodeEmitter
 				throw new ArgumentException("Missing label while resolving patches.", $"label={labelPosition}");
 			}
 
-			var relOffset = patch.Patch(CodeStream, labelPosition);
+			patch.Patch(CodeStream, labelPosition);
 
-			trace?.Log($"Patch L_{patch.Label:X5} @ {patch.Position} with 0x{relOffset:X8}");
+			trace?.Log($"Patch L_{patch.Label:X5} @ {patch.Position} ");
 		}
 
 		// Reset the position
@@ -157,37 +157,65 @@ public sealed partial class CodeEmitter
 
 	#region Emit Methods
 
-	public void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset)
+	public void EmitLink(int position, Operand symbolOperand, int patchOffset, long referenceOffset, byte patchBitOffset, byte patchBitSize, byte patchValueShift)
 	{
 		position += patchOffset;
 
 		if (symbolOperand.IsLabel)
 		{
-			Linker.Link(LinkType.AbsoluteAddress, patchType, MethodName, position, symbolOperand.Name, referenceOffset);
+			Linker.Link(
+				LinkType.AbsoluteAddress,
+				MethodName,
+				position,
+				symbolOperand.Name,
+				referenceOffset,
+				patchBitOffset,
+				patchBitSize,
+				patchValueShift
+			);
 		}
 		else if (symbolOperand.IsStaticField)
 		{
-			Linker.Link(LinkType.AbsoluteAddress, patchType, MethodName, position, symbolOperand.Field.FullName, referenceOffset);
+			Linker.Link(
+				LinkType.AbsoluteAddress,
+				MethodName,
+				position,
+				symbolOperand.Field.FullName,
+				referenceOffset,
+				patchBitOffset,
+				patchBitSize,
+				patchValueShift
+			);
 		}
 	}
 
-	public void EmitForwardLink(int offset)
+	public void EmitForwardLink32(int offset)
 	{
-		Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, MethodName, CurrentPosition, MethodName, CurrentPosition + offset);
+		Linker.Link(
+			LinkType.AbsoluteAddress,
+			MethodName,
+			CurrentPosition,
+			MethodName,
+			CurrentPosition + offset,
+			0,
+			32,
+			0
+		);
 	}
 
 	#endregion Emit Methods
 
-	public void EmitRelative24(Operand symbolOperand)
+	public void EmitRelative24x4(Operand symbolOperand)
 	{
-		// TODO
 		Linker.Link(
 			LinkType.RelativeOffset,
-			PatchType.I24o8,
 			MethodName,
 			CodeStream.Position,
 			symbolOperand.Name,
-			-4
+			-4,
+			8,
+			24,
+			4
 		);
 	}
 
@@ -195,11 +223,13 @@ public sealed partial class CodeEmitter
 	{
 		Linker.Link(
 			LinkType.RelativeOffset,
-			PatchType.I32,
 			MethodName,
 			CodeStream.Position,
 			symbolOperand.Name,
-			-4
+			-4,
+			0,
+			32,
+			0
 		);
 	}
 
@@ -207,11 +237,13 @@ public sealed partial class CodeEmitter
 	{
 		Linker.Link(
 			LinkType.RelativeOffset,
-			PatchType.I64,
 			MethodName,
 			CodeStream.Position,
 			symbolOperand.Name,
-			-8
+			-8,
+			0,
+			64,
+			0
 		);
 	}
 

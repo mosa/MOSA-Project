@@ -52,7 +52,7 @@ public sealed class VMov : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append2Bits(0b00);
-			opcodeEncoder.Append4BitImmediateHighNibble(node.Operand1);
+			opcodeEncoder.Append4BitImmediate(node.Operand1, 4);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);

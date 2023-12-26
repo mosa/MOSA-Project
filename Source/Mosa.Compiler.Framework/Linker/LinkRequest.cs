@@ -17,11 +17,6 @@ public sealed class LinkRequest
 	public LinkType LinkType { get; }
 
 	/// <summary>
-	/// Gets the patches.
-	/// </summary>
-	public PatchType PatchType { get; }
-
-	/// <summary>
 	/// The object that is being patched.
 	/// </summary>
 	public LinkerSymbol PatchSymbol { get; }
@@ -32,6 +27,21 @@ public sealed class LinkRequest
 	public int PatchOffset { get; }
 
 	/// <summary>
+	/// Gets the patch bit offset.
+	/// </summary>
+	public int PatchBitOffset { get; }
+
+	/// <summary>
+	/// Gets the patch size in bits.
+	/// </summary>
+	public byte PatchBitSize { get; }
+
+	/// <summary>
+	/// Gets the patch value shirt.
+	/// </summary>
+	public byte PatchValueShift { get; }
+
+	/// <summary>
 	/// Gets the reference symbol.
 	/// </summary>
 	public LinkerSymbol ReferenceSymbol { get; }
@@ -39,7 +49,7 @@ public sealed class LinkRequest
 	/// <summary>
 	/// Gets the offset to apply to the reference target.
 	/// </summary>
-	public int ReferenceOffset { get; }
+	public long ReferenceOffset { get; }
 
 	#endregion Properties
 
@@ -54,17 +64,50 @@ public sealed class LinkRequest
 	/// <param name="patchOffset">The patch offset.</param>
 	/// <param name="referenceSymbol">The reference symbol.</param>
 	/// <param name="referenceOffset">The reference offset.</param>
-	///
-	public LinkRequest(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
+	public LinkRequest(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, LinkerSymbol referenceSymbol, long referenceOffset)
 	{
 		Debug.Assert(patchSymbol != null);
 		Debug.Assert(referenceSymbol != null);
 
 		LinkType = linkType;
-		PatchType = patchType;
 
 		PatchSymbol = patchSymbol;
 		PatchOffset = patchOffset;
+
+		ReferenceSymbol = referenceSymbol;
+		ReferenceOffset = referenceOffset;
+
+		switch (patchType)
+		{
+			case PatchType.I24o8: PatchBitSize = 24; PatchBitOffset = 8; PatchValueShift = 0; break;
+			case PatchType.I32: PatchBitSize = 32; PatchBitOffset = 0; PatchValueShift = 0; break;
+			case PatchType.I64: PatchBitSize = 64; PatchBitOffset = 0; PatchValueShift = 0; break;
+		}
+	}
+
+	/// <summary>
+	///   Initializes a new instance of LinkRequest.
+	/// </summary>
+	/// <param name="linkType">Type of the link.</param>
+	/// <param name="patchSymbol">The patch symbol.</param>
+	/// <param name="patchOffset">The patch offset.</param>
+	/// <param name="patchBitOffset"></param>
+	/// <param name="patchBitSize"></param>
+	/// <param name="patchValueShift"></param>
+	/// <param name="referenceSymbol">The reference symbol.</param>
+	/// <param name="referenceOffset">The reference offset.</param>
+	public LinkRequest(LinkType linkType, LinkerSymbol patchSymbol, int patchOffset, byte patchBitOffset, byte patchBitSize, byte patchValueShift, LinkerSymbol referenceSymbol, long referenceOffset)
+	{
+		Debug.Assert(patchSymbol != null);
+		Debug.Assert(referenceSymbol != null);
+
+		LinkType = linkType;
+
+		PatchSymbol = patchSymbol;
+		PatchOffset = patchOffset;
+		PatchBitOffset = patchBitOffset;
+		PatchBitSize = patchBitSize;
+		PatchValueShift = patchValueShift;
 
 		ReferenceSymbol = referenceSymbol;
 		ReferenceOffset = referenceOffset;

@@ -614,6 +614,7 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					case "register": cond1 = ".IsPhysicalRegister"; break;
 					case "floatregister": cond1 = ".IsFloatingPointRegister"; break;
 					case "constant": cond1 = ".IsConstant"; break;
+					case "resolvedconstant": cond1 = ".IsResolvedConstant"; break;
 					case "eax": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 0"; break;
 					case "ecx": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 1"; break;
 					case "edx": cond1 = ".IsPhysicalRegister"; cond2 = ".Register.RegisterCode == 2"; break;
@@ -628,18 +629,18 @@ public class BuildInstructionFiles : BuildBaseTemplate
 					case "0": cond1 = ".IsConstantZero"; break;
 					case "one":
 					case "1": cond1 = ".IsConstantOne"; break;
-					case "constant_imm8": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue; cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue; break;
-					case "constant_imm12": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + (short.MinValue >> 4); cond3 = ".ConstantSigned32 <= " + (short.MaxValue >> 4); break;
-					case "constant_imm16": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue; cond3 = ".ConstantSigned32 <= " + short.MaxValue; break;
-					case "constant_imm32": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue; cond3 = ".ConstantSigned32 <= " + int.MaxValue; break;
-					case "constant_imm8u": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + byte.MaxValue; break;
-					case "constant_imm12u": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 4096"; break;
-					case "constant_imm16u": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + ushort.MaxValue; break;
-					case "constant_imm32u": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + uint.MaxValue; break;
-					case "constant_1to4": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 4"; break;
-					case "constant_1to8": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 8"; break;
-					case "constant_0or1": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;
-					case "boolean": cond1 = ".IsConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;
+					case "constant_imm8": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue; cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue; break;
+					case "constant_imm12": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantSigned32 >= " + (short.MinValue >> 4); cond3 = ".ConstantSigned32 <= " + (short.MaxValue >> 4); break;
+					case "constant_imm16": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue; cond3 = ".ConstantSigned32 <= " + short.MaxValue; break;
+					case "constant_imm32": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue; cond3 = ".ConstantSigned32 <= " + int.MaxValue; break;
+					case "constant_imm8u": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + byte.MaxValue; break;
+					case "constant_imm12u": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 4096"; break;
+					case "constant_imm16u": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + ushort.MaxValue; break;
+					case "constant_imm32u": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= " + uint.MaxValue; break;
+					case "constant_1to4": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 4"; break;
+					case "constant_1to8": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantUnsigned32 >= 1"; cond3 = ".ConstantUnsigned32 <= 8"; break;
+					case "constant_0or1": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;
+					case "boolean": cond1 = ".IsResolvedConstant"; cond2 = ".ConstantUnsigned32 >= 0"; cond3 = ".ConstantUnsigned32 <= 1"; break;
 				}
 
 				var subexpression = $"node.{operand}{cond1}";
@@ -830,8 +831,9 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 				var code = string.Empty;
 				var postcode = string.Empty;
+				var postparam = string.Empty;
 
-				GetCodes(parts[0], ref code, ref postcode);
+				GetCodes(parts[0], ref code, ref postcode, ref postparam);
 
 				var operand = parts.Length > 1 ? GetOperand(parts[1]) : string.Empty;
 				var operand2 = parts.Length > 2 ? GetOperand(parts[2]) : null;
@@ -840,19 +842,20 @@ public class BuildInstructionFiles : BuildBaseTemplate
 
 				if (operand2 == null)
 				{
-					Lines.AppendLine($"opcodeEncoder.{code}({operand}{postcode});");
+					Lines.AppendLine($"opcodeEncoder.{code}({operand}{postcode}{postparam});");
 				}
 				else
 				{
-					Lines.AppendLine($"opcodeEncoder.{code}({operand}{postcode}, {operand2});");
+					Lines.AppendLine($"opcodeEncoder.{code}({operand}{postcode}{postparam}, {operand2});");
 				}
 			}
 		}
 	}
 
-	private static void GetCodes(string part, ref string code, ref string postcode)
+	private static void GetCodes(string part, ref string code, ref string postcode, ref string postparam)
 	{
 		postcode = string.Empty;
+		postparam = string.Empty;
 
 		switch (part)
 		{
@@ -869,12 +872,15 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "reg3s1": code = "Append3Bits"; postcode = ".Register.RegisterCode >> 1"; return;
 			case "reg16pow2": code = "Append16Bits(ToPower2"; postcode = ".Register.RegisterCode)"; return;
 
+			case "int8": code = "AppendInteger8"; return;
+			case "int16": code = "AppendInteger16"; return;
+			case "int32": code = "AppendInteger32"; return;
+			case "int64": code = "AppendInteger64"; return;
+
 			case "imm1": code = "Append1BitImmediate"; return;
 			case "imm2": code = "Append2BitImmediate"; return;
-			case "imm2scale": code = "Append2BitScale"; return;
 			case "imm3": code = "Append3BitImmediate"; return;
 			case "imm4": code = "Append4BitImmediate"; return;
-			case "imm4hn": code = "Append4BitImmediateHighNibble"; return;
 			case "imm5": code = "Append5BitImmediate"; return;
 			case "imm6": code = "Append6BitImmediate"; return;
 			case "imm7": code = "Append7BitImmediate"; return;
@@ -882,9 +888,36 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "imm12": code = "Append12BitImmediate"; return;
 			case "imm16": code = "Append16BitImmediate"; return;
 			case "imm32": code = "Append32BitImmediate"; return;
-			case "imm32+": code = "Append32BitImmediateWithOffset"; return;
 			case "imm64": code = "Append64BitImmediate"; return;
+
+			//case "imm1": code = "AppendNBitImmediate"; postparam = ", 1, 0"; return;
+			//case "imm2": code = "AppendNBitImmediate"; postparam = ", 2, 0"; return;
+			//case "imm3": code = "AppendNBitImmediate"; postparam = ", 3, 0"; return;
+			//case "imm4": code = "AppendNBitImmediate"; postparam = ", 4, 0"; return;
+			//case "imm5": code = "AppendNBitImmediate"; postparam = ", 5, 0"; return;
+			//case "imm6": code = "AppendNBitImmediate"; postparam = ", 6, 0"; return;
+			//case "imm7": code = "AppendNBitImmediate"; postparam = ", 7, 0"; return;
+			//case "imm8": code = "AppendNBitImmediate"; postparam = ", 8, 0"; return;
+			//case "imm12": code = "AppendNBitImmediate"; postparam = ", 12, 0"; return;
+			//case "imm16": code = "AppendNBitImmediate"; postparam = ", 16, 0"; return;
+			//case "imm32": code = "AppendNBitImmediate"; postparam = ", 32, 0"; return;
+			//case "imm64": code = "AppendNBitImmediate"; postparam = ", 64, 0"; return;
+
+			case "imm2scale": code = "Append2BitScale"; return;
+			case "imm32+": code = "AppendInteger32WithOffset"; return;
+
+			case "imm4s4": code = "Append4BitImmediate"; postparam = ", 4"; return;
+			case "imm4s12": code = "Appen4NBitImmediate"; postparam = ", 12"; return;
+			case "imm4s28": code = "Append4BitImmediate"; postparam = ", 28"; return;
+			case "imm12s16": code = "Append12BitImmediate"; postparam = ", 16"; return;
+
+			//case "imm4s4": code = "AppendNBitImmediate"; postparam = ", 4, 4"; return;
+			//case "imm4s12": code = "AppendNBitImmediate"; postparam = ", 4, 12"; return;
+			//case "imm4s28": code = "AppendNBitImmediate"; postparam = ", 4, 28"; return;
+			//case "imm12s16": code = "AppendNBitImmediate"; postparam = ", 12, 16"; return;
+
 			case "rel24": code = "EmitRelative24"; return;
+			case "rel24x4": code = "EmitRelative24x4"; return;
 			case "rel26": code = "EmitRelative26"; return;
 			case "rel26x4": code = "EmitRelative26x4"; return;
 			case "rel32": code = "EmitRelative32"; return;
@@ -893,7 +926,6 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "forward32": code = "EmitForward32"; return;
 			case "supress8": code = "SuppressByte"; return;
 			case "conditional": code = "Append4Bits"; postcode = "GetConditionCode(node.ConditionCode)"; return;
-			//case "status": code = "Append1Bit"; postcode = ".IsSetFlags ? 1 : 0"; return;
 			case "setflag": code = "Append1Bit"; postcode = ".IsSetFlags ? 1 : 0"; return;
 			case "updir": code = "Append1Bit"; postcode = ".IsUpDirection ? 1 : 0"; return;
 			case "downdir": code = "Append1Bit"; postcode = ".IsDownDirection ? 1 : 0"; return;
@@ -902,9 +934,6 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "fp": code = "Append1Bit"; postcode = ".IsR4 ? 0 : 1"; return;
 			case "int": code = "Append1Bit"; postcode = ".IsInteger ? 1 : 0"; return;
 			case "float": code = "Append1Bit"; postcode = ".IsFloatingPoint ? 1 : 0"; return;
-
-			//case "signed": code = "Append1Bit"; postcode = ".ConstantSigned64 < 0 ? 1 : 0"; return;
-			//case "imm12unsigned": code = "Append12BitImmediate"; postcode = ""; return;
 
 			case "": return;
 

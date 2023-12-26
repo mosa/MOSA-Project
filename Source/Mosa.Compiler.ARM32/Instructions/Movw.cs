@@ -7,7 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Movw - Movw
+/// Movw - Movw [load low]
 /// </summary>
 public sealed class Movw : ARM32Instruction
 {
@@ -29,7 +29,7 @@ public sealed class Movw : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(0b1101);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4BitImmediateHighNibble(node.Operand1);
+			opcodeEncoder.Append4BitImmediate(node.Operand1, 4);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append12BitImmediate(node.Operand1);
 

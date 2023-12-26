@@ -518,7 +518,7 @@ public sealed class ElfLinker
 
 				var relocationEntry = new RelocationEntry
 				{
-					RelocationType = ConvertType(MachineType, patch.LinkType, patch.PatchType),
+					RelocationType = ConvertType(MachineType, patch),
 					Symbol = symbolTableOffset[patch.ReferenceSymbol],
 					Offset = (ulong)(symbol.SectionOffset + patch.PatchOffset),
 				};
@@ -556,7 +556,7 @@ public sealed class ElfLinker
 
 				var relocationAddendEntry = new RelocationAddendEntry
 				{
-					RelocationType = ConvertType(MachineType, patch.LinkType, patch.PatchType),
+					RelocationType = ConvertType(MachineType, patch),
 					Symbol = symbolTableOffset[patch.ReferenceSymbol],
 					Offset = (ulong)(symbol.SectionOffset + patch.PatchOffset),
 					Addend = (ulong)patch.ReferenceOffset,
@@ -654,8 +654,10 @@ public sealed class ElfLinker
 		return shortname;
 	}
 
-	private static RelocationType ConvertType(MachineType machineType, LinkType linkType, PatchType patchType)
+	private static RelocationType ConvertType(MachineType machineType, LinkRequest linkRequest)
 	{
+		var linkType = linkRequest.LinkType;
+
 		if (machineType == MachineType.Intel386)
 		{
 			if (linkType == LinkType.AbsoluteAddress)

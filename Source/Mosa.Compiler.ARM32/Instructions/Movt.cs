@@ -7,7 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM32.Instructions;
 
 /// <summary>
-/// Movt - Movt
+/// Movt - Movt [load high portion]
 /// </summary>
 public sealed class Movt : ARM32Instruction
 {
@@ -29,7 +29,7 @@ public sealed class Movt : ARM32Instruction
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(0b1010);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.Append4BitImmediateHighNibble(node.Operand2);
+			opcodeEncoder.Append4BitImmediate(node.Operand2, 4);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append12BitImmediate(node.Operand2);
 

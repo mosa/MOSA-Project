@@ -37,7 +37,7 @@ public sealed class Out16 : X64Instruction
 		if (node.Operand1.IsConstant)
 		{
 			opcodeEncoder.Append8Bits(0xE7);
-			opcodeEncoder.Append8BitImmediate(node.Operand1);
+			opcodeEncoder.AppendInteger8(node.Operand1);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;
