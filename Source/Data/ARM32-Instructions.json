@@ -1692,28 +1692,6 @@
 			]
 		},
 		{
-			"Name": "Movwt",
-			"Commutative": "false",
-			"FamilyName": "ARM32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
-			"Description": "Movw + Movt",
-			"OpcodeEncodingAppend": "rd=reg4:r",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[resolvedconstant]",
-					"Encoding": "conditional|0011|0000|[imm4_1]|[rd]|[imm12_1]|conditional|0011|0100|[imm4_2]|[rd]|[imm12_2]",
-					"Append": "imm4_1=imm4s12:o1,imm12_1=imm12:o1,imm4_2=imm4s28:o1,imm12_2=imm12s16:o1"
-				}
-			]
-		},
-		{
 			"Name": "Movt",
 			"Commutative": "false",
 			"FamilyName": "ARM32",
