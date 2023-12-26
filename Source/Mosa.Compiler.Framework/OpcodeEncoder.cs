@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Mosa.Compiler.Framework;
 
@@ -399,6 +400,66 @@ public sealed class OpcodeEncoder
 
 			AppendBits(0, size);
 		}
+	}
+
+	public void Append1BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 1, shift, offset);
+	}
+
+	public void Append2BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 2, shift, offset);
+	}
+
+	public void Append3BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 3, shift, offset);
+	}
+
+	public void Append4BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 4, shift, offset);
+	}
+
+	public void Append5BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 5, shift, offset);
+	}
+
+	public void Append6BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 6, shift, offset);
+	}
+
+	public void Append7BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 7, shift, offset);
+	}
+
+	public void Append8BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 8, shift, offset);
+	}
+
+	public void Append12BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 12, shift, offset);
+	}
+
+	public void Append16BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 16, shift, offset);
+	}
+
+	public void Append24BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 24, shift, offset);
+	}
+
+	public void Append32BitImmediate(Operand operand, byte shift, long offset = 0)
+	{
+		AppendNBitImmediate(operand, 32, shift, offset);
 	}
 
 	public void EmitRelative24(int label)

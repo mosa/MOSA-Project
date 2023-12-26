@@ -33,7 +33,7 @@ public sealed class MvnRegShift : ARM32Instruction
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 			opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.AppendNBitImmediate(node.Operand3, 2, 0);
+			opcodeEncoder.Append2BitImmediate(node.Operand3, 0);
 			opcodeEncoder.Append1Bit(0b1);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 

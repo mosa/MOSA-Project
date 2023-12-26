@@ -35,7 +35,7 @@ public sealed class VStr : ARM32Instruction
 			opcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
 			opcodeEncoder.Append3Bits(0b101);
 			opcodeEncoder.Append1Bit(node.Operand3.IsR4 ? 0 : 1);
-			opcodeEncoder.AppendNBitImmediate(node.Operand2, 8, 0);
+			opcodeEncoder.Append8BitImmediate(node.Operand2, 0);
 
 			System.Diagnostics.Debug.Assert(opcodeEncoder.CheckOpcodeAlignment());
 			return;

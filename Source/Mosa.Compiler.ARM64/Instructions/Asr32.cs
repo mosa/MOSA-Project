@@ -29,7 +29,7 @@ public sealed class Asr32 : ARM64Instruction
 			opcodeEncoder.Append4Bits(0b1001);
 			opcodeEncoder.Append2Bits(0b10);
 			opcodeEncoder.Append1Bit(0b0);
-			opcodeEncoder.AppendNBitImmediate(node.Operand2, 6, 0);
+			opcodeEncoder.Append6BitImmediate(node.Operand2, 0);
 			opcodeEncoder.Append4Bits(0b0111);
 			opcodeEncoder.Append2Bits(0b11);
 			opcodeEncoder.Append5Bits(node.Operand1.Register.RegisterCode);

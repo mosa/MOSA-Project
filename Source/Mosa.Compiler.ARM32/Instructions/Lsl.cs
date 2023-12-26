@@ -52,7 +52,7 @@ public sealed class Lsl : ARM32Instruction
 			opcodeEncoder.Append1Bit(node.IsSetFlags ? 1 : 0);
 			opcodeEncoder.Append4Bits(0b0000);
 			opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.AppendNBitImmediate(node.Operand2, 5, 0);
+			opcodeEncoder.Append5BitImmediate(node.Operand2, 0);
 			opcodeEncoder.Append2Bits(0b00);
 			opcodeEncoder.Append1Bit(0b0);
 			opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);

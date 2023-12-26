@@ -877,26 +877,44 @@ public class BuildInstructionFiles : BuildBaseTemplate
 			case "int32": code = "AppendInteger32"; return;
 			case "int64": code = "AppendInteger64"; return;
 
-			case "imm1": code = "AppendNBitImmediate"; postparam = ", 1, 0"; return;
-			case "imm2": code = "AppendNBitImmediate"; postparam = ", 2, 0"; return;
-			case "imm3": code = "AppendNBitImmediate"; postparam = ", 3, 0"; return;
-			case "imm4": code = "AppendNBitImmediate"; postparam = ", 4, 0"; return;
-			case "imm5": code = "AppendNBitImmediate"; postparam = ", 5, 0"; return;
-			case "imm6": code = "AppendNBitImmediate"; postparam = ", 6, 0"; return;
-			case "imm7": code = "AppendNBitImmediate"; postparam = ", 7, 0"; return;
-			case "imm8": code = "AppendNBitImmediate"; postparam = ", 8, 0"; return;
-			case "imm12": code = "AppendNBitImmediate"; postparam = ", 12, 0"; return;
-			case "imm16": code = "AppendNBitImmediate"; postparam = ", 16, 0"; return;
-			case "imm32": code = "AppendNBitImmediate"; postparam = ", 32, 0"; return;
-			case "imm64": code = "AppendNBitImmediate"; postparam = ", 64, 0"; return;
+			case "imm1": code = "Append1BitImmediate"; postparam = ", 0"; return;
+			case "imm2": code = "Append2BitImmediate"; postparam = ", 0"; return;
+			case "imm3": code = "Append3BitImmediate"; postparam = ", 0"; return;
+			case "imm4": code = "Append4BitImmediate"; postparam = ", 0"; return;
+			case "imm5": code = "Append5BitImmediate"; postparam = ", 0"; return;
+			case "imm6": code = "Append6BitImmediate"; postparam = ", 0"; return;
+			case "imm7": code = "Append7BitImmediate"; postparam = ", 0"; return;
+			case "imm8": code = "Append8BitImmediate"; postparam = ", 0"; return;
+			case "imm12": code = "Append12BitImmediate"; postparam = ", 0"; return;
+			case "imm16": code = "Append16BitImmediate"; postparam = ", 0"; return;
+			case "imm32": code = "Append32BitImmediate"; postparam = ", 0"; return;
+			case "imm64": code = "Append64BitImmediate"; postparam = ", 0"; return;
+
+			//case "imm1": code = "AppendNBitImmediate"; postparam = ", 1, 0"; return;
+			//case "imm2": code = "AppendNBitImmediate"; postparam = ", 2, 0"; return;
+			//case "imm3": code = "AppendNBitImmediate"; postparam = ", 3, 0"; return;
+			//case "imm4": code = "AppendNBitImmediate"; postparam = ", 4, 0"; return;
+			//case "imm5": code = "AppendNBitImmediate"; postparam = ", 5, 0"; return;
+			//case "imm6": code = "AppendNBitImmediate"; postparam = ", 6, 0"; return;
+			//case "imm7": code = "AppendNBitImmediate"; postparam = ", 7, 0"; return;
+			//case "imm8": code = "AppendNBitImmediate"; postparam = ", 8, 0"; return;
+			//case "imm12": code = "AppendNBitImmediate"; postparam = ", 12, 0"; return;
+			//case "imm16": code = "AppendNBitImmediate"; postparam = ", 16, 0"; return;
+			//case "imm32": code = "AppendNBitImmediate"; postparam = ", 32, 0"; return;
+			//case "imm64": code = "AppendNBitImmediate"; postparam = ", 64, 0"; return;
 
 			case "imm2scale": code = "Append2BitScale"; return;
 			case "imm32+": code = "AppendInteger32WithOffset"; return;
 
-			case "imm4s4": code = "AppendNBitImmediate"; postparam = ", 4, 4"; return;
-			case "imm4s12": code = "AppendNBitImmediate"; postparam = ", 4, 12"; return;
-			case "imm4s28": code = "AppendNBitImmediate"; postparam = ", 4, 28"; return;
-			case "imm12s16": code = "AppendNBitImmediate"; postparam = ", 12, 16"; return;
+			case "imm4s4": code = "Append4BitImmediate"; postparam = ", 4"; return;
+			case "imm4s12": code = "Appen4NBitImmediate"; postparam = ", 12"; return;
+			case "imm4s28": code = "Append4BitImmediate"; postparam = ", 28"; return;
+			case "imm12s16": code = "Append12BitImmediate"; postparam = ", 16"; return;
+
+			//case "imm4s4": code = "AppendNBitImmediate"; postparam = ", 4, 4"; return;
+			//case "imm4s12": code = "AppendNBitImmediate"; postparam = ", 4, 12"; return;
+			//case "imm4s28": code = "AppendNBitImmediate"; postparam = ", 4, 28"; return;
+			//case "imm12s16": code = "AppendNBitImmediate"; postparam = ", 12, 16"; return;
 
 			case "rel24": code = "EmitRelative24"; return;
 			case "rel24x4": code = "EmitRelative24x4"; return;
