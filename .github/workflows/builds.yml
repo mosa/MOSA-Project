@@ -2,7 +2,11 @@ name: Builds
 
 on:
   push:
+    paths-ignore:
+      - 'Source/Docs/**'
   pull_request:
+    paths-ignore:
+      - 'Source/Docs/**'
 
 permissions:
   contents: write
@@ -164,38 +168,6 @@ jobs:
         with:
           name: macos-build-artifact
           path: bin
-
-  generate-docs:
-    name: Generate Documentation
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
-    steps:
-      - name: Set python3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Update package repository
-        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-      - name: Install Graphviz
-        run: sudo apt-get install -y graphviz
-      - name: Install Sphinx dependencies
-        run: pip3 install sphinx sphinxcontrib.httpdomain sphinx-prompt sphinx_rtd_theme sphinx-tabs
-      - name: Generate HTML website
-        run: sphinx-build -b html Source/Docs sphinx-docs
-      - name: Copy CNAME file
-        run: cp Source/Docs/CNAME sphinx-docs/
-      - name: Copy .nojekyll file
-        run: cp Source/Docs/.nojekyll sphinx-docs/
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: sphinx-docs
-          branch: docs
 
   windows-unit-testing:
     strategy:
