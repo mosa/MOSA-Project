@@ -74,7 +74,7 @@ Finally, you can build your kernel using the GUI launcher tool copied to the Too
 
 .. code-block:: bash
 
-	Tools/Mosa.Tool.Launcher MyMosaKernel.dll
+	Tools/Mosa.Tool.Launcher MyMosaKernel.x86.dll
 
 Clone and build manually
 ========================
