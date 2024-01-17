@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Kernel.BareMetal.Intel;
 using Mosa.Runtime;
-using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.BareMetal.x86;
@@ -2170,7 +2169,6 @@ public static class IDT
 	/// Interrupts the handler.
 	/// </summary>
 	/// <param name="stackStatePointer">The stack state pointer.</param>
-	[Plug("Mosa.Runtime.Interrupt::Process")]
 	private static unsafe void ProcessInterrupt(Pointer stackStatePointer)
 	{
 		var stack = new IDTStackEntry(stackStatePointer);
@@ -2270,6 +2268,7 @@ public static class IDT
 
 			default:
 				Interrupt?.Invoke(stack.Interrupt, stack.ErrorCode);
+				BareMetal.InterruptManager.ProcessInterrupt(stack.Interrupt, stack.ErrorCode);
 				break;
 		}
 

@@ -9,7 +9,7 @@ namespace Mosa.Compiler.x64.Intrinsic;
 /// </summary>
 internal static partial class IntrinsicMethods
 {
-	private static readonly string DefaultInterruptMethodName = "Mosa.Kernel.X64.IDT::ProcessInterrupt";
+	private static readonly string DefaultInterruptMethodName = "Mosa.Kernel.BareMetal.X64.IDT::ProcessInterrupt";
 
 	private static void InsertIRQ(int irq, Context context, Transform transform)
 	{

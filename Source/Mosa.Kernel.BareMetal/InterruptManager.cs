@@ -10,6 +10,7 @@ public static class InterruptManager
 	{
 		Debug.WriteLine("InterreuptManager:Setup()");
 
+		InterruptQueue.Setup();
 		Platform.Interrupt.Setup();
 
 		Debug.WriteLine("InterreuptManager:Setup() [Exit]");
@@ -18,5 +19,10 @@ public static class InterruptManager
 	public static void SetHandler(InterruptHandler handler)
 	{
 		Platform.Interrupt.SetHandler(handler);
+	}
+
+	public static void ProcessInterrupt(uint interrupt, uint errorCode)
+	{
+		InterruptQueue.Enqueue(interrupt);
 	}
 }

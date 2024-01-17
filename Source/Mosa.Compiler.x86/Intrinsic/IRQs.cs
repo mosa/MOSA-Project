@@ -9,8 +9,7 @@ namespace Mosa.Compiler.x86.Intrinsic;
 /// </summary>
 internal static partial class IntrinsicMethods
 {
-	//private static readonly string DefaultInterruptMethodName = "Mosa.Kernel.x86.IDT::ProcessInterrupt";
-	private static readonly string DefaultInterruptMethodName = "Mosa.Runtime.Interrupt::Process";
+	private static readonly string DefaultInterruptMethodName = "Mosa.Kernel.BareMetal.x86.IDT::ProcessInterrupt";
 
 	private static readonly string[] seperator = new string[] { "::" };
 
@@ -23,7 +22,7 @@ internal static partial class IntrinsicMethods
 			interruptMethodName = DefaultInterruptMethodName;
 		}
 
-		var ar = interruptMethodName.Split(seperator, System.StringSplitOptions.None);
+		var ar = interruptMethodName.Split(seperator, StringSplitOptions.None);
 
 		if (ar.Length != 2)
 			return;
