@@ -107,7 +107,7 @@ public static class HAL
 	}
 
 	/// <summary>
-	/// Pause
+	/// Yield
 	/// </summary>
 	public static void Yield() => hardwareAbstraction.Yield();
 

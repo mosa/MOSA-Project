@@ -22,7 +22,8 @@ The target platforms are:
 
 - 32-bit x86 (stable)
 - 64-bit x86 (x64) (in development)
-- A32 ARMv8 (in early development)
+- 32-bit ARMv8+ (in early development)
+- 64-bit ARMv8+ (in early development)
 
 The MOSA compiler supports most object and non-object oriented code, including:
 

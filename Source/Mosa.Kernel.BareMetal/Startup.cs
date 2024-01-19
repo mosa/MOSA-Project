@@ -252,7 +252,9 @@ public static class Startup
 
 	private static void ProcessInterrupt(uint interrupt, uint errorCode)
 	{
-		if (interrupt is >= 0x20 and < 0x30)
+		if (interrupt is >= 0x20 and < 0x30)        // FIXME: X86 specific
+		{
 			HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+		}
 	}
 }
