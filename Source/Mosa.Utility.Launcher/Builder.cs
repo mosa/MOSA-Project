@@ -68,7 +68,7 @@ public class Builder : BaseLauncher
 				return;
 			}
 
-			if (!Compile(GetMosaSettings()))
+			if (!Compile())
 			{
 				IsSucccessful = false;
 				return;
@@ -101,12 +101,7 @@ public class Builder : BaseLauncher
 		}
 	}
 
-	private MosaSettings GetMosaSettings()
-	{
-		return MosaSettings;
-	}
-
-	private bool Compile(MosaSettings mosaSettings)
+	private bool Compile()
 	{
 		OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
 
