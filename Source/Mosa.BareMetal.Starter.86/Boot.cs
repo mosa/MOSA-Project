@@ -3,7 +3,7 @@
 using Mosa.Kernel.BareMetal;
 using Mosa.Runtime.Plug;
 
-namespace Mosa.BareMetal.Starter;
+namespace Mosa.BareMetal.Starter.x86;
 
 internal class Boot
 {
@@ -15,6 +15,6 @@ internal class Boot
 
 	public static void ForceInclude()
 	{
-		Mosa.Kernel.BareMetal.x86.PlatformPlug.ForceInclude();
+		Kernel.BareMetal.x86.PlatformPlug.ForceInclude();
 	}
 }
