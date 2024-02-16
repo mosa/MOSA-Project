@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <package>
 	<metadata>
 		<id>Mosa.DeviceSystem</id>
@@ -20,8 +20,8 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
-		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net7.0" />
-		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net7.0" />
-		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net7.0" />
+		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net8.0" />
+		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net8.0" />
+		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net8.0" />
 	</files>
 </package>

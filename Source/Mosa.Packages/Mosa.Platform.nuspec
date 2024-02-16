@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <package>
 	<metadata>
 		<id>Mosa.Platform</id>
@@ -17,9 +17,9 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
-		<file src="..\..\bin\Mosa.Kernel.BareMetal.dll" target="lib\net7.0" />
-		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net7.0" />
-		<file src="..\..\bin\System.Runtime.dll" target="lib\net7.0" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net7.0" />
+		<file src="..\..\bin\Mosa.Kernel.BareMetal.dll" target="lib\net8.0" />
+		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net8.0" />
+		<file src="..\..\bin\System.Runtime.dll" target="lib\net8.0" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net8.0" />
 	</files>
 </package>
