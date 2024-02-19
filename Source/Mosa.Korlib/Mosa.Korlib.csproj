@@ -7,7 +7,7 @@
 		<RootNamespace />
 		<SkipCommonResourcesIncludes>true</SkipCommonResourcesIncludes>
 		<RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
-		<AssemblyVersion>7.0.0.0</AssemblyVersion>
+		<AssemblyVersion>8.0.0.0</AssemblyVersion>
 	</PropertyGroup>
 
 </Project>
