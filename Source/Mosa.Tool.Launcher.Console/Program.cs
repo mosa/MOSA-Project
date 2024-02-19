@@ -42,7 +42,6 @@ internal static class Program
 			var compilerHooks = CreateCompilerHooks();
 
 			Builder = new Builder(mosaSettings, compilerHooks);
-
 			Builder.Build();
 
 			if (!Builder.IsSucccessful)
