@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem.Devices.Graphics;
+
 namespace Mosa.DeviceSystem;
 
 public static class Bitmap

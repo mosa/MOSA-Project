@@ -1,18 +1,20 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using Mosa.DeviceSystem.Drivers.PCI;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.PCI;
 
 /// <summary>
-/// PCI Device
+/// The base class for all PCI devices in the device driver framework. It provides a generic way of initializing and enabling/disabling
+/// such devices.
 /// </summary>
-public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
+public class PCIDevice : BaseDeviceDriver
 {
 	#region PCICommand
 
-	internal struct PCIConfigurationHeader
+	private struct PCIConfigurationHeader
 	{
 		internal const int VendorID = 0x00;
 		internal const int DeviceID = 0x02;
@@ -58,7 +60,7 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 		//internal const int PendingBitsforMSI = 0xB0;
 	}
 
-	internal struct PCICommand
+	private struct PCICommand
 	{
 		internal const ushort IOSpaceEnable = 0x1; // Enable response in I/O space
 		internal const ushort MemorySpaceEnable = 0x2; //  Enable response in memory space
@@ -75,164 +77,90 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 
 	#endregion PCICommand
 
-	/// <summary>
-	/// The pci controller
-	/// </summary>
-	protected IPCIController pciController;
-
-	/// <summary>
-	/// The memory region count
-	/// </summary>
-	protected byte memoryRegionCount;
-
-	/// <summary>
-	/// The io port region count
-	/// </summary>
-	protected byte ioPortRegionCount;
+	private IPCIController pciController;
 
 	#region Properties
 
-	/// <summary>
-	/// Gets the bus.
-	/// </summary>
-	/// <value>The bus.</value>
-	public byte Bus { get; protected set; }
+	public byte Bus { get; private set; }
 
-	/// <summary>
-	/// Gets the slot.
-	/// </summary>
-	/// <value>The slot.</value>
-	public byte Slot { get; protected set; }
+	public byte Slot { get; private set; }
 
-	/// <summary>
-	/// Gets the function.
-	/// </summary>
-	/// <value>The function.</value>
-	public byte Function { get; protected set; }
+	public byte Function { get; private set; }
 
-	/// <summary>
-	/// Gets the capabilities.
-	/// </summary>
-	public PCICapability[] Capabilities { get; protected set; }
+	public PCICapability[] Capabilities { get; private set; }
 
-	/// <summary>
-	/// Gets the vendor ID.
-	/// </summary>
-	/// <value>The vendor ID.</value>
 	public ushort VendorID => pciController.ReadConfig16(this, PCIConfigurationHeader.VendorID);
 
-	/// <summary>
-	/// Gets the device ID.
-	/// </summary>
-	/// <value>The device ID.</value>
 	public ushort DeviceID => pciController.ReadConfig16(this, PCIConfigurationHeader.DeviceID);
 
-	/// <summary>
-	/// Gets the revision ID.
-	/// </summary>
-	/// <value>The revision ID.</value>
 	public byte RevisionID => pciController.ReadConfig8(this, PCIConfigurationHeader.RevisionID);
 
-	/// <summary>
-	/// Gets the class code.
-	/// </summary>
-	/// <value>The class code.</value>
 	public byte ClassCode => pciController.ReadConfig8(this, PCIConfigurationHeader.ClassCode);
 
-	/// <summary>
-	/// Gets the prog IF.
-	/// </summary>
-	/// <value>The prog IF.</value>
 	public byte ProgIF => pciController.ReadConfig8(this, PCIConfigurationHeader.ProgrammingInterface);
 
-	/// <summary>
-	/// Gets the sub class code.
-	/// </summary>
-	/// <value>The sub class code.</value>
 	public byte SubClassCode => pciController.ReadConfig8(this, PCIConfigurationHeader.SubClassCode);
 
-	/// <summary>
-	/// Gets the sub vendor ID.
-	/// </summary>
-	/// <value>The sub vendor ID.</value>
 	public ushort SubSystemVendorID => pciController.ReadConfig16(this, PCIConfigurationHeader.SubSystemVendorID);
 
-	/// <summary>
-	/// Gets the sub device ID.
-	/// </summary>
-	/// <value>The sub device ID.</value>
 	public ushort SubSystemID => pciController.ReadConfig16(this, PCIConfigurationHeader.SubSystemID);
 
-	/// <summary>
-	/// Gets the IRQ.
-	/// </summary>
-	/// <value>The IRQ.</value>
 	public byte IRQ => pciController.ReadConfig8(this, PCIConfigurationHeader.InterruptLineRegister);
 
-	/// <summary>
-	/// Gets or sets the status register.
-	/// </summary>
-	/// <value>The status.</value>
 	public ushort StatusRegister
 	{
 		get => pciController.ReadConfig16(this, PCIConfigurationHeader.StatusRegister);
 		set => pciController.WriteConfig16(this, PCIConfigurationHeader.StatusRegister, value);
 	}
 
-	/// <summary>
-	/// Gets or sets the command register.
-	/// </summary>
-	/// <value>The status.</value>
 	public ushort CommandRegister
 	{
 		get => pciController.ReadConfig16(this, PCIConfigurationHeader.CommandRegister);
 		set => pciController.WriteConfig16(this, PCIConfigurationHeader.CommandRegister, value);
 	}
 
-	/// <summary>
-	/// Gets the base addresses.
-	/// </summary>
-	/// <value>The base addresses.</value>
 	public BaseAddress[] BaseAddresses { get; private set; }
 
 	#endregion Properties
 
 	public override void Initialize()
 	{
-		pciController = base.Device.Parent.DeviceDriver as IPCIController;
+		pciController = Device.Parent.DeviceDriver as IPCIController;
+		if (pciController == null) return;
 
-		var configuration = base.Device.Configuration as PCIDeviceConfiguration;
+		var configuration = Device.Configuration as PCIDeviceConfiguration;
+		if (configuration == null) return;
 
 		Bus = configuration.Bus;
 		Slot = configuration.Slot;
 		Function = configuration.Function;
 
-		base.Device.Name = base.Device.Parent.Name + '/' + Bus + '.' + Slot + '.' + Function;
-
-		ioPortRegionCount = memoryRegionCount = 0;
+		Device.Name = $"{Device.Parent.Name}/{Bus}.{Slot}.{Function}";
 		BaseAddresses = new BaseAddress[8];
 
 		for (byte i = 0; i < 6; i++)
 		{
-			byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + i * 4);
+			var bar = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + i * 4);
 
-			uint address = pciController.ReadConfig32(this, barr);
-
-			if (address == 0)
-				continue;
+			var address = pciController.ReadConfig32(this, bar);
+			if (address == 0) continue;
 
 			HAL.DisableAllInterrupts();
 
-			pciController.WriteConfig32(this, barr, 0xFFFFFFFF);
-			uint mask = pciController.ReadConfig32(this, barr);
-			pciController.WriteConfig32(this, barr, address);
+			pciController.WriteConfig32(this, bar, 0xFFFFFFFF);
+			var mask = pciController.ReadConfig32(this, bar);
+			pciController.WriteConfig32(this, bar, address);
 
 			HAL.EnableAllInterrupts();
 
 			if (address % 2 == 1)
+			{
 				BaseAddresses[i] = new BaseAddress(AddressType.IO, new Pointer(address & 0x0000FFF8), (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+			}
 			else
+			{
 				BaseAddresses[i] = new BaseAddress(AddressType.Memory, new Pointer(address & 0xFFFFFFF0), ~(mask & 0xFFFFFFF0) + 1, (address & 0x08) == 1);
+			}
 		}
 
 		// FIXME: Special case for generic VGA
@@ -240,21 +168,6 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 		{
 			BaseAddresses[6] = new BaseAddress(AddressType.Memory, new Pointer(0xA0000), 0x1FFFF, false);
 			BaseAddresses[7] = new BaseAddress(AddressType.IO, new Pointer(0x3B0), 0x0F, false);
-		}
-
-		foreach (var baseAddress in BaseAddresses)
-		{
-			if (baseAddress == null)
-				continue;
-
-			if (baseAddress.Region == AddressType.Undefined)
-				continue;
-
-			switch (baseAddress.Region)
-			{
-				case AddressType.IO: ioPortRegionCount++; break;
-				case AddressType.Memory: memoryRegionCount++; break;
-			}
 		}
 
 		if ((StatusRegister & (byte)PCIStatus.Capability) != 0)
@@ -265,7 +178,6 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 			while (ptr != 0)
 			{
 				var capability = pciController.ReadConfig8(this, ptr);
-
 				capabilities.Add(new PCICapability(capability, ptr));
 
 				ptr = pciController.ReadConfig8(this, (byte)(ptr + 1));
@@ -277,52 +189,23 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 		EnableDevice();
 	}
 
-	public override void Probe() => base.Device.Status = DeviceStatus.Available;
+	public override void Probe() => Device.Status = DeviceStatus.Available;
 
-	public override void Start()
-	{
-		base.Device.Status = DeviceStatus.Online;
-	}
+	public override void Start() => Device.Status = DeviceStatus.Online;
 
-	/// <summary>
-	/// Called when an interrupt is received.
-	/// </summary>
-	/// <returns></returns>
 	public override bool OnInterrupt()
 	{
 		// TODO
 		return true;
 	}
 
-	/// <summary>
-	/// Enables the device.
-	/// </summary>
 	public void EnableDevice()
-	{
-		CommandRegister = (ushort)(CommandRegister | PCICommand.IOSpaceEnable | PCICommand.BusMasterFunctionEnable | PCICommand.MemorySpaceEnable);
-	}
+		=> CommandRegister = (ushort)(CommandRegister | PCICommand.IOSpaceEnable | PCICommand.BusMasterFunctionEnable | PCICommand.MemorySpaceEnable);
 
-	/// <summary>
-	/// Disables the device.
-	/// </summary>
 	public void DisableDevice()
-	{
-		CommandRegister = (ushort)(CommandRegister & ~PCICommand.IOSpaceEnable & ~PCICommand.BusMasterFunctionEnable & PCICommand.MemorySpaceEnable);
-	}
+		=> CommandRegister = (ushort)(CommandRegister & ~PCICommand.IOSpaceEnable & ~PCICommand.BusMasterFunctionEnable & PCICommand.MemorySpaceEnable);
 
-	/// <summary>
-	/// Sets the no driver found.
-	/// </summary>
-	public void SetNoDriverFound()
-	{
-		base.Device.Status = DeviceStatus.NotFound;
-	}
+	public void SetNoDriverFound() => Device.Status = DeviceStatus.NotFound;
 
-	/// <summary>
-	/// Sets the device online.
-	/// </summary>
-	public void SetDeviceOnline()
-	{
-		base.Device.Status = DeviceStatus.Online;
-	}
+	public void SetDeviceOnline() => Device.Status = DeviceStatus.Online;
 }

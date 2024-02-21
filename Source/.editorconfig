@@ -1,5 +1,5 @@
-# top-most EditorConfig file
 root = true
+# top-most EditorConfig file
 
 # Default settings:
 # A newline ending every file
@@ -11,24 +11,65 @@ indent_style = tab
 indent_size = 4
 trim_trailing_whitespace = true
 
-[*.cs]
-indent_size = 4
+# Microsoft .NET properties
+csharp_new_line_before_open_brace = all
+csharp_preferred_modifier_order = private, async, protected, public, internal, volatile, abstract, new, override, sealed, static, virtual, extern, readonly, unsafe, file, required:suggestion
+csharp_preserve_single_line_blocks = true
+dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:none
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:none
+dotnet_style_parentheses_in_relational_binary_operators = never_if_unnecessary:none
 dotnet_sort_system_directives_first = true
 dotnet_style_prefer_auto_properties = true
 dotnet_style_prefer_compound_assignment = true
 dotnet_style_coalesce_expression = true
 dotnet_style_prefer_simplified_interpolation = true
-dotnet_diagnostic.CS0168.severity = none
 csharp_style_var_for_built_in_types = true
 csharp_style_var_when_type_is_apparent = true
 
-csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
+# ReSharper properties
+resharper_align_multiline_statement_conditions = false
+resharper_blank_lines_after_block_statements = 0
+resharper_blank_lines_after_start_comment = 0
+resharper_blank_lines_around_property = 0
+resharper_blank_lines_around_single_line_local_method = 1
+resharper_braces_for_ifelse = not_required
+resharper_braces_for_lock = not_required
+resharper_braces_for_using = required_for_multiline
+resharper_braces_for_while = required_for_multiline
+resharper_braces_redundant = false
+resharper_cpp_max_line_length = 238
+resharper_cpp_wrap_parameters_style = chop_if_long
+resharper_csharp_alignment_tab_fill_style = optimal_fill
+resharper_csharp_allow_comment_after_lbrace = true
+resharper_csharp_blank_lines_around_field = 0
+resharper_csharp_blank_lines_around_invocable = 0
+resharper_csharp_blank_lines_around_region = 0
+resharper_csharp_case_block_braces = next_line_shifted_2
+resharper_csharp_indent_statement_pars = outside
+resharper_csharp_max_line_length = 15750
+resharper_csharp_remove_blank_lines_near_braces_in_code = false
+resharper_csharp_remove_blank_lines_near_braces_in_declarations = false
+resharper_csharp_wrap_before_binary_opsign = true
+resharper_csharp_wrap_extends_list_style = chop_if_long
+resharper_csharp_wrap_ternary_expr_style = wrap_if_long
+resharper_indent_nested_foreach_stmt = true
+resharper_indent_nested_for_stmt = true
+resharper_indent_pars = outside
+resharper_instance_members_qualify_declared_in = 
+resharper_nested_ternary_style = simple_wrap
+resharper_object_creation_when_type_evident = explicitly_typed
+resharper_parentheses_non_obvious_operations = none, shift, conditional_and, conditional_or, conditional
+resharper_parentheses_redundancy_style = remove
+resharper_parentheses_same_type_operations = true
+resharper_place_accessorholder_attribute_on_same_line = false
+resharper_place_accessor_attribute_on_same_line = false
+resharper_place_expr_accessor_on_single_line = true
+resharper_place_expr_method_on_single_line = true
+resharper_place_field_attribute_on_same_line = false
+resharper_place_simple_embedded_statement_on_same_line = false
+resharper_place_simple_initializer_on_single_line = false
+resharper_space_after_ptr_in_data_member = false
+resharper_space_before_ptr_in_data_member = true
+resharper_toplevel_function_declaration_return_type_style = on_single_line
 
 file_header_template = Copyright (c) MOSA Project. Licensed under the New BSD License.
-
-[*.csproj]
-indent_size = 4
-
-[*.yml}]
-indent_style = space
-indent_size = 4

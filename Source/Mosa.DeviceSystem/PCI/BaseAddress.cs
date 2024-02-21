@@ -5,86 +5,38 @@ using Mosa.Runtime;
 namespace Mosa.DeviceSystem.PCI;
 
 /// <summary>
-///
+/// Describes a PCI BAR.
 /// </summary>
 public class BaseAddress
 {
-	/// <summary>
-	///
-	/// </summary>
-	protected Pointer address;
+	public AddressType Region { get; }
 
-	/// <summary>
-	///
-	/// </summary>
-	protected uint size;
+	public Pointer Address { get; }
 
-	/// <summary>
-	///
-	/// </summary>
-	protected AddressType region;
+	public uint Size { get; }
 
-	/// <summary>
-	///
-	/// </summary>
-	protected bool prefetchable;
+	public bool Prefetchable { get; }
 
-	/// <summary>
-	/// Gets the address.
-	/// </summary>
-	/// <value>The address.</value>
-	public Pointer Address => address;
-
-	/// <summary>
-	/// Gets the size.
-	/// </summary>
-	/// <value>The size.</value>
-	public uint Size => size;
-
-	/// <summary>
-	/// Gets the region.
-	/// </summary>
-	/// <value>The region.</value>
-	public AddressType Region => region;
-
-	/// <summary>
-	/// Gets a value indicating whether this <see cref="BaseAddress"/> is prefetchable.
-	/// </summary>
-	/// <value><c>true</c> if prefetchable; otherwise, <c>false</c>.</value>
-	public bool Prefetchable => prefetchable;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="BaseAddress"/> class.
-	/// </summary>
-	/// <param name="region">The region.</param>
-	/// <param name="address">The address.</param>
-	/// <param name="size">The size.</param>
-	/// <param name="prefetchable">if set to <c>true</c> [prefetchable].</param>
 	public BaseAddress(AddressType region, Pointer address, uint size, bool prefetchable)
 	{
-		this.region = region;
-		this.address = address;
-		this.size = size;
-		this.prefetchable = prefetchable;
+		Region = region;
+		Address = address;
+		Size = size;
+		Prefetchable = prefetchable;
 	}
 
-	/// <summary>
-	/// Returns a <see cref="System.String"/> that represents this instance.
-	/// </summary>
-	/// <returns>
-	/// A <see cref="System.String"/> that represents this instance.
-	/// </returns>
 	public override string ToString()
 	{
-		if (region == AddressType.Undefined)
-			return string.Empty;
-
-		if (region == AddressType.IO)
-			return "I/O Port at 0x" + address.ToInt32().ToString("X") + " [size=" + size + "]";
-
-		if (prefetchable)
-			return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size + "] (prefetchable)";
-
-		return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size + "] (non-prefetchable)";
+		switch (Region)
+		{
+			case AddressType.IO: return "I/O Port at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "]";
+			case AddressType.Memory:
+				{
+					if (Prefetchable) return "Memory at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "] (prefetchable)";
+					return "Memory at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "] (non-prefetchable)";
+				}
+			case AddressType.Undefined:
+			default: return string.Empty;
+		}
 	}
 }

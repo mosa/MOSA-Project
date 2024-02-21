@@ -6,7 +6,8 @@ using Mosa.BareMetal.CoolWorld.Apps;
 using Mosa.BareMetal.CoolWorld.Components;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Service;
+using Mosa.DeviceSystem.Fonts;
+using Mosa.DeviceSystem.Services;
 using Mosa.Kernel.BareMetal;
 
 namespace Mosa.BareMetal.CoolWorld;

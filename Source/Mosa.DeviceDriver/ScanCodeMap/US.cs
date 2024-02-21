@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Devices.Keyboard;
+using Mosa.DeviceSystem.Drivers.Keyboard;
 
 namespace Mosa.DeviceDriver.ScanCodeMap;
 

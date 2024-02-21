@@ -2,6 +2,9 @@
 
 using System.Drawing;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Devices.Graphics;
+using Mosa.DeviceSystem.Drivers.Graphics;
+using Mosa.DeviceSystem.Fonts;
 
 namespace Mosa.BareMetal.CoolWorld;
 
@@ -85,7 +88,7 @@ public static class Display
 
 	public static void Update()
 	{
-		DisplayFrame.CopyFrame(BackFrame);
+		DisplayFrame.CopyFrameBuffer(BackFrame);
 		Driver.Update(0, 0, Width, Height);
 	}
 }

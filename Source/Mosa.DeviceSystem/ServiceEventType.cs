@@ -10,5 +10,5 @@ public enum ServiceEventType
 	Start,
 	Stop,
 	Error,
-	Warning,
+	Warning
 }
