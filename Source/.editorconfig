@@ -1,5 +1,5 @@
 root = true
-# top-most EditorConfig file
+# Top-most EditorConfig file
 
 # Default settings:
 # A newline ending every file
@@ -11,6 +11,7 @@ indent_style = tab
 indent_size = 4
 trim_trailing_whitespace = true
 
+[*.cs]
 # Microsoft .NET properties
 csharp_new_line_before_open_brace = all
 csharp_preferred_modifier_order = private, async, protected, public, internal, volatile, abstract, new, override, sealed, static, virtual, extern, readonly, unsafe, file, required:suggestion
