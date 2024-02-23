@@ -126,10 +126,12 @@ public class PCIDevice : BaseDeviceDriver
 	public override void Initialize()
 	{
 		pciController = Device.Parent.DeviceDriver as IPCIController;
-		if (pciController == null) return;
+		if (pciController == null)
+			return;
 
 		var configuration = Device.Configuration as PCIDeviceConfiguration;
-		if (configuration == null) return;
+		if (configuration == null)
+			return;
 
 		Bus = configuration.Bus;
 		Slot = configuration.Slot;
@@ -143,7 +145,8 @@ public class PCIDevice : BaseDeviceDriver
 			var bar = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + i * 4);
 
 			var address = pciController.ReadConfig32(this, bar);
-			if (address == 0) continue;
+			if (address == 0)
+				continue;
 
 			HAL.DisableAllInterrupts();
 

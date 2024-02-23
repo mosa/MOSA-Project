@@ -25,7 +25,8 @@ public class PCIDeviceService : BaseService
 		//HAL.Pause();
 
 		var device = MatchEvent<PCIDevice>(serviceEvent, ServiceEventType.Start);
-		if (device == null) return;
+		if (device == null)
+			return;
 
 		var pciDevice = device.DeviceDriver as PCIDevice;
 
@@ -38,18 +39,26 @@ public class PCIDeviceService : BaseService
 
 		foreach (var driver in drivers)
 		{
-			if (driver is not PCIDeviceDriverRegistryEntry pciDriver) continue;
-			if (!IsMatch(pciDriver, pciDevice)) continue;
+			if (driver is not PCIDeviceDriverRegistryEntry pciDriver)
+				continue;
+
+			if (!IsMatch(pciDriver, pciDevice))
+				continue;
 
 			var priority = GetMatchedPriority(pciDriver);
-			if (priority <= 0) continue;
 
-			if (priority >= matchPriority && matchPriority != 0) continue;
+			if (priority <= 0)
+				continue;
+
+			if (priority >= matchPriority && matchPriority != 0)
+				continue;
+
 			matchedDriver = pciDriver;
 			matchPriority = priority;
 		}
 
-		if (matchedDriver == null) return; // No driver found
+		if (matchedDriver == null) // No driver found
+			return;
 
 		StartDevice(matchedDriver, device, pciDevice);
 	}
@@ -61,7 +70,8 @@ public class PCIDeviceService : BaseService
 
 		foreach (var pciBaseAddress in pciDevice.BaseAddresses)
 		{
-			if (pciBaseAddress == null || pciBaseAddress.Size == 0) continue;
+			if (pciBaseAddress == null || pciBaseAddress.Size == 0)
+				continue;
 
 			switch (pciBaseAddress.Region)
 			{

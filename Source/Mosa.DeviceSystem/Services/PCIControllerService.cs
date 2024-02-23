@@ -22,7 +22,8 @@ public class PCIControllerService : BaseService
 	public override void PostEvent(ServiceEvent serviceEvent)
 	{
 		var device = MatchEvent<IPCIControllerLegacy>(serviceEvent, ServiceEventType.Start);
-		if (device == null) return;
+		if (device == null)
+			return;
 
 		var pciController = device.DeviceDriver as IPCIControllerLegacy;
 		CreatePCIDevices(device, pciController);
@@ -37,7 +38,8 @@ public class PCIControllerService : BaseService
 			{
 				for (var fun = 0; fun < 7; fun++)
 				{
-					if (!ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun)) continue;
+					if (!ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
+						continue;
 
 					// TODO: Check for duplicates
 

@@ -79,33 +79,34 @@ public class TextScreen
 		for (;;)
 		{
 			var key = keyboard.GetKeyPressed();
-			if (key == null) continue;
+			if (key == null)
+				continue;
 
 			switch (key.Character)
 			{
 				case '\n': // Enter key
-				{
-					NewLine();
-					textDevice.SetCursor(cursorX, cursorY);
-					return new string(buffer, 0, length);
-				}
-				case '\b': // Backspace key
-				{
-					if (length > 0)
 					{
-						Previous();
-						InternalWrite(' ', false);
+						NewLine();
 						textDevice.SetCursor(cursorX, cursorY);
-						length--;
+						return new string(buffer, 0, length);
 					}
-					break;
-				}
+				case '\b': // Backspace key
+					{
+						if (length > 0)
+						{
+							Previous();
+							InternalWrite(' ', false);
+							textDevice.SetCursor(cursorX, cursorY);
+							length--;
+						}
+						break;
+					}
 				default: // Any other key
-				{
-					buffer[length++] = key.Character;
-					Write(key.Character);
-					break;
-				}
+					{
+						buffer[length++] = key.Character;
+						Write(key.Character);
+						break;
+					}
 			}
 		}
 	}

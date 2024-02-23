@@ -32,7 +32,9 @@ public class BaseAddress
 			case AddressType.IO: return "I/O Port at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "]";
 			case AddressType.Memory:
 				{
-					if (Prefetchable) return "Memory at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "] (prefetchable)";
+					if (Prefetchable)
+						return "Memory at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "] (prefetchable)";
+
 					return "Memory at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "] (non-prefetchable)";
 				}
 			case AddressType.Undefined:

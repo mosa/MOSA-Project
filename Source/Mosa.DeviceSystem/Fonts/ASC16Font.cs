@@ -33,7 +33,8 @@ public class ASC16Font : ISimpleFont
 
 	public void DrawString(FrameBuffer32 frameBuffer, uint color, uint x, uint y, string text)
 	{
-		for (var c = 0; c < text.Length; c++) DrawChar(frameBuffer, color, x + (uint)(c * Width), y, text[c]);
+		for (var c = 0; c < text.Length; c++)
+			DrawChar(frameBuffer, color, x + (uint)(c * Width), y, text[c]);
 	}
 
 	public uint CalculateWidth(char c) => Width;

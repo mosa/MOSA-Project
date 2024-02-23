@@ -26,7 +26,8 @@ public class PartitionService : BaseService
 			var diskDevice = device.DeviceDriver as IDiskDevice;
 
 			var mbr = new MasterBootBlock(diskDevice);
-			if (!mbr.Valid) return;
+			if (!mbr.Valid)
+				return;
 
 			for (var i = 0U; i < MasterBootBlock.MaxMBRPartitions; i++)
 			{

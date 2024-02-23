@@ -55,7 +55,8 @@ public class Keyboard : IKeyboard
 	public Key GetKeyPressed(bool blocking = false)
 	{
 		var scanCode = keyboardDevice.GetScanCode(blocking);
-		if (scanCode == 0) return null;
+		if (scanCode == 0)
+			return null;
 
 		var keyEvent = scanCodeMap.ConvertScanCode(scanCode);
 		switch (keyEvent.KeyType)

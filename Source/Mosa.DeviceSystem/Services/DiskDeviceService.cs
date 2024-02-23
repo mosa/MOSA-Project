@@ -18,15 +18,21 @@ public class DiskDeviceService : BaseService
 
 		// This mounts everything detected
 
-		if (device?.DeviceDriver is not IDiskControllerDevice controller) return;
+		if (device?.DeviceDriver is not IDiskControllerDevice controller)
+			return;
 
 		var deviceService = device.DeviceService;
 
 		for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 		{
-			if (!controller.Open(drive)) continue;
-			if (controller.GetTotalSectors(drive) == 0) continue;
-			if (deviceService.CheckExists(device, drive)) return; // Don't mount twice
+			if (!controller.Open(drive))
+				continue;
+
+			if (controller.GetTotalSectors(drive) == 0)
+				continue;
+
+			if (deviceService.CheckExists(device, drive)) // Don't mount twice
+				return;
 
 			var configuration = new DiskDeviceConfiguration
 			{

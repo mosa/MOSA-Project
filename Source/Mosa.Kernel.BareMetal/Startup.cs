@@ -221,7 +221,9 @@ public static class Startup
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(" [FAIL]");
 				Console.WriteLine("No keyboard detected!");
-				for (;;) HAL.Yield();
+
+				for (;;)
+					HAL.Yield();
 			}
 
 			Kernel.Keyboard = new Keyboard(stdKeyboard, new US());

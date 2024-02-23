@@ -36,13 +36,17 @@ public sealed class FrameBuffer32
 
 	public void SetPixel(uint color, uint x, uint y)
 	{
-		if (x >= Width || y >= Height) return;
+		if (x >= Width || y >= Height)
+			return;
+
 		Buffer.Write32(GetOffset(x, y), color);
 	}
 
 	public uint GetPixel(uint x, uint y)
 	{
-		if (x >= Width || y >= Height) return 0;
+		if (x >= Width || y >= Height)
+			return 0;
+
 		return Buffer.Read32(GetOffset(x, y));
 	}
 
@@ -178,7 +182,9 @@ public sealed class FrameBuffer32
 			radiusError += yChange;
 			yChange += 2;
 
-			if ((radiusError << 1) + xChange <= 0) continue;
+			if ((radiusError << 1) + xChange <= 0)
+				continue;
+
 			x1--;
 			radiusError += xChange;
 			xChange += 2;
@@ -208,12 +214,14 @@ public sealed class FrameBuffer32
 
 	private void DrawHorizontalLine(uint color, uint dx, uint x, uint y)
 	{
-		for (var i = 0u; i < dx; i++) SetPixel(x + i, y, color);
+		for (var i = 0u; i < dx; i++)
+			SetPixel(x + i, y, color);
 	}
 
 	private void DrawVerticalLine(uint color, uint dy, uint x, uint y)
 	{
-		for (var i = 0u; i < dy; i++) SetPixel(color, x, y + i);
+		for (var i = 0u; i < dy; i++)
+			SetPixel(color, x, y + i);
 	}
 
 	private void DrawDiagonalLine(uint color, uint dx, uint dy, uint x1, uint y1)

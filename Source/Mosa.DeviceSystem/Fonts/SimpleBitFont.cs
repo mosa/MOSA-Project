@@ -44,7 +44,8 @@ public class SimpleBitFont : ISimpleFont
 		var size8 = Size / 8;
 		var sizePerFont = Size * size8 * index;
 
-		if (index < 0) return;
+		if (index < 0)
+			return;
 
 		for (var h = 0; h < Size; h++)
 			for (var aw = 0; aw < size8; aw++)
@@ -99,7 +100,9 @@ public class SimpleBitFont : ISimpleFont
 	public uint CalculateWidth(string s)
 	{
 		var r = 0U;
-		for (var i = 0; i < s.Length; i++) r += CalculateWidth(s[i]) + 2;
+
+		for (var i = 0; i < s.Length; i++)
+			r += CalculateWidth(s[i]) + 2;
 
 		return r;
 	}

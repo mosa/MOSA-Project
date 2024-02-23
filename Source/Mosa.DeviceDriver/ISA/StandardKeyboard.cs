@@ -43,7 +43,8 @@ public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 
 	public byte GetScanCode(bool blocking = false)
 	{
-		if (!blocking) return IsFIFODataAvailable() ? GetFromFIFO() : (byte)0;
+		if (!blocking)
+			return IsFIFODataAvailable() ? GetFromFIFO() : (byte)0;
 
 		while (!IsFIFODataAvailable()) HAL.Yield();
 		return GetFromFIFO();
@@ -54,8 +55,12 @@ public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 		lock (DriverLock)
 		{
 			var next = fifoEnd + 1;
-			if (next == FIFOSize) next = 0;
-			if (next == fifoStart) return; // Out of room
+
+			if (next == FIFOSize)
+				next = 0;
+
+			if (next == fifoStart) // Out of room
+				return;
 
 			fifoBuffer[next] = scancode;
 			fifoEnd = next;
@@ -66,11 +71,13 @@ public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 	{
 		lock (DriverLock)
 		{
-			if (fifoEnd == fifoStart) return 0; // Should not happen
+			if (fifoEnd == fifoStart) // Should not happen
+				return 0;
 
 			var value = fifoBuffer[fifoStart++];
 
-			if (fifoStart == FIFOSize) fifoStart = 0;
+			if (fifoStart == FIFOSize)
+				fifoStart = 0;
 
 			return value;
 		}
@@ -83,7 +90,8 @@ public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 	private void ReadScanCode()
 	{
 		var status = statusPort.Read8();
-		if ((status & 0x01) != 0x01) return;
+		if ((status & 0x01) != 0x01)
+			return;
 
 		var data = dataPort.Read8();
 		AddToFIFO(data);

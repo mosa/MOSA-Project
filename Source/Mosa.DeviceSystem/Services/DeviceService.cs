@@ -31,7 +31,8 @@ public sealed class DeviceService : BaseService
 		devices = new List<Device>();
 		IRQDispatch = new List<Device>[MaxInterrupts];
 
-		for (var i = 0; i < MaxInterrupts; i++) IRQDispatch[i] = new List<Device>();
+		for (var i = 0; i < MaxInterrupts; i++)
+			IRQDispatch[i] = new List<Device>();
 	}
 
 	#region Device Driver Registry
@@ -42,7 +43,8 @@ public sealed class DeviceService : BaseService
 
 		foreach (var deviceDriver in deviceDrivers)
 		{
-			if ((deviceDriver.Platform & platformArchitecture) == platformArchitecture) RegisterDeviceDriver(deviceDriver);
+			if ((deviceDriver.Platform & platformArchitecture) == platformArchitecture)
+				RegisterDeviceDriver(deviceDriver);
 		}
 	}
 
@@ -62,7 +64,8 @@ public sealed class DeviceService : BaseService
 		{
 			foreach (var deviceDriver in registry)
 			{
-				if (deviceDriver.BusType == busType) drivers.Add(deviceDriver);
+				if (deviceDriver.BusType == busType)
+					drivers.Add(deviceDriver);
 			}
 		}
 
@@ -95,7 +98,8 @@ public sealed class DeviceService : BaseService
 			DeviceService = this
 		};
 
-		if (autoStart) StartDevice(device);
+		if (autoStart)
+			StartDevice(device);
 
 		HAL.DebugWriteLine("DeviceService:Initialize() [Exit]");
 
@@ -155,7 +159,8 @@ public sealed class DeviceService : BaseService
 		{
 			foreach (var device in devices)
 			{
-				if (device.DeviceDriver is T) return device;
+				if (device.DeviceDriver is T)
+					return device;
 			}
 		}
 
@@ -170,7 +175,8 @@ public sealed class DeviceService : BaseService
 		{
 			foreach (var device in devices)
 			{
-				if (device.DeviceDriver is T) list.Add(device);
+				if (device.DeviceDriver is T)
+					list.Add(device);
 			}
 		}
 
@@ -183,7 +189,8 @@ public sealed class DeviceService : BaseService
 		{
 			foreach (var device in devices)
 			{
-				if (device.Status == status && device.DeviceDriver is T) return device;
+				if (device.Status == status && device.DeviceDriver is T)
+					return device;
 			}
 		}
 
@@ -198,7 +205,8 @@ public sealed class DeviceService : BaseService
 		{
 			foreach (var device in devices)
 			{
-				if (device.Status == status && device.DeviceDriver is T) list.Add(device);
+				if (device.Status == status && device.DeviceDriver is T)
+					list.Add(device);
 			}
 		}
 
@@ -213,7 +221,8 @@ public sealed class DeviceService : BaseService
 		{
 			foreach (var device in devices)
 			{
-				if (device.Name == name) list.Add(device);
+				if (device.Name == name)
+					list.Add(device);
 			}
 		}
 
@@ -226,7 +235,8 @@ public sealed class DeviceService : BaseService
 
 		lock (sync)
 		{
-			foreach (var device in parent.Children) list.Add(device);
+			foreach (var device in parent.Children)
+				list.Add(device);
 		}
 
 		return list;
@@ -238,7 +248,8 @@ public sealed class DeviceService : BaseService
 		{
 			var list = new List<Device>(devices.Count);
 
-			foreach (var device in devices) list.Add(device);
+			foreach (var device in devices)
+				list.Add(device);
 
 			return list;
 		}
@@ -250,7 +261,8 @@ public sealed class DeviceService : BaseService
 		{
 			foreach (var device in devices)
 			{
-				if (device.Parent == parent && device.ComponentID == componentID) return true;
+				if (device.Parent == parent && device.ComponentID == componentID)
+					return true;
 			}
 		}
 
@@ -280,7 +292,8 @@ public sealed class DeviceService : BaseService
 		if (device.Resources != null)
 		{
 			var irq = device.Resources.IRQ;
-			if (irq >= MaxInterrupts) return;
+			if (irq >= MaxInterrupts)
+				return;
 
 			lock (sync)
 			{
@@ -293,10 +306,12 @@ public sealed class DeviceService : BaseService
 
 	public void ReleaseInterruptHandler(Device device)
 	{
-		if (device.Resources == null) return;
+		if (device.Resources == null)
+			return;
 
 		var irq = device.Resources.IRQ;
-		if (irq >= MaxInterrupts) return;
+		if (irq >= MaxInterrupts)
+			return;
 
 		lock (sync)
 		{
