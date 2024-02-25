@@ -2,7 +2,7 @@
 
 using System;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Service;
+using Mosa.DeviceSystem.Services;
 
 namespace Mosa.BareMetal.HelloWorld.Apps;
 
@@ -17,7 +17,9 @@ public class Reboot : IApp
 		Console.WriteLine("Rebooting...");
 
 		var pc = Kernel.BareMetal.Kernel.ServiceManager.GetFirstService<PCService>();
-		pc.Reset();
+		var success = pc.Reset();
+
+		if (!success) Console.WriteLine("Error while trying to reboot.");
 
 		for (; ; ) HAL.Yield();
 	}

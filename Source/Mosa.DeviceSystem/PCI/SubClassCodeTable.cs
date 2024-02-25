@@ -3,17 +3,10 @@
 namespace Mosa.DeviceSystem.PCI;
 
 /// <summary>
-///
+/// Provides a table associating PCI device sub class codes with names.
 /// </summary>
 public static class SubClassCodeTable
 {
-	/// <summary>
-	/// Looks up the specified sub class code.
-	/// </summary>
-	/// <param name="classCode">The class code.</param>
-	/// <param name="subClassCode">The sub class code.</param>
-	/// <param name="progIF">The prog IF.</param>
-	/// <returns></returns>
 	public static string Lookup(byte classCode, byte subClassCode, byte progIF)
 	{
 		return ((classCode << 16) | (subClassCode << 8) | progIF) switch
@@ -43,8 +36,7 @@ public static class SubClassCodeTable
 			0x020200 => "FDDI controller",
 			0x020300 => "ATM controller",
 			0x020500 => "WorldFlip controller",
-			0x020600 => "PCIMG 2.14 controller" // Prog. I/F xxh per spec
-			,
+			0x020600 => "PCIMG 2.14 controller", // Prog. I/F xxh per spec
 			0x028000 => "Network controller",
 			0x030000 => "VGA compatable controller",
 			0x030001 => "8514 compatable",
@@ -67,8 +59,7 @@ public static class SubClassCodeTable
 			0x060500 => "PCMCIA bridge",
 			0x060600 => "NuBus bridge",
 			0x060700 => "CardBus bridge",
-			0x060800 => "RACEWay bridge" // Prog. I/F xxh per spec
-			,
+			0x060800 => "RACEWay bridge", // Prog. I/F xxh per spec
 			0x060940 => "Semi-transparent PCI-to-PCI bridge [Primary]",
 			0x060980 => "Semi-transparent PCI-to-PCI bridge [Secondary]",
 			0x060A00 => "InfiniBand bridge",

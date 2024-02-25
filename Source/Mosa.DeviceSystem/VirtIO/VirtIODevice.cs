@@ -5,6 +5,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.VirtIO;
 
+/// <summary>
+/// Describes a generic VirtIO device.
+/// </summary>
 public class VirtIODevice
 {
 	private readonly string devName;

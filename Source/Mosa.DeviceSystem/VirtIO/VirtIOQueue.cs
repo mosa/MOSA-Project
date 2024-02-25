@@ -4,6 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.VirtIO;
 
+/// <summary>
+/// Generic VirtIO virtqueue implementation.
+/// </summary>
 public class VirtIOQueue
 {
 	public ushort Size { get; }

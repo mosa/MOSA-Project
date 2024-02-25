@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Fonts;
 
 namespace Mosa.BareMetal.CoolWorld;
 

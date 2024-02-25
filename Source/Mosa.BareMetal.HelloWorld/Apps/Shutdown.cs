@@ -2,7 +2,7 @@
 
 using System;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Service;
+using Mosa.DeviceSystem.Services;
 
 namespace Mosa.BareMetal.HelloWorld.Apps;
 

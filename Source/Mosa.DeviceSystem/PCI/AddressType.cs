@@ -7,18 +7,7 @@ namespace Mosa.DeviceSystem.PCI;
 /// </summary>
 public enum AddressType
 {
-	/// <summary>
-	/// Port IO Address Region
-	/// </summary>
-	IO,
-
-	/// <summary>
-	/// Memory Address Region
-	/// </summary>
+	PortIO,
 	Memory,
-
-	/// <summary>
-	/// Undefined Address Region
-	/// </summary>
 	Undefined
 }

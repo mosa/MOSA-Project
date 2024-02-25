@@ -520,7 +520,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		if (data.Length < count * 512)
 			return false;
 
-		lock (_lock)
+		lock (DriverLock)
 		{
 			for (uint index = 0; index < count; index++)
 			{
@@ -563,7 +563,7 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		if (data.Length < count * 512)
 			return false;
 
-		lock (_lock)
+		lock (DriverLock)
 		{
 			for (uint index = 0; index < count; index++)
 			{
