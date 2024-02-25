@@ -9,9 +9,9 @@ namespace Mosa.Compiler.x86.Intrinsic;
 /// </summary>
 internal static partial class IntrinsicMethods
 {
-	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::GetCR4")]
-	private static void GetCR4(Context context, Transform transform)
+	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::SetEAX")]
+	private static void SetEAX(Context context, Transform transform)
 	{
-		context.SetInstruction(X86.MovCRLoad32, context.Result, transform.PhysicalRegisters.Allocate32(CPURegister.CR4));
+		context.SetInstruction(X86.Mov32, transform.PhysicalRegisters.Allocate32(CPURegister.EAX), context.Operand1);
 	}
 }

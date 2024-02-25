@@ -11,6 +11,7 @@ public static class Scheduler
 {
 	public static class IRQ
 	{
+		public const int SystemCall = 253;
 		public const int Clock = 0x20;
 		public const int ThreadTermination = 254;
 	}
@@ -30,6 +31,15 @@ public static class Scheduler
 	public static void SignalTermination()
 	{
 		Native.Int(IRQ.ThreadTermination);
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static object SignalSystemCall(object obj)
+	{
+		Native.SetEAX(Intrinsic.GetObjectAddress(obj).ToUInt32());
+		Native.Int(IRQ.SystemCall);
+
+		return Native.GetEAX();
 	}
 
 	public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress)
@@ -66,5 +76,10 @@ public static class Scheduler
 		PIC.SendEndOfInterrupt(IRQ.Clock);
 
 		Native.InterruptReturn((uint)thread.StackStatePointer.ToInt32());
+	}
+
+	public static void SetReturnObject(Pointer stackTop, Pointer ob)
+	{
+		stackTop.Store32(-32, ob.ToInt32());    // EAX
 	}
 }

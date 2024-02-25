@@ -92,10 +92,15 @@ public static class Platform
 		public static void SignalTermination()
 		{ }
 
+		public static object SignalSystemCall(object obj) => null;
+
 		public static void SwitchToThread(Thread thread)
 		{ }
 
 		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => Pointer.Zero;
+
+		public static void SetReturnObject(Pointer stackTop, Pointer ob)
+		{ }
 	}
 
 	public static class Serial

@@ -247,10 +247,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		Device.Status = DeviceStatus.Online;
 	}
 
-	public override bool OnInterrupt()
-	{
-		return false;
-	}
+	public override bool OnInterrupt() => false;
 
 	public void SetMode(uint width, uint height)
 	{

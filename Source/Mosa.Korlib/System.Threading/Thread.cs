@@ -2,7 +2,7 @@
 
 namespace System.Threading;
 
-public enum ThreadStatus { Empty = 0, Running, Terminating, Terminated, Waiting };
+public enum ThreadStatus { Empty = 0, Running, Terminating, Terminated, Sleeping };
 
 public delegate void ThreadStart();
 

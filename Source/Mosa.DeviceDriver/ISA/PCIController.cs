@@ -60,11 +60,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	/// Called when an interrupt is received.
 	/// </summary>
 	/// <returns></returns>
-	public override bool OnInterrupt()
-	{
-		// TODO
-		return false;
-	}
+	public override bool OnInterrupt() => false;
 
 	/// <summary>
 	/// Gets the index.

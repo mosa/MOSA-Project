@@ -5,17 +5,17 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.x86.Intrinsic;
 
 /// <summary>
-/// IntrinsicMethods
+/// Intrinsic Methods
 /// </summary>
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::AllocateStackSpace")]
 	private static void AllocateStackSpace(Context context, Transform transform)
 	{
-		Operand result = context.Result;
-		Operand size = context.Operand1;
+		var result = context.Result;
+		var size = context.Operand1;
 
-		Operand esp = transform.PhysicalRegisters.Allocate32(CPURegister.ESP);
+		var esp = transform.PhysicalRegisters.Allocate32(CPURegister.ESP);
 
 		context.SetInstruction(X86.Sub32, esp, esp, size);
 		context.AppendInstruction(X86.Mov32, result, esp);

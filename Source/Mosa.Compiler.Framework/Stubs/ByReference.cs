@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.Stages;
 namespace Mosa.Compiler.Framework.Intrinsics;
 
 /// <summary>
-/// IntrinsicMethods
+/// Intrinsic Methods
 /// </summary>
 internal static partial class StubMethods
 {

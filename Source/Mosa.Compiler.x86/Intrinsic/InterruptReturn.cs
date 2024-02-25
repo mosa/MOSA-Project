@@ -5,16 +5,16 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.x86.Intrinsic;
 
 /// <summary>
-/// IntrinsicMethods
+/// Intrinsic Methods
 /// </summary>
 internal static partial class IntrinsicMethods
 {
 	[IntrinsicMethod("Mosa.Compiler.x86.Intrinsic::InterruptReturn")]
 	private static void InterruptReturn(Context context, Transform transform)
 	{
-		Operand v0 = context.Operand1;
+		var v0 = context.Operand1;
 
-		Operand esp = transform.PhysicalRegisters.Allocate32(CPURegister.ESP);
+		var esp = transform.PhysicalRegisters.Allocate32(CPURegister.ESP);
 
 		context.SetInstruction(X86.Mov32, esp, v0);
 		context.AppendInstruction(X86.Popad);

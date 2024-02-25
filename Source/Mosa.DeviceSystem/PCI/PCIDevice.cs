@@ -288,11 +288,7 @@ public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 	/// Called when an interrupt is received.
 	/// </summary>
 	/// <returns></returns>
-	public override bool OnInterrupt()
-	{
-		// TODO
-		return true;
-	}
+	public override bool OnInterrupt() => true;
 
 	/// <summary>
 	/// Enables the device.
