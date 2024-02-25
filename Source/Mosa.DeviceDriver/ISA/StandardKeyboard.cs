@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Drivers.Keyboard;
+using Mosa.DeviceSystem.Keyboard;
 
 namespace Mosa.DeviceDriver.ISA;
 

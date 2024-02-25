@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using Mosa.DeviceSystem.Drivers.PCI;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.PCI;

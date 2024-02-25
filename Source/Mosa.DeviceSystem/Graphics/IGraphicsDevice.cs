@@ -1,8 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.Devices.Graphics;
-
-namespace Mosa.DeviceSystem.Drivers.Graphics;
+namespace Mosa.DeviceSystem.Graphics;
 
 /// <summary>
 /// An interface used for interacting directly with a graphics device. It provides access to the device's frame buffer, along with

@@ -1,10 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Drawing;
-using Mosa.DeviceSystem.Drivers.Graphics;
 using Mosa.DeviceSystem.Fonts;
+using Mosa.DeviceSystem.Graphics;
 
-namespace Mosa.DeviceSystem.Devices.TextDevice;
+namespace Mosa.DeviceSystem.TextDevice;
 
 /// <summary>
 /// An interface used for interacting with a text device. It can clear the underlying buffer, write characters, set the cursor position,

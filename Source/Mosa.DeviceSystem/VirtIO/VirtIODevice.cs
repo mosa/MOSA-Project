@@ -1,10 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.Drivers.PCI;
 using Mosa.DeviceSystem.PCI;
 using Mosa.Runtime;
 
-namespace Mosa.DeviceSystem.Drivers.VirtIO;
+namespace Mosa.DeviceSystem.VirtIO;
 
 /// <summary>
 /// Describes a generic VirtIO device.

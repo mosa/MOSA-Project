@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.Devices.Keyboard;
+namespace Mosa.DeviceSystem.Keyboard;
 
 /// <summary>
 /// Describes a press/release key code event.

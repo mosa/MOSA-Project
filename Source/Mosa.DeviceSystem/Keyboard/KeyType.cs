@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.Devices.Keyboard;
+namespace Mosa.DeviceSystem.Keyboard;
 
 /// <summary>
 /// Generally used to describe modifier keys, or just the type of key, like a regular key.

@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.Drivers.VirtIO;
+namespace Mosa.DeviceSystem.VirtIO;
 
 /// <summary>
 /// Generic VirtIO flags to send to a device, most notably for querying data and dealing with virtqueues.

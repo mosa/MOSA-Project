@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.Drivers.Keyboard;
+namespace Mosa.DeviceSystem.Keyboard;
 
 /// <summary>
 /// An interface used for interacting directly with a keyboard device. It provides access to the device's raw scan codes, in a

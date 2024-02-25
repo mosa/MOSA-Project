@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.Devices.Graphics;
+using Mosa.DeviceSystem.Graphics;
 
 namespace Mosa.DeviceSystem.Fonts;
 

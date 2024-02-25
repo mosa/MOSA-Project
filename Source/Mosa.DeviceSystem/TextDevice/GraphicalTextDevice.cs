@@ -2,10 +2,10 @@
 
 using System;
 using System.Drawing;
-using Mosa.DeviceSystem.Drivers.Graphics;
 using Mosa.DeviceSystem.Fonts;
+using Mosa.DeviceSystem.Graphics;
 
-namespace Mosa.DeviceSystem.Devices.TextDevice;
+namespace Mosa.DeviceSystem.TextDevice;
 
 /// <summary>
 /// An implementation of the <see cref="ITextDevice"/> interface using an <see cref="IGraphicsDevice"/> and an <see cref="ISimpleFont"/>.

@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Drawing;
-using Mosa.DeviceSystem.Devices.Keyboard;
+using Mosa.DeviceSystem.Keyboard;
 
-namespace Mosa.DeviceSystem.Devices.TextDevice;
+namespace Mosa.DeviceSystem.TextDevice;
 
 /// <summary>
 /// A class used for interacting with a text screen (like a TTY), using an <see cref="ITextDevice"/> and an <see cref="IKeyboard"/>.

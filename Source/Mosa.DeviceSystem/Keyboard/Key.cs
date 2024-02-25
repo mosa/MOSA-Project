@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.Devices.Keyboard;
+namespace Mosa.DeviceSystem.Keyboard;
 
 /// <summary>
 /// The key code class notably used by <see cref="IKeyboard"/>.

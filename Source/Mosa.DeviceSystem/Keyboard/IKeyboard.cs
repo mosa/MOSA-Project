@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.Drivers.Keyboard;
-
-namespace Mosa.DeviceSystem.Devices.Keyboard;
+namespace Mosa.DeviceSystem.Keyboard;
 
 /// <summary>
 /// An interface used for interacting with a keyboard. It can retrieve the key codes and states of a keyboard.

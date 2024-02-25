@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.Drivers.PCI;
+namespace Mosa.DeviceSystem.PCI;
 
 /// <summary>
 /// An interface used for reading/writing to the PCI configuration space of a PCI device. Unlike <see cref="IPCIController"/>, this

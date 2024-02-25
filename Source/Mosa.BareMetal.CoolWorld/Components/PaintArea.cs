@@ -2,7 +2,7 @@
 
 using System.Drawing;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Devices.Graphics;
+using Mosa.DeviceSystem.Graphics;
 
 namespace Mosa.BareMetal.CoolWorld.Components;
 

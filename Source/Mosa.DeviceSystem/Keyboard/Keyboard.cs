@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.Drivers.Keyboard;
-
-namespace Mosa.DeviceSystem.Devices.Keyboard;
+namespace Mosa.DeviceSystem.Keyboard;
 
 /// <summary>
 /// An implementation of the <see cref="IKeyboard"/> interface using an <see cref="IKeyboardDevice"/> and an <see cref="IScanCodeMap"/>.

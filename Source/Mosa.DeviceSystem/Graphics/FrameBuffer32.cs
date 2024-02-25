@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using Mosa.Runtime;
 
-namespace Mosa.DeviceSystem.Devices.Graphics;
+namespace Mosa.DeviceSystem.Graphics;
 
 /// <summary>
 /// A 32 bpp versatile frame buffer that works with physical and virtual outputs.

@@ -19,8 +19,7 @@
 
 using System;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Devices.Graphics;
-using Mosa.DeviceSystem.Drivers.Graphics;
+using Mosa.DeviceSystem.Graphics;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.PCI.VMware;
