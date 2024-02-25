@@ -7,7 +7,7 @@ namespace Mosa.DeviceSystem.PCI;
 /// </summary>
 public enum AddressType
 {
-	IO,
+	PortIO,
 	Memory,
 	Undefined
 }

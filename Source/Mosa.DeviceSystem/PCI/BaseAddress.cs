@@ -29,7 +29,7 @@ public class BaseAddress
 	{
 		switch (Region)
 		{
-			case AddressType.IO: return "I/O Port at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "]";
+			case AddressType.PortIO: return "I/O Port at 0x" + Address.ToUInt32().ToString("X") + " [size=" + Size + "]";
 			case AddressType.Memory:
 				{
 					if (Prefetchable)

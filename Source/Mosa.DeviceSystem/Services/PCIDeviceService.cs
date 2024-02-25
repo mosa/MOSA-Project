@@ -75,7 +75,7 @@ public class PCIDeviceService : BaseService
 
 			switch (pciBaseAddress.Region)
 			{
-				case AddressType.IO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
+				case AddressType.PortIO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
 				case AddressType.Memory: memoryRegions.Add(new AddressRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
 			}
 		}

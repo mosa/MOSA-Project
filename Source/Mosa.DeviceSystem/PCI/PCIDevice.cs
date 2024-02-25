@@ -158,7 +158,7 @@ public class PCIDevice : BaseDeviceDriver
 
 			if (address % 2 == 1)
 			{
-				BaseAddresses[i] = new BaseAddress(AddressType.IO, new Pointer(address & 0x0000FFF8), (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+				BaseAddresses[i] = new BaseAddress(AddressType.PortIO, new Pointer(address & 0x0000FFF8), (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
 			}
 			else
 			{
@@ -170,7 +170,7 @@ public class PCIDevice : BaseDeviceDriver
 		if (ClassCode == 0x03 && SubClassCode == 0x00 && ProgIF == 0x00)
 		{
 			BaseAddresses[6] = new BaseAddress(AddressType.Memory, new Pointer(0xA0000), 0x1FFFF, false);
-			BaseAddresses[7] = new BaseAddress(AddressType.IO, new Pointer(0x3B0), 0x0F, false);
+			BaseAddresses[7] = new BaseAddress(AddressType.PortIO, new Pointer(0x3B0), 0x0F, false);
 		}
 
 		if ((StatusRegister & (byte)PCIStatus.Capability) != 0)
