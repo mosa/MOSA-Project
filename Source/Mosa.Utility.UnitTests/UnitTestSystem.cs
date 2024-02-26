@@ -17,7 +17,14 @@ public static class UnitTestSystem
 	public static int Start(string[] args)
 	{
 		var mosaSettings = new MosaSettings();
+		mosaSettings.LoadAppLocations();
+		mosaSettings.SetDefaultSettings();
 		mosaSettings.LoadArguments(args);
+		mosaSettings.NormalizeSettings();
+		mosaSettings.ResolveDefaults();
+		mosaSettings.ResolveFileAndPathSettings();
+		mosaSettings.AddStandardPlugs();
+		mosaSettings.ExpandSearchPaths();
 
 		var stopwatch = new Stopwatch();
 		stopwatch.Start();

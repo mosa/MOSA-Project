@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.Service;
+using Mosa.DeviceSystem.Services;
 
 namespace Mosa.DeviceSystem;
 
@@ -13,7 +13,7 @@ public abstract class BaseDeviceDriver
 
 	protected DeviceService DeviceService => Device.DeviceService;
 
-	protected object _lock = new object();
+	protected readonly object DriverLock = new object();
 
 	/// <summary>
 	/// Sets up the this device.

@@ -2,7 +2,7 @@
 
 using System;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Service;
+using Mosa.DeviceSystem.Services;
 using Mosa.Kernel.BareMetal;
 using Mosa.Runtime.Plug;
 
@@ -33,7 +33,9 @@ public static class Program
 		Console.WriteLine("Shutting down...");
 
 		var pcService = Kernel.BareMetal.Kernel.ServiceManager.GetFirstService<PCService>();
-		pcService.Shutdown();
+		var success = pcService.Shutdown();
+
+		if (!success) Console.WriteLine("Error while trying to shut down.");
 
 		for (; ; ) HAL.Yield();
 	}

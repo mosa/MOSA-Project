@@ -2,6 +2,9 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
+/// <summary>
+/// Generic VirtIO flags to send to a device for initialization.
+/// </summary>
 public static class VirtIOFlags
 {
 	public const byte Reset = 0;

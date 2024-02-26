@@ -2,6 +2,9 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
+/// <summary>
+/// VirtIO configuration capabilities of a device.
+/// </summary>
 public static class VirtIOConfigurationCapabilities
 {
 	public const byte Common = 1;

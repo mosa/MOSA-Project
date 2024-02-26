@@ -1,155 +1,99 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Keyboard;
 
 namespace Mosa.DeviceDriver.ISA;
 
 /// <summary>
-/// Standard Keyboard Device Driver
+/// A standard PS/2 keyboard. It implements the IKeyboardDevice interface, and uses a FIFO (First In First Out) buffer to store
+/// the raw scancodes, which can be retrieved using the GetScanCode() function.
 /// </summary>
 //[ISADeviceDriver(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.X86AndX64)]
 public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 {
-	protected IOPortReadWrite dataPort;
+	private IOPortReadWrite dataPort;
+	private IOPortRead statusPort;
 
-	protected IOPortRead statusPort;
+	private const ushort FIFOSize = 256;
 
-	protected IOPortWrite commandPort;
-
-	protected const ushort fifoSize = 256;
-
-	protected byte[] fifoBuffer;
-
-	protected uint fifoStart;
-
-	protected uint fifoEnd;
+	private byte[] fifoBuffer;
+	private uint fifoStart, fifoEnd;
 
 	public override void Initialize()
 	{
 		Device.Name = "StandardKeyboard";
 
-		dataPort = Device.Resources.GetIOPortReadWrite(0, 0);       // 0x60
-		statusPort = Device.Resources.GetIOPortRead(1, 0);          // 0x64
-		commandPort = Device.Resources.GetIOPortWrite(1, 0);        // 0x64
+		dataPort = Device.Resources.GetIOPortReadWrite(0, 0); // 0x60
+		statusPort = Device.Resources.GetIOPortRead(1, 0);    // 0x64
 
-		fifoBuffer = new byte[fifoSize];
-		fifoStart = 0;
-		fifoEnd = 0;
+		fifoBuffer = new byte[FIFOSize];
+		fifoStart = fifoEnd = 0;
 	}
 
-	/// <summary>
-	/// Probes this instance.
-	/// </summary>
-	/// <remarks>
-	/// Override for ISA devices, if example
-	/// </remarks>
 	public override void Probe() => Device.Status = DeviceStatus.Available;
 
-	/// <summary>
-	/// Starts this hardware device.
-	/// </summary>
 	public override void Start() => Device.Status = DeviceStatus.Online;
 
-	/// <summary>
-	/// Called when interrupt is received.
-	/// </summary>
-	/// <returns></returns>
 	public override bool OnInterrupt()
 	{
 		ReadScanCode();
 		return true;
 	}
 
-	/// <summary>
-	/// Adds scan code to FIFO.
-	/// </summary>
-	/// <param name="value">The value.</param>
-	protected void AddToFIFO(byte value)
+	public byte GetScanCode(bool blocking = false)
 	{
-		uint next = fifoEnd + 1;
+		if (!blocking)
+			return IsFIFODataAvailable() ? GetFromFIFO() : (byte)0;
 
-		if (next == fifoSize)
-			next = 0;
-
-		if (next == fifoStart)
-			return; // out of room
-
-		fifoBuffer[next] = value;
-		fifoEnd = next;
+		while (!IsFIFODataAvailable()) HAL.Yield();
+		return GetFromFIFO();
 	}
 
-	/// <summary>
-	/// Gets scan code from FIFO.
-	/// </summary>
-	/// <returns></returns>
-	protected byte GetFromFIFO()
+	private void AddToFIFO(byte scancode)
 	{
-		if (fifoEnd == fifoStart)
-			return 0;   // should not happen
-
-		byte value = fifoBuffer[fifoStart];
-
-		fifoStart++;
-
-		if (fifoStart == fifoSize)
-			fifoStart = 0;
-
-		return value;
-	}
-
-	/// <summary>
-	/// Determines whether FIFO data is available
-	/// </summary>
-	/// <returns>
-	/// 	<c>true</c> if [FIFO data is available]; otherwise, <c>false</c>.
-	/// </returns>
-	protected bool IsFIFODataAvailable()
-	{
-		return fifoEnd != fifoStart;
-	}
-
-	/// <summary>
-	/// Determines whether the FIFO is full
-	/// </summary>
-	/// <returns>
-	/// 	<c>true</c> if the FIFO is full; otherwise, <c>false</c>.
-	/// </returns>
-	protected bool IsFIFOFull()
-	{
-		return (fifoEnd + 1 == fifoSize ? 0 : fifoEnd + 1) == fifoStart;
-	}
-
-	/// <summary>
-	/// Reads the scan code from the device
-	/// </summary>
-	protected void ReadScanCode()
-	{
-		lock (_lock)
+		lock (DriverLock)
 		{
-			byte status = statusPort.Read8();
+			var next = fifoEnd + 1;
 
-			if ((status & 0x01) == 0x01)
-			{
-				byte data = dataPort.Read8();
+			if (next == FIFOSize)
+				next = 0;
 
-				AddToFIFO(data);
-			}
+			if (next == fifoStart) // Out of room
+				return;
+
+			fifoBuffer[next] = scancode;
+			fifoEnd = next;
 		}
 	}
 
-	/// <summary>
-	/// Gets the scan code from the fifo
-	/// </summary>
-	/// <returns></returns>
-	public byte GetScanCode()
+	private byte GetFromFIFO()
 	{
-		lock (_lock)
+		lock (DriverLock)
 		{
-			if (IsFIFODataAvailable())
-			{
-				return GetFromFIFO();
-			}
+			if (fifoEnd == fifoStart) // Should not happen
+				return 0;
+
+			var value = fifoBuffer[fifoStart++];
+
+			if (fifoStart == FIFOSize)
+				fifoStart = 0;
+
+			return value;
 		}
-		return 0;
+	}
+
+	private bool IsFIFODataAvailable() => fifoEnd != fifoStart;
+
+	private bool IsFIFOFull() => (fifoEnd + 1 == FIFOSize ? 0 : fifoEnd + 1) == fifoStart;
+
+	private void ReadScanCode()
+	{
+		var status = statusPort.Read8();
+		if ((status & 0x01) != 0x01)
+			return;
+
+		var data = dataPort.Read8();
+		AddToFIFO(data);
 	}
 }

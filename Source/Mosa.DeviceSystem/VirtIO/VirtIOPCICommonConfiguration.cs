@@ -2,6 +2,9 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
+/// <summary>
+/// Generic VirtIO flags to send to a device, most notably for querying data and dealing with virtqueues.
+/// </summary>
 public static class VirtIOPCICommonConfiguration
 {
 	public const byte DeviceFeatureSelect = 0;

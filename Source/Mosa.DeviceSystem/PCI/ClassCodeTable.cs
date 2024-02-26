@@ -3,43 +3,31 @@
 namespace Mosa.DeviceSystem.PCI;
 
 /// <summary>
-/// Class Code Table
+/// Provides a table associating PCI device class codes with names.
 /// </summary>
 public static class ClassCodeTable
 {
-	/// <summary>
-	/// Looks up the specified class code.
-	/// </summary>
-	/// <param name="classCode">The class code.</param>
-	/// <returns></returns>
-	public static string Lookup(byte classCode)
+	public static string Lookup(byte classCode) => classCode switch
 	{
-		switch (classCode)
-		{
-			case 0x00: return "Pre PCI 2.0 device";
-			case 0x01: return "Mass storage controller";
-			case 0x02: return "Network controller";
-			case 0x03: return "Display controller";
-			case 0x04: return "Multimedia device";
-			case 0x05: return "Memory Controller";
-			case 0x06: return "Bridge Device";
-			case 0x07: return "Simple communications controller";
-			case 0x08: return "Base system peripheral";
-			case 0x09: return "Inupt device";
-			case 0x0A: return "Docking Station";
-			case 0x0B: return "Processort";
-			case 0x0C: return "Serial bus controller";
-			case 0x0D: return "Wireless controller";
-			case 0x0E: return "Intelligent IO controller";
-			case 0x0F: return "Satellite communications controller";
-			case 0x10: return "Encryption/Decryption controller";
-			case 0x11: return "Signal processing controller";
-			case 0xFF: return "Misc";
-			default:
-				if (classCode >= 0x0D && classCode <= 0xFE)
-					return "Reserved";
-				else
-					return string.Empty;
-		}
-	}
+		0x00 => "Pre PCI 2.0 device",
+		0x01 => "Mass storage controller",
+		0x02 => "Network controller",
+		0x03 => "Display controller",
+		0x04 => "Multimedia device",
+		0x05 => "Memory Controller",
+		0x06 => "Bridge Device",
+		0x07 => "Simple communications controller",
+		0x08 => "Base system peripheral",
+		0x09 => "Input device",
+		0x0A => "Docking Station",
+		0x0B => "Processor",
+		0x0C => "Serial bus controller",
+		0x0D => "Wireless controller",
+		0x0E => "Intelligent IO controller",
+		0x0F => "Satellite communications controller",
+		0x10 => "Encryption/Decryption controller",
+		0x11 => "Signal processing controller",
+		0xFF => "Misc",
+		_ => classCode is >= 0x0D and <= 0xFE ? "Reserved" : string.Empty
+	};
 }

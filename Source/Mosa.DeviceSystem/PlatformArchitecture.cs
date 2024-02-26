@@ -1,35 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+
 namespace Mosa.DeviceSystem;
 
-/// <summary>
-/// Platform Architecture
-/// </summary>
-[System.Flags]
+[Flags]
 public enum PlatformArchitecture
 {
-	/// <summary>
-	/// The none
-	/// </summary>
 	None = 0,
-
-	/// <summary>
-	/// The X86
-	/// </summary>
-	X86 = 1,
-
-	/// <summary>
-	/// The X64
-	/// </summary>
-	X64 = 2,
-
-	/// <summary>
-	/// The ARMv8 32bit
-	/// </summary>
-	ARM32 = 3,
-
-	/// <summary>
-	/// The X86 and X64
-	/// </summary>
-	X86AndX64 = PlatformArchitecture.X86 | PlatformArchitecture.X64,
+	X86,
+	X64,
+	X86AndX64 = X86 | X64,
+	ARM32
 }

@@ -62,42 +62,35 @@ public static class ConsolePlug
 		var length = 0;
 		var buffer = new char[1024];
 
-		for (; ; )
+		for (;;)
 		{
-			HAL.Yield();
-
-			var key = Kernel.Keyboard.GetKeyPressed();
+			var key = Kernel.Keyboard.GetKeyPressed(true);
 			if (key == null) continue;
 
 			switch (key.Character)
 			{
-				// Enter key
-				case '\n':
+				case '\n': // Enter key
+				{
+					ScreenConsole.Write(ScreenConsole.Newline);
+					return new string(buffer, 0, length);
+				}
+				case '\b': // Backspace key
+				{
+					if (length > 0)
 					{
-						ScreenConsole.Write(ScreenConsole.Newline);
-						return new string(buffer, 0, length);
+						ScreenConsole.Write(ScreenConsole.Backspace);
+						ScreenConsole.Write(' ');
+						ScreenConsole.Write(ScreenConsole.Backspace);
+						length--;
 					}
-
-				// Backspace key
-				case '\b':
-					{
-						if (length > 0)
-						{
-							ScreenConsole.Write(ScreenConsole.Backspace);
-							ScreenConsole.Write(' ');
-							ScreenConsole.Write(ScreenConsole.Backspace);
-							length--;
-						}
-						break;
-					}
-
-				// Any other key
-				default:
-					{
-						buffer[length++] = key.Character;
-						ScreenConsole.Write(key.Character);
-						break;
-					}
+					break;
+				}
+				default: // Any other key
+				{
+					buffer[length++] = key.Character;
+					ScreenConsole.Write(key.Character);
+					break;
+				}
 			}
 		}
 	}

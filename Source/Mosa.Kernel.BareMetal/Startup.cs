@@ -5,7 +5,8 @@ using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.Service;
+using Mosa.DeviceSystem.Keyboard;
+using Mosa.DeviceSystem.Services;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Runtime;
@@ -219,7 +220,9 @@ public static class Startup
 				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine(" [FAIL]");
 				Console.WriteLine("No keyboard detected!");
-				while (true) HAL.Yield();
+
+				for (;;)
+					HAL.Yield();
 			}
 
 			Kernel.Keyboard = new Keyboard(stdKeyboard, new US());

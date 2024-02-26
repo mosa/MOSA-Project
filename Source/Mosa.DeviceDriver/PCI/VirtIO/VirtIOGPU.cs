@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Graphics;
 using Mosa.DeviceSystem.VirtIO;
 using Mosa.Runtime;
 

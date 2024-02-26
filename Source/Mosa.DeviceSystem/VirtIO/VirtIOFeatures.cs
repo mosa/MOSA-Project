@@ -2,6 +2,9 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
+/// <summary>
+/// Generic VirtIO feature list.
+/// </summary>
 public static class VirtIOFeatures
 {
 	public const byte IndirectDescriptor = 28;

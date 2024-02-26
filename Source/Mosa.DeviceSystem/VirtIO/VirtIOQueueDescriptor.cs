@@ -2,6 +2,9 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
+/// <summary>
+/// Describes a generic VirtIO queue descriptor structure.
+/// </summary>
 public static class VirtIOQueueDescriptor
 {
 	public const byte Phys = 0;

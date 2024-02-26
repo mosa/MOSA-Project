@@ -2,6 +2,9 @@
 
 namespace Mosa.DeviceSystem.VirtIO;
 
+/// <summary>
+/// Describes a generic VirtIO virtqueue used ring. It is used by the driver to query filled in data.
+/// </summary>
 public static class VirtIOQueueAvailableRing
 {
 	public const byte Flags = 0;

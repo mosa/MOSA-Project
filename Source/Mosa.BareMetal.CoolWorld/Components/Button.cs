@@ -3,6 +3,7 @@
 using System;
 using System.Drawing;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Fonts;
 
 namespace Mosa.BareMetal.CoolWorld.Components;
 
