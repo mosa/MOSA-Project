@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.ARM64.Intrinsic;
 
 /// <summary>
-/// IntrinsicMethods
+/// Intrinsic Methods
 /// </summary>
 internal static partial class IntrinsicMethods
 {

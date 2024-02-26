@@ -80,6 +80,28 @@ public static class Scheduler
 		ScheduleNextThread(threadID);
 	}
 
+	public static void SystemCall(Pointer request)
+	{
+		var threadID = GetCurrentThreadID();
+
+		// TODO: Put the request somewhere
+
+		SleepThread(threadID);
+		ScheduleNextThread(threadID);
+	}
+
+	public static void SetSystemCallReturn(uint threadID, object response)
+	{
+		var thread = Threads[threadID];
+
+		Platform.Scheduler.SetReturnObject(thread.StackTop, Intrinsic.GetObjectAddress(response));
+
+		if (thread.Status == ThreadStatus.Sleeping)
+		{
+			thread.Status = ThreadStatus.Running;
+		}
+	}
+
 	#endregion Public API
 
 	#region Internal API
@@ -111,6 +133,12 @@ public static class Scheduler
 	internal static void SignalTermination()
 	{
 		Platform.Scheduler.SignalTermination();
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	internal static object SignalSystemCall(object obj)
+	{
+		return Platform.Scheduler.SignalSystemCall(obj);
 	}
 
 	private static uint CreateThread(ThreadStart thread, uint stackSize)
@@ -155,6 +183,13 @@ public static class Scheduler
 
 			// TODO: release stack memory
 		}
+	}
+
+	private static void SleepThread(uint threadID)
+	{
+		var thread = Threads[threadID];
+
+		thread.Status = ThreadStatus.Sleeping;
 	}
 
 	private static uint GetNextThread(uint currentThreadID)

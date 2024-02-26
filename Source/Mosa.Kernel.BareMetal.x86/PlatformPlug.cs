@@ -144,11 +144,17 @@ public static class PlatformPlug
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SignalTermination")]
 		public static void SignalTermination() => Scheduler.SignalTermination();
 
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SignalSystemCall")]
+		public static object SignalSystemCall(object obj) => Scheduler.SignalSystemCall(obj);
+
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SwitchToThread")]
 		public static void SwitchToThread(Thread thread) => Scheduler.SwitchToThread(thread);
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SetupThreadStack")]
 		public static Pointer SetupThreadStack(Pointer stackTop, Pointer methodAddress, Pointer termAddress) => Scheduler.SetupThreadStack(stackTop, methodAddress, termAddress);
+
+		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SetReturnObject")]
+		public static void SetReturnObject(Pointer stackTop, Pointer ob) => Scheduler.SetReturnObject(stackTop, ob);
 	}
 
 	public static class SerialPlug

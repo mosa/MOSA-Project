@@ -207,7 +207,8 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 			// See: https://github.com/msareedjr/MOSA-MikeOS/commit/6867064fedae707280083ba4d9ff12d468a6dce0
 			var h = new ACPISDTHeader(HAL.GetPhysicalMemory(xsdt ? XSDT.GetPointerToOtherSDT(i) : RSDT.GetPointerToOtherSDT(i), 0xFFF).Address);
 
-			if (!h.Pointer.IsNull && h.Signature == value) return h.Pointer;
+			if (!h.Pointer.IsNull && h.Signature == value)
+				return h.Pointer;
 		}
 
 		// No SDT found (by signature)

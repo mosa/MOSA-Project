@@ -57,8 +57,5 @@ public abstract class BaseDeviceDriver
 	/// Called when an interrupt is received.
 	/// </summary>
 	/// <returns></returns>
-	public virtual bool OnInterrupt()
-	{
-		return false;
-	}
+	public virtual bool OnInterrupt() => false;
 }

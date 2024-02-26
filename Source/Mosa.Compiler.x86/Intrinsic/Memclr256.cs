@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.x86.Intrinsic;
 
 /// <summary>
-/// IntrinsicMethods
+/// Intrinsic Methods
 /// </summary>
 internal static partial class IntrinsicMethods
 {
@@ -15,10 +15,9 @@ internal static partial class IntrinsicMethods
 		var dest = context.Operand1;
 
 		var v0 = transform.PhysicalRegisters.AllocateR8(CPURegister.XMM0);
-		var offset16 = Operand.Constant32_16;
 
 		context.SetInstruction(X86.PXor, v0, v0, v0);
 		context.AppendInstruction(X86.MovupsStore, dest, Operand.Constant32_0, v0);
-		context.AppendInstruction(X86.MovupsStore, dest, offset16, v0);
+		context.AppendInstruction(X86.MovupsStore, dest, Operand.Constant32_16, v0);
 	}
 }

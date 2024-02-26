@@ -2262,6 +2262,10 @@ public static class IDT
 				BareMetal.Scheduler.ClockInterrupt(stackStatePointer);
 				break;
 
+			case Scheduler.IRQ.SystemCall:
+				BareMetal.Scheduler.SystemCall(new Pointer(stack.EAX));
+				break;
+
 			case Scheduler.IRQ.ThreadTermination:
 				BareMetal.Scheduler.TerminateCurrentThread();
 				break;

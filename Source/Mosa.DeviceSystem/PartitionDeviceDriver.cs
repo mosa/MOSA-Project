@@ -71,11 +71,7 @@ public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 	/// Called when an interrupt is received.
 	/// </summary>
 	/// <returns></returns>
-	public override bool OnInterrupt()
-	{
-		// TODO
-		return true;
-	}
+	public override bool OnInterrupt() => true;
 
 	/// <summary>
 	/// Reads the block.
