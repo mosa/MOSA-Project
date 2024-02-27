@@ -1,41 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<Compile Include="..\Mosa.DeviceSystem\BaseDeviceConfiguration.cs">
-			<Link>DeviceSystem\BaseDeviceConfiguration.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\CHS.cs">
+			<Link>DeviceSystem\Disks\CHS.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\CHS.cs">
-			<Link>DeviceSystem\CHS.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Misc\DataBlock.cs">
+			<Link>DeviceSystem\Misc\DataBlock.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\DataBlock.cs">
-			<Link>DeviceSystem\DataBlock.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Framework\DeviceStatus.cs">
+			<Link>DeviceSystem\Framework\DeviceStatus.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\DeviceStatus.cs">
-			<Link>DeviceSystem\DeviceStatus.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\DiskGeometry.cs">
+			<Link>DeviceSystem\Disks\DiskGeometry.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\DiskGeometry.cs">
-			<Link>DeviceSystem\DiskGeometry.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\DiskPartitionConfiguration.cs">
+			<Link>DeviceSystem\Disks\DiskPartitionConfiguration.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\DiskPartitionConfiguration.cs">
-			<Link>DeviceSystem\DiskPartitionConfiguration.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\GenericPartition.cs">
+			<Link>DeviceSystem\Disks\GenericPartition.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\GenericPartition.cs">
-			<Link>DeviceSystem\GenericPartition.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\IDiskDevice.cs">
+			<Link>DeviceSystem\Disks\IDiskDevice.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\IDiskDevice.cs">
-			<Link>DeviceSystem\IDiskDevice.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\IPartitionDevice.cs">
+			<Link>DeviceSystem\Disks\IPartitionDevice.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\IPartitionDevice.cs">
-			<Link>DeviceSystem\IPartitionDevice.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\MasterBootBlock.cs">
+			<Link>DeviceSystem\Disks\MasterBootBlock.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\MasterBootBlock.cs">
-			<Link>DeviceSystem\MasterBootBlock.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\PartitionDeviceDriver.cs">
+			<Link>DeviceSystem\Disks\PartitionDeviceDriver.cs</Link>
 		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\PartitionDeviceDriver.cs">
-			<Link>DeviceSystem\PartitionDeviceDriver.cs</Link>
-		</Compile>
-		<Compile Include="..\Mosa.DeviceSystem\PartitionType.cs">
-			<Link>DeviceSystem\PartitionType.cs</Link>
+		<Compile Include="..\Mosa.DeviceSystem\Disks\PartitionType.cs">
+			<Link>DeviceSystem\Disks\PartitionType.cs</Link>
 		</Compile>
 		<Compile Include="..\Mosa.FileSystem\**\*.cs" />
 		<Compile Remove="..\Mosa.FileSystem\obj\**\*" />

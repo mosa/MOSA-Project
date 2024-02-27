@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Disks;
 
 namespace Mosa.BareMetal.HelloWorld.Apps;
 

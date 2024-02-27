@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.HardwareAbstraction;
 
 namespace Mosa.DeviceSystem.Services;
 

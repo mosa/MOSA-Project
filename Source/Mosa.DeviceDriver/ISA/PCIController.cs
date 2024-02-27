@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDriver.ISA;
@@ -29,7 +30,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 
 	public override void Initialize()
 	{
-		Device.Name = "PCI_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+		Device.Name = "PCI_0x" + Device.Resources.IOPortRegions[0].BaseIOPort.ToString("X");
 
 		configAddress = Device.Resources.GetIOPortReadWrite(0, 0);
 		configData = Device.Resources.GetIOPortReadWrite(0, 4);

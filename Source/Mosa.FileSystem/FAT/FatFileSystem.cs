@@ -2,6 +2,8 @@
 
 using System;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Disks;
+using Mosa.DeviceSystem.Misc;
 using Mosa.FileSystem.FAT.Vfs;
 using Mosa.FileSystem.VFS;
 

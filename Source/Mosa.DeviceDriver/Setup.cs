@@ -2,6 +2,10 @@
 
 using System.Collections.Generic;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.Framework.ISA;
+using Mosa.DeviceSystem.Framework.PCI;
+using Mosa.DeviceSystem.Misc;
 
 namespace Mosa.DeviceDriver;
 

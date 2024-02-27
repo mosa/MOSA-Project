@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Misc;
 using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;

@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Mosa.DeviceDriver.ISA;
-using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Fonts;
+using Mosa.DeviceSystem.Misc;
 
 namespace Mosa.BareMetal.CoolWorld;
 
@@ -23,7 +23,8 @@ public static class Utils
 
 	public static SimpleBitFont Load(byte[] data)
 	{
-		var stream = new DataStream(data);
+		var block = new DataBlock(data);
+		var position = 0U;
 
 		var name = string.Empty;
 		var charset = string.Empty;
@@ -31,7 +32,7 @@ public static class Utils
 		// Name
 		for (; ; )
 		{
-			var ch = stream.ReadChar();
+			var ch = block.GetChar(position++);
 			if (ch == byte.MaxValue)
 				break;
 
@@ -41,20 +42,20 @@ public static class Utils
 		// Charset
 		for (; ; )
 		{
-			var ch = stream.ReadChar();
+			var ch = block.GetChar(position++);
 			if (ch == byte.MaxValue)
 				break;
 
 			charset += ch;
 		}
 
-		var width = stream.ReadByte();
-		var height = stream.ReadByte();
-		var size = stream.ReadByte();
+		var width = block[position++];
+		var height = block[position++];
+		var size = block[position++];
 
-		_ = stream.ReadByte(); // Skip end byte
+		position++; // Skip end byte
 
-		var fontData = stream.ReadEnd();
+		var fontData = block.GetBytes(position, block.Length - position);
 
 		return new SimpleBitFont(name, width, height, size, charset, fontData);
 	}

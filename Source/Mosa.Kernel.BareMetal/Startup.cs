@@ -5,6 +5,8 @@ using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Disks;
+using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.DeviceSystem.Keyboard;
 using Mosa.DeviceSystem.Services;
 using Mosa.FileSystem.FAT;
@@ -126,9 +128,9 @@ public static class Startup
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Hardware abstraction layer...");
-		var hardware = new HardwareAbstractionLayer();
 		var deviceService = new DeviceService();
-		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
+		HAL.Set(new HardwareAbstractionLayer());
+		HAL.SetInterruptHandler(deviceService.ProcessInterrupt);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 

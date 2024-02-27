@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.DeviceSystem.Services;
 using Mosa.Kernel.BareMetal;
 using Mosa.Runtime.Plug;

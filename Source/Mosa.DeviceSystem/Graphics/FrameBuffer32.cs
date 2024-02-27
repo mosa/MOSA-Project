@@ -2,6 +2,8 @@
 
 using System;
 using System.Drawing;
+using Mosa.DeviceSystem.HardwareAbstraction;
+using Mosa.DeviceSystem.Misc;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.Graphics;

@@ -1,8 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Drawing;
-using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Graphics;
+using Mosa.DeviceSystem.HardwareAbstraction;
+using Mosa.DeviceSystem.Mouse;
 
 namespace Mosa.BareMetal.CoolWorld.Components;
 
@@ -28,7 +29,7 @@ public class PaintArea
 		Width = width;
 		Height = height;
 
-		Buffer = new(DeviceSystem.HAL.AllocateMemory(width * height * 4, 0), width, height, (xx, yy) => (yy * width + xx) * 4);
+		Buffer = new(HAL.AllocateMemory(width * height * 4, 0), width, height, (xx, yy) => (yy * width + xx) * 4);
 		Buffer.ClearScreen((uint)color.ToArgb());
 	}
 

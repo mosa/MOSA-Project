@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Disks;
+using Mosa.DeviceSystem.Framework;
 using Mosa.FileSystem.FAT;
 
 namespace Mosa.Utility.BootImage;
@@ -118,7 +119,7 @@ public static class Generator
 				mbr.Partitions[0].Bootable = false;
 				mbr.Partitions[0].StartLBA = 1;
 				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
-				mbr.Partitions[0].PartitionType = 0xEE; // GPT protective MBR ID
+				mbr.Partitions[0].PartitionType = PartitionType.GPT; // GPT protective MBR ID
 
 				mbr.Write();
 

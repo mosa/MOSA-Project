@@ -2,6 +2,7 @@
 
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Keyboard;
+using Mosa.DeviceSystem.Services;
 
 namespace Mosa.Kernel.BareMetal;
 
