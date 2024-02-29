@@ -51,8 +51,10 @@ public class CHS
 
 		Sector = (ushort)(lba % diskGeometry.SectorsPerTrack + 1);
 		lba /= diskGeometry.SectorsPerTrack;
+
 		Head = (byte)(lba % diskGeometry.Heads);
 		lba /= diskGeometry.Heads;
+
 		Cylinder = (ushort)(lba & 0xFF);
 		Sector |= (ushort)((lba >> 2) & 0xC0);
 	}

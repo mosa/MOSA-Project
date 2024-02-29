@@ -5,6 +5,4 @@ namespace Mosa.DeviceSystem;
 /// <summary>
 /// Interface Device Configuration
 /// </summary>
-public abstract class BaseDeviceConfiguration
-{
-}
+public abstract class BaseDeviceConfiguration { }

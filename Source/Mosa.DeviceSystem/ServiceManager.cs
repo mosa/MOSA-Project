@@ -10,20 +10,19 @@ namespace Mosa.DeviceSystem;
 /// </summary>
 public sealed class ServiceManager
 {
-	private readonly List<BaseService> Services = new List<BaseService>();
-	private readonly List<ServiceEvent> Events = new List<ServiceEvent>();
+	public List<BaseService> Services { get; } = new List<BaseService>();
 
-	public readonly object lockServices = new object();
-	public readonly object lockEvents = new object();
+	public List<ServiceEvent> Events { get; } = new List<ServiceEvent>();
+
+	private readonly object lockServices = new object();
+	private readonly object lockEvents = new object();
 
 	public void AddService(BaseService service)
 	{
 		HAL.DebugWriteLine("ServiceManager:AddService()");
 
 		lock (lockServices)
-		{
 			Services.Add(service);
-		}
 
 		service.Start(this);
 
@@ -35,9 +34,7 @@ public sealed class ServiceManager
 		HAL.DebugWriteLine("ServiceManager:AddEvent()");
 
 		lock (lockEvents)
-		{
 			Events.Add(serviceEvent);
-		}
 
 		SendEvents();
 
@@ -49,15 +46,9 @@ public sealed class ServiceManager
 		var list = new List<T>();
 
 		lock (lockServices)
-		{
 			foreach (var service in Services)
-			{
 				if (service is T s)
-				{
 					list.Add(s);
-				}
-			}
-		}
 
 		return list;
 	}
@@ -65,15 +56,9 @@ public sealed class ServiceManager
 	public T GetFirstService<T>() where T : BaseService
 	{
 		lock (lockServices)
-		{
 			foreach (var service in Services)
-			{
 				if (service is T s)
-				{
 					return s;
-				}
-			}
-		}
 
 		return null;
 	}
@@ -85,9 +70,7 @@ public sealed class ServiceManager
 			var list = new List<BaseService>(Services.Count);
 
 			foreach (var service in Services)
-			{
 				list.Add(service);
-			}
 
 			return list;
 		}

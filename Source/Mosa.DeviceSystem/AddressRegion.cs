@@ -37,8 +37,5 @@ public struct AddressRegion
 	/// <returns>
 	/// 	<c>true</c> if [contains] [the specified address]; otherwise, <c>false</c>.
 	/// </returns>
-	public bool Contains(Pointer address)
-	{
-		return address >= Address && address < Address + Size;
-	}
+	public bool Contains(Pointer address) => address >= Address && address < Address + Size;
 }

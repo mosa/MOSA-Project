@@ -11,10 +11,7 @@ public class GenericPartition
 	/// Initializes a new instance of the <see cref="GenericPartition"/> class.
 	/// </summary>
 	/// <param name="index">The index.</param>
-	public GenericPartition(uint index)
-	{
-		this.Index = index;
-	}
+	public GenericPartition(uint index) => Index = index;
 
 	/// <summary>
 	/// Gets or sets a value indicating whether this <see cref="GenericPartition"/> is bootable.
@@ -26,13 +23,6 @@ public class GenericPartition
 	/// Gets the partition index.
 	/// </summary>
 	/// <value>The partition index.</value>
-
-	/* Unmerged change from project 'Mosa.Utility.FileSystem'
-	Before:
-			public uint Index { get { return index; } }
-	After:
-			public uint Index { get; } }
-	*/
 
 	public uint Index { get; private set; }
 

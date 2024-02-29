@@ -26,19 +26,13 @@ public class DataBlock
 	/// Initializes a new instance of the <see cref="DataBlock"/> struct.
 	/// </summary>
 	/// <param name="data">The data.</param>
-	public DataBlock(byte[] data)
-	{
-		Data = data;
-	}
+	public DataBlock(byte[] data) => Data = data;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DataBlock"/> struct.
 	/// </summary>
 	/// <param name="length">The length.</param>
-	public DataBlock(uint length)
-	{
-		Data = new byte[length];
-	}
+	public DataBlock(uint length) => Data = new byte[length];
 
 	/// <summary>
 	/// Gets or sets the <see cref="Byte" /> at the specified index.
@@ -59,20 +53,14 @@ public class DataBlock
 	/// </summary>
 	/// <param name="offset">The offset.</param>
 	/// <returns></returns>
-	public char GetChar(uint offset)
-	{
-		return (char)Data[offset];
-	}
+	public char GetChar(uint offset) => (char)Data[offset];
 
 	/// <summary>
 	/// Sets the char.
 	/// </summary>
 	/// <param name="offset">The offset.</param>
 	/// <param name="value">The value.</param>
-	public void SetChar(uint offset, char value)
-	{
-		Data[offset] = (byte)value;
-	}
+	public void SetChar(uint offset, char value) => Data[offset] = (byte)value;
 
 	/// <summary>
 	/// Gets the chars.
@@ -83,8 +71,8 @@ public class DataBlock
 	public char[] GetChars(uint offset, uint length)
 	{
 		var value = new char[length];
-
-		for (uint index = 0; index < length; index++) { value[index] = GetChar(offset + index); }
+		for (var index = 0U; index < length; index++)
+			value[index] = GetChar(offset + index);
 
 		return value;
 	}
@@ -98,8 +86,8 @@ public class DataBlock
 	public byte[] GetBytes(uint offset, uint length)
 	{
 		var value = new byte[length];
-
-		for (uint index = 0; index < length; index++) { value[index] = Data[offset + index]; }
+		for (var index = 0U; index < length; index++)
+			value[index] = Data[offset + index];
 
 		return value;
 	}
@@ -111,7 +99,8 @@ public class DataBlock
 	/// <param name="value">The value.</param>
 	public void SetChars(uint offset, char[] value)
 	{
-		for (uint index = 0; index < value.Length; index++) { Data[offset + index] = (byte)value[index]; }
+		for (var index = 0U; index < value.Length; index++)
+			Data[offset + index] = (byte)value[index];
 	}
 
 	/// <summary>
@@ -121,7 +110,8 @@ public class DataBlock
 	/// <param name="value">The value.</param>
 	public void SetString(uint offset, string value)
 	{
-		for (int index = 0; index < value.Length; index++) { Data[offset + index] = (byte)value[index]; }
+		for (var index = 0; index < value.Length; index++)
+			Data[offset + index] = (byte)value[index];
 	}
 
 	/// <summary>
@@ -132,7 +122,8 @@ public class DataBlock
 	/// <param name="length">The length.</param>
 	public void SetString(uint offset, string value, uint length)
 	{
-		for (int index = 0; index < length; index++) { Data[offset + index] = (byte)value[index]; }
+		for (var index = 0; index < length; index++)
+			Data[offset + index] = (byte)value[index];
 	}
 
 	/// <summary>
@@ -324,20 +315,14 @@ public class DataBlock
 	/// </summary>
 	/// <param name="offset">The offset.</param>
 	/// <returns></returns>
-	public byte GetByte(uint offset)
-	{
-		return Data[offset];
-	}
+	public byte GetByte(uint offset) => Data[offset];
 
 	/// <summary>
 	/// Sets the byte.
 	/// </summary>
 	/// <param name="offset">The offset.</param>
 	/// <param name="value">The value.</param>
-	public void SetByte(uint offset, byte value)
-	{
-		Data[offset] = value;
-	}
+	public void SetByte(uint offset, byte value) => Data[offset] = value;
 
 	/// <summary>
 	/// Sets the bytes.
@@ -346,7 +331,8 @@ public class DataBlock
 	/// <param name="value">The value.</param>
 	public void SetBytes(uint offset, byte[] value)
 	{
-		for (uint index = 0; index < value.Length; index++) { Data[offset + index] = value[index]; }
+		for (var index = 0U; index < value.Length; index++)
+			Data[offset + index] = value[index];
 	}
 
 	/// <summary>
@@ -358,7 +344,8 @@ public class DataBlock
 	/// <param name="length">The length.</param>
 	public void SetBytes(uint offset, byte[] value, uint start, uint length)
 	{
-		for (uint index = 0; index < length; index++) { Data[offset + index] = value[start + index]; }
+		for (var index = 0U; index < length; index++)
+			Data[offset + index] = value[start + index];
 	}
 
 	/// <summary>
@@ -369,7 +356,8 @@ public class DataBlock
 	/// <param name="length">The length.</param>
 	public void Fill(uint offset, byte value, uint length)
 	{
-		for (uint index = 0; index < length; index++) { Data[offset + index] = value; }
+		for (var index = 0U; index < length; index++)
+			Data[offset + index] = value;
 	}
 
 	/// <summary>
@@ -378,8 +366,5 @@ public class DataBlock
 	/// <param name="offset">The offset.</param>
 	/// <param name="length">The length.</param>
 	/// <returns></returns>
-	public string GetString(uint offset, uint length)
-	{
-		return Encoding.ASCII.GetString(Data, (int)offset, (int)length);
-	}
+	public string GetString(uint offset, uint length) => Encoding.ASCII.GetString(Data, (int)offset, (int)length);
 }

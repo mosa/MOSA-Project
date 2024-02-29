@@ -24,34 +24,24 @@ public abstract class BaseService
 	/// <summary>
 	/// Initializes this instance.
 	/// </summary>
-	protected virtual void Initialize()
-	{ }
+	protected virtual void Initialize() { }
 
 	/// <summary>
 	/// Posts the event.
 	/// </summary>
 	/// <param name="serviceEvent">The service event.</param>
-	public virtual void PostEvent(ServiceEvent serviceEvent)
-	{
-	}
+	public virtual void PostEvent(ServiceEvent serviceEvent) { }
 
 	//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	protected static Device MatchEvent<SERVICE>(ServiceEvent serviceEvent, ServiceEventType eventType) where SERVICE : class
+	protected static Device MatchEvent<TService>(ServiceEvent serviceEvent, ServiceEventType eventType) where TService : class
 	{
 		if (serviceEvent.ServiceEventType != eventType)
 			return null;
 
-		var device = serviceEvent.Subject as Device;
-
-		if (device == null)
+		if (serviceEvent.Subject is not Device device)
 			return null;
 
-		var service = device.DeviceDriver as SERVICE;
-
-		if (service == null)
-			return null;
-
-		return device;
+		return device.DeviceDriver is not TService ? null : device;
 	}
 }

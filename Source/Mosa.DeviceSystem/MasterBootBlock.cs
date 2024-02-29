@@ -43,45 +43,23 @@ public class MasterBootBlock
 	public const uint MaxMBRPartitions = 4;
 
 	/// <summary>
-	/// The disk device
-	/// </summary>
-	protected IDiskDevice diskDevice;
-
-	/// <summary>
-	/// The partitions
-	/// </summary>
-	public GenericPartition[] Partitions;
-
-	/// <summary>
-	/// The disk signature
-	/// </summary>
-	protected uint diskSignature;
-
-	/// <summary>
-	/// The valid
-	/// </summary>
-	protected bool valid;
-
-	/// <summary>
-	/// The code
-	/// </summary>
-	protected byte[] code;
-
-	/// <summary>
 	/// Gets a value indicating whether this <see cref="MasterBootBlock"/> is valid.
 	/// </summary>
 	/// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
-	public bool Valid => valid;
+	public bool Valid { get; private set; }
 
 	/// <summary>
 	/// Gets the disk signature.
 	/// </summary>
 	/// <value>The disk signature.</value>
-	public uint DiskSignature
-	{
-		get => diskSignature;
-		set => diskSignature = value;
-	}
+	public uint DiskSignature { get; set; }
+
+	/// <summary>
+	/// The partitions
+	/// </summary>
+	public GenericPartition[] Partitions { get; set; }
+
+	public DataBlock DataBlock { get; set; }
 
 	/// <summary>
 	/// Gets or sets the code.
@@ -95,11 +73,8 @@ public class MasterBootBlock
 				return null;
 
 			var copy = new byte[code.Length];
-
-			for (int i = 0; i < code.Length; i++)
-			{
+			for (var i = 0; i < code.Length; i++)
 				copy[i] = code[i];
-			}
 
 			return copy;
 		}
@@ -112,13 +87,22 @@ public class MasterBootBlock
 			}
 
 			code = new byte[value.Length];
-
-			for (int i = 0; i < value.Length; i++)
-			{
+			for (var i = 0; i < value.Length; i++)
 				code[i] = value[i];
-			}
 		}
 	}
+
+	/// <summary>
+	/// The disk device
+	/// </summary>
+	private readonly IDiskDevice diskDevice;
+
+	/// <summary>
+	/// The code
+	/// </summary>
+	private byte[] code;
+
+	private byte[] data;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MasterBootBlock"/> class.
@@ -127,18 +111,13 @@ public class MasterBootBlock
 	public MasterBootBlock(IDiskDevice diskDevice)
 	{
 		this.diskDevice = diskDevice;
-		Partitions = new GenericPartition[MaxMBRPartitions];
 
-		for (uint i = 0; i < MaxMBRPartitions; i++)
-		{
+		Partitions = new GenericPartition[MaxMBRPartitions];
+		for (var i = 0U; i < MaxMBRPartitions; i++)
 			Partitions[i] = new GenericPartition(i);
-		}
 
 		Read();
 	}
-
-	public DataBlock masterboot;
-	public byte[] data;
 
 	/// <summary>
 	/// Reads the master boot block.
@@ -146,43 +125,40 @@ public class MasterBootBlock
 	/// <returns></returns>
 	public bool Read()
 	{
-		valid = false;
+		Valid = false;
 
 		if (diskDevice.BlockSize != 512 || diskDevice.TotalBlocks < 3)
-			return false;  // only going to work with 512 sector sizes and disks more than 2 blocks
+			return false;  // Only going to work with 512 sector sizes and disks more than 2 blocks
 
 		data = diskDevice.ReadBlock(0, 1);
-		masterboot = new DataBlock(data);
+		DataBlock = new DataBlock(data);
 
-		if (masterboot.GetUShort(MBR.MBRSignature) != MBRConstant.MBRSignature)
+		if (DataBlock.GetUShort(MBR.MBRSignature) != MBRConstant.MBRSignature)
 			return false;
 
-		valid = true;
-
-		diskSignature = masterboot.GetUInt32(MBR.DiskSignature);
+		Valid = true;
+		DiskSignature = DataBlock.GetUInt32(MBR.DiskSignature);
 
 		for (uint index = 0; index < MaxMBRPartitions; index++)
 		{
-			uint offset = MBR.FirstPartition + index * MBRConstant.PartitionSize;
+			var offset = MBR.FirstPartition + index * MBRConstant.PartitionSize;
 
 			Partitions[index] = new GenericPartition(index)
 			{
-				Bootable = masterboot.GetByte(offset + PartitionRecord.Status) == MBRConstant.Bootable,
-				PartitionType = masterboot.GetByte(offset + PartitionRecord.PartitionType),
-				StartLBA = masterboot.GetUInt32(offset + PartitionRecord.LBA),
-				TotalBlocks = masterboot.GetUInt32(offset + PartitionRecord.Sectors)
+				Bootable = DataBlock.GetByte(offset + PartitionRecord.Status) == MBRConstant.Bootable,
+				PartitionType = DataBlock.GetByte(offset + PartitionRecord.PartitionType),
+				StartLBA = DataBlock.GetUInt32(offset + PartitionRecord.LBA),
+				TotalBlocks = DataBlock.GetUInt32(offset + PartitionRecord.Sectors)
 			};
 		}
 
-		//TODO: Extended Partitions
+		// TODO: Extended Partitions
 
 		code = new byte[MBRConstant.CodeAreaSize];
-		for (uint index = 0; index < MBRConstant.CodeAreaSize; index++)
-		{
-			code[index] = masterboot.GetByte(index);
-		}
+		for (var index = 0U; index < MBRConstant.CodeAreaSize; index++)
+			code[index] = DataBlock.GetByte(index);
 
-		return valid;
+		return Valid;
 	}
 
 	/// <summary>
@@ -194,49 +170,43 @@ public class MasterBootBlock
 		if (!diskDevice.CanWrite)
 			return false;
 
-		var masterboot = new DataBlock(512);
-
-		masterboot.SetUInt32(MBR.DiskSignature, diskSignature);
-		masterboot.SetUShort(MBR.MBRSignature, MBRConstant.MBRSignature);
+		var block = new DataBlock(512);
+		block.SetUInt32(MBR.DiskSignature, DiskSignature);
+		block.SetUShort(MBR.MBRSignature, MBRConstant.MBRSignature);
 
 		if (code != null)
+			for (var index = 0U; index < MBRConstant.CodeAreaSize && index < code.Length; index++)
+				block.SetByte(index, code[index]);
+
+		for (var index = 0U; index < MaxMBRPartitions; index++)
 		{
-			for (uint index = 0; index < MBRConstant.CodeAreaSize && index < code.Length; index++)
-			{
-				masterboot.SetByte(index, code[index]);
-			}
+			if (Partitions[index].TotalBlocks == 0)
+				continue;
+
+			var offset = MBR.FirstPartition + index * 16;
+			block.SetByte(offset + PartitionRecord.Status, (byte)(Partitions[index].Bootable ? 0x80 : 0x00));
+			block.SetByte(offset + PartitionRecord.PartitionType, Partitions[index].PartitionType);
+			block.SetUInt32(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
+			block.SetUInt32(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
+
+			var diskGeometry = new DiskGeometry();
+			diskGeometry.GuessGeometry(diskDevice.TotalBlocks);
+
+			var chsStart = new CHS();
+			var chsEnd = new CHS();
+
+			chsStart.SetCHS(diskGeometry, Partitions[index].StartLBA);
+			chsEnd.SetCHS(diskGeometry, Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
+
+			block.SetByte(offset + PartitionRecord.FirstCRS, chsStart.Head);
+			block.SetByte(offset + PartitionRecord.FirstCRS + 1, (byte)((chsStart.Sector & 0x3F) | ((chsStart.Cylinder >> 8) & 0x03)));
+			block.SetByte(offset + PartitionRecord.FirstCRS + 2, (byte)(chsStart.Cylinder & 0xFF));
+			block.SetByte(offset + PartitionRecord.LastCRS, chsEnd.Head);
+			block.SetByte(offset + PartitionRecord.LastCRS + 1, (byte)((chsEnd.Sector & 0x3F) | ((chsEnd.Cylinder >> 8) & 0x03)));
+			block.SetByte(offset + PartitionRecord.LastCRS + 2, (byte)(chsEnd.Cylinder & 0xFF));
 		}
 
-		for (uint index = 0; index < MaxMBRPartitions; index++)
-		{
-			if (Partitions[index].TotalBlocks != 0)
-			{
-				uint offset = MBR.FirstPartition + index * 16;
-				masterboot.SetByte(offset + PartitionRecord.Status, (byte)(Partitions[index].Bootable ? 0x80 : 0x00));
-				masterboot.SetByte(offset + PartitionRecord.PartitionType, Partitions[index].PartitionType);
-				masterboot.SetUInt32(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
-				masterboot.SetUInt32(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
-
-				var diskGeometry = new DiskGeometry();
-				diskGeometry.GuessGeometry(diskDevice.TotalBlocks);
-
-				var chsStart = new CHS();
-				var chsEnd = new CHS();
-
-				chsStart.SetCHS(diskGeometry, Partitions[index].StartLBA);
-				chsEnd.SetCHS(diskGeometry, Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
-
-				masterboot.SetByte(offset + PartitionRecord.FirstCRS, chsStart.Head);
-				masterboot.SetByte(offset + PartitionRecord.FirstCRS + 1, (byte)((chsStart.Sector & 0x3F) | ((chsStart.Cylinder >> 8) & 0x03)));
-				masterboot.SetByte(offset + PartitionRecord.FirstCRS + 2, (byte)(chsStart.Cylinder & 0xFF));
-				masterboot.SetByte(offset + PartitionRecord.LastCRS, chsEnd.Head);
-				masterboot.SetByte(offset + PartitionRecord.LastCRS + 1, (byte)((chsEnd.Sector & 0x3F) | ((chsEnd.Cylinder >> 8) & 0x03)));
-				masterboot.SetByte(offset + PartitionRecord.LastCRS + 2, (byte)(chsEnd.Cylinder & 0xFF));
-			}
-		}
-
-		diskDevice.WriteBlock(0, 1, masterboot.Data);
-
+		diskDevice.WriteBlock(0, 1, block.Data);
 		return true;
 	}
 }

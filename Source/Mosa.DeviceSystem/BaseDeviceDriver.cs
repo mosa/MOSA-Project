@@ -33,25 +33,17 @@ public abstract class BaseDeviceDriver
 	/// <summary>
 	/// Probes this instance.
 	/// </summary>
-	public virtual void Probe()
-	{
-		Device.Status = DeviceStatus.NotFound;
-	}
+	public virtual void Probe() => Device.Status = DeviceStatus.NotFound;
 
 	/// <summary>
 	/// Starts this hardware device.
 	/// </summary>
-	public virtual void Start()
-	{
-		Device.Status = DeviceStatus.Error;
-	}
+	public virtual void Start() => Device.Status = DeviceStatus.Error;
 
 	/// <summary>
 	/// Stops this hardware device.
 	/// </summary>
-	public virtual void Stop()
-	{
-	}
+	public virtual void Stop() { }
 
 	/// <summary>
 	/// Called when an interrupt is received.

@@ -4,7 +4,7 @@ namespace Mosa.DeviceSystem;
 
 public struct IOPortRead
 {
-	public ushort Address { get; private set; }
+	public ushort Address { get; }
 
 	public IOPortRead(ushort address) => Address = address;
 
@@ -17,7 +17,7 @@ public struct IOPortRead
 
 public struct IOPortWrite
 {
-	public ushort Address { get; private set; }
+	public ushort Address { get; }
 
 	public IOPortWrite(ushort address) => Address = address;
 
@@ -30,12 +30,9 @@ public struct IOPortWrite
 
 public struct IOPortReadWrite
 {
-	public ushort Address { get; private set; }
+	public ushort Address { get; }
 
-	public IOPortReadWrite(ushort address)
-	{
-		Address = address;
-	}
+	public IOPortReadWrite(ushort address) => Address = address;
 
 	public byte Read8() => HAL.In8(Address);
 
