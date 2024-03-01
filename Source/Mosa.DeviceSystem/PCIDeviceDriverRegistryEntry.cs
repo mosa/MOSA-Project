@@ -24,16 +24,3 @@ public class PCIDeviceDriverRegistryEntry : DeviceDriverRegistryEntry
 
 	public PCIField PCIFields { get; set; }
 }
-
-[System.Flags]
-public enum PCIField : byte
-{
-	DeviceID = 1,
-	VendorID = 2,
-	SubSystemVendorID = 4,
-	SubSystemID = 8,
-	RevisionID = 16,
-	ProgIF = 32,
-	ClassCode = 64,
-	SubClassCode = 128
-}

@@ -23,7 +23,7 @@ public class DiskDeviceService : BaseService
 
 		var deviceService = device.DeviceService;
 
-		for (var drive = 0U; drive < controller.MaximunDriveCount; drive++)
+		for (var drive = 0U; drive < controller.MaximumDriveCount; drive++)
 		{
 			if (!controller.Open(drive))
 				continue;

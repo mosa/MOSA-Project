@@ -128,8 +128,9 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	protected IOPortRead AltStatusPort;
 
 	/// <summary>
-	/// The maximum number of drives
+	/// Gets the maximum drive count.
 	/// </summary>
+	/// <value>The drive count.</value>
 	public uint MaximumDriveCount { get; private set; }
 
 	public enum AddressingMode
@@ -163,8 +164,8 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 
 	public override void Initialize()
 	{
-		Device.Name = "IDE_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
-		Device.ComponentID = Device.Resources.GetIOPortRegion(0).BaseIOPort;
+		Device.Name = "IDE_0x" + Device.Resources.IOPortRegions[0].BaseIOPort.ToString("X");
+		Device.ComponentID = Device.Resources.IOPortRegions[0].BaseIOPort;
 
 		DataPort = Device.Resources.GetIOPortReadWrite(0, 0);
 		ErrorPort = Device.Resources.GetIOPortRead(0, 1);
@@ -464,12 +465,6 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// <param name="drive">The drive.</param>
 	/// <returns></returns>
 	public bool Release(uint drive) => true;
-
-	/// <summary>
-	/// Gets the maximum drive count.
-	/// </summary>
-	/// <value>The drive count.</value>
-	public uint MaximunDriveCount => MaximumDriveCount;
 
 	/// <summary>
 	/// Gets the size of the sector.

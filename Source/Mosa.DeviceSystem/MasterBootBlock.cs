@@ -40,7 +40,7 @@ public class MasterBootBlock
 	/// <summary>
 	/// The maximum MBR partitions
 	/// </summary>
-	public const uint MaxMBRPartitions = 4;
+	public const uint MaxPartitions = 4;
 
 	/// <summary>
 	/// Gets a value indicating whether this <see cref="MasterBootBlock"/> is valid.
@@ -112,8 +112,8 @@ public class MasterBootBlock
 	{
 		this.diskDevice = diskDevice;
 
-		Partitions = new GenericPartition[MaxMBRPartitions];
-		for (var i = 0U; i < MaxMBRPartitions; i++)
+		Partitions = new GenericPartition[MaxPartitions];
+		for (var i = 0U; i < MaxPartitions; i++)
 			Partitions[i] = new GenericPartition(i);
 
 		Read();
@@ -139,7 +139,7 @@ public class MasterBootBlock
 		Valid = true;
 		DiskSignature = DataBlock.GetUInt32(MBR.DiskSignature);
 
-		for (uint index = 0; index < MaxMBRPartitions; index++)
+		for (uint index = 0; index < MaxPartitions; index++)
 		{
 			var offset = MBR.FirstPartition + index * MBRConstant.PartitionSize;
 
@@ -178,7 +178,7 @@ public class MasterBootBlock
 			for (var index = 0U; index < MBRConstant.CodeAreaSize && index < code.Length; index++)
 				block.SetByte(index, code[index]);
 
-		for (var index = 0U; index < MaxMBRPartitions; index++)
+		for (var index = 0U; index < MaxPartitions; index++)
 		{
 			if (Partitions[index].TotalBlocks == 0)
 				continue;
@@ -192,11 +192,8 @@ public class MasterBootBlock
 			var diskGeometry = new DiskGeometry();
 			diskGeometry.GuessGeometry(diskDevice.TotalBlocks);
 
-			var chsStart = new CHS();
-			var chsEnd = new CHS();
-
-			chsStart.SetCHS(diskGeometry, Partitions[index].StartLBA);
-			chsEnd.SetCHS(diskGeometry, Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
+			var chsStart = new CHS(diskGeometry, Partitions[index].StartLBA);
+			var chsEnd = new CHS(diskGeometry, Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
 
 			block.SetByte(offset + PartitionRecord.FirstCRS, chsStart.Head);
 			block.SetByte(offset + PartitionRecord.FirstCRS + 1, (byte)((chsStart.Sector & 0x3F) | ((chsStart.Cylinder >> 8) & 0x03)));

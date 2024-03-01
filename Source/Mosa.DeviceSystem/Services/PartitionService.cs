@@ -29,7 +29,7 @@ public class PartitionService : BaseService
 			if (!mbr.Valid)
 				return;
 
-			for (var i = 0U; i < MasterBootBlock.MaxMBRPartitions; i++)
+			for (var i = 0U; i < MasterBootBlock.MaxPartitions; i++)
 			{
 				if (mbr.Partitions[i].PartitionType == PartitionType.Empty)
 					continue;
