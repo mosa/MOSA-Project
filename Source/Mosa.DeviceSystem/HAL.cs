@@ -11,25 +11,24 @@ namespace Mosa.DeviceSystem;
 public static class HAL
 {
 	/// <summary>
+	/// Interrupt Delegate
+	/// </summary>
+	/// <param name="irq">The irq.</param>
+	public delegate void HandleInterrupt(byte irq);
+
+	public static PlatformArchitecture PlatformArchitecture => hardwareAbstraction.PlatformArchitecture;
+
+	/// <summary>
 	/// The hardware abstraction
 	/// </summary>
 	private static BaseHardwareAbstraction hardwareAbstraction;
-
-	public static PlatformArchitecture PlatformArchitecture => hardwareAbstraction.PlatformArchitecture;
+	private static HandleInterrupt handleInterrupt;
 
 	/// <summary>
 	/// Sets the hardware abstraction.
 	/// </summary>
 	/// <param name="hardwareAbstraction">The hardware abstraction.</param>
 	public static void Set(BaseHardwareAbstraction hardwareAbstraction) => HAL.hardwareAbstraction = hardwareAbstraction;
-
-	/// <summary>
-	/// Interrupt Delegate
-	/// </summary>
-	/// <param name="irq">The irq.</param>
-	public delegate void HandleInterrupt(byte irq);
-
-	private static HandleInterrupt handleInterrupt;
 
 	/// <summary>
 	/// Sets the interrupt handler.
@@ -101,9 +100,7 @@ public static class HAL
 	public static void Assert(bool condition, string message)
 	{
 		if (!condition)
-		{
 			hardwareAbstraction.Abort(message);
-		}
 	}
 
 	/// <summary>

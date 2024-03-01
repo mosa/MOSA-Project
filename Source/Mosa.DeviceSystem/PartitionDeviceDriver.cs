@@ -8,11 +8,6 @@ namespace Mosa.DeviceSystem;
 public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 {
 	/// <summary>
-	/// The disk device
-	/// </summary>
-	private IDiskDevice diskDevice;
-
-	/// <summary>
 	/// The read only
 	/// </summary>
 	public bool ReadOnly { get; protected set; }
@@ -21,13 +16,13 @@ public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 	/// Gets the start block.
 	/// </summary>
 	/// <value>The start block.</value>
-	public uint StartBlock { get; protected set; }
+	public uint StartBlock { get; private set; }
 
 	/// <summary>
 	/// Gets the block count.
 	/// </summary>
 	/// <value>The block count.</value>
-	public uint BlockCount { get; protected set; }
+	public uint BlockCount { get; private set; }
 
 	/// <summary>
 	/// Gets the size of the block.
@@ -41,31 +36,39 @@ public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 	/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
 	public bool CanWrite => !ReadOnly;
 
+	/// <summary>
+	/// The disk device
+	/// </summary>
+	private IDiskDevice diskDevice;
+
 	public override void Initialize()
 	{
-		var configuration = Device.Configuration as DiskPartitionConfiguration;
+		if (Device.Configuration is not DiskPartitionConfiguration configuration)
+		{
+			Device.Status = DeviceStatus.Error;
+			return;
+		}
 
 		StartBlock = configuration.StartLBA;
 		BlockCount = configuration.TotalBlocks;
 		ReadOnly = configuration.ReadOnly;
 
 		diskDevice = Device.Parent.DeviceDriver as IDiskDevice;
+		if (diskDevice == null)
+		{
+			Device.Status = DeviceStatus.Error;
+			return;
+		}
+
 		BlockSize = diskDevice.BlockSize;
 
 		Device.ComponentID = StartBlock;
-
-		if (StartBlock == 0)
-			Device.Name = Device.Parent.Name + "/Raw";
-		else
-			Device.Name = Device.Parent.Name + "/Partition" + (configuration.Index + 1);
+		Device.Name = StartBlock == 0 ? $"{Device.Parent.Name}/Raw" : $"{Device.Parent.Name}/Partition{(configuration.Index + 1)}";
 	}
 
 	public override void Probe() => Device.Status = DeviceStatus.Available;
 
-	public override void Start()
-	{
-		Device.Status = DeviceStatus.Online;
-	}
+	public override void Start() => Device.Status = DeviceStatus.Online;
 
 	/// <summary>
 	/// Called when an interrupt is received.
@@ -79,10 +82,7 @@ public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 	/// <param name="block">The block.</param>
 	/// <param name="count">The count.</param>
 	/// <returns></returns>
-	public byte[] ReadBlock(uint block, uint count)
-	{
-		return diskDevice.ReadBlock(block + StartBlock, count);
-	}
+	public byte[] ReadBlock(uint block, uint count) => diskDevice.ReadBlock(block + StartBlock, count);
 
 	/// <summary>
 	/// Reads the block.
@@ -91,10 +91,7 @@ public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 	/// <param name="count">The count.</param>
 	/// <param name="data">The data.</param>
 	/// <returns></returns>
-	public bool ReadBlock(uint block, uint count, byte[] data)
-	{
-		return diskDevice.ReadBlock(block + StartBlock, count, data);
-	}
+	public bool ReadBlock(uint block, uint count, byte[] data) => diskDevice.ReadBlock(block + StartBlock, count, data);
 
 	/// <summary>
 	/// Writes the block.
@@ -103,8 +100,5 @@ public class PartitionDeviceDriver : BaseDeviceDriver, IPartitionDevice
 	/// <param name="count">The count.</param>
 	/// <param name="data">The data.</param>
 	/// <returns></returns>
-	public bool WriteBlock(uint block, uint count, byte[] data)
-	{
-		return diskDevice.WriteBlock(block + StartBlock, count, data);
-	}
+	public bool WriteBlock(uint block, uint count, byte[] data) => diskDevice.WriteBlock(block + StartBlock, count, data);
 }

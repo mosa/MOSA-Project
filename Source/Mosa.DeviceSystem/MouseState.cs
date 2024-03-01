@@ -4,5 +4,7 @@ namespace Mosa.DeviceSystem;
 
 public enum MouseState
 {
-	None = 0, Left, Right
+	None,
+	Left,
+	Right
 }

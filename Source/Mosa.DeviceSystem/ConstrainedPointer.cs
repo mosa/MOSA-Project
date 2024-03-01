@@ -25,17 +25,8 @@ public readonly struct ConstrainedPointer
 
 	public ConstrainedPointer(Pointer address, uint size)
 	{
-		this.Address = address;
-		this.Size = size;
-	}
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private void CheckOffset(uint offset)
-	{
-		if (offset >= Size)
-		{
-			throw new ArgumentOutOfRangeException(nameof(offset));
-		}
+		Address = address;
+		Size = size;
 	}
 
 	public byte this[uint offset]
@@ -163,5 +154,12 @@ public readonly struct ConstrainedPointer
 	{
 		CheckOffset(offset);
 		Address.Store64(offset, value);
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private void CheckOffset(uint offset)
+	{
+		if (offset >= Size)
+			throw new ArgumentOutOfRangeException(nameof(offset));
 	}
 }

@@ -34,5 +34,5 @@ public enum DeviceStatus : byte
 
 	Offline,
 
-	Disabled,
+	Disabled
 }
