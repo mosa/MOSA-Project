@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Misc;
 
 namespace Mosa.FileSystem.FAT.Find;
 

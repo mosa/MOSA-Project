@@ -1,5 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem.Disks;
+using Mosa.DeviceSystem.Framework;
+
 namespace Mosa.DeviceSystem.Services;
 
 /// <summary>

@@ -3,7 +3,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Graphics;
+using Mosa.DeviceSystem.Mouse;
 
 namespace Mosa.BareMetal.CoolWorld;
 

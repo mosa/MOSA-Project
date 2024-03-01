@@ -4,7 +4,10 @@
 // http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
 // http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Disks;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.HardwareAbstraction;
+using Mosa.DeviceSystem.Misc;
 
 namespace Mosa.DeviceDriver.ISA;
 

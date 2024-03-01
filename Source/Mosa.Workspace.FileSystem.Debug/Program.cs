@@ -2,7 +2,8 @@
 
 using System.Reflection;
 using Mosa.Compiler.Common;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Disks;
+using Mosa.DeviceSystem.Framework;
 using Mosa.FileSystem.FAT;
 using Mosa.Workspace.FileSystem.Debug.Synthetic;
 

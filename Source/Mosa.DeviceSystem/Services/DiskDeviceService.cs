@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.CompilerServices;
+using Mosa.DeviceSystem.Disks;
 
 namespace Mosa.DeviceSystem.Services;
 

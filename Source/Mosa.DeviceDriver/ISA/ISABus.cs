@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.Framework.ISA;
+using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ISA;
