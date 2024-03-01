@@ -25,8 +25,11 @@ public class CHS
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CHS"/> struct.
 	/// </summary>
-	public CHS()
+	public CHS(ushort cylinder, byte head, ushort sector)
 	{
+		Cylinder = cylinder;
+		Head = head;
+		Sector = sector;
 	}
 
 	/// <summary>

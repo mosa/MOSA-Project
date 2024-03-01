@@ -94,16 +94,6 @@ public static class HAL
 	public static void Abort(string message) => hardwareAbstraction.Abort(message);
 
 	/// <summary>
-	/// Aborts with the specified message.
-	/// </summary>
-	/// <param name="message">The message.</param>
-	public static void Assert(bool condition, string message)
-	{
-		if (!condition)
-			hardwareAbstraction.Abort(message);
-	}
-
-	/// <summary>
 	/// Yield
 	/// </summary>
 	public static void Yield() => hardwareAbstraction.Yield();

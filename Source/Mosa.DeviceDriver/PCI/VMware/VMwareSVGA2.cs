@@ -206,7 +206,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 
 	public override void Initialize()
 	{
-		Device.Name = "VMWARE_SVGA2_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+		Device.Name = "VMWARE_SVGA2_0x" + Device.Resources.IOPortRegions[0].BaseIOPort.ToString("X");
 
 		// Doesn't work on VMware Workstation
 		//buffer = Device.Resources.GetMemory(0);
