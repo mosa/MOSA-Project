@@ -128,13 +128,14 @@ public static class Startup
 		Console.Write("> Hardware abstraction layer...");
 		var hardware = new HardwareAbstractionLayer();
 		var deviceService = new DeviceService();
-		DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
+		HAL.Set(hardware);
+		HAL.SetInterruptHandler(deviceService.ProcessInterrupt);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Registering device drivers...");
-		deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
+		deviceService.RegisterDeviceDriver(Setup.GetDeviceDriverRegistryEntries());
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
