@@ -75,6 +75,9 @@ public static unsafe class Native
 	[DllImport("Mosa.Compiler.x86.Intrinsic::Int")]
 	public static extern void Int(byte interrupt);
 
+	[DllImport("Mosa.Compiler.x86.Intrinsic::Int3")]
+	public static extern void Int3(byte interrupt, uint a, uint b, uint c);
+
 	[DllImport("Mosa.Compiler.x86.Intrinsic::Sqrtsd")]
 	public static extern double Sqrtsd(double destination);
 
@@ -159,9 +162,6 @@ public static unsafe class Native
 
 	[DllImport("Mosa.Compiler.x86.Intrinsic::Set32")]
 	public static extern void Set32(uint address, uint value);
-
-	[DllImport("Mosa.Compiler.x86.Intrinsic::SetEAX")]
-	public static extern void SetEAX(uint value);
 
 	[DllImport("Mosa.Compiler.x86.Intrinsic::GetEAX")]
 	public static extern uint GetEAX();

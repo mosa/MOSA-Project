@@ -136,9 +136,9 @@ public static class Scheduler
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	internal static object SignalSystemCall(object obj)
+	internal static object SignalSystemCall(object obj, uint receiverID, uint senderID)
 	{
-		return Platform.Scheduler.SignalSystemCall(obj);
+		return Platform.Scheduler.SignalSystemCall(obj, receiverID, senderID);
 	}
 
 	private static uint CreateThread(ThreadStart thread, uint stackSize)

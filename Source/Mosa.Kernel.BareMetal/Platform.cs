@@ -92,7 +92,7 @@ public static class Platform
 		public static void SignalTermination()
 		{ }
 
-		public static object SignalSystemCall(object obj) => null;
+		public static object SignalSystemCall(object obj, uint receiverID, uint senderID) => null;
 
 		public static void SwitchToThread(Thread thread)
 		{ }

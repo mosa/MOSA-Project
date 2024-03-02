@@ -34,10 +34,9 @@ public static class Scheduler
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static object SignalSystemCall(object obj)
+	public static object SignalSystemCall(object obj, uint senderID, uint receiverID)
 	{
-		Native.SetEAX(Intrinsic.GetObjectAddress(obj).ToUInt32());
-		Native.Int(IRQ.SystemCall);
+		Native.Int3(IRQ.SystemCall, Intrinsic.GetObjectAddress(obj).ToUInt32(), receiverID, senderID);
 
 		return Native.GetEAX();
 	}
