@@ -141,24 +141,20 @@ public class StandardMouse : BaseDeviceDriver, IMouseDevice
 
 	private void Wait(byte type)
 	{
-		int timeOut = 100000;
+		var timeout = 100000;
 
 		if (type == 0)
 		{
-			for (; timeOut > 0; timeOut--)
+			for (; timeout > 0; timeout--)
 				if ((command.Read8() & 1) == 1)
 					return;
 
 			return;
 		}
-		else
-		{
-			for (; timeOut > 0; timeOut--)
-				if ((command.Read8() & 2) == 0)
-					return;
 
-			return;
-		}
+		for (; timeout > 0; timeout--)
+			if ((command.Read8() & 2) == 0)
+				return;
 	}
 
 	private void WriteRegister(byte value)

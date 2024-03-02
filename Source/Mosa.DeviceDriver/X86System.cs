@@ -11,22 +11,15 @@ namespace Mosa.DeviceDriver;
 /// </summary>
 public class X86System : BaseDeviceDriver
 {
-	public override void Initialize()
-	{
-		Device.Name = "X86System";
-	}
+	public override void Initialize() => Device.Name = "X86System";
 
-	public override void Probe()
-	{
-		Device.Status = DeviceStatus.Available;
-	}
+	public override void Probe() => Device.Status = DeviceStatus.Available;
 
 	public override void Start()
 	{
 		HAL.DebugWriteLine("X86System:Start()");
 
 		CreateISABusDevices();
-
 		Device.Status = DeviceStatus.Online;
 
 		HAL.DebugWriteLine("X86System:Start() [Exit]");
@@ -34,7 +27,7 @@ public class X86System : BaseDeviceDriver
 
 	public override bool OnInterrupt() => true;
 
-	protected void CreateISABusDevices()
+	private void CreateISABusDevices()
 	{
 		HAL.DebugWriteLine("X86System:CreateISABusDevices()");
 

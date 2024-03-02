@@ -9,48 +9,31 @@ namespace Mosa.DeviceDriver.ScanCodeMap;
 /// </summary>
 public class HU : IScanCodeMap
 {
-	private bool _shifted;
-	private bool _alted;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="HU"/> class.
-	/// </summary>
-	public HU()
-	{
-		_shifted = false;
-		_alted = false;
-	}
+	private bool shift, alt;
 
 	private char TransformCharacter(char c)
 	{
-		if (_alted)
+		if (!alt) return shift ? char.ToUpper(c) : c;
+
+		return c switch
 		{
-			switch (c)
-			{
-				case 'q': return '\\';
-				case 'w': return '|';
-
-				case 'f': return '[';
-				case 'g': return ']';
-				case 'é': return '$';
-
-				case 'í': return '<';
-				case 'y': return '>';
-				case 'x': return '#';
-				case 'c': return '&';
-				case 'v': return '@';
-				case 'b': return '{';
-				case 'n': return '}';
-				case ',': return ';';
-				case '.': return '>';
-				case '-': return '*';
-			}
-		}
-
-		if (_shifted)
-			return char.ToUpper(c);
-
-		return c;
+			'q' => '\\',
+			'w' => '|',
+			'f' => '[',
+			'g' => ']',
+			'é' => '$',
+			'í' => '<',
+			'y' => '>',
+			'x' => '#',
+			'c' => '&',
+			'v' => '@',
+			'b' => '{',
+			'n' => '}',
+			',' => ';',
+			'.' => '>',
+			'-' => '*',
+			_ => shift ? char.ToUpper(c) : c
+		};
 	}
 
 	/// <summary>
@@ -71,15 +54,15 @@ public class HU : IScanCodeMap
 		switch (scancode & 0x7F)
 		{
 			case 1: key.Character = (char)27; break;
-			case 2: key.Character = _shifted ? '\'' : '1'; break;
-			case 3: key.Character = _shifted ? '"' : '2'; break;
-			case 4: key.Character = _shifted ? '+' : '3'; break;
-			case 5: key.Character = _shifted ? '!' : '4'; break;
-			case 6: key.Character = _shifted ? '%' : '5'; break;
-			case 7: key.Character = _shifted ? '/' : '6'; break;
-			case 8: key.Character = _shifted ? '=' : '7'; break;
-			case 9: key.Character = _shifted ? '(' : '8'; break;
-			case 10: key.Character = _shifted ? ')' : '9'; break;
+			case 2: key.Character = shift ? '\'' : '1'; break;
+			case 3: key.Character = shift ? '"' : '2'; break;
+			case 4: key.Character = shift ? '+' : '3'; break;
+			case 5: key.Character = shift ? '!' : '4'; break;
+			case 6: key.Character = shift ? '%' : '5'; break;
+			case 7: key.Character = shift ? '/' : '6'; break;
+			case 8: key.Character = shift ? '=' : '7'; break;
+			case 9: key.Character = shift ? '(' : '8'; break;
+			case 10: key.Character = shift ? ')' : '9'; break;
 			case 11: key.Character = TransformCharacter('ö'); break;
 			case 12: key.Character = TransformCharacter('ü'); break;
 			case 13: key.Character = TransformCharacter('ó'); break;
@@ -120,11 +103,10 @@ public class HU : IScanCodeMap
 			case 48: key.Character = TransformCharacter('b'); break;
 			case 49: key.Character = TransformCharacter('n'); break;
 			case 50: key.Character = TransformCharacter('m'); break;
-			case 51: key.Character = _shifted ? '?' : ','; break;
-			case 52: key.Character = _shifted ? ':' : '.'; break;
-			case 53: key.Character = _shifted ? '_' : '-'; break;
+			case 51: key.Character = shift ? '?' : ','; break;
+			case 52: key.Character = shift ? ':' : '.'; break;
+			case 53: key.Character = shift ? '_' : '-'; break;
 			case 54: key.KeyType = KeyType.RightShift; break;
-
 			case 56: key.KeyType = KeyType.LeftAlt; break;
 			case 57: key.Character = ' '; break;
 			case 58: key.KeyType = KeyType.CapsLock; break;
@@ -145,7 +127,6 @@ public class HU : IScanCodeMap
 			case 73: key.KeyType = KeyType.PageUp; break;
 			case 74: key.Character = '-'; break;
 			case 75: key.KeyType = KeyType.LeftArrow; break;
-
 			case 77: key.KeyType = KeyType.RightArrow; break;
 			case 78: key.Character = '+'; break;
 			case 79: key.KeyType = KeyType.End; break;
@@ -153,21 +134,30 @@ public class HU : IScanCodeMap
 			case 81: key.KeyType = KeyType.PageDown; break;
 			case 82: key.KeyType = KeyType.Insert; break;
 			case 83: key.KeyType = KeyType.Delete; break;
-
 			case 86: key.Character = TransformCharacter('<'); break;
 			case 87: key.KeyType = KeyType.F11; break;
 			case 88: key.KeyType = KeyType.F12; break;
-
-			default: //Unmapped buttons (which doesn't exist on a hungarian keyboard)
-				return new KeyEvent();
+			default: return new KeyEvent(); // Unmapped buttons (which doesn't exist on a hungarian keyboard)
 		}
 
-		if (key.KeyType is KeyType.LeftShift or KeyType.RightShift)
-			_shifted = key.KeyPress == KeyEvent.KeyPressType.Make;
-		if (key.KeyType == KeyType.CapsLock)
-			_shifted = !_shifted;
-		if (key.KeyType == KeyType.LeftAlt)
-			_alted = key.KeyPress == KeyEvent.KeyPressType.Make;
+		switch (key.KeyType)
+		{
+			case KeyType.LeftShift or KeyType.RightShift:
+				{
+					shift = key.KeyPress == KeyEvent.KeyPressType.Make;
+					break;
+				}
+			case KeyType.CapsLock:
+				{
+					shift = !shift;
+					break;
+				}
+			case KeyType.LeftAlt:
+				{
+					alt = key.KeyPress == KeyEvent.KeyPressType.Make;
+					break;
+				}
+		}
 
 		return key;
 	}

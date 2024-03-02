@@ -14,10 +14,7 @@ public class PCService : BaseService
 	private DeviceService deviceService;
 	private IACPI ACPI;
 
-	protected override void Initialize()
-	{
-		deviceService = ServiceManager.GetFirstService<DeviceService>();
-	}
+	protected override void Initialize() => deviceService = ServiceManager.GetFirstService<DeviceService>();
 
 	public bool Reset()
 	{

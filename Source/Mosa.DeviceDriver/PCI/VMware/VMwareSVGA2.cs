@@ -8,15 +8,6 @@
  *
  */
 
-// References:
-// https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/blob/master/src/svga_reg.h
-// https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/blob/master/src/guest_os.h
-// https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/blob/master/src/svga_limits.h
-// https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/blob/master/src/svga_modes.h
-// https://sourceforge.net/p/vmware-svga/git/ci/master/tree/lib/vmware/svga_reg.h
-// https://sourceforge.net/p/vmware-svga/git/ci/master/tree/lib/refdriver/svga.c
-// https://github.com/prepare/vmware-svga
-
 using System;
 using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.Graphics;
@@ -25,6 +16,14 @@ using Mosa.DeviceSystem.Misc;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.PCI.VMware;
+
+//https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/blob/master/src/svga_reg.h
+//https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/blob/master/src/guest_os.h
+//https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/blob/master/src/svga_limits.h
+//https://gitlab.freedesktop.org/xorg/driver/xf86-video-vmware/-/blob/master/src/svga_modes.h
+//https://sourceforge.net/p/vmware-svga/git/ci/master/tree/lib/vmware/svga_reg.h
+//https://sourceforge.net/p/vmware-svga/git/ci/master/tree/lib/refdriver/svga.c
+//https://github.com/prepare/vmware-svga
 
 /// <summary>
 /// VMware SVGA II Device Driver
@@ -199,9 +198,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 	#endregion Definitions
 
 	private IOPortReadWrite indexPort, valuePort;
-
 	private uint vramSize, bufferSize, fifoSize, capabilities;
-
 	private ConstrainedPointer buffer, fifo;
 
 	public FrameBuffer32 FrameBuffer { get; private set; }
@@ -218,10 +215,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		valuePort = Device.Resources.GetIOPortReadWrite(0, 1);
 	}
 
-	public override void Probe()
-	{
-		Device.Status = DeviceStatus.Available;
-	}
+	public override void Probe() => Device.Status = DeviceStatus.Available;
 
 	public override void Start()
 	{
@@ -265,31 +259,22 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		Enable();
 		WriteRegister(SvgaRegister.ConfigDone, 1);
 
-		bufferSize = ReadRegister(SvgaRegister.FrameBufferSize);
 		var frame = new Pointer(ReadRegister(SvgaRegister.FrameBufferStart));
-
-		buffer = HAL.GetPhysicalMemory(frame, bufferSize);
-
 		var offset = ReadRegister(SvgaRegister.FrameBufferOffset);
 		var bytesPerLine = ReadRegister(SvgaRegister.BytesPerLine);
 
+		bufferSize = ReadRegister(SvgaRegister.FrameBufferSize);
+		buffer = HAL.GetPhysicalMemory(frame, bufferSize);
 		FrameBuffer = new FrameBuffer32(buffer, width, height, (x, y) => offset + y * bytesPerLine + x * 4);
 	}
 
-	public void Disable()
-	{
-		WriteRegister(SvgaRegister.Enable, 0);
-	}
+	public void Disable() => WriteRegister(SvgaRegister.Enable, 0);
 
-	public void Enable()
-	{
-		WriteRegister(SvgaRegister.Enable, 1);
-	}
+	public void Enable() => WriteRegister(SvgaRegister.Enable, 1);
 
 	public void Update(uint x, uint y, uint width, uint height)
 	{
 		WriteToFifo(FifoCommand.Update);
-
 		WriteToFifo(x);
 		WriteToFifo(y);
 		WriteToFifo(width);
@@ -302,7 +287,6 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 			throw new InvalidOperationException();
 
 		WriteToFifo(FifoCommand.RectCopy);
-
 		WriteToFifo(x);
 		WriteToFifo(y);
 		WriteToFifo(newX);
@@ -311,10 +295,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		WriteToFifo(height);
 	}
 
-	public bool SupportsHardwareCursor()
-	{
-		return (capabilities & SvgaCapability.AlphaCursor) != 0;
-	}
+	public bool SupportsHardwareCursor() => (capabilities & SvgaCapability.AlphaCursor) != 0;
 
 	public void DefineCursor(FrameBuffer32 image)
 	{
@@ -328,8 +309,8 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 		WriteToFifo(image.Width); // Width
 		WriteToFifo(image.Height); // Height
 
-		for (uint y = 0; y < image.Height; y++)
-			for (uint x = 0; x < image.Width; x++)
+		for (var y = 0U; y < image.Height; y++)
+			for (var x = 0U; x < image.Width; x++)
 				WriteToFifo(image.GetPixel(x, y));
 	}
 
@@ -365,15 +346,9 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 
 	#region FIFO
 
-	private void WriteFifoRegister(uint index, uint value)
-	{
-		fifo.Write32(index * 4, value);
-	}
+	private void WriteFifoRegister(uint index, uint value) => fifo.Write32(index * 4, value);
 
-	private uint ReadFifoRegister(uint index)
-	{
-		return fifo.Read32(index * 4);
-	}
+	private uint ReadFifoRegister(uint index) => fifo.Read32(index * 4);
 
 	private void WaitForFifo()
 	{
@@ -396,10 +371,7 @@ public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 			WriteFifoRegister(FifoRegister.NextCmd, ReadFifoRegister(FifoRegister.Min));
 	}
 
-	private bool HasFifoCapability(uint capability)
-	{
-		return (ReadFifoRegister(FifoRegister.Capabilities) & capability) != 0;
-	}
+	private bool HasFifoCapability(uint capability) => (ReadFifoRegister(FifoRegister.Capabilities) & capability) != 0;
 
 	#endregion FIFO
 }

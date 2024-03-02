@@ -43,7 +43,6 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	public override void Probe()
 	{
 		configAddress.Write32(BaseValue);
-
 		var found = configAddress.Read32() == BaseValue;
 
 		Device.Status = found ? DeviceStatus.Available : DeviceStatus.NotFound;
@@ -52,9 +51,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 	public override void Start()
 	{
 		if (Device.Status == DeviceStatus.Available)
-		{
 			Device.Status = DeviceStatus.Online;
-		}
 	}
 
 	/// <summary>
@@ -80,7 +77,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 			   | (uint)(register & 0xFC);
 	}
 
-	#region IPCIController
+	#region IPCIControllerLegacy
 
 	/// <summary>
 	/// Reads from configuration space
@@ -166,9 +163,9 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 		configData.Write8(value);
 	}
 
-	#endregion IPCIController
+	#endregion IPCIControllerLegacy
 
-	#region IPCIController v2
+	#region IPCIController
 
 	/// <summary>
 	/// Reads from configuration space
@@ -242,5 +239,5 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 		configData.Write8(value);
 	}
 
-	#endregion IPCIController v2
+	#endregion IPCIController
 }
