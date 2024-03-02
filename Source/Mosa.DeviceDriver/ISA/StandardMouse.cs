@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.HardwareAbstraction;
+using Mosa.DeviceSystem.Mouse;
 
 namespace Mosa.DeviceDriver.ISA;
 //https://github.com/nifanfa/MOSA-Core/blob/master/Source/Mosa.External.x86/Driver/Input/PS2Mouse.cs

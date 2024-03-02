@@ -18,8 +18,10 @@
 // https://github.com/prepare/vmware-svga
 
 using System;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.Graphics;
+using Mosa.DeviceSystem.HardwareAbstraction;
+using Mosa.DeviceSystem.Misc;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.PCI.VMware;

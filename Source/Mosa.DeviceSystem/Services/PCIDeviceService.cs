@@ -2,6 +2,9 @@
 
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.Framework.PCI;
+using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem.Services;

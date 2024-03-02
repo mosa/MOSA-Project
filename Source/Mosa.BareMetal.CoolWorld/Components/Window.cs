@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Drawing;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Mouse;
 
 namespace Mosa.BareMetal.CoolWorld.Components;
 

@@ -2,7 +2,8 @@
 
 using System.IO.Hashing;
 using System.Text;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Disks;
+using Mosa.DeviceSystem.Misc;
 
 namespace Mosa.Utility.BootImage;
 
