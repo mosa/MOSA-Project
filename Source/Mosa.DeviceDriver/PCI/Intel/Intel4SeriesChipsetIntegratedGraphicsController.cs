@@ -9,8 +9,5 @@ namespace Mosa.DeviceDriver.PCI.Intel;
 /// </summary>
 public class Intel4SeriesChipsetIntegratedGraphicsController : BaseDeviceDriver
 {
-	public override void Initialize()
-	{
-		Device.Name = "Intel4SeriesChipsetIntegratedGraphicsController";
-	}
+	public override void Initialize() => Device.Name = "Intel4SeriesChipsetIntegratedGraphicsController";
 }

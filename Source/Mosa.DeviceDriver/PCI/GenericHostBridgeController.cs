@@ -14,10 +14,7 @@ public class GenericHostBridgeController : BaseDeviceDriver, IHostBridgeControll
 	private byte resetAddress;
 	private byte resetValue;
 
-	public override void Initialize()
-	{
-		Device.Name = "GenericHostBridgeController";
-	}
+	public override void Initialize() => Device.Name = "GenericHostBridgeController";
 
 	public override void Probe() => Device.Status = DeviceStatus.Available;
 

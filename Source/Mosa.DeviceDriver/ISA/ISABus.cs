@@ -13,23 +13,19 @@ namespace Mosa.DeviceDriver.ISA;
 /// </summary>
 public class ISABus : BaseDeviceDriver
 {
-	public override void Initialize()
-	{
-		Device.Name = "ISA-BUS";
-	}
+	public override void Initialize() => Device.Name = "ISA-BUS";
 
 	public override void Probe() => Device.Status = DeviceStatus.Available;
 
 	public override void Start()
 	{
 		Device.Status = DeviceStatus.Online;
-
-		StartISADevices();
+		StartDevices();
 	}
 
 	public override bool OnInterrupt() => true;
 
-	protected void StartISADevices()
+	private void StartDevices()
 	{
 		HAL.DebugWriteLine("ISABus:StartISADevices()");
 
@@ -38,19 +34,18 @@ public class ISABus : BaseDeviceDriver
 
 		foreach (var driver in drivers)
 		{
-			if (driver is ISADeviceDriverRegistryEntry)
-			{
-				HAL.DebugWrite(" > ISA Driver: ");
-				HAL.DebugWriteLine(driver.Name);
+			if (driver is not ISADeviceDriverRegistryEntry entry)
+				continue;
 
-				StartISADevice(driver as ISADeviceDriverRegistryEntry);
-			}
+			HAL.DebugWrite(" > ISA Driver: ");
+			HAL.DebugWriteLine(entry.Name);
+			StartDevice(entry);
 		}
 
 		HAL.DebugWriteLine("ISABus:StartISADevices() [Exit]");
 	}
 
-	protected void StartISADevice(ISADeviceDriverRegistryEntry driverEntry)
+	private void StartDevice(ISADeviceDriverRegistryEntry driverEntry)
 	{
 		var ioPortRegions = new List<IOPortRegion>();
 		var memoryRegions = new List<AddressRegion>();
@@ -58,14 +53,10 @@ public class ISABus : BaseDeviceDriver
 		ioPortRegions.Add(new IOPortRegion(driverEntry.BasePort, driverEntry.PortRange));
 
 		if (driverEntry.AltBasePort != 0x00)
-		{
 			ioPortRegions.Add(new IOPortRegion(driverEntry.AltBasePort, driverEntry.AltPortRange));
-		}
 
 		if (driverEntry.BaseAddress != 0x00)
-		{
 			memoryRegions.Add(new AddressRegion(new Pointer(driverEntry.BaseAddress), driverEntry.AddressRange));
-		}
 
 		//if (driverEntry.PhysicalMemory != null)
 		//{
@@ -81,7 +72,6 @@ public class ISABus : BaseDeviceDriver
 		//}
 
 		var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, driverEntry.IRQ);
-
 		DeviceService.Initialize(driverEntry, Device, true, null, hardwareResources);
 	}
 }

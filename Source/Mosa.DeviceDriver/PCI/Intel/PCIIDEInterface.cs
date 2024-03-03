@@ -2,10 +2,10 @@
 
 using Mosa.DeviceSystem.Framework;
 
-// PCI ISA IDE Xcelerator (PIIX4)
-// http://www.intel.com/assets/pdf/datasheet/290562.pdf
-
 namespace Mosa.DeviceDriver.PCI.Intel;
+
+// PCI ISA IDE Xcelerator (PIIX4)
+//http://www.intel.com/assets/pdf/datasheet/290562.pdf
 
 /// <summary>
 /// </summary>
@@ -15,8 +15,5 @@ namespace Mosa.DeviceDriver.PCI.Intel;
 //Programming Interface: 80h= Capable of IDE bus master operation.
 public class PCIIDEInterface : BaseDeviceDriver
 {
-	public override void Initialize()
-	{
-		Device.Name = "IDEInterface";
-	}
+	public override void Initialize() => Device.Name = "IDEInterface";
 }

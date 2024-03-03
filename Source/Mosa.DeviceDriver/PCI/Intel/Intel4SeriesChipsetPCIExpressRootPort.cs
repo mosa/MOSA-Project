@@ -9,8 +9,5 @@ namespace Mosa.DeviceDriver.PCI.Intel;
 /// </summary>
 public class Intel4SeriesChipsetPCIExpressRootPort : BaseDeviceDriver
 {
-	public override void Initialize()
-	{
-		Device.Name = "Intel4SeriesChipsetPCIExpressRootPort";
-	}
+	public override void Initialize() => Device.Name = "Intel4SeriesChipsetPCIExpressRootPort";
 }
