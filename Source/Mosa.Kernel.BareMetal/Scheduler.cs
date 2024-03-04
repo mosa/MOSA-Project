@@ -93,8 +93,8 @@ public static class Scheduler
 			return;
 
 		var thread = GetCurrentThread();
-		SaveThreadState(thread, stackSate);
 
+		SaveThreadState(thread, stackSate);
 		ScheduleNextThread(thread);
 	}
 
@@ -107,7 +107,7 @@ public static class Scheduler
 
 		SaveThreadState(thread, stackSate);
 
-		thread.Status = ThreadStatus.Sleeping;
+		Sleep(thread);
 
 		ScheduleNextThread(thread);
 	}
@@ -146,9 +146,9 @@ public static class Scheduler
 			Threads[i] = new Thread(i);
 		}
 
-		var address = GetAddress(IdleThread);
-
 		SignalThreadTerminationMethodAddress = GetAddress(SignalTermination);
+
+		var address = GetAddress(IdleThread);
 
 		CreateThread(address, 2, 0);
 
@@ -167,19 +167,6 @@ public static class Scheduler
 		return Platform.Scheduler.SignalSystemCall();
 	}
 
-	private static Thread CreateThread(ThreadStart thread, uint stackSize)
-	{
-		Debug.WriteLine("Scheduler:CreateThread()");
-
-		var address = GetAddress(thread);
-
-		var newthread = CreateThread(address, stackSize);
-
-		Debug.WriteLine("Scheduler:CreateThread() [Exit]");
-
-		return newthread;
-	}
-
 	internal static void QueueRequestMessage(MessageQueue messageQueue, object data)
 	{
 		var thread = GetCurrentThread();
@@ -192,6 +179,19 @@ public static class Scheduler
 	#endregion Internal API
 
 	#region Private API
+
+	private static Thread CreateThread(ThreadStart thread, uint stackSize)
+	{
+		Debug.WriteLine("Scheduler:CreateThread()");
+
+		var address = GetAddress(thread);
+
+		var newthread = CreateThread(address, stackSize);
+
+		Debug.WriteLine("Scheduler:CreateThread() [Exit]");
+
+		return newthread;
+	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	private static void IdleThread()
@@ -299,6 +299,11 @@ public static class Scheduler
 	private static void SaveThreadState(Thread thread, Pointer stackSate)
 	{
 		thread.StackStatePointer = stackSate;
+	}
+
+	private static void Sleep(Thread thread)
+	{
+		thread.Status = ThreadStatus.Sleeping;
 	}
 
 	private static Thread GetCurrentThread()

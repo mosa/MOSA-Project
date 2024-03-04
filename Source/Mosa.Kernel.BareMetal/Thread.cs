@@ -15,7 +15,8 @@ public class Thread
 	public Pointer StackTop;
 	public Pointer StackBottom;
 	public Pointer StackStatePointer;
-	public uint Ticks;
+	public uint Sequence = 0;
+	public uint Ticks = 0;
 
 	public Thread(uint index)
 	{

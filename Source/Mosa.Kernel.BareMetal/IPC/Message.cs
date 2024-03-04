@@ -2,14 +2,24 @@
 
 namespace Mosa.Kernel.BareMetal.IPC;
 
-public class Message
+internal class Message
 {
-	public object Data;
-	public Thread Thread;
+	public readonly object Data;
+	public readonly uint Sequence;
+	public readonly Thread Thread;
 
 	public Message(object requestData, Thread thread = null)
 	{
 		Data = requestData;
-		Thread = thread;
+
+		if (thread != null)
+		{
+			Thread = thread;
+			Sequence = ++thread.Sequence;
+		}
+		else
+		{
+			Sequence = 0;
+		}
 	}
 }

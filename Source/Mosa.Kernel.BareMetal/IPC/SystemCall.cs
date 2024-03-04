@@ -6,7 +6,7 @@ public static class SystemCall
 {
 	public static object Send(ServiceIdentification serviceID, object data)
 	{
-		var messageQueue = QueueRegistry.Find(serviceID);
+		var messageQueue = ServiceQueueRegistry.Find(serviceID);
 
 		if (messageQueue == null)
 			return null;
