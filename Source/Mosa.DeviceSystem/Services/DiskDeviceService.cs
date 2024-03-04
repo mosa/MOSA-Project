@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.CompilerServices;
+using Mosa.DeviceSystem.Disks;
 
 namespace Mosa.DeviceSystem.Services;
 
@@ -23,7 +24,7 @@ public class DiskDeviceService : BaseService
 
 		var deviceService = device.DeviceService;
 
-		for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
+		for (var drive = 0U; drive < controller.MaximumDriveCount; drive++)
 		{
 			if (!controller.Open(drive))
 				continue;

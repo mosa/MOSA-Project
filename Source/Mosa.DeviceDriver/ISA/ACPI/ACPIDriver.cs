@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.Runtime;
 
 // Portions of this code are from Cosmos
@@ -44,17 +45,13 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 	public override void Initialize()
 	{
 		Device.Name = "ACPI";
+		//Setup();
 	}
 
 	/// <summary>
 	/// Probes this instance.
 	/// </summary>
-	public override void Probe()
-	{
-		//Device.Status = DeviceStatus.Available;
-		Device.Status = DeviceStatus.Offline;
-		//Setup();
-	}
+	public override void Probe() => Device.Status = DeviceStatus.Offline; // Future: Should be "Available"
 
 	/// <summary>
 	/// Starts this hardware device.
@@ -215,6 +212,6 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 		return Pointer.Zero;
 	}
 
-	private static int CalculateSignatureValue(string signature)
-		=> ((byte)signature[0] & 0xFF) | (((byte)signature[1] & 0xFF) << 8) | (((byte)signature[2] & 0xFF) << 16) | (((byte)signature[3] & 0xFF) << 24);
+	private static int CalculateSignatureValue(string signature) =>
+		((byte)signature[0] & 0xFF) | (((byte)signature[1] & 0xFF) << 8) | (((byte)signature[2] & 0xFF) << 16) | (((byte)signature[3] & 0xFF) << 24);
 }

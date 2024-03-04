@@ -2,8 +2,8 @@
 
 using System;
 using System.Drawing;
-using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.Fonts;
+using Mosa.DeviceSystem.Mouse;
 
 namespace Mosa.BareMetal.CoolWorld.Components;
 

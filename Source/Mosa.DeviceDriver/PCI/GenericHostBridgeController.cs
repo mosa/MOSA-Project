@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDriver.PCI;
@@ -14,10 +14,7 @@ public class GenericHostBridgeController : BaseDeviceDriver, IHostBridgeControll
 	private byte resetAddress;
 	private byte resetValue;
 
-	public override void Initialize()
-	{
-		Device.Name = "GenericHostBridgeController";
-	}
+	public override void Initialize() => Device.Name = "GenericHostBridgeController";
 
 	public override void Probe() => Device.Status = DeviceStatus.Available;
 

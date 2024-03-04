@@ -1,6 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.CompilerServices;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.Framework.PCI;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem.Services;

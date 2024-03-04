@@ -1,5 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.HardwareAbstraction;
+using Mosa.DeviceSystem.Misc;
 using Mosa.DeviceSystem.PCI;
 using Mosa.Runtime;
 

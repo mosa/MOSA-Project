@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Disks;
 
 namespace Mosa.BareMetal.HelloWorld.Apps;
 

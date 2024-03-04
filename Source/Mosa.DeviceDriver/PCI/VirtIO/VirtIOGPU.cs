@@ -1,8 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.Graphics;
+using Mosa.DeviceSystem.HardwareAbstraction;
+using Mosa.DeviceSystem.Misc;
 using Mosa.DeviceSystem.VirtIO;
 using Mosa.Runtime;
 
@@ -44,7 +46,7 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 		public const byte Size = 24;
 	}
 
-	private VirtIODevice virtIoDevice;
+	private VirtIODevice virtIODevice;
 	private Pointer resourceHeader;
 	private Pointer backingHeader;
 	private Pointer linkHeader;
@@ -57,25 +59,23 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 	{
 		Device.Name = "VIRTIO_GPU";
 
-		virtIoDevice = new VirtIODevice(Device);
-		virtIoDevice.StartInitialize();
+		virtIODevice = new VirtIODevice(Device);
+		virtIODevice.StartInitialize();
 
 		var deviceFeatures = (uint)VirtIOFeatures.Version1;
+		if ((virtIODevice.DeviceFeatures & VirtIOFeatures.InOrder) != 0) deviceFeatures |= VirtIOFeatures.InOrder;
 
-		if ((virtIoDevice.DeviceFeatures & VirtIOFeatures.InOrder) != 0) deviceFeatures |= VirtIOFeatures.InOrder;
+		virtIODevice.SelectFeatures(deviceFeatures);
+		virtIODevice.EndInitialize();
 
-		virtIoDevice.SelectFeatures(deviceFeatures);
-		virtIoDevice.EndInitialize();
-
-		var scanOuts = virtIoDevice.DeviceConfigurationPointer.Read32(virtIoDevice.DeviceConfigurationOffset + Configuration.NumScanOuts);
-
+		var scanOuts = virtIODevice.DeviceConfigurationPointer.Read32(virtIODevice.DeviceConfigurationOffset + Configuration.NumScanOuts);
 		if (scanOuts > 1)
 		{
 			HAL.DebugWriteLine("Detected more than 1 scan out!");
 			return;
 		}
 
-		virtIoDevice.Start();
+		virtIODevice.Start();
 
 		resourceHeader = GC.AllocateObject(40); // FIXME - Not a GC object
 		backingHeader = GC.AllocateObject(48); // FIXME
@@ -103,7 +103,7 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 		resourceHeader.Store32(28, 1); // Format
 		resourceHeader.Store32(32, width);
 		resourceHeader.Store32(36, height);
-		virtIoDevice.SendHeader(Queues.ControlQueue, resourceHeader, 40);
+		virtIODevice.SendHeader(Queues.ControlQueue, resourceHeader, 40);
 
 		// Allocate framebuffer
 		var frameBufferSize = width * height * 4;
@@ -116,7 +116,7 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 		backingHeader.Store32(28, 1);
 		backingHeader.Store64(32, frameBuffer.ToUInt64());
 		backingHeader.Store32(40, frameBufferSize);
-		virtIoDevice.SendHeader(Queues.ControlQueue, backingHeader, 48);
+		virtIODevice.SendHeader(Queues.ControlQueue, backingHeader, 48);
 
 		// Link the scan out
 		linkHeader.Store32(ControlHeader.Type, 0x0103);
@@ -126,14 +126,12 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 		linkHeader.Store32(36, height);
 		linkHeader.Store32(40, 0);
 		linkHeader.Store32(44, 1);
-		virtIoDevice.SendHeader(Queues.ControlQueue, linkHeader, 48);
+		virtIODevice.SendHeader(Queues.ControlQueue, linkHeader, 48);
 	}
 
-	public void Disable()
-	{ }
+	public void Disable() { }
 
-	public void Enable()
-	{ }
+	public void Enable() { }
 
 	public void Update(uint x, uint y, uint width, uint height)
 	{
@@ -145,7 +143,7 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 		transferHeader.Store32(36, height);
 		transferHeader.Store64(40, 0UL);
 		transferHeader.Store32(48, 1);
-		virtIoDevice.SendHeader(Queues.ControlQueue, transferHeader, 56);
+		virtIODevice.SendHeader(Queues.ControlQueue, transferHeader, 56);
 
 		// Flush resource
 		flushHeader.Store32(ControlHeader.Type, 0x0104);
@@ -154,26 +152,14 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 		flushHeader.Store32(32, width);
 		flushHeader.Store32(36, height);
 		flushHeader.Store32(40, 1);
-		virtIoDevice.SendHeader(Queues.ControlQueue, flushHeader, 48);
+		virtIODevice.SendHeader(Queues.ControlQueue, flushHeader, 48);
 	}
 
-	public void CopyRectangle(uint x, uint y, uint newX, uint newY, uint width, uint height)
-	{
-		throw new NotImplementedException();
-	}
+	public void CopyRectangle(uint x, uint y, uint newX, uint newY, uint width, uint height) => throw new NotImplementedException();
 
-	public bool SupportsHardwareCursor()
-	{
-		return false;
-	}
+	public bool SupportsHardwareCursor() => false;
 
-	public void DefineCursor(FrameBuffer32 image)
-	{
-		throw new NotImplementedException();
-	}
+	public void DefineCursor(FrameBuffer32 image) => throw new NotImplementedException();
 
-	public void SetCursor(bool visible, uint x, uint y)
-	{
-		throw new NotImplementedException();
-	}
+	public void SetCursor(bool visible, uint x, uint y) => throw new NotImplementedException();
 }

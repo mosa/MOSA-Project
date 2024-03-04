@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem;
+namespace Mosa.DeviceSystem.Framework;
 
 /// <summary>
 /// Abstract class for hardware devices
@@ -9,15 +9,11 @@ public abstract class BaseDeviceDriver
 {
 	protected Device Device;
 
-	/* protected DeviceService DeviceService { get { return Device.DeviceService; } } */
-
-	protected object _lock = new object();
-
 	/// <summary>
 	/// Sets up the this device.
 	/// </summary>
 	/// <param name="device">The device.</param>
-	public virtual void Setup(Device device)
+	public void Setup(Device device)
 	{
 		Device = device;
 		Device.Status = DeviceStatus.Initializing;
@@ -31,32 +27,16 @@ public abstract class BaseDeviceDriver
 	/// <summary>
 	/// Probes this instance.
 	/// </summary>
-	public virtual void Probe()
-	{
-		Device.Status = DeviceStatus.NotFound;
-	}
+	public virtual void Probe() => Device.Status = DeviceStatus.NotFound;
 
 	/// <summary>
 	/// Starts this hardware device.
 	/// </summary>
-	public virtual void Start()
-	{
-		Device.Status = DeviceStatus.Error;
-	}
-
-	/// <summary>
-	/// Stops this hardware device.
-	/// </summary>
-	public virtual void Stop()
-	{
-	}
+	public virtual void Start() => Device.Status = DeviceStatus.Error;
 
 	/// <summary>
 	/// Called when an interrupt is received.
 	/// </summary>
 	/// <returns></returns>
-	public virtual bool OnInterrupt()
-	{
-		return false;
-	}
+	public virtual bool OnInterrupt() => false;
 }

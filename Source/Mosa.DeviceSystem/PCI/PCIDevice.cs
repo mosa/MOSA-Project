@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.Framework.PCI;
+using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.PCI;
