@@ -4,26 +4,19 @@ namespace Mosa.Kernel.BareMetal.IPC;
 
 public static class SystemCall
 {
-	public static object Send(object obj, uint receiverID, uint senderID)
+	public static object Send(ServiceIdentification serviceID, object data)
 	{
-		// Find object in memory
-		PinObject(obj);
+		var messageQueue = QueueRegistry.Find(serviceID);
 
-		// Raise the interrupt
-		var value = Scheduler.SignalSystemCall(obj, receiverID, senderID);
+		if (messageQueue == null)
+			return null;
 
-		UnpinObject(obj);
+		var message = new Message(data, null);
+
+		messageQueue.Add(message);
+
+		var value = Scheduler.SignalSystemCall();
 
 		return value;
-	}
-
-	private static void PinObject(object obj)
-	{
-		// TODO
-	}
-
-	private static void UnpinObject(object obj)
-	{
-		// TODO
 	}
 }

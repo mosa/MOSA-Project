@@ -145,7 +145,7 @@ public static class PlatformPlug
 		public static void SignalTermination() => Scheduler.SignalTermination();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SignalSystemCall")]
-		public static object SignalSystemCall(object obj, uint receiverID, uint senderID) => Scheduler.SignalSystemCall(obj, receiverID, senderID);
+		public static object SignalSystemCall() => Scheduler.SignalSystemCall();
 
 		[Plug("Mosa.Kernel.BareMetal.Platform+Scheduler::SwitchToThread")]
 		public static void SwitchToThread(Thread thread) => Scheduler.SwitchToThread(thread);

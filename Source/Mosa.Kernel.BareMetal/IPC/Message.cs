@@ -4,8 +4,12 @@ namespace Mosa.Kernel.BareMetal.IPC;
 
 public class Message
 {
-	public uint ReceiverID;
-	public uint SenderID;
-
 	public object Data;
+	public Thread Thread;
+
+	public Message(object requestData, Thread thread = null)
+	{
+		Data = requestData;
+		Thread = thread;
+	}
 }
