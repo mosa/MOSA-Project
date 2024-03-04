@@ -160,9 +160,6 @@ public static unsafe class Native
 	[DllImport("Mosa.Compiler.x86.Intrinsic::Set32")]
 	public static extern void Set32(uint address, uint value);
 
-	[DllImport("Mosa.Compiler.x86.Intrinsic::SetEAX")]
-	public static extern void SetEAX(uint value);
-
 	[DllImport("Mosa.Compiler.x86.Intrinsic::GetEAX")]
 	public static extern uint GetEAX();
 

@@ -78,6 +78,7 @@ public static class IR
 	public static readonly BaseInstruction FinallyStart = new FinallyStart();
 	public static readonly BaseInstruction Flow = new Flow();
 	public static readonly BaseInstruction Gen = new Gen();
+	public static readonly BaseInstruction Use = new Use();
 	public static readonly BaseInstruction IntrinsicMethodCall = new IntrinsicMethodCall();
 	public static readonly BaseInstruction IsInstanceOfType = new IsInstanceOfType();
 	public static readonly BaseInstruction IsInstanceOfInterfaceType = new IsInstanceOfInterfaceType();

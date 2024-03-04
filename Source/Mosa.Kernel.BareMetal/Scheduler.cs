@@ -1,8 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using Mosa.Kernel.BareMetal.IPC;
 using Mosa.Runtime;
+
+// NOTE: The scheduler called from the interrupt handler may not allocate memory!
 
 namespace Mosa.Kernel.BareMetal;
 
@@ -10,7 +14,7 @@ public static class Scheduler
 {
 	#region Private Members
 
-	private const int MaxThreads = 256;
+	private const int MaxThreads = 4096;
 
 	private static Pointer SignalThreadTerminationMethodAddress;
 
@@ -18,9 +22,11 @@ public static class Scheduler
 
 	private static bool Enabled;
 
-	private static uint CurrentThreadID;
+	private static Thread CurrentThread;
 
 	private static int clockTicks;
+
+	private static uint NextThreadID;
 
 	private static uint DefaultStackSize => Page.Size * 8;
 
@@ -38,7 +44,8 @@ public static class Scheduler
 	{
 		Debug.WriteLine("Scheduler:Start()");
 
-		SetThreadID(0);
+		SetCurrentThread(null);
+		NextThreadID = 1;
 		Enabled = true;
 
 		Platform.Scheduler.Start();
@@ -48,7 +55,7 @@ public static class Scheduler
 
 	public static uint CreateThread(ThreadStart thread)
 	{
-		return CreateThread(thread, DefaultStackSize);
+		return CreateThread(thread, DefaultStackSize).Index;
 	}
 
 	public static void ClockInterrupt(Pointer stackSate)
@@ -59,10 +66,10 @@ public static class Scheduler
 		Interlocked.Increment(ref clockTicks);
 
 		// Save current stack state
-		var threadID = GetCurrentThreadID();
-		SaveThreadState(threadID, stackSate);
+		var thread = GetCurrentThread();
+		SaveThreadState(thread, stackSate);
 
-		ScheduleNextThread(threadID);
+		ScheduleNextThread(thread);
 	}
 
 	public static void TerminateCurrentThread()
@@ -70,35 +77,54 @@ public static class Scheduler
 		if (!Enabled)
 			return;
 
-		var threadID = GetCurrentThreadID();
+		var thread = GetCurrentThread();
 
-		if (threadID != 0)
+		if (thread != null)
 		{
-			TerminateThread(threadID);
+			TerminateThread(thread);
 		}
 
-		ScheduleNextThread(threadID);
+		ScheduleNextThread(thread);
 	}
 
-	public static void SystemCall(Pointer request)
+	public static void YieldCurrentThread(Pointer stackSate)
 	{
-		var threadID = GetCurrentThreadID();
+		if (!Enabled)
+			return;
 
-		// TODO: Put the request somewhere
+		var thread = GetCurrentThread();
 
-		SleepThread(threadID);
-		ScheduleNextThread(threadID);
+		SaveThreadState(thread, stackSate);
+		ScheduleNextThread(thread);
+	}
+
+	public static void SystemCall(Pointer stackSate, Pointer data)
+	{
+		if (!Enabled)
+			return;
+
+		var thread = GetCurrentThread();
+
+		SaveThreadState(thread, stackSate);
+
+		Sleep(thread);
+
+		ScheduleNextThread(thread);
 	}
 
 	public static void SetSystemCallReturn(uint threadID, object response)
 	{
 		var thread = Threads[threadID];
 
-		Platform.Scheduler.SetReturnObject(thread.StackTop, Intrinsic.GetObjectAddress(response));
-
 		if (thread.Status == ThreadStatus.Sleeping)
 		{
+			Platform.Scheduler.SetReturnObject(thread.StackTop, Intrinsic.GetObjectAddress(response));
+
 			thread.Status = ThreadStatus.Running;
+		}
+		else
+		{
+			Debug.WriteLine("WARNING: Thread not sleep");
 		}
 	}
 
@@ -112,17 +138,17 @@ public static class Scheduler
 
 		Enabled = false;
 		Threads = new Thread[MaxThreads];
-		CurrentThreadID = 0;
+		CurrentThread = null;
 		clockTicks = 0;
 
-		for (var i = 0; i < MaxThreads; i++)
+		for (var i = 0u; i < MaxThreads; i++)
 		{
-			Threads[i] = new Thread();
+			Threads[i] = new Thread(i);
 		}
 
-		var address = GetAddress(IdleThread);
-
 		SignalThreadTerminationMethodAddress = GetAddress(SignalTermination);
+
+		var address = GetAddress(IdleThread);
 
 		CreateThread(address, 2, 0);
 
@@ -136,12 +162,25 @@ public static class Scheduler
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	internal static object SignalSystemCall(object obj)
+	internal static object SignalSystemCall()
 	{
-		return Platform.Scheduler.SignalSystemCall(obj);
+		return Platform.Scheduler.SignalSystemCall();
 	}
 
-	private static uint CreateThread(ThreadStart thread, uint stackSize)
+	internal static void QueueRequestMessage(MessageQueue messageQueue, object data)
+	{
+		var thread = GetCurrentThread();
+
+		var message = new Message(data, thread);
+
+		//
+	}
+
+	#endregion Internal API
+
+	#region Private API
+
+	private static Thread CreateThread(ThreadStart thread, uint stackSize)
 	{
 		Debug.WriteLine("Scheduler:CreateThread()");
 
@@ -154,10 +193,6 @@ public static class Scheduler
 		return newthread;
 	}
 
-	#endregion Internal API
-
-	#region Private API
-
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	private static void IdleThread()
 	{
@@ -167,17 +202,15 @@ public static class Scheduler
 		}
 	}
 
-	private static void ScheduleNextThread(uint threadID)
+	private static void ScheduleNextThread(Thread currentThread)
 	{
-		threadID = GetNextThread(threadID);
-		SwitchToThread(threadID);
+		var thread = GetNextThread(currentThread);
+		SwitchToThread(thread);
 	}
 
-	private static void TerminateThread(uint threadID)
+	private static void TerminateThread(Thread thread)
 	{
-		var thread = Threads[threadID];
-
-		if (thread.Status == ThreadStatus.Running)
+		if (thread.Status == ThreadStatus.Running || thread.Status == ThreadStatus.Sleeping)
 		{
 			thread.Status = ThreadStatus.Terminating;
 
@@ -185,34 +218,29 @@ public static class Scheduler
 		}
 	}
 
-	private static void SleepThread(uint threadID)
+	private static Thread GetNextThread(Thread currentThread)
 	{
-		var thread = Threads[threadID];
+		var currentIndex = currentThread.Index;
 
-		thread.Status = ThreadStatus.Sleeping;
-	}
+		if (currentIndex == 0)
+			currentIndex = 1;
 
-	private static uint GetNextThread(uint currentThreadID)
-	{
-		uint threadID = currentThreadID;
-
-		if (currentThreadID == 0)
-			currentThreadID = 1;
+		var index = currentIndex;
 
 		while (true)
 		{
-			threadID++;
+			index++;
 
-			if (threadID == MaxThreads)
-				threadID = 1;
+			if (index == MaxThreads)
+				index = 1;
 
-			var thread = Threads[threadID];
+			var thread = Threads[index];
 
 			if (thread.Status == ThreadStatus.Running)
-				return threadID;
+				return thread;
 
-			if (currentThreadID == threadID)
-				return 0; // idle thread
+			if (currentIndex == index)
+				return null; // idle thread
 		}
 	}
 
@@ -226,26 +254,26 @@ public static class Scheduler
 		return Intrinsic.GetDelegateTargetAddress(d);
 	}
 
-	private static uint CreateThread(Pointer methodAddress, uint stackSize)
+	private static Thread CreateThread(Pointer methodAddress, uint stackSize)
 	{
 		Debug.WriteLine("Scheduler:CreateThread(Pointer,uint)");
 
-		var threadID = FindEmptyThreadSlot();
+		var index = FindEmptyThreadSlot();
 
-		if (threadID == 0)
+		if (index == 0)
 		{
 			ResetTerminatedThreads();
-			threadID = FindEmptyThreadSlot();
+			index = FindEmptyThreadSlot();
 		}
 
-		CreateThread(methodAddress, stackSize, threadID);
+		var thread = CreateThread(methodAddress, stackSize, index);
 
 		Debug.WriteLine("Scheduler:CreateThread(Pointer,uint) [Exit]");
 
-		return threadID;
+		return thread;
 	}
 
-	private static void CreateThread(Pointer methodAddress, uint pages, uint threadID)
+	private static Thread CreateThread(Pointer methodAddress, uint pages, uint threadID)
 	{
 		Debug.WriteLine("Scheduler:CreateThread(Pointer, uint, uint)");
 
@@ -260,38 +288,39 @@ public static class Scheduler
 		thread.StackBottom = stack;
 		thread.StackTop = stackTop;
 		thread.StackStatePointer = bottom;
+		thread.Ticks = 0;
+		thread.ID = NextThreadID++;
 
 		Debug.WriteLine("Scheduler:CreateThread(Pointer, uint, uint) [Exit]");
+
+		return thread;
 	}
 
-	private static void SaveThreadState(uint threadID, Pointer stackSate)
+	private static void SaveThreadState(Thread thread, Pointer stackSate)
 	{
-		//Assert.True(threadID < MaxThreads, "SaveThreadState(): invalid thread id > max");
-
-		var thread = Threads[threadID];
-
-		//Assert.True(thread != null, "SaveThreadState(): thread id = null");
-
 		thread.StackStatePointer = stackSate;
 	}
 
-	private static uint GetCurrentThreadID()
+	private static void Sleep(Thread thread)
 	{
-		return CurrentThreadID;
+		thread.Status = ThreadStatus.Sleeping;
 	}
 
-	private static void SetThreadID(uint threadID)
+	private static Thread GetCurrentThread()
 	{
-		CurrentThreadID = threadID;
+		return CurrentThread;
 	}
 
-	private static void SwitchToThread(uint threadID)
+	private static void SetCurrentThread(Thread thread)
 	{
-		var thread = Threads[threadID];
+		CurrentThread = thread;
+	}
 
+	private static void SwitchToThread(Thread thread)
+	{
 		thread.Ticks++;
 
-		SetThreadID(threadID);
+		SetCurrentThread(thread);
 
 		Platform.Scheduler.SwitchToThread(thread);
 	}

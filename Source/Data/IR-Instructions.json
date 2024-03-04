@@ -462,6 +462,14 @@
 			"VariableOperands": "true"
 		},
 		{
+			"Name": "Use",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
 			"Name": "IntrinsicMethodCall",
 			"FamilyName": "IR",
 			"ResultCount": 0,

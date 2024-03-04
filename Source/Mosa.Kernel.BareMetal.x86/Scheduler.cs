@@ -11,8 +11,9 @@ public static class Scheduler
 {
 	public static class IRQ
 	{
-		public const int SystemCall = 253;
+		public const int SystemCall = 252;
 		public const int Clock = 0x20;
+		public const int ThreadYield = 253;
 		public const int ThreadTermination = 254;
 	}
 
@@ -34,9 +35,8 @@ public static class Scheduler
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static object SignalSystemCall(object obj)
+	public static object SignalSystemCall()
 	{
-		Native.SetEAX(Intrinsic.GetObjectAddress(obj).ToUInt32());
 		Native.Int(IRQ.SystemCall);
 
 		return Native.GetEAX();

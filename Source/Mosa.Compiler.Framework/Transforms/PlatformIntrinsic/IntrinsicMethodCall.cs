@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework.Transforms.PlatformIntrinsic;
 
 /// <summary>
-/// IntrinsicMethodCall
+/// Intrinsic Method Call
 /// </summary>
 public sealed class IntrinsicMethodCall : BaseTransform
 {

@@ -14,6 +14,6 @@ internal static partial class IntrinsicMethods
 	{
 		Helper.FoldOperand1ToConstant(context);
 
-		context.SetInstruction(X86.Int, context.Result, context.Operand1);
+		context.SetInstruction(X86.Int, null, context.Operand1);
 	}
 }
