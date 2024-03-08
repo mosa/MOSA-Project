@@ -4,9 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ISA.ACPI;
 
-public struct MADTEntry
+public readonly struct MADTEntry
 {
-	public Pointer Pointer;
+	public readonly Pointer Pointer;
 
 	public const uint Size = Offset.Size;
 

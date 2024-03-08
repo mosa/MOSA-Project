@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime;
 
-public struct Pointer
+public readonly struct Pointer
 {
 	private readonly unsafe void* value;
 
