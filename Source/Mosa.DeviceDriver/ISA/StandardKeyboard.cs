@@ -57,12 +57,14 @@ public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 		{
 			var next = fifoEnd + 1;
 
+			// Check if FIFO buffer is full
 			if (next == FIFOSize)
 				next = 0;
 
-			if (next == fifoStart) // Out of room
+			if (next == fifoStart)
 				return;
 
+			// If not, add the scan code
 			fifoBuffer[next] = scancode;
 			fifoEnd = next;
 		}

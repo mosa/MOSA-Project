@@ -6,11 +6,11 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct FADT
 {
-	public readonly Pointer Pointer;
+	public Pointer Pointer;
 
-	public readonly uint Size = Offset.Size;
+	public const uint Size = Offset.Size;
 
-	internal static class Offset
+	private static class Offset
 	{
 		public const int h = 0;
 		public const int FirmwareCtrl = h + ACPISDTHeader.Offset.Size;
@@ -69,7 +69,7 @@ public struct FADT
 
 	public FADT(Pointer entry) => Pointer = entry;
 
-	public readonly ACPISDTHeader ACPISDTHeader => new ACPISDTHeader(Pointer + Offset.h);
+	public ACPISDTHeader ACPISDTHeader => new ACPISDTHeader(Pointer + Offset.h);
 
 	public GenericAddressStructure ResetReg => new GenericAddressStructure(Pointer + Offset.ResetReg);
 
@@ -77,85 +77,85 @@ public struct FADT
 
 	public GenericAddressStructure X_PM1bControlBlock => new GenericAddressStructure(Pointer + Offset.X_PM1bControlBlock);
 
-	public readonly uint FirmwareCtrl => Pointer.Load32(Offset.FirmwareCtrl);
+	public uint FirmwareCtrl => Pointer.Load32(Offset.FirmwareCtrl);
 
-	public readonly uint Dsdt => Pointer.Load32(Offset.Dsdt);
+	public uint Dsdt => Pointer.Load32(Offset.Dsdt);
 
-	public readonly byte Reserved => Pointer.Load8(Offset.Reserved);
+	public byte Reserved => Pointer.Load8(Offset.Reserved);
 
-	public readonly byte PreferredPowerManagementProfile => Pointer.Load8(Offset.PreferredPowerManagementProfile);
+	public byte PreferredPowerManagementProfile => Pointer.Load8(Offset.PreferredPowerManagementProfile);
 
-	public readonly ushort SCI_Interrupt => Pointer.Load16(Offset.SCI_Interrupt);
+	public ushort SCI_Interrupt => Pointer.Load16(Offset.SCI_Interrupt);
 
-	public readonly uint SMI_CommandPort => Pointer.Load32(Offset.SMI_CommandPort);
+	public uint SMI_CommandPort => Pointer.Load32(Offset.SMI_CommandPort);
 
-	public readonly byte AcpiEnable => Pointer.Load8(Offset.AcpiEnable);
+	public byte AcpiEnable => Pointer.Load8(Offset.AcpiEnable);
 
-	public readonly byte AcpiDisable => Pointer.Load8(Offset.AcpiDisable);
+	public byte AcpiDisable => Pointer.Load8(Offset.AcpiDisable);
 
-	public readonly byte S4BIOS_REQ => Pointer.Load8(Offset.S4BIOS_REQ);
+	public byte S4BIOS_REQ => Pointer.Load8(Offset.S4BIOS_REQ);
 
-	public readonly byte PSTATE_Control => Pointer.Load8(Offset.PSTATE_Control);
+	public byte PSTATE_Control => Pointer.Load8(Offset.PSTATE_Control);
 
-	public readonly uint PM1aEventBlock => Pointer.Load32(Offset.PM1aEventBlock);
+	public uint PM1aEventBlock => Pointer.Load32(Offset.PM1aEventBlock);
 
-	public readonly uint PM1bEventBlock => Pointer.Load32(Offset.PM1bEventBlock);
+	public uint PM1bEventBlock => Pointer.Load32(Offset.PM1bEventBlock);
 
-	public readonly uint PM1aControlBlock => Pointer.Load32(Offset.PM1aControlBlock);
+	public uint PM1aControlBlock => Pointer.Load32(Offset.PM1aControlBlock);
 
-	public readonly uint PM1bControlBlock => Pointer.Load32(Offset.PM1bControlBlock);
+	public uint PM1bControlBlock => Pointer.Load32(Offset.PM1bControlBlock);
 
-	public readonly uint PM2ControlBlock => Pointer.Load32(Offset.PM2ControlBlock);
+	public uint PM2ControlBlock => Pointer.Load32(Offset.PM2ControlBlock);
 
-	public readonly uint PMTimerBlock => Pointer.Load32(Offset.PMTimerBlock);
+	public uint PMTimerBlock => Pointer.Load32(Offset.PMTimerBlock);
 
-	public readonly uint GPE0Block => Pointer.Load32(Offset.GPE0Block);
+	public uint GPE0Block => Pointer.Load32(Offset.GPE0Block);
 
-	public readonly uint GPE1Block => Pointer.Load32(Offset.GPE1Block);
+	public uint GPE1Block => Pointer.Load32(Offset.GPE1Block);
 
-	public readonly byte PM1EventLength => Pointer.Load8(Offset.PM1EventLength);
+	public byte PM1EventLength => Pointer.Load8(Offset.PM1EventLength);
 
-	public readonly byte PM1ControlLength => Pointer.Load8(Offset.PM1ControlLength);
+	public byte PM1ControlLength => Pointer.Load8(Offset.PM1ControlLength);
 
-	public readonly byte PM2ControlLength => Pointer.Load8(Offset.PM2ControlLength);
+	public byte PM2ControlLength => Pointer.Load8(Offset.PM2ControlLength);
 
-	public readonly byte PMTimerLength => Pointer.Load8(Offset.PMTimerLength);
+	public byte PMTimerLength => Pointer.Load8(Offset.PMTimerLength);
 
-	public readonly byte GPE0Length => Pointer.Load8(Offset.GPE0Length);
+	public byte GPE0Length => Pointer.Load8(Offset.GPE0Length);
 
-	public readonly byte GPE1Length => Pointer.Load8(Offset.GPE1Length);
+	public byte GPE1Length => Pointer.Load8(Offset.GPE1Length);
 
-	public readonly byte GPE1Base => Pointer.Load8(Offset.GPE1Base);
+	public byte GPE1Base => Pointer.Load8(Offset.GPE1Base);
 
-	public readonly byte CStateControl => Pointer.Load8(Offset.CStateControl);
+	public byte CStateControl => Pointer.Load8(Offset.CStateControl);
 
-	public readonly ushort WorstC2Latency => Pointer.Load16(Offset.WorstC2Latency);
+	public ushort WorstC2Latency => Pointer.Load16(Offset.WorstC2Latency);
 
-	public readonly ushort WorstC3Latency => Pointer.Load16(Offset.WorstC3Latency);
+	public ushort WorstC3Latency => Pointer.Load16(Offset.WorstC3Latency);
 
-	public readonly ushort FlushSize => Pointer.Load16(Offset.FlushSize);
+	public ushort FlushSize => Pointer.Load16(Offset.FlushSize);
 
-	public readonly ushort FlushStride => Pointer.Load16(Offset.FlushStride);
+	public ushort FlushStride => Pointer.Load16(Offset.FlushStride);
 
-	public readonly byte DutyOffset => Pointer.Load8(Offset.DutyOffset);
+	public byte DutyOffset => Pointer.Load8(Offset.DutyOffset);
 
-	public readonly byte DutyWidth => Pointer.Load8(Offset.DutyWidth);
+	public byte DutyWidth => Pointer.Load8(Offset.DutyWidth);
 
-	public readonly byte DayAlarm => Pointer.Load8(Offset.DayAlarm);
+	public byte DayAlarm => Pointer.Load8(Offset.DayAlarm);
 
-	public readonly byte MonthAlarm => Pointer.Load8(Offset.MonthAlarm);
+	public byte MonthAlarm => Pointer.Load8(Offset.MonthAlarm);
 
-	public readonly byte Century => Pointer.Load8(Offset.Century);
+	public byte Century => Pointer.Load8(Offset.Century);
 
-	public readonly ushort BootArchitectureFlags => Pointer.Load16(Offset.BootArchitectureFlags);
+	public ushort BootArchitectureFlags => Pointer.Load16(Offset.BootArchitectureFlags);
 
-	public readonly byte Reserved2 => Pointer.Load8(Offset.Reserved2);
+	public byte Reserved2 => Pointer.Load8(Offset.Reserved2);
 
-	public readonly uint Flags => Pointer.Load32(Offset.Flags);
+	public uint Flags => Pointer.Load32(Offset.Flags);
 
-	public readonly byte ResetValue => Pointer.Load8(Offset.ResetValue);
+	public byte ResetValue => Pointer.Load8(Offset.ResetValue);
 
-	public readonly ulong X_FirmwareControl => Pointer.Load64(Offset.X_FirmwareControl);
+	public ulong X_FirmwareControl => Pointer.Load64(Offset.X_FirmwareControl);
 
-	public readonly ulong X_Dsdt => Pointer.Load64(Offset.X_Dsdt);
+	public ulong X_Dsdt => Pointer.Load64(Offset.X_Dsdt);
 }

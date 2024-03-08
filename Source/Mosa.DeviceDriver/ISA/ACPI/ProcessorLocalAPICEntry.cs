@@ -6,11 +6,11 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct ProcessorLocalAPICEntry
 {
-	public readonly Pointer Pointer;
+	public Pointer Pointer;
 
-	public readonly uint Size => Offset.Size;
+	public const uint Size = Offset.Size;
 
-	internal static class Offset
+	private static class Offset
 	{
 		public const int Entry = 0;
 		public const int AcpiProcessorID = MADTEntry.Offset.Size + Entry;
@@ -21,11 +21,11 @@ public struct ProcessorLocalAPICEntry
 
 	public ProcessorLocalAPICEntry(Pointer entry) => Pointer = entry;
 
-	public readonly MADTEntry MADTEntry => new(Pointer + Offset.Entry);
+	public MADTEntry MADTEntry => new MADTEntry(Pointer + Offset.Entry);
 
-	public readonly byte AcpiProcessorID => Pointer.Load8(Offset.AcpiProcessorID);
+	public byte AcpiProcessorID => Pointer.Load8(Offset.AcpiProcessorID);
 
-	public readonly byte ApicID => Pointer.Load8(Offset.ApicID);
+	public byte ApicID => Pointer.Load8(Offset.ApicID);
 
-	public readonly uint Flags => Pointer.Load32(Offset.Flags);
+	public uint Flags => Pointer.Load32(Offset.Flags);
 }

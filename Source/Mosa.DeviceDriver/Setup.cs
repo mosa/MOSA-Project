@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.Framework.Generic;
 using Mosa.DeviceSystem.Framework.ISA;
 using Mosa.DeviceSystem.Framework.PCI;
 using Mosa.DeviceSystem.Misc;
@@ -12,13 +13,12 @@ public static class Setup
 {
 	public static List<DeviceDriverRegistryEntry> GetDeviceDriverRegistryEntries() => new List<DeviceDriverRegistryEntry>
 	{
-		//new ISADeviceDriverRegistryEntry
-		//{
-		//	Name = "ACPI",
-		//	Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARM32,
-		//	AutoLoad = true,
-		//	Factory = () => new ISA.ACPI.ACPIDriver()
-		//},
+		new GenericDeviceDriverRegistryEntry
+		{
+			Name = "ACPI",
+			Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARM32,
+			Factory = () => new ISA.ACPI.ACPIDriver()
+		},
 
 		new ISADeviceDriverRegistryEntry
 		{

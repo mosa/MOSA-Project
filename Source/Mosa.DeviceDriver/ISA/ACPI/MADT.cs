@@ -6,11 +6,11 @@ namespace Mosa.DeviceDriver.ISA.ACPI;
 
 public struct MADT
 {
-	public readonly Pointer Pointer;
+	public Pointer Pointer;
 
-	public readonly uint Size => Offset.Size;
+	public const uint Size = Offset.Size;
 
-	internal static class Offset
+	private static class Offset
 	{
 		public const int ACPISDTHeader = 0;
 		public const int LocalApicAddress = ACPISDTHeader + ACPI.ACPISDTHeader.Offset.Size;
@@ -20,9 +20,9 @@ public struct MADT
 
 	public MADT(Pointer entry) => Pointer = entry;
 
-	public readonly ACPISDTHeader ACPISDTHeader => new(Pointer + Offset.ACPISDTHeader);
+	public ACPISDTHeader ACPISDTHeader => new ACPISDTHeader(Pointer + Offset.ACPISDTHeader);
 
-	public readonly uint LocalApicAddress => Pointer.Load32(Offset.LocalApicAddress);
+	public uint LocalApicAddress => Pointer.Load32(Offset.LocalApicAddress);
 
-	public readonly uint Flags => Pointer.Load32(Offset.Flags);
+	public uint Flags => Pointer.Load32(Offset.Flags);
 }

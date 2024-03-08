@@ -12,11 +12,7 @@ namespace Mosa.DeviceDriver.ISA;
 //[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCIController
 {
-	#region Definitions
-
 	private const uint BaseValue = 0x80000000;
-
-	#endregion Definitions
 
 	/// <summary>
 	/// The configuration address
@@ -30,7 +26,7 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 
 	public override void Initialize()
 	{
-		Device.Name = "PCI_0x" + Device.Resources.IOPortRegions[0].BaseIOPort.ToString("X");
+		Device.Name = "PCIController_0x" + Device.Resources.IOPortRegions[0].BaseIOPort.ToString("X");
 
 		configAddress = Device.Resources.GetIOPortReadWrite(0, 0);
 		configData = Device.Resources.GetIOPortReadWrite(0, 4);

@@ -1,15 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-// References
-// http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
-// http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
-
 using Mosa.DeviceSystem.Disks;
 using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.DeviceSystem.Misc;
 
 namespace Mosa.DeviceDriver.ISA;
+
+// http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
+// http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
 /// <summary>
 /// IDE Controller
@@ -318,13 +317,6 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	}
 
 	/// <summary>
-	/// Opens the specified drive.
-	/// </summary>
-	/// <param name="drive">The drive.</param>
-	/// <returns></returns>
-	public bool Open(uint drive) => drive < MaximumDriveCount && driveInfo[drive].Present;
-
-	/// <summary>
 	/// Performs the LBA28.
 	/// </summary>
 	/// <param name="operation">The operation.</param>
@@ -435,6 +427,13 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	/// </summary>
 	/// <value>The drive count.</value>
 	public uint MaximumDriveCount { get; private set; }
+
+	/// <summary>
+	/// Opens the specified drive.
+	/// </summary>
+	/// <param name="drive">The drive.</param>
+	/// <returns></returns>
+	public bool Open(uint drive) => drive < MaximumDriveCount && driveInfo[drive].Present;
 
 	/// <summary>
 	/// Releases the specified drive.

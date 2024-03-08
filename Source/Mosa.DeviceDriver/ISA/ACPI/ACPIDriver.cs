@@ -4,21 +4,21 @@ using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.Runtime;
 
+namespace Mosa.DeviceDriver.ISA.ACPI;
+
 // Portions of this code are from Cosmos
 
 //https://wiki.osdev.org/ACPI
 //https://wiki.osdev.org/MADT
 
-namespace Mosa.DeviceDriver.ISA.ACPI;
-
-public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
+public class ACPIDriver : BaseDeviceDriver, IACPI
 {
-	private FADT FADT;
-	private RSDT RSDT;
-	private XSDT XSDT;
-	private MADT MADT;
+	private FADT fadt;
+	private RSDT rsdt;
+	private XSDT xsdt;
+	private MADT madt;
 
-	private IOPortWrite SMI_CommandPort;
+	private IOPortWrite smiCommandPort;
 
 	public short SLP_TYPa { get; set; }
 
@@ -45,66 +45,39 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 	public override void Initialize()
 	{
 		Device.Name = "ACPI";
-		//Setup();
-	}
 
-	/// <summary>
-	/// Probes this instance.
-	/// </summary>
-	public override void Probe() => Device.Status = DeviceStatus.Offline; // Future: Should be "Available"
-
-	/// <summary>
-	/// Starts this hardware device.
-	/// </summary>
-	public override void Start()
-	{
-		SMI_CommandPort.Write8(FADT.AcpiEnable);
-		HAL.Sleep(3000);
-		Device.Status = DeviceStatus.Online;
-	}
-
-	/// <summary>
-	/// Stops this hardware device.
-	/// </summary>
-	public override void Stop()
-	{
-		SMI_CommandPort.Write8(FADT.AcpiDisable);
-		HAL.Sleep(3000);
-		Device.Status = DeviceStatus.Offline;
-	}
-
-	private void Setup()
-	{
 		// TODO: Find the multiboot service
 		// Multiboot.V2.RSDPv1
 
 		var rsdp = Pointer.Zero; // HAL.GetRSDP();
-		var version2 = true; // HAL.IsACPIVersion2();
+		if (rsdp.IsNull)
+			return;
 
+		var version2 = true; // HAL.IsACPIVersion2();
 		if (version2)
 		{
 			var descriptor20 = new RSDPDescriptor20(rsdp);
-			XSDT = new XSDT(HAL.GetPhysicalMemory(descriptor20.XsdtAddress, 0xFFFF).Address);
+			xsdt = new XSDT(HAL.GetPhysicalMemory(descriptor20.XsdtAddress, 0xFFFF).Address);
 		}
 		else
 		{
 			var descriptor = new RSDPDescriptor(rsdp);
-			RSDT = new RSDT(HAL.GetPhysicalMemory(descriptor.RsdtAddress, 0xFFFF).Address);
+			rsdt = new RSDT(HAL.GetPhysicalMemory(descriptor.RsdtAddress, 0xFFFF).Address);
 		}
 
-		FADT = new FADT(HAL.GetPhysicalMemory(FindBySignature("FACP"), 0xFFFF).Address);
-		MADT = new MADT(HAL.GetPhysicalMemory(FindBySignature("APIC"), 0xFFFF).Address);
+		fadt = new FADT(HAL.GetPhysicalMemory(FindBySignature("FACP"), 0xFFFF).Address);
+		madt = new MADT(HAL.GetPhysicalMemory(FindBySignature("APIC"), 0xFFFF).Address);
 
-		if (FADT.Pointer.IsNull)
+		if (fadt.Pointer.IsNull)
 			return;
 
-		if (!MADT.Pointer.IsNull)
+		if (!madt.Pointer.IsNull)
 		{
 			ProcessorIDs = new byte[256];
-			LocalApicAddress = MADT.LocalApicAddress;
+			LocalApicAddress = madt.LocalApicAddress;
 
-			var ptr = MADT.Pointer;
-			var ptr2 = ptr + MADT.ACPISDTHeader.Length;
+			var ptr = madt.Pointer;
+			var ptr2 = ptr + madt.ACPISDTHeader.Length;
 
 			for (ptr += 0x2C; ptr < ptr2;)
 			{
@@ -135,74 +108,94 @@ public unsafe class ACPIDriver : BaseDeviceDriver, IACPI
 			}
 		}
 
-		var dsdt = new Pointer(FADT.Dsdt);
+		var dsdt = new Pointer(fadt.Dsdt);
+		if (dsdt.Load32() != 0x54445344) return; //DSDT
 
-		if (dsdt.Load32() == 0x54445344) //DSDT
+		var s5addr = dsdt + ACPISDTHeader.Offset.Size;
+		var dsdtLength = (int)dsdt.Load32() + 1 - ACPISDTHeader.Offset.Size;
+
+		for (var k = 0; k < dsdtLength; k++)
 		{
-			var S5Addr = dsdt + ACPISDTHeader.Offset.Size;
-			var dsdtLength = (int)dsdt.Load32() + 1 - ACPISDTHeader.Offset.Size;
+			if (s5addr.Load32() == 0x5f35535f)
+				break; //_S5_
 
-			for (var k = 0; k < dsdtLength; k++)
+			s5addr++;
+		}
+
+		if ((dsdtLength <= 0) || (((s5addr - 1).Load8() != 0x08 && ((s5addr - 2).Load8() != 0x08 || (s5addr - 1).Load8() != '\\'))
+								  || (s5addr + 4).Load8() != 0x12)) return;
+		s5addr += 5;
+		s5addr += ((s5addr.Load32() & 0xC0) >> 6) + 2;
+
+		if (s5addr.Load8() == 0x0A) s5addr++;
+
+		SLP_TYPa = (short)(s5addr.Load16() << 10);
+		s5addr++;
+
+		if (s5addr.Load8() == 0x0A) s5addr++;
+
+		SLP_TYPb = (short)(s5addr.Load16() << 10);
+		SLP_EN = 1 << 13;
+
+		smiCommandPort = new IOPortWrite((ushort)fadt.SMI_CommandPort);
+
+		var has64BitPtr = false;
+
+		if (version2)
+		{
+			ResetAddress = new IOPortWrite((ushort)fadt.ResetReg.Address);
+			ResetValue = fadt.ResetValue;
+
+			if (Pointer.Size == 8) // 64-bit
 			{
-				if (S5Addr.Load32() == 0x5f35535f)
-					break; //_S5_
+				has64BitPtr = true;
 
-				S5Addr++;
-			}
-
-			if ((dsdtLength > 0)
-				&& (((S5Addr - 1).Load8() == 0x08 || (S5Addr - 2).Load8() == 0x08 && (S5Addr - 1).Load8() == '\\') && (S5Addr + 4).Load8() == 0x12))
-			{
-				S5Addr += 5;
-				S5Addr += ((S5Addr.Load32() & 0xC0) >> 6) + 2;
-
-				if (S5Addr.Load8() == 0x0A) S5Addr++;
-
-				SLP_TYPa = (short)(S5Addr.Load16() << 10);
-				S5Addr++;
-
-				if (S5Addr.Load8() == 0x0A) S5Addr++;
-
-				SLP_TYPb = (short)(S5Addr.Load16() << 10);
-				SLP_EN = 1 << 13;
-
-				SMI_CommandPort = new IOPortWrite((ushort)FADT.SMI_CommandPort);
-
-				var has64BitPtr = false;
-
-				if (version2)
-				{
-					ResetAddress = new IOPortWrite((ushort)FADT.ResetReg.Address);
-					ResetValue = FADT.ResetValue;
-
-					if (Pointer.Size == 8) // 64-bit
-					{
-						has64BitPtr = true;
-
-						PM1aControlBlock = new IOPortWrite((ushort)FADT.X_PM1aControlBlock.Address);
-						if (FADT.X_PM1bControlBlock.Address != 0) PM1bControlBlock = new IOPortWrite((ushort)FADT.X_PM1bControlBlock.Address);
-					}
-				}
-
-				if (!has64BitPtr)
-				{
-					PM1aControlBlock = new IOPortWrite((ushort)FADT.PM1aControlBlock);
-					if (FADT.PM1bControlBlock != 0) PM1bControlBlock = new IOPortWrite((ushort)FADT.PM1bControlBlock);
-				}
+				PM1aControlBlock = new IOPortWrite((ushort)fadt.X_PM1aControlBlock.Address);
+				if (fadt.X_PM1bControlBlock.Address != 0) PM1bControlBlock = new IOPortWrite((ushort)fadt.X_PM1bControlBlock.Address);
 			}
 		}
+
+		if (has64BitPtr) return;
+
+		PM1aControlBlock = new IOPortWrite((ushort)fadt.PM1aControlBlock);
+		if (fadt.PM1bControlBlock != 0) PM1bControlBlock = new IOPortWrite((ushort)fadt.PM1bControlBlock);
+	}
+
+	/// <summary>
+	/// Probes this instance.
+	/// </summary>
+	public override void Probe() => Device.Status = DeviceStatus.Offline; // Future: Should be "Available"
+
+	/// <summary>
+	/// Starts this hardware device.
+	/// </summary>
+	public override void Start()
+	{
+		smiCommandPort.Write8(fadt.AcpiEnable);
+		HAL.Sleep(3000);
+		Device.Status = DeviceStatus.Online;
+	}
+
+	/// <summary>
+	/// Stops this hardware device.
+	/// </summary>
+	public override void Stop()
+	{
+		smiCommandPort.Write8(fadt.AcpiDisable);
+		HAL.Sleep(3000);
+		Device.Status = DeviceStatus.Offline;
 	}
 
 	private Pointer FindBySignature(string signature)
 	{
-		var xsdt = !XSDT.Pointer.IsNull;
+		var hasXSDT = !xsdt.Pointer.IsNull;
 		var value = CalculateSignatureValue(signature);
 
-		for (var i = 0U; i < (xsdt ? 16 : 8); i++)
+		for (var i = 0U; i < (hasXSDT ? 16 : 8); i++)
 		{
 			// On some systems or VM software (e.g. VirtualBox), we have to map the pointer, or else it will crash.
 			// See: https://github.com/msareedjr/MOSA-MikeOS/commit/6867064fedae707280083ba4d9ff12d468a6dce0
-			var h = new ACPISDTHeader(HAL.GetPhysicalMemory(xsdt ? XSDT.GetPointerToOtherSDT(i) : RSDT.GetPointerToOtherSDT(i), 0xFFF).Address);
+			var h = new ACPISDTHeader(HAL.GetPhysicalMemory(hasXSDT ? xsdt.GetPointerToOtherSDT(i) : rsdt.GetPointerToOtherSDT(i), 0xFFF).Address);
 
 			if (!h.Pointer.IsNull && h.Signature == value)
 				return h.Pointer;
