@@ -137,6 +137,8 @@ public struct Char: IComparable, IComparable<char>, IEquatable<char>
 		return c >= '0' && c <= '9';
 	}
 
+	public static bool IsAsciiDigit(char c) => IsDigit(c);
+
 	public static bool IsLetterOrDigit(char c)
 	{
 		return (IsLetter(c) || IsDigit(c));

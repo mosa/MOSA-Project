@@ -4,47 +4,72 @@ namespace System.Text;
 
 public class StringBuilder
 {
-	private char[] Characters = new char[int.MaxValue];
+	private char[] characters;
+	private int length;
 
-	private int Length = 0;
+	public StringBuilder() => characters = new char[byte.MaxValue];
+
+	public StringBuilder(int capacity) => characters = new char[capacity];
 
 	public StringBuilder Clear()
 	{
-		Length = 0;
+		length = 0;
 		return this;
 	}
 
 	public StringBuilder Append(char c)
 	{
-		if (Length >= Characters.Length)
-		{
-			var chars = new char[Length + 100];
-			for (var i = 0; i < Length; i++)
-				chars[i] = Characters[i];
-			Characters = chars;
-		}
+		EnsureCapacity();
 
-		Characters[Length] = c;
-		Length++;
+		characters[length++] = c;
+		return this;
+	}
+
+	public StringBuilder Append(char c, int count)
+	{
+		EnsureCapacity(count);
+
+		for (var i = 0; i < count; i++)
+			characters[length++] = c;
+
+		return this;
+	}
+
+	public StringBuilder Append(string s)
+	{
+		EnsureCapacity(s.length);
+
+		foreach (var c in s)
+			characters[length++] = c;
 
 		return this;
 	}
 
 	public StringBuilder AppendLine(string s)
 	{
-		for (var i = 0; i < s.length; i++)
-			Append(s[i]);
+		EnsureCapacity(s.length);
 
+		foreach (var c in s)
+			characters[length++] = c;
+
+		characters[length++] = '\n';
 		return this;
 	}
 
-	public char[] ToCharArray()
-	{
-		return Characters;
-	}
+	public char[] ToCharArray() => characters;
 
-	public override string ToString()
+	public override string ToString() => new string(characters, 0, length);
+
+	private void EnsureCapacity(int capacity = 0)
 	{
-		return new string(Characters, 0, Length);
+		var newLength = length + capacity;
+		if (newLength < characters.Length)
+			return;
+
+		var chars = new char[newLength + 100];
+		for (var i = 0; i < length; i++)
+			chars[i] = characters[i];
+
+		characters = chars;
 	}
 }
