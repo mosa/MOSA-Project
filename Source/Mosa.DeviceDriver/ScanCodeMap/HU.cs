@@ -48,7 +48,7 @@ public class HU : IScanCodeMap
 		if (scancode == 0)
 			return key;
 
-		key.KeyPress = (scancode & 0x80) != 0 ? KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
+		key.KeyPress = (scancode & 0x80) != 0 ? KeyEvent.KeyPressType.Break : KeyEvent.KeyPressType.Make;
 		key.KeyType = KeyType.RegularKey;
 
 		switch (scancode & 0x7F)
@@ -107,6 +107,7 @@ public class HU : IScanCodeMap
 			case 52: key.Character = shift ? ':' : '.'; break;
 			case 53: key.Character = shift ? '_' : '-'; break;
 			case 54: key.KeyType = KeyType.RightShift; break;
+
 			case 56: key.KeyType = KeyType.LeftAlt; break;
 			case 57: key.Character = ' '; break;
 			case 58: key.KeyType = KeyType.CapsLock; break;
@@ -127,6 +128,7 @@ public class HU : IScanCodeMap
 			case 73: key.KeyType = KeyType.PageUp; break;
 			case 74: key.Character = '-'; break;
 			case 75: key.KeyType = KeyType.LeftArrow; break;
+
 			case 77: key.KeyType = KeyType.RightArrow; break;
 			case 78: key.Character = '+'; break;
 			case 79: key.KeyType = KeyType.End; break;
@@ -134,10 +136,13 @@ public class HU : IScanCodeMap
 			case 81: key.KeyType = KeyType.PageDown; break;
 			case 82: key.KeyType = KeyType.Insert; break;
 			case 83: key.KeyType = KeyType.Delete; break;
+
 			case 86: key.Character = TransformCharacter('<'); break;
 			case 87: key.KeyType = KeyType.F11; break;
 			case 88: key.KeyType = KeyType.F12; break;
-			default: return new KeyEvent(); // Unmapped buttons (which doesn't exist on a hungarian keyboard)
+
+			// Unmapped buttons (which doesn't exist on a hungarian keyboard)
+			default: return new KeyEvent();
 		}
 
 		switch (key.KeyType)

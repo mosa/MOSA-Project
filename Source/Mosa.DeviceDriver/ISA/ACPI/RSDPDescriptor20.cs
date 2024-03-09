@@ -2,18 +2,13 @@
 
 using Mosa.Runtime;
 
-// Portions of this code are from Cosmos
-
-//https://wiki.osdev.org/ACPI
-//https://wiki.osdev.org/MADT
-
 namespace Mosa.DeviceDriver.ISA.ACPI;
 
-public struct RSDPDescriptor20
+public readonly struct RSDPDescriptor20
 {
 	public readonly Pointer Pointer;
 
-	public readonly uint Size = Offset.Size;
+	public const uint Size = Offset.Size;
 
 	private static class Offset
 	{
@@ -32,15 +27,15 @@ public struct RSDPDescriptor20
 
 	public RSDPDescriptor20(Pointer entry) => Pointer = entry;
 
-	public readonly byte Checksum => Pointer.Load8(Offset.Checksum);
+	public byte Checksum => Pointer.Load8(Offset.Checksum);
 
-	public readonly byte Revision => Pointer.Load8(Offset.Revision);
+	public byte Revision => Pointer.Load8(Offset.Revision);
 
-	public readonly Pointer RsdtAddress => new(Pointer.Load32(Offset.RsdtAddress));
+	public Pointer RsdtAddress => new Pointer(Pointer.Load32(Offset.RsdtAddress));
 
-	public readonly uint Length => Pointer.Load32(Offset.Length);
+	public uint Length => Pointer.Load32(Offset.Length);
 
-	public readonly Pointer XsdtAddress => new(Pointer.Load64(Offset.XsdtAddress));
+	public Pointer XsdtAddress => new Pointer(Pointer.Load64(Offset.XsdtAddress));
 
-	public readonly byte ExtendedChecksum => Pointer.Load8(Offset.ExtendedChecksum);
+	public byte ExtendedChecksum => Pointer.Load8(Offset.ExtendedChecksum);
 }

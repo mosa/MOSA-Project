@@ -4,11 +4,11 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ISA.ACPI;
 
-public struct MADTEntry
+public readonly struct MADTEntry
 {
 	public readonly Pointer Pointer;
 
-	public readonly uint Size => Offset.Size;
+	public const uint Size = Offset.Size;
 
 	internal static class Offset
 	{
@@ -19,7 +19,7 @@ public struct MADTEntry
 
 	public MADTEntry(Pointer entry) => Pointer = entry;
 
-	public readonly byte Type => Pointer.Load8(Offset.Type);
+	public byte Type => Pointer.Load8(Offset.Type);
 
-	public readonly byte Length => Pointer.Load8(Offset.Length);
+	public byte Length => Pointer.Load8(Offset.Length);
 }
