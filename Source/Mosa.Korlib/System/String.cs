@@ -331,7 +331,35 @@ public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>,
 
 	public static string Format(string format, params object[] args)
 	{
-		return format;
+		var sb = new StringBuilder(format.length + args.Length * 8);
+		var index = 0;
+
+		while (index < format.length)
+		{
+			var c = format[index++];
+
+			if (c != '{')
+			{
+				sb.Append(c);
+				continue;
+			}
+
+			var argIndexStr = Empty;
+			var current = format[index++];
+
+			while (current != '}')
+			{
+				argIndexStr += current;
+				current = format[index++];
+			}
+
+			var argIndex = int.Parse(argIndexStr);
+			var arg = args[argIndex];
+
+			sb.Append(arg.ToString());
+		}
+
+		return sb.ToString();
 	}
 
 	public bool Equals(string s)

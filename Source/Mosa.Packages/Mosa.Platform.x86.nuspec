@@ -12,7 +12,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA x86 platform libraries</summary>
 		<description>This package contains the x86 implementations of the BareMetal kernel and runtime libraries (including the core library).</description>
-		<copyright>Copyright © MOSA Project 2023</copyright>
+		<copyright>Copyright © MOSA Project 2024</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Platform" version="$version$" />

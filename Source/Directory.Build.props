@@ -12,7 +12,7 @@
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<CodeAnalysisRuleSet>../Common.ruleset</CodeAnalysisRuleSet>
 		<Company>MOSA Project</Company>
-		<Copyright>Copyright © MOSA Project 2023</Copyright>
-		<AssemblyVersion>2.5.0.0</AssemblyVersion>
+		<Copyright>Copyright © MOSA Project 2024</Copyright>
+		<AssemblyVersion>2.6.0.0</AssemblyVersion>
 	</PropertyGroup>
 </Project>

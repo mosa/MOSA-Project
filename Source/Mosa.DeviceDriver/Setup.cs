@@ -56,17 +56,6 @@ public static class Setup
 			Factory = () => new ISA.PCIController()
 		},
 
-		new PCIDeviceDriverRegistryEntry
-		{
-			Name = "PCIGenericHostBridge",
-			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
-			ClassCode = 0x06,
-			SubClassCode = 0x00,
-			PCIFields =  PCIField.ClassCode | PCIField.SubClassCode,
-			Factory = () => new PCI.GenericHostBridgeController()
-		},
-
 		new ISADeviceDriverRegistryEntry
 		{
 			Name = "IDEController",
@@ -92,6 +81,7 @@ public static class Setup
 			Factory = () => new ISA.IDEController()
 		},
 
+		// Future: Clarify how these 4-series controllers are differentiated in PCI (right now most are pointing to the same device?)
 		new PCIDeviceDriverRegistryEntry
 		{
 			Name = "Intel4SeriesChipsetDRAMController",
@@ -120,7 +110,7 @@ public static class Setup
 			Platform = PlatformArchitecture.X86AndX64,
 			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
-			DeviceID = 0x2E10,
+			DeviceID = 0x2E13,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
 			Factory = () => new PCI.Intel.Intel4SeriesChipsetIntegratedGraphicsController2E13()
 		},
