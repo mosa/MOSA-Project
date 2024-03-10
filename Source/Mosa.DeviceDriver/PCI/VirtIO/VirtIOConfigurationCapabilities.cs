@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.VirtIO;
+namespace Mosa.DeviceDriver.PCI.VirtIO;
 
 /// <summary>
 /// VirtIO configuration capabilities of a device.
