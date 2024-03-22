@@ -424,9 +424,9 @@ public static class AppLocationsSettings
 				if (dir == null)
 					continue;
 
-				var location = SearchSubdirectories(dir, file);
+				var location = Path.Combine(dir, file);
 
-				if (location != null)
+				if (File.Exists(location))
 					return location;
 			}
 		}
@@ -441,9 +441,9 @@ public static class AppLocationsSettings
 		if (dir == null)
 			return null;
 
-		var location = SearchSubdirectories(dir, file);
+		var location = Path.Combine(dir, file);
 
-		if (location != null)
+		if (File.Exists(location))
 			return location;
 
 		return null;

@@ -16,7 +16,15 @@ public class BaseLauncher
 	public BaseLauncher(MosaSettings mosaSettings, CompilerHooks compilerHook)
 	{
 		CompilerHooks = compilerHook;
-		MosaSettings = mosaSettings;
+
+		MosaSettings = new MosaSettings();
+		MosaSettings.LoadAppLocations();
+		MosaSettings.SetDefaultSettings();
+		MosaSettings.ResolveDefaults();
+		MosaSettings.Merge(mosaSettings);
+		MosaSettings.NormalizeSettings();
+		MosaSettings.ResolveFileAndPathSettings();
+		MosaSettings.AddStandardPlugs();
 	}
 
 	protected void OutputStatus(string status)
