@@ -2,7 +2,7 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.DeviceSystem.VirtIO;
+namespace Mosa.DeviceDriver.PCI.VirtIO;
 
 /// <summary>
 /// Generic VirtIO virtqueue implementation.

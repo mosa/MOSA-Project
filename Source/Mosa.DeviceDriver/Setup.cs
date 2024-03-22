@@ -17,7 +17,7 @@ public static class Setup
 		{
 			Name = "ACPI",
 			Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARM32,
-			Factory = () => new ISA.ACPI.ACPIDriver()
+			Factory = () => new ACPI.ACPIDriver()
 		},
 
 		new ISADeviceDriverRegistryEntry
@@ -224,7 +224,7 @@ public static class Setup
 			VendorID = 0x1AF4,
 			DeviceID = 0x1050,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
-			Factory = () => new PCI.VirtIO.VirtIOGPU()
+			Factory = () => new PCI.VirtIO.Devices.VirtIOGPU()
 		},
 
 		new PCIDeviceDriverRegistryEntry

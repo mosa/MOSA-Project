@@ -4,7 +4,7 @@ using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.Runtime;
 
-namespace Mosa.DeviceDriver.ISA.ACPI;
+namespace Mosa.DeviceDriver.ACPI;
 
 // Portions of this code are from Cosmos
 

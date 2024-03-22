@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem.VirtIO;
+namespace Mosa.DeviceDriver.PCI.VirtIO;
 
 /// <summary>
 /// Describes a generic VirtIO queue descriptor structure.

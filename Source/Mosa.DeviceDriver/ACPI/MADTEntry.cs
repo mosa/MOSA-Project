@@ -2,7 +2,7 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.DeviceDriver.ISA.ACPI;
+namespace Mosa.DeviceDriver.ACPI;
 
 public readonly struct MADTEntry
 {

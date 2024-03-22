@@ -6,7 +6,7 @@ using Mosa.DeviceSystem.Misc;
 using Mosa.DeviceSystem.PCI;
 using Mosa.Runtime;
 
-namespace Mosa.DeviceSystem.VirtIO;
+namespace Mosa.DeviceDriver.PCI.VirtIO;
 
 /// <summary>
 /// Describes a generic VirtIO device.

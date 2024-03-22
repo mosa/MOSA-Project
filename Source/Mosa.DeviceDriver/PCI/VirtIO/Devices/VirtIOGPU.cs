@@ -5,10 +5,9 @@ using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.Graphics;
 using Mosa.DeviceSystem.HardwareAbstraction;
 using Mosa.DeviceSystem.Misc;
-using Mosa.DeviceSystem.VirtIO;
 using Mosa.Runtime;
 
-namespace Mosa.DeviceDriver.PCI.VirtIO;
+namespace Mosa.DeviceDriver.PCI.VirtIO.Devices;
 
 public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 {
