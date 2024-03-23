@@ -4,7 +4,7 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal;
 
-public struct BitMapIndexTable
+public readonly struct BitMapIndexTable
 {
 	private readonly Pointer Pointer;
 

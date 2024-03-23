@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Kernel.BareMetal.IPC;
+namespace Mosa.Kernel.BareMetal.Messaging;
 
 internal static class ServiceQueueRegistry
 {
@@ -23,6 +23,20 @@ internal static class ServiceQueueRegistry
 			foreach (var queue in Queues)
 			{
 				if (queue.ServiceID.ID == serviceID.ID)
+					return queue;
+			}
+
+			return null;
+		}
+	}
+
+	public static MessageQueue Find(string serviceName)
+	{
+		lock (Queues)
+		{
+			foreach (var queue in Queues)
+			{
+				if (queue.Name == serviceName)
 					return queue;
 			}
 

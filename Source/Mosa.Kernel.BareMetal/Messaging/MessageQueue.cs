@@ -2,9 +2,9 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Kernel.BareMetal.IPC;
+namespace Mosa.Kernel.BareMetal.Messaging;
 
-internal class MessageQueue
+public class MessageQueue
 {
 	public string Name { get; private set; }
 

@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Mosa.Kernel.BareMetal.IPC;
+using Mosa.Kernel.BareMetal.Messaging;
 using Mosa.Runtime;
 
 // NOTE: The scheduler called from the interrupt handler may not allocate memory!
@@ -167,13 +167,15 @@ public static class Scheduler
 		return Platform.Scheduler.SignalSystemCall();
 	}
 
-	internal static void QueueRequestMessage(MessageQueue messageQueue, object data)
+	internal static void SendMessage(MessageQueue messageQueue, object data, bool async)
 	{
 		var thread = GetCurrentThread();
 
-		var message = new Message(data, thread);
+		var sequence = async ? 0 : ++thread.Sequence;
 
-		//
+		var message = async ? new Message(data, thread, sequence) : new Message(data);
+
+		messageQueue.Add(message);
 	}
 
 	#endregion Internal API

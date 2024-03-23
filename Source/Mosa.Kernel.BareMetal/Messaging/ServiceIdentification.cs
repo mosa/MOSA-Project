@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Kernel.BareMetal.IPC;
+namespace Mosa.Kernel.BareMetal.Messaging;
 
 public readonly struct ServiceIdentification
 {

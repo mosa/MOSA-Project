@@ -66,13 +66,13 @@ public partial class MosaSettings
 	public bool EmitBinary
 	{
 		get => Settings.GetValue(Name.Compiler_Binary, true);
-		set => Settings.SetValue(Name.Compiler_Binary, true);
+		set => Settings.SetValue(Name.Compiler_Binary, value);
 	}
 
 	public bool EmitDwarf
 	{
 		get => Settings.GetValue(Name.Linker_Dwarf, false);
-		set => Settings.SetValue(Name.Linker_Dwarf, false);
+		set => Settings.SetValue(Name.Linker_Dwarf, value);
 	}
 
 	public string MultibootVersion
@@ -757,7 +757,6 @@ public partial class MosaSettings
 
 		MethodScanner = false;
 
-		EmitBinary = true;
 		SSA = true;
 		BasicOptimizations = true;
 		ValueNumbering = true;

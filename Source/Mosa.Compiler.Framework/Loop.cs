@@ -2,7 +2,7 @@
 
 using System.Diagnostics;
 
-namespace Mosa.Compiler.Framework.Common;
+namespace Mosa.Compiler.Framework;
 
 public sealed class Loop
 {
