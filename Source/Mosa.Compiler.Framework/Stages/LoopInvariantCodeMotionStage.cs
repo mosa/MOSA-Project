@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.Common;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -18,9 +17,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 	private readonly Counter CodeMotionCount = new("LoopInvariantCodeMotion.CodeMotion");
 	private readonly Counter Methods = new("LoopInvariantCodeMotion.Methods");
 
-	private SimpleFastDominance AnalysisDominance;
-
-	private HashSet<Operand> ParamStoreSet = new HashSet<Operand>();
+	private HashSet<Operand> ParamStoreSet = new();
 
 	private TraceLog trace;
 
@@ -50,9 +47,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 
 		ParamStoreSet = CollectParamStores();
 
-		AnalysisDominance = new SimpleFastDominance(BasicBlocks, BasicBlocks.PrologueBlock);
-
-		var loops = FindLoops();
+		var loops = LoopDetector.FindLoops(BasicBlocks);
 
 		if (loops.Count == 0)
 			return;
@@ -62,7 +57,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 			DumpLoops(loops);
 		}
 
-		SortLoops(loops);
+		SortLoopsByBlockCount(loops);
 
 		FindLoopInvariantInstructions(loops);
 
@@ -78,77 +73,6 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 	protected override void Finish()
 	{
 		ParamStoreSet = null;
-		AnalysisDominance = null;
-	}
-
-	private List<Loop> FindLoops()
-	{
-		var loops = new List<Loop>();
-		var lookup = new Dictionary<BasicBlock, Loop>();
-
-		foreach (var block in BasicBlocks)
-		{
-			if (block.PreviousBlocks.Count == 0)
-				continue;
-
-			foreach (var previous in block.PreviousBlocks)
-			{
-				// Is this a back-edge? Yes, if "block" dominates "previous"
-				if (AnalysisDominance.IsDominator(block, previous))
-				{
-					if (lookup.TryGetValue(block, out Loop loop))
-					{
-						loop.AddBackEdge(previous);
-					}
-					else
-					{
-						loop = new Loop(block, previous);
-						loops.Add(loop);
-						lookup.Add(block, loop);
-					}
-				}
-			}
-		}
-
-		foreach (var loop in loops)
-		{
-			PopulateLoopNodes(loop);
-		}
-
-		return loops;
-	}
-
-	private void PopulateLoopNodes(Loop loop)
-	{
-		var worklist = new Stack<BasicBlock>();
-		var array = new BitArray(BasicBlocks.Count);
-
-		foreach (var backedge in loop.Backedges)
-		{
-			worklist.Push(backedge);
-		}
-
-		loop.AddNode(loop.Header);
-		array.Set(loop.Header.Sequence, true);
-
-		while (worklist.Count != 0)
-		{
-			var node = worklist.Pop();
-
-			if (!array.Get(node.Sequence))
-			{
-				array.Set(node.Sequence, true);
-				loop.LoopBlocks.Add(node);
-
-				foreach (var previous in node.PreviousBlocks)
-				{
-					if (previous == loop.Header)
-						continue;
-
-					worklist.Push(previous);
-				}
-			}
-		}
 	}
 
 	public void DumpLoops(List<Loop> loops)
@@ -180,7 +104,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		}
 	}
 
-	private void SortLoops(List<Loop> loops)
+	private static void SortLoopsByBlockCount(List<Loop> loops)
 	{
 		loops.Sort((Loop p1, Loop p2) => p1.LoopBlocks.Count < p2.LoopBlocks.Count ? 0 : 1);
 	}

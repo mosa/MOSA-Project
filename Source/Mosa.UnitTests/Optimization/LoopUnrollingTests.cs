@@ -13,7 +13,20 @@ public static class LoopUnrollingTests
 
 		for (var i = 0; i < 2; i++)
 		{
-			v = v + 1;
+			v++;
+		}
+
+		return v;
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static int SimpleUnroll2(int a)
+	{
+		var v = 0;
+
+		for (var i = 0; i < 2; i++)
+		{
+			v += a;
 		}
 
 		return v;
