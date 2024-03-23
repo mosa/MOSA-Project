@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
+using Mosa.Compiler.Framework.Common;
 
 namespace Mosa.Compiler.Framework.Analysis;
 
@@ -56,7 +57,7 @@ public sealed class LoopDetector
 	private static void PopulateLoopNodes(BasicBlocks basicBlocks, Loop loop)
 	{
 		var worklist = new Stack<BasicBlock>();
-		var array = new BitArray(basicBlocks.Count);
+		var array = new BlockBitSet(basicBlocks);
 
 		foreach (var backedge in loop.Backedges)
 		{
@@ -64,15 +65,15 @@ public sealed class LoopDetector
 		}
 
 		loop.AddNode(loop.Header);
-		array.Set(loop.Header.Sequence, true);
+		array.Add(loop.Header);
 
 		while (worklist.Count != 0)
 		{
 			var node = worklist.Pop();
 
-			if (!array.Get(node.Sequence))
+			if (!array.Contains(node))
 			{
-				array.Set(node.Sequence, true);
+				array.Add(node);
 				loop.LoopBlocks.Add(node);
 
 				foreach (var previous in node.PreviousBlocks)

@@ -4,18 +4,18 @@ using System.Collections;
 
 namespace Mosa.Compiler.Framework.Common;
 
-public sealed class QuickBlockSet
+public sealed class BlockBitSet
 {
 	private readonly BasicBlocks BasicBlocks;
 	private readonly BitArray ArraySet;
 
-	public QuickBlockSet(BasicBlocks basicBlocks)
+	public BlockBitSet(BasicBlocks basicBlocks)
 	{
 		BasicBlocks = basicBlocks;
 		ArraySet = new BitArray(basicBlocks.Count, false);
 	}
 
-	public QuickBlockSet(BasicBlocks basicBlocks, List<BasicBlock> blocks)
+	public BlockBitSet(BasicBlocks basicBlocks, List<BasicBlock> blocks)
 	{
 		BasicBlocks = basicBlocks;
 		ArraySet = new BitArray(basicBlocks.Count, false);
@@ -47,6 +47,16 @@ public sealed class QuickBlockSet
 	public void Remove(BasicBlock block)
 	{
 		ArraySet.Set(block.Sequence, false);
+	}
+
+	public void Or(BlockBitSet set)
+	{
+		ArraySet.Or(set.ArraySet);
+	}
+
+	public void And(BlockBitSet set)
+	{
+		ArraySet.And(set.ArraySet);
 	}
 
 	public IEnumerable<BasicBlock> GetBlocks()

@@ -14,10 +14,10 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 	#region Data Members
 
 	private BasicBlocks basicBlocks;
-	private QuickBlockSet active;
-	private QuickBlockSet visited;
-	private QuickBlockSet loopHeader;
-	private QuickBlockSet loopEnds;
+	private BlockBitSet active;
+	private BlockBitSet visited;
+	private BlockBitSet loopHeader;
+	private BlockBitSet loopEnds;
 	private int loopCount;
 	private int[] forwardBranchesCount;
 	private int[] loopBlockIndex;
@@ -114,9 +114,9 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 		this.basicBlocks = basicBlocks;
 
 		blockCount = basicBlocks.Count;
-		loopEnds = new QuickBlockSet(basicBlocks);
+		loopEnds = new BlockBitSet(basicBlocks);
 		loopCount = 0;
-		loopHeader = new QuickBlockSet(basicBlocks);
+		loopHeader = new BlockBitSet(basicBlocks);
 		forwardBranchesCount = new int[blockCount];
 		loopBlockIndex = new int[blockCount];
 		loopDepth = new int[blockCount];
@@ -154,8 +154,8 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 	private void StartCountEdges(BasicBlock start)
 	{
-		active = new QuickBlockSet(basicBlocks);
-		visited = new QuickBlockSet(basicBlocks);
+		active = new BlockBitSet(basicBlocks);
+		visited = new BlockBitSet(basicBlocks);
 
 		CountEdges(start, null);
 	}
@@ -249,7 +249,7 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 	private void AssignLoopDepth(BasicBlock start)
 	{
-		visited = new QuickBlockSet(basicBlocks);
+		visited = new BlockBitSet(basicBlocks);
 
 		var worklist = new Stack<BasicBlock>();
 

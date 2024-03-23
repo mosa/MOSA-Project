@@ -4,6 +4,7 @@ using System.Collections;
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Common;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -16,7 +17,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 	private List<BasicBlock> ReversePostOrder;
 
 	private Dictionary<Operand, Operand> MapToValueNumber;
-	private BitArray Processed;
+	private BlockBitSet Processed;
 
 	private TraceLog trace;
 
@@ -67,7 +68,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 		MapToValueNumber = new Dictionary<Operand, Operand>(MethodCompiler.VirtualRegisters.Count);
 		Expressions = new Dictionary<int, List<Expression>>();
-		Processed = new BitArray(BasicBlocks.Count, false);
+		Processed = new BlockBitSet(BasicBlocks);
 
 		AnalysisDominance = new SimpleFastDominance(BasicBlocks, BasicBlocks.PrologueBlock);
 
@@ -203,7 +204,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		var successorValidated = false;
 		var successorProcessed = true;
 
-		Processed.Set(block.Sequence, true);
+		Processed.Add(block);
 
 		for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 		{
@@ -219,7 +220,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 					successorValidated = true;
 					foreach (var processed in block.PreviousBlocks)
 					{
-						if (!Processed.Get(block.Sequence))
+						if (!Processed.Contains(block))
 						{
 							successorProcessed = false;
 							break;
