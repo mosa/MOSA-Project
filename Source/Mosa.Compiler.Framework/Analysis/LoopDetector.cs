@@ -17,7 +17,7 @@ public sealed class LoopDetector
 		return FindLoops(basicBlocks, dominance);
 	}
 
-	public static List<Loop> FindLoops(BasicBlocks basicBlocks, SimpleFastDominance analysisDominance)
+	public static List<Loop> FindLoops(BasicBlocks basicBlocks, SimpleFastDominance dominance)
 	{
 		var loops = new List<Loop>();
 		var lookup = new Dictionary<BasicBlock, Loop>();
@@ -30,7 +30,7 @@ public sealed class LoopDetector
 			foreach (var previous in block.PreviousBlocks)
 			{
 				// Is this a back-edge? Yes, if "block" dominates "previous"
-				if (analysisDominance.IsDominator(block, previous))
+				if (dominance.IsDominator(block, previous))
 				{
 					if (lookup.TryGetValue(block, out Loop loop))
 					{
@@ -57,7 +57,7 @@ public sealed class LoopDetector
 	private static void PopulateLoopNodes(BasicBlocks basicBlocks, Loop loop)
 	{
 		var worklist = new Stack<BasicBlock>();
-		var array = new BlockBitSet(basicBlocks);
+		var visited = new BlockBitSet(basicBlocks);
 
 		foreach (var backedge in loop.Backedges)
 		{
@@ -65,24 +65,24 @@ public sealed class LoopDetector
 		}
 
 		loop.AddNode(loop.Header);
-		array.Add(loop.Header);
+		visited.Add(loop.Header);
 
 		while (worklist.Count != 0)
 		{
 			var node = worklist.Pop();
 
-			if (!array.Contains(node))
+			if (visited.Contains(node))
+				continue;
+
+			visited.Add(node);
+			loop.LoopBlocks.Add(node);
+
+			foreach (var previous in node.PreviousBlocks)
 			{
-				array.Add(node);
-				loop.LoopBlocks.Add(node);
+				if (previous == loop.Header)
+					continue;
 
-				foreach (var previous in node.PreviousBlocks)
-				{
-					if (previous == loop.Header)
-						continue;
-
-					worklist.Push(previous);
-				}
+				worklist.Push(previous);
 			}
 		}
 	}
