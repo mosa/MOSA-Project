@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
+using Mosa.Compiler.Framework.Common;
 
 namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
@@ -15,13 +16,13 @@ public class RemoveUnreachableBlocks : BaseBlockTransform
 		var emptied = 0;
 
 		var stack = new Stack<BasicBlock>();
-		var bitmap = new BitArray(basicBlocks.Count, false);
+		var bitmap = new BlockBitSet(basicBlocks);
 
 		foreach (var block in basicBlocks)
 		{
 			if (block.IsHeadBlock || block.IsHandlerHeadBlock || block.IsTryHeadBlock)
 			{
-				bitmap.Set(block.Sequence, true);
+				bitmap.Add(block);
 				stack.Push(block);
 			}
 		}
@@ -36,9 +37,9 @@ public class RemoveUnreachableBlocks : BaseBlockTransform
 			{
 				//trace?.Log($"Visited Block: {block}");
 
-				if (!bitmap.Get(next.Sequence))
+				if (!bitmap.Contains(next))
 				{
-					bitmap.Set(next.Sequence, true);
+					bitmap.Add(next);
 					stack.Push(next);
 				}
 			}
@@ -46,7 +47,7 @@ public class RemoveUnreachableBlocks : BaseBlockTransform
 
 		foreach (var block in basicBlocks)
 		{
-			if (bitmap.Get(block.Sequence))
+			if (bitmap.Contains(block))
 				continue;
 
 			if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)

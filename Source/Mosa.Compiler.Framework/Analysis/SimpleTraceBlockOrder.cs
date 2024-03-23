@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
+using Mosa.Compiler.Framework.Common;
 
 namespace Mosa.Compiler.Framework.Analysis;
 
@@ -22,7 +23,7 @@ public class SimpleTraceBlockOrder : BaseBlockOrder
 	public override void Analyze(BasicBlocks basicBlocks)
 	{
 		// Create dictionary of referenced blocks
-		var referenced = new BitArray(basicBlocks.Count);
+		var referenced = new BlockBitSet(basicBlocks);
 
 		// Allocate list of ordered Blocks
 		NewBlockOrder = new List<BasicBlock>(basicBlocks.Count);
@@ -38,9 +39,9 @@ public class SimpleTraceBlockOrder : BaseBlockOrder
 			{
 				var block = workList.Pop();
 
-				if (!referenced.Get(block.Sequence))
+				if (!referenced.Contains(block))
 				{
-					referenced.Set(block.Sequence, true);
+					referenced.Add(block);
 					NewBlockOrder.Add(block);
 
 					var nextBlocks = new List<BasicBlock>(block.NextBlocks);
@@ -48,7 +49,7 @@ public class SimpleTraceBlockOrder : BaseBlockOrder
 
 					foreach (var successor in nextBlocks)
 					{
-						if (!referenced.Get(successor.Sequence))
+						if (!referenced.Contains(successor))
 						{
 							workList.Push(successor);
 						}

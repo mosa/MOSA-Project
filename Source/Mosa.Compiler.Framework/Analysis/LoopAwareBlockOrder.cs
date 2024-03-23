@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.Common;
 
 namespace Mosa.Compiler.Framework.Analysis;
 
@@ -13,9 +14,9 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 	#region Data Members
 
 	private BasicBlocks basicBlocks;
-	private BitArray active;
-	private BitArray visited;
-	private BitArray loopHeader;
+	private BlockBitSet active;
+	private BlockBitSet visited;
+	private BlockBitSet loopHeader;
 	private List<BasicBlock> loopEnds;
 	private int loopCount;
 	private int[] forwardBranchesCount;
@@ -115,7 +116,7 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 		blockCount = basicBlocks.Count;
 		loopEnds = new List<BasicBlock>();
 		loopCount = 0;
-		loopHeader = new BitArray(blockCount, false);
+		loopHeader = new BlockBitSet(basicBlocks);
 		forwardBranchesCount = new int[blockCount];
 		loopBlockIndex = new int[blockCount];
 		loopDepth = new int[blockCount];
@@ -153,8 +154,8 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 	private void StartCountEdges(BasicBlock start)
 	{
-		active = new BitArray(blockCount, false);
-		visited = new BitArray(blockCount, false);
+		active = new BlockBitSet(basicBlocks);
+		visited = new BlockBitSet(basicBlocks);
 
 		CountEdges(start, null);
 	}
@@ -163,12 +164,12 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 	{
 		var blockId = current.Sequence;
 
-		if (active.Get(blockId))
+		if (active.Contains(current))
 		{
-			Debug.Assert(visited.Get(blockId));
+			Debug.Assert(visited.Contains(current));
 			Debug.Assert(parent != null);
 
-			loopHeader.Set(blockId, true);
+			loopHeader.Add(current);
 			loopEnds.Add(parent);
 
 			return;
@@ -176,21 +177,21 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 		forwardBranchesCount[blockId]++;
 
-		if (visited.Get(blockId))
+		if (visited.Contains(current))
 			return;
 
-		visited.Set(blockId, true);
-		active.Set(blockId, true);
+		visited.Add(current);
+		active.Add(current);
 
 		foreach (var next in current.NextBlocks)
 		{
 			CountEdges(next, current);
 		}
 
-		Debug.Assert(active.Get(blockId));
-		active.Set(blockId, false);
+		Debug.Assert(active.Contains(current));
+		active.Remove(current);
 
-		if (loopHeader.Get(blockId))
+		if (loopHeader.Contains(current))
 		{
 			loopBlockIndex[blockId] = loopCount;
 			loopCount++;
@@ -248,7 +249,7 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 
 	private void AssignLoopDepth(BasicBlock start)
 	{
-		visited = new BitArray(blockCount, false);
+		visited = new BlockBitSet(basicBlocks);
 
 		var worklist = new Stack<BasicBlock>();
 
@@ -258,9 +259,9 @@ public sealed class LoopAwareBlockOrder : BaseBlockOrder
 		{
 			var current = worklist.Pop();
 
-			if (!visited.Get(current.Sequence))
+			if (!visited.Contains(current))
 			{
-				visited.Set(current.Sequence, true);
+				visited.Add(current);
 
 				var currentLoopDepth = 0;
 				var minLoopIndex = -1;
