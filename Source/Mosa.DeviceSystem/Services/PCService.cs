@@ -30,18 +30,9 @@ public class PCService : BaseService
 		if (address.Address == 0)
 			return false;
 
-		// 1st method
 		var value = ACPI.ResetValue;
 		address.Write8(value);
-
-		// 2nd method: write to PCI Configuration Space (we're actually writing on the host bridge controller)
-		// TODO: Fix
-		var controller = deviceService.GetFirstDevice<IHostBridgeController>(DeviceStatus.Online).DeviceDriver as IHostBridgeController;
-		if (controller == null)
-			return false;
-
-		controller.SetCPUResetInformation((byte)address.Address, value);
-		return controller.CPUReset();
+		return true;
 	}
 
 	public bool Shutdown()

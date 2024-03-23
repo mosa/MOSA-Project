@@ -4,6 +4,7 @@ namespace Mosa.DeviceSystem.Framework;
 
 public enum DeviceBusType
 {
+	None,
 	ISA,
 	PCI
 }

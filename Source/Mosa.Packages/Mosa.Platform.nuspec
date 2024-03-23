@@ -12,7 +12,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA BareMetal kernel and runtime libraries</summary>
 		<description>This package contains the platform-agnostic BareMetal kernel and runtime libraries (including the core library).</description>
-		<copyright>Copyright © MOSA Project 2023</copyright>
+		<copyright>Copyright © MOSA Project 2024</copyright>
 		<tags>MOSA Compiler</tags>
 	</metadata>
 	<files>

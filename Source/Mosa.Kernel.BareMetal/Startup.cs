@@ -192,9 +192,10 @@ public static class Startup
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
+		// Future: We shouldn't be directly initializing ISA devices on non-x86 platforms (even if it doesn't do anything on those)
 		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> X86System...");
-		deviceService.Initialize(new X86System(), null);
+		Console.Write("> ISABus...");
+		deviceService.Initialize(new ISABus(), null);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 

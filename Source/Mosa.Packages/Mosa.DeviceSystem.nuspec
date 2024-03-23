@@ -12,7 +12,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA device drivers framework and file system</summary>
 		<description>This package contains the MOSA device drivers framework along with the VFS (Virtual File System) and the file systems implementations.</description>
-		<copyright>Copyright © MOSA Project 2023</copyright>
+		<copyright>Copyright © MOSA Project 2024</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Platform" version="$version$" />

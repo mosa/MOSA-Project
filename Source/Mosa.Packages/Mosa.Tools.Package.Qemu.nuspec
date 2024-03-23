@@ -12,7 +12,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA tools with QEMU for Windows</summary>
 		<description>This package contains all the tools for MOSA along with QEMU binaries for Windows.</description>
-		<copyright>Copyright © MOSA Project 2023</copyright>
+		<copyright>Copyright © MOSA Project 2024</copyright>
 		<tags>MOSA Compiler</tags>
 		<contentFiles>
 			<files include="**/*.*" buildAction="None" copyToOutput="true" />

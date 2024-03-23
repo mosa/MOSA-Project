@@ -13,7 +13,7 @@ namespace Mosa.DeviceDriver.ISA;
 /// </summary>
 public class ISABus : BaseDeviceDriver
 {
-	public override void Initialize() => Device.Name = "ISA-BUS";
+	public override void Initialize() => Device.Name = "ISABus";
 
 	public override void Probe() => Device.Status = DeviceStatus.Available;
 
@@ -27,7 +27,7 @@ public class ISABus : BaseDeviceDriver
 
 	private void StartDevices()
 	{
-		HAL.DebugWriteLine("ISABus:StartISADevices()");
+		HAL.DebugWriteLine("ISABus:StartDevices()");
 
 		// Start ISA Drivers
 		var drivers = DeviceService.GetDeviceDrivers(DeviceBusType.ISA);
@@ -42,7 +42,7 @@ public class ISABus : BaseDeviceDriver
 			StartDevice(entry);
 		}
 
-		HAL.DebugWriteLine("ISABus:StartISADevices() [Exit]");
+		HAL.DebugWriteLine("ISABus:StartDevices() [Exit]");
 	}
 
 	private void StartDevice(ISADeviceDriverRegistryEntry driverEntry)

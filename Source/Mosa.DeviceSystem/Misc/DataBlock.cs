@@ -18,12 +18,6 @@ public class DataBlock
 
 	public DataBlock(uint length) => Data = new byte[length];
 
-	public byte this[int index]
-	{
-		get => Data[index];
-		set => Data[index] = value;
-	}
-
 	public char GetChar(uint offset) => (char)Data[offset];
 
 	public void SetChar(uint offset, char value) => Data[offset] = (byte)value;
