@@ -4,6 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ACPI;
 
+/// <summary>
+/// Describes a processor local APIC entry in the ACPI MADT.
+/// </summary>
 public readonly struct ProcessorLocalAPICEntry
 {
 	public readonly Pointer Pointer;

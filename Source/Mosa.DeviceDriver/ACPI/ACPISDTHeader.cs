@@ -4,6 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ACPI;
 
+/// <summary>
+/// A standard ACPI header, which is the base of all other headers (like the <see cref="FADT"/> for example).
+/// </summary>
 public readonly struct ACPISDTHeader
 {
 	public readonly Pointer Pointer;

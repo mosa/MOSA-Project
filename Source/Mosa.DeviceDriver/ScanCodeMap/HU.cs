@@ -5,7 +5,7 @@ using Mosa.DeviceSystem.Keyboard;
 namespace Mosa.DeviceDriver.ScanCodeMap;
 
 /// <summary>
-/// Implements the HU Keyboard map.
+/// Implements a Hungarian QWERTZ scan code map.
 /// </summary>
 public class HU : IScanCodeMap
 {

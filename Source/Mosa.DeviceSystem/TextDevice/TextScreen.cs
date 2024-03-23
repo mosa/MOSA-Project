@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem.TextDevice;
 /// <summary>
 /// A class used for interacting with a text screen (like a TTY), using an <see cref="ITextDevice"/> and an <see cref="IKeyboard"/>.
 /// It can do pretty much everything except reading specific characters at a given cursor position (however, it can sequentially read
-/// a line using the ReadLine() function).
+/// a line using the ReadLine() method).
 /// </summary>
 public class TextScreen
 {

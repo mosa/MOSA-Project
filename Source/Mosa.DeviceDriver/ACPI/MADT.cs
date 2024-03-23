@@ -4,6 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ACPI;
 
+/// <summary>
+/// The ACPI Multiple APIC Description Table.
+/// </summary>
 public readonly struct MADT
 {
 	public readonly Pointer Pointer;

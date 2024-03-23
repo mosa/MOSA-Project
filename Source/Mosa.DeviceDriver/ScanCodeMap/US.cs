@@ -5,7 +5,7 @@ using Mosa.DeviceSystem.Keyboard;
 namespace Mosa.DeviceDriver.ScanCodeMap;
 
 /// <summary>
-/// Implements the US Keyboard map (scan code set 2)
+/// Implements a QWERTY scan code map. (https://wiki.osdev.org/PS/2_Keyboard#Scan_Code_Set_1)
 /// </summary>
 public class US : IScanCodeMap
 {

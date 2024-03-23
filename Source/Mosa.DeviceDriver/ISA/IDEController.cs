@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.ISA;
 // http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
 /// <summary>
-/// IDE Controller
+/// Implements an IDE controller in ATA PIO mode. It also implements the <see cref="IDiskControllerDevice"/> interface.
 /// </summary>
 //[ISADeviceDriver(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 //[ISADeviceDriver(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.X86AndX64)]

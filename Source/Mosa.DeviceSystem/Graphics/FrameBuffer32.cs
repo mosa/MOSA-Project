@@ -9,8 +9,8 @@ using Mosa.Runtime;
 namespace Mosa.DeviceSystem.Graphics;
 
 /// <summary>
-/// A 32 bpp versatile frame buffer that works with physical and virtual outputs. Given two X and Y coordinates, the lambda function
-/// GetOffset provides the correct offset within the buffer. This frame buffer implements software-accelerated drawing functions.
+/// A 32 bpp versatile frame buffer that works with physical and virtual outputs. Given two X and Y coordinates, the lambda method
+/// GetOffset provides the correct offset within the buffer. This frame buffer implements software-accelerated drawing methods.
 /// For hardware-accelerated ones, check the graphics device driver you're using.
 /// </summary>
 public sealed class FrameBuffer32

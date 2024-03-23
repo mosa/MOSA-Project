@@ -4,9 +4,6 @@ using Mosa.DeviceSystem.Framework;
 
 namespace Mosa.DeviceDriver.PCI.Intel;
 
-/// <summary>
-/// Intel
-/// </summary>
 public class Intel4SeriesChipsetDRAMController : BaseDeviceDriver
 {
 	public override void Initialize() => Device.Name = "Intel4SeriesChipsetDRAMController";

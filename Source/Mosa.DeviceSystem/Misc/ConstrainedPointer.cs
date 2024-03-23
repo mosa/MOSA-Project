@@ -7,7 +7,7 @@ using Mosa.Runtime;
 namespace Mosa.DeviceSystem.Misc;
 
 /// <summary>
-/// Provides access to a sized region in memory, using a <see cref="Pointer"/>. It also provides functions for directly reading and
+/// Provides access to a sized region in memory, using a <see cref="Pointer"/>. It also provides methods for directly reading and
 /// writing 24-bit integers.
 /// </summary>
 public readonly struct ConstrainedPointer
