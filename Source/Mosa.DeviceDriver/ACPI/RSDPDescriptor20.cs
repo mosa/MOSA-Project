@@ -4,6 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ACPI;
 
+/// <summary>
+/// The ACPI Root System Description Pointer v2 (also known as the eXtended System Description Pointer, or XSDP).
+/// </summary>
 public readonly struct RSDPDescriptor20
 {
 	public readonly Pointer Pointer;

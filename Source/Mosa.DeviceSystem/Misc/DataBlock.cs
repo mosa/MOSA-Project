@@ -5,8 +5,8 @@ using System.Text;
 namespace Mosa.DeviceSystem.Misc;
 
 /// <summary>
-/// Provides functions for reading and writing specific sized types of data (e.g. various sized integers or byte arrays). It also
-/// provides functions for writing those types in a reserved endianness.
+/// Provides methods for reading and writing specific sized types of data (e.g. various sized integers or byte arrays). It also
+/// provides methods for writing those types in a reserved endianness.
 /// </summary>
 public class DataBlock
 {

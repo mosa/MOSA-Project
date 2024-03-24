@@ -4,6 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ACPI;
 
+/// <summary>
+/// The ACPI eXtended System Description Table.
+/// </summary>
 public readonly struct XSDT
 {
 	public readonly Pointer Pointer;

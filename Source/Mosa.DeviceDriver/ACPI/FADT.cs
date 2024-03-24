@@ -4,6 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ACPI;
 
+/// <summary>
+/// The Fixed ACPI Description Table.
+/// </summary>
 public readonly struct FADT
 {
 	public readonly Pointer Pointer;

@@ -4,6 +4,10 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ACPI;
 
+/// <summary>
+/// The ACPI Generic Address Structure. It describes in which address space a register is located (e.g. MMIO, Port IO, PCI configuration
+/// space, etc...)
+/// </summary>
 public readonly struct GenericAddressStructure
 {
 	public readonly Pointer Pointer;

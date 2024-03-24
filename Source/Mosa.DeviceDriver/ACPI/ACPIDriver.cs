@@ -11,6 +11,9 @@ namespace Mosa.DeviceDriver.ACPI;
 //https://wiki.osdev.org/ACPI
 //https://wiki.osdev.org/MADT
 
+/// <summary>
+/// A basic implementation of ACPI. It implements the <see cref="IACPI"/> interface.
+/// </summary>
 public class ACPIDriver : BaseDeviceDriver, IACPI
 {
 	private FADT fadt;

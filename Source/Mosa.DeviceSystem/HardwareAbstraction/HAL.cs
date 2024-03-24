@@ -9,7 +9,7 @@ namespace Mosa.DeviceSystem.HardwareAbstraction;
 /// <summary>
 /// A static class used throughout the code base to call the hardware abstraction layer. It internally sets an instance of a
 /// <see cref="BaseHardwareAbstraction"/> class, and effectively does nothing more than that, except from providing a
-/// <see cref="HandleInterrupt"/> delegate function to handle interrupts coming from anywhere.
+/// <see cref="HandleInterrupt"/> delegate method to handle interrupts coming from anywhere.
 /// </summary>
 public static class HAL
 {
@@ -22,7 +22,7 @@ public static class HAL
 
 	public static void Set(BaseHardwareAbstraction abstraction) => hardwareAbstraction = abstraction;
 
-	public static void SetInterruptHandler(HandleInterrupt function) => handleInterrupt = function;
+	public static void SetInterruptHandler(HandleInterrupt method) => handleInterrupt = method;
 
 	public static void ProcessInterrupt(byte irq) => handleInterrupt?.Invoke(irq);
 

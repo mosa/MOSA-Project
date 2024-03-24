@@ -4,6 +4,9 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.ACPI;
 
+/// <summary>
+/// A generic entry in the ACPI MADT, which is the base of all other entries (like the <see cref="IOAPICEntry"/> for example).
+/// </summary>
 public readonly struct MADTEntry
 {
 	public readonly Pointer Pointer;

@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem.Mouse;
 /// <summary>
 /// An interface used for interacting directly with a mouse device. It provides access to the device's raw X and Y coordinates,
 /// as well as its current state. It is important to provide the screen resolution to the mouse using the SetScreenResolution()
-/// function first before using the driver.
+/// method first before using the driver.
 /// </summary>
 public interface IMouseDevice
 {

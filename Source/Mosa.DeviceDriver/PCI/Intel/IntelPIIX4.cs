@@ -8,6 +8,7 @@ namespace Mosa.DeviceDriver.PCI.Intel;
 //http://www.intel.com/assets/pdf/datasheet/290562.pdf
 
 /// <summary>
+/// A newer version of the <see cref="IntelPIIX3"/> southbridge, supporting most notably ACPI.
 /// </summary>
 //[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x7113, Platforms = PlatformArchitecture.X86AndX64)]
 public class IntelPIIX4 : BaseDeviceDriver

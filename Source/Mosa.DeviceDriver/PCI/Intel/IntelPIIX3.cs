@@ -8,6 +8,7 @@ namespace Mosa.DeviceDriver.PCI.Intel;
 //http://download.intel.com/design/intarch/datashts/29055002.pdf
 
 /// <summary>
+/// The southbridge of the generic Intel chipset <see cref="Intel440FX"/>.
 /// </summary>
 //[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x7000, Platforms = PlatformArchitecture.X86AndX64)]
 public class IntelPIIX3 : BaseDeviceDriver

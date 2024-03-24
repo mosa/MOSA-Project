@@ -9,7 +9,7 @@ using Mosa.Runtime;
 namespace Mosa.DeviceDriver.ISA;
 
 /// <summary>
-/// ISA Bus Driver
+/// A device driver whose sole purpose is to initialize all ISA devices in the system.
 /// </summary>
 public class ISABus : BaseDeviceDriver
 {

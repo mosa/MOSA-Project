@@ -8,6 +8,7 @@ namespace Mosa.DeviceDriver.PCI.Intel;
 //http://www.intel.com/assets/pdf/datasheet/290562.pdf
 
 /// <summary>
+/// The IDE controller for the <see cref="IntelPIIX4"/> southbridge, interfacing via PCI.
 /// </summary>
 //[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x7010, Platforms = PlatformArchitecture.X86AndX64)]
 //Base Class Code: 01h=Mass storage device.
