@@ -464,7 +464,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			|| node.Instruction.IsIOOperation
 			|| node.Instruction.HasUnspecifiedSideEffect
 			|| node.Instruction.HasVariableOperands
-			|| node.Instruction.IsFlowNext
+			|| !node.Instruction.IsFlowNext
 			|| node.Instruction.IgnoreDuringCodeGeneration
 			|| node.Operand1.IsUnresolvedConstant
 			|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))

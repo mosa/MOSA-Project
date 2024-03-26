@@ -1207,7 +1207,7 @@ public sealed class Node
 		var label = Label;
 		var block = Block;
 
-		Clear();
+		Empty();
 
 		Instruction = instruction;
 		OperandCount = operandCount;
