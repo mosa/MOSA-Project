@@ -6,7 +6,7 @@ namespace Mosa.Kernel.BareMetal.IPC;
 
 internal static class ServiceQueueRegistry
 {
-	public static List<MessageQueue> Queues = new List<MessageQueue>();
+	public static List<MessageQueue> Queues = new();
 
 	public static void Register(ServiceIdentification serviceID, MessageQueue queue)
 	{

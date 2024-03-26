@@ -167,13 +167,18 @@ public static class Scheduler
 		return Platform.Scheduler.SignalSystemCall();
 	}
 
-	internal static void QueueRequestMessage(MessageQueue messageQueue, object data)
+	internal static void SendMessage(MessageQueue messageQueue, object data, bool async)
 	{
 		var thread = GetCurrentThread();
 
-		var message = new Message(data, thread);
+		var message = async ? new Message(data, thread) : new Message(data);
 
-		//
+		messageQueue.Add(message);
+	}
+
+	internal static Thread GetCurrentThread()
+	{
+		return CurrentThread;
 	}
 
 	#endregion Internal API
@@ -304,11 +309,6 @@ public static class Scheduler
 	private static void Sleep(Thread thread)
 	{
 		thread.Status = ThreadStatus.Sleeping;
-	}
-
-	private static Thread GetCurrentThread()
-	{
-		return CurrentThread;
 	}
 
 	private static void SetCurrentThread(Thread thread)

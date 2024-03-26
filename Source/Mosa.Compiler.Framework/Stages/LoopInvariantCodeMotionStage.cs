@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common;
@@ -135,7 +134,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					// note - same code from ValueNumberingStage::CanAssignValueNumberToExpression()
@@ -145,7 +144,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 						|| node.Instruction.IsIOOperation
 						|| node.Instruction.HasUnspecifiedSideEffect
 						|| node.Instruction.HasVariableOperands
-						|| node.Instruction.IsFlowNext
+						|| !node.Instruction.IsFlowNext
 						|| node.Instruction.IgnoreDuringCodeGeneration
 						|| node.Operand1.IsUnresolvedConstant
 						|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant)
