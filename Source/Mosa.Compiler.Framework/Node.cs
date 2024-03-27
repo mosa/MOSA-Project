@@ -480,22 +480,6 @@ public sealed class Node
 	#region Methods
 
 	/// <summary>
-	/// Clears this instance.
-	/// </summary>
-	private void Clear()
-	{
-		Label = -1;
-		Instruction = null;
-
-		ClearOperands();
-
-		ConditionCode = ConditionCode.Undefined;
-		Options = InstructionOption.None;
-		Block = null;
-		BranchTargets = null;
-	}
-
-	/// <summary>
 	/// Empties this node.
 	/// </summary>
 	public void Empty()
@@ -507,8 +491,7 @@ public sealed class Node
 		Instruction = null;
 		Block.RemoveBranchInstruction(this);
 		BranchTargets = null;
-
-		PhiBlocks?.Clear();
+		PhiBlocks = null;
 
 		if (AdditionalOperands != null)
 		{
