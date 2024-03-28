@@ -26,7 +26,7 @@ namespace Mosa.DeviceDriver.PCI.VMware;
 //https://github.com/prepare/vmware-svga
 
 /// <summary>
-/// VMware SVGA II Device Driver
+/// A basic implementation of the VMware SVGA-II device. It also implements the <see cref="IGraphicsDevice"/> interface.
 /// </summary>
 //[PCIDeviceDriver(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.X86AndX64)]
 public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice

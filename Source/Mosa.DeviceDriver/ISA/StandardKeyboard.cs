@@ -7,8 +7,8 @@ using Mosa.DeviceSystem.Keyboard;
 namespace Mosa.DeviceDriver.ISA;
 
 /// <summary>
-/// A standard PS/2 keyboard. It implements the IKeyboardDevice interface, and uses a FIFO (First In First Out) buffer to store
-/// the raw scancodes, which can be retrieved using the GetScanCode() function.
+/// A standard PS/2 keyboard. It implements the <see cref="IKeyboardDevice"/> interface, and uses a FIFO (First In First Out) buffer to
+/// store the raw scancodes, which can be retrieved using the GetScanCode() method.
 /// </summary>
 //[ISADeviceDriver(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.X86AndX64)]
 public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice

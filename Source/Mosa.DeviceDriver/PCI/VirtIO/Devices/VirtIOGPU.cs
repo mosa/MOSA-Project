@@ -9,6 +9,10 @@ using Mosa.Runtime;
 
 namespace Mosa.DeviceDriver.PCI.VirtIO.Devices;
 
+/// <summary>
+/// A bare bones (framebuffer-only) implementation of the VirtIO GPU device. It also implements the <see cref="IGraphicsDevice"/>
+/// interface.
+/// </summary>
 public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 {
 	private static class Features

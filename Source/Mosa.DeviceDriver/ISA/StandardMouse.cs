@@ -11,6 +11,9 @@ namespace Mosa.DeviceDriver.ISA;
 //https://forum.osdev.org/viewtopic.php?t=10247
 //https://wiki.osdev.org/Mouse_Input
 
+/// <summary>
+/// A standard PS/2 mouse. It implements the <see cref="IMouseDevice"/> interface.
+/// </summary>
 public class StandardMouse : BaseDeviceDriver, IMouseDevice
 {
 	private enum WaitType

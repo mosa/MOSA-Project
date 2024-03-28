@@ -7,9 +7,9 @@ namespace Mosa.DeviceSystem.Fonts;
 /// <summary>
 /// An interface used for implementing simple fonts. Those can be fixed, like <see cref="ASC16Font"/>, or dynamic, like the
 /// <see cref="SimpleBitFont"/> format. It provides access to the name of the font, its fixed width/height/size (if any),
-/// and the charset it supports. It then allows drawing characters using the DrawChar() and DrawString() functions.
+/// and the charset it supports. It then allows drawing characters using the DrawChar() and DrawString() methods.
 /// To reliably calculate the total width of a character or string, or the height of a character, respectively use the
-/// CalculateWidth() and CalculateHeight() functions.
+/// CalculateWidth() and CalculateHeight() methods.
 /// </summary>
 public interface ISimpleFont
 {

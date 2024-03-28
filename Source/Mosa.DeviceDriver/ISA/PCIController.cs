@@ -7,7 +7,8 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceDriver.ISA;
 
 /// <summary>
-/// PCI Controller
+/// A device driver which queries the PCI controller in the system. It implements both the <see cref="IPCIController"/> and the
+/// <see cref="IPCIControllerLegacy"/> interfaces.
 /// </summary>
 //[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCIController

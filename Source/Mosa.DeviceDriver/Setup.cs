@@ -9,6 +9,12 @@ using Mosa.DeviceSystem.Misc;
 
 namespace Mosa.DeviceDriver;
 
+/// <summary>
+/// Includes a method to get all device drivers that should be initialized by a kernel. Note that this is only a helper method and a
+/// kernel may not use it, and may choose to load specific drivers instead. In a future release however, this method will be removed
+/// in favor of having an attribute associated to each device driver class, effectively telling which device drivers are registered for
+/// initialization.
+/// </summary>
 public static class Setup
 {
 	public static List<DeviceDriverRegistryEntry> GetDeviceDriverRegistryEntries() => new List<DeviceDriverRegistryEntry>
