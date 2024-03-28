@@ -28,7 +28,7 @@ public sealed class ExceptionEnd : BaseExceptionTransform
 
 		var handler = FindNextEnclosingFinallyHandler(transform, immediate);
 
-		if (handler == null)
+		if (handler == null || handler.HandlerStart >= target.Label)
 		{
 			context.SetInstruction(IR.Jmp, target);
 			return;

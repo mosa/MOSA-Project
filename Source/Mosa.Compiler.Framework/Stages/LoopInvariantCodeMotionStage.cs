@@ -137,7 +137,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 					if (node.IsEmptyOrNop)
 						continue;
 
-					// note - same code from ValueNumberingStage::CanAssignValueNumberToExpression()
+					// note - similar code in ValueNumberingStage::CanAssignValueNumberToExpression()
 					if (node.ResultCount != 1
 						|| node.OperandCount is 0 or > 2
 						|| node.Instruction.IsMemoryWrite

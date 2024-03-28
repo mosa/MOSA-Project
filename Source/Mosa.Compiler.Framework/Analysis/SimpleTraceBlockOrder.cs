@@ -47,11 +47,9 @@ public class SimpleTraceBlockOrder : BaseBlockOrder
 				if (block.NextBlocks.Count == 0)
 					continue;
 
-				var nextBlocks = block.NextBlocks;
-
-				//var nextBlocks = (block.NextBlocks.Count == 2 && block.NextBlocks[0].Label < block.NextBlocks[1].Label)
-				//	? new List<BasicBlock>() { block.NextBlocks[1], block.NextBlocks[0] }
-				//	: block.NextBlocks;
+				var nextBlocks = (block.NextBlocks.Count == 2 && block.NextBlocks[0].Label < block.NextBlocks[1].Label)
+					? new List<BasicBlock>() { block.NextBlocks[1], block.NextBlocks[0] }
+					: block.NextBlocks;
 
 				foreach (var successor in nextBlocks)
 				{

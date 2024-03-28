@@ -15,7 +15,7 @@ public static class ExceptionTransforms
 		new ExceptionStart(),
 		new ExceptionEnd(),
 		new Flow(),
-		new TryEnd(),
 		new TryStart(),
+		new TryEnd(),
 	};
 }
