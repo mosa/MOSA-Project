@@ -3,7 +3,6 @@
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Configuration;
 
 namespace Mosa.Compiler.Framework;
 

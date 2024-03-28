@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Managers;
 
 namespace Mosa.Compiler.Framework.Stages;
 

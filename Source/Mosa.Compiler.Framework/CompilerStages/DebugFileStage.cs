@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Reflection.Metadata;
-
 namespace Mosa.Compiler.Framework.CompilerStages;
 
 /// <summary>

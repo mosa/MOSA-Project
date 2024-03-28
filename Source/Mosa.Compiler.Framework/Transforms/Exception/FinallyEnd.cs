@@ -64,22 +64,25 @@ public sealed class FinallyEnd : BaseExceptionTransform
 				var target = targets[i];
 				var conditionBlock = newBlocks[i + 1];
 
-				conditionBlock.AppendInstruction(transform.BranchInstruction, ConditionCode.Equal, null, leaveTargetRegister, Operand.CreateConstant32(target.Label), target);
-				conditionBlock.AppendInstruction(IR.Jmp, newBlocks[i + 2].Block);
+				if (next == null && i == targets.Count - 1)
+				{
+					conditionBlock.AppendInstruction(IR.Jmp, target);
+				}
+				else
+				{
+					conditionBlock.AppendInstruction(transform.BranchInstruction, ConditionCode.Equal, null, leaveTargetRegister, Operand.CreateConstant32(target.Label), target);
+					conditionBlock.AppendInstruction(IR.Jmp, newBlocks[i + 2].Block);
+				}
 			}
 		}
 
-		var finallyCallBlock = newBlocks[targetcount - 1];
-
 		if (next != null)
 		{
+			var finallyCallBlock = newBlocks[targetcount - 1];
+
 			finallyCallBlock.AppendInstruction(IR.MoveObject, transform.ExceptionRegister, Operand.NullObject);
 			finallyCallBlock.AppendInstruction(IR.MoveObject, transform.LeaveTargetRegister, leaveTargetRegister);
 			finallyCallBlock.AppendInstruction(IR.Jmp, transform.BasicBlocks.GetByLabel(next.HandlerStart));
-		}
-		else
-		{
-			// should be an unreachable block
 		}
 	}
 }

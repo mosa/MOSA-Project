@@ -143,8 +143,9 @@ public sealed class Compiler
 	{
 		new CILDecoderStage(),
 		new ExceptionStage(),
-		new IRTransformsStage(),
 		mosaSettings.Devirtualization ? new DevirtualizeCallStage() : null,
+		mosaSettings.BasicOptimizations ? new OptimizationStage(false) : null,
+		new IRTransformsStage(),
 		new PlugStage(),
 		new RuntimeStage(),
 

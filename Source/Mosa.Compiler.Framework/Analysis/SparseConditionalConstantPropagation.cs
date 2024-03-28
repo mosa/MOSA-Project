@@ -882,7 +882,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		var operand1 = GetVariableState(node.Operand1);
 
-		if (operand1.IsOverDefined )
+		if (operand1.IsOverDefined)
 		{
 			UpdateToOverDefined(result);
 			return;
@@ -946,7 +946,6 @@ public sealed class SparseConditionalConstantPropagation
 		result = 0;
 		return false;
 	}
-
 
 	private void IntegerOperation2(Node node)
 	{

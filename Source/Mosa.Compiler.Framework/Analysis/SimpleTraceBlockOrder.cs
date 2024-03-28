@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections;
 using Mosa.Compiler.Framework.Common;
 
 namespace Mosa.Compiler.Framework.Analysis;
@@ -39,20 +38,24 @@ public class SimpleTraceBlockOrder : BaseBlockOrder
 			{
 				var block = workList.Pop();
 
-				if (!referenced.Contains(block))
+				if (referenced.Contains(block))
+					continue;
+
+				referenced.Add(block);
+				NewBlockOrder.Add(block);
+
+				if (block.NextBlocks.Count == 0)
+					continue;
+
+				var nextBlocks = (block.NextBlocks.Count == 2 && block.NextBlocks[0].Label < block.NextBlocks[1].Label)
+					? new List<BasicBlock>() { block.NextBlocks[1], block.NextBlocks[0] }
+					: block.NextBlocks;
+
+				foreach (var successor in nextBlocks)
 				{
-					referenced.Add(block);
-					NewBlockOrder.Add(block);
-
-					var nextBlocks = new List<BasicBlock>(block.NextBlocks);
-					nextBlocks.Sort();
-
-					foreach (var successor in nextBlocks)
+					if (!referenced.Contains(successor))
 					{
-						if (!referenced.Contains(successor))
-						{
-							workList.Push(successor);
-						}
+						workList.Push(successor);
 					}
 				}
 			}
