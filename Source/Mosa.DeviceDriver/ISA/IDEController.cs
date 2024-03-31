@@ -19,9 +19,6 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 {
 	#region Definitions
 
-	/// <summary>
-	/// IDE Command
-	/// </summary>
 	private struct IDECommand
 	{
 		internal const byte ReadSectorsWithRetry = 0x20;
@@ -41,9 +38,6 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		internal const byte Error = 1 << 0;
 	}
 
-	/// <summary>
-	/// Identify Drive
-	/// </summary>
 	private struct IdentifyDrive
 	{
 		internal const uint GeneralConfig = 0x00;
@@ -64,70 +58,11 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 
 	#endregion Definitions
 
-	/// <summary>
-	/// The drives per controller
-	/// </summary>
 	public const uint DrivesPerController = 2; // The maximum supported
 
-	/// <summary>
-	/// The data port
-	/// </summary>
-	private IOPortReadWrite dataPort;
-
-	/// <summary>
-	/// The feature port
-	/// </summary>
-	private IOPortReadWrite featurePort;
-
-	/// <summary>
-	/// The error port
-	/// </summary>
-	private IOPortRead errorPort;
-
-	/// <summary>
-	/// The sector count port
-	/// </summary>
-	private IOPortReadWrite sectorCountPort;
-
-	/// <summary>
-	/// The lba low port
-	/// </summary>
-	private IOPortReadWrite lbaLowPort;
-
-	/// <summary>
-	/// The lba mid port
-	/// </summary>
-	private IOPortReadWrite lbaMidPort;
-
-	/// <summary>
-	/// The lba high port
-	/// </summary>
-	private IOPortReadWrite lbaHighPort;
-
-	/// <summary>
-	/// The device head port
-	/// </summary>
-	private IOPortReadWrite deviceHeadPort;
-
-	/// <summary>
-	/// The status port
-	/// </summary>
-	private IOPortRead statusPort;
-
-	/// <summary>
-	/// The command port
-	/// </summary>
-	private IOPortWrite commandPort;
-
-	/// <summary>
-	/// The bus control register port
-	/// </summary>
-	private IOPortWrite controlPort;
-
-	/// <summary>
-	/// The status port
-	/// </summary>
-	private IOPortRead altStatusPort;
+	private IOPortReadWrite dataPort, featurePort, sectorCountPort, lbaLowPort, lbaMidPort, lbaHighPort, deviceHeadPort;
+	private IOPortRead errorPort, statusPort, altStatusPort;
+	private IOPortWrite commandPort, controlPort;
 
 	private enum AddressingMode
 	{
@@ -142,30 +77,13 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		Write
 	}
 
-	/// <summary>
-	/// Drive Info
-	/// </summary>
 	private struct DriveInfo
 	{
-		/// <summary>
-		/// The present
-		/// </summary>
 		public bool Present;
-
-		/// <summary>
-		/// The maximum lba
-		/// </summary>
 		public uint MaxLBA;
-
-		/// <summary>
-		/// The lba type
-		/// </summary>
 		public AddressingMode AddressingMode;
 	}
 
-	/// <summary>
-	/// The drive information
-	/// </summary>
 	private readonly DriveInfo[] driveInfo = new DriveInfo[DrivesPerController];
 
 	public override void Initialize()
@@ -266,16 +184,8 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		driveInfo[index].AddressingMode = aMode;
 	}
 
-	/// <summary>
-	/// Called when an interrupt is received.
-	/// </summary>
-	/// <returns></returns>
 	public override bool OnInterrupt() => true;
 
-	/// <summary>
-	/// Waits for register ready.
-	/// </summary>
-	/// <returns>True if the drive is ready.</returns>
 	private bool WaitForReadyStatus()
 	{
 		byte status;
@@ -290,10 +200,6 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		// TODO: Timeout -> return false
 	}
 
-	/// <summary>
-	/// Waits for the selected drive to send the identify data.
-	/// </summary>
-	/// <returns>True if the data is received, False if an error ocurred.</returns>
 	private bool WaitForIdentifyData()
 	{
 		byte status;
@@ -306,25 +212,12 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		return (status & StatusRegister.Error) != StatusRegister.Error;
 	}
 
-	/// <summary>
-	/// Send a CacheFlush (0xE7) command to the selected drive.
-	/// </summary>
-	/// <returns>True if the cache flush command is successful, false if not.</returns>
 	private bool DoCacheFlush()
 	{
 		commandPort.Write8(0xE7);
 		return WaitForReadyStatus();
 	}
 
-	/// <summary>
-	/// Performs the LBA28.
-	/// </summary>
-	/// <param name="operation">The operation.</param>
-	/// <param name="drive">The drive NBR.</param>
-	/// <param name="lba">The lba.</param>
-	/// <param name="data">The data.</param>
-	/// <param name="offset">The offset.</param>
-	/// <returns></returns>
 	private bool PerformLBA28(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 	{
 		if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
@@ -362,15 +255,6 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		return true;
 	}
 
-	/// <summary>
-	/// Reads the LBA48.
-	/// </summary>
-	/// <param name="operation">The operation.</param>
-	/// <param name="drive">The drive.</param>
-	/// <param name="lba">The lba.</param>
-	/// <param name="data">The data.</param>
-	/// <param name="offset">The offset.</param>
-	/// <returns></returns>
 	private bool PerformLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 	{
 		if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
@@ -422,57 +306,18 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 
 	#region IDiskControllerDevice
 
-	/// <summary>
-	/// Gets the maximum drive count.
-	/// </summary>
-	/// <value>The drive count.</value>
 	public uint MaximumDriveCount { get; private set; }
 
-	/// <summary>
-	/// Opens the specified drive.
-	/// </summary>
-	/// <param name="drive">The drive.</param>
-	/// <returns></returns>
 	public bool Open(uint drive) => drive < MaximumDriveCount && driveInfo[drive].Present;
 
-	/// <summary>
-	/// Releases the specified drive.
-	/// </summary>
-	/// <param name="drive">The drive.</param>
-	/// <returns></returns>
 	public bool Release(uint drive) => true;
 
-	/// <summary>
-	/// Gets the size of the sector.
-	/// </summary>
-	/// <param name="drive">The drive NBR.</param>
-	/// <returns></returns>
 	public uint GetSectorSize(uint drive) => 512;
 
-	/// <summary>
-	/// Gets the total sectors.
-	/// </summary>
-	/// <param name="drive">The drive NBR.</param>
-	/// <returns></returns>
 	public uint GetTotalSectors(uint drive) => drive >= MaximumDriveCount || !driveInfo[drive].Present ? 0 : driveInfo[drive].MaxLBA;
 
-	/// <summary>
-	/// Determines whether this instance can write to the specified drive.
-	/// </summary>
-	/// <param name="drive">The drive NBR.</param>
-	/// <returns>
-	/// 	<c>true</c> if this instance can write to the specified drive; otherwise, <c>false</c>.
-	/// </returns>
 	public bool CanWrite(uint drive) => true; // TODO
 
-	/// <summary>
-	/// Reads the block.
-	/// </summary>
-	/// <param name="drive">The drive NBR.</param>
-	/// <param name="block">The block.</param>
-	/// <param name="count">The count.</param>
-	/// <param name="data">The data.</param>
-	/// <returns></returns>
 	public bool ReadBlock(uint drive, uint block, uint count, byte[] data)
 	{
 		if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
@@ -506,14 +351,6 @@ public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 		}
 	}
 
-	/// <summary>
-	/// Writes the block.
-	/// </summary>
-	/// <param name="drive">The drive NBR.</param>
-	/// <param name="block">The block.</param>
-	/// <param name="count">The count.</param>
-	/// <param name="data">The data.</param>
-	/// <returns></returns>
 	public bool WriteBlock(uint drive, uint block, uint count, byte[] data)
 	{
 		if (drive >= MaximumDriveCount || !driveInfo[drive].Present)

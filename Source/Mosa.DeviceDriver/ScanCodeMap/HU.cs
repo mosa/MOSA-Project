@@ -36,11 +36,6 @@ public class HU : IScanCodeMap
 		};
 	}
 
-	/// <summary>
-	/// Convert can code into a key
-	/// </summary>
-	/// <param name="scancode">The scancode.</param>
-	/// <returns></returns>
 	public KeyEvent ConvertScanCode(byte scancode)
 	{
 		var key = new KeyEvent();
