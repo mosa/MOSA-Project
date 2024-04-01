@@ -96,6 +96,7 @@ public static class Name
 	public const string Optimizations_Basic = "Optimizations.Basic";
 	public const string Optimizations_Basic_Window = "Optimizations.Basic.Window";
 	public const string Optimizations_BitTracker = "Optimizations.BitTracker";
+	public const string Optimizations_LoopRangeTracker = "Optimizations.LoopRangeTracker";
 	public const string Optimizations_Devirtualization = "Optimizations.Devirtualization";
 	public const string Optimizations_Inline = "Optimizations.Inline";
 	public const string Optimizations_Inline_Aggressive = "Optimizations.Inline.Aggressive";

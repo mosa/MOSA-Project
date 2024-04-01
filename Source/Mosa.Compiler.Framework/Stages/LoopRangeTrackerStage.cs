@@ -84,6 +84,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 	private void ProcessNode32(Node node, Loop loop)
 	{
+		var headerblock = node.Block.PreviousBlocks[0];
+
 		//	match a = phi(x, y) { B1, B2}
 		//	in header loop
 		//	where x is constant
@@ -96,7 +98,11 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		var b1 = node.PhiBlocks[0];
 		var b2 = node.PhiBlocks[1];
 
-		var headerblock = node.Block.PreviousBlocks[0];
+		if (!x.IsResolvedConstant || b1 != headerblock)
+		{
+			// swap
+			(x, y, b1, b2) = (y, x, b2, b1);
+		}
 
 		if (!x.IsResolvedConstant)
 			return;
@@ -170,20 +176,44 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			if (!(b.Block == loop.Header || (loop.Backedges.Count == 1 && loop.Backedges.Contains(b.Block))))
 				continue;
 
-			// form: x < y -> which branch exits the loop
-			if (b.ConditionCode != ConditionCode.Less)
+			var x = b.Operand1;
+			var y = b.Operand2;
+			var condition = b.ConditionCode;
+			var target = b.BranchTarget1;
+			var othertarget = target != b.Block.NextBlocks[0]
+				? b.Block.NextBlocks[0]
+				: b.Block.NextBlocks[1];
+
+			if (!(condition == ConditionCode.Less
+				|| condition == ConditionCode.LessOrEqual
+				|| condition == ConditionCode.UnsignedLess
+				|| condition == ConditionCode.UnsignedLessOrEqual
+				|| condition == ConditionCode.Equal))
+			{
+				// swap
+				(x, y, condition, target, othertarget) = (y, x, condition.GetOpposite(), othertarget, target);
+			}
+
+			// form: x (variable) </<=/== y (constant) -> which branch exits the loop
+			if (!(condition == ConditionCode.Less
+				|| condition == ConditionCode.LessOrEqual
+				|| condition == ConditionCode.UnsignedLess
+				|| condition == ConditionCode.UnsignedLessOrEqual
+				|| condition == ConditionCode.Equal))
 				continue;
 
-			if (b.Operand1 != incrementVariable)
+			if (x != incrementVariable)
 				continue;
 
-			if (!b.Operand2.IsResolvedConstant)
+			if (!y.IsResolvedConstant)
 				continue;
 
-			if (!loop.LoopBlocks.Contains(b.BranchTarget1))  // exits loop
+			if (!loop.LoopBlocks.Contains(target))  // exits loop
 				continue;
 
-			var branchmax = b.Operand2.ConstantSigned32 - 1 + incrementValue.ConstantSigned32;
+			var adj = condition == ConditionCode.LessOrEqual || condition == ConditionCode.Equal ? 1 : 0;
+
+			var branchmax = y.ConstantSigned32 + incrementValue.ConstantSigned32 - 1 + adj;
 
 			max = Math.Min(max, branchmax);
 

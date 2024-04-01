@@ -1078,6 +1078,7 @@ public partial class MainForm : Form
 		cbLoopInvariantCodeMotion.Checked = MosaSettings.LoopInvariantCodeMotion;
 		cbEnableValueNumbering.Checked = MosaSettings.ValueNumbering;
 		cbEnableBitTracker.Checked = MosaSettings.BitTracker;
+		cbEnableLoopRangeTracker.Checked = MosaSettings.LoopRangeTracker;
 		cbEnableBinaryCodeGeneration.Checked = MosaSettings.EmitBinary;
 		cbEnableMethodScanner.Checked = MosaSettings.MethodScanner;
 		cbEnableMultithreading.Checked = MosaSettings.Multithreading;
@@ -1199,6 +1200,7 @@ public partial class MainForm : Form
 		MosaSettings.SparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 		MosaSettings.Devirtualization = cbEnableDevirtualization.Checked;
 		MosaSettings.BitTracker = cbEnableBitTracker.Checked;
+		MosaSettings.LoopRangeTracker = cbEnableLoopRangeTracker.Checked;
 		MosaSettings.LoopInvariantCodeMotion = cbLoopInvariantCodeMotion.Checked;
 		MosaSettings.LongExpansion = cbEnableLongExpansion.Checked;
 		MosaSettings.TwoPassOptimization = cbEnableTwoPassOptimizations.Checked;

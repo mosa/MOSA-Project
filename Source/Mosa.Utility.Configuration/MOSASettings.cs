@@ -566,6 +566,12 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Optimizations_BitTracker, value);
 	}
 
+	public bool LoopRangeTracker
+	{
+		get => Settings.GetValue(Name.Optimizations_LoopRangeTracker, true);
+		set => Settings.SetValue(Name.Optimizations_LoopRangeTracker, value);
+	}
+
 	public int OptimizationBasicWindow
 	{
 		get => Settings.GetValue(Name.Optimizations_Basic_Window, 5);
@@ -763,6 +769,7 @@ public partial class MosaSettings
 		SparseConditionalConstantPropagation = true;
 		Devirtualization = true;
 		BitTracker = true;
+		LoopRangeTracker = true;
 		LoopInvariantCodeMotion = true;
 		LongExpansion = true;
 		TwoPassOptimization = true;
