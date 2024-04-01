@@ -29,7 +29,6 @@ public class ISABus : BaseDeviceDriver
 	{
 		HAL.DebugWriteLine("ISABus:StartDevices()");
 
-		// Start ISA Drivers
 		var drivers = DeviceService.GetDeviceDrivers(DeviceBusType.ISA);
 
 		foreach (var driver in drivers)
@@ -57,19 +56,6 @@ public class ISABus : BaseDeviceDriver
 
 		if (driverEntry.BaseAddress != 0x00)
 			memoryRegions.Add(new AddressRegion(new Pointer(driverEntry.BaseAddress), driverEntry.AddressRange));
-
-		//if (driverEntry.PhysicalMemory != null)
-		//{
-		//	foreach (var physicalMemory in driver.PhysicalMemory)
-		//	{
-		//		if (physicalMemory.MemorySize > 0)
-		//		{
-		//			var memory = HAL.AllocateMemory(physicalMemory.MemorySize, physicalMemory.MemoryAlignment);
-
-		//			memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
-		//		}
-		//	}
-		//}
 
 		var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, driverEntry.IRQ);
 		DeviceService.Initialize(driverEntry, Device, true, null, hardwareResources);
