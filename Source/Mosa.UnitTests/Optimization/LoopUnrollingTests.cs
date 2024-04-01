@@ -1,12 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.CompilerServices;
-
 namespace Mosa.UnitTests.Optimization;
 
 public static class LoopUnrollingTests
 {
-	[MethodImpl(MethodImplOptions.NoInlining)]
+	[MosaUnitTest]
 	public static int SimpleUnroll()
 	{
 		var v = 0;
@@ -19,7 +17,7 @@ public static class LoopUnrollingTests
 		return v;
 	}
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
+	[MosaUnitTest(Series = "I4")]
 	public static int SimpleUnroll2(int a)
 	{
 		var v = 0;

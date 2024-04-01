@@ -3,7 +3,7 @@
 	<Import Project="../Mosa.BareMetal.targets" />
 
 	<ItemGroup>
-		<ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+	  <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

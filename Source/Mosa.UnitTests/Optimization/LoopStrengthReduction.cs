@@ -1,13 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.CompilerServices;
-
 namespace Mosa.UnitTests.Optimization;
 
 public static class LoopStrengthReduction
 {
-	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static int Reduction1(int[] n)
+	private static int Reduction1(int[] n)
 	{
 		var a = 0;
 
@@ -19,8 +16,7 @@ public static class LoopStrengthReduction
 		return a;
 	}
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
-	public static int Reduction2(int[] n)
+	private static int Reduction2(int[] n)
 	{
 		var a = 0;
 
@@ -32,7 +28,7 @@ public static class LoopStrengthReduction
 		return a;
 	}
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
+	[MosaUnitTest]
 	public static int Reduction3()
 	{
 		var a = 8;
@@ -50,7 +46,7 @@ public static class LoopStrengthReduction
 		return a;
 	}
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
+	[MosaUnitTest]
 	public static int Reduction4()
 	{
 		var a = 8;
@@ -59,6 +55,54 @@ public static class LoopStrengthReduction
 		for (var i = n; i > 0; i--)
 		{
 			a *= i;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction5()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = 0; i < n; i++)
+		{
+			a *= i;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction6()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = 0; i < n; i++)
+		{
+			a *= i;
+
+			if (i > 20)
+				return 0;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction7()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = n; i > 0; i--)
+		{
+			a *= i;
+
+			if (i < 0)
+				return 0;
 		}
 
 		return a;

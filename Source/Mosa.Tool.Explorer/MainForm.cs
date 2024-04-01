@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
@@ -588,6 +589,7 @@ public partial class MainForm : Form
 		}
 		else
 		{
+			pipeline.InsertAfterLast<FastBlockOrderingStage>(new GraphVizStage());
 			pipeline.Add(new GraphVizStage());
 		}
 	}

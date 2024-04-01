@@ -161,7 +161,8 @@ public sealed class Compiler
 		mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
 		mosaSettings.BasicOptimizations && mosaSettings.SSA && (mosaSettings.ValueNumbering || mosaSettings.LoopInvariantCodeMotion || mosaSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
 		mosaSettings.BitTracker ? new BitTrackerStage() : null,
-		mosaSettings.BasicOptimizations && mosaSettings.LongExpansion ? new OptimizationStage(mosaSettings.LongExpansion) : null,
+		//mosaSettings.BitTracker && mosaSettings.SSA ? new LoopRangeTrackerStage() : null,
+		mosaSettings.BasicOptimizations  ? new OptimizationStage(mosaSettings.LongExpansion) : null,
 
 		mosaSettings.TwoPassOptimization && mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
 		mosaSettings.TwoPassOptimization && mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
