@@ -136,6 +136,7 @@
 			folderBrowserDialog1 = new FolderBrowserDialog();
 			timer1 = new System.Windows.Forms.Timer(components);
 			saveFileDialog1 = new SaveFileDialog();
+			cbEnableLoopRangeTracker = new ToolStripMenuItem();
 			statusStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -244,7 +245,7 @@
 			// 
 			// optionsToolStripMenuItem
 			// 
-			optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbEnableAllOptimizations, cbDisableAllOptimizations, toolStripSeparator4, cbEnableSSA, cbEnableBasicOptimizations, cbEnableValueNumbering, cbEnableSparseConditionalConstantPropagation, cbEnableDevirtualization, cbEnableInline, cbInlineExplicit, cbEnableLongExpansion, cbLoopInvariantCodeMotion, cbEnableBitTracker, cbEnableTwoPassOptimizations, cbPlatformOptimizations, cbEnableBinaryCodeGeneration, cbEnableCodeSizeReduction });
+			optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbEnableAllOptimizations, cbDisableAllOptimizations, toolStripSeparator4, cbEnableSSA, cbEnableBasicOptimizations, cbEnableValueNumbering, cbEnableSparseConditionalConstantPropagation, cbEnableDevirtualization, cbEnableInline, cbInlineExplicit, cbEnableLongExpansion, cbLoopInvariantCodeMotion, cbEnableBitTracker, cbEnableLoopRangeTracker, cbEnableTwoPassOptimizations, cbPlatformOptimizations, cbEnableBinaryCodeGeneration, cbEnableCodeSizeReduction });
 			optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			optionsToolStripMenuItem.Size = new Size(93, 20);
 			optionsToolStripMenuItem.Text = "Optimizations";
@@ -546,7 +547,7 @@
 			tabControl.Controls.Add(tabMethodCounters);
 			tabControl.Controls.Add(tabLogs);
 			tabControl.Controls.Add(tabCompilerCounters);
-			tabControl.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+			tabControl.Font = new Font("Microsoft Sans Serif", 10F);
 			tabControl.Location = new Point(1, 3);
 			tabControl.Margin = new Padding(0);
 			tabControl.Name = "tabControl";
@@ -595,7 +596,7 @@
 			// 
 			// label1
 			// 
-			label1.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+			label1.Font = new Font("Microsoft Sans Serif", 10F);
 			label1.Location = new Point(352, 9);
 			label1.Margin = new Padding(5);
 			label1.Name = "label1";
@@ -606,7 +607,7 @@
 			// cbInstructionLabels
 			// 
 			cbInstructionLabels.DropDownStyle = ComboBoxStyle.DropDownList;
-			cbInstructionLabels.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+			cbInstructionLabels.Font = new Font("Microsoft Sans Serif", 8.25F);
 			cbInstructionLabels.FormattingEnabled = true;
 			cbInstructionLabels.Location = new Point(413, 8);
 			cbInstructionLabels.Margin = new Padding(5);
@@ -619,7 +620,7 @@
 			// cbInstructionStages
 			// 
 			cbInstructionStages.DropDownStyle = ComboBoxStyle.DropDownList;
-			cbInstructionStages.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+			cbInstructionStages.Font = new Font("Microsoft Sans Serif", 8.25F);
 			cbInstructionStages.FormattingEnabled = true;
 			cbInstructionStages.ItemHeight = 13;
 			cbInstructionStages.Location = new Point(64, 8);
@@ -632,7 +633,7 @@
 			// 
 			// stageLabel
 			// 
-			stageLabel.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+			stageLabel.Font = new Font("Microsoft Sans Serif", 10F);
 			stageLabel.Location = new Point(5, 9);
 			stageLabel.Margin = new Padding(5);
 			stageLabel.Name = "stageLabel";
@@ -643,7 +644,7 @@
 			// tbInstructions
 			// 
 			tbInstructions.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			tbInstructions.Font = new Font("Lucida Console", 8F, FontStyle.Regular, GraphicsUnit.Point);
+			tbInstructions.Font = new Font("Lucida Console", 8F);
 			tbInstructions.Location = new Point(0, 37);
 			tbInstructions.Margin = new Padding(4, 3, 4, 3);
 			tbInstructions.Name = "tbInstructions";
@@ -681,7 +682,7 @@
 			// cbDebugStages
 			// 
 			cbDebugStages.DropDownStyle = ComboBoxStyle.DropDownList;
-			cbDebugStages.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+			cbDebugStages.Font = new Font("Microsoft Sans Serif", 8.25F);
 			cbDebugStages.FormattingEnabled = true;
 			cbDebugStages.Location = new Point(64, 8);
 			cbDebugStages.Margin = new Padding(5);
@@ -693,7 +694,7 @@
 			// 
 			// label3
 			// 
-			label3.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+			label3.Font = new Font("Microsoft Sans Serif", 10F);
 			label3.Location = new Point(5, 9);
 			label3.Margin = new Padding(5);
 			label3.Name = "label3";
@@ -704,7 +705,7 @@
 			// tbDebugResult
 			// 
 			tbDebugResult.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			tbDebugResult.Font = new Font("Lucida Console", 8F, FontStyle.Regular, GraphicsUnit.Point);
+			tbDebugResult.Font = new Font("Lucida Console", 8F);
 			tbDebugResult.Location = new Point(0, 37);
 			tbDebugResult.Margin = new Padding(4, 3, 4, 3);
 			tbDebugResult.Name = "tbDebugResult";
@@ -831,7 +832,7 @@
 			// tbTransforms
 			// 
 			tbTransforms.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			tbTransforms.Font = new Font("Lucida Console", 8F, FontStyle.Regular, GraphicsUnit.Point);
+			tbTransforms.Font = new Font("Lucida Console", 8F);
 			tbTransforms.Location = new Point(0, 34);
 			tbTransforms.Margin = new Padding(0);
 			tbTransforms.Name = "tbTransforms";
@@ -864,7 +865,7 @@
 			dataGridView1.Name = "dataGridView1";
 			dataGridView1.ReadOnly = true;
 			dataGridView1.RowHeadersVisible = false;
-			dataGridView1.RowTemplate.DefaultCellStyle.Font = new Font("Consolas", 8F, FontStyle.Regular, GraphicsUnit.Point);
+			dataGridView1.RowTemplate.DefaultCellStyle.Font = new Font("Consolas", 8F);
 			dataGridView1.RowTemplate.Height = 18;
 			dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			dataGridView1.Size = new Size(253, 290);
@@ -873,7 +874,7 @@
 			// 
 			// label7
 			// 
-			label7.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+			label7.Font = new Font("Microsoft Sans Serif", 10F);
 			label7.Location = new Point(352, 9);
 			label7.Margin = new Padding(5);
 			label7.Name = "label7";
@@ -884,7 +885,7 @@
 			// cbTransformLabels
 			// 
 			cbTransformLabels.DropDownStyle = ComboBoxStyle.DropDownList;
-			cbTransformLabels.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+			cbTransformLabels.Font = new Font("Microsoft Sans Serif", 8.25F);
 			cbTransformLabels.FormattingEnabled = true;
 			cbTransformLabels.Location = new Point(413, 8);
 			cbTransformLabels.Margin = new Padding(5);
@@ -897,7 +898,7 @@
 			// cbTransformStages
 			// 
 			cbTransformStages.DropDownStyle = ComboBoxStyle.DropDownList;
-			cbTransformStages.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+			cbTransformStages.Font = new Font("Microsoft Sans Serif", 8.25F);
 			cbTransformStages.FormattingEnabled = true;
 			cbTransformStages.ItemHeight = 13;
 			cbTransformStages.Location = new Point(64, 8);
@@ -910,7 +911,7 @@
 			// 
 			// label8
 			// 
-			label8.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+			label8.Font = new Font("Microsoft Sans Serif", 10F);
 			label8.Location = new Point(5, 9);
 			label8.Margin = new Padding(5);
 			label8.Name = "label8";
@@ -988,7 +989,7 @@
 			gridMethodCounters.ReadOnly = true;
 			gridMethodCounters.RowHeadersVisible = false;
 			gridMethodCounters.RowHeadersWidth = 51;
-			gridMethodCounters.RowTemplate.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Regular, GraphicsUnit.Point);
+			gridMethodCounters.RowTemplate.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 7.8F);
 			gridMethodCounters.RowTemplate.Height = 20;
 			gridMethodCounters.ShowCellErrors = false;
 			gridMethodCounters.ShowCellToolTips = false;
@@ -1012,7 +1013,7 @@
 			// tbMethodCounters
 			// 
 			tbMethodCounters.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			tbMethodCounters.Font = new Font("Lucida Console", 8F, FontStyle.Regular, GraphicsUnit.Point);
+			tbMethodCounters.Font = new Font("Lucida Console", 8F);
 			tbMethodCounters.Location = new Point(0, 3);
 			tbMethodCounters.Margin = new Padding(4, 3, 4, 3);
 			tbMethodCounters.Name = "tbMethodCounters";
@@ -1037,7 +1038,7 @@
 			// cbCompilerSections
 			// 
 			cbCompilerSections.DropDownStyle = ComboBoxStyle.DropDownList;
-			cbCompilerSections.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+			cbCompilerSections.Font = new Font("Microsoft Sans Serif", 8.25F);
 			cbCompilerSections.FormattingEnabled = true;
 			cbCompilerSections.Location = new Point(77, 8);
 			cbCompilerSections.Margin = new Padding(5);
@@ -1049,7 +1050,7 @@
 			// 
 			// label4
 			// 
-			label4.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Regular, GraphicsUnit.Point);
+			label4.Font = new Font("Microsoft Sans Serif", 10F);
 			label4.Location = new Point(5, 9);
 			label4.Margin = new Padding(5);
 			label4.Name = "label4";
@@ -1060,7 +1061,7 @@
 			// tbCompilerLogs
 			// 
 			tbCompilerLogs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			tbCompilerLogs.Font = new Font("Lucida Console", 8F, FontStyle.Regular, GraphicsUnit.Point);
+			tbCompilerLogs.Font = new Font("Lucida Console", 8F);
 			tbCompilerLogs.Location = new Point(0, 37);
 			tbCompilerLogs.Margin = new Padding(4, 3, 4, 3);
 			tbCompilerLogs.Name = "tbCompilerLogs";
@@ -1140,7 +1141,7 @@
 			gridCompilerCounters.ReadOnly = true;
 			gridCompilerCounters.RowHeadersVisible = false;
 			gridCompilerCounters.RowHeadersWidth = 51;
-			gridCompilerCounters.RowTemplate.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 7.8F, FontStyle.Regular, GraphicsUnit.Point);
+			gridCompilerCounters.RowTemplate.DefaultCellStyle.Font = new Font("Microsoft Sans Serif", 7.8F);
 			gridCompilerCounters.RowTemplate.Height = 20;
 			gridCompilerCounters.ShowCellErrors = false;
 			gridCompilerCounters.ShowCellToolTips = false;
@@ -1164,7 +1165,7 @@
 			// tbCompilerCounters
 			// 
 			tbCompilerCounters.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			tbCompilerCounters.Font = new Font("Lucida Console", 8F, FontStyle.Regular, GraphicsUnit.Point);
+			tbCompilerCounters.Font = new Font("Lucida Console", 8F);
 			tbCompilerCounters.Location = new Point(0, 0);
 			tbCompilerCounters.Margin = new Padding(4, 3, 4, 3);
 			tbCompilerCounters.Name = "tbCompilerCounters";
@@ -1243,6 +1244,15 @@
 			// 
 			timer1.Enabled = true;
 			timer1.Tick += timer1_Tick;
+			// 
+			// cbEnableLoopRangeTracker
+			// 
+			cbEnableLoopRangeTracker.Checked = true;
+			cbEnableLoopRangeTracker.CheckOnClick = true;
+			cbEnableLoopRangeTracker.CheckState = CheckState.Checked;
+			cbEnableLoopRangeTracker.Name = "cbEnableLoopRangeTracker";
+			cbEnableLoopRangeTracker.Size = new Size(293, 22);
+			cbEnableLoopRangeTracker.Text = "Enable Loop Range Tracker";
 			// 
 			// MainForm
 			// 
@@ -1407,5 +1417,6 @@
 		private Button button1;
 		private Button button2;
 		private ToolStripMenuItem cbEnableCodeSizeReduction;
+		private ToolStripMenuItem cbEnableLoopRangeTracker;
 	}
 }

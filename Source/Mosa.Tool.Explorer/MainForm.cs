@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
@@ -588,6 +589,7 @@ public partial class MainForm : Form
 		}
 		else
 		{
+			pipeline.InsertAfterLast<FastBlockOrderingStage>(new GraphVizStage());
 			pipeline.Add(new GraphVizStage());
 		}
 	}
@@ -972,6 +974,7 @@ public partial class MainForm : Form
 		cbEnableLongExpansion.Checked = state;
 		cbEnableTwoPassOptimizations.Checked = state;
 		cbEnableBitTracker.Checked = state;
+		cbEnableLoopRangeTracker.Checked = state;
 		cbLoopInvariantCodeMotion.Checked = state;
 		cbPlatformOptimizations.Checked = state;
 		cbEnableDevirtualization.Checked = state;
@@ -1076,6 +1079,7 @@ public partial class MainForm : Form
 		cbLoopInvariantCodeMotion.Checked = MosaSettings.LoopInvariantCodeMotion;
 		cbEnableValueNumbering.Checked = MosaSettings.ValueNumbering;
 		cbEnableBitTracker.Checked = MosaSettings.BitTracker;
+		cbEnableLoopRangeTracker.Checked = MosaSettings.LoopRangeTracker;
 		cbEnableBinaryCodeGeneration.Checked = MosaSettings.EmitBinary;
 		cbEnableMethodScanner.Checked = MosaSettings.MethodScanner;
 		cbEnableMultithreading.Checked = MosaSettings.Multithreading;
@@ -1197,6 +1201,7 @@ public partial class MainForm : Form
 		MosaSettings.SparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 		MosaSettings.Devirtualization = cbEnableDevirtualization.Checked;
 		MosaSettings.BitTracker = cbEnableBitTracker.Checked;
+		MosaSettings.LoopRangeTracker = cbEnableLoopRangeTracker.Checked;
 		MosaSettings.LoopInvariantCodeMotion = cbLoopInvariantCodeMotion.Checked;
 		MosaSettings.LongExpansion = cbEnableLongExpansion.Checked;
 		MosaSettings.TwoPassOptimization = cbEnableTwoPassOptimizations.Checked;
