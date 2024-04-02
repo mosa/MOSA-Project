@@ -75,21 +75,15 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				continue;
 
 			if (node.Instruction == IR.Phi32)
-				ProcessNode32(node, loop);
-
-			//if (node.Instruction == IR.Phi64))
-			//ProcessNode64(node, loop);
+				ProcessNode(node, loop, true);
+			else if (node.Instruction == IR.Phi64)
+				ProcessNode(node, loop, false);
 		}
 	}
 
-	private void ProcessNode32(Node node, Loop loop)
+	private void ProcessNode(Node node, Loop loop, bool is32Bit)
 	{
 		var headerblock = node.Block.PreviousBlocks[0];
-
-		//	match a = phi(x, y) { B1, B2}
-		//	in header loop
-		//	where x is constant
-		//	B1 is loop.header.previous
 
 		var result = node.Result;
 		var x = node.Operand1;
@@ -110,19 +104,14 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		if (b1 != headerblock)
 			return;
 
-		//y.defined by
-		//instruction = Add
-		//op1 = x
-		//op2 = positive constant c (increment)
-		//in block within loop        // may not be necessary in SSA form
-		// => at this point, we know the lower of a is constant x
-
 		if (!y.IsDefinedOnce)
 			return;
 
 		var d = y.Definitions[0];
 
-		if (d.Instruction != IR.Add32)
+		// Future: determine direction base on IR.Add or IR.Sub and constant
+
+		if (!(d.Instruction == IR.Add32 || d.Instruction == IR.Add64))
 			return;
 
 		if (d.Result != y)
@@ -134,18 +123,18 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		if (!d.Operand2.IsResolvedConstant)
 			return;
 
-		if (d.Operand2.ConstantUnsigned32 <= 0)
+		if (d.Operand2.ConstantUnsigned64 <= 0)
 			return;
 
 		if (!loop.LoopBlocks.Contains(d.Block))
 			return;
 
-		result.BitValue.NarrowMin(x.ConstantUnsigned32);
+		result.BitValue.NarrowMin(x.ConstantUnsigned64);
 
-		trace?.Log($"{result} MinValue = {x.ConstantUnsigned32}");
+		trace?.Log($"{result} MinValue = {x.ConstantUnsigned64}");
 		MinDetermined.Increment();
 
-		if (DetermineMaxOut32(d.Operand1, d.Operand2, loop, out var max))
+		if (DetermineMaxOut(d.Operand1, d.Operand2, loop, out var max))
 		{
 			result.BitValue.NarrowMax((ulong)max);
 
@@ -154,22 +143,14 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		}
 	}
 
-	private bool DetermineMaxOut32(Operand incrementVariable, Operand incrementValue, Loop loop, out int max)
+	private static bool DetermineMaxOut(Operand incrementVariable, Operand incrementValue, Loop loop, out long max)
 	{
 		bool determined = false;
-		max = int.MaxValue;
-
-		//a.used by
-		//instruction = branch
-		//compare: <
-		//op1 = result
-		//op2 = constant d
-		//branch is to phi node
-		//in block within loop
+		max = long.MaxValue;
 
 		foreach (var b in incrementVariable.Uses)
 		{
-			if (b.Instruction != IR.Branch32)
+			if (!(b.Instruction == IR.Branch32 || b.Instruction == IR.Branch64))
 				continue;
 
 			// only that are the header or backedge (if only one)
@@ -184,22 +165,35 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				? b.Block.NextBlocks[0]
 				: b.Block.NextBlocks[1];
 
-			if (!(condition == ConditionCode.Less
-				|| condition == ConditionCode.LessOrEqual
-				|| condition == ConditionCode.UnsignedLess
-				|| condition == ConditionCode.UnsignedLessOrEqual
-				|| condition == ConditionCode.Equal))
+			// form: x (variable) </<=/== y (constant) -> where branch exits the loop
+
+			// change form - on condition
+			if (condition is not (ConditionCode.Less
+				or ConditionCode.LessOrEqual
+				or ConditionCode.UnsignedLess
+				or ConditionCode.UnsignedLessOrEqual
+				or ConditionCode.Equal))
 			{
-				// swap
-				(x, y, condition, target, othertarget) = (y, x, condition.GetOpposite(), othertarget, target);
+				(x, y, condition) = (y, x, condition.GetOpposite()); // swap
 			}
 
-			// form: x (variable) </<=/== y (constant) -> which branch exits the loop
-			if (!(condition == ConditionCode.Less
-				|| condition == ConditionCode.LessOrEqual
-				|| condition == ConditionCode.UnsignedLess
-				|| condition == ConditionCode.UnsignedLessOrEqual
-				|| condition == ConditionCode.Equal))
+			// change form - on branch
+			if (!loop.LoopBlocks.Contains(target))
+			{
+				(condition, target, othertarget) = (condition.GetOpposite(), othertarget, target); // swap
+			}
+
+			// change form - on constant to right
+			if (!y.IsResolvedConstant && condition == ConditionCode.Equal)
+			{
+				(x, y) = (y, x);
+			}
+
+			if (condition is not (ConditionCode.Less
+				or ConditionCode.LessOrEqual
+				or ConditionCode.UnsignedLess
+				or ConditionCode.UnsignedLessOrEqual
+				or ConditionCode.Equal))
 				continue;
 
 			if (x != incrementVariable)
@@ -208,12 +202,12 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			if (!y.IsResolvedConstant)
 				continue;
 
-			if (!loop.LoopBlocks.Contains(target))  // exits loop
-				continue;
+			if (!loop.LoopBlocks.Contains(target))
+				continue; // exits loop
 
 			var adj = condition == ConditionCode.LessOrEqual || condition == ConditionCode.Equal ? 1 : 0;
 
-			var branchmax = y.ConstantSigned32 + incrementValue.ConstantSigned32 - 1 + adj;
+			var branchmax = y.ConstantSigned64 + incrementValue.ConstantSigned64 - 1 + adj;
 
 			max = Math.Min(max, branchmax);
 

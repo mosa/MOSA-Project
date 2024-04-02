@@ -974,6 +974,7 @@ public partial class MainForm : Form
 		cbEnableLongExpansion.Checked = state;
 		cbEnableTwoPassOptimizations.Checked = state;
 		cbEnableBitTracker.Checked = state;
+		cbEnableLoopRangeTracker.Checked = state;
 		cbLoopInvariantCodeMotion.Checked = state;
 		cbPlatformOptimizations.Checked = state;
 		cbEnableDevirtualization.Checked = state;

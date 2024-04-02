@@ -82,9 +82,111 @@ public static class LoopStrengthReduction
 
 		for (var i = 0; i < n; i++)
 		{
-			a *= i;
+			a += i;
 
 			if (i > 20)
+				return 0;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction6a()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = 0; i < n; i++)
+		{
+			a += i;
+
+			if (i > 9)
+				return 0;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction6b()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = 0; i < n; i++)
+		{
+			a += i;
+
+			if (i > 10)
+				return 0;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction6c()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = 0; i < n; i++)
+		{
+			a += i;
+
+			if (i > 11)
+				return 0;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction6d()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = 0; i != n; i++)
+		{
+			a += i;
+
+			if (i > 9)
+				return 0;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction6e()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = 0; i != n; i++)
+		{
+			a += i;
+
+			if (i > 10)
+				return 0;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction6f()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = 0; i != n; i++)
+		{
+			a += i;
+
+			if (i > 11)
 				return 0;
 		}
 
