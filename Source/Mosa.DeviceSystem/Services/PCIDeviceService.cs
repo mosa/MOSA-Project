@@ -10,60 +10,63 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceSystem.Services;
 
 /// <summary>
-/// Properly initializes and starts the dummy PCI devices created by the <see cref="PCIControllerService"/>.
+/// Initializes and starts all PCI devices in the system.
 /// </summary>
 public class PCIDeviceService : BaseService
 {
 	private DeviceService deviceService;
 
-	protected override void Initialize()
-	{
-		deviceService = ServiceManager.GetFirstService<DeviceService>();
-	}
+	protected override void Initialize() => deviceService = ServiceManager.GetFirstService<DeviceService>();
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	public override void PostEvent(ServiceEvent serviceEvent)
 	{
-		//HAL.DebugWriteLine("PCIDeviceService:PostEvent()");
-		//HAL.Pause();
-
-		var device = MatchEvent<PCIDevice>(serviceEvent, ServiceEventType.Start);
+		var device = MatchEvent<IPCIController>(serviceEvent, ServiceEventType.Start);
 		if (device == null)
 			return;
 
-		var pciDevice = device.DeviceDriver as PCIDevice;
+		var pciController = device.DeviceDriver as IPCIController;
+		for (byte bus = 0; bus < byte.MaxValue; bus++)
+			for (byte slot = 0; slot < 16; slot++)
+				for (byte function = 0; function < 7; function++)
+					CreatePCIDevice(bus, slot, function, device, pciController);
+	}
+
+	private void CreatePCIDevice(byte bus, byte slot, byte function, Device device, IPCIController pciController)
+	{
+		var pciDevice = new PCIDevice(bus, slot, function);
+		var value = pciController.ReadConfig32(pciDevice, 0);
+
+		if (value == 0xFFFFFFFF)
+			return;
+
+		// TODO: Check for duplicates
+
+		var parentDevice = deviceService.Initialize(pciDevice, device);
 
 		// Find the best matching driver
 		PCIDeviceDriverRegistryEntry matchedDriver = null;
 		var matchPriority = 0;
 
-		// Start PCI Drivers
 		var drivers = deviceService.GetDeviceDrivers(DeviceBusType.PCI);
-
 		foreach (var driver in drivers)
 		{
-			if (driver is not PCIDeviceDriverRegistryEntry pciDriver)
-				continue;
-
-			if (!IsMatch(pciDriver, pciDevice))
+			if (driver is not PCIDeviceDriverRegistryEntry pciDriver || !IsMatch(pciDriver, pciDevice))
 				continue;
 
 			var priority = GetMatchedPriority(pciDriver);
-
-			if (priority <= 0)
-				continue;
-
-			if (priority >= matchPriority && matchPriority != 0)
+			if (priority <= 0 || (priority >= matchPriority && matchPriority != 0))
 				continue;
 
 			matchedDriver = pciDriver;
 			matchPriority = priority;
 		}
 
-		if (matchedDriver == null) // No driver found
+		// No driver found
+		if (matchedDriver == null)
 			return;
 
-		StartDevice(matchedDriver, device, pciDevice);
+		StartDevice(matchedDriver, parentDevice, pciDevice);
 	}
 
 	private void StartDevice(PCIDeviceDriverRegistryEntry driver, Device device, PCIDevice pciDevice)
@@ -83,16 +86,11 @@ public class PCIDeviceService : BaseService
 			}
 		}
 
-		//foreach (var ioportregion in ioPortRegions)
-		//{
-		//	HAL.DebugWriteLine("  I/O: 0x" + ioportregion.BaseIOPort.ToString("X") + " [" + ioportregion.Size.ToString("X") + "]");
-		//}
-		//foreach (var memoryregion in memoryRegions)
-		//{
-		//	HAL.DebugWriteLine("  Memory: 0x" + memoryregion.BaseAddress.ToString("X") + " [" + memoryregion.Size.ToString("X") + "]");
-		//}
-
 		var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, pciDevice.IRQ);
+
+		HAL.DebugWriteLine(" > PCI Driver: ");
+		HAL.DebugWriteLine(driver.Name);
+
 		deviceService.Initialize(driver, device, driver.AutoStart, null, hardwareResources);
 	}
 

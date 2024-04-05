@@ -149,7 +149,6 @@ public static class Startup
 		var serviceManager = new ServiceManager();
 		var diskDeviceService = new DiskDeviceService();
 		var partitionService = new PartitionService();
-		var pciControllerService = new PCIControllerService();
 		var pciDeviceService = new PCIDeviceService();
 		var pcService = new PCService();
 		Kernel.ServiceManager = serviceManager;
@@ -171,12 +170,6 @@ public static class Startup
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Partition Service...");
 		serviceManager.AddService(partitionService);
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.WriteLine(" [Completed]");
-
-		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> PCI Controller Service...");
-		serviceManager.AddService(pciControllerService);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 

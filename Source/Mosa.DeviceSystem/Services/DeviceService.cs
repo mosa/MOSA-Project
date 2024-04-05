@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using Mosa.DeviceSystem.Framework;
+using Mosa.DeviceSystem.Framework.Generic;
 using Mosa.DeviceSystem.HardwareAbstraction;
 
 namespace Mosa.DeviceSystem.Services;
@@ -77,6 +78,28 @@ public sealed class DeviceService : BaseService
 	#endregion Device Driver Registry
 
 	#region Initialize Devices Drivers
+
+	protected override void Initialize()
+	{
+		HAL.DebugWriteLine("DeviceService::Initialize()");
+
+		var drivers = GetDeviceDrivers(DeviceBusType.None);
+		foreach (var driver in drivers)
+		{
+			var entry = (GenericDeviceDriverRegistryEntry)driver;
+
+			HAL.DebugWriteLine(" > Generic Driver: ");
+			HAL.DebugWriteLine(entry.Name);
+
+			var ioPortRegions = new List<IOPortRegion>();
+			var memoryRegions = new List<AddressRegion>();
+			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, entry.IRQ);
+
+			Initialize(entry, null, true, null, hardwareResources);
+		}
+
+		HAL.DebugWriteLine("DeviceService::Initialize() [Exit]");
+	}
 
 	public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
 	{
