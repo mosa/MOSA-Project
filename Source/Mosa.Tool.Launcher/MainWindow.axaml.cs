@@ -171,7 +171,7 @@ public partial class MainWindow : Window
 		TwoOptPass.IsChecked = MosaSettings.TwoPassOptimization;
 		ValueNumOpts.IsChecked = MosaSettings.ValueNumbering;
 		BtOpts.IsChecked = MosaSettings.BitTracker;
-		//BtOpts.IsChecked = MosaSettings.LoopRangeTracker;
+		LrtOpts.IsChecked = MosaSettings.LoopRangeTracker;
 		PlatOpts.IsChecked = MosaSettings.PlatformOptimizations;
 		LicmOpts.IsChecked = MosaSettings.LoopInvariantCodeMotion;
 
@@ -279,7 +279,7 @@ public partial class MainWindow : Window
 		MosaSettings.TwoPassOptimization = TwoOptPass.IsChecked!.Value;
 		MosaSettings.ValueNumbering = ValueNumOpts.IsChecked!.Value;
 		MosaSettings.BitTracker = BtOpts.IsChecked!.Value;
-		MosaSettings.LoopRangeTracker = BtOpts.IsChecked!.Value; // until GUI updated
+		MosaSettings.LoopRangeTracker = LrtOpts.IsChecked!.Value;
 		MosaSettings.PlatformOptimizations = PlatOpts.IsChecked!.Value;
 		MosaSettings.LoopInvariantCodeMotion = LicmOpts.IsChecked!.Value;
 
