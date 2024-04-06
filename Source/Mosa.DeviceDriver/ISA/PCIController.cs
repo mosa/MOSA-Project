@@ -7,11 +7,10 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceDriver.ISA;
 
 /// <summary>
-/// A device driver which queries the PCI controller in the system. It implements both the <see cref="IPCIController"/> and the
-/// <see cref="IPCIControllerLegacy"/> interfaces.
+/// A device driver which queries the PCI controller in the system. It implements the <see cref="IPCIController"/> interface.
 /// </summary>
 //[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
-public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCIController
+public sealed class PCIController : BaseDeviceDriver, IPCIController
 {
 	private const uint BaseValue = 0x80000000;
 
@@ -49,46 +48,6 @@ public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCI
 			   | (uint)((function & 0x07) << 8)
 			   | (uint)(register & 0xFC);
 	}
-
-	#region IPCIControllerLegacy
-
-	public uint ReadConfig32(byte bus, byte slot, byte function, byte register)
-	{
-		configAddress.Write32(GetIndex(bus, slot, function, register));
-		return configData.Read32();
-	}
-
-	public ushort ReadConfig16(byte bus, byte slot, byte function, byte register)
-	{
-		configAddress.Write32(GetIndex(bus, slot, function, register));
-		return (ushort)((configData.Read32() >> (register % 4 * 8)) & 0xFFFF);
-	}
-
-	public byte ReadConfig8(byte bus, byte slot, byte function, byte register)
-	{
-		configAddress.Write32(GetIndex(bus, slot, function, register));
-		return (byte)((configData.Read32() >> (register % 4 * 8)) & 0xFF);
-	}
-
-	public void WriteConfig32(byte bus, byte slot, byte function, byte register, uint value)
-	{
-		configAddress.Write32(GetIndex(bus, slot, function, register));
-		configData.Write32(value);
-	}
-
-	public void WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value)
-	{
-		configAddress.Write32(GetIndex(bus, slot, function, register));
-		configData.Write16(value);
-	}
-
-	public void WriteConfig8(byte bus, byte slot, byte function, byte register, byte value)
-	{
-		configAddress.Write32(GetIndex(bus, slot, function, register));
-		configData.Write8(value);
-	}
-
-	#endregion IPCIControllerLegacy
 
 	#region IPCIController
 
