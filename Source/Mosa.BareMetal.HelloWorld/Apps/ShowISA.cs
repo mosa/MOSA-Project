@@ -2,6 +2,7 @@
 
 using System;
 using Mosa.DeviceDriver.ISA;
+using Mosa.DeviceSystem.Framework;
 
 namespace Mosa.BareMetal.HelloWorld.Apps;
 
@@ -15,7 +16,7 @@ public class ShowISA : IApp
 	{
 		Console.Write("> Probing for ISA devices...");
 
-		var isaDevices = Program.DeviceService.GetChildrenOf(Program.DeviceService.GetFirstDevice<ISABus>());
+		var isaDevices = Program.DeviceService.GetAllDevices(DeviceBusType.ISA);
 		Console.WriteLine("[Completed: " + isaDevices.Count + " found]");
 
 		foreach (var device in isaDevices)

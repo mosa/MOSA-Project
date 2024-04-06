@@ -20,26 +20,26 @@ public sealed class ServiceManager
 
 	public void AddService(BaseService service)
 	{
-		HAL.DebugWriteLine("ServiceManager:AddService()");
+		HAL.DebugWriteLine("ServiceManager::AddService()");
 
 		lock (lockServices)
 			Services.Add(service);
 
 		service.Start(this);
 
-		HAL.DebugWriteLine("ServiceManager:AddService() [Exit]");
+		HAL.DebugWriteLine("ServiceManager::AddService() [Exit]");
 	}
 
 	public void AddEvent(ServiceEvent serviceEvent)
 	{
-		HAL.DebugWriteLine("ServiceManager:AddEvent()");
+		HAL.DebugWriteLine("ServiceManager::AddEvent()");
 
 		lock (lockEvents)
 			Events.Add(serviceEvent);
 
 		SendEvents();
 
-		HAL.DebugWriteLine("ServiceManager:AddEvent() [Exit]");
+		HAL.DebugWriteLine("ServiceManager::AddEvent() [Exit]");
 	}
 
 	public List<T> GetService<T>() where T : BaseService
@@ -80,7 +80,7 @@ public sealed class ServiceManager
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	private void SendEvents()
 	{
-		HAL.DebugWriteLine("ServiceManager:SendEvents()");
+		HAL.DebugWriteLine("ServiceManager::SendEvents()");
 
 		while (true)
 		{
@@ -98,13 +98,13 @@ public sealed class ServiceManager
 			DispatchEvents(serviceEvent);
 		}
 
-		HAL.DebugWriteLine("ServiceManager:SendEvents() [Exit]");
+		HAL.DebugWriteLine("ServiceManager::SendEvents() [Exit]");
 	}
 
 	[MethodImpl(MethodImplOptions.NoInlining)]
 	private void DispatchEvents(ServiceEvent serviceEvent)
 	{
-		HAL.DebugWriteLine("ServiceManager:DispatchEvents()");
+		HAL.DebugWriteLine("ServiceManager::DispatchEvents()");
 
 		var i = 0;
 
@@ -125,6 +125,6 @@ public sealed class ServiceManager
 			service.PostEvent(serviceEvent);
 		}
 
-		HAL.DebugWriteLine("ServiceManager:DispatchEvents() [Exit]");
+		HAL.DebugWriteLine("ServiceManager::DispatchEvents() [Exit]");
 	}
 }

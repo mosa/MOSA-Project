@@ -1,10 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.Framework.PCI;
 using Mosa.DeviceSystem.HardwareAbstraction;
+using Mosa.DeviceSystem.Misc;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem.Services;
@@ -16,23 +16,25 @@ public class PCIDeviceService : BaseService
 {
 	private DeviceService deviceService;
 
-	protected override void Initialize() => deviceService = ServiceManager.GetFirstService<DeviceService>();
-
-	[MethodImpl(MethodImplOptions.NoInlining)]
-	public override void PostEvent(ServiceEvent serviceEvent)
+	protected override void Initialize()
 	{
-		var device = MatchEvent<IPCIController>(serviceEvent, ServiceEventType.Start);
-		if (device == null)
+		HAL.DebugWriteLine("PCIDeviceService::Initialize()");
+
+		deviceService = ServiceManager.GetFirstService<DeviceService>();
+
+		var controllerDevice = deviceService.GetFirstDevice<IPCIController>();
+		if (controllerDevice?.DeviceDriver is not IPCIController pciController)
 			return;
 
-		var pciController = device.DeviceDriver as IPCIController;
 		for (byte bus = 0; bus < byte.MaxValue; bus++)
 			for (byte slot = 0; slot < 16; slot++)
 				for (byte function = 0; function < 7; function++)
-					CreatePCIDevice(bus, slot, function, device, pciController);
+					CreateDevice(bus, slot, function, controllerDevice, pciController);
+
+		HAL.DebugWriteLine("PCIDeviceService::Initialize() [Exit]");
 	}
 
-	private void CreatePCIDevice(byte bus, byte slot, byte function, Device device, IPCIController pciController)
+	private void CreateDevice(byte bus, byte slot, byte function, Device device, IPCIController pciController)
 	{
 		var pciDevice = new PCIDevice(bus, slot, function);
 		var value = pciController.ReadConfig32(pciDevice, 0);
@@ -62,9 +64,22 @@ public class PCIDeviceService : BaseService
 			matchPriority = priority;
 		}
 
-		// No driver found
-		if (matchedDriver == null)
-			return;
+		// Set a dummy entry if none were found
+		matchedDriver ??= new PCIDeviceDriverRegistryEntry
+		{
+			Name = "UnknownPCIDevice",
+			Platform = PlatformArchitecture.None,
+			BusType = DeviceBusType.PCI,
+			VendorID = pciDevice.VendorID,
+			DeviceID = pciDevice.DeviceID,
+			RevisionID = pciDevice.RevisionID,
+			ClassCode = pciDevice.ClassCode,
+			SubClassCode = pciDevice.SubClassCode,
+			ProgIF = pciDevice.ProgIF,
+			SubSystemVendorID = pciDevice.SubSystemVendorID,
+			SubSystemID = pciDevice.SubSystemID,
+			PCIFields = PCIField.All
+		};
 
 		StartDevice(matchedDriver, parentDevice, pciDevice);
 	}

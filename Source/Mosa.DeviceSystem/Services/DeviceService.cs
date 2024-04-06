@@ -103,14 +103,14 @@ public sealed class DeviceService : BaseService
 
 	public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
 	{
-		var deviceDriver = deviceDriverRegistryEntry.Factory();
+		var deviceDriver = deviceDriverRegistryEntry.Factory?.Invoke();
 
 		return Initialize(deviceDriver, parent, autoStart, configuration, resources, deviceDriverRegistryEntry);
 	}
 
 	public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
 	{
-		HAL.DebugWriteLine("DeviceService:Initialize()");
+		HAL.DebugWriteLine("DeviceService::Initialize(BaseDeviceDriver)");
 
 		var device = new Device
 		{
@@ -126,7 +126,7 @@ public sealed class DeviceService : BaseService
 		if (autoStart)
 			StartDevice(device);
 
-		HAL.DebugWriteLine("DeviceService:Initialize() [Exit]");
+		HAL.DebugWriteLine("DeviceService::Initialize(BaseDeviceDriver) [Exit]");
 
 		return device;
 	}
@@ -137,7 +137,7 @@ public sealed class DeviceService : BaseService
 	/// <param name="device">The device.</param>
 	private void StartDevice(Device device)
 	{
-		HAL.DebugWriteLine("DeviceService:StartDevice()");
+		HAL.DebugWriteLine("DeviceService::StartDevice()");
 
 		lock (sync)
 		{
@@ -147,22 +147,22 @@ public sealed class DeviceService : BaseService
 		}
 
 		device.Status = DeviceStatus.Initializing;
-		device.DeviceDriver.Setup(device);
+		device.DeviceDriver?.Setup(device);
 
 		if (device.Status == DeviceStatus.Initializing)
 		{
-			device.DeviceDriver.Initialize();
+			device.DeviceDriver?.Initialize();
 
 			HAL.DebugWrite(" # Initialized: ");
 			HAL.DebugWriteLine(device.Name);
 
 			if (device.Status == DeviceStatus.Initializing)
 			{
-				device.DeviceDriver.Probe();
+				device.DeviceDriver?.Probe();
 
 				if (device.Status == DeviceStatus.Available)
 				{
-					device.DeviceDriver.Start();
+					device.DeviceDriver?.Start();
 
 					AddInterruptHandler(device);
 				}
@@ -171,7 +171,7 @@ public sealed class DeviceService : BaseService
 
 		ServiceManager.AddEvent(new ServiceEvent(ServiceEventType.Start, device));
 
-		HAL.DebugWriteLine("DeviceService:StartDevice():Exit");
+		HAL.DebugWriteLine("DeviceService::StartDevice():Exit");
 	}
 
 	#endregion Initialize Devices Drivers
@@ -275,6 +275,20 @@ public sealed class DeviceService : BaseService
 
 			foreach (var device in devices)
 				list.Add(device);
+
+			return list;
+		}
+	}
+
+	public List<Device> GetAllDevices(DeviceBusType busType)
+	{
+		lock (sync)
+		{
+			var list = new List<Device>(devices.Count);
+
+			foreach (var device in devices)
+				if (device.DeviceDriverRegistryEntry?.BusType == busType)
+					list.Add(device);
 
 			return list;
 		}
