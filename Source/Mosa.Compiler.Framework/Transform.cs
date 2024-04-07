@@ -132,7 +132,7 @@ public sealed class Transform
 		TypeSystem = Compiler.TypeSystem;
 
 		Devirtualization = Compiler.MosaSettings.Devirtualization;
-		Window = Math.Max(Compiler.MosaSettings.OptimizationBasicWindow, 1);
+		Window = Compiler.MosaSettings.OptimizationBasicWindow;
 
 		LoadInstruction = Is32BitPlatform ? IR.Load32 : IR.Load64;
 		StoreInstruction = Is32BitPlatform ? IR.Store32 : IR.Store64;

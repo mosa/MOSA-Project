@@ -1304,9 +1304,13 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static Node GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand1 = null, Operand operand2 = null)
 	{
+		immediate = false;
+
+		if (window != 0)
+			return null;
+
 		var previous = context.Node.Previous;
 		var count = 0;
-		immediate = false;
 
 		while (count < window)
 		{
@@ -1360,9 +1364,13 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static Node GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
 	{
+		immediate = false;
+
+		if (window != 0)
+			return null;
+
 		var next = context.Node.Next;
 		var count = 0;
-		immediate = false;
 
 		while (count < window)
 		{
