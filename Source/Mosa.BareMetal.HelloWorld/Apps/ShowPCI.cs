@@ -24,9 +24,7 @@ public class ShowPCI : IApp
 			Program.Bullet(ConsoleColor.Yellow);
 			Console.Write(" ");
 
-			if (device.Parent.DeviceDriver is not PCIDevice pciDevice)
-				continue;
-
+			var pciDevice = (PCIDevice)device.Parent.DeviceDriver;
 			var name = device.DeviceDriver == null ? device.DeviceDriverRegistryEntry.Name : device.Name;
 
 			Program.InBrackets(pciDevice.Device.Name + ": " + name + " " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ConsoleColor.White, ConsoleColor.Green);
