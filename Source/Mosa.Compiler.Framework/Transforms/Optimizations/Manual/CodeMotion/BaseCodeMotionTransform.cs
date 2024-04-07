@@ -82,6 +82,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 
 				if (next.IsBlockEndInstruction
 					|| next.Instruction.IsMemoryWrite
+					|| next.Instruction.IsMemoryRead
+					|| next.Instruction.IsIOOperation
 					|| !next.Instruction.IsFlowNext
 					|| next.Instruction.HasUnspecifiedSideEffect)
 					return next;
