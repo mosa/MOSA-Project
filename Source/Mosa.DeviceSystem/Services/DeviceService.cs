@@ -88,7 +88,7 @@ public sealed class DeviceService : BaseService
 		{
 			var entry = (GenericDeviceDriverRegistryEntry)driver;
 
-			HAL.DebugWriteLine(" > Generic Driver: ");
+			HAL.DebugWriteLine(" > Generic Device: ");
 			HAL.DebugWriteLine(entry.Name);
 
 			var ioPortRegions = new List<IOPortRegion>();
@@ -101,19 +101,20 @@ public sealed class DeviceService : BaseService
 		HAL.DebugWriteLine("DeviceService::Initialize() [Exit]");
 	}
 
-	public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
+	public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceBusType fallbackBusType = DeviceBusType.None)
 	{
-		var deviceDriver = deviceDriverRegistryEntry.Factory?.Invoke();
+		var deviceDriver = deviceDriverRegistryEntry?.Factory();
 
-		return Initialize(deviceDriver, parent, autoStart, configuration, resources, deviceDriverRegistryEntry);
+		return Initialize(deviceDriver, parent, autoStart, configuration, resources, deviceDriverRegistryEntry, fallbackBusType);
 	}
 
-	public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
+	public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null, DeviceBusType fallbackBusType = DeviceBusType.None)
 	{
 		HAL.DebugWriteLine("DeviceService::Initialize(BaseDeviceDriver)");
 
 		var device = new Device
 		{
+			BusType = deviceDriverRegistryEntry?.BusType ?? fallbackBusType,
 			DeviceDriver = deviceDriver,
 			DeviceDriverRegistryEntry = deviceDriverRegistryEntry,
 			Status = DeviceStatus.Initializing,
@@ -287,7 +288,7 @@ public sealed class DeviceService : BaseService
 			var list = new List<Device>(devices.Count);
 
 			foreach (var device in devices)
-				if (device.DeviceDriverRegistryEntry?.BusType == busType)
+				if (device.BusType == busType)
 					list.Add(device);
 
 			return list;

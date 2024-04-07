@@ -15,6 +15,8 @@ public class Device
 {
 	public string Name { get; set; }
 
+	public DeviceBusType BusType { get; set; }
+
 	public BaseDeviceDriver DeviceDriver { get; set; }
 
 	public DeviceStatus Status { get; set; }

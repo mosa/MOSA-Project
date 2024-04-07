@@ -24,7 +24,7 @@ public class ISADeviceService : BaseService
 		{
 			var entry = (ISADeviceDriverRegistryEntry)driver;
 
-			HAL.DebugWriteLine(" > ISA Driver: ");
+			HAL.DebugWriteLine(" > ISA Device: ");
 			HAL.DebugWriteLine(entry.Name);
 
 			var ioPortRegions = new List<IOPortRegion>();
@@ -39,7 +39,7 @@ public class ISADeviceService : BaseService
 				memoryRegions.Add(new AddressRegion(new Pointer(entry.BaseAddress), entry.AddressRange));
 
 			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, entry.IRQ);
-			deviceService.Initialize(entry, null, true, null, hardwareResources);
+			deviceService.Initialize(entry, null, true, null, hardwareResources, DeviceBusType.ISA);
 		}
 
 		HAL.DebugWriteLine("ISADeviceService::Initialize() [Exit]");

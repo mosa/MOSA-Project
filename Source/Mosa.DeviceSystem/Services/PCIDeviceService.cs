@@ -64,23 +64,6 @@ public class PCIDeviceService : BaseService
 			matchPriority = priority;
 		}
 
-		// Set a dummy entry if none were found
-		matchedDriver ??= new PCIDeviceDriverRegistryEntry
-		{
-			Name = "UnknownPCIDevice",
-			Platform = PlatformArchitecture.None,
-			BusType = DeviceBusType.PCI,
-			VendorID = pciDevice.VendorID,
-			DeviceID = pciDevice.DeviceID,
-			RevisionID = pciDevice.RevisionID,
-			ClassCode = pciDevice.ClassCode,
-			SubClassCode = pciDevice.SubClassCode,
-			ProgIF = pciDevice.ProgIF,
-			SubSystemVendorID = pciDevice.SubSystemVendorID,
-			SubSystemID = pciDevice.SubSystemID,
-			PCIFields = PCIField.All
-		};
-
 		StartDevice(matchedDriver, parentDevice, pciDevice);
 	}
 
@@ -103,10 +86,21 @@ public class PCIDeviceService : BaseService
 
 		var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, pciDevice.IRQ);
 
-		HAL.DebugWriteLine(" > PCI Driver: ");
+		// No driver was found previously
+		if (driver == null)
+		{
+			HAL.DebugWriteLine(" > Unknown PCI Device: ");
+			HAL.DebugWriteLine(pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x"));
+
+			// It must be set to auto start, or else the device isn't registered in the framework
+			deviceService.Initialize(null, device, true, null, hardwareResources, DeviceBusType.PCI);
+			return;
+		}
+
+		HAL.DebugWriteLine(" > PCI Device: ");
 		HAL.DebugWriteLine(driver.Name);
 
-		deviceService.Initialize(driver, device, driver.AutoStart, null, hardwareResources);
+		deviceService.Initialize(driver, device, driver.AutoStart, null, hardwareResources, DeviceBusType.PCI);
 	}
 
 	private static bool HasFlag(PCIField list, PCIField match) => (int)(list & match) != 0;

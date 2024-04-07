@@ -92,7 +92,6 @@ public static class Setup
 		{
 			Name = "Intel4SeriesChipsetDRAMController",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x2E10,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
@@ -103,7 +102,6 @@ public static class Setup
 		{
 			Name = "Intel4SeriesChipsetIntegratedGraphicsController",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x2E10,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
@@ -114,7 +112,6 @@ public static class Setup
 		{
 			Name = "Intel4SeriesChipsetIntegratedGraphicsController2E13",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x2E13,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
@@ -125,7 +122,6 @@ public static class Setup
 		{
 			Name = "Intel4SeriesChipsetPCIExpressRootPort",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x2E10,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
@@ -136,7 +132,6 @@ public static class Setup
 		{
 			Name = "Intel4SeriesChipsetPCIExpressRootPort",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x2E10,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
@@ -147,7 +142,6 @@ public static class Setup
 		{
 			Name = "Intel440FX",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x1237,
 			ClassCode = 0x06,
@@ -160,7 +154,6 @@ public static class Setup
 		{
 			Name = "IntelPIIX3",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x7000,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
@@ -171,7 +164,6 @@ public static class Setup
 		{
 			Name = "IntelPIIX4",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x7113,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
@@ -182,7 +174,6 @@ public static class Setup
 		{
 			Name = "IntelGPIOController",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x0934,
 			ClassCode = 0X0C,
@@ -197,7 +188,6 @@ public static class Setup
 		{
 			Name = "IntelHSUART",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x0936,
 			ClassCode = 0X07,
@@ -212,7 +202,6 @@ public static class Setup
 		{
 			Name = "PCIIDEInterface",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x8086,
 			DeviceID = 0x7010,
 			ClassCode = 0X01,
@@ -226,7 +215,6 @@ public static class Setup
 		{
 			Name = "VirtIOGPU",
 			Platform = PlatformArchitecture.X86AndX64 | PlatformArchitecture.ARM32,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x1AF4,
 			DeviceID = 0x1050,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
@@ -237,7 +225,6 @@ public static class Setup
 		{
 			Name = "VMwareSVGA2",
 			Platform = PlatformArchitecture.X86AndX64,
-			BusType = DeviceBusType.PCI,
 			VendorID = 0x15AD,
 			DeviceID = 0x0405,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
