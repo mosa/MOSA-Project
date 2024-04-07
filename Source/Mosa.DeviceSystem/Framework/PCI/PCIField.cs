@@ -13,5 +13,6 @@ public enum PCIField : byte
 	RevisionID = 16,
 	ProgIF = 32,
 	ClassCode = 64,
-	SubClassCode = 128
+	SubClassCode = 128,
+	All = DeviceID | VendorID | SubSystemVendorID | SubSystemID | RevisionID | ProgIF | ClassCode | SubClassCode
 }
