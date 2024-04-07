@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Reflection.Metadata.Ecma335;
+
 namespace Mosa.Compiler.Framework;
 
 /// <summary>
@@ -68,6 +70,23 @@ public static class ConditionCodeExtension
 			ConditionCode.NoParity => ConditionCode.Parity,
 			_ => throw new NotSupportedException()
 		};
+	}
+
+	public static bool IsSigned(this ConditionCode conditionCode)
+	{
+		return conditionCode switch
+		{
+			ConditionCode.GreaterOrEqual => true,
+			ConditionCode.Greater => true,
+			ConditionCode.LessOrEqual => true,
+			ConditionCode.Less => true,
+			_ => false
+		};
+	}
+
+	public static bool IsUnsigned(this ConditionCode conditionCode)
+	{
+		return !conditionCode.IsSigned();
 	}
 
 	public static ConditionCode GetReverse(this ConditionCode conditionCode)

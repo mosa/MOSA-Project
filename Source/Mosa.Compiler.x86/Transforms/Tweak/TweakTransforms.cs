@@ -12,6 +12,7 @@ public static class TweakTransforms
 	public static readonly List<BaseTransform> List = new()
 	{
 		new Cmp32(),
+		new Test32(),
 		new Shl32(),
 		new Shld32(),
 		new Shr32(),
