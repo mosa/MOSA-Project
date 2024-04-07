@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.BareMetal.HelloWorld.Apps;
@@ -14,7 +15,7 @@ public class ShowPCI : IApp
 	public void Execute()
 	{
 		Console.Write("> Probing for PCI devices...");
-		var devices = Program.DeviceService.GetDevices<PCIDevice>();
+		var devices = Program.DeviceService.GetAllDevices(DeviceBusType.PCI);
 		Console.WriteLine("[Completed: " + devices.Count + " found]");
 
 		foreach (var device in devices)
@@ -23,21 +24,10 @@ public class ShowPCI : IApp
 			Program.Bullet(ConsoleColor.Yellow);
 			Console.Write(" ");
 
-			var pciDevice = device.DeviceDriver as PCIDevice;
-			Program.InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ConsoleColor.White, ConsoleColor.Green);
+			var pciDevice = (PCIDevice)device.Parent.DeviceDriver;
+			var name = device.DeviceDriverRegistryEntry == null ? "UnknownPCIDevice" : device.Name;
 
-			var children = Program.DeviceService.GetChildrenOf(device);
-
-			if (children.Count != 0)
-			{
-				var child = children[0];
-
-				Console.WriteLine();
-				Console.Write("    ");
-
-				Program.InBrackets(child.Name, ConsoleColor.White, ConsoleColor.Green);
-			}
-
+			Program.InBrackets(pciDevice.Device.Name + ": " + name + " " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ConsoleColor.White, ConsoleColor.Green);
 			Console.WriteLine();
 		}
 	}

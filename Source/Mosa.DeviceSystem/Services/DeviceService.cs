@@ -88,7 +88,7 @@ public sealed class DeviceService : BaseService
 		{
 			var entry = (GenericDeviceDriverRegistryEntry)driver;
 
-			HAL.DebugWriteLine(" > Generic Driver: ");
+			HAL.DebugWriteLine(" > Generic Device: ");
 			HAL.DebugWriteLine(entry.Name);
 
 			var ioPortRegions = new List<IOPortRegion>();
@@ -101,19 +101,20 @@ public sealed class DeviceService : BaseService
 		HAL.DebugWriteLine("DeviceService::Initialize() [Exit]");
 	}
 
-	public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
+	public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceBusType fallbackBusType = DeviceBusType.None)
 	{
-		var deviceDriver = deviceDriverRegistryEntry.Factory();
+		var deviceDriver = deviceDriverRegistryEntry?.Factory();
 
-		return Initialize(deviceDriver, parent, autoStart, configuration, resources, deviceDriverRegistryEntry);
+		return Initialize(deviceDriver, parent, autoStart, configuration, resources, deviceDriverRegistryEntry, fallbackBusType);
 	}
 
-	public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
+	public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null, DeviceBusType fallbackBusType = DeviceBusType.None)
 	{
-		HAL.DebugWriteLine("DeviceService:Initialize()");
+		HAL.DebugWriteLine("DeviceService::Initialize(BaseDeviceDriver)");
 
 		var device = new Device
 		{
+			BusType = deviceDriverRegistryEntry?.BusType ?? fallbackBusType,
 			DeviceDriver = deviceDriver,
 			DeviceDriverRegistryEntry = deviceDriverRegistryEntry,
 			Status = DeviceStatus.Initializing,
@@ -126,7 +127,7 @@ public sealed class DeviceService : BaseService
 		if (autoStart)
 			StartDevice(device);
 
-		HAL.DebugWriteLine("DeviceService:Initialize() [Exit]");
+		HAL.DebugWriteLine("DeviceService::Initialize(BaseDeviceDriver) [Exit]");
 
 		return device;
 	}
@@ -137,7 +138,7 @@ public sealed class DeviceService : BaseService
 	/// <param name="device">The device.</param>
 	private void StartDevice(Device device)
 	{
-		HAL.DebugWriteLine("DeviceService:StartDevice()");
+		HAL.DebugWriteLine("DeviceService::StartDevice()");
 
 		lock (sync)
 		{
@@ -147,22 +148,22 @@ public sealed class DeviceService : BaseService
 		}
 
 		device.Status = DeviceStatus.Initializing;
-		device.DeviceDriver.Setup(device);
+		device.DeviceDriver?.Setup(device);
 
 		if (device.Status == DeviceStatus.Initializing)
 		{
-			device.DeviceDriver.Initialize();
+			device.DeviceDriver?.Initialize();
 
 			HAL.DebugWrite(" # Initialized: ");
 			HAL.DebugWriteLine(device.Name);
 
 			if (device.Status == DeviceStatus.Initializing)
 			{
-				device.DeviceDriver.Probe();
+				device.DeviceDriver?.Probe();
 
 				if (device.Status == DeviceStatus.Available)
 				{
-					device.DeviceDriver.Start();
+					device.DeviceDriver?.Start();
 
 					AddInterruptHandler(device);
 				}
@@ -171,7 +172,7 @@ public sealed class DeviceService : BaseService
 
 		ServiceManager.AddEvent(new ServiceEvent(ServiceEventType.Start, device));
 
-		HAL.DebugWriteLine("DeviceService:StartDevice():Exit");
+		HAL.DebugWriteLine("DeviceService::StartDevice():Exit");
 	}
 
 	#endregion Initialize Devices Drivers
@@ -275,6 +276,20 @@ public sealed class DeviceService : BaseService
 
 			foreach (var device in devices)
 				list.Add(device);
+
+			return list;
+		}
+	}
+
+	public List<Device> GetAllDevices(DeviceBusType busType)
+	{
+		lock (sync)
+		{
+			var list = new List<Device>(devices.Count);
+
+			foreach (var device in devices)
+				if (device.BusType == busType)
+					list.Add(device);
 
 			return list;
 		}

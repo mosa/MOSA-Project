@@ -149,6 +149,7 @@ public static class Startup
 		var serviceManager = new ServiceManager();
 		var diskDeviceService = new DiskDeviceService();
 		var partitionService = new PartitionService();
+		var isaDeviceService = new ISADeviceService();
 		var pciDeviceService = new PCIDeviceService();
 		var pcService = new PCService();
 		Kernel.ServiceManager = serviceManager;
@@ -174,6 +175,12 @@ public static class Startup
 		Console.WriteLine(" [Completed]");
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
+		Console.Write("> ISA Device Service...");
+		serviceManager.AddService(isaDeviceService);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine(" [Completed]");
+
+		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> PCI Device Service...");
 		serviceManager.AddService(pciDeviceService);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -182,13 +189,6 @@ public static class Startup
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> PC Service...");
 		serviceManager.AddService(pcService);
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.WriteLine(" [Completed]");
-
-		// Future: We shouldn't be directly initializing ISA devices on non-x86 platforms (even if it doesn't do anything on those)
-		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> ISABus...");
-		deviceService.Initialize(new ISABus(), null);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
