@@ -6,8 +6,6 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 {
 	public abstract class BaseCodeMotionTransform : BaseTransform
 	{
-		public const int MotionWindows = 30;
-
 		public BaseCodeMotionTransform(BaseInstruction instruction, TransformType type, bool log = false)
 			: base(instruction, type, log)
 		{ }
@@ -16,6 +14,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 
 		public override bool Match(Context context, Transform transform)
 		{
+			if (transform.Window == 0)
+				return false;
+
 			if (!context.Result.IsVirtualRegister)
 				return false;
 
@@ -29,7 +30,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 				return false;
 
 			// find locations before any memory store operation or use
-			var location = GetMotionLocation(context.Node, context.Result.Uses[0], MotionWindows);
+			var location = GetMotionLocation(context.Node, context.Result.Uses[0], transform.Window);
 
 			if (location == null || location.Previous == null)
 				return false;
@@ -44,7 +45,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 		{
 			transform.GetManager<CodeMotionManager>().MarkMotion(context.Node);
 
-			var location = GetMotionLocation(context.Node, context.Result.Uses[0], MotionWindows);
+			var location = GetMotionLocation(context.Node, context.Result.Uses[0], transform.Window);
 
 			location.Previous.MoveFrom(context.Node);
 		}

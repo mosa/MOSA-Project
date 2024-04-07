@@ -25,6 +25,10 @@ public partial class MosaSettings
 		public const int X64StackLocation = 0x30000;
 		public const int ARM32StackLocation = 0x30000;
 		public const int ARM64StackLocation = 0x30000;
+
+		public const int Optimizations_Basic_Window = 30;
+		public const int Optimizations_Inline_Maximum = 12;
+		public const int Optimizations_Inline_AggressiveMaximum = 24;
 	}
 
 	#endregion Constants
@@ -574,19 +578,19 @@ public partial class MosaSettings
 
 	public int OptimizationBasicWindow
 	{
-		get => Settings.GetValue(Name.Optimizations_Basic_Window, 5);
+		get => Settings.GetValue(Name.Optimizations_Basic_Window, Constant.Optimizations_Basic_Window);
 		set => Settings.SetValue(Name.Optimizations_Basic_Window, value);
 	}
 
 	public int InlineMaximum
 	{
-		get => Settings.GetValue(Name.Optimizations_Inline_Maximum, 12);
+		get => Settings.GetValue(Name.Optimizations_Inline_Maximum, Constant.Optimizations_Inline_Maximum);
 		set => Settings.SetValue(Name.Optimizations_Inline_Maximum, value);
 	}
 
 	public int InlineAggressiveMaximum
 	{
-		get => Settings.GetValue(Name.Optimizations_Inline_AggressiveMaximum, 24);
+		get => Settings.GetValue(Name.Optimizations_Inline_AggressiveMaximum, Constant.Optimizations_Inline_AggressiveMaximum);
 		set => Settings.SetValue(Name.Optimizations_Inline_AggressiveMaximum, value);
 	}
 
@@ -776,9 +780,9 @@ public partial class MosaSettings
 		PlatformOptimizations = true;
 		InlineMethods = true;
 		InlineExplicit = true;
-		InlineAggressiveMaximum = 24;
-		InlineMaximum = 12;
-		OptimizationBasicWindow = 5;
+		InlineMaximum = Constant.Optimizations_Inline_Maximum;
+		InlineAggressiveMaximum = Constant.Optimizations_Inline_AggressiveMaximum;
+		OptimizationBasicWindow = Constant.Optimizations_Basic_Window;
 		ReduceCodeSize = false;
 
 		Emulator = "Qemu";
@@ -844,19 +848,22 @@ public partial class MosaSettings
 		}
 	}
 
-	private string ToLower(string value)
+	public void AdjustSettings()
 	{
-		if (value == null)
-			return string.Empty;
+		if (OptimizationBasicWindow < 0)
+			OptimizationBasicWindow = 0;
 
-		if (value == "%DEFAULT%" || value == "%REGISTRY%")
-			return value;
+		if (InlineMaximum < 0)
+			InlineMaximum = 0;
 
-		return value.ToLowerInvariant().Trim();
+		if (InlineAggressiveMaximum < 0)
+			InlineAggressiveMaximum = 0;
 	}
 
 	public void ResolveDefaults()
 	{
+		AdjustSettings();
+
 		if (string.IsNullOrWhiteSpace(TemporaryFolder) || TemporaryFolder == "%DEFAULT%")
 		{
 			TemporaryFolder = Path.Combine(Path.GetTempPath(), "MOSA");
@@ -885,37 +892,6 @@ public partial class MosaSettings
 		if (string.IsNullOrWhiteSpace(Platform) || Platform == "%DEFAULT%")
 		{
 			Platform = "x86";
-		}
-	}
-
-	public static string GetRegistry(string name, string defaultValue)
-	{
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-		{
-			try
-			{
-				return (string)Registry.CurrentUser
-						.OpenSubKey(WindowsRegistry.Software)
-						.OpenSubKey(WindowsRegistry.MosaApp)
-						.GetValue(name, defaultValue);
-			}
-			catch
-			{
-				return defaultValue;
-			}
-		}
-
-		return defaultValue;
-	}
-
-	public static void SetRegistry(string name, string value)
-	{
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-		{
-			Registry.CurrentUser
-			.OpenSubKey(WindowsRegistry.Software)
-			.OpenSubKey(WindowsRegistry.MosaApp, RegistryKeyPermissionCheck.ReadWriteSubTree)
-			.SetValue(name, value);
 		}
 	}
 
@@ -1036,6 +1012,48 @@ public partial class MosaSettings
 				AddSearchPath(path);
 			}
 		}
+	}
+
+	public static string GetRegistry(string name, string defaultValue)
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+		{
+			try
+			{
+				return (string)Registry.CurrentUser
+						.OpenSubKey(WindowsRegistry.Software)
+						.OpenSubKey(WindowsRegistry.MosaApp)
+						.GetValue(name, defaultValue);
+			}
+			catch
+			{
+				return defaultValue;
+			}
+		}
+
+		return defaultValue;
+	}
+
+	public static void SetRegistry(string name, string value)
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+		{
+			Registry.CurrentUser
+			.OpenSubKey(WindowsRegistry.Software)
+			.OpenSubKey(WindowsRegistry.MosaApp, RegistryKeyPermissionCheck.ReadWriteSubTree)
+			.SetValue(name, value);
+		}
+	}
+
+	private string ToLower(string value)
+	{
+		if (value == null)
+			return string.Empty;
+
+		if (value == "%DEFAULT%" || value == "%REGISTRY%")
+			return value;
+
+		return value.ToLowerInvariant().Trim();
 	}
 
 	#region Custom Helpers
