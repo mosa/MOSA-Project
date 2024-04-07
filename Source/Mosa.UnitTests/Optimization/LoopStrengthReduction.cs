@@ -54,7 +54,41 @@ public static class LoopStrengthReduction
 
 		for (var i = n; i > 0; i--)
 		{
-			a *= i;
+			a++;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction4a()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = n; i > 0; i--)
+		{
+			a++;
+
+			if (i > 11)
+				return 0;
+		}
+
+		return a;
+	}
+
+	[MosaUnitTest]
+	public static int Reduction4b()
+	{
+		var a = 8;
+		var n = 10;
+
+		for (var i = n; i > 3; i--)
+		{
+			a++;
+
+			if (i < 1)
+				return 0;
 		}
 
 		return a;
