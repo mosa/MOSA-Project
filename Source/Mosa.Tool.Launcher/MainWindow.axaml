@@ -176,6 +176,10 @@
 					<Label FontSize="14" Name="qemuImgPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 					<Label FontSize="14">Bochs:</Label>
 					<Label FontSize="14" Name="bochsPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">Bochs BIOS:</Label>
+					<Label FontSize="14" Name="bochsBiosPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
+					<Label FontSize="14">Bochs VGA BIOS:</Label>
+					<Label FontSize="14" Name="bochsVgaBiosPathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 					<Label FontSize="14">VMWare:</Label>
 					<Label FontSize="14" Name="vmwarePathLbl" Margin="165, -23, 0, 0">No path specified</Label>
 					<Label FontSize="14">VirtualBox:</Label>

@@ -55,6 +55,18 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.AppLocation_Bochs, value);
 	}
 
+	public string BochsBIOS
+	{
+		get => Settings.GetValue(Name.AppLocation_Bochs_BIOS, null);
+		set => Settings.SetValue(Name.AppLocation_Bochs_BIOS, value);
+	}
+
+	public string BochsVGABIOS
+	{
+		get => Settings.GetValue(Name.AppLocation_Bochs_VGABIOS, null);
+		set => Settings.SetValue(Name.AppLocation_Bochs_VGABIOS, value);
+	}
+
 	public string CompileTimeFile
 	{
 		get => Settings.GetValue(Name.CompilerDebug_CompileTimeFile, null);
@@ -121,10 +133,10 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Emulator_Serial, value);
 	}
 
-	public string EmulatorSVGA
+	public string EmulatorGraphics
 	{
-		get => Settings.GetValue(Name.Emulator_SVGA, "std");
-		set => Settings.SetValue(Name.Emulator_SVGA, value);
+		get => Settings.GetValue(Name.Emulator_Graphics, "std");
+		set => Settings.SetValue(Name.Emulator_Graphics, value);
 	}
 
 	public string EmulatorSerialHost
@@ -143,6 +155,12 @@ public partial class MosaSettings
 	{
 		get => (ushort)Settings.GetValue(Name.Emulator_Serial_Port, 0);
 		set => Settings.SetValue(Name.Emulator_Serial_Port, value);
+	}
+
+	public bool EmulatorAcceleration
+	{
+		get => Settings.GetValue(Name.Emulator_Acceleration, false);
+		set => Settings.SetValue(Name.Emulator_Acceleration, value);
 	}
 
 	public string FileSystem
