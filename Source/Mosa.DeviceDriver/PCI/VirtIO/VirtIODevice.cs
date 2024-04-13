@@ -42,7 +42,7 @@ public class VirtIODevice
 
 		if (configuration.RevisionID < 1)
 		{
-			HAL.DebugWriteLine("[" + devName + "] pci revision id mismatch; abort");
+			HAL.DebugWriteLine($"[{devName}] pci revision id mismatch; abort");
 			return;
 		}
 
