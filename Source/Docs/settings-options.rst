@@ -154,13 +154,14 @@ Emulator Settings
     Emulator,"Type of Emulator QEMU, VMware, Bochs"
     Emulator.Memory,Amount of memory for the virtual machine in MB
     Emulator.Display,"If true, show the video display"
-	Emulator.SVGA,"SVGA mode: std, cirrus, vbe, virtio or vmware"
+	Emulator.Graphics,"Graphics device: std, cirrus, vbe, virtio or vmware"
 	Emulator.MaxRuntime,Maximum runtime of the virtual machine in seconds (future)
     Emulator.GDB,"If true, enables GDB within emulator"
     Emulator.Serial,"Serial Emulation type None, Pipe, TCPServer, TCPClient"
     Emulator.Serial.Host,Serial Host Name or IP address
     Emulator.Serial.Port,Serial Port
     Emulator.Serial.Pipe,Serial Pipename
+    Emulator.Acceleration,Enables CPU hardware acceleration on the emulator, if available
 
 GDB Settings
 ------------
@@ -202,6 +203,8 @@ Application Location Settings
    :widths: 50, 200
 
     AppLocation.Bochs,Location of the BOCHS application
+    AppLocation.Bochs.BIOS,Location of the BOCHS BIOS
+    AppLocation.Bochs.VGABIOS,Location of the BOCHS VGA BIOS
     AppLocation.QemuX86,Location of the QEMU application for x86 (i386)
     AppLocation.QemuX64,Location of the QEMU application for x64
     AppLocation.QemuARM32,Location of the QEMU application for ARM32
