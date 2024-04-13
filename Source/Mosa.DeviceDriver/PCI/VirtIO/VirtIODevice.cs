@@ -14,7 +14,7 @@ namespace Mosa.DeviceDriver.PCI.VirtIO;
 public class VirtIODevice
 {
 	private readonly string devName;
-	private readonly PCIDevice pciDevice;
+	private readonly PCIDeviceConfiguration configuration;
 	private readonly IPCIController pciController;
 	private readonly ConstrainedPointer devBar;
 	private readonly uint devOff;
@@ -38,30 +38,30 @@ public class VirtIODevice
 	public VirtIODevice(Device device)
 	{
 		devName = device.Name;
-		pciDevice = (PCIDevice)device.Parent.DeviceDriver;
+		configuration = (PCIDeviceConfiguration)device.Configuration;
 
-		if (pciDevice.RevisionID < 1)
+		if (configuration.RevisionID < 1)
 		{
 			HAL.DebugWriteLine("[" + devName + "] pci revision id mismatch; abort");
 			return;
 		}
 
-		pciController = pciDevice.Controller;
+		pciController = configuration.Controller;
 
-		foreach (var capability in pciDevice.Capabilities)
+		foreach (var capability in configuration.Capabilities)
 		{
 			if (capability.Capability != 0x09)
 				continue;
 
-			var configType = pciController.ReadConfig8(pciDevice, (byte)(capability.Offset + 3));
-			var bar = pciController.ReadConfig8(pciDevice, (byte)(capability.Offset + 4));
-			var offset = pciController.ReadConfig32(pciDevice, (byte)(capability.Offset + 8));
+			var configType = pciController.ReadConfig8(configuration, (byte)(capability.Offset + 3));
+			var bar = pciController.ReadConfig8(configuration, (byte)(capability.Offset + 4));
+			var offset = pciController.ReadConfig32(configuration, (byte)(capability.Offset + 8));
 
 			switch (configType)
 			{
 				case VirtIOConfigurationCapabilities.Common:
 					{
-						var pciBar = pciDevice.BaseAddresses[bar];
+						var pciBar = configuration.BaseAddresses[bar];
 
 						if (pciBar.Region == AddressType.Memory)
 						{
@@ -78,7 +78,7 @@ public class VirtIODevice
 					}
 				case VirtIOConfigurationCapabilities.Notify:
 					{
-						var pciBar = pciDevice.BaseAddresses[bar];
+						var pciBar = configuration.BaseAddresses[bar];
 
 						if (pciBar.Region == AddressType.Memory)
 						{
@@ -91,13 +91,13 @@ public class VirtIODevice
 							return;
 						}
 
-						notifyOffMultiplier = pciController.ReadConfig32(pciDevice, (byte)(capability.Offset + 16));
+						notifyOffMultiplier = pciController.ReadConfig32(configuration, (byte)(capability.Offset + 16));
 						break;
 					}
 				case VirtIOConfigurationCapabilities.ISR: break;
 				case VirtIOConfigurationCapabilities.Device:
 					{
-						var pciBar = pciDevice.BaseAddresses[bar];
+						var pciBar = configuration.BaseAddresses[bar];
 
 						if (pciBar.Region == AddressType.Memory)
 						{
