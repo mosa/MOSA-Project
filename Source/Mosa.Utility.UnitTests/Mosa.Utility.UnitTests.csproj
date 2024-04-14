@@ -51,7 +51,8 @@
 
 		<Compile Include="..\Mosa.UnitTests\Optimization\LoopUnrollingTests.cs" Link="Tests\Optimization\LoopUnrollingTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Optimization\LoopStrengthReduction.cs" Link="Tests\Optimization\LoopStrengthReduction.cs" />
-
+		<Compile Include="..\Mosa.UnitTests\Optimization\LoopRange.cs" Link="Tests\Optimization\LoopRange.cs" />
+		
 		<Compile Include="..\Mosa.UnitTests\Other\CompilerBugTests.cs" Link="Tests\Other\CompilerBugTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Other\SpecificTests.cs" Link="Tests\Other\SpecificTests.cs" />
 

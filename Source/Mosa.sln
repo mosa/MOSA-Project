@@ -176,12 +176,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Docs\compiler-transformations.rst = Docs\compiler-transformations.rst
 		Docs\conf.py = Docs\conf.py
 		Docs\contents.txt = Docs\contents.txt
+		Docs\create-operating-system.rst = Docs\create-operating-system.rst
 		Docs\demos.rst = Docs\demos.rst
 		Docs\faq.rst = Docs\faq.rst
 		Docs\get-involved.rst = Docs\get-involved.rst
+		Docs\getting-started.rst = Docs\getting-started.rst
 		Docs\index.rst = Docs\index.rst
 		Docs\introduction.rst = Docs\introduction.rst
 		Docs\license.rst = Docs\license.rst
+		Docs\mosa-project-structure.rst = Docs\mosa-project-structure.rst
 		Docs\mosa-runtime-tables.dot = Docs\mosa-runtime-tables.dot
 		Docs\runtime-tables.rst = Docs\runtime-tables.rst
 		Docs\settings-options.rst = Docs\settings-options.rst
@@ -192,9 +195,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Docs\tool-launcher.rst = Docs\tool-launcher.rst
 		Docs\unit-tests.rst = Docs\unit-tests.rst
 		Docs\usb-flash-drive-installation.rst = Docs\usb-flash-drive-installation.rst
-		Docs\create-operating-system.rst = Docs\create-operating-system.rst
-		Docs\mosa-project-structure.rst = Docs\mosa-project-structure.rst
-		Docs\getting-started.rst = Docs\getting-started.rst
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Utility.Disassembler", "Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj", "{E45FBA9E-6F57-4511-8977-D8045DE09622}"
@@ -246,6 +246,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Kernel.BareMetal.Intel", "Mosa.Kernel.BareMetal.Intel\Mosa.Kernel.BareMetal.Intel.csproj", "{E94607AB-584E-4D15-B0FA-68E086FE9E70}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.TestWorld.ARM32", "Mosa.BareMetal.TestWorld.ARM32\Mosa.BareMetal.TestWorld.ARM32.csproj", "{26667157-E909-4F7A-9130-F8B5C15A1E4E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Template", "Template", "{A1660856-2153-477F-BAAC-39E8BEB75971}"
+	ProjectSection(SolutionItems) = preProject
+		TemplateLibrary.txt = TemplateLibrary.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1506,6 +1511,7 @@ Global
 		{282FA278-D577-48BC-93BD-214519F3AB28} = {3A538FDC-0226-4971-A3C0-31570CDA340D}
 		{E94607AB-584E-4D15-B0FA-68E086FE9E70} = {75BB6B40-C122-422F-8B40-F50A70A08E0D}
 		{26667157-E909-4F7A-9130-F8B5C15A1E4E} = {3A538FDC-0226-4971-A3C0-31570CDA340D}
+		{A1660856-2153-477F-BAAC-39E8BEB75971} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}

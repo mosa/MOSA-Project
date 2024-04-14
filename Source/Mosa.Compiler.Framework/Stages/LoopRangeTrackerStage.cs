@@ -153,7 +153,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 		if (direction)
 		{
-			if (!signed || (signed && !startOperand.IsNegative))
+			if (!signed /*|| (signed && !startOperand.IsNegative)*/)
 			{
 				var start = startOperand.ConstantUnsigned64;
 
@@ -176,7 +176,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		}
 		else
 		{
-			if (!signed || (signed && !startOperand.IsNegative))
+			if (!signed /*|| (signed && !startOperand.IsNegative)*/)
 			{
 				var start = startOperand.ConstantUnsigned64;
 

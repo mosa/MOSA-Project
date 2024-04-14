@@ -259,6 +259,24 @@ public sealed class Transform
 		TraceLog?.Log();
 	}
 
+	public void TraceBefore(BaseBlockTransform transformation, BasicBlock block)
+	{
+		TraceLog?.Log($"{TotalTransformCount,-7}\t| {transformation.Name}");
+
+		if (transformation.Log)
+			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName}");
+
+		TraceLog?.Log($"{block}\t| {transformation.Name}");
+
+		TotalTransformCount++;
+	}
+
+	public void TraceAfter(BaseBlockTransform transformation)
+	{
+		TraceLog?.Log($"       \t| {transformation.Name}");
+		TraceLog?.Log();
+	}
+
 	#endregion Trace
 
 	#region Basic Block Helpers
