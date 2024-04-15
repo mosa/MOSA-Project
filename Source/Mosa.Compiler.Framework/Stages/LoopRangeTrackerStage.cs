@@ -221,12 +221,12 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 	{
 		var signAnalysis = SignedAnalysis.Unknown;
 
-		foreach (var b in value.Uses)
+		foreach (var use in value.Uses)
 		{
-			if (!(b.Instruction == IR.Branch32 || b.Instruction == IR.Branch64))
+			if (!(use.Instruction == IR.Branch32 || use.Instruction == IR.Branch64))
 				continue;
 
-			var condition = b.ConditionCode;
+			var condition = use.ConditionCode;
 			var signed = condition.IsSigned();
 
 			if (signAnalysis == SignedAnalysis.Unknown)
@@ -238,7 +238,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				if (signed && signAnalysis == SignedAnalysis.Signed)
 					continue;
 
-				if (!signed && signAnalysis != SignedAnalysis.NotSigned)
+				if (!signed && signAnalysis == SignedAnalysis.NotSigned)
 					continue;
 
 				return SignedAnalysis.Both;
