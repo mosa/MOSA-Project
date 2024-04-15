@@ -46,7 +46,7 @@ public class VirtIODevice
 			return;
 		}
 
-		pciController = (IPCIController)device.Parent.Parent.DeviceDriver;
+		pciController = pciDevice.Controller;
 
 		foreach (var capability in pciDevice.Capabilities)
 		{
