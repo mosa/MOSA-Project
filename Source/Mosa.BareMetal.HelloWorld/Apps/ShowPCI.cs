@@ -24,10 +24,10 @@ public class ShowPCI : IApp
 			Program.Bullet(ConsoleColor.Yellow);
 			Console.Write(" ");
 
-			var pciDevice = (PCIDevice)device.Parent.DeviceDriver;
+			var pciDevice = (PCIDeviceConfiguration)device.Configuration;
 			var name = device.DeviceDriverRegistryEntry == null ? "UnknownPCIDevice" : device.Name;
 
-			Program.InBrackets(pciDevice.Device.Name + ": " + name + " " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ConsoleColor.White, ConsoleColor.Green);
+			Program.InBrackets(pciDevice.Name + ": " + name + " " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ConsoleColor.White, ConsoleColor.Green);
 			Console.WriteLine();
 		}
 	}

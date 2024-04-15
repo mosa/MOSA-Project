@@ -28,9 +28,9 @@ public static class HAL
 
 	public static ConstrainedPointer GetPhysicalMemory(Pointer address, uint size) => hardwareAbstraction.GetPhysicalMemory(address, size);
 
-	internal static void DisableAllInterrupts() => hardwareAbstraction.DisableInterrupts();
+	public static void DisableAllInterrupts() => hardwareAbstraction.DisableInterrupts();
 
-	internal static void EnableAllInterrupts() => hardwareAbstraction.EnableInterrupts();
+	public static void EnableAllInterrupts() => hardwareAbstraction.EnableInterrupts();
 
 	public static void Sleep(uint milliseconds) => hardwareAbstraction.Sleep(milliseconds);
 
