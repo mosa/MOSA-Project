@@ -45,18 +45,14 @@ public sealed class DeviceService : BaseService
 		var platformArchitecture = HAL.PlatformArchitecture;
 
 		foreach (var deviceDriver in deviceDrivers)
-		{
 			if ((deviceDriver.Platform & platformArchitecture) == platformArchitecture)
 				RegisterDeviceDriver(deviceDriver);
-		}
 	}
 
 	public void RegisterDeviceDriver(DeviceDriverRegistryEntry deviceDriver)
 	{
 		lock (sync)
-		{
 			registry.Add(deviceDriver);
-		}
 	}
 
 	public List<DeviceDriverRegistryEntry> GetDeviceDrivers(DeviceBusType busType)
@@ -64,13 +60,9 @@ public sealed class DeviceService : BaseService
 		var drivers = new List<DeviceDriverRegistryEntry>();
 
 		lock (sync)
-		{
 			foreach (var deviceDriver in registry)
-			{
 				if (deviceDriver.BusType == busType)
 					drivers.Add(deviceDriver);
-			}
-		}
 
 		return drivers;
 	}
@@ -182,13 +174,9 @@ public sealed class DeviceService : BaseService
 	public Device GetFirstDevice<T>()
 	{
 		lock (sync)
-		{
 			foreach (var device in devices)
-			{
 				if (device.DeviceDriver is T)
 					return device;
-			}
-		}
 
 		return null;
 	}
@@ -198,13 +186,9 @@ public sealed class DeviceService : BaseService
 		var list = new List<Device>();
 
 		lock (sync)
-		{
 			foreach (var device in devices)
-			{
 				if (device.DeviceDriver is T)
 					list.Add(device);
-			}
-		}
 
 		return list;
 	}
@@ -212,13 +196,9 @@ public sealed class DeviceService : BaseService
 	public Device GetFirstDevice<T>(DeviceStatus status)
 	{
 		lock (sync)
-		{
 			foreach (var device in devices)
-			{
 				if (device.Status == status && device.DeviceDriver is T)
 					return device;
-			}
-		}
 
 		return null;
 	}
@@ -228,13 +208,9 @@ public sealed class DeviceService : BaseService
 		var list = new List<Device>();
 
 		lock (sync)
-		{
 			foreach (var device in devices)
-			{
 				if (device.Status == status && device.DeviceDriver is T)
 					list.Add(device);
-			}
-		}
 
 		return list;
 	}
@@ -244,13 +220,9 @@ public sealed class DeviceService : BaseService
 		var list = new List<Device>();
 
 		lock (sync)
-		{
 			foreach (var device in devices)
-			{
 				if (device.Name == name)
 					list.Add(device);
-			}
-		}
 
 		return list;
 	}
@@ -260,10 +232,8 @@ public sealed class DeviceService : BaseService
 		var list = new List<Device>();
 
 		lock (sync)
-		{
 			foreach (var device in parent.Children)
 				list.Add(device);
-		}
 
 		return list;
 	}
@@ -298,13 +268,9 @@ public sealed class DeviceService : BaseService
 	public bool CheckExists(Device parent, ulong componentID)
 	{
 		lock (sync)
-		{
 			foreach (var device in devices)
-			{
 				if (device.Parent == parent && device.ComponentID == componentID)
 					return true;
-			}
-		}
 
 		return false;
 	}
@@ -336,9 +302,7 @@ public sealed class DeviceService : BaseService
 				return;
 
 			lock (sync)
-			{
 				IRQDispatch[irq].Add(device);
-			}
 		}
 
 		HAL.DebugWriteLine("DeviceService::AddInterruptHandler() [Exit]");
@@ -354,9 +318,7 @@ public sealed class DeviceService : BaseService
 			return;
 
 		lock (sync)
-		{
 			IRQDispatch[irq].Remove(device);
-		}
 	}
 
 	#endregion Interrupts
