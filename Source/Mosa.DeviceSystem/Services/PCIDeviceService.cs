@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.Framework.PCI;
 using Mosa.DeviceSystem.HardwareAbstraction;
-using Mosa.DeviceSystem.Misc;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem.Services;
@@ -34,17 +33,17 @@ public class PCIDeviceService : BaseService
 		HAL.DebugWriteLine("PCIDeviceService::Initialize() [Exit]");
 	}
 
-	private void CreateDevice(byte bus, byte slot, byte function, Device device, IPCIController pciController)
+	private void CreateDevice(byte bus, byte slot, byte function, Device pciControllerDevice, IPCIController pciController)
 	{
-		var pciDevice = new PCIDevice(bus, slot, function);
-		var value = pciController.ReadConfig32(pciDevice, 0);
+		var configuration = new PCIDeviceConfiguration(pciControllerDevice.Name, pciController, bus, slot, function);
+		var value = pciController.ReadConfig32(configuration, 0);
 
 		if (value == 0xFFFFFFFF)
 			return;
 
 		// TODO: Check for duplicates
 
-		var parentDevice = deviceService.Initialize(pciDevice, device);
+		configuration.Initialize();
 
 		// Find the best matching driver
 		PCIDeviceDriverRegistryEntry matchedDriver = null;
@@ -53,7 +52,7 @@ public class PCIDeviceService : BaseService
 		var drivers = deviceService.GetDeviceDrivers(DeviceBusType.PCI);
 		foreach (var driver in drivers)
 		{
-			if (driver is not PCIDeviceDriverRegistryEntry pciDriver || !IsMatch(pciDriver, pciDevice))
+			if (driver is not PCIDeviceDriverRegistryEntry pciDriver || !IsMatch(pciDriver, configuration))
 				continue;
 
 			var priority = GetMatchedPriority(pciDriver);
@@ -64,71 +63,72 @@ public class PCIDeviceService : BaseService
 			matchPriority = priority;
 		}
 
-		StartDevice(matchedDriver, parentDevice, pciDevice);
+		StartDevice(matchedDriver, pciControllerDevice, configuration);
 	}
 
-	private void StartDevice(PCIDeviceDriverRegistryEntry driver, Device device, PCIDevice pciDevice)
+	private void StartDevice(PCIDeviceDriverRegistryEntry driver, Device parentDevice, PCIDeviceConfiguration configuration)
 	{
 		var ioPortRegions = new List<IOPortRegion>();
 		var memoryRegions = new List<AddressRegion>();
 
-		foreach (var pciBaseAddress in pciDevice.BaseAddresses)
+		foreach (var baseAddress in configuration.BaseAddresses)
 		{
-			if (pciBaseAddress == null || pciBaseAddress.Size == 0)
+			if (baseAddress == null || baseAddress.Size == 0)
 				continue;
 
-			switch (pciBaseAddress.Region)
+			switch (baseAddress.Region)
 			{
-				case AddressType.PortIO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
-				case AddressType.Memory: memoryRegions.Add(new AddressRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
+				case AddressType.PortIO: ioPortRegions.Add(new IOPortRegion((ushort)baseAddress.Address, (ushort)baseAddress.Size)); break;
+				case AddressType.Memory: memoryRegions.Add(new AddressRegion(baseAddress.Address, baseAddress.Size)); break;
 			}
 		}
 
-		var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, pciDevice.IRQ);
+		var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, configuration.IRQ);
 
 		// No driver was found previously
 		if (driver == null)
 		{
 			HAL.DebugWriteLine(" > Unknown PCI Device: ");
-			HAL.DebugWriteLine(pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x"));
+			HAL.DebugWriteLine(configuration.VendorID.ToString("x") + ":" + configuration.DeviceID.ToString("x"));
 
 			// It must be set to auto start, or else the device isn't registered in the framework
-			deviceService.Initialize(null, device, true, null, hardwareResources, DeviceBusType.PCI);
+			deviceService.Initialize(null, parentDevice, true, configuration, hardwareResources, DeviceBusType.PCI);
 			return;
 		}
 
 		HAL.DebugWriteLine(" > PCI Device: ");
 		HAL.DebugWriteLine(driver.Name);
 
-		deviceService.Initialize(driver, device, driver.AutoStart, null, hardwareResources, DeviceBusType.PCI);
+		configuration.EnableDevice();
+		deviceService.Initialize(driver, parentDevice, driver.AutoStart, configuration, hardwareResources, DeviceBusType.PCI);
 	}
 
 	private static bool HasFlag(PCIField list, PCIField match) => (int)(list & match) != 0;
 
-	private static bool IsMatch(PCIDeviceDriverRegistryEntry driver, PCIDevice pciDevice)
+	private static bool IsMatch(PCIDeviceDriverRegistryEntry driver, PCIDeviceConfiguration pciDeviceConfiguration)
 	{
-		if (HasFlag(driver.PCIFields, PCIField.VendorID) && driver.VendorID != pciDevice.VendorID)
+		if (HasFlag(driver.PCIFields, PCIField.VendorID) && driver.VendorID != pciDeviceConfiguration.VendorID)
 			return false;
 
-		if (HasFlag(driver.PCIFields, PCIField.DeviceID) && driver.DeviceID != pciDevice.DeviceID)
+		if (HasFlag(driver.PCIFields, PCIField.DeviceID) && driver.DeviceID != pciDeviceConfiguration.DeviceID)
 			return false;
 
-		if (HasFlag(driver.PCIFields, PCIField.SubSystemID) && driver.SubSystemID != pciDevice.SubSystemID)
+		if (HasFlag(driver.PCIFields, PCIField.SubSystemID) && driver.SubSystemID != pciDeviceConfiguration.SubSystemID)
 			return false;
 
-		if (HasFlag(driver.PCIFields, PCIField.SubSystemVendorID) && driver.SubSystemVendorID != pciDevice.SubSystemVendorID)
+		if (HasFlag(driver.PCIFields, PCIField.SubSystemVendorID) && driver.SubSystemVendorID != pciDeviceConfiguration.SubSystemVendorID)
 			return false;
 
-		if (HasFlag(driver.PCIFields, PCIField.ClassCode) && driver.ClassCode != pciDevice.ClassCode)
+		if (HasFlag(driver.PCIFields, PCIField.ClassCode) && driver.ClassCode != pciDeviceConfiguration.ClassCode)
 			return false;
 
-		if (HasFlag(driver.PCIFields, PCIField.SubClassCode) && driver.SubClassCode != pciDevice.SubClassCode)
+		if (HasFlag(driver.PCIFields, PCIField.SubClassCode) && driver.SubClassCode != pciDeviceConfiguration.SubClassCode)
 			return false;
 
-		if (HasFlag(driver.PCIFields, PCIField.ProgIF) && driver.ProgIF != pciDevice.ProgIF)
+		if (HasFlag(driver.PCIFields, PCIField.ProgIF) && driver.ProgIF != pciDeviceConfiguration.ProgIF)
 			return false;
 
-		if (HasFlag(driver.PCIFields, PCIField.RevisionID) && driver.RevisionID != pciDevice.RevisionID)
+		if (HasFlag(driver.PCIFields, PCIField.RevisionID) && driver.RevisionID != pciDeviceConfiguration.RevisionID)
 			return false;
 
 		return true;
@@ -136,30 +136,30 @@ public class PCIDeviceService : BaseService
 
 	private static int GetMatchedPriority(PCIDeviceDriverRegistryEntry driver)
 	{
-		var vendorID = HasFlag(driver.PCIFields, PCIField.VendorID);
-		var deviceID = HasFlag(driver.PCIFields, PCIField.DeviceID);
-		var subSystemID = HasFlag(driver.PCIFields, PCIField.SubSystemID);
-		var subSystemVendorID = HasFlag(driver.PCIFields, PCIField.SubSystemVendorID);
+		var vendorId = HasFlag(driver.PCIFields, PCIField.VendorID);
+		var deviceId = HasFlag(driver.PCIFields, PCIField.DeviceID);
+		var subSystemId = HasFlag(driver.PCIFields, PCIField.SubSystemID);
+		var subSystemVendorId = HasFlag(driver.PCIFields, PCIField.SubSystemVendorID);
 		var classCode = HasFlag(driver.PCIFields, PCIField.ClassCode);
 		var subClassCode = HasFlag(driver.PCIFields, PCIField.SubClassCode);
-		var progIF = HasFlag(driver.PCIFields, PCIField.ProgIF);
-		var revisionID = HasFlag(driver.PCIFields, PCIField.RevisionID);
+		var progIf = HasFlag(driver.PCIFields, PCIField.ProgIF);
+		var revisionId = HasFlag(driver.PCIFields, PCIField.RevisionID);
 
-		switch (vendorID)
+		switch (vendorId)
 		{
-			case true when deviceID && classCode && subClassCode && progIF && revisionID: return 1;
-			case true when deviceID && classCode && subClassCode && progIF: return 2;
-			case true when deviceID && subSystemVendorID && subSystemID && revisionID: return 3;
-			case true when deviceID && subSystemVendorID && subSystemID: return 4;
-			case true when deviceID && revisionID: return 5;
-			case true when deviceID: return 6;
+			case true when deviceId && classCode && subClassCode && progIf && revisionId: return 1;
+			case true when deviceId && classCode && subClassCode && progIf: return 2;
+			case true when deviceId && subSystemVendorId && subSystemId && revisionId: return 3;
+			case true when deviceId && subSystemVendorId && subSystemId: return 4;
+			case true when deviceId && revisionId: return 5;
+			case true when deviceId: return 6;
 			default:
 				{
 					switch (classCode)
 					{
-						case true when subClassCode && progIF && revisionID: return 7;
-						case true when subClassCode && progIF: return 8;
-						case true when subClassCode && revisionID: return 9;
+						case true when subClassCode && progIf && revisionId: return 7;
+						case true when subClassCode && progIf: return 8;
+						case true when subClassCode && revisionId: return 9;
 						case true when subClassCode: return 10;
 					}
 					break;

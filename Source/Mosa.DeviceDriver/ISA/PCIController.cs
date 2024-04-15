@@ -51,39 +51,39 @@ public sealed class PCIController : BaseDeviceDriver, IPCIController
 
 	#region IPCIController
 
-	public uint ReadConfig32(PCIDevice pciDevice, byte register)
+	public uint ReadConfig32(PCIDeviceConfiguration configuration, byte register)
 	{
-		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+		configAddress.Write32(GetIndex(configuration.Bus, configuration.Slot, configuration.Function, register));
 		return configData.Read32();
 	}
 
-	public ushort ReadConfig16(PCIDevice pciDevice, byte register)
+	public ushort ReadConfig16(PCIDeviceConfiguration configuration, byte register)
 	{
-		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+		configAddress.Write32(GetIndex(configuration.Bus, configuration.Slot, configuration.Function, register));
 		return (ushort)((configData.Read32() >> (register % 4 * 8)) & 0xFFFF);
 	}
 
-	public byte ReadConfig8(PCIDevice pciDevice, byte register)
+	public byte ReadConfig8(PCIDeviceConfiguration configuration, byte register)
 	{
-		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+		configAddress.Write32(GetIndex(configuration.Bus, configuration.Slot, configuration.Function, register));
 		return (byte)((configData.Read32() >> (register % 4 * 8)) & 0xFF);
 	}
 
-	public void WriteConfig32(PCIDevice pciDevice, byte register, uint value)
+	public void WriteConfig32(PCIDeviceConfiguration configuration, byte register, uint value)
 	{
-		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+		configAddress.Write32(GetIndex(configuration.Bus, configuration.Slot, configuration.Function, register));
 		configData.Write32(value);
 	}
 
-	public void WriteConfig16(PCIDevice pciDevice, byte register, ushort value)
+	public void WriteConfig16(PCIDeviceConfiguration configuration, byte register, ushort value)
 	{
-		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+		configAddress.Write32(GetIndex(configuration.Bus, configuration.Slot, configuration.Function, register));
 		configData.Write16(value);
 	}
 
-	public void WriteConfig8(PCIDevice pciDevice, byte register, byte value)
+	public void WriteConfig8(PCIDeviceConfiguration configuration, byte register, byte value)
 	{
-		configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+		configAddress.Write32(GetIndex(configuration.Bus, configuration.Slot, configuration.Function, register));
 		configData.Write8(value);
 	}
 

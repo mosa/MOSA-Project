@@ -7,15 +7,15 @@ namespace Mosa.DeviceSystem.PCI;
 /// </summary>
 public interface IPCIController
 {
-	uint ReadConfig32(PCIDevice pciDevice, byte register);
+	uint ReadConfig32(PCIDeviceConfiguration configuration, byte register);
 
-	ushort ReadConfig16(PCIDevice pciDevice, byte register);
+	ushort ReadConfig16(PCIDeviceConfiguration configuration, byte register);
 
-	byte ReadConfig8(PCIDevice pciDevice, byte register);
+	byte ReadConfig8(PCIDeviceConfiguration configuration, byte register);
 
-	void WriteConfig32(PCIDevice pciDevice, byte register, uint value);
+	void WriteConfig32(PCIDeviceConfiguration configuration, byte register, uint value);
 
-	void WriteConfig16(PCIDevice pciDevice, byte register, ushort value);
+	void WriteConfig16(PCIDeviceConfiguration configuration, byte register, ushort value);
 
-	void WriteConfig8(PCIDevice pciDevice, byte register, byte value);
+	void WriteConfig8(PCIDeviceConfiguration configuration, byte register, byte value);
 }
