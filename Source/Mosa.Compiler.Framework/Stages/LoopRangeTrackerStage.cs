@@ -135,10 +135,10 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 		var signedAnalysis = DetermineSignUsage(incrementVariableOperand);
 
-		if (signedAnalysis == SignedAnalysis.Unknown || signedAnalysis == SignedAnalysis.Both)
+		if (signedAnalysis == SignAnalysis.Unknown || signedAnalysis == SignAnalysis.Both)
 			return;
 
-		bool signed = signedAnalysis == SignedAnalysis.Signed;
+		bool signed = signedAnalysis == SignAnalysis.Signed;
 
 		if ((signed && incrementValueOperand.IsNegative)
 			|| (!signed && incrementValueOperand.IsNegative))
@@ -214,12 +214,12 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		}
 	}
 
-	private enum SignedAnalysis
+	private enum SignAnalysis
 	{ Unknown, Signed, NotSigned, Both };
 
-	private static SignedAnalysis DetermineSignUsage(Operand value)
+	private static SignAnalysis DetermineSignUsage(Operand value)
 	{
-		var signAnalysis = SignedAnalysis.Unknown;
+		var signAnalysis = SignAnalysis.Unknown;
 
 		foreach (var use in value.Uses)
 		{
@@ -229,19 +229,19 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			var condition = use.ConditionCode;
 			var signed = condition.IsSigned();
 
-			if (signAnalysis == SignedAnalysis.Unknown)
+			if (signAnalysis == SignAnalysis.Unknown)
 			{
-				signAnalysis = signed ? SignedAnalysis.Signed : SignedAnalysis.NotSigned;
+				signAnalysis = signed ? SignAnalysis.Signed : SignAnalysis.NotSigned;
 			}
 			else
 			{
-				if (signed && signAnalysis == SignedAnalysis.Signed)
+				if (signed && signAnalysis == SignAnalysis.Signed)
 					continue;
 
-				if (!signed && signAnalysis == SignedAnalysis.NotSigned)
+				if (!signed && signAnalysis == SignAnalysis.NotSigned)
 					continue;
 
-				return SignedAnalysis.Both;
+				return SignAnalysis.Both;
 			}
 		}
 
