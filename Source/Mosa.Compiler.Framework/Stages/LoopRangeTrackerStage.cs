@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.Instructions;
 
 namespace Mosa.Compiler.Framework.Stages;
 
@@ -10,15 +9,13 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 {
-	private readonly Counter MinDetermined = new("LoopRangeTrackerStage.MinDetermined");
-	private readonly Counter MaxDetermined = new("LoopRangeTrackerStage.MaxDetermined");
+	private readonly Counter RangeDetermined = new("LoopRangeTrackerStage.RangeDetermined");
 
 	private TraceLog trace;
 
 	protected override void Initialize()
 	{
-		Register(MinDetermined);
-		Register(MaxDetermined);
+		Register(RangeDetermined);
 	}
 
 	protected override void Finish()
@@ -153,47 +150,65 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 		if (direction)
 		{
-			if (!signed /*|| (signed && !startOperand.IsNegative)*/)
+			if (DetermineMaxOut(incrementVariableOperand, incrementValueOperand, loop, out var end))
 			{
-				var start = startOperand.ConstantUnsigned64;
-
-				result.BitValue.NarrowMin(start);
-
-				trace?.Log($"{result} MinValue = {start}");
-				MinDetermined.Increment();
-			}
-
-			if (DetermineMaxOut(incrementVariableOperand, incrementValueOperand, loop, out var max))
-			{
-				if (max >= 0 || !signed)
+				if (!signed)
 				{
-					result.BitValue.NarrowMax((ulong)max);
+					var start = startOperand.ConstantUnsigned64;
 
-					trace?.Log($"{result} MaxValue = {max}");
-					MaxDetermined.Increment();
+					trace?.Log($"{result}");
+					result.BitValue.NarrowMin(start).NarrowMax((ulong)end);
+
+					trace?.Log($"{result} Start = {start}");
+					trace?.Log($"{result} End   = {end}");
+					trace?.Log($"{result.BitValue}");
+
+					RangeDetermined.Increment();
+				}
+				else
+				{
+					var start = startOperand.ConstantSigned64;
+
+					trace?.Log($"{result}");
+					result.BitValue.NarrowSignRange(start, end);
+
+					trace?.Log($"{result} Start = {start}");
+					trace?.Log($"{result} End   = {end}");
+					trace?.Log($"{result.BitValue}");
+
+					RangeDetermined.Increment();
 				}
 			}
 		}
 		else
 		{
-			if (!signed /*|| (signed && !startOperand.IsNegative)*/)
+			if (DetermineMinOut(incrementVariableOperand, incrementValueOperand, loop, out var end))
 			{
-				var start = startOperand.ConstantUnsigned64;
-
-				result.BitValue.NarrowMax(start);
-
-				trace?.Log($"{result} MaxValue = {start}");
-				MaxDetermined.Increment();
-			}
-
-			if (DetermineMinOut(incrementVariableOperand, incrementValueOperand, loop, out var min))
-			{
-				if (min >= 0 || !signed)
+				if (!signed)
 				{
-					result.BitValue.NarrowMin((ulong)min);
+					var start = startOperand.ConstantUnsigned64;
 
-					trace?.Log($"{result} MinValue = {min}");
-					MinDetermined.Increment();
+					trace?.Log($"{result}");
+					result.BitValue.NarrowMax(start).NarrowMin((ulong)end);
+
+					trace?.Log($"** Start = {start}");
+					trace?.Log($"** End   = {end}");
+					trace?.Log($"{result.BitValue}");
+
+					RangeDetermined.Increment();
+				}
+				else
+				{
+					var start = startOperand.ConstantSigned64;
+
+					trace?.Log($"{result}");
+					result.BitValue.NarrowSignRange(start, end);
+
+					trace?.Log($"** Start = {start}");
+					trace?.Log($"** End   = {end}");
+					trace?.Log($"{result.BitValue}");
+
+					RangeDetermined.Increment();
 				}
 			}
 		}
@@ -237,6 +252,13 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 	{
 		bool determined = false;
 		max = long.MaxValue;
+
+		// limit to increament values that can not cause overflow
+		if (incrementValue.IsInt32 && (incrementValue.ConstantSigned32 >= short.MaxValue - 1 || incrementValue.ConstantSigned32 <= short.MinValue + 1))
+			return false;
+
+		if (!incrementValue.IsInt32 && (incrementValue.ConstantSigned64 >= short.MaxValue - 1 || incrementValue.ConstantSigned64 <= short.MinValue + 1))
+			return false;
 
 		foreach (var use in incrementVariable.Uses)
 		{
@@ -294,8 +316,11 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			if (!y.IsResolvedConstant)
 				continue;
 
-			if (loop.LoopBlocks.Contains(target))
-				continue; // exits loop
+			if (incrementValue.IsInt32 && (y.ConstantSigned32 >= short.MaxValue - 1 || y.ConstantSigned32 <= short.MinValue + 1))
+				continue;
+
+			if (!incrementValue.IsInt32 && (y.ConstantSigned64 >= short.MaxValue - 1 || y.ConstantSigned64 <= short.MinValue + 1))
+				continue;
 
 			var adj = condition == ConditionCode.GreaterOrEqual
 				|| condition == ConditionCode.UnsignedGreaterOrEqual ? 0 : 1;
@@ -316,6 +341,13 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 	{
 		bool determined = false;
 		min = long.MinValue;
+
+		// limit to increament values that can not cause overflow
+		if (incrementValue.IsInt32 && (incrementValue.ConstantSigned32 >= short.MaxValue - 1 || incrementValue.ConstantSigned32 <= short.MinValue + 1))
+			return false;
+
+		if (!incrementValue.IsInt32 && (incrementValue.ConstantSigned64 >= short.MaxValue - 1 || incrementValue.ConstantSigned64 <= short.MinValue + 1))
+			return false;
 
 		foreach (var use in incrementVariable.Uses)
 		{
@@ -373,8 +405,11 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			if (!y.IsResolvedConstant)
 				continue;
 
-			if (loop.LoopBlocks.Contains(target))
-				continue; // exits loop
+			if (incrementValue.IsInt32 && (y.ConstantSigned32 >= short.MaxValue - 1 || y.ConstantSigned32 <= short.MinValue + 1))
+				continue;
+
+			if (!incrementValue.IsInt32 && (y.ConstantSigned64 >= short.MaxValue - 1 || y.ConstantSigned64 <= short.MinValue + 1))
+				continue;
 
 			var adj = condition == ConditionCode.LessOrEqual
 				|| condition == ConditionCode.UnsignedLessOrEqual ? 1 : 0;

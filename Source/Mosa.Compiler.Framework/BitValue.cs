@@ -188,6 +188,30 @@ public sealed class BitValue
 		return Narrow();
 	}
 
+	public BitValue NarrowSignRange(long minValue, long maxValue)
+	{
+		if (IsFixed)
+			return this;
+
+		if (minValue > maxValue)
+		{
+			(minValue, maxValue) = (maxValue, minValue); // swap
+		}
+
+		if (minValue >= 0 && maxValue >= 0)
+		{
+			return NarrowMax((ulong)maxValue).NarrowMin((ulong)MinValue);
+		}
+		else if (minValue < 0 && maxValue < 0)
+		{
+			return NarrowMin((ulong)maxValue).NarrowMax((ulong)MinValue);
+		}
+
+		// unable to narrow
+
+		return this;
+	}
+
 	public BitValue NarrowSetBits(ulong bitsSet)
 	{
 		if (IsFixed)
@@ -322,11 +346,11 @@ public sealed class BitValue
 	{
 		var sb = new StringBuilder();
 
-		sb.Append($"Min: {MinValue}");
-		sb.Append($" Max: {MaxValue}");
-		sb.Append($" BitsSet: {Convert.ToString((long)BitsSet, 2).PadLeft(64, '0')}");
-		sb.Append($" BitsClear: {Convert.ToString((long)BitsClear, 2).PadLeft(64, '0')}");
-		sb.Append($" BitsKnown: {Convert.ToString((long)BitsKnown, 2).PadLeft(64, '0')}");
+		sb.AppendLine($" Min: {MinValue}");
+		sb.AppendLine($" Max: {MaxValue}");
+		sb.AppendLine($" BitsSet:   {Convert.ToString((long)BitsSet, 2).PadLeft(64, '0')}");
+		sb.AppendLine($" BitsClear: {Convert.ToString((long)BitsClear, 2).PadLeft(64, '0')}");
+		sb.AppendLine($" BitsKnown: {Convert.ToString((long)BitsKnown, 2).PadLeft(64, '0')}");
 
 		return sb.ToString();
 	}
