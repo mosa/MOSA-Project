@@ -275,9 +275,15 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			var updated = count != 0;
 			changed |= updated;
 
-			if (updated && MethodCompiler.Statistics)
+			if (updated)
 			{
-				UpdateCounter(transform.Name, count);
+				MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
+
+				if (MosaSettings.FullCheckMode)
+					FullCheck(false);
+
+				if (MethodCompiler.Statistics)
+					UpdateCounter(transform.Name, count);
 			}
 		}
 

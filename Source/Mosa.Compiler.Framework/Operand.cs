@@ -113,6 +113,27 @@ public sealed partial class Operand
 		}
 	}
 
+	public bool IsNegative
+	{
+		get
+		{
+			if (!IsResolvedConstant)
+				return false;
+			else if (IsLocalStack || IsOnStack || IsParameter)
+				return ConstantUnsigned64 < 0;
+			else if (IsNull)
+				return false;
+			else if (IsR8)
+				return ConstantDouble < 0;
+			else if (IsR4)
+				return ConstantFloat < 0;
+			else if (IsInt32)
+				return ConstantSigned32 < 0;
+			else
+				return ConstantSigned64 < 0;
+		}
+	}
+
 	public bool IsPhysicalRegister => Location == LocationType.PhysicalRegister;
 
 	public bool IsFloatingPoint => IsR4 | IsR8;

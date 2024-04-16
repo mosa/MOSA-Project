@@ -49,6 +49,8 @@ public class MergeBlocks : BaseBlockTransform
 
 				trace?.Log($"Merge Blocking: {block} with: {next}");
 
+				transform.TraceBefore(this, block);
+
 				if (isInSSAForm)
 				{
 					PhiHelper.UpdatePhiTargets(next.NextBlocks, next, block);
@@ -68,6 +70,8 @@ public class MergeBlocks : BaseBlockTransform
 				insertPoint.MoveFrom(next.AfterFirst.ForwardToNonEmpty, next.Last.Previous.BackwardsToNonEmpty);
 				emptied++;
 				changed = true;
+
+				transform.TraceAfter(this);
 			}
 		}
 
