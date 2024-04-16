@@ -200,11 +200,11 @@ public sealed class BitValue
 
 		if (minValue >= 0 && maxValue >= 0)
 		{
-			return NarrowMax((ulong)maxValue).NarrowMin((ulong)MinValue);
+			return NarrowMax((ulong)maxValue).NarrowMin((ulong)minValue);
 		}
 		else if (minValue < 0 && maxValue < 0)
 		{
-			return NarrowMin((ulong)maxValue).NarrowMax((ulong)MinValue);
+			return NarrowMin((ulong)maxValue).NarrowMax((ulong)minValue);
 		}
 
 		// unable to narrow

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -138,7 +139,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		if (signedAnalysis == SignAnalysis.Unknown || signedAnalysis == SignAnalysis.Both)
 			return;
 
-		bool signed = signedAnalysis == SignAnalysis.Signed;
+		var signed = signedAnalysis == SignAnalysis.Signed;
 
 		if ((signed && incrementValueOperand.IsNegative)
 			|| (!signed && incrementValueOperand.IsNegative))
@@ -250,7 +251,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 	private static bool DetermineMaxOut(Operand incrementVariable, Operand incrementValue, Loop loop, out long max)
 	{
-		bool determined = false;
+		var determined = false;
 		max = long.MaxValue;
 
 		// limit to increament values that can not cause overflow
@@ -316,16 +317,18 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			if (!y.IsResolvedConstant)
 				continue;
 
-			if (incrementValue.IsInt32 && (y.ConstantSigned32 >= short.MaxValue - 1 || y.ConstantSigned32 <= short.MinValue + 1))
+			Debug.Assert(y.IsInt32 == incrementValue.IsInt32);
+
+			if (y.IsInt32 && (y.ConstantSigned32 >= short.MaxValue - 1 || y.ConstantSigned32 <= short.MinValue + 1))
 				continue;
 
-			if (!incrementValue.IsInt32 && (y.ConstantSigned64 >= short.MaxValue - 1 || y.ConstantSigned64 <= short.MinValue + 1))
+			if (!y.IsInt32 && (y.ConstantSigned64 >= short.MaxValue - 1 || y.ConstantSigned64 <= short.MinValue + 1))
 				continue;
 
 			var adj = condition == ConditionCode.GreaterOrEqual
 				|| condition == ConditionCode.UnsignedGreaterOrEqual ? 0 : 1;
 
-			var value = incrementValue.IsInt32
+			var value = y.IsInt32
 				? y.ConstantSigned32 + incrementValue.ConstantSigned32 + adj
 				: y.ConstantSigned64 + incrementValue.ConstantSigned64 + adj;
 
@@ -339,7 +342,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 	private static bool DetermineMinOut(Operand incrementVariable, Operand incrementValue, Loop loop, out long min)
 	{
-		bool determined = false;
+		var determined = false;
 		min = long.MinValue;
 
 		// limit to increament values that can not cause overflow
@@ -405,16 +408,18 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			if (!y.IsResolvedConstant)
 				continue;
 
-			if (incrementValue.IsInt32 && (y.ConstantSigned32 >= short.MaxValue - 1 || y.ConstantSigned32 <= short.MinValue + 1))
+			Debug.Assert(y.IsInt32 == incrementValue.IsInt32);
+
+			if (y.IsInt32 && (y.ConstantSigned32 >= short.MaxValue - 1 || y.ConstantSigned32 <= short.MinValue + 1))
 				continue;
 
-			if (!incrementValue.IsInt32 && (y.ConstantSigned64 >= short.MaxValue - 1 || y.ConstantSigned64 <= short.MinValue + 1))
+			if (!y.IsInt32 && (y.ConstantSigned64 >= short.MaxValue - 1 || y.ConstantSigned64 <= short.MinValue + 1))
 				continue;
 
 			var adj = condition == ConditionCode.LessOrEqual
 				|| condition == ConditionCode.UnsignedLessOrEqual ? 1 : 0;
 
-			var value = incrementValue.IsInt32
+			var value = y.IsInt32
 				? y.ConstantSigned32 + incrementValue.ConstantSigned32 + adj
 				: y.ConstantSigned64 + incrementValue.ConstantSigned64 + adj;
 
