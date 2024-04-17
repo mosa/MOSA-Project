@@ -8,6 +8,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Framework.Stages.Diagnostic;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
@@ -573,12 +574,8 @@ public partial class MainForm : Form
 		pipeline.Add(new DisassemblyStage());
 		pipeline.Add(new DebugInfoStage());
 
-		//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(new StopStage());
-		//pipeline.InsertBefore<EnterSSAStage>(new DominanceOutputStage());
-		//pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
-		//pipeline.InsertAfterLast<IRTransformsStage>(new GraphVizStage());
-
-		//pipeline.InsertAfterFirst<ExceptionStage>(new StopStage());
+		pipeline.InsertAfterLast<FastBlockOrderingStage>(new LoopAnalysisStage());
+		pipeline.InsertAfterLast<FastBlockOrderingStage>(new DominanceAnalysisStage());
 
 		if (cbEnableDebugDiagnostic.Checked)
 		{

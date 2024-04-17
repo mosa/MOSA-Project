@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Text;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Analysis;
 
-namespace Mosa.Tool.Explorer.Stages;
+namespace Mosa.Compiler.Framework.Stages.Diagnostic;
 
-public class DominanceOutputStage : BaseMethodCompilerStage
+public class DominanceAnalysisStage : BaseMethodCompilerStage
 {
 	private const int TraceLevel = 5;
 

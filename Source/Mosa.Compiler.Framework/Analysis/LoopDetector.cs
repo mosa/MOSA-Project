@@ -74,7 +74,7 @@ public sealed class LoopDetector
 				continue;
 
 			visited.Add(node);
-			loop.LoopBlocks.Add(node);
+			loop.AddNode(node);
 
 			foreach (var previous in node.PreviousBlocks)
 			{
