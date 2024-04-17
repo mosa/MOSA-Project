@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    </PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.x64\Mosa.Compiler.x64.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.x86\Mosa.Compiler.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
+	</ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.1.0-beta1" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.1.0-beta1" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0-beta1" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0-beta1" />
+    </ItemGroup>
+
+</Project>
