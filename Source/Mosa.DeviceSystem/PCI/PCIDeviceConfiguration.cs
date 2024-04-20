@@ -11,7 +11,7 @@ namespace Mosa.DeviceSystem.PCI;
 /// The base class for all PCI devices in the device driver framework. It provides a generic way of initializing and enabling/disabling
 /// such devices.
 /// </summary>
-public class PCIDevice : BaseDeviceDriver
+public class PCIDeviceConfiguration : BaseDeviceConfiguration
 {
 	#region Properties
 
@@ -21,7 +21,9 @@ public class PCIDevice : BaseDeviceDriver
 
 	public byte Function { get; }
 
-	public IPCIController Controller { get; private set; }
+	public string Name { get; }
+
+	public IPCIController Controller { get; }
 
 	public PCICapability[] Capabilities { get; private set; }
 
@@ -59,19 +61,17 @@ public class PCIDevice : BaseDeviceDriver
 
 	#endregion Properties
 
-	public PCIDevice(byte bus, byte slot, byte function)
+	public PCIDeviceConfiguration(string pciControllerName, IPCIController pciController, byte bus, byte slot, byte function)
 	{
 		Bus = bus;
 		Slot = slot;
 		Function = function;
+		Name = $"{pciControllerName}/{bus}.{slot}.{function}";
+		Controller = pciController;
 	}
 
-	public override void Initialize()
+	public void Initialize()
 	{
-		Controller = Device.Parent.DeviceDriver as IPCIController;
-		if (Controller == null)
-			return;
-
 		VendorID = Controller.ReadConfig16(this, PCIConfigurationHeader.VendorID);
 		DeviceID = Controller.ReadConfig16(this, PCIConfigurationHeader.DeviceID);
 		RevisionID = Controller.ReadConfig8(this, PCIConfigurationHeader.RevisionID);
@@ -82,13 +82,11 @@ public class PCIDevice : BaseDeviceDriver
 		SubSystemID = Controller.ReadConfig16(this, PCIConfigurationHeader.SubSystemID);
 		IRQ = Controller.ReadConfig8(this, PCIConfigurationHeader.InterruptLineRegister);
 
-		Device.Name = $"{Device.Parent.Name}/{Bus}.{Slot}.{Function}";
-
 		for (byte i = 0; i < 6; i++)
 		{
 			var bar = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + i * 4);
-
 			var address = Controller.ReadConfig32(this, bar);
+
 			if (address == 0)
 				continue;
 
@@ -101,13 +99,9 @@ public class PCIDevice : BaseDeviceDriver
 			HAL.EnableAllInterrupts();
 
 			if (address % 2 == 1)
-			{
 				BaseAddresses[i] = new BaseAddress(AddressType.PortIO, new Pointer(address & 0x0000FFF8), (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
-			}
 			else
-			{
 				BaseAddresses[i] = new BaseAddress(AddressType.Memory, new Pointer(address & 0xFFFFFFF0), ~(mask & 0xFFFFFFF0) + 1, (address & 0x08) == 1);
-			}
 		}
 
 		// FIXME: Special case for generic VGA
@@ -117,33 +111,21 @@ public class PCIDevice : BaseDeviceDriver
 			BaseAddresses[7] = new BaseAddress(AddressType.PortIO, new Pointer(0x3B0), 0x0F, false);
 		}
 
-		if ((StatusRegister & (byte)PCIStatus.Capability) != 0)
+		if ((StatusRegister & (byte)PCIStatus.Capability) == 0)
+			return;
+
+		var capabilities = new List<PCICapability>();
+		var ptr = Controller.ReadConfig8(this, PCIConfigurationHeader.CapabilitiesPointer);
+
+		while (ptr != 0)
 		{
-			var capabilities = new List<PCICapability>();
-			var ptr = Controller.ReadConfig8(this, PCIConfigurationHeader.CapabilitiesPointer);
+			var capability = Controller.ReadConfig8(this, ptr);
+			capabilities.Add(new PCICapability(capability, ptr));
 
-			while (ptr != 0)
-			{
-				var capability = Controller.ReadConfig8(this, ptr);
-				capabilities.Add(new PCICapability(capability, ptr));
-
-				ptr = Controller.ReadConfig8(this, (byte)(ptr + 1));
-			}
-
-			Capabilities = capabilities.ToArray();
+			ptr = Controller.ReadConfig8(this, (byte)(ptr + 1));
 		}
 
-		EnableDevice();
-	}
-
-	public override void Probe() => Device.Status = DeviceStatus.Available;
-
-	public override void Start() => Device.Status = DeviceStatus.Online;
-
-	public override bool OnInterrupt()
-	{
-		// TODO
-		return true;
+		Capabilities = capabilities.ToArray();
 	}
 
 	public void EnableDevice()
@@ -151,8 +133,4 @@ public class PCIDevice : BaseDeviceDriver
 
 	public void DisableDevice()
 		=> CommandRegister = (ushort)(CommandRegister & ~PCICommand.IOSpaceEnable & ~PCICommand.BusMasterFunctionEnable & PCICommand.MemorySpaceEnable);
-
-	public void SetNoDriverFound() => Device.Status = DeviceStatus.NotFound;
-
-	public void SetDeviceOnline() => Device.Status = DeviceStatus.Online;
 }

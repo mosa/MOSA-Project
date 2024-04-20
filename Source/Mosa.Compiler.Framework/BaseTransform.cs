@@ -1183,19 +1183,19 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				{
 					return (int)value1.BitsSet > (int)value2.BitsSet;
 				}
-				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitKnown32 && value2.IsSignBitKnown32 && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
 				{
 					return true;
 				}
-				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitKnown32 && value2.IsSignBitKnown32 && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
 				{
 					return false;
 				}
-				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitKnown64 && value2.IsSignBitKnown64 && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
 				{
 					return true;
 				}
-				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitKnown64 && value2.IsSignBitKnown64 && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
 				{
 					return false;
 				}
@@ -1211,19 +1211,19 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				{
 					return (int)value1.BitsSet < (int)value2.BitsSet;
 				}
-				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitKnown32 && value2.IsSignBitKnown32 && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
 				{
 					return true;
 				}
-				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitKnown32 && value2.IsSignBitKnown32 && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
 				{
 					return false;
 				}
-				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitKnown64 && value2.IsSignBitKnown64 && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
 				{
 					return true;
 				}
-				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitKnown64 && value2.IsSignBitKnown64 && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
 				{
 					return false;
 				}
@@ -1239,19 +1239,19 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				{
 					return (int)value1.BitsSet >= (int)value2.BitsSet;
 				}
-				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitKnown32 && value2.IsSignBitKnown32 && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
 				{
 					return true;
 				}
-				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitKnown32 && value2.IsSignBitKnown32 && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
 				{
 					return false;
 				}
-				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitKnown64 && value2.IsSignBitKnown64 && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
 				{
 					return true;
 				}
-				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitKnown64 && value2.IsSignBitKnown64 && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
 				{
 					return false;
 				}
@@ -1267,19 +1267,19 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 				{
 					return (int)value1.BitsSet <= (int)value2.BitsSet;
 				}
-				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitKnown32 && value2.IsSignBitKnown32 && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
 				{
 					return true;
 				}
-				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
+				else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitKnown32 && value2.IsSignBitKnown32 && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
 				{
 					return false;
 				}
-				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitKnown64 && value2.IsSignBitKnown64 && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
 				{
 					return true;
 				}
-				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
+				else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitKnown64 && value2.IsSignBitKnown64 && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
 				{
 					return false;
 				}
