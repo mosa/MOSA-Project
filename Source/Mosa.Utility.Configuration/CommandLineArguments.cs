@@ -158,8 +158,10 @@ public static class CommandLineArguments
 			new Argument { Name = "-video-width", Setting = Name.Multiboot_Video_Width},
 			new Argument { Name = "-video-height", Setting = Name.Multiboot_Video_Height},
 
-			new Argument { Name = "-vmware-svga", Setting = Name.Emulator_SVGA, Value = "vmware"},
-			new Argument { Name = "-virtio-vga", Setting = Name.Emulator_SVGA, Value = "virtio"},
+			new Argument { Name = "-vmware-svga", Setting = Name.Emulator_Graphics, Value = "vmware"},
+			new Argument { Name = "-virtio-vga", Setting = Name.Emulator_Graphics, Value = "virtio"},
+
+			new Argument { Name = "-acceleration", Setting = Name.Emulator_Acceleration, Value = "true"},
 
 			new Argument { Name = "-gdb-port", Setting = Name.GDB_Port},
 			new Argument { Name = "-gdb-host", Setting = Name.GDB_Host},

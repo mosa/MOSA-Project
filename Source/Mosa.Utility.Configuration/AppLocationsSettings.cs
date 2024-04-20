@@ -31,6 +31,8 @@ public static class AppLocationsSettings
 		mosaSettings.QemuEdk2ARM64 = FindQemuEDK2ARM64();
 		mosaSettings.QemuImgApp = FindQemuImg();
 		mosaSettings.BochsApp = FindBochs();
+		mosaSettings.BochsBIOS = FindBochsBIOS();
+		mosaSettings.BochsVGABIOS = FindBochsVGABIOS();
 		mosaSettings.VmwarePlayerApp = FindVmwarePlayer();
 		mosaSettings.VmwareWorkstationApp = FindVmwareWorkstation();
 		mosaSettings.VirtualBoxApp = FindVirtualBox();
@@ -225,6 +227,64 @@ public static class AppLocationsSettings
 					@"%APPDIR%\..\Tools\Bochs"
 				 })
 			: TryFind("bochs", LinuxDirectories);
+	}
+
+	private static string FindBochsBIOS()
+	{
+		return
+			IsWindows ? TryFind("BIOS-bochs-latest",
+					new string[] {
+						@"%ProgramFiles%\Bochs-2.6.9",
+						@"%ProgramFiles(x86)%\Bochs-2.6.9",
+						@"%ProgramFiles%\Bochs-2.6.8",
+						@"%ProgramFiles(x86)%\Bochs-2.6.8",
+						@"%ProgramFiles%\Bochs-2.6.5",
+						@"%ProgramFiles(x86)%\Bochs-2.6.5",
+						@"%ProgramFiles%\Bochs-2.6.2",
+						@"%ProgramFiles(x86)%\Bochs-2.6.2",
+						@"%ProgramFiles%\Bochs-2.7",
+						@"%ProgramFiles(x86)%\Bochs-2.7",
+
+						@"%CURRENT%\..\Tools\Bochs",
+						@"%CURRENT%\Tools\Bochs",
+
+						@"%APPDIR%\Tools\Bochs",
+						@"%APPDIR%\..\Tools\Bochs"
+					})
+				: TryFind("BIOS-bochs-latest",
+					new string[] {
+						"/usr/share/bochs",
+						"/opt/homebrew/share/bochs/"
+					});
+	}
+
+	private static string FindBochsVGABIOS()
+	{
+		return
+			IsWindows ? TryFind("VGABIOS-lgpl-latest",
+					new string[] {
+						@"%ProgramFiles%\Bochs-2.6.9",
+						@"%ProgramFiles(x86)%\Bochs-2.6.9",
+						@"%ProgramFiles%\Bochs-2.6.8",
+						@"%ProgramFiles(x86)%\Bochs-2.6.8",
+						@"%ProgramFiles%\Bochs-2.6.5",
+						@"%ProgramFiles(x86)%\Bochs-2.6.5",
+						@"%ProgramFiles%\Bochs-2.6.2",
+						@"%ProgramFiles(x86)%\Bochs-2.6.2",
+						@"%ProgramFiles%\Bochs-2.7",
+						@"%ProgramFiles(x86)%\Bochs-2.7",
+
+						@"%CURRENT%\..\Tools\Bochs",
+						@"%CURRENT%\Tools\Bochs",
+
+						@"%APPDIR%\Tools\Bochs",
+						@"%APPDIR%\..\Tools\Bochs"
+					})
+				: TryFind("VGABIOS-lgpl-latest",
+					new string[] {
+						"/usr/share/bochs",
+						"/opt/homebrew/share/bochs/"
+					});
 	}
 
 	private static string FindQemuImg()

@@ -153,6 +153,8 @@ public partial class MainWindow : Window
 		qemuEdk2ARMPathLbl.Content = MosaSettings.QemuEdk2ARM32;
 		qemuImgPathLbl.Content = MosaSettings.QemuImgApp;
 		bochsPathLbl.Content = MosaSettings.BochsApp;
+		bochsBiosPathLbl.Content = MosaSettings.BochsBIOS;
+		bochsVgaBiosPathLbl.Content = MosaSettings.BochsVGABIOS;
 		vmwarePathLbl.Content = string.IsNullOrEmpty(MosaSettings.VmwarePlayerApp) ? MosaSettings.VmwareWorkstationApp : MosaSettings.VmwarePlayerApp;
 		vboxPathLbl.Content = MosaSettings.VirtualBoxApp;
 		mkisofsPathLbl.Content = MosaSettings.MkisofsApp;

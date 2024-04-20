@@ -43,19 +43,11 @@ public class Builder : BaseLauncher
 		Counters.Clear();
 		IsSucccessful = false;
 
-		Stopwatch.StartNew();
+		Stopwatch.Start();
 
 		try
 		{
-			if (!Directory.Exists(MosaSettings.TemporaryFolder))
-			{
-				Directory.CreateDirectory(MosaSettings.ImageFolder);
-			}
-
-			if (!Directory.Exists(MosaSettings.ImageFolder))
-			{
-				Directory.CreateDirectory(MosaSettings.ImageFolder);
-			}
+			Directory.CreateDirectory(MosaSettings.ImageFolder);
 
 			if (string.IsNullOrEmpty(MosaSettings.SourceFiles[0]))
 			{
@@ -211,14 +203,14 @@ public class Builder : BaseLauncher
 
 	private void CreateVMDK(string source)
 	{
-		var arg = $"convert -f raw -O vmdk {Quote(source)} {Quote(MosaSettings.ImageFile)}";
+		var arg = $"convert -f raw -O vmdk \"{source}\" \"{MosaSettings.ImageFile}\"";
 
 		LaunchApplicationWithOutput(MosaSettings.QemuImgApp, arg);
 	}
 
 	private void CreateVDI(string source)
 	{
-		var arg = $"convert -f raw -O vdi {Quote(source)} {Quote(MosaSettings.ImageFile)}";
+		var arg = $"convert -f raw -O vdi \"{source}\" \"{MosaSettings.ImageFile}\"";
 
 		LaunchApplicationWithOutput(MosaSettings.QemuImgApp, arg);
 	}
@@ -231,7 +223,7 @@ public class Builder : BaseLauncher
 		var startingAddress = MosaSettings.BaseAddress + MultibootHeaderLength;
 		var fileOffset = Linker.BaseFileOffset + MultibootHeaderLength;
 
-		var arg = $"-b 32 -o0x{startingAddress:x} -e0x{fileOffset:x} {Quote(MosaSettings.OutputFile)}";
+		var arg = $"-b 32 -o0x{startingAddress:x} -e0x{fileOffset:x} \"{MosaSettings.OutputFile}\"";
 
 		//var nasmfile = Path.Combine(LauncherSettings.ImageFolder, $"{Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0])}.nasm");
 
@@ -244,7 +236,7 @@ public class Builder : BaseLauncher
 
 	private void GenerateASMFile()
 	{
-		OutputStatus($"Reko Disassembly: {MosaSettings.AsmFile}");
+		OutputStatus($"Executing Reko Disassembly: {MosaSettings.AsmFile}");
 
 		var map = new Dictionary<ulong, List<string>>();
 

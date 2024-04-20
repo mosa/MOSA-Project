@@ -113,10 +113,11 @@ Below are the command line arguments available:
 	-timeout,Emulator.MaxRuntime,{value}
 	-debug,Launcher.Serial,true
 	-debug,OS.BootOptions,bootoptions=serialdebug
-	
+	-acceleration,Emulator.Acceleration,true
+
     Launcher - Emulator - Qemu & VMWare:
-    -vmware-svga,Emulator.SVGA,vmware
-	-virtio-vga,Emulator.SVGA,virtio
+    -vmware-svga,Emulator.Graphics,vmware
+	-virtio-vga,Emulator.Graphics,virtio
 
     Launcher - Image:
     -image,Image.ImageFile,{value}
