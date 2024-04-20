@@ -5,6 +5,8 @@ namespace Mosa.Utility.Configuration;
 public static class Name
 {
 	public const string AppLocation_Bochs = "AppLocation.Bochs";
+	public const string AppLocation_Bochs_BIOS = "AppLocation.Bochs.BIOS";
+	public const string AppLocation_Bochs_VGABIOS = "AppLocation.Bochs.VGABIOS";
 	public const string AppLocation_GDB = "AppLocation.GDB";
 	public const string AppLocation_Mkisofs = "AppLocation.Mkisofs";
 	public const string AppLocation_Ndisasm = "AppLocation.Ndisasm";
@@ -60,8 +62,9 @@ public static class Name
 	public const string Emulator_Serial_Host = "Emulator.Serial.Host";
 	public const string Emulator_Serial_Pipe = "Emulator.Serial.Pipe";
 	public const string Emulator_Serial_Port = "Emulator.Serial.Port";
+	public const string Emulator_Graphics = "Emulator.Graphics";
+	public const string Emulator_Acceleration = "Emulator.Acceleration";
 
-	public const string Emulator_SVGA = "Emulator.SVGA";
 	public const string Explorer_DebugDiagnostic = "Explorer.DebugDiagnostic";
 	public const string Explorer_Filter = "Explorer.Filter";
 	public const string Explorer_Start = "Explorer.Start";

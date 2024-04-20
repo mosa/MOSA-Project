@@ -213,7 +213,7 @@ public class SimpleTCP
 			var b = receivedData.Dequeue();
 
 			if (b == NewLine)
-				lines--;
+				Interlocked.Decrement(ref lines);
 
 			return b;
 		}
@@ -237,7 +237,7 @@ public class SimpleTCP
 				bytes[i] = b;
 
 				if (b == NewLine)
-					lines--;
+					Interlocked.Decrement(ref lines);
 			}
 
 			return bytes;
@@ -313,7 +313,7 @@ public class SimpleTCP
 					receivedData.Enqueue(b);
 
 					if (b == NewLine)
-						lines++;
+						Interlocked.Increment(ref lines);
 				}
 			}
 		}
