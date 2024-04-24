@@ -244,6 +244,8 @@ jobs:
         with:
           name: macos-build-artifact
           path: bin
+      - name: Install Qemu
+        run: brew install qemu
       - name: Unit Test 
         run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
 
@@ -334,6 +336,8 @@ jobs:
         with:
           name: macos-build-artifact
           path: bin
+      - name: Install Qemu
+        run: brew install qemu
       - name: Demo Test - BareMetal Starter
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
