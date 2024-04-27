@@ -489,7 +489,7 @@ public sealed class Node
 		ConditionCode = ConditionCode.Undefined;
 		Options = InstructionOption.None;
 		Instruction = null;
-		Block.RemoveBranchInstruction(this);
+		Block?.RemoveBranchInstruction(this);
 		BranchTargets = null;
 		PhiBlocks = null;
 

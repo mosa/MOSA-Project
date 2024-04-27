@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Mosa.Kernel.BareMetal;
 using Mosa.UnitTests.Optimization;
+using Mosa.UnitTests.Primitive;
 
 namespace Mosa.BareMetal.TestWorld.x86;
 
@@ -20,7 +21,15 @@ public static class Boot
 		Console.WriteLine("Mosa.BareMetal.TextWorld.x86");
 		Console.WriteLine();
 
-		Division.DivisionBy7(254u);
+		//Division.DivisionBy7(254u);
+		if (SingleTests.CeqR4R4(2, -1))
+		{
+			Console.WriteLine("FALSE");
+		}
+		else
+		{
+			Console.WriteLine("PASS");
+		}
 
 		//InterruptManager.SetHandler(ProcessInterrupt);
 

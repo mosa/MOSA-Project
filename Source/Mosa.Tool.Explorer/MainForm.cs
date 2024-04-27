@@ -586,6 +586,12 @@ public partial class MainForm : Form
 		}
 		else
 		{
+			if (MosaSettings.InlineMethods || MosaSettings.InlineExplicit)
+			{
+				pipeline.InsertBefore<InlineStage>(new GraphVizStage());
+				pipeline.InsertAfterLast<InlineStage>(new GraphVizStage());
+			}
+
 			pipeline.InsertAfterLast<FastBlockOrderingStage>(new GraphVizStage());
 			pipeline.Add(new GraphVizStage());
 		}
@@ -1438,7 +1444,7 @@ public partial class MainForm : Form
 				continue;
 			}
 
-			if (parts[0].StartsWith(" "))
+			if (parts[0].StartsWith(' '))
 			{
 				entry.After = part1;
 				continue;
@@ -1446,7 +1452,7 @@ public partial class MainForm : Form
 
 			entry = new TranformEntry
 			{
-				ID = Convert.ToInt32(parts[0].Trim()) + 1,
+				ID = Convert.ToInt32(parts[0].Trim()),
 				Name = part1,
 				Pass = pass
 			};

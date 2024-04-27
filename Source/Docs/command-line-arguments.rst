@@ -173,6 +173,7 @@ Below are the command line arguments available:
 
 	Unit Testings:
 	-maxerrors,UnitTest.MaxErrors,{value}
+	-filter,UnitTest.Filter,{value}
 
     Optimization Levels:
     -o0,Optimizations.Basic,false
