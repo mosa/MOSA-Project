@@ -392,6 +392,11 @@ public sealed class Node
 	public int BranchTargetsCount => BranchTargets?.Count ?? 0;
 
 	/// <summary>
+	/// Gets the PHI block count.
+	/// </summary>
+	public int PhiBlockCount => PhiBlocks?.Count ?? 0;
+
+	/// <summary>
 	/// Sets the branch target.
 	/// </summary>
 	/// <param name="block">The basic block.</param>

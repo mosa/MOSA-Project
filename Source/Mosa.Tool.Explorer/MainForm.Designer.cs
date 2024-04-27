@@ -55,13 +55,13 @@
 			cbEnableLongExpansion = new ToolStripMenuItem();
 			cbLoopInvariantCodeMotion = new ToolStripMenuItem();
 			cbEnableBitTracker = new ToolStripMenuItem();
+			cbEnableLoopRangeTracker = new ToolStripMenuItem();
 			cbEnableTwoPassOptimizations = new ToolStripMenuItem();
 			cbPlatformOptimizations = new ToolStripMenuItem();
 			cbEnableBinaryCodeGeneration = new ToolStripMenuItem();
 			cbEnableCodeSizeReduction = new ToolStripMenuItem();
 			displayOptionsToolStripMenuItem = new ToolStripMenuItem();
 			showOperandTypes = new ToolStripMenuItem();
-			padInstructions = new ToolStripMenuItem();
 			showSizes = new ToolStripMenuItem();
 			removeIRNop = new ToolStripMenuItem();
 			advanceToolStripMenuItem = new ToolStripMenuItem();
@@ -136,7 +136,6 @@
 			folderBrowserDialog1 = new FolderBrowserDialog();
 			timer1 = new System.Windows.Forms.Timer(components);
 			saveFileDialog1 = new SaveFileDialog();
-			cbEnableLoopRangeTracker = new ToolStripMenuItem();
 			statusStrip1.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -359,6 +358,15 @@
 			cbEnableBitTracker.Size = new Size(293, 22);
 			cbEnableBitTracker.Text = "Enable Bit Tracker";
 			// 
+			// cbEnableLoopRangeTracker
+			// 
+			cbEnableLoopRangeTracker.Checked = true;
+			cbEnableLoopRangeTracker.CheckOnClick = true;
+			cbEnableLoopRangeTracker.CheckState = CheckState.Checked;
+			cbEnableLoopRangeTracker.Name = "cbEnableLoopRangeTracker";
+			cbEnableLoopRangeTracker.Size = new Size(293, 22);
+			cbEnableLoopRangeTracker.Text = "Enable Loop Range Tracker";
+			// 
 			// cbEnableTwoPassOptimizations
 			// 
 			cbEnableTwoPassOptimizations.Checked = true;
@@ -395,7 +403,7 @@
 			// 
 			// displayOptionsToolStripMenuItem
 			// 
-			displayOptionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { showOperandTypes, padInstructions, showSizes, removeIRNop });
+			displayOptionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { showOperandTypes, showSizes, removeIRNop });
 			displayOptionsToolStripMenuItem.Name = "displayOptionsToolStripMenuItem";
 			displayOptionsToolStripMenuItem.Size = new Size(57, 20);
 			displayOptionsToolStripMenuItem.Text = "Display";
@@ -407,16 +415,6 @@
 			showOperandTypes.Size = new Size(184, 22);
 			showOperandTypes.Text = "Show Operand Types";
 			showOperandTypes.CheckStateChanged += DisplayCheckStateChanged;
-			// 
-			// padInstructions
-			// 
-			padInstructions.Checked = true;
-			padInstructions.CheckOnClick = true;
-			padInstructions.CheckState = CheckState.Checked;
-			padInstructions.Name = "padInstructions";
-			padInstructions.Size = new Size(184, 22);
-			padInstructions.Text = "Pad Instructions";
-			padInstructions.CheckStateChanged += DisplayCheckStateChanged;
 			// 
 			// showSizes
 			// 
@@ -1245,15 +1243,6 @@
 			timer1.Enabled = true;
 			timer1.Tick += timer1_Tick;
 			// 
-			// cbEnableLoopRangeTracker
-			// 
-			cbEnableLoopRangeTracker.Checked = true;
-			cbEnableLoopRangeTracker.CheckOnClick = true;
-			cbEnableLoopRangeTracker.CheckState = CheckState.Checked;
-			cbEnableLoopRangeTracker.Name = "cbEnableLoopRangeTracker";
-			cbEnableLoopRangeTracker.Size = new Size(293, 22);
-			cbEnableLoopRangeTracker.Text = "Enable Loop Range Tracker";
-			// 
 			// MainForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1344,7 +1333,6 @@
 		private ToolStripMenuItem displayOptionsToolStripMenuItem;
 		private ToolStripMenuItem showOperandTypes;
 		private ToolStripMenuItem showSizes;
-		private ToolStripMenuItem padInstructions;
 		private ToolStripMenuItem cbEnableValueNumbering;
 		private ToolStripMenuItem cbEnableMethodScanner;
 		private TextBox tbFilter;

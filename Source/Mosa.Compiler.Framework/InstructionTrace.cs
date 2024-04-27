@@ -13,61 +13,65 @@ public static class InstructionTrace
 	{
 		var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage, section, version, step);
 
-		traceLog?.Log($"{method.FullName} [v{version}] @ {step} after stage {stage}:");
-		traceLog?.Log();
+		traceLog?.Log($"M\t{method.FullName}\t{version}\t{stage}\t{step}");
 
-		if (basicBlocks.Count > 0)
+		var sb = new StringBuilder();
+
+		foreach (var block in basicBlocks)
 		{
-			foreach (var block in basicBlocks)
+			traceLog?.Log($"S\t{block}\t{block.Sequence}\t{(block.IsHeadBlock ? "Header" : string.Empty)}\t{block.PreviousBlocks.Count}\t{GetTabBlocks(block.PreviousBlocks)}");
+
+			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				traceLog?.Log($"Block #{block.Sequence} - Label L_{block.Label:X5}" + (block.IsHeadBlock ? " [Header]" : string.Empty));
-				traceLog?.Log($"  Prev: {ListBlocks(block.PreviousBlocks)}");
+				if (node.IsEmpty)
+					continue;
 
-				LogInstructions(traceLog, block.First);
+				sb.Clear();
 
-				traceLog?.Log($"  Next: {ListBlocks(block.NextBlocks)}");
-				traceLog?.Log();
+				sb.Append($"I\t{node.Label:X5}\t{(node.IsMarked ? "*" : string.Empty)}\t{node.Instruction}\t");
+				sb.Append($"{(node.ConditionCode != ConditionCode.Undefined ? node.ConditionCode.GetConditionString() : string.Empty)}\t");
+
+				sb.Append($"{node.ResultCount}\t");
+				sb.Append($"{node.OperandCount}\t");
+				sb.Append($"{node.BranchTargetsCount}\t");
+				sb.Append($"{node.PhiBlockCount}\t");
+
+				foreach (var operand in node.Results)
+				{
+					sb.Append($"{operand}\t");
+				}
+
+				foreach (var operand in node.Operands)
+				{
+					sb.Append($"{operand}\t");
+				}
+
+				sb.Append($"{GetTabBlocks(node.BranchTargets)}");
+				sb.Append($"{GetTabBlocks(node.PhiBlocks)}");
+
+				sb.Length--;
+
+				traceLog?.Log(sb.ToString());
 			}
-		}
-		else
-		{
-			traceLog?.Log("No instructions.");
+
+			traceLog?.Log($"E\t{block}\t{block.Sequence}\t{block.NextBlocks.Count}\t{GetTabBlocks(block.NextBlocks)}");
 		}
 
 		return traceLog;
 	}
 
-	private static string ListBlocks(IList<BasicBlock> blocks)
+	private static string GetTabBlocks(IList<BasicBlock> blocks)
 	{
-		var text = new StringBuilder();
+		if (blocks == null || blocks.Count == 0)
+			return string.Empty;
+
+		var sb = new StringBuilder();
 
 		foreach (var next in blocks)
 		{
-			if (text.Length != 0)
-				text.Append(", ");
-
-			text.AppendFormat(next.ToString());
+			sb.AppendFormat($"{next}\t");
 		}
 
-		return text.ToString();
-	}
-
-	/// <summary>
-	/// Logs the instructions in the given enumerable to the trace.
-	/// </summary>
-	/// <param name="traceLog">The trace log.</param>
-	/// <param name="node">The context.</param>
-	private static void LogInstructions(TraceLog traceLog, Node node)
-	{
-		for (; !node.IsBlockEndInstruction; node = node.Next)
-		{
-			if (node.IsEmpty)
-				continue;
-
-			traceLog.Log(node.ToString());
-
-			if (node.IsBlockEndInstruction)
-				return;
-		}
+		return sb.ToString();
 	}
 }
