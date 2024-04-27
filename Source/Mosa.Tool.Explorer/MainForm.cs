@@ -595,8 +595,8 @@ public partial class MainForm : Form
 
 			if (MosaSettings.SSA)
 			{
+				pipeline.InsertBefore<EnterSSAStage>(new DominanceAnalysisStage());
 				pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
-				pipeline.InsertAfterLast<EnterSSAStage>(new GraphVizStage());
 			}
 
 			pipeline.InsertAfterLast<FastBlockOrderingStage>(new GraphVizStage());
