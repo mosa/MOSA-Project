@@ -592,6 +592,12 @@ public partial class MainForm : Form
 				pipeline.InsertAfterLast<InlineStage>(new GraphVizStage());
 			}
 
+			if (MosaSettings.SSA)
+			{
+				pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
+				pipeline.InsertAfterLast<EnterSSAStage>(new GraphVizStage());
+			}
+
 			pipeline.InsertAfterLast<FastBlockOrderingStage>(new GraphVizStage());
 			pipeline.Add(new GraphVizStage());
 		}

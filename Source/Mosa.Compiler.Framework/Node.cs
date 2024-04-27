@@ -854,11 +854,6 @@ public sealed class Node
 			sb.Append($" [{ConditionCode.GetConditionString()}]");
 		}
 
-		if (Instruction.Modifier != null)
-		{
-			sb.Append($" [{Instruction.Modifier}]");
-		}
-
 		for (var i = 0; i < ResultCount; i++)
 		{
 			var op = GetResult(i);
