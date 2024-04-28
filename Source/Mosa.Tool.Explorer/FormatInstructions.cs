@@ -6,7 +6,9 @@ namespace Mosa.Tool.Explorer;
 
 public class FormatInstructions
 {
-	public static string Format(List<InstructionRecord> records, string blockLabel, bool strip, bool removeNop)
+	private const int Padding = 34;
+
+	public static string Format(List<InstructionRecord> records, string blockLabel, bool strip, bool removeNop, bool lineBetweenBlocks)
 	{
 		var sb = new StringBuilder();
 		var blocks = new StringBuilder();
@@ -51,7 +53,7 @@ public class FormatInstructions
 								blocks.Append(op);
 							}
 
-							sb.Append("".PadRight(record.PreviousBlockCount == 1 ? 33 : 33 - 8));
+							sb.Append("".PadRight(record.PreviousBlockCount == 1 ? Padding : Padding - 8));
 
 							sb.Append(blocks);
 						}
@@ -96,14 +98,14 @@ public class FormatInstructions
 							}
 						}
 
-						var count = 35 - both.Length - blocks.Length;
+						var count = Padding + 2 - both.Length - blocks.Length;
 
 						if (count < 0)
 							count = 1;
 
 						var padding = string.Empty.PadRight(count);
 
-						sb.Append($"{record.Label}:{record.Mark.PadLeft(1)}{both}{padding}{blocks} ");
+						sb.Append($"{record.Label[..5]}:{record.Mark.PadLeft(1)}{both}{padding}{blocks} ");
 
 						// Result
 						for (int i = 0; i < record.ResultCount; i++)
@@ -171,6 +173,13 @@ public class FormatInstructions
 				case "E":
 					{
 						inblock = false;
+
+						if (!inblock && !allLines)
+							continue;
+
+						if (lineBetweenBlocks)
+							sb.AppendLine();
+
 						break;
 					}
 				default: break;

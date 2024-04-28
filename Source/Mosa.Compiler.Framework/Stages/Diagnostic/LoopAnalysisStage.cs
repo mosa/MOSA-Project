@@ -38,9 +38,6 @@ public sealed class LoopAnalysisStage : BaseMethodCompilerStage
 		if (BasicBlocks.PrologueBlock == null)
 			return;
 
-		if (!MethodCompiler.IsInSSAForm)
-			return;
-
 		OutputLoops();
 	}
 

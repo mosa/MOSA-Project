@@ -1143,7 +1143,7 @@ public partial class MainForm : Form
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbInstructions.Text = FormatInstructions.Format(records, label, !showOperandTypes.Checked, removeIRNop.Checked);
+		tbInstructions.Text = FormatInstructions.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
 	}
 
 	private void UpdateInstructionStages()
@@ -1272,7 +1272,7 @@ public partial class MainForm : Form
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbTransforms.Text = FormatInstructions.Format(records, label, !showOperandTypes.Checked, removeIRNop.Checked);
+		tbTransforms.Text = FormatInstructions.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
 	}
 
 	private void UpdateTransformStages()
