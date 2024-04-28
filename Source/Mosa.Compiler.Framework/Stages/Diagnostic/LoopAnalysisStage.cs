@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages.Diagnostic;
@@ -28,10 +29,10 @@ public sealed class LoopAnalysisStage : BaseMethodCompilerStage
 
 	protected override void Run()
 	{
+		// Method is empty - must be a plugged method
 		if (HasProtectedRegions)
 			return;
 
-		// Method is empty - must be a plugged method
 		if (BasicBlocks.HeadBlocks.Count != 1)
 			return;
 
@@ -41,6 +42,11 @@ public sealed class LoopAnalysisStage : BaseMethodCompilerStage
 		if (!MethodCompiler.IsInSSAForm)
 			return;
 
+		OutputLoops();
+	}
+
+	private void OutputLoops()
+	{
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 
 		LoopCount.Set(loops.Count);
