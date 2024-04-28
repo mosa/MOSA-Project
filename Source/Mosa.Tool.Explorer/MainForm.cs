@@ -582,25 +582,25 @@ public partial class MainForm : Form
 		{
 			for (int i = 1; i < pipeline.Count; i += 2)
 			{
-				pipeline.Insert(i, new BasicBlockGraphStage());
+				pipeline.Insert(i, new ControlFlowGraphStage());
 			}
 		}
 		else
 		{
 			if (MosaSettings.InlineMethods || MosaSettings.InlineExplicit)
 			{
-				pipeline.InsertBefore<InlineStage>(new BasicBlockGraphStage());
-				pipeline.InsertAfterLast<InlineStage>(new BasicBlockGraphStage());
+				pipeline.InsertBefore<InlineStage>(new ControlFlowGraphStage());
+				pipeline.InsertAfterLast<InlineStage>(new ControlFlowGraphStage());
 			}
 
 			if (MosaSettings.SSA)
 			{
 				pipeline.InsertBefore<EnterSSAStage>(new DominanceAnalysisStage());
-				pipeline.InsertBefore<EnterSSAStage>(new BasicBlockGraphStage());
+				pipeline.InsertBefore<EnterSSAStage>(new ControlFlowGraphStage());
 			}
 
-			pipeline.InsertAfterLast<FastBlockOrderingStage>(new BasicBlockGraphStage());
-			pipeline.Add(new BasicBlockGraphStage());
+			pipeline.InsertAfterLast<FastBlockOrderingStage>(new ControlFlowGraphStage());
+			pipeline.Add(new ControlFlowGraphStage());
 		}
 	}
 

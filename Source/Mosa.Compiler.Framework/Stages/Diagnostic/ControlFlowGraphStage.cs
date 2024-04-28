@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Stages.Diagnostic;
 
-public class BasicBlockGraphStage : BaseMethodCompilerStage
+public class ControlFlowGraphStage : BaseMethodCompilerStage
 {
 	protected override void Run()
 	{
@@ -11,7 +11,7 @@ public class BasicBlockGraphStage : BaseMethodCompilerStage
 
 	protected void CreateDiagram()
 	{
-		var trace = CreateTraceLog("Diagram");
+		var trace = CreateTraceLog("graphviz");
 
 		trace.Log("digraph blocks {");
 

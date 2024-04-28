@@ -58,7 +58,7 @@ public class DominanceAnalysisStage : BaseMethodCompilerStage
 
 	private void OutputDiagram()
 	{
-		var trace = CreateTraceLog("Diagram");
+		var trace = CreateTraceLog("DominanceTree-graphviz");
 
 		trace.Log("digraph blocks {");
 
