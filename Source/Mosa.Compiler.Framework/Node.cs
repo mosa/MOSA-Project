@@ -1375,7 +1375,7 @@ public sealed class Node
 	/// <param name="result2">The result2.</param>
 	public void SetInstruction2(BaseInstruction instruction, Operand result, Operand result2)
 	{
-		SetInstruction(instruction, 1, 2);
+		SetInstruction(instruction, 0, 2);
 		Result = result;
 		Result2 = result2;
 	}
