@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Instructions;
 public sealed class ExceptionEnd : BaseIRInstruction
 {
 	public ExceptionEnd()
-		: base(1, 0)
+		: base(0, 0)
 	{
 	}
 
