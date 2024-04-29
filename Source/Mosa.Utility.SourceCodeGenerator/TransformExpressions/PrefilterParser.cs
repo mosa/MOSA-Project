@@ -92,6 +92,21 @@ public static class PrefilterParser
 			{
 				return (method, index);
 			}
+			else if (token.TokenType == TokenType.Ampersand && method.MethodName != null)
+			{
+				// peak ahead
+				var next = tokens[index];
+
+				if (next.TokenType == TokenType.Word)
+				{
+					method.Parameters.Add(new Operand(new Token(TokenType.Ampersand, token.Position, next.Value), method.Parameters.Count));
+					index++; // skip word
+				}
+				else
+				{
+					throw new Exception($"parsing error {token}");
+				}
+			}
 			else
 			{
 				throw new Exception($"parsing error {token}");

@@ -19,7 +19,7 @@ public sealed class Shr64ZeroValue : BaseTransform
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, 10))
 			return false;
 
 		return true;

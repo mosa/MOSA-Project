@@ -23,7 +23,7 @@ public sealed class Mul32ToLea32By3Or5Or9 : BaseTransform
 		if (!Contains(context.Operand2, 3, 5, 9))
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, 10))
 			return false;
 
 		return true;

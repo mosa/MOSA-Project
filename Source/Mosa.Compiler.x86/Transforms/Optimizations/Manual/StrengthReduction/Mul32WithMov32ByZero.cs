@@ -30,7 +30,7 @@ public sealed class Mul32WithMov32ByZero : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsConstantZero)
 			return false;
 
-		if (!(AreStatusFlagsUsed(context.Instruction, context.Node.Next) == TriState.No))
+		if (!(AreStatusFlagsUsed(context.Instruction, context.Node.Next, transform.Window) == TriState.No))
 			return false;
 
 		return true;

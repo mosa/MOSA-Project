@@ -26,7 +26,7 @@ public sealed class Shr64 : BaseTransform
 		if (!IsConstant(context.Operand2.Definitions[0].Operand1))
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, 10))
 			return false;
 
 		return true;

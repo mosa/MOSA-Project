@@ -26,7 +26,7 @@
 			"Name": "Add##",
 			"SubName": "ByZero",
 			"Expression": "X64.Add## a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## a)",
 			"Variations": "No"
 		},
@@ -35,7 +35,7 @@
 			"Name": "Sub##",
 			"SubName": "ByZero",
 			"Expression": "X64.Sub## a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## a)",
 			"Variations": "Yes"
 		},
@@ -44,7 +44,7 @@
 			"Name": "IMul##",
 			"SubName": "ByZero",
 			"Expression": "X64.IMul## a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## 0)",
 			"Variations": "No",
 			"Log": "No"
@@ -54,7 +54,7 @@
 			"Name": "IMul##",
 			"SubName": "ByOne",
 			"Expression": "X64.IMul## a 1",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## 1)",
 			"Variations": "No",
 			"Log": "No"
@@ -64,7 +64,7 @@
 			"Name": "And##",
 			"SubName": "ByFF",
 			"Expression": "X64.And## a 0xFF",
-			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Movzx8To## a)",
 			"Variations": "Yes",
 			"Log": "No",
@@ -75,7 +75,7 @@
 			"Name": "Add##By1Not##",
 			"SubName": "",
 			"Expression": "X64.Add## (X64.Not## x) 1",
-			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@, 10)",
 			"Result": "(X64.Neg## x)",
 			"Variations": "Yes"
 		},
@@ -84,7 +84,7 @@
 			"Name": "Inc##Not##",
 			"SubName": "",
 			"Expression": "X64.Inc## (X64.Not## x)",
-			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@, 10)",
 			"Result": "(X64.Neg## x)",
 			"Variations": "No"
 		},
@@ -93,7 +93,7 @@
 			"Name": "And##Add##",
 			"SubName": "ToBlsr##",
 			"Expression": "X64.And## x (X64.Add## x -1)",
-			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@, 10)",
 			"Result": "(X64.Blsr## x)",
 			"Variations": "Yes"
 		},
@@ -112,7 +112,7 @@
 			"Name": "And##",
 			"SubName": "ByZero",
 			"Expression": "X64.And## a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## 0)",
 			"Variations": "Yes",
 			"Log": "No"
@@ -122,7 +122,7 @@
 			"Name": "And##",
 			"SubName": "ByMax",
 			"Expression": "X64.And## a 0xFFFFFFFF",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## [To##(0xFFFFFFFF)])",
 			"Variations": "Yes",
 			"Log": "No"
@@ -132,7 +132,7 @@
 			"Name": "Sar##",
 			"SubName": "ZeroValue",
 			"Expression": "X64.Sar## 0 a",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## 0)",
 			"Priority": "80"
 		},
@@ -141,7 +141,7 @@
 			"Name": "Sar##",
 			"SubName": "ByZero",
 			"Expression": "X64.Sar## a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## a)",
 			"Priority": "80"
 		},
@@ -150,7 +150,7 @@
 			"Name": "Shl##",
 			"SubName": "ZeroValue",
 			"Expression": "X64.Shl## 0 a",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## 0)",
 			"Priority": "80"
 		},
@@ -159,7 +159,7 @@
 			"Name": "Shl##",
 			"SubName": "ByZero",
 			"Expression": "X64.Shl## a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## a)",
 			"Priority": "80"
 		},
@@ -168,7 +168,7 @@
 			"Name": "Shr##",
 			"SubName": "ZeroValue",
 			"Expression": "X64.Shr## 0 a",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## 0)",
 			"Priority": "80"
 		},
@@ -177,7 +177,7 @@
 			"Name": "Shr##",
 			"SubName": "ByZero",
 			"Expression": "X64.Shr## a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## a)",
 			"Priority": "80"
 		},
@@ -186,7 +186,7 @@
 			"Name": "IMul##Mov##",
 			"SubName": "ByZero",
 			"Expression": "X64.IMul## a (X64.Mov## 0)",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## 0)",
 			"Variations": "No",
 			"Log": "No"
@@ -196,7 +196,7 @@
 			"Name": "IMul##Mov##",
 			"SubName": "ByOne",
 			"Expression": "X64.IMul## a (X64.Mov## 1)",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Mov## a)",
 			"Variations": "No",
 			"Log": "No"

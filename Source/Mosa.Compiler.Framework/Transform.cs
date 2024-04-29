@@ -48,6 +48,8 @@ public sealed class Transform
 
 	public bool IsLowerCodeSize => Options.HasFlag(TransformStageOption.ReduceCodeSize);
 
+	public bool IsTraceTransforms = false;
+
 	#endregion Properties
 
 	#region Properties - Indirect
@@ -167,6 +169,8 @@ public sealed class Transform
 
 		Options = TransformStageOption.None;
 
+		IsTraceTransforms = methodCompiler.IsTraceTransforms;
+
 		TraceLog = null;
 		Managers.Clear();
 
@@ -245,6 +249,9 @@ public sealed class Transform
 	{
 		TransformCount++;
 
+		if (!IsTraceTransforms)
+			return;
+
 		TraceLog?.Log($"{TransformCount,-7}\t| {transformation.Name}");
 
 		if (transformation.Log)
@@ -255,6 +262,9 @@ public sealed class Transform
 
 	private void TraceAfter(Context context)
 	{
+		if (!IsTraceTransforms)
+			return;
+
 		TraceInstructions();
 
 		TraceLog?.Log($"       \t| {context}");
@@ -264,6 +274,9 @@ public sealed class Transform
 	public void TraceBefore(BaseBlockTransform transformation, BasicBlock block)
 	{
 		TransformCount++;
+
+		if (!IsTraceTransforms)
+			return;
 
 		TraceLog?.Log($"{TransformCount,-7}\t| {transformation.Name}");
 
@@ -275,6 +288,9 @@ public sealed class Transform
 
 	public void TraceAfter(BaseBlockTransform transformation)
 	{
+		if (!IsTraceTransforms)
+			return;
+
 		TraceInstructions();
 
 		TraceLog?.Log($"       \t| {transformation.Name}");
@@ -283,6 +299,9 @@ public sealed class Transform
 
 	public void TraceInstructions()
 	{
+		if (!IsTraceTransforms)
+			return;
+
 		MethodCompiler.CreateTranformInstructionTrace(Stage, TransformCount);
 	}
 

@@ -47,7 +47,7 @@
 			"Name": "Mul##ToLea##",
 			"SubName": "By3Or5Or9",
 			"Expression": "X64.Mul## a b",
-			"Filter": "!IsResult2Used(@) && !IsZero(a) && Contains(b, 3, 5, 9) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "!IsResult2Used(@) && !IsZero(a) && Contains(b, 3, 5, 9) && !AreAnyStatusFlagsUsed(@, 10)",
 			"Result": "(X64.Lea## a a [Sub##(To##(b),1)] [To##(0)])",
 			"Variations": "No",
 			"Log": "No"

@@ -9,7 +9,7 @@ public enum TokenType
 {
 	Unknown,
 
-	Word,  // temporary - until deducted
+	Word,  // temporary
 	Method,
 	Instruction,
 	Label,
@@ -51,4 +51,5 @@ public enum TokenType
 
 	At,
 	Percent,
+	Ampersand
 }

@@ -2,6 +2,7 @@
 
 using System.Collections;
 using Mosa.Compiler.Framework.Common;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 
@@ -61,12 +62,16 @@ public class RemoveUnreachableBlocks : BaseBlockTransform
 
 			var nextBlocks = block.NextBlocks.ToArray();
 
+			transform.TraceBefore(this, block);
+
 			block.EmptyBlockOfAllInstructions(true);
 			PhiHelper.UpdatePhiBlocks(nextBlocks);
 
 			emptied++;
 
 			trace?.Log($"Removed Unreachable Block: {block}");
+
+			transform.TraceAfter(this);
 		}
 
 		return emptied;

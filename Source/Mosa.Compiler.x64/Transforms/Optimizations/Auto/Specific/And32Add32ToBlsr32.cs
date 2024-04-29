@@ -35,7 +35,7 @@ public sealed class And32Add32ToBlsr32 : BaseTransform
 		if (!IsVirtualRegister(context.Operand1))
 			return false;
 
-		if (IsCarryFlagUsed(context))
+		if (IsCarryFlagUsed(context, 10))
 			return false;
 
 		return true;
@@ -80,7 +80,7 @@ public sealed class And32Add32ToBlsr32_v1 : BaseTransform
 		if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
 			return false;
 
-		if (IsCarryFlagUsed(context))
+		if (IsCarryFlagUsed(context, 10))
 			return false;
 
 		return true;
@@ -125,7 +125,7 @@ public sealed class And32Add32ToBlsr32_v2 : BaseTransform
 		if (!IsVirtualRegister(context.Operand1))
 			return false;
 
-		if (IsCarryFlagUsed(context))
+		if (IsCarryFlagUsed(context, 10))
 			return false;
 
 		return true;
@@ -170,7 +170,7 @@ public sealed class And32Add32ToBlsr32_v3 : BaseTransform
 		if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand2))
 			return false;
 
-		if (IsCarryFlagUsed(context))
+		if (IsCarryFlagUsed(context, 10))
 			return false;
 
 		return true;

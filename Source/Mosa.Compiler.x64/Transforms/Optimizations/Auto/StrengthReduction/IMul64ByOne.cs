@@ -17,7 +17,7 @@ public sealed class IMul64ByOne : BaseTransform
 		if (!context.Operand2.IsConstantOne)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, 10))
 			return false;
 
 		return true;

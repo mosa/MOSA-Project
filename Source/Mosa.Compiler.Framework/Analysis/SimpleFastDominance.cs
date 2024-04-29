@@ -208,7 +208,7 @@ public sealed class SimpleFastDominance
 				if (!result.Contains(c))
 				{
 					result.Add(c);
-					workList.Enqueue(c);
+					//workList.Enqueue(c);
 				}
 			}
 		}
