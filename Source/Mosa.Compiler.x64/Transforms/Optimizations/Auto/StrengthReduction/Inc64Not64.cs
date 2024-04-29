@@ -26,7 +26,7 @@ public sealed class Inc64Not64 : BaseTransform
 		if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
 			return false;
 
-		if (IsCarryFlagUsed(context, 10))
+		if (IsCarryFlagUsed(context, transform.Window))
 			return false;
 
 		return true;

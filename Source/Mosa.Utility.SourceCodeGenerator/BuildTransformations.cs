@@ -607,7 +607,11 @@ public class BuildTransformations : BuildBaseTemplate
 			{
 				sb.Append(CreateConstantName(parameter));
 			}
-			if (parameter.IsAt)
+			else if (parameter.IsDollar)
+			{
+				sb.Append($"transform.{parameter.Value}");
+			}
+			else if (parameter.IsAt)
 			{
 				sb.Length--;
 				return sb.ToString();
@@ -677,6 +681,10 @@ public class BuildTransformations : BuildBaseTemplate
 			else if (parameter.IsAt)
 			{
 				sb.Append("context");
+			}
+			else if (parameter.IsDollar)
+			{
+				sb.Append($"transform.{parameter.Value}");
 			}
 			else if (parameter.IsPercent)
 			{

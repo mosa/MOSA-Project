@@ -17,7 +17,7 @@ public sealed class And64ByZero : BaseTransform
 		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context, 10))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;
@@ -44,7 +44,7 @@ public sealed class And64ByZero_v1 : BaseTransform
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context, 10))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

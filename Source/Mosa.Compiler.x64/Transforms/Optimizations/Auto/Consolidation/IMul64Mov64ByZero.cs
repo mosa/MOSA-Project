@@ -26,7 +26,7 @@ public sealed class IMul64Mov64ByZero : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context, 10))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

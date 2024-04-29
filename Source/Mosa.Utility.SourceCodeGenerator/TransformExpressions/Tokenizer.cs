@@ -148,9 +148,9 @@ public static class Tokenizer
 			{
 				tokens.Add(new Token(TokenType.Percent, index++, "%"));
 			}
-			else if (c == '&')
+			else if (c == '^')
 			{
-				tokens.Add(new Token(TokenType.Ampersand, index++, "&"));
+				tokens.Add(new Token(TokenType.Top, index++, "^"));
 			}
 			else
 			{

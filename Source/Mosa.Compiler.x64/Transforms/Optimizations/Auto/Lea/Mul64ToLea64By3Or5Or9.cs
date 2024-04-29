@@ -23,7 +23,7 @@ public sealed class Mul64ToLea64By3Or5Or9 : BaseTransform
 		if (!Contains(context.Operand2, 3, 5, 9))
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context, 10))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

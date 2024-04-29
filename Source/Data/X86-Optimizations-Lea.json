@@ -43,7 +43,7 @@
 			"Name": "Mul32ToLea32",
 			"SubName": "By3Or5Or9",
 			"Expression": "X86.Mul32 a b",
-			"Filter": "!IsResult2Used(@) && !IsZero(a) && Contains(b, 3, 5, 9) && !AreAnyStatusFlagsUsed(@, 10)",
+			"Filter": "!IsResult2Used(@) && !IsZero(a) && Contains(b, 3, 5, 9) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Lea32 a a [Sub32(To32(b),1)] [To32(0)])",
 			"Variations": "No",
 			"Log": "No"

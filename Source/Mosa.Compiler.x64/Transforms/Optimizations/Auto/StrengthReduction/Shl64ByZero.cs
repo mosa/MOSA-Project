@@ -19,7 +19,7 @@ public sealed class Shl64ByZero : BaseTransform
 		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context, 10))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

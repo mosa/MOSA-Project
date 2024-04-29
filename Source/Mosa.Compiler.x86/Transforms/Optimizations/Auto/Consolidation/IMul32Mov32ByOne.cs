@@ -26,7 +26,7 @@ public sealed class IMul32Mov32ByOne : BaseTransform
 		if (!context.Operand2.Definitions[0].Operand1.IsConstantOne)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context, 10))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

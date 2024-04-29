@@ -26,7 +26,7 @@ public sealed class Add64 : BaseTransform
 		if (!IsConstant(context.Operand2.Definitions[0].Operand1))
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context, 10))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

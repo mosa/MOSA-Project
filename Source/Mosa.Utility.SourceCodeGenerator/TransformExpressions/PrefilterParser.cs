@@ -92,14 +92,14 @@ public static class PrefilterParser
 			{
 				return (method, index);
 			}
-			else if (token.TokenType == TokenType.Ampersand && method.MethodName != null)
+			else if (token.TokenType == TokenType.Dollar && method.MethodName != null)
 			{
 				// peak ahead
 				var next = tokens[index];
 
 				if (next.TokenType == TokenType.Word)
 				{
-					method.Parameters.Add(new Operand(new Token(TokenType.Ampersand, token.Position, next.Value), method.Parameters.Count));
+					method.Parameters.Add(new Operand(new Token(TokenType.Dollar, token.Position, next.Value), method.Parameters.Count));
 					index++; // skip word
 				}
 				else

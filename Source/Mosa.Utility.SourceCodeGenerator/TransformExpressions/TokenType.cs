@@ -24,6 +24,7 @@ public enum TokenType
 	Hash,
 	Minus,
 	Dollar,
+	Top,
 
 	Greater,
 	Less,
@@ -51,5 +52,4 @@ public enum TokenType
 
 	At,
 	Percent,
-	Ampersand
 }
