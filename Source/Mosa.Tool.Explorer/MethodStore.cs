@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -50,19 +49,33 @@ public class MethodStore
 	{
 		var methodData = GetMethodData(method, true);
 
+		var records = new List<InstructionRecord>();
+
+		foreach (var line in lines)
+		{
+			records.Add(new InstructionRecord(line));
+		}
+
 		lock (methodData)
 		{
 			ClearMethodDataOnNewVersion(version, methodData);
 
 			methodData.OrderedStageNames.AddIfNew(stage);
 			methodData.InstructionLogs.Remove(stage);
-			methodData.InstructionLogs.Add(stage, lines);
+			methodData.InstructionLogs.Add(stage, records);
 		}
 	}
 
 	public void SetTransformTraceInformation(MosaMethod method, string stage, List<string> lines, int version, int step)
 	{
 		var methodData = GetMethodData(method, true);
+
+		var records = new List<InstructionRecord>();
+
+		foreach (var line in lines)
+		{
+			records.Add(new InstructionRecord(line));
+		}
 
 		lock (methodData)
 		{
@@ -72,11 +85,11 @@ public class MethodStore
 
 			if (!methodData.TransformLogs.TryGetValue(stage, out var directionary))
 			{
-				directionary = new Dictionary<int, List<string>>();
+				directionary = new Dictionary<int, List<InstructionRecord>>();
 				methodData.TransformLogs.Add(stage, directionary);
 			}
 
-			directionary.Add(step, lines);
+			directionary.Add(step, records);
 		}
 	}
 
@@ -104,145 +117,5 @@ public class MethodStore
 
 			methodData.MethodCounters = lines;
 		}
-	}
-
-	public string GetStageInstructions(List<string> lines, string blockLabel, bool strip, bool pad, bool removeNop)
-	{
-		var result = new StringBuilder();
-
-		if (lines == null)
-			return string.Empty;
-
-		if (string.IsNullOrWhiteSpace(blockLabel))
-		{
-			foreach (var l in lines)
-			{
-				var line = l;
-
-				if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
-					continue;
-
-				if (removeNop && line.Contains("IR.Nop"))
-					continue;
-
-				if (strip)
-					line = StripBracketContents(line);
-
-				if (pad)
-					line = PadInstruction(line);
-
-				line = Simplify(line);
-
-				result.Append(line);
-				result.Append('\n');
-			}
-
-			return result.ToString();
-		}
-
-		bool inBlock = false;
-
-		foreach (var l in lines)
-		{
-			string line = l;
-
-			if ((!inBlock) && line.StartsWith("Block #") && line.EndsWith(blockLabel))
-			{
-				inBlock = true;
-			}
-
-			if (inBlock)
-			{
-				if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
-					continue;
-
-				if (strip)
-					line = StripBracketContents(line);
-
-				if (pad)
-					line = PadInstruction(line);
-
-				line = Simplify(line);
-
-				result.Append(line);
-				result.Append("\n");
-
-				if (line.StartsWith("  Next:"))
-				{
-					return result.ToString();
-				}
-			}
-		}
-
-		return result.ToString();
-	}
-
-	private string StripBracketContents(string s)
-	{
-		if (string.IsNullOrEmpty(s) || s.Length < 5)
-			return s;
-
-		if (!char.IsDigit(s[0]))
-			return s;
-
-		int at = 0;
-
-		while (true)
-		{
-			int open = s.IndexOf(" [", at);
-
-			if (open < 0)
-				return s;
-
-			int close = s.IndexOf(']', open);
-
-			if (close < 0)
-				return s;
-
-			var part = s.Substring(open + 2, close - open - 2);
-
-			if (part == "NULL" || char.IsSymbol(part[0]) || char.IsPunctuation(part[0]))
-			{
-				at = close;
-				continue;
-			}
-
-			s = s.Remove(open, close - open + 1);
-
-			at = open;
-		}
-	}
-
-	private string PadInstruction(string s)
-	{
-		const int padding = 30;
-
-		if (string.IsNullOrEmpty(s) || s.Length < 5)
-			return s;
-
-		if (!char.IsDigit(s[0]))
-			return s;
-
-		int first = s.IndexOf(':');
-
-		if (first < 0 || first > 15)
-			return s;
-
-		int second = s.IndexOf(' ', first + 2);
-
-		if (second < 0)
-			return s;
-
-		if (second > padding)
-			return s;
-
-		s = s.Insert(second, new string(' ', padding - second));
-
-		return s;
-	}
-
-	private string Simplify(string s)
-	{
-		return s.Replace("const=", string.Empty);
 	}
 }

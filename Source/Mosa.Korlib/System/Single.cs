@@ -40,6 +40,7 @@ public struct Single: IComparable, IComparable<float>, IEquatable<float>
 		return (s > 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
 	}
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool IsInfinity(float s)
 	{
 		return (s == PositiveInfinity || s == NegativeInfinity);

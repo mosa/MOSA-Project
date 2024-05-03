@@ -35,8 +35,6 @@ public abstract class BaseInstruction
 
 	public virtual string FamilyName => null;
 
-	public virtual string Modifier => null;
-
 	public virtual string FullName { get; private set; }
 
 	public virtual string OpcodeName { get; private set; }

@@ -24,7 +24,7 @@ public sealed class Add32ToInc32 : BaseTransform
 		if (!AreSame(context.Operand1, context.Result))
 			return false;
 
-		if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
+		if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false, transform.Window) == TriState.No))
 			return false;
 
 		return true;

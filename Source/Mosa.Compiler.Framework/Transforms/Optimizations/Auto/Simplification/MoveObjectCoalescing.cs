@@ -23,6 +23,9 @@ public sealed class MoveObjectCoalescing : BaseTransform
 		if (context.Operand1.Definitions[0].Instruction != IR.MoveObject)
 			return false;
 
+		if (IsCPURegister(context.Operand1.Definitions[0].Operand1))
+			return false;
+
 		return true;
 	}
 

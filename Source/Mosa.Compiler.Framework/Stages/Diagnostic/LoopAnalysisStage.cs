@@ -28,19 +28,21 @@ public sealed class LoopAnalysisStage : BaseMethodCompilerStage
 
 	protected override void Run()
 	{
+		// Method is empty - must be a plugged method
 		if (HasProtectedRegions)
 			return;
 
-		// Method is empty - must be a plugged method
 		if (BasicBlocks.HeadBlocks.Count != 1)
 			return;
 
 		if (BasicBlocks.PrologueBlock == null)
 			return;
 
-		if (!MethodCompiler.IsInSSAForm)
-			return;
+		OutputLoops();
+	}
 
+	private void OutputLoops()
+	{
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 
 		LoopCount.Set(loops.Count);

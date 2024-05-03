@@ -49,7 +49,7 @@ public sealed class Deadcode : BaseTransform
 			|| instruction.IsSignFlagModified
 			|| instruction.IsParityFlagModified)
 		{
-			return !AreAnyStatusFlagsUsed(context);
+			return !AreAnyStatusFlagsUsed(context, transform.Window);
 		}
 
 		return true;

@@ -19,7 +19,7 @@ public sealed class Shr32ByZero : BaseTransform
 		if (!context.Operand2.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

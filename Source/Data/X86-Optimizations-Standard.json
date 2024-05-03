@@ -22,7 +22,7 @@
 			"Name": "Add32",
 			"SubName": "ByZero",
 			"Expression": "X86.Add32 a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 a)",
 			"Variations": "No"
 		},
@@ -31,7 +31,7 @@
 			"Name": "Sub32",
 			"SubName": "ByZero",
 			"Expression": "X86.Sub32 a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 a)",
 			"Variations": "Yes"
 		},
@@ -40,7 +40,7 @@
 			"Name": "IMul32",
 			"SubName": "ByZero",
 			"Expression": "X86.IMul32 a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 0)",
 			"Variations": "No",
 			"Log": "No"
@@ -50,7 +50,7 @@
 			"Name": "IMul32",
 			"SubName": "ByOne",
 			"Expression": "X86.IMul32 a 1",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 1)",
 			"Variations": "No",
 			"Log": "No"
@@ -60,7 +60,7 @@
 			"Name": "And32",
 			"SubName": "ByFF",
 			"Expression": "X86.And32 a 0xFF",
-			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "!IsCPURegister(a,%ESI) && !IsCPURegister(a,%EDI) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Movzx8To32 a)",
 			"Variations": "Yes",
 			"Log": "No",
@@ -71,7 +71,7 @@
 			"Name": "Add32By1Not32",
 			"SubName": "",
 			"Expression": "X86.Add32 (X86.Not32 x) 1",
-			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@, $Window)",
 			"Result": "(X86.Neg32 x)",
 			"Variations": "Yes"
 		},
@@ -80,7 +80,7 @@
 			"Name": "Inc32Not32",
 			"SubName": "",
 			"Expression": "X86.Inc32 (X86.Not32 x)",
-			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@, $Window)",
 			"Result": "(X86.Neg32 x)",
 			"Variations": "No"
 		},
@@ -89,7 +89,7 @@
 			"Name": "And32Add32",
 			"SubName": "ToBlsr32",
 			"Expression": "X86.And32 x (X86.Add32 x -1)",
-			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@)",
+			"Filter": "IsVirtualRegister(x) && !IsCarryFlagUsed(@, $Window)",
 			"Result": "(X86.Blsr32 x)",
 			"Variations": "Yes"
 		},
@@ -108,7 +108,7 @@
 			"Name": "And32",
 			"SubName": "ByZero",
 			"Expression": "X86.And32 a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 0)",
 			"Variations": "Yes",
 			"Log": "No"
@@ -118,7 +118,7 @@
 			"Name": "And32",
 			"SubName": "ByMax",
 			"Expression": "X86.And32 a 0xFFFFFFFF",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 [To32(0xFFFFFFFF)])",
 			"Variations": "Yes",
 			"Log": "No"
@@ -128,7 +128,7 @@
 			"Name": "Sar32",
 			"SubName": "ZeroValue",
 			"Expression": "X86.Sar32 0 a",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 0)",
 			"Priority": "80"
 		},
@@ -137,7 +137,7 @@
 			"Name": "Sar32",
 			"SubName": "ByZero",
 			"Expression": "X86.Sar32 a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 a)",
 			"Priority": "80"
 		},
@@ -146,7 +146,7 @@
 			"Name": "Shl32",
 			"SubName": "ZeroValue",
 			"Expression": "X86.Shl32 0 a",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 0)",
 			"Priority": "80"
 		},
@@ -155,7 +155,7 @@
 			"Name": "Shl32",
 			"SubName": "ByZero",
 			"Expression": "X86.Shl32 a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 a)",
 			"Priority": "80"
 		},
@@ -164,7 +164,7 @@
 			"Name": "Shr32",
 			"SubName": "ZeroValue",
 			"Expression": "X86.Shr32 0 a",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 0)",
 			"Priority": "80"
 		},
@@ -173,7 +173,7 @@
 			"Name": "Shr32",
 			"SubName": "ByZero",
 			"Expression": "X86.Shr32 a 0",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 a)",
 			"Priority": "80"
 		},
@@ -182,7 +182,7 @@
 			"Name": "IMul32Mov32",
 			"SubName": "ByZero",
 			"Expression": "X86.IMul32 a (X86.Mov32 0)",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 0)",
 			"Variations": "No",
 			"Log": "No"
@@ -192,7 +192,7 @@
 			"Name": "IMul32Mov32",
 			"SubName": "ByOne",
 			"Expression": "X86.IMul32 a (X86.Mov32 1)",
-			"Filter": "!AreAnyStatusFlagsUsed(@)",
+			"Filter": "!AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Mov32 a)",
 			"Variations": "No",
 			"Log": "No"

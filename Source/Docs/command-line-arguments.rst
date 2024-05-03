@@ -50,7 +50,7 @@ Below are the command line arguments available:
     -devirtualization,Optimizations.Devirtualization,true
     -devirtualization-off,Optimizations.Devirtualization,false
     -inline-level,Optimizations.Inline.Maximum,{value}
-	-reducesize,Optimizations.ReduceCodeSize,true
+	-reduce-size,Optimizations.ReduceCodeSize,true
 
     -platform,Compiler.Platform,{value}
     -x86,Compiler.Platform,x86
@@ -174,6 +174,7 @@ Below are the command line arguments available:
 
 	Unit Testings:
 	-maxerrors,UnitTest.MaxErrors,{value}
+	-filter,UnitTest.Filter,{value}
 
     Optimization Levels:
     -o0,Optimizations.Basic,false

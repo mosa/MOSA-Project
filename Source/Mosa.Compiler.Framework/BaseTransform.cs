@@ -294,14 +294,14 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		return value == 0;
 	}
 
-	public static bool AreAnyStatusFlagsUsed(Context context)
+	public static bool AreAnyStatusFlagsUsed(Context context, int window)
 	{
-		return AreStatusFlagsUsed(context.Instruction, context.Node) != TriState.No;
+		return AreStatusFlagsUsed(context.Instruction, context.Node, window) != TriState.No;
 	}
 
-	public static bool IsCarryFlagUsed(Context context)
+	public static bool IsCarryFlagUsed(Context context, int window)
 	{
-		return IsCarryFlagUsed(context.Node) != TriState.No;
+		return IsCarryFlagUsed(context.Node, window) != TriState.No;
 	}
 
 	protected static bool IsResultAndOperand1Same(Context context)
@@ -900,27 +900,28 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	public enum TriState
 	{ Yes, No, Unknown };
 
-	public static TriState AreAnyStatusFlagsUsed(Node node)
+	public static TriState AreAnyStatusFlagsUsed(Node node, int window)
 	{
-		return AreStatusFlagsUsed(node.Next, true, true, true, true, true);
+		return AreStatusFlagsUsed(node.Next, true, true, true, true, true, window);
 	}
 
-	public static TriState IsCarryFlagUsed(Node node)
+	public static TriState IsCarryFlagUsed(Node node, int window)
 	{
-		return AreStatusFlagsUsed(node.Next, false, true, false, false, false);
+		return AreStatusFlagsUsed(node.Next, false, true, false, false, false, window);
 	}
 
-	public static TriState AreStatusFlagsUsed(BaseInstruction instruction, Node node)
+	public static TriState AreStatusFlagsUsed(BaseInstruction instruction, Node node, int window)
 	{
 		return AreStatusFlagsUsed(node.Next,
 			instruction.IsZeroFlagModified,
 			instruction.IsCarryFlagModified,
 			instruction.IsSignFlagModified,
 			instruction.IsOverflowFlagModified,
-			instruction.IsParityFlagModified);
+			instruction.IsParityFlagModified,
+			window);
 	}
 
-	public static TriState AreStatusFlagsUsed(Node node, bool checkZero, bool checkCarry, bool checkSign, bool checkOverlow, bool checkParity)
+	public static TriState AreStatusFlagsUsed(Node node, bool checkZero, bool checkCarry, bool checkSign, bool checkOverlow, bool checkParity, int window)
 	{
 		// if none are being checked, then for sure it's a no
 		if (!checkZero && !checkCarry && !checkSign && !checkOverlow && !checkParity)
@@ -928,8 +929,13 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 		for (var at = node; ; at = at.Next)
 		{
+			if (window <= 0)
+				return TriState.Unknown;
+
 			if (at.IsEmptyOrNop)
 				continue;
+
+			window--;
 
 			if (at.IsBlockEndInstruction)
 				return TriState.Unknown;

@@ -46,6 +46,8 @@ public class SkipEmptyBlocks : BaseBlockTransform
 
 			trace?.Log($"Removed Block: {block} - Skipped to: {block.NextBlocks[0]}");
 
+			transform.TraceBefore(this, block);
+
 			if (isInSSAForm)
 			{
 				PhiHelper.UpdatePhiTargets(block.NextBlocks, block, block.PreviousBlocks[0]);
@@ -54,6 +56,8 @@ public class SkipEmptyBlocks : BaseBlockTransform
 			block.RemoveEmptyBlockWithSingleJump(true);
 
 			emptied++;
+
+			transform.TraceAfter(this);
 		}
 
 		return emptied;

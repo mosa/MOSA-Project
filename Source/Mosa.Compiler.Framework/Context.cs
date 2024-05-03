@@ -473,6 +473,17 @@ public sealed class Context
 	/// Sets the instruction.
 	/// </summary>
 	/// <param name="instruction">The instruction.</param>
+	/// <param name="condition">The condition.</param>
+	/// <param name="result">The result.</param>
+	public void SetInstruction(BaseInstruction instruction, ConditionCode condition, Operand result)
+	{
+		Node.SetInstruction(instruction, condition, result);
+	}
+
+	/// <summary>
+	/// Sets the instruction.
+	/// </summary>
+	/// <param name="instruction">The instruction.</param>
 	/// <param name="result">The result.</param>
 	public void SetInstruction(BaseInstruction instruction, Operand result)
 	{

@@ -40,13 +40,17 @@ public sealed class Transform
 
 	public BaseMethodCompilerStage Stage { get; private set; }
 
-	public int TotalTransformCount { get; private set; }
+	public int TransformCount { get; private set; }
 
 	public bool IsInSSAForm { get; private set; }
 
 	public bool IsLowerTo32 => Options.HasFlag(TransformStageOption.LowerTo32);
 
 	public bool IsLowerCodeSize => Options.HasFlag(TransformStageOption.ReduceCodeSize);
+
+	public bool IsSSAEnabled { get; private set; } = false;
+
+	public bool IsTraceTransforms = false;
 
 	#endregion Properties
 
@@ -143,6 +147,8 @@ public sealed class Transform
 		MulUnsignedInstruction = Is32BitPlatform ? IR.MulUnsigned32 : IR.MulUnsigned64;
 		BranchInstruction = Is32BitPlatform ? IR.Branch32 : IR.Branch64;
 
+		IsSSAEnabled = Compiler.MosaSettings.SSA;
+
 		Options = TransformStageOption.None;
 
 		TraceLog = null;
@@ -167,6 +173,8 @@ public sealed class Transform
 
 		Options = TransformStageOption.None;
 
+		IsTraceTransforms = methodCompiler.IsTraceTransforms;
+
 		TraceLog = null;
 		Managers.Clear();
 
@@ -176,7 +184,7 @@ public sealed class Transform
 	public void SetStage(BaseMethodCompilerStage stage)
 	{
 		Stage = stage;
-		TotalTransformCount = 0;
+		TransformCount = 0;
 		IsInSSAForm = MethodCompiler.IsInSSAForm;
 		Managers.Clear();
 	}
@@ -241,40 +249,64 @@ public sealed class Transform
 
 	#region Trace
 
-	public void TraceBefore(Context context, BaseTransform transformation)
+	private void TraceBefore(Context context, BaseTransform transformation)
 	{
-		TraceLog?.Log($"{TotalTransformCount,-7}\t| {transformation.Name}");
+		TransformCount++;
+
+		if (!IsTraceTransforms)
+			return;
+
+		TraceLog?.Log($"{TransformCount,-7}\t| {transformation.Name}");
 
 		if (transformation.Log)
 			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName} at {context}");
 
 		TraceLog?.Log($"{context.Block}\t| {context}");
-
-		TotalTransformCount++;
 	}
 
-	public void TraceAfter(Context context)
+	private void TraceAfter(Context context)
 	{
+		if (!IsTraceTransforms)
+			return;
+
+		TraceInstructions();
+
 		TraceLog?.Log($"       \t| {context}");
 		TraceLog?.Log();
 	}
 
 	public void TraceBefore(BaseBlockTransform transformation, BasicBlock block)
 	{
-		TraceLog?.Log($"{TotalTransformCount,-7}\t| {transformation.Name}");
+		TransformCount++;
+
+		if (!IsTraceTransforms)
+			return;
+
+		TraceLog?.Log($"{TransformCount,-7}\t| {transformation.Name}");
 
 		if (transformation.Log)
 			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName}");
 
 		TraceLog?.Log($"{block}\t| {transformation.Name}");
-
-		TotalTransformCount++;
 	}
 
 	public void TraceAfter(BaseBlockTransform transformation)
 	{
+		if (!IsTraceTransforms)
+			return;
+
+		TraceInstructions();
+
 		TraceLog?.Log($"       \t| {transformation.Name}");
 		TraceLog?.Log();
+	}
+
+	public void TraceInstructions()
+	{
+		if (!IsTraceTransforms)
+			return;
+
+		MethodCompiler.CreateTranformInstructionTrace(Stage, TransformCount);
 	}
 
 	#endregion Trace

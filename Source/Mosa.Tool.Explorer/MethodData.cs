@@ -13,10 +13,10 @@ public class MethodData
 
 	public List<string> OrderedTransformStageNames = new List<string>();
 
-	public Dictionary<string, List<string>> InstructionLogs = new Dictionary<string, List<string>>();
+	public Dictionary<string, List<InstructionRecord>> InstructionLogs = new Dictionary<string, List<InstructionRecord>>();
+	public Dictionary<string, Dictionary<int, List<InstructionRecord>>> TransformLogs = new Dictionary<string, Dictionary<int, List<InstructionRecord>>>();
+
 	public Dictionary<string, List<string>> DebugLogs = new Dictionary<string, List<string>>();
 
 	public List<string> MethodCounters = new List<string>();
-
-	public Dictionary<string, Dictionary<int, List<string>>> TransformLogs = new Dictionary<string, Dictionary<int, List<string>>>();
 }
