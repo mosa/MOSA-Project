@@ -291,6 +291,6 @@ public static class ManualTransforms
 		new StrengthReduction.DivUnsignedMagicNumber64(),
 
 		new NonSSA.Move32(),
-		//new NonSSA.Add32(),
+		new NonSSA.Move32Constant(),
 	};
 }

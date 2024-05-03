@@ -29,9 +29,9 @@ public abstract class BaseNonSA : BaseTransform
 			if (at.Instruction == IR.Epilogue)
 				return null;
 
-			if (at.Instruction.IsBranch)
+			if (at.Instruction.IsUnconditionalBranch)
 			{
-				if (at.Instruction.IsUnconditionalBranch && at.Block.NextBlocks.Count == 1 && at.BranchTargets[0].PreviousBlocks.Count == 1)
+				if (at.Block.NextBlocks.Count == 1 && at.BranchTargets[0].PreviousBlocks.Count == 1)
 				{
 					at = at.BranchTargets[0].First;
 					continue;
@@ -43,7 +43,7 @@ public abstract class BaseNonSA : BaseTransform
 			if (at.ResultCount >= 1 && (at.Result == target || at.Result == replacement))
 				return null;
 
-			if (at.ResultCount == 2 && at.Result2 == target || at.Result2 == replacement)
+			if (at.ResultCount == 2 && (at.Result2 == target || at.Result2 == replacement))
 				return null;
 
 			if (at.OperandCount == 0)

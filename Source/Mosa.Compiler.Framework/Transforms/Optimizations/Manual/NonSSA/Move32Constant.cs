@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.NonSSA;
 
-public sealed class Move32 : BaseNonSA
+public sealed class Move32Constant : BaseNonSA
 {
-	public Move32() : base(IR.Move32, TransformType.Manual | TransformType.Optimization, true)
+	public Move32Constant() : base(IR.Move32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -15,7 +13,10 @@ public sealed class Move32 : BaseNonSA
 		if (!transform.MethodCompiler.HasProtectedRegions || !transform.IsSSAEnabled)
 			return false;
 
-		if (!context.Result.IsUsedOnce)
+		if (!context.Operand1.IsConstant)
+			return false;
+
+		if (!context.Result.IsUsed)
 			return false;
 
 		if (Find(context.Node.Next, context.Result, context.Operand1, transform.Window) == null)
@@ -29,9 +30,5 @@ public sealed class Move32 : BaseNonSA
 		var node = Find(context.Node.Next, context.Result, context.Operand1, transform.Window);
 
 		node.ReplaceOperand(context.Result, context.Operand1);
-
-		Debug.Assert(!context.Result.IsUsed);
-
-		context.SetNop();
 	}
 }

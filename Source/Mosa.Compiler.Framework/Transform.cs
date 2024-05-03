@@ -48,6 +48,8 @@ public sealed class Transform
 
 	public bool IsLowerCodeSize => Options.HasFlag(TransformStageOption.ReduceCodeSize);
 
+	public bool IsSSAEnabled { get; private set; } = false;
+
 	public bool IsTraceTransforms = false;
 
 	#endregion Properties
@@ -144,6 +146,8 @@ public sealed class Transform
 		MulSignedInstruction = Is32BitPlatform ? IR.MulSigned32 : IR.MulSigned64;
 		MulUnsignedInstruction = Is32BitPlatform ? IR.MulUnsigned32 : IR.MulUnsigned64;
 		BranchInstruction = Is32BitPlatform ? IR.Branch32 : IR.Branch64;
+
+		IsSSAEnabled = Compiler.MosaSettings.SSA;
 
 		Options = TransformStageOption.None;
 
