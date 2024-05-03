@@ -8,6 +8,8 @@ public sealed class Move32PropagateConstant : BaseTransform
 	{
 	}
 
+	public override int Priority => 40;
+
 	public override bool Match(Context context, Transform transform)
 	{
 		if (!context.Result.IsDefinedOnce)

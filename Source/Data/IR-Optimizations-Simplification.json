@@ -46,7 +46,7 @@
 			"Name": "MoveObject",
 			"SubName": "Coalescing",
 			"Expression": "IR.MoveObject (IR.MoveObject a)",
-			"Filter": "",
+			"Filter": "!IsCPURegister(a)",
 			"Result": "(IR.MoveObject a)",
 			"Priority": "25"
 		},
@@ -55,7 +55,7 @@
 			"Name": "MoveManagedPointer",
 			"SubName": "Coalescing",
 			"Expression": "IR.MoveManagedPointer (IR.MoveManagedPointer a)",
-			"Filter": "",
+			"Filter": "!IsCPURegister(a)",
 			"Result": "(IR.MoveManagedPointer a)",
 			"Priority": "25"
 		},
