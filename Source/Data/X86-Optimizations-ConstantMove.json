@@ -13,7 +13,7 @@
 			"Name": "Add32",
 			"SubName": "",
 			"Expression": "X86.Add32 a (X86.Mov32 c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Add32 a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -23,7 +23,7 @@
 			"Name": "Sub32",
 			"SubName": "",
 			"Expression": "X86.Sub32 a (X86.Mov32 c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Sub32 a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -33,7 +33,7 @@
 			"Name": "And32",
 			"SubName": "",
 			"Expression": "X86.And32 a (X86.Mov32 c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.And32 a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -43,7 +43,7 @@
 			"Name": "Or32",
 			"SubName": "",
 			"Expression": "X86.Or32 a (X86.Mov32 c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Or32 a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -53,7 +53,7 @@
 			"Name": "Xor32",
 			"SubName": "",
 			"Expression": "X86.Xor32 a (X86.Mov32 c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Xor32 a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -63,7 +63,7 @@
 			"Name": "Sar32",
 			"SubName": "",
 			"Expression": "X86.Sar32 a (X86.Mov32 c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Sar32 a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -73,7 +73,7 @@
 			"Name": "Shl32",
 			"SubName": "",
 			"Expression": "X86.Shl32 a (X86.Mov32 c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Shl32 a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -83,7 +83,7 @@
 			"Name": "Shr32",
 			"SubName": "",
 			"Expression": "X86.Shr32 a (X86.Mov32 c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X86.Shr32 a c)",
 			"Variations": "No",
 			"Log": "No"

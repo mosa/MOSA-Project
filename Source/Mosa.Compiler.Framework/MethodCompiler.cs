@@ -194,6 +194,8 @@ public sealed class MethodCompiler
 
 	public int? MethodTraceLevel { get; }
 
+	public bool IsTraceTransforms => NotifyTranformTraceHandler != null || NotifyInstructionTraceHandler != null;
+
 	#endregion Properties
 
 	#region Properties - Operand

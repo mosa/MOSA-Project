@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 
@@ -46,13 +45,13 @@ public abstract class X86Instruction : BasePlatformInstruction
 			ConditionCode.Zero => 0x4, // Zero (ZF = 1)
 			ConditionCode.NotZero => 0x5, // NotEqual (ZF = 0)
 			ConditionCode.GreaterOrEqual => 0xD, // GreaterOrEqual (SF = OF)
-			ConditionCode.Greater => 0xF, // GreaterThan (ZF = 0 and SF = OF)
+			ConditionCode.Greater => 0xF, // Greater (ZF = 0 and SF = OF)
 			ConditionCode.LessOrEqual => 0xE, // LessOrEqual (ZF = 1 or SF <> OF)
 			ConditionCode.Less => 0xC, // LessThan (SF <> OF)
 			ConditionCode.UnsignedGreaterOrEqual => 0x3, // UnsignedGreaterOrEqual (CF = 0)
-			ConditionCode.UnsignedGreater => 0x7, // UnsignedGreaterThan (CF = 0 & ZF = 0)
+			ConditionCode.UnsignedGreater => 0x7, // UnsignedGreater (CF = 0 & ZF = 0)
 			ConditionCode.UnsignedLessOrEqual => 0x6, // UnsignedLessOrEqual (CF = 1 or ZF = 1)
-			ConditionCode.UnsignedLess => 0x2, // UnsignedLessThan (CF = 1)
+			ConditionCode.UnsignedLess => 0x2, // UnsignedLess (CF = 1)
 			ConditionCode.Signed => 0x8, // Signed (SF = 1)
 			ConditionCode.NotSigned => 0x9, // NotSigned (SF = 0)
 			ConditionCode.Carry => 0x2, // Carry (CF = 1)

@@ -24,6 +24,8 @@ public class Operand
 
 	public bool IsAt => Token != null && Token.TokenType == TokenType.At;
 
+	public bool IsDollar => Token != null && Token.TokenType == TokenType.Dollar;
+
 	public bool IsPercent => Token != null && Token.TokenType == TokenType.Percent;
 
 	public bool IsInteger => Token != null && Token.TokenType == TokenType.IntegerConstant;
@@ -100,6 +102,8 @@ public class Operand
 			return $"{Index} : {Node}";
 		else if (IsMethod)
 			return $"{Index} : {Method}";
+		else if (IsDollar)
+			return $"{Index} : {LabelName}";
 		else
 			return $"{Index} : {Token}";
 	}

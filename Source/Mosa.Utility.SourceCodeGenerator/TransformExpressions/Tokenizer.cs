@@ -148,6 +148,10 @@ public static class Tokenizer
 			{
 				tokens.Add(new Token(TokenType.Percent, index++, "%"));
 			}
+			else if (c == '^')
+			{
+				tokens.Add(new Token(TokenType.Top, index++, "^"));
+			}
 			else
 			{
 				throw new CompilerException($"tokensizer: syntax error at {index}");

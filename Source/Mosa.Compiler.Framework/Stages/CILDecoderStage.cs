@@ -100,6 +100,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 	private TraceLog trace;
 
+	private Operand ReturnOperand;
+
 	#endregion Data Members
 
 	#region Overrides Methods
@@ -130,6 +132,8 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		CreateParameters();
 
+		CreateReturnOperand();
+
 		CollectTargets();
 
 		CreateBasicBlocks();
@@ -140,13 +144,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 
 		CreateInstructions();
 
-		var epilogueBlock = BasicBlocks.EpilogueBlock;
-
-		if (epilogueBlock != null)
-		{
-			var epilogue = new Context(epilogueBlock.First);
-			epilogue.AppendInstruction(IR.Epilogue);
-		}
+		PopulateEpilogueBlock();
 
 		MethodCompiler.ProtectedRegions = ProtectedRegion.CreateProtectedRegions(BasicBlocks, Method.ExceptionHandlers);
 
@@ -161,6 +159,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		Targets = null;
 		trace = null;
+		ReturnOperand = null;
 	}
 
 	#endregion Overrides Methods
@@ -216,6 +215,20 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			var operand = methodCompiler.Parameters.Allocate(primitiveType, elementType, parameter.Name, offset, size, parameter.ParameterType);
 
 			offset += (int)Alignment.AlignUp(size, methodCompiler.Architecture.NativePointerSize);
+		}
+	}
+
+	public void CreateReturnOperand()
+	{
+		if (Method.Signature.ReturnType.IsVoid)
+		{
+			ReturnOperand = null;
+		}
+		else
+		{
+			var underlyingType = MosaTypeLayout.GetUnderlyingType(Method.Signature.ReturnType);
+
+			ReturnOperand = MethodCompiler.AllocateVirtualRegisterOrStackLocal(underlyingType);
 		}
 	}
 
@@ -572,6 +585,61 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 				block = null;
 			}
 		}
+	}
+
+	private void PopulateEpilogueBlock()
+	{
+		var epilogueBlock = BasicBlocks.EpilogueBlock;
+
+		if (epilogueBlock == null)
+			return;
+
+		var context = new Context(epilogueBlock.First);
+
+		if (!Method.Signature.ReturnType.IsVoid)
+		{
+			var underlyingType = MosaTypeLayout.GetUnderlyingType(Method.Signature.ReturnType);
+			var primitiveType = MethodCompiler.GetPrimitiveType(underlyingType);
+
+			switch (primitiveType)
+			{
+				case PrimitiveType.Int32:
+					context.AppendInstruction(IR.SetReturn32, null, ReturnOperand);
+					break;
+
+				case PrimitiveType.Int64:
+					context.AppendInstruction(IR.SetReturn64, null, ReturnOperand);
+					break;
+
+				case PrimitiveType.R4:
+					context.AppendInstruction(IR.SetReturnR4, null, ReturnOperand);
+					break;
+
+				case PrimitiveType.R8:
+					context.AppendInstruction(IR.SetReturnR8, null, ReturnOperand);
+					break;
+
+				case PrimitiveType.Object:
+					context.AppendInstruction(IR.SetReturnObject, null, ReturnOperand);
+					break;
+
+				case PrimitiveType.ValueType:
+					context.AppendInstruction(IR.SetReturnCompound, null, ReturnOperand);
+					break;
+
+				case PrimitiveType.ManagedPointer when Is32BitPlatform:
+					context.AppendInstruction(IR.SetReturn32, null, ReturnOperand);
+					break;
+
+				case PrimitiveType.ManagedPointer when Is64BitPlatform:
+					context.AppendInstruction(IR.SetReturn64, null, ReturnOperand);
+					break;
+
+				default: break;
+			}
+		}
+
+		context.AppendInstruction(IR.Epilogue);
 	}
 
 	#endregion Initialize Methods
@@ -4435,35 +4503,35 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 			switch (entry.PrimitiveType)
 			{
 				case PrimitiveType.Int32:
-					context.AppendInstruction(IR.SetReturn32, null, entry.Operand);
+					context.AppendInstruction(IR.Move32, ReturnOperand, entry.Operand);
 					break;
 
 				case PrimitiveType.Int64:
-					context.AppendInstruction(IR.SetReturn64, null, entry.Operand);
+					context.AppendInstruction(IR.Move64, ReturnOperand, entry.Operand);
 					break;
 
 				case PrimitiveType.R4:
-					context.AppendInstruction(IR.SetReturnR4, null, entry.Operand);
+					context.AppendInstruction(IR.MoveR4, ReturnOperand, entry.Operand);
 					break;
 
 				case PrimitiveType.R8:
-					context.AppendInstruction(IR.SetReturnR8, null, entry.Operand);
+					context.AppendInstruction(IR.MoveR8, ReturnOperand, entry.Operand);
 					break;
 
 				case PrimitiveType.Object:
-					context.AppendInstruction(IR.SetReturnObject, null, entry.Operand);
+					context.AppendInstruction(IR.MoveObject, ReturnOperand, entry.Operand);
 					break;
 
 				case PrimitiveType.ValueType:
-					context.AppendInstruction(IR.SetReturnCompound, null, entry.Operand);
+					context.AppendInstruction(IR.MoveCompound, ReturnOperand, entry.Operand);
 					break;
 
 				case PrimitiveType.ManagedPointer when Is32BitPlatform:
-					context.AppendInstruction(IR.SetReturn32, null, entry.Operand);
+					context.AppendInstruction(IR.MoveManagedPointer, ReturnOperand, entry.Operand);
 					break;
 
 				case PrimitiveType.ManagedPointer when Is64BitPlatform:
-					context.AppendInstruction(IR.SetReturn64, null, entry.Operand);
+					context.AppendInstruction(IR.MoveManagedPointer, ReturnOperand, entry.Operand);
 					break;
 
 				default: return false;

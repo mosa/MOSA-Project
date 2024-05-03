@@ -25,7 +25,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	protected bool AreCPURegistersAllocated;
 
 	protected int MaxPasses;
-	protected int Steps;
 
 	protected readonly Dictionary<string, Counter> TransformCounters = new();
 
@@ -49,9 +48,9 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
-		UpdateCounter("Transform.Total", Transform.TotalTransformCount);
-		UpdateCounter("Transform.Transforms", TransformCount);
-		UpdateCounter("Transform.Optimizations", OptimizationCount);
+		UpdateCounter("Transform.Count", Transform.TransformCount);
+		UpdateCounter("Transform.Count.Transforms", TransformCount);
+		UpdateCounter("Transform.Count.Optimizations", OptimizationCount);
 
 		UpdateCounter(TransformCountStage, TransformCount);
 		UpdateCounter(OptimizationCountStage, OptimizationCount);
@@ -72,12 +71,11 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
 
-		Steps = 0;
-		MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
-
 		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
 		Transform.SetLogs(Trace, SpecialTrace);
+
+		Transform.TraceInstructions();
 
 		Setup();
 
@@ -252,8 +250,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 				if (MethodCompiler.Statistics)
 					UpdateCounter(transform.Name, 1);
 
-				MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
-
 				if (MosaSettings.FullCheckMode)
 					FullCheck(false);
 
@@ -277,8 +273,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 			if (updated)
 			{
-				MethodCompiler.CreateTranformInstructionTrace(this, Steps++);
-
 				if (MosaSettings.FullCheckMode)
 					FullCheck(false);
 

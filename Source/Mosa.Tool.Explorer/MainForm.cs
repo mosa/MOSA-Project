@@ -13,6 +13,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
+using Reko.Core;
 using static Mosa.Utility.Configuration.MosaSettings;
 
 namespace Mosa.Tool.Explorer;
@@ -314,19 +315,19 @@ public partial class MainForm : Form
 		return entry;
 	}
 
-	private static List<string> ExtractLabels(List<string> lines)
+	private static List<string> ExtractLabels(List<InstructionRecord> records)
 	{
-		if (lines == null)
+		if (records == null)
 			return null;
 
 		var labels = new List<string>();
 
-		foreach (var line in lines)
+		foreach (var record in records)
 		{
-			if (!line.StartsWith("Block #"))
-				continue;
-
-			labels.Add(line.Substring(line.IndexOf("L_")));
+			if (record.IsStartBlock)
+			{
+				labels.Add(record.BlockLabel);
+			}
 		}
 
 		return labels;
@@ -581,13 +582,25 @@ public partial class MainForm : Form
 		{
 			for (int i = 1; i < pipeline.Count; i += 2)
 			{
-				pipeline.Insert(i, new GraphVizStage());
+				pipeline.Insert(i, new ControlFlowGraphStage());
 			}
 		}
 		else
 		{
-			pipeline.InsertAfterLast<FastBlockOrderingStage>(new GraphVizStage());
-			pipeline.Add(new GraphVizStage());
+			if (MosaSettings.InlineMethods || MosaSettings.InlineExplicit)
+			{
+				pipeline.InsertBefore<InlineStage>(new ControlFlowGraphStage());
+				pipeline.InsertAfterLast<InlineStage>(new ControlFlowGraphStage());
+			}
+
+			if (MosaSettings.SSA)
+			{
+				pipeline.InsertBefore<EnterSSAStage>(new DominanceAnalysisStage());
+				pipeline.InsertBefore<EnterSSAStage>(new ControlFlowGraphStage());
+			}
+
+			pipeline.InsertAfterLast<FastBlockOrderingStage>(new ControlFlowGraphStage());
+			pipeline.Add(new ControlFlowGraphStage());
 		}
 	}
 
@@ -611,7 +624,7 @@ public partial class MainForm : Form
 		return cbInstructionLabels.SelectedItem as string;
 	}
 
-	private List<string> GetCurrentInstructionLines()
+	private List<InstructionRecord> GetCurrentInstructionLines()
 	{
 		if (CurrentMethodData == null)
 			return null;
@@ -650,7 +663,7 @@ public partial class MainForm : Form
 		return cbTransformLabels.SelectedItem as string;
 	}
 
-	private List<string> GetCurrentTransformLines()
+	private List<InstructionRecord> GetCurrentTransformRecords()
 	{
 		if (CurrentMethodData == null)
 			return null;
@@ -1099,12 +1112,12 @@ public partial class MainForm : Form
 
 	private void UpdateInstructionLabels()
 	{
-		var lines = GetCurrentInstructionLines();
+		var records = GetCurrentInstructionLines();
 
 		cbInstructionLabels.Items.Clear();
 		cbInstructionLabels.Items.Add("All");
 
-		var labels = ExtractLabels(lines);
+		var labels = ExtractLabels(records);
 
 		if (labels != null)
 		{
@@ -1119,18 +1132,18 @@ public partial class MainForm : Form
 		if (CurrentMethod == null)
 			return;
 
-		var lines = GetCurrentInstructionLines();
+		var records = GetCurrentInstructionLines();
 		var label = GetCurrentInstructionLabel();
 
 		SetStatus(CurrentMethod.FullName);
 
-		if (lines == null)
+		if (records == null)
 			return;
 
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbInstructions.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked, removeIRNop.Checked);
+		tbInstructions.Text = FormatInstructions.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
 	}
 
 	private void UpdateInstructionStages()
@@ -1230,12 +1243,12 @@ public partial class MainForm : Form
 
 	private void UpdateTransformLabels()
 	{
-		var lines = GetCurrentTransformLines();
+		var records = GetCurrentTransformRecords();
 
 		cbTransformLabels.Items.Clear();
 		cbTransformLabels.Items.Add("All");
 
-		var labels = ExtractLabels(lines);
+		var labels = ExtractLabels(records);
 
 		if (labels != null)
 		{
@@ -1250,16 +1263,16 @@ public partial class MainForm : Form
 		if (CurrentMethod == null)
 			return;
 
-		var lines = GetCurrentTransformLines();
+		var records = GetCurrentTransformRecords();
 		var label = GetCurrentTransformLabel();
 
-		if (lines == null)
+		if (records == null)
 			return;
 
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbTransforms.Text = MethodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked, removeIRNop.Checked);
+		tbTransforms.Text = FormatInstructions.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
 	}
 
 	private void UpdateTransformStages()
@@ -1438,7 +1451,7 @@ public partial class MainForm : Form
 				continue;
 			}
 
-			if (parts[0].StartsWith(" "))
+			if (parts[0].StartsWith(' '))
 			{
 				entry.After = part1;
 				continue;
@@ -1446,7 +1459,7 @@ public partial class MainForm : Form
 
 			entry = new TranformEntry
 			{
-				ID = Convert.ToInt32(parts[0].Trim()) + 1,
+				ID = Convert.ToInt32(parts[0].Trim()),
 				Name = part1,
 				Pass = pass
 			};

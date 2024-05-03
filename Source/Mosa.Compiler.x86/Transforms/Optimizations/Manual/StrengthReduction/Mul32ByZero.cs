@@ -15,7 +15,7 @@ public sealed class Mul32ByZero : BaseTransform
 		if (!(context.Operand1.IsConstantZero || context.Operand2.IsConstantZero))
 			return false;
 
-		if (!(AreStatusFlagsUsed(context.Instruction, context.Node.Next) == TriState.No))
+		if (!(AreStatusFlagsUsed(context.Instruction, context.Node.Next, transform.Window) == TriState.No))
 			return false;
 
 		return true;

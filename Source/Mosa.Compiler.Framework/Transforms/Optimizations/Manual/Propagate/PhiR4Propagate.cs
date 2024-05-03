@@ -8,6 +8,8 @@ public sealed class PhiR4Propagate : BaseTransform
 	{
 	}
 
+	public override int Priority => 40;
+
 	public override bool Match(Context context, Transform transform)
 	{
 		if (context.OperandCount == 1)

@@ -27,7 +27,7 @@ public sealed class Lea64ToDec64 : BaseTransform
 		if (context.Operand1.Register == CPURegister.RSP)
 			return false;
 
-		if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
+		if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false, transform.Window) == TriState.No))
 			return false;
 
 		return true;

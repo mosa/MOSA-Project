@@ -20,7 +20,7 @@ public sealed class And32ByMax : BaseTransform
 		if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFF)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;
@@ -50,7 +50,7 @@ public sealed class And32ByMax_v1 : BaseTransform
 		if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFF)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

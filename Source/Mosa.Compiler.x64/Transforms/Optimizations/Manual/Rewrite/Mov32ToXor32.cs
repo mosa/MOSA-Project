@@ -15,7 +15,7 @@ public sealed class Mov32ToXor32 : BaseTransform
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

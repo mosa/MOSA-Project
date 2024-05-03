@@ -17,7 +17,7 @@
 			"Name": "Add##",
 			"SubName": "",
 			"Expression": "X64.Add## a (X64.Mov## c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X64.Add## a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -27,7 +27,7 @@
 			"Name": "Sub##",
 			"SubName": "",
 			"Expression": "X64.Sub## a (X64.Mov## c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X64.Sub## a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -37,7 +37,7 @@
 			"Name": "And##",
 			"SubName": "",
 			"Expression": "X64.And## a (X64.Mov## c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X64.And## a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -47,7 +47,7 @@
 			"Name": "Or##",
 			"SubName": "",
 			"Expression": "X64.Or## a (X64.Mov## c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X64.Or## a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -57,7 +57,7 @@
 			"Name": "Xor##",
 			"SubName": "",
 			"Expression": "X64.Xor## a (X64.Mov## c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X64.Xor## a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -67,7 +67,7 @@
 			"Name": "Sar##",
 			"SubName": "",
 			"Expression": "X64.Sar## a (X64.Mov## c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X64.Sar## a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -77,7 +77,7 @@
 			"Name": "Shl##",
 			"SubName": "",
 			"Expression": "X64.Shl## a (X64.Mov## c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X64.Shl## a c)",
 			"Variations": "No",
 			"Log": "No"
@@ -87,7 +87,7 @@
 			"Name": "Shr##",
 			"SubName": "",
 			"Expression": "X64.Shr## a (X64.Mov## c)",
-			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@)",
+			"Filter": "IsConstant(c) && !AreAnyStatusFlagsUsed(@, $Window)",
 			"Result": "(X64.Shr## a c)",
 			"Variations": "No",
 			"Log": "No"

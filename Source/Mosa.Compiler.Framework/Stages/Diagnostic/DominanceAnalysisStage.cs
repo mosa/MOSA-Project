@@ -3,7 +3,11 @@
 using System.Text;
 using Mosa.Compiler.Framework.Analysis;
 
+<<<<<<<< HEAD:Source/Mosa.Tool.Explorer.Avalonia/Stages/DominanceOutputStage.cs
+namespace Mosa.Tool.Explorer.Avalonia.Stages;
+========
 namespace Mosa.Compiler.Framework.Stages.Diagnostic;
+>>>>>>>> 487-wip:Source/Mosa.Compiler.Framework/Stages/Diagnostic/DominanceAnalysisStage.cs
 
 public class DominanceAnalysisStage : BaseMethodCompilerStage
 {
@@ -27,17 +31,14 @@ public class DominanceAnalysisStage : BaseMethodCompilerStage
 		foreach (var headBlock in BasicBlocks.HeadBlocks)
 		{
 			trace.Log($"Head: {headBlock}");
+
 			var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
-
-			for (int i = 0; i < BasicBlocks.Count; i++)
+			foreach (var block in BasicBlocks)
 			{
-				var block = BasicBlocks[i];
-
 				sb.Clear();
 				sb.Append($"  Block {block} : ");
 
 				var children = dominance.GetChildren(block);
-
 				if (children != null && children.Count != 0)
 				{
 					foreach (var child in children)
@@ -58,27 +59,26 @@ public class DominanceAnalysisStage : BaseMethodCompilerStage
 
 	private void OutputDiagram()
 	{
+<<<<<<<< HEAD:Source/Mosa.Tool.Explorer.Avalonia/Stages/DominanceOutputStage.cs
 		var trace = CreateTraceLog("Diagram");
-		var sb = new StringBuilder();
+========
+		var trace = CreateTraceLog("DominanceTree-graphviz");
 
+>>>>>>>> 487-wip:Source/Mosa.Compiler.Framework/Stages/Diagnostic/DominanceAnalysisStage.cs
 		trace.Log("digraph blocks {");
 
 		foreach (var headBlock in BasicBlocks.HeadBlocks)
 		{
 			var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
 
-			for (int i = 0; i < BasicBlocks.Count; i++)
+			foreach (var block in BasicBlocks)
 			{
-				var block = BasicBlocks[i];
-
 				var children = dominance.GetChildren(block);
-				if (children != null && children.Count != 0)
-				{
-					foreach (var child in children)
-					{
-						trace.Log($"\t{block} -> {child}");
-					}
-				}
+				if (children == null || children.Count == 0)
+					continue;
+
+				foreach (var child in children)
+					trace.Log($"\t{block} -> {child}");
 			}
 		}
 
@@ -95,7 +95,7 @@ public class DominanceAnalysisStage : BaseMethodCompilerStage
 			trace.Log($"Head: {headBlock}");
 			var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
 
-			for (int i = 0; i < BasicBlocks.Count; i++)
+			for (var i = 0; i < BasicBlocks.Count; i++)
 			{
 				var block = BasicBlocks[i];
 

@@ -84,6 +84,21 @@ public static class FilterParser
 			{
 				method.Parameters.Add(new Operand(token, method.Parameters.Count));
 			}
+			else if (token.TokenType == TokenType.Dollar && method.MethodName != null)
+			{
+				// peak ahead
+				var next = tokens[index];
+
+				if (next.TokenType == TokenType.Word)
+				{
+					method.Parameters.Add(new Operand(new Token(TokenType.Dollar, token.Position, next.Value), method.Parameters.Count));
+					index++; // skip word
+				}
+				else
+				{
+					throw new Exception($"parsing error {token}");
+				}
+			}
 			else if (token.TokenType == TokenType.Comma)
 			{
 				// skip

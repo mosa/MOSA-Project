@@ -111,7 +111,7 @@ public sealed class SimpleFastDominance
 					}
 				}
 
-				if (doms[b.Sequence] != newIDom || doms[b.Sequence] == null)
+				if (doms[b.Sequence] != newIDom)
 				{
 					doms[b.Sequence] = newIDom;
 					changed = true;

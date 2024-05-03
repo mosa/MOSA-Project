@@ -518,8 +518,15 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 		if (operand1.IsResolvedConstant
 			&& operand2.IsResolvedConstant
-			&& operand1.IsFloatingPoint
-			&& operand2.IsFloatingPoint
+			&& operand1.IsR4
+			&& operand2.IsR4
+			&& operand1.ConstantFloat == operand2.ConstantFloat)
+			return true;
+
+		if (operand1.IsResolvedConstant
+			&& operand2.IsResolvedConstant
+			&& operand1.IsR8
+			&& operand2.IsR8
 			&& operand1.ConstantDouble == operand2.ConstantDouble)
 			return true;
 

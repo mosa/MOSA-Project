@@ -392,6 +392,11 @@ public sealed class Node
 	public int BranchTargetsCount => BranchTargets?.Count ?? 0;
 
 	/// <summary>
+	/// Gets the PHI block count.
+	/// </summary>
+	public int PhiBlockCount => PhiBlocks?.Count ?? 0;
+
+	/// <summary>
 	/// Sets the branch target.
 	/// </summary>
 	/// <param name="block">The basic block.</param>
@@ -489,7 +494,7 @@ public sealed class Node
 		ConditionCode = ConditionCode.Undefined;
 		Options = InstructionOption.None;
 		Instruction = null;
-		Block.RemoveBranchInstruction(this);
+		Block?.RemoveBranchInstruction(this);
 		BranchTargets = null;
 		PhiBlocks = null;
 
@@ -852,11 +857,6 @@ public sealed class Node
 		if (ConditionCode != ConditionCode.Undefined)
 		{
 			sb.Append($" [{ConditionCode.GetConditionString()}]");
-		}
-
-		if (Instruction.Modifier != null)
-		{
-			sb.Append($" [{Instruction.Modifier}]");
 		}
 
 		for (var i = 0; i < ResultCount; i++)
@@ -1375,7 +1375,7 @@ public sealed class Node
 	/// <param name="result2">The result2.</param>
 	public void SetInstruction2(BaseInstruction instruction, Operand result, Operand result2)
 	{
-		SetInstruction(instruction, 1, 2);
+		SetInstruction(instruction, 0, 2);
 		Result = result;
 		Result2 = result2;
 	}

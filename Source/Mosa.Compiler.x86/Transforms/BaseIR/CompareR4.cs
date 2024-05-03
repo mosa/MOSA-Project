@@ -18,8 +18,6 @@ public sealed class CompareR4 : BaseIRTransform
 	{
 		Debug.Assert(context.ConditionCode != ConditionCode.Undefined);
 
-		//FloatCompare(context, X86.Ucomiss);
-
 		var instruction = X86.Ucomiss;
 
 		var result = context.Result;
@@ -34,20 +32,38 @@ public sealed class CompareR4 : BaseIRTransform
 
 		if (condition == ConditionCode.Equal)
 		{
+			var nextBlock = transform.Split(context);
+			var newBlocks = transform.CreateNewBlockContexts(2, context.Label);
+
 			context.SetInstruction(instruction, null, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, ConditionCode.NoParity, result);
-			context.AppendInstruction(X86.Mov32, v1, Operand.Constant32_0);
-			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, v1);
-			context.AppendInstruction(X86.Movzx8To32, result, result);
+			context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+
+			newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.Equal, result);
+			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
+
+			newBlocks[1].AppendInstruction(X86.Movzx8To32, result, result);
+			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
+
 			return;
 		}
 		else if (condition == ConditionCode.NotEqual)
 		{
+			var nextBlock = transform.Split(context);
+			var newBlocks = transform.CreateNewBlockContexts(2, context.Label);
+
 			context.SetInstruction(instruction, null, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, ConditionCode.Parity, result);
-			context.AppendInstruction(X86.Mov32, v1, Operand.Constant32_1);
-			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, v1);
-			context.AppendInstruction(X86.Movzx8To32, result, result);
+			context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+
+			newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
+			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
+
+			newBlocks[1].AppendInstruction(X86.Movzx8To32, result, result);
+			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
+
 			return;
 		}
 		else if (condition is ConditionCode.Greater or ConditionCode.UnsignedGreater)
@@ -66,15 +82,15 @@ public sealed class CompareR4 : BaseIRTransform
 		}
 		else if (condition is ConditionCode.GreaterOrEqual or ConditionCode.UnsignedGreaterOrEqual)
 		{
-			context.SetInstruction(instruction, null, operand2, operand1);
-			context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, v1);
+			context.SetInstruction(instruction, null, operand1, operand2);
+			context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, v1);
 			context.AppendInstruction(X86.Movzx8To32, result, v1);
 			return;
 		}
 		else if (condition is ConditionCode.LessOrEqual or ConditionCode.UnsignedLessOrEqual)
 		{
 			context.SetInstruction(instruction, null, operand2, operand1);
-			context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, v1);
+			context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, v1);
 			context.AppendInstruction(X86.Movzx8To32, result, v1);
 			return;
 		}

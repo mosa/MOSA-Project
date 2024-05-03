@@ -409,7 +409,7 @@
 			"Name": "ExceptionEnd",
 			"FamilyName": "IR",
 			"ResultCount": 0,
-			"OperandCount": 1,
+			"OperandCount": 0,
 			"IgnoreDuringCodeGeneration": "true"
 		},
 		{

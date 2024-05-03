@@ -23,6 +23,9 @@ public sealed class MoveManagedPointerCoalescing : BaseTransform
 		if (context.Operand1.Definitions[0].Instruction != IR.MoveManagedPointer)
 			return false;
 
+		if (IsCPURegister(context.Operand1.Definitions[0].Operand1))
+			return false;
+
 		return true;
 	}
 

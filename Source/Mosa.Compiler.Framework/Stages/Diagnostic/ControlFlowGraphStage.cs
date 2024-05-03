@@ -2,23 +2,25 @@
 
 namespace Mosa.Compiler.Framework.Stages.Diagnostic;
 
+<<<<<<<< HEAD:Source/Mosa.Compiler.Framework/Stages/Diagnostic/GraphVizStage.cs
 public class GraphVizStage : BaseMethodCompilerStage
+========
+public class ControlFlowGraphStage : BaseMethodCompilerStage
+>>>>>>>> 487-wip:Source/Mosa.Compiler.Framework/Stages/Diagnostic/ControlFlowGraphStage.cs
 {
-	private const int TraceLevel = 6;
-
 	protected override void Run()
 	{
-		if (!IsTraceable(TraceLevel))
-			return;
+		CreateDiagram();
+	}
 
-		var trace = CreateTraceLog();
+	protected void CreateDiagram()
+	{
+		var trace = CreateTraceLog("graphviz");
 
 		trace.Log("digraph blocks {");
 
 		foreach (var block in BasicBlocks)
 		{
-			//trace.Log("\t" + block);
-
 			foreach (var next in block.NextBlocks)
 			{
 				trace.Log($"\t{block} -> {next}");

@@ -29,7 +29,7 @@ public sealed class Add32By1Not32 : BaseTransform
 		if (!IsVirtualRegister(context.Operand1.Definitions[0].Operand1))
 			return false;
 
-		if (IsCarryFlagUsed(context))
+		if (IsCarryFlagUsed(context, transform.Window))
 			return false;
 
 		return true;
@@ -68,7 +68,7 @@ public sealed class Add32By1Not32_v1 : BaseTransform
 		if (!IsVirtualRegister(context.Operand2.Definitions[0].Operand1))
 			return false;
 
-		if (IsCarryFlagUsed(context))
+		if (IsCarryFlagUsed(context, transform.Window))
 			return false;
 
 		return true;

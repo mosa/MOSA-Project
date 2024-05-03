@@ -26,7 +26,7 @@ public sealed class Sar32 : BaseTransform
 		if (!IsConstant(context.Operand2.Definitions[0].Operand1))
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;

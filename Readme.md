@@ -4,7 +4,7 @@
 
 [build-status-image]: https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg?branch=master
 [build-status]: https://github.com/mosa/MOSA-Project/actions
-[test-status-image]: https://github.com/mosa/MOSA-Project/workflows/Unit%20Tests/badge.svg
+[test-status-image]: https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg
 [test-status]: https://github.com/mosa/MOSA-Project/actions
 [pull-requests-image]: http://www.issuestats.com/github/mosa/mosa-project/badge/pr
 [pull-requests]: http://www.issuestats.com/github/mosa/mosa-project

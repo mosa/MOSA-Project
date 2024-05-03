@@ -19,7 +19,7 @@ public sealed class Sar64ZeroValue : BaseTransform
 		if (!context.Operand1.IsConstantZero)
 			return false;
 
-		if (AreAnyStatusFlagsUsed(context))
+		if (AreAnyStatusFlagsUsed(context, transform.Window))
 			return false;
 
 		return true;
