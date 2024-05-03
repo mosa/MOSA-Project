@@ -2,11 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Stages.Diagnostic;
 
-<<<<<<<< HEAD:Source/Mosa.Compiler.Framework/Stages/Diagnostic/GraphVizStage.cs
-public class GraphVizStage : BaseMethodCompilerStage
-========
 public class ControlFlowGraphStage : BaseMethodCompilerStage
->>>>>>>> 487-wip:Source/Mosa.Compiler.Framework/Stages/Diagnostic/ControlFlowGraphStage.cs
 {
 	protected override void Run()
 	{

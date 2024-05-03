@@ -2,12 +2,7 @@
 
 using System.Text;
 using Mosa.Compiler.Framework.Analysis;
-
-<<<<<<<< HEAD:Source/Mosa.Tool.Explorer.Avalonia/Stages/DominanceOutputStage.cs
-namespace Mosa.Tool.Explorer.Avalonia.Stages;
-========
-namespace Mosa.Compiler.Framework.Stages.Diagnostic;
->>>>>>>> 487-wip:Source/Mosa.Compiler.Framework/Stages/Diagnostic/DominanceAnalysisStage.cs
+using Mosa.Compiler.Framework;
 
 public class DominanceAnalysisStage : BaseMethodCompilerStage
 {
@@ -59,12 +54,8 @@ public class DominanceAnalysisStage : BaseMethodCompilerStage
 
 	private void OutputDiagram()
 	{
-<<<<<<<< HEAD:Source/Mosa.Tool.Explorer.Avalonia/Stages/DominanceOutputStage.cs
-		var trace = CreateTraceLog("Diagram");
-========
 		var trace = CreateTraceLog("DominanceTree-graphviz");
 
->>>>>>>> 487-wip:Source/Mosa.Compiler.Framework/Stages/Diagnostic/DominanceAnalysisStage.cs
 		trace.Log("digraph blocks {");
 
 		foreach (var headBlock in BasicBlocks.HeadBlocks)
