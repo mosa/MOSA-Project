@@ -142,7 +142,7 @@ jobs:
          
   macos-build:
     name: MacOS Build
-    runs-on: macos-latest
+    runs-on: macos-13
     timeout-minutes: 15
     steps:
       - name: Set net8.0
@@ -227,7 +227,7 @@ jobs:
         optimization: [0,1,2,3,4,5,6,7,8,9]
       fail-fast: false
     name: MacOS - Unit Test -o${{ matrix.optimization }}
-    runs-on: macos-latest
+    runs-on: macos-13
     timeout-minutes: 15
     needs: macos-build
     steps:
@@ -319,7 +319,7 @@ jobs:
         optimization: [0,1,2,3,4,5,6,7,8,9]
       fail-fast: false
     name: MacOS - Demo Test -o${{ matrix.optimization }}
-    runs-on: macos-latest
+    runs-on: macos-13
     timeout-minutes: 15
     needs: macos-build
     steps:
