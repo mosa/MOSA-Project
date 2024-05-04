@@ -18,6 +18,9 @@ public sealed class MoveR8Propagate : BaseTransform
 		if (!context.Operand1.IsDefinedOnce)
 			return false;
 
+		if (context.Operand1.IsPhysicalRegister)
+			return false;
+
 		return true;
 	}
 
