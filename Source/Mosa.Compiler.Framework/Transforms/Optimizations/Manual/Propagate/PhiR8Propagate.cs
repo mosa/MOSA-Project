@@ -15,6 +15,9 @@ public sealed class PhiR8Propagate : BaseTransform
 		if (context.OperandCount == 1)
 			return true;
 
+		if (context.Operand1.IsPhysicalRegister)
+			return false;
+
 		var operand = context.Operand1;
 
 		foreach (var op in context.Operands)
