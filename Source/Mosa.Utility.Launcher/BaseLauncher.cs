@@ -30,24 +30,19 @@ public class BaseLauncher
 
 	protected void OutputStatus(string status)
 	{
-		if (string.IsNullOrEmpty(status)) return;
+		if (string.IsNullOrEmpty(status))
+			return;
 
 		OutputEvent(status);
 	}
 
-	protected virtual void OutputEvent(string status)
-	{
-		CompilerHooks.NotifyStatus?.Invoke(status);
-	}
+	protected virtual void OutputEvent(string status) => CompilerHooks.NotifyStatus?.Invoke(status);
 
-	protected static byte[] GetResource(string path, string name)
-	{
-		return GetResource($"{path
-			.Replace(".", "._")
-			.Replace(@"\", "._")
-			.Replace("/", "._")
-			.Replace("-", "_")}.{name}");
-	}
+	protected static byte[] GetResource(string path, string name) => GetResource($"{path
+		.Replace(".", "._")
+		.Replace(@"\", "._")
+		.Replace("/", "._")
+		.Replace("-", "_")}.{name}");
 
 	protected Process CreateApplicationProcess(string app, string args)
 	{

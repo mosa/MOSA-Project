@@ -45,7 +45,6 @@ resharper_csharp_allow_comment_after_lbrace = true
 resharper_csharp_blank_lines_around_field = 0
 resharper_csharp_blank_lines_around_invocable = 0
 resharper_csharp_blank_lines_around_region = 0
-resharper_csharp_case_block_braces = next_line_shifted_2
 resharper_csharp_indent_statement_pars = outside
 resharper_csharp_max_line_length = 15750
 resharper_csharp_remove_blank_lines_near_braces_in_code = false

@@ -13,6 +13,34 @@ public class SimpleTCP
 
 	public delegate void OnStatusUpdateHandler(string status);
 
+	#region Public Properties
+
+	public OnDataAvailableHandler OnDataAvailable { get; set; }
+
+	public OnStatusUpdateHandler OnStatusUpdate { get; set; }
+
+	public bool IsConnected => tcpClient is { Connected: true };
+
+	public bool HasData
+	{
+		get
+		{
+			lock (receivedData)
+				return receivedData.Count > 0;
+		}
+	}
+
+	public bool HasLine
+	{
+		get
+		{
+			lock (receivedData)
+				return lines > 0;
+		}
+	}
+
+	#endregion Public Properties
+
 	#region Private Members
 
 	private const byte NewLine = (byte)'\n';
@@ -22,54 +50,13 @@ public class SimpleTCP
 	private NetworkStream stream;
 
 	private readonly byte[] receiveBuffer = new byte[4096];
-	private readonly Queue<byte> receivedData = new();
+	private readonly Queue<byte> receivedData = new Queue<byte>();
 
 	private static readonly byte[] Empty = Array.Empty<byte>();
 
-	private volatile int lines = 0;
+	private volatile int lines;
 
 	#endregion Private Members
-
-	#region Public Properties
-
-	public OnDataAvailableHandler OnDataAvailable { get; set; }
-
-	public OnStatusUpdateHandler OnStatusUpdate { get; set; }
-
-	public bool IsConnected
-	{
-		get
-		{
-			if (tcpClient == null)
-				return false;
-
-			return tcpClient.Connected;
-		}
-	}
-
-	public bool HasData
-	{
-		get
-		{
-			lock (receivedData)
-			{
-				return receivedData.Count > 0;
-			}
-		}
-	}
-
-	public bool HasLine
-	{
-		get
-		{
-			lock (receivedData)
-			{
-				return lines > 0;
-			}
-		}
-	}
-
-	#endregion Public Properties
 
 	#region Public Methods
 
@@ -125,7 +112,6 @@ public class SimpleTCP
 		}
 		catch (SocketException)
 		{
-			//Output($"Exception: {e}");
 			return false;
 		}
 
@@ -160,11 +146,9 @@ public class SimpleTCP
 			stream = tcpClient.GetStream();
 			SetReadCallBack();
 		}
-		catch (Exception e)
+		catch (Exception)
 		{
 			tcpClient = null;
-			//Output($"Exception: {e}");
-
 			return false;
 		}
 
@@ -187,10 +171,7 @@ public class SimpleTCP
 		}
 	}
 
-	public void Send(byte[] data)
-	{
-		stream.Write(data);
-	}
+	public void Send(byte[] data) => stream.Write(data);
 
 	public void Send(string s)
 	{
@@ -198,10 +179,7 @@ public class SimpleTCP
 			stream.WriteByte((byte)c);
 	}
 
-	public void Send(char c)
-	{
-		stream.WriteByte((byte)c);
-	}
+	public void Send(char c) => stream.WriteByte((byte)c);
 
 	public int GetByte()
 	{
@@ -211,7 +189,6 @@ public class SimpleTCP
 				return -1;
 
 			var b = receivedData.Dequeue();
-
 			if (b == NewLine)
 				Interlocked.Decrement(ref lines);
 
@@ -224,7 +201,6 @@ public class SimpleTCP
 		lock (receivedData)
 		{
 			var count = receivedData.Count;
-
 			if (count == 0)
 				return Empty;
 
@@ -244,12 +220,7 @@ public class SimpleTCP
 		}
 	}
 
-	public string GetFullLine()
-	{
-		var bytes = GetBytes();
-
-		return Encoding.Default.GetString(bytes);
-	}
+	public string GetFullLine() => Encoding.Default.GetString(GetBytes());
 
 	public string GetLine()
 	{
@@ -258,11 +229,7 @@ public class SimpleTCP
 		while (true)
 		{
 			var b = GetByte();
-
-			if (b < 0)
-				break;
-
-			if (b == NewLine)
+			if (b is < 0 or NewLine)
 				break;
 
 			sb.Append((char)b);
@@ -275,21 +242,9 @@ public class SimpleTCP
 
 	#region Private Methods
 
-	private void Output(string status)
-	{
-		if (OnStatusUpdate == null)
-			return;
+	private void Output(string status) => OnStatusUpdate?.Invoke(status);
 
-		OnStatusUpdate(status);
-	}
-
-	private void TriggerOnData()
-	{
-		if (OnDataAvailable == null)
-			return;
-
-		OnDataAvailable();
-	}
+	private void TriggerOnData() => OnDataAvailable?.Invoke();
 
 	private void SetReadCallBack()
 	{
@@ -317,9 +272,8 @@ public class SimpleTCP
 				}
 			}
 		}
-		catch (Exception e)
+		catch (Exception)
 		{
-			//Output($"Exception: {e}");
 			Disconnect();
 		}
 		finally
