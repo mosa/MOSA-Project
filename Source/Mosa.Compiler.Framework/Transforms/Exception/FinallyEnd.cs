@@ -15,12 +15,12 @@ public sealed class FinallyEnd : BaseExceptionTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var exceptionManager = transform.GetManager<ExceptionManager>();
-
 		var naturalBlock = TraverseBackToNativeBlock(context.Block);
 		var handler = FindImmediateExceptionHandler(transform, naturalBlock.Label);
 
 		var handlerBlock = transform.BasicBlocks.GetByLabel(handler.HandlerStart);
+
+		var exceptionManager = transform.GetManager<ExceptionManager>();
 
 		var exceptionVirtualRegister = exceptionManager.ExceptionVirtualRegisters[handlerBlock];
 		var leaveTargetRegister = exceptionManager.LeaveTargetVirtualRegisters[handlerBlock];

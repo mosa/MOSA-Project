@@ -18,7 +18,10 @@ public sealed class Move32 : BaseNonSA
 		if (!context.Result.IsUsedOnce)
 			return false;
 
-		if (Find(context.Node.Next, context.Result, context.Operand1, transform.Window) == null)
+		//if (IsWithinHandler(transform, context.Result))
+		//	return false;
+
+		if (FindNextUsed(context.Node.Next, context.Result, context.Operand1, transform.Window) == null)
 			return false;
 
 		return true;
@@ -26,7 +29,7 @@ public sealed class Move32 : BaseNonSA
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var node = Find(context.Node.Next, context.Result, context.Operand1, transform.Window);
+		var node = FindNextUsed(context.Node.Next, context.Result, context.Operand1, transform.Window);
 
 		node.ReplaceOperand(context.Result, context.Operand1);
 

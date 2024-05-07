@@ -13,6 +13,8 @@ namespace Mosa.Compiler.Framework.Stages;
 public class OptimizationStage : BaseTransformStage
 {
 	private readonly CodeMotionManager CodeMotion = new();
+	private readonly ExceptionHandlerOperandManager ExceptionHandlerOperands = new();
+
 	private readonly bool LowerTo32;
 
 	public OptimizationStage(bool lowerTo32)
@@ -36,6 +38,10 @@ public class OptimizationStage : BaseTransformStage
 	protected override void Setup()
 	{
 		Transform.AddManager(CodeMotion);
+		Transform.AddManager(ExceptionHandlerOperands);
+
+		CodeMotion.Setup(Transform.MethodCompiler);
+		ExceptionHandlerOperands.Setup(Transform.MethodCompiler);
 	}
 
 	protected override bool SetupPhase(int phase)

@@ -11,8 +11,10 @@ public abstract class BaseTransformManager
 	{ }
 
 	public virtual void Setup(MethodCompiler methodCompiler)
-	{ }
+	{
+		Reset();
+	}
 
-	public virtual void Finish()
+	public virtual void Reset()
 	{ }
 }
