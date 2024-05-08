@@ -160,7 +160,7 @@ public partial class MethodView : DebugDockContent
 			var entry = new MethodInstructionEntry()
 			{
 				IP = instruction.Address,   // Offset?
-				Length = instruction.Length,
+				Length = (int)instruction.Length,
 				Instruction = instruction.Instruction,
 				Info = info
 			};
