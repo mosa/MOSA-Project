@@ -13,8 +13,12 @@ public static class Utils
 
 	public static readonly FilePickerOpenOptions LibraryOpenOptions = new FilePickerOpenOptions
 	{
+		Title = "Select a library to open in the explorer",
 		FileTypeFilter = new List<FilePickerFileType> { LibraryFileType }
 	};
 
-	public static readonly FolderPickerOpenOptions FolderOpenOptions = new FolderPickerOpenOptions();
+	public static readonly FolderPickerOpenOptions FolderOpenOptions = new FolderPickerOpenOptions
+	{
+		Title = "Select a folder where to dump all method stages"
+	};
 }

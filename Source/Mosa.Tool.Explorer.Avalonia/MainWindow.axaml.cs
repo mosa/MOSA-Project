@@ -15,8 +15,6 @@ using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Avalonia.CompilerStage;
 using Mosa.Tool.Explorer.Avalonia.Stages;
 using Mosa.Utility.Configuration;
-using DebugInfoStage = Mosa.Tool.Explorer.Avalonia.Stages.DebugInfoStage;
-using GraphVizStage = Mosa.Tool.Explorer.Avalonia.Stages.GraphVizStage;
 using Timer = System.Timers.Timer;
 
 namespace Mosa.Tool.Explorer.Avalonia;
@@ -31,7 +29,7 @@ public partial class MainWindow : Window
 	private readonly ObservableCollection<CounterEntry> counterCollection = new ObservableCollection<CounterEntry>();
 	private readonly ObservableCollection<CounterEntry> compilerCounterCollection = new ObservableCollection<CounterEntry>();
 
-	private MosaSettings mosaSettings = new MosaSettings();
+	private readonly MosaSettings mosaSettings = new MosaSettings();
 
 	private MosaCompiler compiler;
 	private int completedMethods;
@@ -316,7 +314,15 @@ public partial class MainWindow : Window
 			return;
 
 		compilerData.Stopwatch.Reset();
-		compiler.CompileSingleMethod(currentMethod);
+		ThreadPool.QueueUserWorkItem(_ => compiler.CompileSingleMethod(currentMethod));
+	}
+
+	private void TabControl_OnSelectionChanged(object _, SelectionChangedEventArgs e)
+	{
+		compilerData.DirtyLog = true;
+
+		if (TabControl != null)
+			RefreshCompilerLog();
 	}
 
 	private void InstructionsStage_OnSelectionChanged(object _, SelectionChangedEventArgs e) => UpdateInstructionStageSelection();
@@ -337,12 +343,12 @@ public partial class MainWindow : Window
 
 	private void UpdateInstructionBlocks()
 	{
-		var lines = GetCurrentInstructionLines();
+		var records = GetCurrentInstructionLines();
 
 		InstructionsBlock.Items.Clear();
 		InstructionsBlock.Items.Add("All");
 
-		var labels = ExtractLabels(lines);
+		var labels = ExtractLabels(records);
 		if (labels == null)
 			return;
 
@@ -350,20 +356,16 @@ public partial class MainWindow : Window
 			InstructionsBlock.Items.Add(label);
 	}
 
-	private static List<string> ExtractLabels(List<string> lines)
+	private static List<string> ExtractLabels(List<InstructionRecord> records)
 	{
-		if (lines == null)
+		if (records == null)
 			return null;
 
 		var labels = new List<string>();
 
-		foreach (var line in lines)
-		{
-			if (!line.StartsWith("Block #"))
-				continue;
-
-			labels.Add(line[line.IndexOf("L_", StringComparison.Ordinal)..]);
-		}
+		foreach (var record in records)
+			if (record.IsStartBlock)
+				labels.Add(record.BlockLabel);
 
 		return labels;
 	}
@@ -429,6 +431,18 @@ public partial class MainWindow : Window
 
 	private void CountersGridFilter_OnTextChanged(object _, TextChangedEventArgs e) => UpdateCounters();
 
+	private async void CopyCountersText_OnClick(object _, RoutedEventArgs e)
+	{
+		if (Clipboard == null)
+		{
+			SetStatus("Error: No Clipboard Detected.");
+			return;
+		}
+
+		await Clipboard.SetTextAsync(CreateText(currentMethodData.Counters));
+		SetStatus("Text Copied!");
+	}
+
 	private void CompilerLogsSection_OnSelectionChanged(object _, SelectionChangedEventArgs e)
 	{
 		var formatted = CompilerLogsSection.SelectionBoxItem?.ToString();
@@ -442,6 +456,22 @@ public partial class MainWindow : Window
 	}
 
 	private void CompilerCountersGridFilter_OnTextChanged(object _, TextChangedEventArgs e) => UpdateCompilerCounters();
+
+	private async void CopyCompilerCountersText_OnClick(object _, RoutedEventArgs e)
+	{
+		if (Clipboard == null)
+		{
+			SetStatus("Error: No Clipboard Detected.");
+			return;
+		}
+
+		var lines = compilerData.GetLog("Counters");
+		if (lines == null)
+			return;
+
+		await Clipboard.SetTextAsync(CreateText(lines));
+		SetStatus("Text Copied!");
+	}
 
 	private void SetTransformationStep(int step)
 	{
@@ -529,7 +559,7 @@ public partial class MainWindow : Window
 
 			entry = new TransformEntry
 			{
-				ID = Convert.ToInt32(parts[0].Trim()) + 1,
+				ID = Convert.ToInt32(parts[0].Trim()),
 				Name = part1,
 				Pass = pass
 			};
@@ -542,7 +572,7 @@ public partial class MainWindow : Window
 
 	private void UpdateTransformLabels()
 	{
-		var lines = GetCurrentTransformLines();
+		var lines = GetCurrentTransformRecords();
 
 		TransformsBlock.Items.Clear();
 		TransformsBlock.Items.Add("All");
@@ -577,13 +607,7 @@ public partial class MainWindow : Window
 		return stage == null ? null : currentMethodData.DebugLogs[stage];
 	}
 
-	private void UpdateGraphviz()
-	{
-		var graphviz = ShowGraphviz();
-
-		DebugPanel.IsVisible = graphviz;
-		Debug.IsVisible = !graphviz;
-	}
+	private void UpdateGraphviz() => DebugPanel.IsVisible = ShowGraphviz();
 
 	private bool ShowGraphviz()
 	{
@@ -595,11 +619,11 @@ public partial class MainWindow : Window
 		if (DisplayGraphviz.IsChecked != null && !DisplayGraphviz.IsChecked.Value)
 			return false;
 
-		if (string.IsNullOrEmpty(Debug.Text) || !Debug.Text.Contains("digraph blocks"))
+		if (string.IsNullOrEmpty(Debug.Text) || !Debug.Text.StartsWith("digraph blocks"))
 			return false;
 
 		var dot = Path.GetTempFileName();
-		var bmp = Path.GetTempFileName();
+		var img = Path.GetTempFileName();
 
 		try
 		{
@@ -608,29 +632,27 @@ public partial class MainWindow : Window
 			var startInfo = new ProcessStartInfo
 			{
 				FileName = mosaSettings.GraphwizApp,
-				Arguments = $"dot -Tbmp -o \"{bmp}\" \"{dot}\"",
+				Arguments = $"-Tpng -o \"{img}\" \"{dot}\"",
 				CreateNoWindow = true
 			};
 
 			var process = Process.Start(startInfo);
 			process?.WaitForExit();
 
-			var file = File.ReadAllBytes(bmp);
-
-			using var stream = new MemoryStream(file);
+			using var stream = File.OpenRead(img);
 
 			var bitmap = new Bitmap(stream);
-			var picture = new Image
+			var image = new Image
 			{
 				Source = bitmap
 			};
 
-			DebugPanel.Children.Add(picture);
+			DebugPanel.Children.Add(image);
 		}
 		finally
 		{
 			File.Delete(dot);
-			File.Delete(bmp);
+			File.Delete(img);
 		}
 
 		return true;
@@ -671,12 +693,24 @@ public partial class MainWindow : Window
 		if (Dispatcher.UIThread.Invoke(() => DebugDiagnostic.IsChecked))
 		{
 			for (var i = 1; i < pipeline.Count; i += 2)
-				pipeline.Insert(i, new GraphVizStage());
+				pipeline.Insert(i, new ControlFlowGraphStage());
 		}
 		else
 		{
-			pipeline.InsertAfterLast<FastBlockOrderingStage>(new GraphVizStage());
-			pipeline.Add(new GraphVizStage());
+			if (mosaSettings.InlineMethods || mosaSettings.InlineExplicit)
+			{
+				pipeline.InsertBefore<InlineStage>(new ControlFlowGraphStage());
+				pipeline.InsertAfterLast<InlineStage>(new ControlFlowGraphStage());
+			}
+
+			if (mosaSettings.SSA)
+			{
+				pipeline.InsertBefore<EnterSSAStage>(new DominanceAnalysisStage());
+				pipeline.InsertBefore<EnterSSAStage>(new ControlFlowGraphStage());
+			}
+
+			pipeline.InsertAfterLast<FastBlockOrderingStage>(new ControlFlowGraphStage());
+			pipeline.Add(new ControlFlowGraphStage());
 		}
 	}
 
@@ -780,19 +814,19 @@ public partial class MainWindow : Window
 		if (currentMethod == null)
 			return;
 
-		var lines = GetCurrentInstructionLines();
+		var records = GetCurrentInstructionLines();
 		var label = InstructionsBlock.SelectionBoxItem?.ToString();
 
 		SetStatus(currentMethod.FullName);
 
-		if (lines == null)
+		if (records == null)
 			return;
 
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		Instructions.Text = methodStore.GetStageInstructions(lines, label, !ShowOperandTypes.IsChecked,
-			PadInstructions.IsChecked, RemoveIrNop.IsChecked);
+		Instructions.Text = FormatInstructions.Format(records, label, !ShowOperandTypes.IsChecked,
+			RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
 	}
 
 	private void UpdateTransforms()
@@ -802,20 +836,20 @@ public partial class MainWindow : Window
 		if (currentMethod == null)
 			return;
 
-		var lines = GetCurrentTransformLines();
+		var records = GetCurrentTransformRecords();
 		var label = TransformsBlock.SelectionBoxItem?.ToString();
 
-		if (lines == null)
+		if (records == null)
 			return;
 
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		Transforms.Text = methodStore.GetStageInstructions(lines, label, !ShowOperandTypes.IsChecked,
-			PadInstructions.IsChecked, RemoveIrNop.IsChecked);
+		Transforms.Text = FormatInstructions.Format(records, label, !ShowOperandTypes.IsChecked,
+			RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
 	}
 
-	private List<string> GetCurrentTransformLines()
+	private List<InstructionRecord> GetCurrentTransformRecords()
 	{
 		if (currentMethodData == null)
 			return null;
@@ -830,14 +864,13 @@ public partial class MainWindow : Window
 		return log;
 	}
 
-	private List<string> GetCurrentInstructionLines()
+	private List<InstructionRecord> GetCurrentInstructionLines()
 	{
 		if (currentMethodData == null)
 			return null;
 
 		var stage = InstructionsStage.SelectionBoxItem?.ToString();
 		return stage == null ? null : currentMethodData.InstructionLogs[stage];
-
 	}
 
 	private void UpdateInstructionStages()
@@ -869,12 +902,8 @@ public partial class MainWindow : Window
 
 	private void UpdateCounters()
 	{
-		Counters.Clear();
-
 		if (currentMethodData == null)
 			return;
-
-		Counters.Text = CreateText(currentMethodData.Counters);
 
 		counterCollection.Clear();
 
@@ -1074,10 +1103,17 @@ public partial class MainWindow : Window
 		UpdateSettings();
 
 		compiler = new MosaCompiler(mosaSettings, CreateCompilerHooks(), new ClrModuleLoader(), new ClrTypeResolver());
-		compiler.Load();
 
-		CreateTree();
-		SetStatus("Assemblies Loaded!");
+		ThreadPool.QueueUserWorkItem(_ =>
+		{
+			Dispatcher.UIThread.Post(() => SetStatus("Loading Types..."));
+			compiler.Load();
+
+			Dispatcher.UIThread.Post(() => SetStatus("Building Type System Tree..."));
+			Dispatcher.UIThread.Post(CreateTree);
+
+			Dispatcher.UIThread.Post(() => SetStatus("Assemblies Loaded!"));
+		});
 	}
 
 	private void ClearAll()
@@ -1176,10 +1212,8 @@ public partial class MainWindow : Window
 		var sb = new StringBuilder();
 
 		lock (list)
-		{
 			foreach (var l in list)
 				sb.AppendLine(l);
-		}
 
 		return sb.ToString();
 	}
@@ -1201,8 +1235,6 @@ public partial class MainWindow : Window
 			var entry = ExtractCounterData(line);
 			compilerCounterCollection.Add(entry);
 		}
-
-		CompilerCounters.Text = CreateText(lines);
 	}
 
 	private static CounterEntry ExtractCounterData(string line)

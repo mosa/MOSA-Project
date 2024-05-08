@@ -36,10 +36,10 @@
 				<MenuItem Name="CodeSizeReduction" ToggleType="CheckBox" Header="Code Size Reduction"/>
 			</MenuItem>
 			<MenuItem Header="Display">
-				<MenuItem Name="ShowOperandTypes" ToggleType="CheckBox" Header="Show Operand Types" Click="DisplayClick"/>
-				<MenuItem Name="PadInstructions" ToggleType="CheckBox" IsChecked="True" Header="Pad Instructions" Click="DisplayClick"/>
-				<MenuItem Name="ShowSizes" ToggleType="CheckBox" IsChecked="True" Header="Show Sizes" Click="ShowSizes_OnClick"/>
 				<MenuItem Name="RemoveIrNop" ToggleType="CheckBox" Header="Remove IR.Nop" Click="DisplayClick"/>
+				<MenuItem Name="LineBetweenBlocks" ToggleType="CheckBox" IsChecked="True" Header="Line Between Blocks" Click="DisplayClick"/>
+				<MenuItem Name="ShowOperandTypes" ToggleType="CheckBox" Header="Show Operand Types" Click="DisplayClick"/>
+				<MenuItem Name="ShowSizes" ToggleType="CheckBox" IsChecked="True" Header="Show Sizes" Click="ShowSizes_OnClick"/>
 			</MenuItem>
 			<MenuItem Header="Advanced">
 				<MenuItem Name="MultiThreading" ToggleType="CheckBox" Header="Multi-threading"/>
@@ -72,7 +72,7 @@
 
 			<GridSplitter Grid.Column="1"/>
 
-			<TabControl Grid.Column="2" Name="TabControl">
+			<TabControl Grid.Column="2" Name="TabControl" SelectionChanged="TabControl_OnSelectionChanged">
 				<TabItem Header="Instructions" FontSize="15">
 					<Grid RowDefinitions="Auto, *">
 						<StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -159,24 +159,17 @@
 				</TabItem>
 
 				<TabItem Header="Counters" FontSize="15">
-					<TabControl>
-						<TabItem Header="Grid" FontSize="15">
-							<Grid RowDefinitions="Auto, *">
-								<StackPanel Grid.Row="0" Orientation="Horizontal">
-									<Grid ColumnDefinitions="Auto, *">
-										<Label Grid.Column="0">Filter:</Label>
-										<TextBox Grid.Column="1" Name="CountersGridFilter" Width="200" TextChanged="CountersGridFilter_OnTextChanged"/>
-									</Grid>
-								</StackPanel>
-
-								<DataGrid Grid.Row="1" Name="CountersGrid" AutoGenerateColumns="True" IsReadOnly="True"/>
+					<Grid RowDefinitions="Auto, *">
+						<StackPanel Grid.Row="0" Orientation="Horizontal">
+							<Grid ColumnDefinitions="Auto, *">
+								<Label Grid.Column="0">Filter:</Label>
+								<TextBox Grid.Column="1" Name="CountersGridFilter" Width="200" TextChanged="CountersGridFilter_OnTextChanged"/>
 							</Grid>
-						</TabItem>
+							<Button Name="CopyCountersText" Click="CopyCountersText_OnClick">Copy Text</Button>
+						</StackPanel>
 
-						<TabItem Header="Text" FontSize="15">
-							<TextBox Name="Counters" IsReadOnly="True"/>
-						</TabItem>
-					</TabControl>
+						<DataGrid Grid.Row="1" Name="CountersGrid" AutoGenerateColumns="True" IsReadOnly="True"/>
+					</Grid>
 				</TabItem>
 
 				<TabItem Header="Compiler Logs" FontSize="15">
@@ -193,24 +186,17 @@
 				</TabItem>
 
 				<TabItem Header="Compiler Counters" FontSize="15">
-					<TabControl>
-						<TabItem Header="Grid" FontSize="15">
-							<Grid RowDefinitions="Auto, *">
-								<StackPanel Grid.Row="0" Orientation="Horizontal">
-									<Grid ColumnDefinitions="Auto, *">
-										<Label Grid.Column="0">Filter:</Label>
-										<TextBox Grid.Column="1" Name="CompilerCountersGridFilter" Width="200" TextChanged="CompilerCountersGridFilter_OnTextChanged"/>
-									</Grid>
-								</StackPanel>
-
-								<DataGrid Grid.Row="1" Name="CompilerCountersGrid" AutoGenerateColumns="True" IsReadOnly="True"/>
+					<Grid RowDefinitions="Auto, *">
+						<StackPanel Grid.Row="0" Orientation="Horizontal">
+							<Grid ColumnDefinitions="Auto, *">
+								<Label Grid.Column="0">Filter:</Label>
+								<TextBox Grid.Column="1" Name="CompilerCountersGridFilter" Width="200" TextChanged="CompilerCountersGridFilter_OnTextChanged"/>
 							</Grid>
-						</TabItem>
+							<Button Name="CopyCompilerCountersText" Click="CopyCompilerCountersText_OnClick">Copy Text</Button>
+						</StackPanel>
 
-						<TabItem Header="Text" FontSize="15">
-							<TextBox Name="CompilerCounters" IsReadOnly="True"/>
-						</TabItem>
-					</TabControl>
+						<DataGrid Grid.Row="1" Name="CompilerCountersGrid" AutoGenerateColumns="True" IsReadOnly="True"/>
+					</Grid>
 				</TabItem>
 			</TabControl>
 		</Grid>
