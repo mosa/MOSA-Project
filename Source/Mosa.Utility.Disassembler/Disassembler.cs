@@ -5,127 +5,91 @@ using System.Text;
 using Reko.Arch.Arm;
 using Reko.Arch.X86;
 using Reko.Core;
+using Reko.Core.Machine;
 using Reko.Core.Memory;
 
 namespace Mosa.Utility.Disassembler;
 
-public partial class Disassembler
+public class Disassembler
 {
-	private byte[] memory;
-
 	public ulong Offset { get; set; }
 
-	private readonly ProcessorArchitecture arch;
-	private MemoryArea memoryArea;
+	private readonly byte[] memory;
+	private readonly IEnumerator<MachineInstruction> instructions;
+	private readonly StringBuilder sb = new StringBuilder(100);
 
-	public Disassembler(string platform)
+	public Disassembler(string platform, byte[] bytes, ulong address)
 	{
 		var services = new ServiceContainer();
 		var options = new Dictionary<string, object>();
+		var memoryArea = new ByteMemoryArea(Address.Ptr32((uint)address), bytes);
 
-		arch = platform.ToLowerInvariant() switch
+		ProcessorArchitecture arch = platform.ToLowerInvariant() switch
 		{
 			"arm32" => new Arm32Architecture(services, "arm32", options),
 			"arm64" => new Arm64Architecture(services, "arm64", options),
 			"x86" => new X86ArchitectureFlat32(services, "x86-protected-32", options),
 			"x64" => new X86ArchitectureFlat64(services, "x86-protected-64", options),
-			_ => arch
+			_ => throw new PlatformNotSupportedException(platform)
 		};
+
+		memory = bytes;
+		instructions = arch.CreateDisassembler(memoryArea.CreateLeReader((long)Offset)).GetEnumerator();
 	}
 
-	public void SetMemory(byte[] memory, ulong address)
+	public DecodedInstruction DecodeNext()
 	{
-		this.memory = memory;
-		memoryArea = new ByteMemoryArea(Address.Ptr32((uint)address), memory);
-	}
-
-	public List<DecodedInstruction> Decode(int count = int.MaxValue)
-	{
-		var decoded = new List<DecodedInstruction>();
-
-		var sb = new StringBuilder(100);
-
-		try
-		{
-			var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((long)Offset));
-
-			foreach (var instr in dasm)
-			{
-				var len = instr.Length;
-				var address = instr.Address.Offset;
-				var instruction = instr.ToString().Replace('\t', ' ');
-
-				// preference
-				instruction = instruction.Replace(",", ", ");
-
-				// fix up
-				//instruction = ChangeHex(instruction);
-
-				sb.AppendFormat("{0:x8}", address);
-				sb.Append(' ');
-				var bytes = BytesToHex(memory, (uint)Offset, len);
-				sb.Append(bytes == null ? string.Empty : bytes.ToString());
-				sb.Append(string.Empty.PadRight(41 - sb.Length, ' '));
-				sb.Append(instruction);
-
-				decoded.Add(new DecodedInstruction
-				{
-					Address = address,
-					Length = len,
-					Instruction = instruction,
-					Full = sb.ToString()
-				});
-
-				sb.Clear();
-
-				count--;
-
-				if (count == 0)
-					break;
-
-				Offset += (uint)len;
-			}
-
-			return decoded;
-		}
-		catch
-		{
-			return decoded;
-		}
-	}
-
-	private static StringBuilder BytesToHex(byte[] memory, uint offset, int length)
-	{
-		if (length == 0)
+		if (!instructions.MoveNext())
 			return null;
 
-		var sb = new StringBuilder();
+		var machineInstruction = instructions.Current;
+		if (machineInstruction == null)
+			return null;
 
-		for (uint i = 0; i < length; i++)
+		var length = (uint)machineInstruction.Length;
+		var address = machineInstruction.Address.Offset;
+		var instruction = machineInstruction.ToString()
+			.Replace('\t', ' ')
+			.Replace(",", ", ")
+			.Replace("+", " + ")
+			.Replace("-", " - ")
+			.Replace("*", " * ");
+
+		// FIXME
+		//instruction = ChangeHex(instruction);
+
+		sb.Append(address.ToString("X8"));
+		sb.Append(' ');
+		for (var i = 0U; i < length; i++)
 		{
-			var b = memory[i + offset];
-
-			sb.AppendFormat("{0:x2} ", b);
+			var b = memory[i + Offset];
+			sb.Append(b.ToString("X2"));
+			sb.Append(' ');
 		}
+		for (var i = 0; i < 41 - sb.Length; i++)
+			sb.Append(' ');
+		sb.Append(instruction);
 
-		sb.Length--;
+		var decodedInstruction = new DecodedInstruction
+		{
+			Address = address,
+			Length = length,
+			Instruction = instruction,
+			Full = sb.ToString()
+		};
 
-		return sb;
+		sb.Clear();
+
+		Offset += length;
+
+		return decodedInstruction;
 	}
 
-	private static bool IsHex(char c)
+	private static bool IsHex(char c) => c switch
 	{
-		if (c >= '0' && c <= '9')
-			return true;
-
-		if (c >= 'a' && c <= 'f')
-			return true;
-
-		if (c >= 'A' && c <= 'F')
-			return true;
-
-		return false;
-	}
+		>= '0' and <= '9' or >= 'a' and <= 'f' or >= 'A' and <= 'F' => true,
+		_ => false
+	};
 
 	private static int IsNextWordHex(string s, int start)
 	{
@@ -150,7 +114,6 @@ public partial class Disassembler
 		for (var i = 0; i < s.Length; i++)
 		{
 			var c = s[i];
-
 			var l = IsNextWordHex(s, i);
 
 			if (l == 0)
@@ -158,17 +121,15 @@ public partial class Disassembler
 				sb.Append(c);
 				continue;
 			}
-			else
-			{
-				var hex = s.Substring(i, l);
-				var value = long.Parse(hex, System.Globalization.NumberStyles.HexNumber);
-				var hex2 = Convert.ToString(value, 16).ToUpper();
 
-				sb.Append("0x");
-				sb.Append(hex2);
+			var hex = s.Substring(i, l);
+			var value = long.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+			var hex2 = Convert.ToString(value, 16).ToUpper();
 
-				i += l;
-			}
+			sb.Append("0x");
+			sb.Append(hex2);
+
+			i += l;
 		}
 
 		return sb.ToString();

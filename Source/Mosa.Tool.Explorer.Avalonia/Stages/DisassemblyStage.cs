@@ -33,19 +33,13 @@ public class DisassemblyStage : BaseMethodCompilerStage
 		stream.Read(memory, 0, length);
 		stream.Position = oldPosition;
 
-		var disassembler = new Disassembler(Architecture.PlatformName);
-		disassembler.SetMemory(memory, 0);
+		var disassembler = new Disassembler(Architecture.PlatformName, memory, 0);
+		var instruction = disassembler.DecodeNext();
 
-		var list = disassembler.Decode();
-
-		if (list != null)
+		while (instruction != null)
 		{
-			foreach (var instr in list)
-				trace.Log(instr.Full);
-		}
-		else
-		{
-			PostEvent(CompilerEvent.Error, $"Failed disassembly for method {MethodCompiler.Method}");
+			trace.Log(instruction.Full);
+			instruction = disassembler.DecodeNext();
 		}
 	}
 
