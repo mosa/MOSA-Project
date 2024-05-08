@@ -50,23 +50,20 @@ public class Disassembler
 		var address = machineInstruction.Address.Offset;
 		var instruction = machineInstruction.ToString()
 			.Replace('\t', ' ')
-			.Replace(",", ", ")
-			.Replace("+", " + ")
-			.Replace("-", " - ")
-			.Replace("*", " * ");
+			.Replace(",", ", ");
 
 		// FIXME
 		//instruction = ChangeHex(instruction);
 
-		sb.Append(address.ToString("X8"));
+		sb.Append(address.ToString("x8"));
 		sb.Append(' ');
 		for (var i = 0U; i < length; i++)
 		{
 			var b = memory[i + Offset];
-			sb.Append(b.ToString("X2"));
+			sb.Append(b.ToString("x2"));
 			sb.Append(' ');
 		}
-		for (var i = 0; i < 41 - sb.Length; i++)
+		for (var i = sb.Length; i < 41; i++)
 			sb.Append(' ');
 		sb.Append(instruction);
 
