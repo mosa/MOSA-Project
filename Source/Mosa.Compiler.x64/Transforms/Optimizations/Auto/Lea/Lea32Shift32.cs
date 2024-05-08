@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Lea;
 
 public sealed class Lea32Shift32 : BaseTransform
 {
-	public Lea32Shift32() : base(X64.Lea32, TransformType.Auto | TransformType.Optimization)
+	public Lea32Shift32() : base(X64.Lea32, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 

@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Sub32v1 : BaseTransform
 {
-	public Sub32v1() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Sub32v1() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 
@@ -39,7 +39,7 @@ public sealed class Sub32v1 : BaseTransform
 
 public sealed class Sub32v1_v1 : BaseTransform
 {
-	public Sub32v1_v1() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public Sub32v1_v1() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 

@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Add32 : BaseTransform
 {
-	public Add32() : base(X86.Add32, TransformType.Auto | TransformType.Optimization)
+	public Add32() : base(X86.Add32, TransformType.Auto | TransformType.Optimization, 70)
 	{
 	}
 

@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Shl32ZeroValue : BaseTransform
 {
-	public Shl32ZeroValue() : base(X64.Shl32, TransformType.Auto | TransformType.Optimization)
+	public Shl32ZeroValue() : base(X64.Shl32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 

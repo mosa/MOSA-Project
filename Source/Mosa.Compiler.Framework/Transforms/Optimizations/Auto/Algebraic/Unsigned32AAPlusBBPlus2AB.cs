@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
 public sealed class Unsigned32AAPlusBBPlus2AB : BaseTransform
 {
-	public Unsigned32AAPlusBBPlus2AB() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAPlusBBPlus2AB() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 
@@ -93,7 +93,7 @@ public sealed class Unsigned32AAPlusBBPlus2AB : BaseTransform
 
 public sealed class Unsigned32AAPlusBBPlus2AB_v1 : BaseTransform
 {
-	public Unsigned32AAPlusBBPlus2AB_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAPlusBBPlus2AB_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 
@@ -180,7 +180,7 @@ public sealed class Unsigned32AAPlusBBPlus2AB_v1 : BaseTransform
 
 public sealed class Unsigned32AAPlusBBPlus2AB_v2 : BaseTransform
 {
-	public Unsigned32AAPlusBBPlus2AB_v2() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAPlusBBPlus2AB_v2() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 
@@ -267,7 +267,7 @@ public sealed class Unsigned32AAPlusBBPlus2AB_v2 : BaseTransform
 
 public sealed class Unsigned32AAPlusBBPlus2AB_v3 : BaseTransform
 {
-	public Unsigned32AAPlusBBPlus2AB_v3() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAPlusBBPlus2AB_v3() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 
@@ -354,7 +354,7 @@ public sealed class Unsigned32AAPlusBBPlus2AB_v3 : BaseTransform
 
 public sealed class Unsigned32AAPlusBBPlus2AB_v4 : BaseTransform
 {
-	public Unsigned32AAPlusBBPlus2AB_v4() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAPlusBBPlus2AB_v4() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 
@@ -441,7 +441,7 @@ public sealed class Unsigned32AAPlusBBPlus2AB_v4 : BaseTransform
 
 public sealed class Unsigned32AAPlusBBPlus2AB_v5 : BaseTransform
 {
-	public Unsigned32AAPlusBBPlus2AB_v5() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAPlusBBPlus2AB_v5() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 
@@ -528,7 +528,7 @@ public sealed class Unsigned32AAPlusBBPlus2AB_v5 : BaseTransform
 
 public sealed class Unsigned32AAPlusBBPlus2AB_v6 : BaseTransform
 {
-	public Unsigned32AAPlusBBPlus2AB_v6() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAPlusBBPlus2AB_v6() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 
@@ -615,7 +615,7 @@ public sealed class Unsigned32AAPlusBBPlus2AB_v6 : BaseTransform
 
 public sealed class Unsigned32AAPlusBBPlus2AB_v7 : BaseTransform
 {
-	public Unsigned32AAPlusBBPlus2AB_v7() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Unsigned32AAPlusBBPlus2AB_v7() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 75)
 	{
 	}
 

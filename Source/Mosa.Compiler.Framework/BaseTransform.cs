@@ -29,19 +29,32 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	public bool IsTranformation => !IsOptimization;
 
+	public int Level { get; private set; }
+
 	#endregion Properties
 
 	#region Constructors
 
-	public BaseTransform(BaseInstruction instruction, TransformType type, bool log = false)
+	public BaseTransform(BaseInstruction instruction, TransformType type, int level, bool log = false)
 	{
 		Instruction = instruction;
 		Log = log;
+		Level = level;
 
 		IsAuto = type.HasFlag(TransformType.Auto);
 		IsOptimization = type.HasFlag(TransformType.Optimization);
 
 		Name = GetType().FullName.Replace("Mosa.Compiler.", string.Empty).Replace("Mosa.Compiler.Framework.Transforms", "IR").Replace("Transforms.", string.Empty);
+	}
+
+	public BaseTransform(BaseInstruction instruction, int level, TransformType type, bool log = false)
+		: this(instruction, type, level, log)
+	{
+	}
+
+	public BaseTransform(BaseInstruction instruction, TransformType type, bool log = false)
+		: this(instruction, type, 100, log)
+	{
 	}
 
 	public BaseTransform(TransformType type, bool log = false)

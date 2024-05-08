@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Move64Coalescing : BaseTransform
 {
-	public Move64Coalescing() : base(IR.Move64, TransformType.Auto | TransformType.Optimization)
+	public Move64Coalescing() : base(IR.Move64, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 

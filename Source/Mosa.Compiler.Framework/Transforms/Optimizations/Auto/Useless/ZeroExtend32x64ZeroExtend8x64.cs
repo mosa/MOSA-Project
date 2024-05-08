@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
 public sealed class ZeroExtend32x64ZeroExtend8x64 : BaseTransform
 {
-	public ZeroExtend32x64ZeroExtend8x64() : base(IR.ZeroExtend32x64, TransformType.Auto | TransformType.Optimization)
+	public ZeroExtend32x64ZeroExtend8x64() : base(IR.ZeroExtend32x64, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 

@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
 public sealed class Signed64AAMinusBB : BaseTransform
 {
-	public Signed64AAMinusBB() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Signed64AAMinusBB() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 

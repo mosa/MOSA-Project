@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Lea;
 
 public sealed class Lea32Join : BaseTransform
 {
-	public Lea32Join() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization)
+	public Lea32Join() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 

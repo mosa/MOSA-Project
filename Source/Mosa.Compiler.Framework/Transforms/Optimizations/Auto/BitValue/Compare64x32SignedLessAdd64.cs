@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 public sealed class Compare64x32SignedLessAdd64 : BaseTransform
 {
-	public Compare64x32SignedLessAdd64() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32SignedLessAdd64() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 
@@ -53,7 +53,7 @@ public sealed class Compare64x32SignedLessAdd64 : BaseTransform
 
 public sealed class Compare64x32SignedLessAdd64_v1 : BaseTransform
 {
-	public Compare64x32SignedLessAdd64_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32SignedLessAdd64_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 

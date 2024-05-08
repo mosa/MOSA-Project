@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class And64 : BaseTransform
 {
-	public And64() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
+	public And64() : base(X64.And64, TransformType.Auto | TransformType.Optimization, 70)
 	{
 	}
 

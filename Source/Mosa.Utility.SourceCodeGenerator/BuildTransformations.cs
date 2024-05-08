@@ -68,7 +68,21 @@ public class BuildTransformations : BuildBaseTemplate
 		if (ignore)
 			return;
 
-		int priority = node.Priority == null ? 0 : int.Parse(node.Priority);
+		int priority = node.Priority != null ? int.Parse(node.Priority) : 0;
+
+		int level = 100;
+
+		if (node.Level != null)
+		{
+			if (node.Level == "Dynamic")
+			{
+				level = -1;
+			}
+			else
+			{
+				level = int.Parse(node.Level);
+			}
+		}
 
 		if (!optimization && !transformation)
 			optimization = true;
@@ -87,24 +101,24 @@ public class BuildTransformations : BuildBaseTemplate
 		if (commutativeInstructions == null)
 			commutativeInstructions = CommutativeInstructions;
 
-		GenerateTranformations(name, type, subName, expression, filter, prefilter, result, variations, log, optimization, priority, commutativeInstructions, result2);
+		GenerateTranformations(name, type, subName, expression, filter, prefilter, result, variations, optimization, priority, level, log, commutativeInstructions, result2);
 	}
 
-	private void GenerateTranformations(string name, string type, string subName, string expression, string filter, string prefilter, string result, bool variations, bool log, bool optimization, int priority, List<string> commutativeInstructions, string result2)
+	private void GenerateTranformations(string name, string type, string subName, string expression, string filter, string prefilter, string result, bool variations, bool optimization, int priority, int level, bool log, List<string> commutativeInstructions, string result2)
 	{
 		if (expression.Contains("R#"))
 		{
-			GenerateTransformation(R4(name), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result), R4(result2), prefilter), variations, log, optimization, priority, commutativeInstructions);
-			GenerateTransformation(R8(name), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), R4(result2), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(R4(name), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result), R4(result2), prefilter), optimization, priority, level, variations, log, commutativeInstructions);
+			GenerateTransformation(R8(name), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), R4(result2), prefilter), optimization, priority, level, variations, log, commutativeInstructions);
 		}
 		else if (expression.Contains("##"))
 		{
-			GenerateTransformation(To32(name), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result), To32(result2), prefilter), variations, log, optimization, priority, commutativeInstructions);
-			GenerateTransformation(To64(name), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), To32(result2), prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(To32(name), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result), To32(result2), prefilter), optimization, priority, level, variations, log, commutativeInstructions);
+			GenerateTransformation(To64(name), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), To32(result2), prefilter), optimization, priority, level, variations, log, commutativeInstructions);
 		}
 		else
 		{
-			GenerateTransformation(name, type, subName, new Transformation(expression, filter, result, result2, prefilter), variations, log, optimization, priority, commutativeInstructions);
+			GenerateTransformation(name, type, subName, new Transformation(expression, filter, result, result2, prefilter), optimization, priority, level, variations, log, commutativeInstructions);
 		}
 	}
 
@@ -128,7 +142,7 @@ public class BuildTransformations : BuildBaseTemplate
 		return s?.Replace("R#", "R8");
 	}
 
-	private void GenerateTransformation(string name, string type, string subName, Transformation transform, bool Variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
+	private void GenerateTransformation(string name, string type, string subName, Transformation transform, bool optimization, int priority, int level, bool variations, bool log, List<string> commutativeInstructions)
 	{
 		Lines.Clear();
 		First = true;
@@ -145,14 +159,64 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.AppendLine($"namespace {Path}.{type};");
 		Lines.AppendLine();
 
-		GenerateTransformations(name, type, subName, transform, Variations, log, optimization, priority, commutativeInstructions);
+		if (level <= 0)
+		{
+			//level = CalculateLevel(transform);
+		}
+
+		level = CalculateLevel(transform);
+
+		GenerateTransformations(name, type, subName, transform, optimization, priority, level, variations, log, commutativeInstructions);
 
 		Save();
 	}
 
-	private void GenerateTransformations(string name, string type, string subName, Transformation transform, bool variations, bool log, bool optimization, int priority, List<string> commutativeInstructions)
+	private int CalculateLevel(Transformation transform)
 	{
-		GenerateTransformation2(name, type, subName, transform, log, optimization, priority);
+		var nodes = CountNodes(transform.InstructionTree);
+
+		var windows = CountWindows(transform.Prefilters);
+		var windows2 = CountWindows(transform.Filters);
+
+		var cost = ((nodes - 1) * 5) + ((windows + windows2) * 25);
+
+		cost = Math.Min(cost, 100);
+
+		return 100 - cost;
+	}
+
+	private int CountNodes(Node parent)
+	{
+		var count = 1;
+
+		foreach (var operand in parent.Operands)
+		{
+			if (operand.IsInstruction)
+				count += CountNodes(operand.Node);
+		}
+
+		return count;
+	}
+
+	private int CountWindows(List<Method> methods)
+	{
+		var count = 0;
+
+		foreach (var method in methods)
+		{
+			foreach (var parameter in method.Parameters)
+			{
+				if (parameter.IsDollar && parameter.LabelName == "Window")
+					count++;
+			}
+		}
+
+		return count;
+	}
+
+	private void GenerateTransformations(string name, string type, string subName, Transformation transform, bool optimization, int priority, int level, bool variations, bool log, List<string> commutativeInstructions)
+	{
+		GenerateTransformation2(name, type, subName, transform, optimization, priority, level, log);
 
 		if (!variations)
 			return;
@@ -165,12 +229,12 @@ public class BuildTransformations : BuildBaseTemplate
 		var index = 1;
 		foreach (var variation in derivedVariations)
 		{
-			GenerateTransformation2(name, type, $"{subName}_v{index}", variation, log, optimization, priority);
+			GenerateTransformation2(name, type, $"{subName}_v{index}", variation, optimization, priority, level, log);
 			index++;
 		}
 	}
 
-	private void GenerateTransformation2(string name, string type, string subName, Transformation transform, bool log, bool optimization, int priority)
+	private void GenerateTransformation2(string name, string type, string subName, Transformation transform, bool optimization, int priority, int level, bool log)
 	{
 		var instructionName = transform.InstructionTree.InstructionName;
 
@@ -190,10 +254,15 @@ public class BuildTransformations : BuildBaseTemplate
 
 		var typestring = $"TransformType.Auto{(optimization ? " | TransformType.Optimization" : string.Empty)}";
 
+		Lines.Append($"\tpublic {name}{subName}() : base({instructionName}, {typestring}");
+
+		if (level != 100)
+			Lines.Append($", {level}");
+
 		if (log)
-			Lines.AppendLine($"\tpublic {name}{subName}() : base({instructionName}, {typestring}, true)");
-		else
-			Lines.AppendLine($"\tpublic {name}{subName}() : base({instructionName}, {typestring})");
+			Lines.Append($", true");
+
+		Lines.AppendLine(")");
 
 		Lines.AppendLine("\t{");
 		Lines.AppendLine("\t}");

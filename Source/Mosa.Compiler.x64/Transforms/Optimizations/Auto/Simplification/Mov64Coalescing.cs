@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Mov64Coalescing : BaseTransform
 {
-	public Mov64Coalescing() : base(X64.Mov64, TransformType.Auto | TransformType.Optimization)
+	public Mov64Coalescing() : base(X64.Mov64, TransformType.Auto | TransformType.Optimization, 95)
 	{
 	}
 
