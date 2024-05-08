@@ -16,7 +16,7 @@ public class DisassemblyStage : BaseMethodCompilerStage
 		TracePatchRequests();
 	}
 
-	protected void TraceDisassembly()
+	private void TraceDisassembly()
 	{
 		var trace = CreateTraceLog();
 		if (trace == null)
@@ -30,8 +30,14 @@ public class DisassemblyStage : BaseMethodCompilerStage
 		var memory = new byte[length];
 
 		stream.Position = 0;
-		stream.Read(memory, 0, length);
+		var read = stream.Read(memory, 0, length);
 		stream.Position = oldPosition;
+
+		if (read != length)
+		{
+			trace.Log("Error: Couldn't read enough bytes to disassemble.");
+			return;
+		}
 
 		var disassembler = new Disassembler(Architecture.PlatformName, memory, 0);
 		var instruction = disassembler.DecodeNext();
@@ -43,7 +49,7 @@ public class DisassemblyStage : BaseMethodCompilerStage
 		}
 	}
 
-	protected void TracePatchRequests()
+	private void TracePatchRequests()
 	{
 		var trace = CreateTraceLog("Patch-Requests");
 		if (trace == null)

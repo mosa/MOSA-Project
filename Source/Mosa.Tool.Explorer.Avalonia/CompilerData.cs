@@ -38,9 +38,7 @@ public class CompilerData
 			}
 
 			lock (log)
-			{
 				log.AddRange(lines);
-			}
 
 			DirtyLog = dirty;
 		}
@@ -59,9 +57,7 @@ public class CompilerData
 			}
 
 			lock (log)
-			{
 				log.Add(line);
-			}
 
 			DirtyLog = true;
 		}
@@ -70,9 +66,7 @@ public class CompilerData
 	public List<string> GetLog(string section)
 	{
 		lock (Logs)
-		{
 			return Logs.GetValueOrDefault(section);
-		}
 	}
 
 	public void AddTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
