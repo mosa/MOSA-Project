@@ -148,10 +148,10 @@ public partial class MethodView : DebugDockContent
 	{
 		instructions.Clear();
 
-		var disassembler = new Disassembler("x86");
-		disassembler.SetMemory(memory, address);
+		var disassembler = new Disassembler("x86", memory, address);
+		var instruction = disassembler.DecodeNext();
 
-		foreach (var instruction in disassembler.Decode())
+		while (instruction != null)
 		{
 			var addr = MainForm.ParseAddress(instruction.Instruction);
 
@@ -166,6 +166,7 @@ public partial class MethodView : DebugDockContent
 			};
 
 			instructions.Add(entry);
+			instruction = disassembler.DecodeNext();
 		}
 	}
 

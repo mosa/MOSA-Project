@@ -44,15 +44,15 @@ public partial class StatusView : DebugDockContent
 		if (address != InstructionPointer)
 			return;
 
-		var disassembler = new Disassembler("x86");
-		disassembler.SetMemory(memory, address);
+		var disassembler = new Disassembler("x86", memory, address);
 
 		tbInstruction.Text = "Unable to decode!";
 
-		foreach (var instruction in disassembler.Decode())
+		var instruction = disassembler.DecodeNext();
+		while (instruction != null)
 		{
 			tbInstruction.Text = instruction.Instruction;
-			break;
+			instruction = disassembler.DecodeNext();
 		}
 	}
 }
