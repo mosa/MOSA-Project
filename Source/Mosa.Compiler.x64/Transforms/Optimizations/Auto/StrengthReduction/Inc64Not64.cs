@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Inc64Not64 : BaseTransform
 {
-	public Inc64Not64() : base(X64.Inc64, TransformType.Auto | TransformType.Optimization, 70)
+	public Inc64Not64() : base(X64.Inc64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Add32Expression : BaseTransform
 {
-	public Add32Expression() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 95)
+	public Add32Expression() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -50,7 +50,7 @@ public sealed class Add32Expression : BaseTransform
 
 public sealed class Add32Expression_v1 : BaseTransform
 {
-	public Add32Expression_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 95)
+	public Add32Expression_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -94,7 +94,7 @@ public sealed class Add32Expression_v1 : BaseTransform
 
 public sealed class Add32Expression_v2 : BaseTransform
 {
-	public Add32Expression_v2() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 95)
+	public Add32Expression_v2() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -138,7 +138,7 @@ public sealed class Add32Expression_v2 : BaseTransform
 
 public sealed class Add32Expression_v3 : BaseTransform
 {
-	public Add32Expression_v3() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 95)
+	public Add32Expression_v3() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Shr32 : BaseTransform
 {
-	public Shr32() : base(X64.Shr32, TransformType.Auto | TransformType.Optimization, 70)
+	public Shr32() : base(X64.Shr32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

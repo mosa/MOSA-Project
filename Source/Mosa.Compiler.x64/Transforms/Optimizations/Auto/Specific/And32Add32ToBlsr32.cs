@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Specific;
 
 public sealed class And32Add32ToBlsr32 : BaseTransform
 {
-	public And32Add32ToBlsr32() : base(X64.And32, TransformType.Auto | TransformType.Optimization, 70)
+	public And32Add32ToBlsr32() : base(X64.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -53,7 +53,7 @@ public sealed class And32Add32ToBlsr32 : BaseTransform
 
 public sealed class And32Add32ToBlsr32_v1 : BaseTransform
 {
-	public And32Add32ToBlsr32_v1() : base(X64.And32, TransformType.Auto | TransformType.Optimization, 70)
+	public And32Add32ToBlsr32_v1() : base(X64.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -98,7 +98,7 @@ public sealed class And32Add32ToBlsr32_v1 : BaseTransform
 
 public sealed class And32Add32ToBlsr32_v2 : BaseTransform
 {
-	public And32Add32ToBlsr32_v2() : base(X64.And32, TransformType.Auto | TransformType.Optimization, 70)
+	public And32Add32ToBlsr32_v2() : base(X64.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -143,7 +143,7 @@ public sealed class And32Add32ToBlsr32_v2 : BaseTransform
 
 public sealed class And32Add32ToBlsr32_v3 : BaseTransform
 {
-	public And32Add32ToBlsr32_v3() : base(X64.And32, TransformType.Auto | TransformType.Optimization, 70)
+	public And32Add32ToBlsr32_v3() : base(X64.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

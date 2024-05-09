@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class IMul32ByOne : BaseTransform
 {
-	public IMul32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization, 75)
+	public IMul32ByOne() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

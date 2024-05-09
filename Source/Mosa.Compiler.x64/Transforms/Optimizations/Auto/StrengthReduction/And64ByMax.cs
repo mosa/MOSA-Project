@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class And64ByMax : BaseTransform
 {
-	public And64ByMax() : base(X64.And64, TransformType.Auto | TransformType.Optimization, 75)
+	public And64ByMax() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -38,7 +38,7 @@ public sealed class And64ByMax : BaseTransform
 
 public sealed class And64ByMax_v1 : BaseTransform
 {
-	public And64ByMax_v1() : base(X64.And64, TransformType.Auto | TransformType.Optimization, 75)
+	public And64ByMax_v1() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

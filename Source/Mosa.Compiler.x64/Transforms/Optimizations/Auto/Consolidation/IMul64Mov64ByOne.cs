@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Consolidation;
 
 public sealed class IMul64Mov64ByOne : BaseTransform
 {
-	public IMul64Mov64ByOne() : base(X64.IMul64, TransformType.Auto | TransformType.Optimization, 70)
+	public IMul64Mov64ByOne() : base(X64.IMul64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

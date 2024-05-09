@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Consolidation;
 
 public sealed class IMul32Mov32ByZero : BaseTransform
 {
-	public IMul32Mov32ByZero() : base(X64.IMul32, TransformType.Auto | TransformType.Optimization, 70)
+	public IMul32Mov32ByZero() : base(X64.IMul32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

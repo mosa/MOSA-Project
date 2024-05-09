@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class LoadZeroExtend8x64AddressFold : BaseTransform
 {
-	public LoadZeroExtend8x64AddressFold() : base(IR.LoadZeroExtend8x64, TransformType.Auto | TransformType.Optimization, 95)
+	public LoadZeroExtend8x64AddressFold() : base(IR.LoadZeroExtend8x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

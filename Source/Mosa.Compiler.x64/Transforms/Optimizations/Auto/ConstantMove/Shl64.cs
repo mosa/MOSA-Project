@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Shl64 : BaseTransform
 {
-	public Shl64() : base(X64.Shl64, TransformType.Auto | TransformType.Optimization, 70)
+	public Shl64() : base(X64.Shl64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

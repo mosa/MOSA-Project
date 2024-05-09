@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Lea;
 
 public sealed class Mul64ToLea64By3Or5Or9 : BaseTransform
 {
-	public Mul64ToLea64By3Or5Or9() : base(X64.Mul64, TransformType.Auto | TransformType.Optimization, 75)
+	public Mul64ToLea64By3Or5Or9() : base(X64.Mul64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

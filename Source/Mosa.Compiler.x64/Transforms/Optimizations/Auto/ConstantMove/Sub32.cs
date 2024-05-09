@@ -8,7 +8,7 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Sub32 : BaseTransform
 {
-	public Sub32() : base(X64.Sub32, TransformType.Auto | TransformType.Optimization, 70)
+	public Sub32() : base(X64.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

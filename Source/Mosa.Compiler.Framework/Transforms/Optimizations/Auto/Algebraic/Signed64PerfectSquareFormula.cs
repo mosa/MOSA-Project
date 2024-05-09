@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Algebraic;
 
 public sealed class Signed64PerfectSquareFormula : BaseTransform
 {
-	public Signed64PerfectSquareFormula() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 85)
+	public Signed64PerfectSquareFormula() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -80,7 +80,7 @@ public sealed class Signed64PerfectSquareFormula : BaseTransform
 
 public sealed class Signed64PerfectSquareFormula_v1 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 85)
+	public Signed64PerfectSquareFormula_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -154,7 +154,7 @@ public sealed class Signed64PerfectSquareFormula_v1 : BaseTransform
 
 public sealed class Signed64PerfectSquareFormula_v2 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 85)
+	public Signed64PerfectSquareFormula_v2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -228,7 +228,7 @@ public sealed class Signed64PerfectSquareFormula_v2 : BaseTransform
 
 public sealed class Signed64PerfectSquareFormula_v3 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v3() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 85)
+	public Signed64PerfectSquareFormula_v3() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -302,7 +302,7 @@ public sealed class Signed64PerfectSquareFormula_v3 : BaseTransform
 
 public sealed class Signed64PerfectSquareFormula_v4 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v4() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 85)
+	public Signed64PerfectSquareFormula_v4() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -376,7 +376,7 @@ public sealed class Signed64PerfectSquareFormula_v4 : BaseTransform
 
 public sealed class Signed64PerfectSquareFormula_v5 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v5() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 85)
+	public Signed64PerfectSquareFormula_v5() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -450,7 +450,7 @@ public sealed class Signed64PerfectSquareFormula_v5 : BaseTransform
 
 public sealed class Signed64PerfectSquareFormula_v6 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v6() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 85)
+	public Signed64PerfectSquareFormula_v6() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -524,7 +524,7 @@ public sealed class Signed64PerfectSquareFormula_v6 : BaseTransform
 
 public sealed class Signed64PerfectSquareFormula_v7 : BaseTransform
 {
-	public Signed64PerfectSquareFormula_v7() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 85)
+	public Signed64PerfectSquareFormula_v7() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

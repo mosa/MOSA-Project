@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
 
 public sealed class MulUnsigned32WithShiftLeft32 : BaseTransform
 {
-	public MulUnsigned32WithShiftLeft32() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization, 95)
+	public MulUnsigned32WithShiftLeft32() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -41,7 +41,7 @@ public sealed class MulUnsigned32WithShiftLeft32 : BaseTransform
 
 public sealed class MulUnsigned32WithShiftLeft32_v1 : BaseTransform
 {
-	public MulUnsigned32WithShiftLeft32_v1() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization, 95)
+	public MulUnsigned32WithShiftLeft32_v1() : base(IR.MulUnsigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

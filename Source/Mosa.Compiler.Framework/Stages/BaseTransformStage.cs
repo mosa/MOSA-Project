@@ -285,21 +285,4 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		return changed;
 	}
-
-	protected List<BaseTransform> Filter(List<BaseTransform> list)
-	{
-		var level = MosaSettings.OptimizationLevel;
-
-		var newlist = new List<BaseTransform>(list.Count);
-
-		foreach (var transform in list)
-		{
-			if (transform.Level >= level)
-			{
-				newlist.Add(transform);
-			}
-		}
-
-		return newlist;
-	}
 }
