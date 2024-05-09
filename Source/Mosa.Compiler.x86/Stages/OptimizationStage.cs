@@ -16,7 +16,13 @@ public sealed class OptimizationStage : Framework.Stages.BaseTransformStage
 	public OptimizationStage()
 		: base()
 	{
-		AddTranforms(AutoTransforms.List);
-		AddTranforms(ManualTransforms.List);
+	}
+
+	protected override void Initialize()
+	{
+		base.Initialize();
+
+		AddTranforms(Filter(AutoTransforms.List));
+		AddTranforms(Filter(ManualTransforms.List));
 	}
 }

@@ -21,18 +21,22 @@ public class OptimizationStage : BaseTransformStage
 		: base()
 	{
 		LowerTo32 = lowerTo32;
+		EnableBlockOptimizations = true;
+	}
 
-		AddTranforms(ManualTransforms.List);
-		AddTranforms(AutoTransforms.List);
+	protected override void Initialize()
+	{
+		base.Initialize();
+
+		AddTranforms(Filter(ManualTransforms.List));
+		AddTranforms(Filter(AutoTransforms.List));
 
 		if (LowerTo32)
 		{
-			AddTranforms(LowerTo32Transforms.List);
+			AddTranforms(Filter(LowerTo32Transforms.List));
 		}
 
 		AddTranforms(Transforms.BasicBlocks.BasicBlocksTransforms.List);
-
-		EnableBlockOptimizations = true;
 	}
 
 	protected override void Setup()

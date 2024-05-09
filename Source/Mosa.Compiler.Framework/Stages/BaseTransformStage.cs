@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Reflection.Metadata.Ecma335;
+
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
@@ -282,5 +284,22 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		}
 
 		return changed;
+	}
+
+	protected List<BaseTransform> Filter(List<BaseTransform> list)
+	{
+		var level = MosaSettings.OptimizationLevel;
+
+		var newlist = new List<BaseTransform>(list.Count);
+
+		foreach (var transform in list)
+		{
+			if (transform.Level >= level)
+			{
+				newlist.Add(transform);
+			}
+		}
+
+		return newlist;
 	}
 }

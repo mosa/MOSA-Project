@@ -54,7 +54,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-devirtualization-off", Setting = Name.Optimizations_Devirtualization, Value = "false"},
 			new Argument { Name = "-inline-level", Setting = Name.Optimizations_Inline_Maximum},
 			new Argument { Name = "-scanwindow", Setting = Name.Optimizations_ScanWindow},
-			new Argument { Name = "-effortlevel", Setting = Name.Optimizations_Level},
+			new Argument { Name = "-level", Setting = Name.Optimizations_Level},
 			new Argument { Name = "-reduce-size", Setting = Name.Optimizations_ReduceCodeSize, Value = "true"},
 
 			// Compiler - Platforms:
