@@ -48,5 +48,6 @@
 		<file src="..\..\bin\SkiaSharp.dll" target="contentFiles/any/net8.0/Tools" />
 		<file src="..\..\bin\HarfBuzzSharp.dll" target="contentFiles/any/net8.0/Tools" />
 		<file src="..\..\bin\Tmds.DBus.Protocol.dll" target="contentFiles/any/net8.0/Tools" />
+		<file src="..\..\bin\MicroCom.Runtime.dll" target="contentFiles/any/net8.0/Tools" />
 	</files>
 </package>

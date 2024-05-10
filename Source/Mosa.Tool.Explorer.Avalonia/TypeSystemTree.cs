@@ -296,7 +296,7 @@ public class TypeSystemTree
 					GetOrCreateNode(method);
 		}
 
-		//  Method Table
+		// Method Table
 		if (TypeLayout.GetMethodTable(type) != null)
 		{
 			var methodTableNode = new TreeViewItem { Header = "Method Table" };
@@ -306,11 +306,11 @@ public class TypeSystemTree
 
 			foreach (var method in methodList)
 			{
-				if (included == null || included.Contains(method))
-				{
-					var methodNode = new TreeViewItem { Header = method.ShortName, Tag = method };
-					methodTableNode.Items.Add(methodNode);
-				}
+				if (included != null && !included.Contains(method))
+					continue;
+
+				var methodNode = new TreeViewItem { Header = method.ShortName, Tag = method };
+				methodTableNode.Items.Add(methodNode);
 			}
 		}
 

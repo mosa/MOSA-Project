@@ -2,13 +2,13 @@
 
 namespace Mosa.Utility.Disassembler;
 
-public partial class DecodedInstruction
+public class DecodedInstruction
 {
-	public ulong Address { get; set; }
+	public ulong Address { get; init; }
 
-	public int Length { get; set; }
+	public uint Length { get; init; }
 
-	public string Instruction { get; set; }
+	public string Instruction { get; init; }
 
-	public string Full { get; set; }
+	public string Full { get; init; }
 }

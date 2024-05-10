@@ -68,13 +68,13 @@ public partial class TraceView : DebugDockContent
 
 		if (address == InstructionPointer)
 		{
-			var disassembler = new Disassembler("x86");
-			disassembler.SetMemory(memory, address);
+			var disassembler = new Disassembler("x86", memory, address);
+			var instruction = disassembler.DecodeNext();
 
-			foreach (var instruction in disassembler.Decode())
+			while (instruction != null)
 			{
 				opinstruction = instruction.Instruction;
-				break;
+				instruction = disassembler.DecodeNext();
 			}
 		}
 

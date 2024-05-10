@@ -241,12 +241,12 @@ public class Builder : BaseLauncher
 		for (ulong i = fileOffset; i < (ulong)code2.Length; i++)
 			code[i - fileOffset] = code2[i];
 
-		var disassembler = new Disassembler.Disassembler(MosaSettings.Platform);
-		disassembler.SetMemory(code, startingAddress);
+		var disassembler = new Disassembler.Disassembler(MosaSettings.Platform, code, startingAddress);
 
 		using var dest = File.CreateText(MosaSettings.AsmFile);
 
-		foreach (var instruction in disassembler.Decode())
+		var instruction = disassembler.DecodeNext();
+		while (instruction != null)
 		{
 			if (map.TryGetValue(instruction.Address, out List<string> list))
 				foreach (var entry in list)
@@ -256,6 +256,8 @@ public class Builder : BaseLauncher
 
 			if (instruction.Address > startingAddress + length)
 				break;
+
+			instruction = disassembler.DecodeNext();
 		}
 	}
 

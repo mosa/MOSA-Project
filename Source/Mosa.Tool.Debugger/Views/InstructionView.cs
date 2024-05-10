@@ -57,19 +57,20 @@ public partial class InstructionView : DebugDockContent
 	{
 		instructions.Clear();
 
-		var disassembler = new Disassembler("x86");
-		disassembler.SetMemory(memory, address);
+		var disassembler = new Disassembler("x86", memory, address);
+		var instruction = disassembler.DecodeNext();
 
-		foreach (var instruction in disassembler.Decode())
+		while (instruction != null)
 		{
 			var entry = new InstructionEntry()
 			{
 				IP = instruction.Address,
-				Length = instruction.Length,
+				Length = (int)instruction.Length,
 				Instruction = instruction.Instruction.ToString()
 			};
 
 			instructions.Add(entry);
+			instruction = disassembler.DecodeNext();
 		}
 	}
 
