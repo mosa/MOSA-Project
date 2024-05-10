@@ -189,12 +189,12 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Test
-        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }} -counters windows-counters-{{ matrix.optimization }}.txt
+        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }} -counters windows-counters-${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-counters-{{ matrix.optimization }}.txt
-          path: windows-counters-{{ matrix.optimization }}.txt
+          name: windows-counters-${{ matrix.optimization }}.txt
+          path: windows-counters-${{ matrix.optimization }}.txt
 
   linux-unit-testing:
     strategy:
@@ -224,12 +224,12 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Unit Test  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters linux-counters-{{ matrix.optimization }}.txt
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters linux-counters-${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: linux-counters-{{ matrix.optimization }}.txt
-          path: linux-counters-{{ matrix.optimization }}.txt
+          name: linux-counters-${{ matrix.optimization }}.txt
+          path: linux-counters-${{ matrix.optimization }}.txt
           
   macos-unit-testing:
     strategy:
@@ -257,12 +257,12 @@ jobs:
       - name: Install Qemu
         run: brew install qemu
       - name: Unit Test 
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -macos linux-counters-{{ matrix.optimization }}.txt
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -macos linux-counters-${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-counters-{{ matrix.optimization }}.txt
-          path: macos-counters-{{ matrix.optimization }}.txt
+          name: macos-counters-${{ matrix.optimization }}.txt
+          path: macos-counters-${{ matrix.optimization }}.txt
 
   windows-demo-testing:
     strategy:
