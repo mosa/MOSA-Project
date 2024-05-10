@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.NonSSA;
 
 public sealed class Move32NotUsed : BaseNonSA

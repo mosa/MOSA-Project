@@ -6,8 +6,12 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.NonSSA;
 
 public abstract class BaseNonSA : BaseTransform
 {
+	public BaseNonSA(BaseInstruction instruction, TransformType type, int priority = -50, bool log = false)
+			: base(instruction, type, priority, log)
+	{ }
+
 	public BaseNonSA(BaseInstruction instruction, TransformType type, bool log = false)
-			: base(instruction, type, log)
+		: base(instruction, type, -50, log)
 	{ }
 
 	protected static Node FindNextUsed(Node start, Operand target, Operand replacement, int window)
