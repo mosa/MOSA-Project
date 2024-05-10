@@ -263,11 +263,11 @@ jobs:
       - name: Make Artifact Folder
         run: mkdir artifact
       - name: Unit Test 
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} artifact/macos-counters-unittest-o${{ matrix.optimization }}.txt
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} artifact/macos-counters-unittests-o${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-unittest-counters-o${{ matrix.optimization }}
+          name: macos-counters-unittests-o${{ matrix.optimization }}
           path: artifact
 
   windows-demo-testing:
