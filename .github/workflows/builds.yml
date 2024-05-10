@@ -48,7 +48,7 @@ jobs:
       - name: Cleanup 
         run: cmd.exe /C "rmdir /s /q bin\reko bin\cs bin\de bin\es bin\fr bin\it bin\ja bin\ko bin\pl bin\pt-BR bin\ru bin\tr bin\zh-Hans bin\zh-Hant"
       - name: Store Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-build-artifact
           path: bin
@@ -67,7 +67,7 @@ jobs:
       - name: Create Package - Mosa.Templates
         run: nuget pack Source\Mosa.Templates\Mosa.Templates.csproj -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Store Nuget Packages Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Nuget Packages
           path: bin\nupkg
@@ -135,7 +135,7 @@ jobs:
       - name: Unit Test
         run: dotnet test Source/Mosa.Linux.sln
       - name: Store Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
@@ -164,7 +164,7 @@ jobs:
       - name: Unit Test
         run: dotnet test Source/Mosa.Linux.sln
       - name: Store Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-build-artifact
           path: bin
@@ -189,7 +189,12 @@ jobs:
           name: windows-build-artifact
           path: bin
       - name: Unit Test
-        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }}
+        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }} -counters windows-counters-{{ matrix.optimization }}.txt
+      - name: Store Counter Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-counters-{{ matrix.optimization }}.txt
+          path: windows-counters-{{ matrix.optimization }}.txt
 
   linux-unit-testing:
     strategy:
@@ -219,8 +224,13 @@ jobs:
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
       - name: Unit Test  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
-        
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters linux-counters-{{ matrix.optimization }}.txt
+      - name: Store Counter Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-counters-{{ matrix.optimization }}.txt
+          path: linux-counters-{{ matrix.optimization }}.txt
+          
   macos-unit-testing:
     strategy:
       matrix:
@@ -247,7 +257,12 @@ jobs:
       - name: Install Qemu
         run: brew install qemu
       - name: Unit Test 
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -macos linux-counters-{{ matrix.optimization }}.txt
+      - name: Store Counter Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-counters-{{ matrix.optimization }}.txt
+          path: macos-counters-{{ matrix.optimization }}.txt
 
   windows-demo-testing:
     strategy:
