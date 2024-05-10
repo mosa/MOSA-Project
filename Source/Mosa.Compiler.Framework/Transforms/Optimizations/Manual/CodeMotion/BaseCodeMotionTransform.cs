@@ -6,8 +6,8 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion
 {
 	public abstract class BaseCodeMotionTransform : BaseTransform
 	{
-		public BaseCodeMotionTransform(BaseInstruction instruction, TransformType type, bool log = false)
-			: base(instruction, type, log)
+		public BaseCodeMotionTransform(BaseInstruction instruction, TransformType type, int priority = -25, bool log = false)
+			: base(instruction, type, priority, log)
 		{ }
 
 		#region Overrides
