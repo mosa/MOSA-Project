@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class SubManagedPointerSame : BaseTransform
 {
-	public SubManagedPointerSame() : base(IR.SubManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public SubManagedPointerSame() : base(IR.SubManagedPointer, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

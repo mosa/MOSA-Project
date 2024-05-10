@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class AddCarryOut32ByZero : BaseTransform
 {
-	public AddCarryOut32ByZero() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization)
+	public AddCarryOut32ByZero() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -39,11 +37,9 @@ public sealed class AddCarryOut32ByZero : BaseTransform
 
 public sealed class AddCarryOut32ByZero_v1 : BaseTransform
 {
-	public AddCarryOut32ByZero_v1() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization)
+	public AddCarryOut32ByZero_v1() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.Transforms.LowerTo32;
 using Mosa.Compiler.x86.Transforms.AddressMode;
 using Mosa.Compiler.x86.Transforms.FixedRegisters;
 using Mosa.Compiler.x86.Transforms.Optimizations.Manual.Special;

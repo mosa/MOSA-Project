@@ -7,11 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// </summary>
 public sealed class LoadParamSignExtend8x32Double : BaseTransform
 {
-	public LoadParamSignExtend8x32Double() : base(IR.SignExtend8x32, TransformType.Manual | TransformType.Optimization)
+	public LoadParamSignExtend8x32Double() : base(IR.SignExtend8x32, TransformType.Manual | TransformType.Optimization, 85)
 	{
 	}
-
-	public override int Priority => 85;
 
 	public override bool Match(Context context, Transform transform)
 	{

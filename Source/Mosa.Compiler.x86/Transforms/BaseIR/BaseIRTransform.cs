@@ -6,8 +6,12 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR
 {
 	public abstract class BaseIRTransform : BaseX86Transform
 	{
-		public BaseIRTransform(BaseInstruction instruction, TransformType type, bool log = false)
-			: base(instruction, type, log)
+		public BaseIRTransform(BaseInstruction instruction, TransformType type, int priority = 0, bool log = false)
+			: base(instruction, type, priority, log)
+		{ }
+
+		public BaseIRTransform(BaseInstruction instruction, TransformType type, bool log)
+			: base(instruction, type, 0, log)
 		{ }
 
 		#region Overrides

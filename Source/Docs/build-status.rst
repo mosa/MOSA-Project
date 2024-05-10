@@ -1,6 +1,6 @@
 |source| |license| |discord|
 
-|github-build| |github-unittests| |issues| |forks| |stars|
+|github-build| |issues| |forks| |stars|
 
 .. |build| image:: https://img.shields.io/github/workflow/status/mosa/MOSA-Project/Builds
 	:target: https://github.com/mosa/MOSA-Project/actions

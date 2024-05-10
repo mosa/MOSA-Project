@@ -9,11 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class AddCarryOut32 : BaseTransform
 {
-	public AddCarryOut32() : base(IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization)
+	public AddCarryOut32() : base(IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

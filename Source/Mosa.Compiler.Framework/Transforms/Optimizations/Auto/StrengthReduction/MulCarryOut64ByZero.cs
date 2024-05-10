@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class MulCarryOut64ByZero : BaseTransform
 {
-	public MulCarryOut64ByZero() : base(IR.MulCarryOut64, TransformType.Auto | TransformType.Optimization)
+	public MulCarryOut64ByZero() : base(IR.MulCarryOut64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

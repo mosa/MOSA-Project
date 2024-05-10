@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Neg32 : BaseTransform
 {
-	public Neg32() : base(IR.Neg32, TransformType.Auto | TransformType.Optimization)
+	public Neg32() : base(IR.Neg32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

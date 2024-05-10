@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class SignExtend16x64 : BaseTransform
 {
-	public SignExtend16x64() : base(IR.SignExtend16x64, TransformType.Auto | TransformType.Optimization)
+	public SignExtend16x64() : base(IR.SignExtend16x64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

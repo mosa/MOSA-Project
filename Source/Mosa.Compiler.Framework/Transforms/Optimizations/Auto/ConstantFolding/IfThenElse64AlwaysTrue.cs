@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class IfThenElse64AlwaysTrue : BaseTransform
 {
-	public IfThenElse64AlwaysTrue() : base(IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
+	public IfThenElse64AlwaysTrue() : base(IR.IfThenElse64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

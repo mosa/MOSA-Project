@@ -8,10 +8,10 @@ public class ProtectedRegion
 {
 	public MosaExceptionHandler Handler { get; }
 
-	private readonly List<BasicBlock> included = new List<BasicBlock>();
-	private readonly List<BasicBlock> excluded = new List<BasicBlock>();
+	public List<BasicBlock> HandlerBlocks { get; } = new List<BasicBlock>();
 
-	public List<BasicBlock> IncludedBlocks { get; } = new List<BasicBlock>();
+	private readonly HashSet<BasicBlock> included = new();
+	private readonly HashSet<BasicBlock> excluded = new();
 
 	public ProtectedRegion(BasicBlocks basicBlocks, MosaExceptionHandler exceptionHandler)
 	{
@@ -19,7 +19,8 @@ public class ProtectedRegion
 
 		foreach (var block in basicBlocks)
 		{
-			if (block.Label >= exceptionHandler.TryStart && block.Label < exceptionHandler.TryEnd)
+			//if (block.Label >= exceptionHandler.TryStart && block.Label < exceptionHandler.TryEnd)
+			if (exceptionHandler.IsLabelWithinTry(block.Label))
 				included.Add(block);
 			else if (!block.IsCompilerBlock)
 				excluded.Add(block);
@@ -42,10 +43,10 @@ public class ProtectedRegion
 		if (excluded.Contains(block))
 			return;
 
-		if (IncludedBlocks.Contains(block))
+		if (HandlerBlocks.Contains(block))
 			return;
 
-		IncludedBlocks.Add(block);
+		HandlerBlocks.Add(block);
 
 		foreach (var next in block.NextBlocks)
 			Trace(next);
@@ -67,7 +68,7 @@ public class ProtectedRegion
 		return protectedRegions;
 	}
 
-	public static void FinalizeAll(BasicBlocks basicBlocks, IList<ProtectedRegion> protectedRegions)
+	public static void FinalizeAll(BasicBlocks basicBlocks, List<ProtectedRegion> protectedRegions)
 	{
 		foreach (var region in protectedRegions)
 		{

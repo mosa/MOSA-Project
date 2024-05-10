@@ -9,11 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// </summary>
 public sealed class RemSigned64 : BaseTransform
 {
-	public RemSigned64() : base(IR.RemSigned64, TransformType.Manual | TransformType.Transform)
+	public RemSigned64() : base(IR.RemSigned64, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
-
-	public override int Priority => -100;
 
 	public override bool Match(Context context, Transform transform)
 	{

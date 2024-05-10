@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Checked;
 
 public sealed class CheckThrowIndexOutOfRange : BaseTransform
 {
-	public CheckThrowIndexOutOfRange() : base(IR.CheckThrowIndexOutOfRange, TransformType.Manual | TransformType.Optimization, true)
+	public CheckThrowIndexOutOfRange() : base(IR.CheckThrowIndexOutOfRange, TransformType.Manual | TransformType.Optimization, 100, true)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

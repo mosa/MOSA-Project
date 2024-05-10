@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 public sealed class AddCarryOut32ButNotSigned : BaseTransform
 {
-	public AddCarryOut32ButNotSigned() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization, true)
+	public AddCarryOut32ButNotSigned() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization, 20, true)
 	{
 	}
-
-	public override int Priority => 20;
 
 	public override bool Match(Context context, Transform transform)
 	{

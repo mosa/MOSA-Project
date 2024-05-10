@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class MulR8 : BaseTransform
 {
-	public MulR8() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization)
+	public MulR8() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

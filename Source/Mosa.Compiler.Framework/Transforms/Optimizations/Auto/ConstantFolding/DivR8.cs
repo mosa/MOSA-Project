@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class DivR8 : BaseTransform
 {
-	public DivR8() : base(IR.DivR8, TransformType.Auto | TransformType.Optimization)
+	public DivR8() : base(IR.DivR8, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

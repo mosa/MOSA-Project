@@ -136,7 +136,7 @@ public sealed class Transform
 		TypeSystem = Compiler.TypeSystem;
 
 		Devirtualization = Compiler.MosaSettings.Devirtualization;
-		Window = Compiler.MosaSettings.OptimizationBasicWindow;
+		Window = Compiler.MosaSettings.OptimizationScanWindow;
 
 		LoadInstruction = Is32BitPlatform ? IR.Load32 : IR.Load64;
 		StoreInstruction = Is32BitPlatform ? IR.Store32 : IR.Store64;

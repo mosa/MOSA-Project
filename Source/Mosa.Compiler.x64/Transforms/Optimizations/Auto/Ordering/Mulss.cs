@@ -8,11 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Mulss : BaseTransform
 {
-	public Mulss() : base(X64.Mulss, TransformType.Auto | TransformType.Optimization)
+	public Mulss() : base(X64.Mulss, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
-
-	public override int Priority => 10;
 
 	public override bool Match(Context context, Transform transform)
 	{

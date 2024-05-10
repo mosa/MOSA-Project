@@ -9,11 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// </summary>
 public sealed class ConvertR8ToI64 : BaseTransform
 {
-	public ConvertR8ToI64() : base(IR.ConvertR8ToI64, TransformType.Manual | TransformType.Transform)
+	public ConvertR8ToI64() : base(IR.ConvertR8ToI64, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
-
-	public override int Priority => -100;
 
 	public override bool Match(Context context, Transform transform)
 	{

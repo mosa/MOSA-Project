@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Xor64Xor64 : BaseTransform
 {
-	public Xor64Xor64() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Xor64() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -41,11 +39,9 @@ public sealed class Xor64Xor64 : BaseTransform
 
 public sealed class Xor64Xor64_v1 : BaseTransform
 {
-	public Xor64Xor64_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Xor64_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -76,11 +72,9 @@ public sealed class Xor64Xor64_v1 : BaseTransform
 
 public sealed class Xor64Xor64_v2 : BaseTransform
 {
-	public Xor64Xor64_v2() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Xor64_v2() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -111,11 +105,9 @@ public sealed class Xor64Xor64_v2 : BaseTransform
 
 public sealed class Xor64Xor64_v3 : BaseTransform
 {
-	public Xor64Xor64_v3() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Xor64_v3() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Xor32Max : BaseTransform
 {
-	public Xor32Max() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Max() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -35,11 +33,9 @@ public sealed class Xor32Max : BaseTransform
 
 public sealed class Xor32Max_v1 : BaseTransform
 {
-	public Xor32Max_v1() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Max_v1() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

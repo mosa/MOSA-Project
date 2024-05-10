@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class PhiR8Propagate : BaseTransform
 {
-	public PhiR8Propagate() : base(IR.PhiR8, TransformType.Manual | TransformType.Optimization)
+	public PhiR8Propagate() : base(IR.PhiR8, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
-
-	public override int Priority => 40;
 
 	public override bool Match(Context context, Transform transform)
 	{

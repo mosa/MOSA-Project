@@ -7,11 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// </summary>
 public sealed class LoadParamZeroExtend8x64Double : BaseTransform
 {
-	public LoadParamZeroExtend8x64Double() : base(IR.ZeroExtend8x64, TransformType.Manual | TransformType.Optimization)
+	public LoadParamZeroExtend8x64Double() : base(IR.ZeroExtend8x64, TransformType.Manual | TransformType.Optimization, 85)
 	{
 	}
-
-	public override int Priority => 85;
 
 	public override bool Match(Context context, Transform transform)
 	{

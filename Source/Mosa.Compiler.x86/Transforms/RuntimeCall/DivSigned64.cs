@@ -9,11 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// </summary>
 public sealed class DivSigned64 : BaseTransform
 {
-	public DivSigned64() : base(IR.DivSigned64, TransformType.Manual | TransformType.Transform)
+	public DivSigned64() : base(IR.DivSigned64, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
-
-	public override int Priority => -100;
 
 	public override bool Match(Context context, Transform transform)
 	{

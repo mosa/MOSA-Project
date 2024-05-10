@@ -8,11 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Sar32ZeroValue : BaseTransform
 {
-	public Sar32ZeroValue() : base(X86.Sar32, TransformType.Auto | TransformType.Optimization)
+	public Sar32ZeroValue() : base(X86.Sar32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

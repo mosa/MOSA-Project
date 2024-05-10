@@ -7,11 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 /// </summary>
 public sealed class AddOverflowOut64 : BaseTransform
 {
-	public AddOverflowOut64() : base(IR.AddOverflowOut64, TransformType.Manual | TransformType.Optimization)
+	public AddOverflowOut64() : base(IR.AddOverflowOut64, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

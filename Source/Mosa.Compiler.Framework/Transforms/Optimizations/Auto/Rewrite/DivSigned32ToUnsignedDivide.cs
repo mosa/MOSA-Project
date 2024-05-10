@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 
 public sealed class DivSigned32ToUnsignedDivide : BaseTransform
 {
-	public DivSigned32ToUnsignedDivide() : base(IR.DivSigned32, TransformType.Auto | TransformType.Optimization)
+	public DivSigned32ToUnsignedDivide() : base(IR.DivSigned32, TransformType.Auto | TransformType.Optimization, 50)
 	{
 	}
-
-	public override int Priority => 50;
 
 	public override bool Match(Context context, Transform transform)
 	{

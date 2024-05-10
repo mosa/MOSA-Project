@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 public sealed class ArithShiftRight64ButNotSigned : BaseTransform
 {
-	public ArithShiftRight64ButNotSigned() : base(IR.ArithShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public ArithShiftRight64ButNotSigned() : base(IR.ArithShiftRight64, TransformType.Auto | TransformType.Optimization, 20)
 	{
 	}
-
-	public override int Priority => 20;
 
 	public override bool Match(Context context, Transform transform)
 	{

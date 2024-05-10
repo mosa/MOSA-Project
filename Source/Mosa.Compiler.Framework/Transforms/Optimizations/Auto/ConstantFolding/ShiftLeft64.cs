@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class ShiftLeft64 : BaseTransform
 {
-	public ShiftLeft64() : base(IR.ShiftLeft64, TransformType.Auto | TransformType.Optimization)
+	public ShiftLeft64() : base(IR.ShiftLeft64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

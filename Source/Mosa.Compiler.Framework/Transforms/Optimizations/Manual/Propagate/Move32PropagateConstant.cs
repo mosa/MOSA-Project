@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class Move32PropagateConstant : BaseTransform
 {
-	public Move32PropagateConstant() : base(IR.Move32, TransformType.Manual | TransformType.Optimization)
+	public Move32PropagateConstant() : base(IR.Move32, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
-
-	public override int Priority => 40;
 
 	public override bool Match(Context context, Transform transform)
 	{

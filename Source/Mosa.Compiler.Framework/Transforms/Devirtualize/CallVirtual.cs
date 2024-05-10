@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Devirtualize;
 
 public sealed class CallVirtual : BaseTransform
 {
-	public CallVirtual() : base(IR.CallVirtual, TransformType.Manual | TransformType.Optimization)
+	public CallVirtual() : base(IR.CallVirtual, TransformType.Manual | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

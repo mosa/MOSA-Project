@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Dynamic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -28,10 +29,11 @@ public class ExceptionManager : BaseTransformManager
 
 	public override void Setup(MethodCompiler methodCompiler)
 	{
+		Reset();
 		CollectLeaveTargets(methodCompiler.BasicBlocks);
 	}
 
-	public override void Finish()
+	public override void Reset()
 	{
 		LeaveTargets.Clear();
 	}

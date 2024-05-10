@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Or64Max : BaseTransform
 {
-	public Or64Max() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64Max() : base(IR.Or64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -35,11 +33,9 @@ public sealed class Or64Max : BaseTransform
 
 public sealed class Or64Max_v1 : BaseTransform
 {
-	public Or64Max_v1() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64Max_v1() : base(IR.Or64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

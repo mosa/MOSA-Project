@@ -19,7 +19,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	public string Name { get; }
 
-	public virtual int Priority { get; } = 0;
+	public int Priority { get; } = 0;
 
 	public virtual bool IsAuto { get; protected set; }
 
@@ -33,9 +33,10 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	#region Constructors
 
-	public BaseTransform(BaseInstruction instruction, TransformType type, bool log = false)
+	public BaseTransform(BaseInstruction instruction, TransformType type, int priority = 0, bool log = false)
 	{
 		Instruction = instruction;
+		Priority = priority;
 		Log = log;
 
 		IsAuto = type.HasFlag(TransformType.Auto);
@@ -44,8 +45,18 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 		Name = GetType().FullName.Replace("Mosa.Compiler.", string.Empty).Replace("Mosa.Compiler.Framework.Transforms", "IR").Replace("Transforms.", string.Empty);
 	}
 
-	public BaseTransform(TransformType type, bool log = false)
-		: this(null, type, log)
+	public BaseTransform(BaseInstruction instruction, TransformType type, bool log)
+		: this(instruction, type, 0, log)
+	{
+	}
+
+	public BaseTransform(TransformType type, bool log)
+		: this(null, type, 0, log)
+	{
+	}
+
+	public BaseTransform(TransformType type, int priority = 0, bool log = false)
+		: this(null, type, priority, log)
 	{
 	}
 

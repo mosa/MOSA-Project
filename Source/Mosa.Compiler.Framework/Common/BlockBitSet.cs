@@ -6,18 +6,15 @@ namespace Mosa.Compiler.Framework.Common;
 
 public sealed class BlockBitSet
 {
-	//private readonly BasicBlocks BasicBlocks;
 	private readonly BitArray ArraySet;
 
 	public BlockBitSet(BasicBlocks basicBlocks)
 	{
-		//BasicBlocks = basicBlocks;
 		ArraySet = new BitArray(basicBlocks.Count, false);
 	}
 
 	public BlockBitSet(BasicBlocks basicBlocks, List<BasicBlock> blocks)
 	{
-		//BasicBlocks = basicBlocks;
 		ArraySet = new BitArray(basicBlocks.Count, false);
 
 		if (blocks != null)
@@ -59,14 +56,14 @@ public sealed class BlockBitSet
 		ArraySet.And(set.ArraySet);
 	}
 
-	//public IEnumerable<BasicBlock> GetBlocks()
-	//{
-	//	for (var i = 0; i < ArraySet.Count; i++)
-	//	{
-	//		if (ArraySet.Get(i))
-	//		{
-	//			yield return BasicBlocks[i];
-	//		}
-	//	}
-	//}
+	public IEnumerable<BasicBlock> GetBlocks(BasicBlocks basicBlocks)
+	{
+		for (var i = 0; i < ArraySet.Count; i++)
+		{
+			if (ArraySet.Get(i))
+			{
+				yield return basicBlocks[i];
+			}
+		}
+	}
 }

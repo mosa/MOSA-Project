@@ -9,11 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StaticLoad;
 /// </summary>
 public sealed class Load32 : BaseTransform
 {
-	public Load32() : base(IR.Load32, TransformType.Manual | TransformType.Transform)
+	public Load32() : base(IR.Load32, TransformType.Manual | TransformType.Transform, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

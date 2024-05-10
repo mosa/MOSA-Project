@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class AddSub32 : BaseTransform
 {
-	public AddSub32() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public AddSub32() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
-
-	public override int Priority => 90;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -48,11 +46,9 @@ public sealed class AddSub32 : BaseTransform
 
 public sealed class AddSub32_v1 : BaseTransform
 {
-	public AddSub32_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public AddSub32_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
-
-	public override int Priority => 90;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -97,7 +97,7 @@ public static class Name
 	public const string Multiboot_Video_Height = "Multiboot.Video.Height";
 	public const string Multiboot_Video_Width = "Multiboot.Video.Width";
 	public const string Optimizations_Basic = "Optimizations.Basic";
-	public const string Optimizations_Basic_Window = "Optimizations.Basic.Window";
+	public const string Optimizations_ScanWindow = "Optimizations.ScanWindow";
 	public const string Optimizations_BitTracker = "Optimizations.BitTracker";
 	public const string Optimizations_LoopRangeTracker = "Optimizations.LoopRangeTracker";
 	public const string Optimizations_Devirtualization = "Optimizations.Devirtualization";

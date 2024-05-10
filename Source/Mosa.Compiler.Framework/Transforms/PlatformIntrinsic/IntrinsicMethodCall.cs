@@ -7,11 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.PlatformIntrinsic;
 /// </summary>
 public sealed class IntrinsicMethodCall : BaseTransform
 {
-	public IntrinsicMethodCall() : base(IR.IntrinsicMethodCall, TransformType.Manual | TransformType.Transform)
+	public IntrinsicMethodCall() : base(IR.IntrinsicMethodCall, TransformType.Manual | TransformType.Transform, 85)
 	{
 	}
-
-	public override int Priority => -10;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class ConvertI64ToR4 : BaseTransform
 {
-	public ConvertI64ToR4() : base(IR.ConvertI64ToR4, TransformType.Auto | TransformType.Optimization)
+	public ConvertI64ToR4() : base(IR.ConvertI64ToR4, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

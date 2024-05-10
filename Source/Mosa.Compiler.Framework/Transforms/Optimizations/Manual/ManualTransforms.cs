@@ -292,5 +292,6 @@ public static class ManualTransforms
 
 		new NonSSA.Move32(),
 		new NonSSA.Move32Constant(),
+		new NonSSA.Move32NotUsed(),
 	};
 }

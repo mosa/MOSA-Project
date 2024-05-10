@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.CheckedConversion
 {
 	public abstract class BaseCheckedConversionTransform : BaseTransform
 	{
-		public BaseCheckedConversionTransform(BaseInstruction instruction, TransformType type, bool log = false)
-			: base(instruction, type, log)
+		public BaseCheckedConversionTransform(BaseInstruction instruction, TransformType type, int priority = -10, bool log = false)
+			: base(instruction, type, priority, log)
 		{ }
-
-		public override int Priority => -10;
 
 		public override bool Match(Context context, Transform transform)
 		{

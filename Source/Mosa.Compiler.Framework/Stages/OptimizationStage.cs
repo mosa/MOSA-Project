@@ -13,12 +13,15 @@ namespace Mosa.Compiler.Framework.Stages;
 public class OptimizationStage : BaseTransformStage
 {
 	private readonly CodeMotionManager CodeMotion = new();
+	private readonly ExceptionHandlerOperandManager ExceptionHandlerOperands = new();
+
 	private readonly bool LowerTo32;
 
 	public OptimizationStage(bool lowerTo32)
 		: base()
 	{
 		LowerTo32 = lowerTo32;
+		EnableBlockOptimizations = true;
 
 		AddTranforms(ManualTransforms.List);
 		AddTranforms(AutoTransforms.List);
@@ -29,13 +32,15 @@ public class OptimizationStage : BaseTransformStage
 		}
 
 		AddTranforms(Transforms.BasicBlocks.BasicBlocksTransforms.List);
-
-		EnableBlockOptimizations = true;
 	}
 
 	protected override void Setup()
 	{
 		Transform.AddManager(CodeMotion);
+		Transform.AddManager(ExceptionHandlerOperands);
+
+		CodeMotion.Setup(Transform.MethodCompiler);
+		ExceptionHandlerOperands.Setup(Transform.MethodCompiler);
 	}
 
 	protected override bool SetupPhase(int phase)

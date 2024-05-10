@@ -59,7 +59,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 
 			var sections = new List<Tuple<int, int>>();
 
-			foreach (var block in region.IncludedBlocks)
+			foreach (var block in region.HandlerBlocks)
 			{
 				// Check if block continues to exist
 				if (!BasicBlocks.Contains(block))

@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class AddManagedPointerZero : BaseTransform
 {
-	public AddManagedPointerZero() : base(IR.AddManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public AddManagedPointerZero() : base(IR.AddManagedPointer, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -32,11 +30,9 @@ public sealed class AddManagedPointerZero : BaseTransform
 
 public sealed class AddManagedPointerZero_v1 : BaseTransform
 {
-	public AddManagedPointerZero_v1() : base(IR.AddManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public AddManagedPointerZero_v1() : base(IR.AddManagedPointer, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

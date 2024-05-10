@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Not64Twice : BaseTransform
 {
-	public Not64Twice() : base(IR.Not64, TransformType.Auto | TransformType.Optimization)
+	public Not64Twice() : base(IR.Not64, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
-
-	public override int Priority => 25;
 
 	public override bool Match(Context context, Transform transform)
 	{

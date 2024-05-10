@@ -26,7 +26,7 @@ public partial class MosaSettings
 		public const int ARM32StackLocation = 0x30000;
 		public const int ARM64StackLocation = 0x30000;
 
-		public const int Optimizations_Basic_Window = 30;
+		public const int Optimizations_ScanWindow = 30;
 		public const int Optimizations_Inline_Maximum = 12;
 		public const int Optimizations_Inline_AggressiveMaximum = 24;
 	}
@@ -594,10 +594,10 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Optimizations_LoopRangeTracker, value);
 	}
 
-	public int OptimizationBasicWindow
+	public int OptimizationScanWindow
 	{
-		get => Settings.GetValue(Name.Optimizations_Basic_Window, Constant.Optimizations_Basic_Window);
-		set => Settings.SetValue(Name.Optimizations_Basic_Window, value);
+		get => Settings.GetValue(Name.Optimizations_ScanWindow, Constant.Optimizations_ScanWindow);
+		set => Settings.SetValue(Name.Optimizations_ScanWindow, value);
 	}
 
 	public int InlineMaximum
@@ -800,7 +800,7 @@ public partial class MosaSettings
 		InlineExplicit = true;
 		InlineMaximum = Constant.Optimizations_Inline_Maximum;
 		InlineAggressiveMaximum = Constant.Optimizations_Inline_AggressiveMaximum;
-		OptimizationBasicWindow = Constant.Optimizations_Basic_Window;
+		OptimizationScanWindow = Constant.Optimizations_ScanWindow;
 		ReduceCodeSize = false;
 
 		Emulator = "Qemu";
@@ -868,8 +868,8 @@ public partial class MosaSettings
 
 	public void AdjustSettings()
 	{
-		if (OptimizationBasicWindow < 0)
-			OptimizationBasicWindow = 0;
+		if (OptimizationScanWindow < 0)
+			OptimizationScanWindow = 0;
 
 		if (InlineMaximum < 0)
 			InlineMaximum = 0;

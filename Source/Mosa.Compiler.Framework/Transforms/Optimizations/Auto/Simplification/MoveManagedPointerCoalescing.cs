@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class MoveManagedPointerCoalescing : BaseTransform
 {
-	public MoveManagedPointerCoalescing() : base(IR.MoveManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public MoveManagedPointerCoalescing() : base(IR.MoveManagedPointer, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
-
-	public override int Priority => 25;
 
 	public override bool Match(Context context, Transform transform)
 	{

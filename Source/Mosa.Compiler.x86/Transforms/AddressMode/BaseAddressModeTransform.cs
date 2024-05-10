@@ -6,8 +6,8 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode
 {
 	public abstract class BaseAddressModeTransform : BaseX86Transform
 	{
-		public BaseAddressModeTransform(BaseInstruction instruction, TransformType type, bool log = false)
-			: base(instruction, type, log)
+		public BaseAddressModeTransform(BaseInstruction instruction, TransformType type, int priority = 0, bool log = false)
+			: base(instruction, type, priority, log)
 		{ }
 
 		#region Overrides

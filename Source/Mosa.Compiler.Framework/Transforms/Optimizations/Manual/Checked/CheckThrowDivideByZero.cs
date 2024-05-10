@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Checked;
 
 public sealed class CheckThrowDivideByZero : BaseTransform
 {
-	public CheckThrowDivideByZero() : base(IR.CheckThrowDivideByZero, TransformType.Manual | TransformType.Optimization, true)
+	public CheckThrowDivideByZero() : base(IR.CheckThrowDivideByZero, TransformType.Manual | TransformType.Optimization, 100, true)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

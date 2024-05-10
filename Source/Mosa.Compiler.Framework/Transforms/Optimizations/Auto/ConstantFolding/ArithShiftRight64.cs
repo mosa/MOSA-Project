@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class ArithShiftRight64 : BaseTransform
 {
-	public ArithShiftRight64() : base(IR.ArithShiftRight64, TransformType.Auto | TransformType.Optimization)
+	public ArithShiftRight64() : base(IR.ArithShiftRight64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

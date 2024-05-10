@@ -8,11 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Xor32 : BaseTransform
 {
-	public Xor32() : base(X64.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32() : base(X64.Xor32, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
-
-	public override int Priority => 10;
 
 	public override bool Match(Context context, Transform transform)
 	{

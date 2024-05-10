@@ -7,11 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 /// </summary>
 public sealed class Compare64x64BitValue : BaseTransform
 {
-	public Compare64x64BitValue() : base(IR.Compare64x64, TransformType.Manual | TransformType.Optimization)
+	public Compare64x64BitValue() : base(IR.Compare64x64, TransformType.Manual | TransformType.Optimization, 35)
 	{
 	}
-
-	public override int Priority => 35;
 
 	public override bool Match(Context context, Transform transform)
 	{

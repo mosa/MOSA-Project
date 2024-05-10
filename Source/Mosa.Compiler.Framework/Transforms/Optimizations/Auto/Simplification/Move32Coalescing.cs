@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Move32Coalescing : BaseTransform
 {
-	public Move32Coalescing() : base(IR.Move32, TransformType.Auto | TransformType.Optimization)
+	public Move32Coalescing() : base(IR.Move32, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
-
-	public override int Priority => 25;
 
 	public override bool Match(Context context, Transform transform)
 	{

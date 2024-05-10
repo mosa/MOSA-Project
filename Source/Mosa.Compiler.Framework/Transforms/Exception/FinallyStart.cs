@@ -15,8 +15,6 @@ public sealed class FinallyStart : BaseExceptionTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var exceptionManager = transform.GetManager<ExceptionManager>();
-
 		// Remove from header blocks
 		transform.BasicBlocks.RemoveHeaderBlock(context.Block);
 
@@ -29,6 +27,8 @@ public sealed class FinallyStart : BaseExceptionTransform
 
 		context.AppendInstruction(IR.MoveObject, exceptionVirtualRegister, transform.ExceptionRegister);
 		context.AppendInstruction(IR.MoveObject, leaveTargetVirtualRegister, transform.LeaveTargetRegister);
+
+		var exceptionManager = transform.GetManager<ExceptionManager>();
 
 		exceptionManager.ExceptionVirtualRegisters.Add(context.Block, exceptionVirtualRegister);
 		exceptionManager.LeaveTargetVirtualRegisters.Add(context.Block, leaveTargetVirtualRegister);

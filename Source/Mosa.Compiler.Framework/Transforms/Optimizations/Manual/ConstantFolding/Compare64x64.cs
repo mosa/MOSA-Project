@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 
 public sealed class Compare64x64 : BaseTransform
 {
-	public Compare64x64() : base(IR.Compare64x64, TransformType.Manual | TransformType.Optimization)
+	public Compare64x64() : base(IR.Compare64x64, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

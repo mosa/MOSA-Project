@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class DivUnsigned32 : BaseTransform
 {
-	public DivUnsigned32() : base(IR.DivUnsigned32, TransformType.Auto | TransformType.Optimization)
+	public DivUnsigned32() : base(IR.DivUnsigned32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{
