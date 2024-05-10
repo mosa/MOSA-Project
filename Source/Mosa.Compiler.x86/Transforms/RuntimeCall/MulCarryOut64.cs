@@ -10,11 +10,9 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// </summary>
 public sealed class MulCarryOut64 : BaseTransform
 {
-	public MulCarryOut64() : base(IR.MulCarryOut64, TransformType.Manual | TransformType.Transform)
+	public MulCarryOut64() : base(IR.MulCarryOut64, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
-
-	public override int Priority => -100;
 
 	public override bool Match(Context context, Transform transform)
 	{

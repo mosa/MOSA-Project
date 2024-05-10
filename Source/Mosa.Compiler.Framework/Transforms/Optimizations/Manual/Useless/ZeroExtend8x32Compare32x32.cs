@@ -7,11 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// </summary>
 public sealed class ZeroExtend8x32Compare32x32 : BaseTransform
 {
-	public ZeroExtend8x32Compare32x32() : base(IR.ZeroExtend8x32, TransformType.Manual | TransformType.Optimization)
+	public ZeroExtend8x32Compare32x32() : base(IR.ZeroExtend8x32, TransformType.Manual | TransformType.Optimization, 85)
 	{
 	}
-
-	public override int Priority => 85;
 
 	public override bool Match(Context context, Transform transform)
 	{

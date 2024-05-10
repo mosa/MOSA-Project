@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class DivUnsigned64ByOne : BaseTransform
 {
-	public DivUnsigned64ByOne() : base(IR.DivUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public DivUnsigned64ByOne() : base(IR.DivUnsigned64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

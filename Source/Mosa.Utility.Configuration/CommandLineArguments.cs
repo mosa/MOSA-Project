@@ -54,7 +54,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-devirtualization-off", Setting = Name.Optimizations_Devirtualization, Value = "false"},
 			new Argument { Name = "-inline-level", Setting = Name.Optimizations_Inline_Maximum},
 			new Argument { Name = "-scanwindow", Setting = Name.Optimizations_ScanWindow},
-			new Argument { Name = "-level", Setting = Name.Optimizations_Level},
 			new Argument { Name = "-reduce-size", Setting = Name.Optimizations_ReduceCodeSize, Value = "true"},
 
 			// Compiler - Platforms:
@@ -217,7 +216,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o0", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o0", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
 			new Argument { Name = "-o0", Setting = Name.Optimizations_ScanWindow, Value = "0"},
-			new Argument { Name = "-o0", Setting = Name.Optimizations_Level, Value = "0"},
 			new Argument { Name = "-o0", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o1", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -234,7 +232,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o1", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o1", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
 			new Argument { Name = "-o1", Setting = Name.Optimizations_ScanWindow, Value = "30"},
-			new Argument { Name = "-o1", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o1", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o2", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -251,7 +248,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o2", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o2", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
 			new Argument { Name = "-o2", Setting = Name.Optimizations_ScanWindow, Value = "30"},
-			new Argument { Name = "-o2", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o2", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o3", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -268,7 +264,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o3", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o3", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
 			new Argument { Name = "-o3", Setting = Name.Optimizations_ScanWindow, Value = "30"},
-			new Argument { Name = "-o3", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o3", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o4", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -285,7 +280,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o4", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o4", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
 			new Argument { Name = "-o4", Setting = Name.Optimizations_ScanWindow, Value = "30"},
-			new Argument { Name = "-o4", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o4", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o5", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -302,7 +296,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o5", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o5", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
 			new Argument { Name = "-o5", Setting = Name.Optimizations_ScanWindow, Value = "30"},
-			new Argument { Name = "-o5", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o5", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o6", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -319,7 +312,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o6", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o6", Setting = Name.Optimizations_Inline_Maximum, Value = "5"},
 			new Argument { Name = "-o6", Setting = Name.Optimizations_ScanWindow, Value = "30"},
-			new Argument { Name = "-o6", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o6", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o7", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -336,7 +328,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o7", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o7", Setting = Name.Optimizations_Inline_Maximum, Value = "10"},
 			new Argument { Name = "-o7", Setting = Name.Optimizations_ScanWindow, Value = "30"},
-			new Argument { Name = "-o7", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o7", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o8", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -353,7 +344,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o8", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-o8", Setting = Name.Optimizations_Inline_Maximum, Value = "10"},
 			new Argument { Name = "-o8", Setting = Name.Optimizations_ScanWindow, Value = "30"},
-			new Argument { Name = "-o8", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o8", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-o9", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -370,7 +360,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-o9", Setting = Name.Optimizations_TwoPass, Value = "true"},
 			new Argument { Name = "-o9", Setting = Name.Optimizations_Inline_Maximum, Value = "12"},
 			new Argument { Name = "-o9", Setting = Name.Optimizations_ScanWindow, Value = "50"},
-			new Argument { Name = "-o9", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-o9", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-oNone", Setting = Name.Optimizations_Basic, Value = "false"},
@@ -387,7 +376,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-oNone", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-oNone", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
 			new Argument { Name = "-oNone", Setting = Name.Optimizations_ScanWindow, Value = "1"},
-			new Argument { Name = "-oNone", Setting = Name.Optimizations_Level, Value = "0"},
 			new Argument { Name = "-oNone", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-oMax", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -404,7 +392,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-oMax", Setting = Name.Optimizations_TwoPass, Value = "true"},
 			new Argument { Name = "-oMax", Setting = Name.Optimizations_Inline_Maximum, Value = "12"},
 			new Argument { Name = "-oMax", Setting = Name.Optimizations_ScanWindow, Value = "50"},
-			new Argument { Name = "-oMax", Setting = Name.Optimizations_Level, Value = "50"},
 			new Argument { Name = "-oMax", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 
 			new Argument { Name = "-oSize", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -421,7 +408,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-oSize", Setting = Name.Optimizations_TwoPass, Value = "true"},
 			new Argument { Name = "-oSize", Setting = Name.Optimizations_Inline_Maximum, Value = "3"},
 			new Argument { Name = "-oSize", Setting = Name.Optimizations_ScanWindow, Value = "50"},
-			new Argument { Name = "-oSize", Setting = Name.Optimizations_Level, Value = "100"},
 			new Argument { Name = "-oSize", Setting = Name.Optimizations_ReduceCodeSize, Value = "true"},
 
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_Basic, Value = "true"},
@@ -438,7 +424,6 @@ public static class CommandLineArguments
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_TwoPass, Value = "false"},
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_ScanWindow, Value = "5"},
-			new Argument { Name = "-oFast", Setting = Name.Optimizations_Level, Value = "25"},
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 		};
 

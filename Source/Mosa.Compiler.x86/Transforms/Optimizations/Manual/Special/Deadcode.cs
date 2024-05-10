@@ -6,11 +6,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Special;
 
 public sealed class Deadcode : BaseTransform
 {
-	public Deadcode() : base(TransformType.Manual | TransformType.Optimization)
+	public Deadcode() : base(TransformType.Manual | TransformType.Optimization, -100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

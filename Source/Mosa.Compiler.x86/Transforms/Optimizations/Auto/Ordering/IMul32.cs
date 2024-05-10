@@ -8,11 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class IMul32 : BaseTransform
 {
-	public IMul32() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization)
+	public IMul32() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
-
-	public override int Priority => 10;
 
 	public override bool Match(Context context, Transform transform)
 	{

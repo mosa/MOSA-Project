@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Sub64ByZero : BaseTransform
 {
-	public Sub64ByZero() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
+	public Sub64ByZero() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

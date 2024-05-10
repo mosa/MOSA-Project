@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Add64x2 : BaseTransform
 {
-	public Add64x2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
+	public Add64x2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
-
-	public override int Priority => 90;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -48,11 +46,9 @@ public sealed class Add64x2 : BaseTransform
 
 public sealed class Add64x2_v1 : BaseTransform
 {
-	public Add64x2_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
+	public Add64x2_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
-
-	public override int Priority => 90;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -90,11 +86,9 @@ public sealed class Add64x2_v1 : BaseTransform
 
 public sealed class Add64x2_v2 : BaseTransform
 {
-	public Add64x2_v2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
+	public Add64x2_v2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
-
-	public override int Priority => 90;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -132,11 +126,9 @@ public sealed class Add64x2_v2 : BaseTransform
 
 public sealed class Add64x2_v3 : BaseTransform
 {
-	public Add64x2_v3() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
+	public Add64x2_v3() : base(IR.Add64, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
-
-	public override int Priority => 90;
 
 	public override bool Match(Context context, Transform transform)
 	{

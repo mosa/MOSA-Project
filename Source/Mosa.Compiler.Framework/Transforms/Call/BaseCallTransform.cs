@@ -7,8 +7,8 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 
 public abstract class BasePlugTransform : BaseTransform
 {
-	public BasePlugTransform(BaseInstruction instruction, TransformType type, bool log = false)
-		: base(instruction, type, log)
+	public BasePlugTransform(BaseInstruction instruction, TransformType type, int priority = 0, bool log = false)
+		: base(instruction, type, priority, log)
 	{ }
 
 	public override bool Match(Context context, Transform transform)

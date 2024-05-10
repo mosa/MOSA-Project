@@ -27,7 +27,6 @@ public partial class MosaSettings
 		public const int ARM64StackLocation = 0x30000;
 
 		public const int Optimizations_ScanWindow = 30;
-		public const int Optimizations_Level = 100;
 		public const int Optimizations_Inline_Maximum = 12;
 		public const int Optimizations_Inline_AggressiveMaximum = 24;
 	}
@@ -599,12 +598,6 @@ public partial class MosaSettings
 	{
 		get => Settings.GetValue(Name.Optimizations_ScanWindow, Constant.Optimizations_ScanWindow);
 		set => Settings.SetValue(Name.Optimizations_ScanWindow, value);
-	}
-
-	public int OptimizationLevel
-	{
-		get => Settings.GetValue(Name.Optimizations_Level, Constant.Optimizations_Level);
-		set => Settings.SetValue(Name.Optimizations_Level, value);
 	}
 
 	public int InlineMaximum

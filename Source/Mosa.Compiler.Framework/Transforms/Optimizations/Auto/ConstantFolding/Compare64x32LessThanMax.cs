@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Compare64x32LessThanMax : BaseTransform
 {
-	public Compare64x32LessThanMax() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32LessThanMax() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -38,11 +36,9 @@ public sealed class Compare64x32LessThanMax : BaseTransform
 
 public sealed class Compare64x32LessThanMax_v1 : BaseTransform
 {
-	public Compare64x32LessThanMax_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public Compare64x32LessThanMax_v1() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

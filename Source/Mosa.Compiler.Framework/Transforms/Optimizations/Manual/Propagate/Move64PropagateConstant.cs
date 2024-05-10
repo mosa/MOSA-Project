@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class Move64PropagateConstant : BaseTransform
 {
-	public Move64PropagateConstant() : base(IR.Move64, TransformType.Manual | TransformType.Optimization)
+	public Move64PropagateConstant() : base(IR.Move64, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
-
-	public override int Priority => 40;
 
 	public override bool Match(Context context, Transform transform)
 	{

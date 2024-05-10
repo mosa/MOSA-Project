@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class And32Zero : BaseTransform
 {
-	public And32Zero() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
+	public And32Zero() : base(IR.And32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -32,11 +30,9 @@ public sealed class And32Zero : BaseTransform
 
 public sealed class And32Zero_v1 : BaseTransform
 {
-	public And32Zero_v1() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
+	public And32Zero_v1() : base(IR.And32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

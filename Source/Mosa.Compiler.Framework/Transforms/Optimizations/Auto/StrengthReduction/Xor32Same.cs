@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Xor32Same : BaseTransform
 {
-	public Xor32Same() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization)
+	public Xor32Same() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

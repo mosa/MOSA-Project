@@ -9,11 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class DivUnsignedMagicNumber64 : BaseTransform
 {
-	public DivUnsignedMagicNumber64() : base(IR.DivUnsigned64, TransformType.Manual | TransformType.Optimization)
+	public DivUnsignedMagicNumber64() : base(IR.DivUnsigned64, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

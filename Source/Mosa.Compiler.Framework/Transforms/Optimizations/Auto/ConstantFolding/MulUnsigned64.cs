@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class MulUnsigned64 : BaseTransform
 {
-	public MulUnsigned64() : base(IR.MulUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public MulUnsigned64() : base(IR.MulUnsigned64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

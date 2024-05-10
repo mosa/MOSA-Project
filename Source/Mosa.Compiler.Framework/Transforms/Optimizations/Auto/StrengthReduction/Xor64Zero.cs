@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Xor64Zero : BaseTransform
 {
-	public Xor64Zero() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Zero() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -32,11 +30,9 @@ public sealed class Xor64Zero : BaseTransform
 
 public sealed class Xor64Zero_v1 : BaseTransform
 {
-	public Xor64Zero_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public Xor64Zero_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

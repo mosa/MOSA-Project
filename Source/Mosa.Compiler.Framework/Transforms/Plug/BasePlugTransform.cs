@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Plug
 {
 	public abstract class BasePlugTransform : BaseTransform
 	{
-		public BasePlugTransform(BaseInstruction instruction, TransformType type, bool log = false)
-			: base(instruction, type, log)
+		public BasePlugTransform(BaseInstruction instruction, TransformType type, int priority = 100, bool log = false)
+			: base(instruction, type, priority, log)
 		{ }
-
-		public override int Priority => 100;
 
 		public override bool Match(Context context, Transform transform)
 		{

@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class RemUnsigned64 : BaseTransform
 {
-	public RemUnsigned64() : base(IR.RemUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public RemUnsigned64() : base(IR.RemUnsigned64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 public sealed class ArithShiftRight32ButNotSigned : BaseTransform
 {
-	public ArithShiftRight32ButNotSigned() : base(IR.ArithShiftRight32, TransformType.Auto | TransformType.Optimization)
+	public ArithShiftRight32ButNotSigned() : base(IR.ArithShiftRight32, TransformType.Auto | TransformType.Optimization, 20)
 	{
 	}
-
-	public override int Priority => 20;
 
 	public override bool Match(Context context, Transform transform)
 	{

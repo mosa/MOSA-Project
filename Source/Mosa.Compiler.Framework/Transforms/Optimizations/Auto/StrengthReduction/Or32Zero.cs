@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Or32Zero : BaseTransform
 {
-	public Or32Zero() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Zero() : base(IR.Or32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -32,11 +30,9 @@ public sealed class Or32Zero : BaseTransform
 
 public sealed class Or32Zero_v1 : BaseTransform
 {
-	public Or32Zero_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public Or32Zero_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

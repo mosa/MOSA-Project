@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 public sealed class MulSigned32ButNotSigned : BaseTransform
 {
-	public MulSigned32ButNotSigned() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulSigned32ButNotSigned() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization, 20)
 	{
 	}
-
-	public override int Priority => 20;
 
 	public override bool Match(Context context, Transform transform)
 	{

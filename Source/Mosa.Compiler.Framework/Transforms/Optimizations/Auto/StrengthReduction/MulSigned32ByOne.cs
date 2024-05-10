@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class MulSigned32ByOne : BaseTransform
 {
-	public MulSigned32ByOne() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulSigned32ByOne() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -32,11 +30,9 @@ public sealed class MulSigned32ByOne : BaseTransform
 
 public sealed class MulSigned32ByOne_v1 : BaseTransform
 {
-	public MulSigned32ByOne_v1() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization)
+	public MulSigned32ByOne_v1() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

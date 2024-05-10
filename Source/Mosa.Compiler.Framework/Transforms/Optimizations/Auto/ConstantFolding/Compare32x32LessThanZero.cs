@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Compare32x32LessThanZero : BaseTransform
 {
-	public Compare32x32LessThanZero() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32LessThanZero() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -35,11 +33,9 @@ public sealed class Compare32x32LessThanZero : BaseTransform
 
 public sealed class Compare32x32LessThanZero_v1 : BaseTransform
 {
-	public Compare32x32LessThanZero_v1() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization)
+	public Compare32x32LessThanZero_v1() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

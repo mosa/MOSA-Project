@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Add32 : BaseTransform
 {
-	public Add32() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public Add32() : base(IR.Add32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

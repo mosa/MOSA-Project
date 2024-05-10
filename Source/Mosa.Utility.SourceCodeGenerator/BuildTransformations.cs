@@ -70,20 +70,6 @@ public class BuildTransformations : BuildBaseTemplate
 
 		int priority = node.Priority != null ? int.Parse(node.Priority) : 0;
 
-		int level = 100;
-
-		if (node.Level != null)
-		{
-			if (node.Level == "Dynamic")
-			{
-				level = -1;
-			}
-			else
-			{
-				level = int.Parse(node.Level);
-			}
-		}
-
 		if (!optimization && !transformation)
 			optimization = true;
 
@@ -249,6 +235,9 @@ public class BuildTransformations : BuildBaseTemplate
 
 		Lines.Append($"\tpublic {name}{subName}() : base({instructionName}, {typestring}");
 
+		if (priority != 0)
+			Lines.Append($", {priority}");
+
 		if (log)
 			Lines.Append($", true");
 
@@ -258,11 +247,11 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.AppendLine("\t}");
 		Lines.AppendLine("");
 
-		if (priority != 0)
-		{
-			Lines.AppendLine($"\tpublic override int Priority => {priority};");
-			Lines.AppendLine("");
-		}
+		//if (priority != 0)
+		//{
+		//	Lines.AppendLine($"\tpublic override int Priority => {priority};");
+		//	Lines.AppendLine("");
+		//}
 
 		Lines.AppendLine("\tpublic override bool Match(Context context, Transform transform)");
 		Lines.AppendLine("\t{");

@@ -9,11 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class MulOverflowOut64 : BaseTransform
 {
-	public MulOverflowOut64() : base(IR.MulOverflowOut64, TransformType.Auto | TransformType.Optimization, true)
+	public MulOverflowOut64() : base(IR.MulOverflowOut64, TransformType.Auto | TransformType.Optimization, 100, true)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

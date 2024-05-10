@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class AddR4 : BaseTransform
 {
-	public AddR4() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
+	public AddR4() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

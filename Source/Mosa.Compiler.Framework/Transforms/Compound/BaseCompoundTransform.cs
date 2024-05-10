@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Compound;
 
 public abstract class BaseCompoundTransform : BaseTransform
 {
-	public BaseCompoundTransform(BaseInstruction instruction, TransformType type, bool log = false)
-		: base(instruction, type, log)
+	public BaseCompoundTransform(BaseInstruction instruction, TransformType type, int priority = -10, bool log = false)
+		: base(instruction, type, priority, log)
 	{ }
-
-	public override int Priority => -10;
 
 	public override bool Match(Context context, Transform transform)
 	{

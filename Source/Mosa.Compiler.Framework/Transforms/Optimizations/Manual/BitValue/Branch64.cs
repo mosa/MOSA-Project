@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 
 public sealed class Branch64 : BaseTransform
 {
-	public Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization)
+	public Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class MoveManagedPointerPropagateConstant : BaseTransform
 {
-	public MoveManagedPointerPropagateConstant() : base(IR.MoveManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public MoveManagedPointerPropagateConstant() : base(IR.MoveManagedPointer, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
-
-	public override int Priority => 40;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class SubR8x2 : BaseTransform
 {
-	public SubR8x2() : base(IR.SubR8, TransformType.Auto | TransformType.Optimization)
+	public SubR8x2() : base(IR.SubR8, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
-
-	public override int Priority => 90;
 
 	public override bool Match(Context context, Transform transform)
 	{

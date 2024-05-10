@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Or64And64ClearAndSet : BaseTransform
 {
-	public Or64And64ClearAndSet() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64And64ClearAndSet() : base(IR.Or64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -48,11 +46,9 @@ public sealed class Or64And64ClearAndSet : BaseTransform
 
 public sealed class Or64And64ClearAndSet_v1 : BaseTransform
 {
-	public Or64And64ClearAndSet_v1() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64And64ClearAndSet_v1() : base(IR.Or64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -90,11 +86,9 @@ public sealed class Or64And64ClearAndSet_v1 : BaseTransform
 
 public sealed class Or64And64ClearAndSet_v2 : BaseTransform
 {
-	public Or64And64ClearAndSet_v2() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64And64ClearAndSet_v2() : base(IR.Or64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -132,11 +126,9 @@ public sealed class Or64And64ClearAndSet_v2 : BaseTransform
 
 public sealed class Or64And64ClearAndSet_v3 : BaseTransform
 {
-	public Or64And64ClearAndSet_v3() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public Or64And64ClearAndSet_v3() : base(IR.Or64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -7,11 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// </summary>
 public sealed class Store16ZeroExtend16x32 : BaseTransform
 {
-	public Store16ZeroExtend16x32() : base(IR.Store16, TransformType.Manual | TransformType.Optimization)
+	public Store16ZeroExtend16x32() : base(IR.Store16, TransformType.Manual | TransformType.Optimization, 85)
 	{
 	}
-
-	public override int Priority => 85;
 
 	public override bool Match(Context context, Transform transform)
 	{

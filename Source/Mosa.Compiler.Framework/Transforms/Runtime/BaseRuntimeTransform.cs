@@ -7,11 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime
 {
 	public abstract class BaseRuntimeTransform : BaseTransform
 	{
-		public BaseRuntimeTransform(BaseInstruction instruction, TransformType type, bool log = false)
-			: base(instruction, type, log)
+		public BaseRuntimeTransform(BaseInstruction instruction, TransformType type, int priority = 50, bool log = false)
+			: base(instruction, type, priority, log)
 		{ }
-
-		public override int Priority => 50;
 
 		public override bool Match(Context context, Transform transform)
 		{

@@ -8,11 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Shl64ByZero : BaseTransform
 {
-	public Shl64ByZero() : base(X64.Shl64, TransformType.Auto | TransformType.Optimization)
+	public Shl64ByZero() : base(X64.Shl64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

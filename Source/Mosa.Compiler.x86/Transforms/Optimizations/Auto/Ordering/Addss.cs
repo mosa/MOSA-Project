@@ -8,11 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Addss : BaseTransform
 {
-	public Addss() : base(X86.Addss, TransformType.Auto | TransformType.Optimization)
+	public Addss() : base(X86.Addss, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
-
-	public override int Priority => 10;
 
 	public override bool Match(Context context, Transform transform)
 	{

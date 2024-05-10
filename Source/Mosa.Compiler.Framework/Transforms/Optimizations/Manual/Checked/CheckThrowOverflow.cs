@@ -4,11 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Checked;
 
 public sealed class CheckThrowOverflow : BaseTransform
 {
-	public CheckThrowOverflow() : base(IR.CheckThrowOverflow, TransformType.Manual | TransformType.Optimization, true)
+	public CheckThrowOverflow() : base(IR.CheckThrowOverflow, TransformType.Manual | TransformType.Optimization, 100, true)
 	{
 	}
-
-	public override int Priority => 100;
 
 	public override bool Match(Context context, Transform transform)
 	{

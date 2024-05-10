@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
 public sealed class ZeroExtend8x32ZeroExtend16x32 : BaseTransform
 {
-	public ZeroExtend8x32ZeroExtend16x32() : base(IR.ZeroExtend8x32, TransformType.Auto | TransformType.Optimization)
+	public ZeroExtend8x32ZeroExtend16x32() : base(IR.ZeroExtend8x32, TransformType.Auto | TransformType.Optimization, 85)
 	{
 	}
-
-	public override int Priority => 85;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class GetHigh32FromTo64 : BaseTransform
 {
-	public GetHigh32FromTo64() : base(IR.GetHigh32, TransformType.Auto | TransformType.Optimization)
+	public GetHigh32FromTo64() : base(IR.GetHigh32, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
-
-	public override int Priority => 25;
 
 	public override bool Match(Context context, Transform transform)
 	{

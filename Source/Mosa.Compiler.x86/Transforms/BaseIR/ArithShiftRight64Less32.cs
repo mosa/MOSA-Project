@@ -9,11 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// </summary>
 public sealed class ArithShiftRight64Less32 : BaseIRTransform
 {
-	public ArithShiftRight64Less32() : base(IR.ArithShiftRight64, TransformType.Manual | TransformType.Transform)
+	public ArithShiftRight64Less32() : base(IR.ArithShiftRight64, TransformType.Manual | TransformType.Transform, 10)
 	{
 	}
-
-	public override int Priority => 10;
 
 	public override bool Match(Context context, Transform transform)
 	{

@@ -10,11 +10,9 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// </summary>
 public sealed class RemR4 : BaseTransform
 {
-	public RemR4() : base(IR.RemR4, TransformType.Manual | TransformType.Transform)
+	public RemR4() : base(IR.RemR4, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
-
-	public override int Priority => -100;
 
 	public override bool Match(Context context, Transform transform)
 	{

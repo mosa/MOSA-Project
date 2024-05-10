@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
 public sealed class SignExtend32x64Double : BaseTransform
 {
-	public SignExtend32x64Double() : base(IR.SignExtend32x64, TransformType.Auto | TransformType.Optimization)
+	public SignExtend32x64Double() : base(IR.SignExtend32x64, TransformType.Auto | TransformType.Optimization, 85)
 	{
 	}
-
-	public override int Priority => 85;
 
 	public override bool Match(Context context, Transform transform)
 	{

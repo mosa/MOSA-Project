@@ -6,11 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class MulSigned64ByZero : BaseTransform
 {
-	public MulSigned64ByZero() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	public MulSigned64ByZero() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{
@@ -32,11 +30,9 @@ public sealed class MulSigned64ByZero : BaseTransform
 
 public sealed class MulSigned64ByZero_v1 : BaseTransform
 {
-	public MulSigned64ByZero_v1() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization)
+	public MulSigned64ByZero_v1() : base(IR.MulSigned64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
-
-	public override int Priority => 80;
 
 	public override bool Match(Context context, Transform transform)
 	{

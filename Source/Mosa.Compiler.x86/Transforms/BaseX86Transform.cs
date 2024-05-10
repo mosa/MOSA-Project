@@ -6,8 +6,8 @@ namespace Mosa.Compiler.x86.Transforms
 {
 	public abstract class BaseX86Transform : BaseTransform
 	{
-		public BaseX86Transform(BaseInstruction instruction, TransformType type, bool log = false)
-			: base(instruction, type, log)
+		public BaseX86Transform(BaseInstruction instruction, TransformType type, int priority = 0, bool log = false)
+			: base(instruction, type, priority, log)
 		{ }
 
 		#region Helpers
