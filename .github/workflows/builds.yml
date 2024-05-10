@@ -24,7 +24,7 @@ jobs:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: View Build Version
@@ -32,11 +32,11 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
       - name: Setup Nuget.exe
         uses: nuget/setup-nuget@v1
       - name: Restore nuget Packages
@@ -82,7 +82,7 @@ jobs:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: View Build Version
@@ -90,7 +90,7 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Nuget Packages Artifact
@@ -117,7 +117,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: View Build Version
@@ -125,7 +125,7 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Restore nuget Packages
@@ -146,7 +146,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: View Build Version
@@ -154,7 +154,7 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Restore nuget Packages
@@ -180,7 +180,7 @@ jobs:
     needs: windows-build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
@@ -207,11 +207,11 @@ jobs:
     needs: linux-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
@@ -242,11 +242,11 @@ jobs:
     needs: macos-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
@@ -275,7 +275,7 @@ jobs:
     needs: windows-build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
@@ -303,11 +303,11 @@ jobs:
     needs: linux-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
@@ -339,11 +339,11 @@ jobs:
     needs: macos-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
@@ -369,11 +369,11 @@ jobs:
     needs: linux-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
@@ -409,11 +409,11 @@ jobs:
     needs: linux-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
