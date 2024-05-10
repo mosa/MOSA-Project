@@ -94,7 +94,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Nuget Packages Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: Nuget Packages
           path: bin\nupkg
@@ -184,7 +184,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: windows-build-artifact
           path: bin
@@ -215,7 +215,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
@@ -250,7 +250,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: macos-build-artifact
           path: bin
@@ -279,7 +279,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: windows-build-artifact
           path: bin
@@ -311,7 +311,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
@@ -347,7 +347,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: macos-build-artifact
           path: bin
@@ -377,7 +377,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
@@ -417,7 +417,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
