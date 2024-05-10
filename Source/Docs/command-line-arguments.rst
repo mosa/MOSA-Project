@@ -68,8 +68,9 @@ Below are the command line arguments available:
     -output-inlined,CompilerDebug.InlinedFile,%DEFAULT%
     -output-hash,CompilerDebug.PreLinkHashFile,%DEFAULT%
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
-	-counters-filter,CompilerDebug.CountersFilter,{value}
     -check,CompilerDebug.FullCheckMode,true
+	-counters,CompilerDebug.CountersFile,{value}
+	-counters-filter,CompilerDebug.CountersFilter,{value}
 	-asm,CompilerDebug.AsmFile,%DEFAULT%
 	-map,CompilerDebug.MapFile,%DEFAULT%
 
