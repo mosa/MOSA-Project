@@ -32,7 +32,7 @@ Below are the command line arguments available:
     -sccp-off,Optimizations.SCCP,false
     -basic-optimizations,Optimizations.Basic,true
     -basic-optimizations-off,Optimizations.Basic,false
-    -basic-optimization-window,Optimizations.Basic.Window,{value}
+    -scanwindow,Optimizations.ScanWindow,{value}
     -inline-explicit,Optimizations.Inline.Explicit,true
     -inline-explicit-off,Optimizations.Inline.Explicit,false
     -long-expansion,Optimizations.LongExpansion,true
@@ -68,8 +68,9 @@ Below are the command line arguments available:
     -output-inlined,CompilerDebug.InlinedFile,%DEFAULT%
     -output-hash,CompilerDebug.PreLinkHashFile,%DEFAULT%
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
-	-counters-filter,CompilerDebug.CountersFilter,{value}
     -check,CompilerDebug.FullCheckMode,true
+	-counters,CompilerDebug.CountersFile,{value}
+	-counters-filter,CompilerDebug.CountersFilter,{value}
 	-asm,CompilerDebug.AsmFile,%DEFAULT%
 	-map,CompilerDebug.MapFile,%DEFAULT%
 
