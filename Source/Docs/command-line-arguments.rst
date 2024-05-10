@@ -33,7 +33,6 @@ Below are the command line arguments available:
     -basic-optimizations,Optimizations.Basic,true
     -basic-optimizations-off,Optimizations.Basic,false
     -scanwindow,Optimizations.ScanWindow,{value}
-    -level,Optimizations.Level,{value}
     -inline-explicit,Optimizations.Inline.Explicit,true
     -inline-explicit-off,Optimizations.Inline.Explicit,false
     -long-expansion,Optimizations.LongExpansion,true
