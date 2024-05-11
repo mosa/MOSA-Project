@@ -24,7 +24,7 @@ jobs:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: View Build Version
@@ -32,11 +32,11 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
       - name: Setup Nuget.exe
         uses: nuget/setup-nuget@v1
       - name: Restore nuget Packages
@@ -48,7 +48,7 @@ jobs:
       - name: Cleanup 
         run: cmd.exe /C "rmdir /s /q bin\reko bin\cs bin\de bin\es bin\fr bin\it bin\ja bin\ko bin\pl bin\pt-BR bin\ru bin\tr bin\zh-Hans bin\zh-Hant"
       - name: Store Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-build-artifact
           path: bin
@@ -67,7 +67,7 @@ jobs:
       - name: Create Package - Mosa.Templates
         run: nuget pack Source\Mosa.Templates\Mosa.Templates.csproj -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Store Nuget Packages Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Nuget Packages
           path: bin\nupkg
@@ -82,7 +82,7 @@ jobs:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: View Build Version
@@ -90,11 +90,11 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Nuget Packages Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: Nuget Packages
           path: bin\nupkg
@@ -117,7 +117,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: View Build Version
@@ -125,7 +125,7 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Restore nuget Packages
@@ -135,7 +135,7 @@ jobs:
       - name: Unit Test
         run: dotnet test Source/Mosa.Linux.sln
       - name: Store Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
@@ -146,7 +146,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: View Build Version
@@ -154,7 +154,7 @@ jobs:
       - name: View Github Info
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Restore nuget Packages
@@ -164,7 +164,7 @@ jobs:
       - name: Unit Test
         run: dotnet test Source/Mosa.Linux.sln
       - name: Store Build Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-build-artifact
           path: bin
@@ -180,16 +180,23 @@ jobs:
     needs: windows-build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: windows-build-artifact
           path: bin
+      - name: Make Artifact Folder
+        run: mkdir artifact
       - name: Unit Test
-        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }}
+        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }} -counters artifact\windows-counters-unittests-o${{ matrix.optimization }}.txt
+      - name: Store Counter Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-counters-unittests-o${{ matrix.optimization }}
+          path: artifact
 
   linux-unit-testing:
     strategy:
@@ -202,15 +209,15 @@ jobs:
     needs: linux-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
@@ -218,9 +225,16 @@ jobs:
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
       - name: Install Qemu and Dependencies
         run: sudo apt-get -y -o Acquire::Retries=5 install qemu-system-x86
-      - name: Unit Test  
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
-        
+      - name: Make Artifact Folder
+        run: mkdir artifact
+      - name: Perform Unit Testing
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/linux-counters-unittests-o${{ matrix.optimization }}.txt
+      - name: Store Counter Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-counters-unittests-o${{ matrix.optimization }}
+          path: artifact
+          
   macos-unit-testing:
     strategy:
       matrix:
@@ -232,22 +246,29 @@ jobs:
     needs: macos-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: macos-build-artifact
           path: bin
       - name: Install Qemu
         run: brew install qemu
+      - name: Make Artifact Folder
+        run: mkdir artifact
       - name: Unit Test 
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }}
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/macos-counters-unittests-o${{ matrix.optimization }}.txt
+      - name: Store Counter Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-counters-unittests-o${{ matrix.optimization }}
+          path: artifact
 
   windows-demo-testing:
     strategy:
@@ -260,11 +281,11 @@ jobs:
     needs: windows-build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: windows-build-artifact
           path: bin
@@ -288,15 +309,15 @@ jobs:
     needs: linux-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
@@ -324,15 +345,15 @@ jobs:
     needs: macos-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: macos-build-artifact
           path: bin
@@ -354,15 +375,15 @@ jobs:
     needs: linux-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
@@ -394,15 +415,15 @@ jobs:
     needs: linux-build
     steps:
       - name: Set net8.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build-artifact
           path: bin
