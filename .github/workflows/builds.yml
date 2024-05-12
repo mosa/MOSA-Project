@@ -191,7 +191,7 @@ jobs:
       - name: Make Artifact Folder
         run: mkdir artifact
       - name: Unit Test
-        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }} -output-counters artifact\windows-counters-unittests-o${{ matrix.optimization }}.txt
+        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }} -counters artifact\windows-counters-unittests-o${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -228,7 +228,7 @@ jobs:
       - name: Make Artifact Folder
         run: mkdir artifact
       - name: Perform Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -output-counters artifact/linux-counters-unittests-o${{ matrix.optimization }}.txt
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/linux-counters-unittests-o${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -263,7 +263,7 @@ jobs:
       - name: Make Artifact Folder
         run: mkdir artifact
       - name: Unit Test 
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -output-counters artifact/macos-counters-unittests-o${{ matrix.optimization }}.txt
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/macos-counters-unittests-o${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:

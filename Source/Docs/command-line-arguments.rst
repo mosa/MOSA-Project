@@ -82,6 +82,7 @@ Below are the command line arguments available:
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
     -asm,CompilerDebug.AsmFile,%DEFAULT%
     -map,CompilerDebug.MapFile,%DEFAULT%
+    -counters,CompilerDebug.CountersFile,{value}
     -counters-filter,CompilerDebug.CountersFilter,{value}
 
     Compiler - Debug:
