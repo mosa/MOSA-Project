@@ -120,6 +120,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-gdb", Setting = Name.Emulator_GDB, Value = "true"},
 			new Argument { Name = "-vmware-svga", Setting = Name.Emulator_Graphics, Value = "vmware"},
 			new Argument { Name = "-virtio-vga", Setting = Name.Emulator_Graphics, Value = "virtio"},
+			new Argument { Name = "-acceleration", Setting = Name.Emulator_Acceleration, Value = "true"},
 
 			// Launcher - Image:
 			new Argument { Name = "-image", Setting = Name.Image_ImageFile},

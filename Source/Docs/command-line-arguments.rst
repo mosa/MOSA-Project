@@ -126,6 +126,7 @@ Below are the command line arguments available:
     -gdb,Emulator.GDB,true
     -vmware-svga,Emulator.Graphics,vmware
 	-virtio-vga,Emulator.Graphics,virtio
+	-acceleration,Emulator.Acceleration,true
 
     Launcher - Image:
     -image,Image.ImageFile,{value}
