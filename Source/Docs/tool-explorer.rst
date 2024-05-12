@@ -24,5 +24,5 @@ See the :doc:`command line arguments<command-line-arguments>` for a list of avai
 
 Here are the most common options available:
 
-`-filter`
+``-filter``
 	Specifies the default method filter name when Explorer is launched

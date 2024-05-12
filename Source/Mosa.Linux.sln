@@ -155,7 +155,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Docs\compiler-transformations.rst = Docs\compiler-transformations.rst
 		Docs\conf.py = Docs\conf.py
 		Docs\contents.txt = Docs\contents.txt
-		Docs\create-operating-system.rst = Docs\create-operating-system.rst
 		Docs\demos.rst = Docs\demos.rst
 		Docs\faq.rst = Docs\faq.rst
 		Docs\get-involved.rst = Docs\get-involved.rst
@@ -163,7 +162,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Docs\index.rst = Docs\index.rst
 		Docs\introduction.rst = Docs\introduction.rst
 		Docs\license.rst = Docs\license.rst
-		Docs\mosa-project-structure.rst = Docs\mosa-project-structure.rst
 		Docs\mosa-runtime-tables.dot = Docs\mosa-runtime-tables.dot
 		Docs\runtime-tables.rst = Docs\runtime-tables.rst
 		Docs\settings-options.rst = Docs\settings-options.rst
@@ -174,6 +172,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Docs\tool-launcher.rst = Docs\tool-launcher.rst
 		Docs\unit-tests.rst = Docs\unit-tests.rst
 		Docs\usb-flash-drive-installation.rst = Docs\usb-flash-drive-installation.rst
+		Docs\project-structure.rst = Docs\project-structure.rst
+		Docs\optimization-options.rst = Docs\optimization-options.rst
+		Docs\a-dive-into-baremetal.rst = Docs\a-dive-into-baremetal.rst
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.x64", "Mosa.BareMetal.HelloWorld.x64\Mosa.BareMetal.HelloWorld.x64.csproj", "{5F4136A8-EB83-41BE-9D81-B16E723AAE29}"

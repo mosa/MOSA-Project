@@ -2,23 +2,28 @@
 Compiler Transformations
 ########################
 
-The MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. These transformation are described in json formatted text files to make it easy to add new optimizations to the compiler.
+The MOSA compiler uses a database of transformations to represent specific types of optimizations. These transformation
+are described in JSON files to make it easy to add new optimizations to the compiler.
 
-A special parser program, called ``Mosa.Utility.SourceCodeGenerator``, reads the text files and translates them into C# source code files, which are then included and compiled into the MOSA compiler.
+A special parser program, called ``Mosa.Utility.SourceCodeGenerator``, reads the text files and translates them into C#
+source code files, which are then built into the MOSA compiler.
 
 These files are located at ``Source/Data/IR-Optimization-*.json``.
 
 Transformation
 ==============
 
-Each tranformation has three functional parts: **Expression**, **Filter**, and **Rule**.
+Each transformation has three functional parts: **Expression**, **Filter**, and **Rule**.
 
-The **expression** describes the required expression tree necessary in order for the rule to execute. The **filter** describes the specific attributes of operands in the expression tree that must also be satified for the rule to execute. And the **rule** represents the new, replacement expression tree.
+The **expression** describes the required expression tree necessary in order for the rule to execute. The **filter**
+describes the specific attributes of operands in the expression tree that must also be satisfied for the rule to
+execute. And the **rule** represents the new, replacement expression tree.
 
 Example #1
 ----------
 
-Here's an example of a constant folding optimization where an add operation with two constants are translated into a simple move operation.
+Here's an example of a constant folding optimization where an add operation with 2 constants are translated into a
+simple move operation:
 
 .. code-block:: bash
 
@@ -32,7 +37,7 @@ Here's an example of a constant folding optimization where an add operation with
 			"Result": "(IR.Move32 [Add32(To32(a),To32(b))])"
 		}
 
-The first four fields, FamilyName, Type, Name, and SubName, represent a unique name for the transformation.
+The first four fields (``FamilyName``, ``Type``, ``Name``, and ``SubName``) give the transformation a unique name.
 
 This is translated into the following C# code:
 
@@ -72,7 +77,7 @@ This is translated into the following C# code:
 Example #2
 ----------
 
-Here's an example of a rewrite optimization where three operations are reduce to two:
+Here's an example of a rewrite optimization where 3 operations are reduced to 2:
 
 .. code-block:: bash
 
@@ -86,11 +91,12 @@ Here's an example of a rewrite optimization where three operations are reduce to
 			"Result": "(IR.Not32 (IR.Or32 a b))"
 		}
 
-		
+
 Example #3
 ----------
 
-Here's an example of a strength reduction optimization where a multiplication operation by a power of two is translated into a cheaper shift operation:
+Here's an example of a strength reduction optimization where a multiplication operation by a power of 2 is translated
+into a cheaper shift operation:
 
 .. code-block:: bash
 
@@ -108,5 +114,6 @@ Here's an example of a strength reduction optimization where a multiplication op
 Functions
 =========
 
-To find the available filter and expression functions, see the methods in the ``Filter Methods`` and ``Expression Methods`` regions of ``Source/Mosa.Compiler.Framework/Transform/BaseTransformation.cs``.
+To find the available filter and expression functions, see the methods in the ``Filter Methods`` and
+``Expression Methods`` regions of ``Source/Mosa.Compiler.Framework/Transform/BaseTransformation.cs``.
 
