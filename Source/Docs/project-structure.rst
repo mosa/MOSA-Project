@@ -100,6 +100,10 @@ They're the tools provided by the MOSA project. You can learn more about them in
 Mosa.Templates
 **************
 
+It provides the base NuGet template used when creating a new project. Inside the project exists a solution
+(``Mosa.Starter.sln``) whose project structure follows the demos' (1 library with the main OS, multiple executable
+stubs for each platform).
+
 **************
 Mosa.Utility.*
 **************

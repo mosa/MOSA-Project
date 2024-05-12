@@ -37,7 +37,7 @@ simple move operation:
 			"Result": "(IR.Move32 [Add32(To32(a),To32(b))])"
 		}
 
-The first four fields (`FamilyName`, `Type`, `Name`, and `SubName`) give the transformation a unique name.
+The first four fields (``FamilyName``, ``Type``, ``Name``, and ``SubName``) give the transformation a unique name.
 
 This is translated into the following C# code:
 
