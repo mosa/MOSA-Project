@@ -56,17 +56,14 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-operating-system.html">Create your own operating system</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Structure</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="mosa-project-structure.html">MOSA Project Structure</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Settings</span></p>
 <ul class="current">
@@ -93,22 +90,25 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-dive-into-baremetal.html">A dive into the BareMetal kernel</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
 <ul>
@@ -494,6 +494,52 @@
 </section>
 <section id="emulator-settings">
 <h2>Emulator Settings<a class="headerlink" href="#emulator-settings" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Emulator</p></td>
+<td><p>Type of Emulator QEMU, VMware, Bochs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.Memory</p></td>
+<td><p>Amount of memory for the virtual machine in MB</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.Display</p></td>
+<td><p>If true, show the video display</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.Graphics</p></td>
+<td><p>Graphics device: std, cirrus, vbe, virtio or vmware</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.MaxRuntime</p></td>
+<td><p>Maximum runtime of the virtual machine in seconds (future)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.GDB</p></td>
+<td><p>If true, enables GDB within emulator</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.Serial</p></td>
+<td><p>Serial Emulation type None, Pipe, TCPServer, TCPClient</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.Serial.Host</p></td>
+<td><p>Serial Host Name or IP address</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.Serial.Port</p></td>
+<td><p>Serial Port</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.Serial.Pipe</p></td>
+<td><p>Serial Pipename</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.Acceleration</p></td>
+<td><p>Enables CPU hardware acceleration on the emulator, if available</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="gdb-settings">
 <h2>GDB Settings<a class="headerlink" href="#gdb-settings" title="Link to this heading"></a></h2>

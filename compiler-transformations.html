@@ -24,7 +24,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Optimization Options" href="optimization-options.html" />
+    <link rel="next" title="MOSA Runtime Tables" href="runtime-tables.html" />
     <link rel="prev" title="Compiler Optimizations" href="compiler-optimizations.html" /> 
 </head>
 
@@ -56,11 +56,25 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-operating-system.html">Create your own operating system</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Structure</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="mosa-project-structure.html">MOSA Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-dive-into-baremetal.html">A dive into the BareMetal kernel</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
 <ul class="current">
@@ -77,28 +91,14 @@
 </ul>
 </li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
+<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
 <ul>
@@ -133,16 +133,21 @@
              
   <section id="compiler-transformations">
 <h1>Compiler Transformations<a class="headerlink" href="#compiler-transformations" title="Link to this heading"></a></h1>
-<p>The MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. These transformation are described in json formatted text files to make it easy to add new optimizations to the compiler.</p>
-<p>A special parser program, called <code class="docutils literal notranslate"><span class="pre">Mosa.Utility.SourceCodeGenerator</span></code>, reads the text files and translates them into C# source code files, which are then included and compiled into the MOSA compiler.</p>
+<p>The MOSA compiler uses a database of transformations to represent specific types of optimizations. These transformation
+are described in JSON files to make it easy to add new optimizations to the compiler.</p>
+<p>A special parser program, called <code class="docutils literal notranslate"><span class="pre">Mosa.Utility.SourceCodeGenerator</span></code>, reads the text files and translates them into C#
+source code files, which are then built into the MOSA compiler.</p>
 <p>These files are located at <code class="docutils literal notranslate"><span class="pre">Source/Data/IR-Optimization-*.json</span></code>.</p>
 <section id="transformation">
 <h2>Transformation<a class="headerlink" href="#transformation" title="Link to this heading"></a></h2>
-<p>Each tranformation has three functional parts: <strong>Expression</strong>, <strong>Filter</strong>, and <strong>Rule</strong>.</p>
-<p>The <strong>expression</strong> describes the required expression tree necessary in order for the rule to execute. The <strong>filter</strong> describes the specific attributes of operands in the expression tree that must also be satified for the rule to execute. And the <strong>rule</strong> represents the new, replacement expression tree.</p>
+<p>Each transformation has three functional parts: <strong>Expression</strong>, <strong>Filter</strong>, and <strong>Rule</strong>.</p>
+<p>The <strong>expression</strong> describes the required expression tree necessary in order for the rule to execute. The <strong>filter</strong>
+describes the specific attributes of operands in the expression tree that must also be satisfied for the rule to
+execute. And the <strong>rule</strong> represents the new, replacement expression tree.</p>
 <section id="example-1">
 <h3>Example #1<a class="headerlink" href="#example-1" title="Link to this heading"></a></h3>
-<p>Here’s an example of a constant folding optimization where an add operation with two constants are translated into a simple move operation.</p>
+<p>Here’s an example of a constant folding optimization where an add operation with 2 constants are translated into a
+simple move operation:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
 <span class="w">        </span><span class="s2">&quot;FamilyName&quot;</span>:<span class="w"> </span><span class="s2">&quot;IR&quot;</span>,
 <span class="w">        </span><span class="s2">&quot;Type&quot;</span>:<span class="w"> </span><span class="s2">&quot;ConstantFolding&quot;</span>,
@@ -154,7 +159,7 @@
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>The first four fields, FamilyName, Type, Name, and SubName, represent a unique name for the transformation.</p>
+<p>The first four fields (<code class="docutils literal notranslate"><span class="pre">FamilyName</span></code>, <code class="docutils literal notranslate"><span class="pre">Type</span></code>, <code class="docutils literal notranslate"><span class="pre">Name</span></code>, and <code class="docutils literal notranslate"><span class="pre">SubName</span></code>) give the transformation a unique name.</p>
 <p>This is translated into the following C# code:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Add32</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BaseTransformation</span>
 <span class="p">{</span>
@@ -190,7 +195,7 @@
 </section>
 <section id="example-2">
 <h3>Example #2<a class="headerlink" href="#example-2" title="Link to this heading"></a></h3>
-<p>Here’s an example of a rewrite optimization where three operations are reduce to two:</p>
+<p>Here’s an example of a rewrite optimization where 3 operations are reduced to 2:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
 <span class="w">        </span><span class="s2">&quot;FamilyName&quot;</span>:<span class="w"> </span><span class="s2">&quot;IR&quot;</span>,
 <span class="w">        </span><span class="s2">&quot;Type&quot;</span>:<span class="w"> </span><span class="s2">&quot;Rewrite&quot;</span>,
@@ -205,7 +210,8 @@
 </section>
 <section id="example-3">
 <h3>Example #3<a class="headerlink" href="#example-3" title="Link to this heading"></a></h3>
-<p>Here’s an example of a strength reduction optimization where a multiplication operation by a power of two is translated into a cheaper shift operation:</p>
+<p>Here’s an example of a strength reduction optimization where a multiplication operation by a power of 2 is translated
+into a cheaper shift operation:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">{</span>
 <span class="w">        </span><span class="s2">&quot;FamilyName&quot;</span>:<span class="w"> </span><span class="s2">&quot;IR&quot;</span>,
 <span class="w">        </span><span class="s2">&quot;Type&quot;</span>:<span class="w"> </span><span class="s2">&quot;StrengthReduction&quot;</span>,
@@ -221,7 +227,8 @@
 </section>
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
-<p>To find the available filter and expression functions, see the methods in the <code class="docutils literal notranslate"><span class="pre">Filter</span> <span class="pre">Methods</span></code> and <code class="docutils literal notranslate"><span class="pre">Expression</span> <span class="pre">Methods</span></code> regions of <code class="docutils literal notranslate"><span class="pre">Source/Mosa.Compiler.Framework/Transform/BaseTransformation.cs</span></code>.</p>
+<p>To find the available filter and expression functions, see the methods in the <code class="docutils literal notranslate"><span class="pre">Filter</span> <span class="pre">Methods</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Expression</span> <span class="pre">Methods</span></code> regions of <code class="docutils literal notranslate"><span class="pre">Source/Mosa.Compiler.Framework/Transform/BaseTransformation.cs</span></code>.</p>
 </section>
 </section>
 
@@ -230,7 +237,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="compiler-optimizations.html" class="btn btn-neutral float-left" title="Compiler Optimizations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="optimization-options.html" class="btn btn-neutral float-right" title="Optimization Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="runtime-tables.html" class="btn btn-neutral float-right" title="MOSA Runtime Tables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

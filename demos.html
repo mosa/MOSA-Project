@@ -24,7 +24,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Create your own operating system" href="create-operating-system.html" />
+    <link rel="next" title="MOSA Compiler" href="tool-compiler.html" />
     <link rel="prev" title="Getting Started" href="getting-started.html" /> 
 </head>
 
@@ -56,27 +56,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Demos</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#graphicalworld">GraphicalWorld</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coolworld">CoolWorld</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#helloworld">HelloWorld</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testworld">TestWorld</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#starter">Starter</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="create-operating-system.html">Create your own operating system</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Structure</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="mosa-project-structure.html">MOSA Project Structure</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tools</span></p>
 <ul>
@@ -86,14 +71,31 @@
 <li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-dive-into-baremetal.html">A dive into the BareMetal kernel</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
 <ul>
@@ -128,20 +130,33 @@
              
   <section id="demos">
 <h1>Demos<a class="headerlink" href="#demos" title="Link to this heading"></a></h1>
-<p>MOSA includes three demos applications to demostrate various capabilities of the MOSA project.</p>
+<p>MOSA includes three demos applications to demonstrate various capabilities of the MOSA project.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can start any demo by launching its respective script in the Demos folder.</p>
 </div>
-<section id="graphicalworld">
-<h2>GraphicalWorld<a class="headerlink" href="#graphicalworld" title="Link to this heading"></a></h2>
-<p>The <strong>GraphicalWorld</strong> demo uses, as its name would suggest, the GPU and some other features offered by MOSA to make a nice, graphical demo.</p>
-<img alt="_images/mosa-demo-graphicalworld.png" src="_images/mosa-demo-graphicalworld.png" />
+<section id="coolworld">
+<h2>CoolWorld<a class="headerlink" href="#coolworld" title="Link to this heading"></a></h2>
+<p>It uses the GPU and some other features offered by MOSA to make a nice graphical demo.</p>
+<img alt="_images/mosa-demo-coolworld.png" src="_images/mosa-demo-coolworld.png" />
 </section>
 <section id="helloworld">
 <h2>HelloWorld<a class="headerlink" href="#helloworld" title="Link to this heading"></a></h2>
-<p>The <strong>HelloWorld</strong> demo is the classic rendition of <a class="reference external" href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">“Hello, World!”</a>, except it does not actually display those words. Instead it implements a basic shell with a few basic commands, like boot information, memory usage, and device information.</p>
+<p>It implements a basic shell with a few basic commands, like boot information, memory usage, and
+device information.</p>
 <img alt="_images/mosa-demo-helloworld.png" src="_images/mosa-demo-helloworld.png" />
+</section>
+<section id="testworld">
+<h2>TestWorld<a class="headerlink" href="#testworld" title="Link to this heading"></a></h2>
+<p>It’s primarily used for testing and debugging, and thus doesn’t serve any practical purpose other than finding bugs in
+the MOSA compiler for example.</p>
+<img alt="_images/mosa-demo-testworld.png" src="_images/mosa-demo-testworld.png" />
+</section>
+<section id="starter">
+<h2>Starter<a class="headerlink" href="#starter" title="Link to this heading"></a></h2>
+<p>It’s used as a simple demo template project (just like the templates on NuGet), except it’s directly bundled within the
+MOSA solution.</p>
+<img alt="_images/mosa-demo-starter.png" src="_images/mosa-demo-starter.png" />
 </section>
 </section>
 
@@ -150,7 +165,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="getting-started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="create-operating-system.html" class="btn btn-neutral float-right" title="Create your own operating system" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tool-compiler.html" class="btn btn-neutral float-right" title="MOSA Compiler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

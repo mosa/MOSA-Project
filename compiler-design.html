@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Compiler Optimizations" href="compiler-optimizations.html" />
-    <link rel="prev" title="MOSA Project Structure" href="mosa-project-structure.html" /> 
+    <link rel="prev" title="A dive into the BareMetal kernel" href="a-dive-into-baremetal.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -56,11 +56,25 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-operating-system.html">Create your own operating system</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Structure</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="mosa-project-structure.html">MOSA Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-dive-into-baremetal.html">A dive into the BareMetal kernel</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
 <ul class="current">
@@ -74,28 +88,14 @@
 <li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
+<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
 <ul>
@@ -130,42 +130,56 @@
              
   <section id="compiler-design">
 <h1>Compiler Design<a class="headerlink" href="#compiler-design" title="Link to this heading"></a></h1>
-<p>The MOSA Compiler framework is designed around two pipelines each with multiple stages.</p>
+<p>The MOSA Compiler framework is designed around two pipelines, each with multiple stages, and a type system.</p>
 <section id="type-system">
 <h2>Type System<a class="headerlink" href="#type-system" title="Link to this heading"></a></h2>
-<p>The <strong>Type System</strong> is a fundamental part of the MOSA compiler. Essentially, all CIL types and methods are compiled into MOSA types and methods. This also allows for other potential frontends using the MOSA compiler to compile the chosen types and methods into MOSA ones.</p>
+<p>MOSA uses a very similar type system to the one found in .NET, except it’s specific to the MOSA compiler. All types,
+methods, etc.. get translated from their type system to MOSA’s. This is the very first step before the compiler actually
+runs.</p>
 </section>
 <section id="compiler-pipeline">
 <h2>Compiler Pipeline<a class="headerlink" href="#compiler-pipeline" title="Link to this heading"></a></h2>
-<p>The <strong>Compiler Pipeline</strong> is the primary pipeline that executes the steps necessary to compile an application, such as building the type system, compiling each method, linking, and emitting the final object file.</p>
+<p>It’s the primary pipeline that executes the steps necessary to compile an application. It:
+- Creates the type system
+- Compiles each method
+- Links the executable
+- Emits the final object file</p>
 <p>One stage executes the <strong>Method Compiler Pipeline</strong> for each method in the application.</p>
 </section>
 <section id="method-compiler-pipeline">
 <h2>Method Compiler Pipeline<a class="headerlink" href="#method-compiler-pipeline" title="Link to this heading"></a></h2>
-<p>The <strong>Method Compiler Pipeline</strong> is used to compile a single method by progressively lowers the high level instruction representation to the final opcode instructions of the target platform. This pipeline is executed at least once for all methods in the application.</p>
+<p>It’s used to compile a single method by progressively lowering the high level instruction representation to the final
+opcode instructions of the target platform. This pipeline is executed at least once for all methods in the application.</p>
 <p>All the stages can be grouped into one or more of these categories:</p>
 <dl class="simple">
-<dt>Decoding Stage</dt><dd><p>Creates an instruction stream for a method from the source representation, such as a method from a .NET application</p>
+<dt>Decoding Stage</dt><dd><p>Creates an instruction stream for a method from the source representation, such as a method from a .NET application.</p>
 </dd>
-<dt>Transformation Stages</dt><dd><p>Transforms the instruction stream between various representations, usually from a higher level to a lower level representations</p>
+<dt>Transformation Stages</dt><dd><p>Transforms the instruction stream between various representations, usually from a higher level to a lower level
+representation.</p>
 </dd>
-<dt>Optimization Stages</dt><dd><p>Transforms instructions intended to optimize the code to execute faster</p>
+<dt>Optimization Stages</dt><dd><p>Transforms instructions with the intention to make the code execute faster.</p>
 </dd>
-<dt>Register Allocation Stage</dt><dd><p>Allocates the virtual registers in the instruction stream to platform specific physical registers</p>
+<dt>Register Allocation Stage</dt><dd><p>Allocates the virtual registers in the instruction stream to platform-specific physical registers.</p>
 </dd>
-<dt>Platform Specific Transformation Stages</dt><dd><p>Transforms the instructions in the stream into specific platform opcodes</p>
+<dt>Platform-Specific Transformation Stages</dt><dd><p>Transforms the instructions in the stream into specific platform opcodes.</p>
 </dd>
 </dl>
 </section>
 <section id="intermediate-representations">
 <h2>Intermediate Representations<a class="headerlink" href="#intermediate-representations" title="Link to this heading"></a></h2>
-<p>The compiler framework uses a linear intermediate representation (vs an expression tree) to transform the source application into binary machine code. There are several levels of intermediate representations before code generation. These are:</p>
+<p>The compiler framework uses a linear intermediate representation (v.s. an expression tree) to transform the source
+application into binary machine code. There are several levels of intermediate representations before code generation.
+These are:</p>
 <ul class="simple">
 <li><p>Common Intermediate Language (CIL)</p></li>
 <li><p>High-Level Intermediate Representation (IR)</p></li>
 <li><p>Machine specific Intermediate Representation (MIR)</p></li>
 </ul>
-<p>During compilation of an CIL method the instructions are represented by CIL instruction classes and moving forward, the linear instruction stream is modified to use instructions from the intermediate representation. In some cases an instruction from the intermediate representation can not be emitted directly to machine code and it is replaced by a sequence of machine specific instructions. The machine specific instruction classes are provided by the appropriate platform.</p>
+<p>During compilation of a CIL method, the instructions are represented by CIL instruction classes, and moving forward, the
+linear instruction stream is modified to use instructions from the intermediate representation. In some cases an
+instruction from the intermediate representation can not be emitted directly to machine code and it is replaced by a
+sequence of machine specific instructions. The machine specific instruction classes are provided by the appropriate
+platform.</p>
 </section>
 </section>
 
@@ -173,7 +187,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="mosa-project-structure.html" class="btn btn-neutral float-left" title="MOSA Project Structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="a-dive-into-baremetal.html" class="btn btn-neutral float-left" title="A dive into the BareMetal kernel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="compiler-optimizations.html" class="btn btn-neutral float-right" title="Compiler Optimizations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

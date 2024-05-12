@@ -6,7 +6,7 @@ MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BS
 
 .. code-block:: text
 
-  Copyright (c) 2023, MOSA-Project
+  Copyright (c) 2024, MOSA-Project
   All rights reserved.
 
   Redistribution and use in source and binary forms,
@@ -41,4 +41,6 @@ MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BS
   THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
   OF SUCH DAMAGE.
 
-We will accept contributions submitted under the New BSD License or the compatible `MIT/X11 License <http://en.wikipedia.org/wiki/MIT_License>`__. Note: GNU licenses are not compatible with the BSD license.
+We will accept contributions submitted under the New BSD License or the compatible
+`MIT/X11 License <http://en.wikipedia.org/wiki/MIT_License>`__. However, GNU licenses are not compatible with the BSD
+license.

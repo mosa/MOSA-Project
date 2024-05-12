@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOSA Project Structure &mdash; MOSA Project  documentation</title>
+  <title>Project Structure &mdash; MOSA Project  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -24,8 +24,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Compiler Design" href="compiler-design.html" />
-    <link rel="prev" title="Create your own operating system" href="create-operating-system.html" /> 
+    <link rel="next" title="A dive into the BareMetal kernel" href="a-dive-into-baremetal.html" />
+    <link rel="prev" title="Command Line Arguments" href="command-line-arguments.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -56,11 +56,24 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-operating-system.html">Create your own operating system</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Structure</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Project Structure</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Project Structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-baremetal">Mosa.BareMetal.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-compiler">Mosa.Compiler.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-devicedriver">Mosa.DeviceDriver</a></li>
@@ -74,12 +87,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#mosa-runtime">Mosa.Runtime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">Mosa.Runtime.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-tool">Mosa.Tool.*</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mosa-templates">Mosa.Templates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-utility">Mosa.Utility.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-unittests">Mosa.UnitTests.*</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mosa-workspace">Mosa.Workspace.*</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#other-projects">Other projects</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="a-dive-into-baremetal.html">A dive into the BareMetal kernel</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
 <ul>
@@ -87,28 +101,14 @@
 <li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
+<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
 <ul>
@@ -131,9 +131,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">MOSA Project Structure</li>
+      <li class="breadcrumb-item active">Project Structure</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/mosa-project-structure.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/project-structure.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -141,78 +141,94 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="mosa-project-structure">
-<h1>MOSA Project Structure<a class="headerlink" href="#mosa-project-structure" title="Link to this heading"></a></h1>
-<p>MOSA has a lot of projects, which can seem daunting at first. This page will exclusively cover all the types of projects that MOSA has, and explain what they are for.</p>
+  <section id="project-structure">
+<h1>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h1>
+<p>MOSA has a lot of projects, which can seem daunting at first. This page will exclusively cover all the types of projects
+MOSA has, and explain what they’re for.</p>
 <section id="mosa-baremetal">
 <h2>Mosa.BareMetal.*<a class="headerlink" href="#mosa-baremetal" title="Link to this heading"></a></h2>
-<p>Those are the demo projects using the <strong>Mosa.Kernel.BareMetal</strong> kernel.</p>
+<p>They’re the demo projects using the <strong>Mosa.Kernel.BareMetal</strong> kernel.</p>
 </section>
 <section id="mosa-compiler">
 <h2>Mosa.Compiler.*<a class="headerlink" href="#mosa-compiler" title="Link to this heading"></a></h2>
-<p>Those projects make up the MOSA compiler. They include the CIL, IR transformations and native code generation stages. You can learn more about it <a class="reference internal" href="compiler-design.html"><span class="doc">here</span></a>.</p>
+<p>They make up the MOSA compiler. They include the CIL, IR transformations and native code generation stages. You can
+learn more about it <a class="reference internal" href="compiler-design.html"><span class="doc">here</span></a>.</p>
 </section>
 <section id="mosa-devicedriver">
 <h2>Mosa.DeviceDriver<a class="headerlink" href="#mosa-devicedriver" title="Link to this heading"></a></h2>
-<p>This project hosts all the drivers MOSA offers, whether they’re ISA, PCI, USB, etc…</p>
+<p>It hosts all the device driver implementations, whether they’re ISA, PCI, USB, etc…</p>
 </section>
 <section id="mosa-devicesystem">
 <h2>Mosa.DeviceSystem<a class="headerlink" href="#mosa-devicesystem" title="Link to this heading"></a></h2>
-<p>This project contains all kinds of miscelleanous classes and utilities, useful to device drivers and other stuff. It can almost be fully used outside MOSA (it does contain a few classes related to MOSA, like <code class="docutils literal notranslate"><span class="pre">ConstrainedPointer</span></code>) and can serve as a great utilities project. For example, it contains classes for generating a VDI header or VHD footer, MBR generation and some PCI utilities. But it contains much more!</p>
-<p>It is a dependecy of <strong>Mosa.DeviceDriver</strong>.</p>
+<p>It mostly contains abstraction classes (like the device driver framework), generic interfaces (like <code class="docutils literal notranslate"><span class="pre">IGraphicsDevice</span></code>),
+and general other miscellaneous utility classes (like <code class="docutils literal notranslate"><span class="pre">FrameBuffer32</span></code> or <code class="docutils literal notranslate"><span class="pre">ConstrainedPointer</span></code>).</p>
+<p>It is a dependency of <strong>Mosa.DeviceDriver</strong>.</p>
 </section>
 <section id="mosa-filesystem">
 <h2>Mosa.FileSystem<a class="headerlink" href="#mosa-filesystem" title="Link to this heading"></a></h2>
-<p>This project is the MOSA implementation for the file system. It currently only supports FAT32, but it aims to support more in the future.</p>
+<p>It implements the file system used in MOSA. It currently only supports FAT12 and FAT16.</p>
 </section>
 <section id="mosa-kernel-baremetal">
 <h2>Mosa.Kernel.BareMetal<a class="headerlink" href="#mosa-kernel-baremetal" title="Link to this heading"></a></h2>
-<p>This project is the mainline, platform-agnostic implementation of the MOSA kernel.</p>
+<p>It’s the mainline, platform-agnostic implementation of the MOSA kernel. Platform-specific methods are found in the
+<code class="docutils literal notranslate"><span class="pre">Platform</span></code> class exclusively.</p>
 </section>
 <section id="id1">
 <h2>Mosa.Kernel.BareMetal.*<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
-<p>Those projects implement the internal, platform-specific functions of <strong>Mosa.Kernel.BareMetal</strong> as <strong>plugs</strong>.</p>
+<p>They implement the internal, platform-specific functions of <strong>Mosa.Kernel.BareMetal</strong> as <strong>plugs</strong>.</p>
 </section>
 <section id="mosa-korlib">
 <h2>Mosa.Korlib<a class="headerlink" href="#mosa-korlib" title="Link to this heading"></a></h2>
-<p>This project is the MOSA implementation of the .NET standard library. While it is currently missing a lot of features, it is highly portable and can be used in any project requiring a custom core library.</p>
+<p>It’s the MOSA implementation of the .NET standard library. It’s highly portable and can be used in any project requiring
+a custom standard library.</p>
 </section>
 <section id="mosa-plug-korlib">
 <h2>Mosa.Plug.Korlib<a class="headerlink" href="#mosa-plug-korlib" title="Link to this heading"></a></h2>
-<p>While the MOSA implementation of the .NET standard library is portable, it does need some functions implemented by the compiler in order to fully benefit from its potential. This is where this project comes in. It replaces those internal, unimplemented functions with <strong>plugs</strong>. It has a couple of dependencies on other projects, including <strong>Mosa.Runtime</strong> for example. However, it does <strong>not</strong> have dependencies on projects which are built on a specific platform (like <strong>Mosa.Kernel.BareMetal.x86</strong> for example).</p>
+<p>While the MOSA implementation of the .NET standard library is portable, it still needs some methods implemented by the
+compiler in order to fully benefit from its potentia (known as <strong>intrinsics</strong>). That’s where the <strong>Mosa.Plug.Korlib</strong>
+project kicks in. It replaces those internal, unimplemented functions with intrinsics via <strong>plugs</strong>. It has a couple of
+dependencies on other projects, such as <strong>Mosa.Runtime</strong>. However, it does <strong>not</strong> have dependencies on projects which
+are built on a specific platform (like <strong>Mosa.Kernel.BareMetal.x86</strong> for example).</p>
 </section>
 <section id="id2">
 <h2>Mosa.Plug.Korlib.*<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
-<p>Those platform-specific projects are identical to the one above, except they do use platform-specific dependencies like <strong>Mosa.Runtime.x86</strong> in the case of <strong>Mosa.Plug.Korlib.x86</strong>. Those are used if the <strong>plug</strong> must be implemented via platform-specific instructions for example.</p>
+<p>They’re identical to the project above, except they use platform-specific dependencies like <strong>Mosa.Runtime.x86</strong> (in the
+case of <strong>Mosa.Plug.Korlib.x86</strong> for example). They’re used if e.g. the <strong>plug</strong> must be implemented via
+platform-specific instructions.</p>
 </section>
 <section id="mosa-runtime">
 <h2>Mosa.Runtime<a class="headerlink" href="#mosa-runtime" title="Link to this heading"></a></h2>
-<p>This project provides the boot function and process for the kernel, which the compiler integrates in the final binary.</p>
-<p>However, it also provides classes like Pointer or GC.</p>
+<p>It provides the main entry point for the kernel, as well as other critical classes (like <code class="docutils literal notranslate"><span class="pre">Pointer</span></code> and <code class="docutils literal notranslate"><span class="pre">GC</span></code>) used
+throughout MOSA.</p>
 </section>
 <section id="id3">
 <h2>Mosa.Runtime.*<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
-<p>Those projects help in providing additional functions for using native instructions of the specific platform.</p>
+<p>They extend <strong>Mosa.Runtime</strong> by providing a few useful native instructions of the specific platform.</p>
 </section>
 <section id="mosa-tool">
 <h2>Mosa.Tool.*<a class="headerlink" href="#mosa-tool" title="Link to this heading"></a></h2>
-<p>Those projects are the tools provided by the MOSA project. You can learn more about them in the Tools section.</p>
+<p>They’re the tools provided by the MOSA project. You can learn more about them in the Tools section.</p>
+</section>
+<section id="mosa-templates">
+<h2>Mosa.Templates<a class="headerlink" href="#mosa-templates" title="Link to this heading"></a></h2>
+<p>It provides the base NuGet template used when creating a new project. Inside the project exists a solution
+(<code class="docutils literal notranslate"><span class="pre">Mosa.Starter.sln</span></code>) whose project structure follows the demos’ (1 library with the main OS, multiple executable
+stubs for each platform).</p>
 </section>
 <section id="mosa-utility">
 <h2>Mosa.Utility.*<a class="headerlink" href="#mosa-utility" title="Link to this heading"></a></h2>
-<p>Those projects provide common code for other projects to use, such as the tools.</p>
+<p>They’re, in most cases, libraries (but can also be executables like <code class="docutils literal notranslate"><span class="pre">Mosa.Utility.SourceCodeGenerator</span></code>) aimed at
+sharing common code for other projects. They can also prove useful if you want to make your own set of tools for example.</p>
 </section>
 <section id="mosa-unittests">
 <h2>Mosa.UnitTests.*<a class="headerlink" href="#mosa-unittests" title="Link to this heading"></a></h2>
-<p>Those projects host the unit tests, which are automatically triggered in pull requests and main repository commits, but can also <a class="reference internal" href="unit-tests.html"><span class="doc">be triggered manually</span></a>.</p>
+<p>They host the bare metal unit tests, which are automatically triggered in pull requests and main repository commits, but
+can also <a class="reference internal" href="unit-tests.html"><span class="doc">be triggered manually</span></a>.</p>
 </section>
 <section id="mosa-workspace">
 <h2>Mosa.Workspace.*<a class="headerlink" href="#mosa-workspace" title="Link to this heading"></a></h2>
-<p>Those projects are simple playgrounds, which are there to be able to test stuff, such as new compiler optimizations or changes. They’re basically stripped out kernels used to test specific stuff.</p>
-</section>
-<section id="other-projects">
-<h2>Other projects<a class="headerlink" href="#other-projects" title="Link to this heading"></a></h2>
-<p>If some projects are not mentioned here, it’s probably because they’re miscellaneous and/or do not fit in any of the categories cited above.</p>
+<p>They’re simple playgrounds used for testing pretty much anything, such as new compiler optimizations or changes. At
+their core, they’re simply stripped out kernels.</p>
 </section>
 </section>
 
@@ -220,8 +236,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="create-operating-system.html" class="btn btn-neutral float-left" title="Create your own operating system" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="compiler-design.html" class="btn btn-neutral float-right" title="Compiler Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="command-line-arguments.html" class="btn btn-neutral float-left" title="Command Line Arguments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="a-dive-into-baremetal.html" class="btn btn-neutral float-right" title="A dive into the BareMetal kernel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

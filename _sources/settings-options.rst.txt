@@ -161,7 +161,7 @@ Emulator Settings
     Emulator.Serial.Host,Serial Host Name or IP address
     Emulator.Serial.Port,Serial Port
     Emulator.Serial.Pipe,Serial Pipename
-    Emulator.Acceleration,Enables CPU hardware acceleration on the emulator, if available
+    Emulator.Acceleration,"Enables CPU hardware acceleration on the emulator, if available"
 
 GDB Settings
 ------------
@@ -238,7 +238,7 @@ Import Settings
 
 
 Unit Test Settings
----------------
+------------------
 
 .. csv-table::
    :header: "Settings", "Description"

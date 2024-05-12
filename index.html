@@ -55,23 +55,6 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-operating-system.html">Create your own operating system</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Structure</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="mosa-project-structure.html">MOSA Project Structure</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tools</span></p>
 <ul>
@@ -81,14 +64,31 @@
 <li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="a-dive-into-baremetal.html">A dive into the BareMetal kernel</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
 <ul>
@@ -137,24 +137,24 @@
 <h2>Current Status<a class="headerlink" href="#current-status" title="Link to this heading"></a></h2>
 <p>The target platforms are:</p>
 <ul class="simple">
-<li><p>32-bit x86 (stable)</p></li>
-<li><p>64-bit x86 (x64) (in development)</p></li>
+<li><p>32-bit x86</p></li>
+<li><p>64-bit x86 (x64; in development)</p></li>
 <li><p>32-bit ARMv8+ (in early development)</p></li>
 <li><p>64-bit ARMv8+ (in early development)</p></li>
 </ul>
-<p>The MOSA compiler supports most object and non-object oriented code, including:</p>
+<p>The MOSA compiler supports most object and non-object oriented code, including but not limited to:</p>
 <ul class="simple">
-<li><p>Generic Code (example: List&lt;T&gt;)</p></li>
+<li><p>Generic Code (e.g. List&lt;T&gt;)</p></li>
 <li><p>Delegates (static and non-static) and with optional parameters</p></li>
 <li><p>Exception Handling (try, finally, and catch code blocks)</p></li>
 </ul>
-<p>The MOSA compiler seeks to provide high quality code generation using the following optimizations:</p>
+<p>The MOSA compiler seeks to provide high quality code generation using the following optimizations (non-exhaustive):</p>
 <ul class="simple">
 <li><p>Constant Folding and Propagation</p></li>
 <li><p>Strength Reduction optimization</p></li>
 <li><p>Dead Code Elimination</p></li>
 <li><p>Single Static Assignment (SSA)</p></li>
-<li><p>Global Value Numbering / Common Subexpession Elimination</p></li>
+<li><p>Global Value Numbering / Common Subexpression Elimination</p></li>
 <li><p>Sparse Conditional Constant Propagation</p></li>
 <li><p>Inlined Expansion</p></li>
 <li><p>Loop-Invariant Code Motion</p></li>
@@ -163,11 +163,12 @@
 <li><p>Block Reordering</p></li>
 <li><p>Greedy Register Allocation</p></li>
 </ul>
-<p>See the <a class="reference internal" href="compiler-optimizations.html"><span class="doc">Compiler Optimizations</span></a> for a description of each of these optimization methods.</p>
+<p>For an exhaustive list, see <a class="reference internal" href="compiler-optimizations.html"><span class="doc">Compiler Optimizations</span></a> which also gives a description of each of these optimizations.</p>
 </section>
 <section id="join-the-discussion">
 <h2>Join the Discussion<a class="headerlink" href="#join-the-discussion" title="Link to this heading"></a></h2>
-<p>Join us on <a class="reference external" href="https://discord.gg/tRNMn3npsv">Discord</a>. This is the most interactive way to connect to MOSA’s development team.</p>
+<p>Join us on <a class="reference external" href="https://discord.gg/tRNMn3npsv">Discord</a>. This is the most interactive way to connect to MOSA’s
+development team.</p>
 </section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>

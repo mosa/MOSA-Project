@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A dive into the BareMetal kernel &mdash; MOSA Project  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="_static/css/sphinx_prompt_css.css?v=b8d0e3b8" />
+      <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Compiler Design" href="compiler-design.html" />
+    <link rel="prev" title="Project Structure" href="project-structure.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MOSA Project
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Settings</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">A dive into the BareMetal kernel</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-it">What is it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#startup">Startup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#startup-initialize">Startup.Initialize()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#startup-entrypoint">Startup.EntryPoint()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#any-questions">Any questions?</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="get-involved.html">Get Involved</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MOSA Project</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">A dive into the BareMetal kernel</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/a-dive-into-baremetal.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="a-dive-into-the-baremetal-kernel">
+<h1>A dive into the BareMetal kernel<a class="headerlink" href="#a-dive-into-the-baremetal-kernel" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>MOSA’s platform-agnostic, main kernel implementation is called <strong>BareMetal</strong>. It emerged after wanting to unify all
+kernel implementations (which was really x86 and a bit of x64) into 1, and instead implement the platform-specific parts
+via <strong>plugs</strong>.</p>
+<p>At the end of this document, you’ll hopefully understand better how the BareMetal kernel works internally. Let’s get
+started!</p>
+</section>
+<section id="what-is-it">
+<h2>What is it?<a class="headerlink" href="#what-is-it" title="Link to this heading"></a></h2>
+<p>But first, it’s wise to tell you exactly what the BareMetal kernel is. To put it simply, it’s the main kernel
+implementation for MOSA, and abstracts away the <strong>platform-specific details</strong> into separate sub-projects via <strong>plugs</strong>,
+like some other projects already do. The primary advantage of doing this being able to keep a relatively clean code base
+while being able to port the kernel (and other projects) to other platforms relatively easily.</p>
+<p>With that being said, let’s focus on the kernel startup process:</p>
+</section>
+<section id="startup">
+<h2>Startup<a class="headerlink" href="#startup" title="Link to this heading"></a></h2>
+<p>The kernel’s initialization process happens in the <code class="docutils literal notranslate"><span class="pre">Mosa.Kernel.BareMetal.Startup</span></code> class. It’s split into 2 methods:
+- <code class="docutils literal notranslate"><span class="pre">Initialize()</span></code>: For setting up <strong>the platform code used later</strong>, as well as other critical code like the initial
+allocator.
+- <code class="docutils literal notranslate"><span class="pre">EntryPoint()</span></code>: For setting up <strong>everything else</strong>, like the main allocator, the HAL, the device drivers, etc…</p>
+<p>We’ll break down each method individually to find out what actually happens. Let’s start with <code class="docutils literal notranslate"><span class="pre">Initialize()</span></code>:</p>
+</section>
+<section id="startup-initialize">
+<h2>Startup.Initialize()<a class="headerlink" href="#startup-initialize" title="Link to this heading"></a></h2>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">Platform</span><span class="p">.</span><span class="n">Interrupt</span><span class="p">.</span><span class="n">Disable</span><span class="p">();</span>
+<span class="n">Platform</span><span class="p">.</span><span class="n">Setup</span><span class="p">(</span><span class="n">stackFrame</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>First, we have to disable all interrupts because we don’t have an interrupt handler set up (on x86, this is done using
+the <code class="docutils literal notranslate"><span class="pre">cli</span></code> instruction). Then, we setup early platform-specific code (on x86, this initializes the Multiboot v2
+structures). <code class="docutils literal notranslate"><span class="pre">stackFrame</span></code> is a <code class="docutils literal notranslate"><span class="pre">Pointer</span></code> to the current stack address, its primary use is to retrieve the Multiboot
+address and magic number.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">BootOptions</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+<span class="n">Debug</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+<span class="n">BootStatus</span><span class="p">.</span><span class="n">Initalize</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>We then proceed to initialize the boot options, which includes both the static ones in <code class="docutils literal notranslate"><span class="pre">BootSettings</span></code> and the runtime
+ones in the kernel command line. Next, if set in the kernel command line (by <code class="docutils literal notranslate"><span class="pre">bootoptions=serialdebug</span></code>), we set a
+field for later which indicates that serial-based debugging is enabled. It can give us lots of useful insight about
+what’s happening in real time (like allocations for example). Finally, we initialize static fields in the <code class="docutils literal notranslate"><span class="pre">BootStatus</span></code>
+class, which holds useful information at runtime, like if the GC is enabled for example.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">InitialGCMemory</span><span class="p">.</span><span class="n">Initialize</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>There are many allocators in the BareMetal kernel, each having their own specific purpose (we’ll explain them in a bit).
+This one temporarily allows the use of <code class="docutils literal notranslate"><span class="pre">Mosa.Runtime.GC.AllocateMemory()</span></code> method before setting up the true GC
+allocator. To do this, it retrieves a platform-defined <strong>memory pool</strong>, which is nothing more than a memory region
+(which is itself a memory address delimited by a size in bytes). It doesn’t have to be <em>too</em> big, but it should be big
+<em>enough</em> to accomodate for any potential objects created in between that time.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">Platform</span><span class="p">.</span><span class="n">Initialize</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>To conclude this part of the setup, we initialize some more platform-defined structures. On x86, these include the SSE
+instruction set, the PIC, the RTC, and the serial controller if the field for enabling serial-based debugging is set.</p>
+<p>Now that we’ve seen the <code class="docutils literal notranslate"><span class="pre">Initialize()</span></code> method, let’s take a look at the much more interesting <code class="docutils literal notranslate"><span class="pre">EntryPoint()</span></code> method:</p>
+</section>
+<section id="startup-entrypoint">
+<h2>Startup.EntryPoint()<a class="headerlink" href="#startup-entrypoint" title="Link to this heading"></a></h2>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">BootPageAllocator</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The initial page allocator has a similar concept to the initial GC memory allocator seen above, except this one is used
+for allocating platform-defined structures at startup (for example, on x86, this would be the GDT, IDT, etc…). Like
+the latter, it takes in a specific <strong>memory pool</strong> defined by the platform kernel implementation.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">BootMemoryMap</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+<span class="n">BootMemoryMap</span><span class="p">.</span><span class="n">Dump</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Would you be able to guess what the <code class="docutils literal notranslate"><span class="pre">BootMemoryMap.Setup()</span></code> method does? That’s right! It sets up the kernel’s memory
+map. It imports the one defined by the bootloader via Multiboot v2, and imports the platform memory map, i.e. the same
+memory pools defined for the <code class="docutils literal notranslate"><span class="pre">InitialGCMemory</span></code> allocator and the <code class="docutils literal notranslate"><span class="pre">BootPageAllocator</span></code>. Then the <code class="docutils literal notranslate"><span class="pre">Dump()</span></code> method
+simply outputs the memory map to standard output.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">PageFrameAllocator</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>This is the first “real” allocator in the kernel. It’s a physical page allocator using a <strong>bitmap</strong> (not the image
+format, but an actual bit map) to store information about individual pages. It sets the individual page size based on a
+platform <strong>page shift</strong>, and defines each page using the now-initialized memory map from above.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">PageTable</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+<span class="n">VirtualPageAllocator</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">PageTable</span></code> class simply acts as a thin wrapper around the <code class="docutils literal notranslate"><span class="pre">Platform.PageTable</span></code>, so it’s not that interesting.
+However, we can spot a new allocator here: the <code class="docutils literal notranslate"><span class="pre">VirtualPageAllocator</span></code>. As its name would suggest, it allocates a
+specific number of pages, and maps those to become virtual pages instead of physical pages.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">InterruptManager</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Just like <code class="docutils literal notranslate"><span class="pre">PageTable</span></code>, the <code class="docutils literal notranslate"><span class="pre">InterruptManager</span></code> class is a tiny wrapper around <code class="docutils literal notranslate"><span class="pre">Platform.Interrupt</span></code>, as well as
+<code class="docutils literal notranslate"><span class="pre">InterruptQueue</span></code>. The latter is pretty self-explanatory, it allows interrupts to be queued for execution, so to speak.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">GCMemory</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Yet another allocator! This one is designed to replace the <code class="docutils literal notranslate"><span class="pre">InitialGCMemory</span></code> we talked about earlier. Internally, it
+uses the <code class="docutils literal notranslate"><span class="pre">VirtualPageAllocator</span></code>, except it allocates a specified size in <strong>bytes</strong> and keeps track of that and the
+number of allocated pages in a separate heap, called the <strong>GC heap</strong>.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">VirtualMemoryAllocator</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">VirtualMemoryAllocator</span></code> is almost virtually (no pun intended) identical to the <code class="docutils literal notranslate"><span class="pre">GCMemory</span></code> allocator: it
+allocates a specific number of pages given a size in bytes, and store that information in a heap. So, what’s the
+difference? Well, it’s that the 2 heaps are different: where the <code class="docutils literal notranslate"><span class="pre">GCMemory</span></code> allocator stores the information in its
+<strong>GC heap</strong>, the <code class="docutils literal notranslate"><span class="pre">VirtualMemoryAllocator</span></code> does so in its <strong>memory heap</strong>. This is an important distinction because
+the GC heap is used to keep track of all <strong>automatically</strong> allocated objects so they can be freed when needed, whereas
+the memory heap keeps track of all <strong>manually</strong> allocated objects, usually by the kernel or by the end user, so they
+can be freed whenever desired.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">Scheduler</span><span class="p">.</span><span class="n">Setup</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>We’re <strong>finally</strong> done with allocators. Here, we set up the <code class="docutils literal notranslate"><span class="pre">Scheduler</span></code>, which allows the kernel to schedule tasks
+(or <strong>threads</strong>) on the fly. However, since MOSA can currently only use up to 1 CPU core, the scheduler isn’t very
+useful.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">hardware</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HardwareAbstractionLayer</span><span class="p">();</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">deviceService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DeviceService</span><span class="p">();</span>
+
+<span class="n">HAL</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="n">hardware</span><span class="p">);</span>
+<span class="n">HAL</span><span class="p">.</span><span class="n">SetInterruptHandler</span><span class="p">(</span><span class="n">deviceService</span><span class="p">.</span><span class="n">ProcessInterrupt</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This part of the code initializes the HAL (Hardware Abstraction Layer). This is essentially the “man in the middle” of
+the OS: it allows parts of the entire OS to intercommunicate. We also initialize our first <strong>service</strong>, and we set our
+global interrupt handler to the device service’s. We’ll get into what services are, and particularly what the
+<code class="docutils literal notranslate"><span class="pre">DeviceService</span></code> is.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">deviceService</span><span class="p">.</span><span class="n">RegisterDeviceDriver</span><span class="p">(</span><span class="n">Setup</span><span class="p">.</span><span class="n">GetDeviceDriverRegistryEntries</span><span class="p">());</span>
+</pre></div>
+</div>
+<p>As you may have guessed, the <code class="docutils literal notranslate"><span class="pre">DeviceService</span></code> is the base service for initializing all <strong>devices</strong> in the system (along
+with their corresponding <strong>device drivers</strong>). This line of code does exactly that: it registers all device drivers from
+the MOSA device driver framework into the <code class="docutils literal notranslate"><span class="pre">DeviceService</span></code> in order to start them.</p>
+<p>An interesting point to make is this <code class="docutils literal notranslate"><span class="pre">Setup.GetDeviceDriverRegistryEntries()</span></code> method. This method returns a list
+of device driver registry entries, which means that you could very well add/remove drivers to/from that list in order to
+initialize only certain drivers, or more drivers, if you want.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">serviceManager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ServiceManager</span><span class="p">();</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">diskDeviceService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DiskDeviceService</span><span class="p">();</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">partitionService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PartitionService</span><span class="p">();</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">isaDeviceService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ISADeviceService</span><span class="p">();</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">pciDeviceService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PCIDeviceService</span><span class="p">();</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">pcService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PCService</span><span class="p">();</span>
+
+<span class="n">serviceManager</span><span class="p">.</span><span class="n">AddService</span><span class="p">(</span><span class="n">deviceService</span><span class="p">);</span>
+<span class="n">serviceManager</span><span class="p">.</span><span class="n">AddService</span><span class="p">(</span><span class="n">diskDeviceService</span><span class="p">);</span>
+<span class="n">serviceManager</span><span class="p">.</span><span class="n">AddService</span><span class="p">(</span><span class="n">partitionService</span><span class="p">);</span>
+<span class="n">serviceManager</span><span class="p">.</span><span class="n">AddService</span><span class="p">(</span><span class="n">isaDeviceService</span><span class="p">);</span>
+<span class="n">serviceManager</span><span class="p">.</span><span class="n">AddService</span><span class="p">(</span><span class="n">pciDeviceService</span><span class="p">);</span>
+<span class="n">serviceManager</span><span class="p">.</span><span class="n">AddService</span><span class="p">(</span><span class="n">pcService</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The previous code is then followed by the service initialization code. We create a new <code class="docutils literal notranslate"><span class="pre">ServiceManager</span></code>, alongside a
+bunch of other <strong>services</strong>, and we add them all into the <code class="docutils literal notranslate"><span class="pre">ServiceManager</span></code>. So, what exactly are services?</p>
+<p>In short, services are <strong>background tasks</strong> that fulfill a <strong>specific purpose</strong>, and can be <strong>queried at any time</strong>. A
+good example of this is the <code class="docutils literal notranslate"><span class="pre">PCService</span></code>, or even the aforementioned <code class="docutils literal notranslate"><span class="pre">DeviceService</span></code>. Indeed, the <code class="docutils literal notranslate"><span class="pre">PCService</span></code>
+fulfills the purpose of handling power management, like shutting down or rebooting the system. This service must be
+queryable at any point in time, whenever the user wishes to shut down or reboot their PC. Similarly (but more so
+to the end user), the <code class="docutils literal notranslate"><span class="pre">DeviceService</span></code> allows querying any initialized device driver in the system. This is
+particularly useful if you want to, say, get all <code class="docutils literal notranslate"><span class="pre">IGraphicsDevice``s</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">system,</span> <span class="pre">or</span> <span class="pre">even</span> <span class="pre">get</span> <span class="pre">a</span> <span class="pre">very</span> <span class="pre">specific</span> <span class="pre">device</span>
+<span class="pre">like</span> <span class="pre">a</span> <span class="pre">``StandardKeyboard</span></code>.</p>
+<p>Either way, here, we initialize a total of <strong>5 new services</strong>, all of which most likely need no introduction now. But,
+in doubt, here’s a short summary of what all the services do:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DeviceService</span></code>: Starts and handles all devices in the system (if any), including any <strong>generic</strong> devices.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DiskDeviceService</span></code>: Manages all disks in the system.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PartitionService</span></code>: Manages all partitions inside a disk.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ISADeviceService</span></code>: Starts and handles all ISA devices in the system (if any).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PCIDeviceService</span></code>: Starts and handles all PCI devices in the system (if any).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PCService</span></code>: Handles power management in the system.</p></li>
+</ul>
+<p>Wait, what’s that? <strong>Generic</strong> devices? What are those? To put it simply, they’re devices that don’t have a specific
+<strong>bus</strong> attached to them. A <strong>bus</strong> is typically ISA, PCI, USB, etc… but some devices (or standards) simply don’t
+have any actual bus connected to them (e.g. <strong>ACPI</strong>). For this, the term “generic devices” was coined to handle all
+these devices in the system.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">partitionService</span><span class="p">.</span><span class="n">CreatePartitionDevices</span><span class="p">();</span>
+
+<span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">partition</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">deviceService</span><span class="p">.</span><span class="n">GetDevices</span><span class="o">&lt;</span><span class="n">IPartitionDevice</span><span class="o">&gt;</span><span class="p">())</span>
+<span class="w">            </span><span class="n">FileManager</span><span class="p">.</span><span class="n">Register</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">FatFileSystem</span><span class="p">(</span><span class="n">partition</span><span class="p">.</span><span class="n">DeviceDriver</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">IPartitionDevice</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>We haven’t finished talking about services, though. This part of the code here first <strong>initializes</strong> all partitions
+in <strong>all disks</strong>, then iterates over all the partitions to register them as FAT file systems, if they contain one.
+Indeed, the <code class="docutils literal notranslate"><span class="pre">FileManager.Register()</span></code> method will not actually register the file system if it doesn’t contain a valid
+FAT (File Allocation Table).</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">stdKeyboard</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">deviceService</span><span class="p">.</span><span class="n">GetFirstDevice</span><span class="o">&lt;</span><span class="n">StandardKeyboard</span><span class="o">&gt;</span><span class="p">().</span><span class="n">DeviceDriver</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">IKeyboardDevice</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stdKeyboard</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">ForegroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ConsoleColor</span><span class="p">.</span><span class="n">Red</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [FAIL]&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;No keyboard detected!&quot;</span><span class="p">);</span>
+
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span>
+<span class="w">                    </span><span class="n">HAL</span><span class="p">.</span><span class="n">Yield</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="n">Kernel</span><span class="p">.</span><span class="n">Keyboard</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Keyboard</span><span class="p">(</span><span class="n">stdKeyboard</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">US</span><span class="p">());</span>
+</pre></div>
+</div>
+<p>We’re almost done. An essential device to initialize is the <strong>keyboard</strong>, which is what we’ll do here. Note that, if no
+keyboard is detected, the system will <strong>halt</strong>. This is because, currently, MOSA is practically useless for anything
+other than for user interaction (it doesn’t have any network stack, for example). This restriction is bound to
+be removed in the future however.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="n">InterruptManager</span><span class="p">.</span><span class="n">SetHandler</span><span class="p">(</span><span class="n">ProcessInterrupt</span><span class="p">);</span>
+<span class="n">Platform</span><span class="p">.</span><span class="n">Interrupt</span><span class="p">.</span><span class="n">Enable</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Finally, we arrive at the last bit of initialization code. And fortunately for us, it’s not very complicated: it sets
+the CPU’s interrupt handler to one defined in the same <code class="docutils literal notranslate"><span class="pre">Startup</span></code> class (whose sole purpose is to redirect the
+interrupts to the <strong>HAL</strong> if they’re coming from a device), and enable interrupts (on x86 for example, this would
+execute the <code class="docutils literal notranslate"><span class="pre">sti</span></code> instruction).</p>
+<p><strong>Note</strong>: A limitation of this <code class="docutils literal notranslate"><span class="pre">ProcessInterrupt()</span></code> method is it’s <strong>x86 specific</strong>. This is because it checks if the
+interrupt is within a specific range of interrupts, which is specific to x86. With the ever growing support for ARM in
+MOSA, this limitation eventually ought to be surpassed, but for now, it is what it is.</p>
+</section>
+<section id="any-questions">
+<h2>Any questions?<a class="headerlink" href="#any-questions" title="Link to this heading"></a></h2>
+<p>And we’re done! We hope you now understand how the <strong>BareMetal</strong> kernel works better. If you have any questions
+regarding the content of this document, or even any other question, don’t hesitate to join our
+<a class="reference external" href="https://discord.gg/tRNMn3npsv">Discord</a> server! We’ll happily answer your questions :D</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="project-structure.html" class="btn btn-neutral float-left" title="Project Structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="compiler-design.html" class="btn btn-neutral float-right" title="Compiler Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2008-2024, Mosa Project &amp; contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
