@@ -8,14 +8,15 @@ Prerequisites
 Windows
 =======
 
-On Windows, you can either install `Visual Studio <https://visualstudio.microsoft.com/>`__, or use the command line. As MOSA currently targets .NET 7, you'll need Visual Studio 2022 17.4 or newer.
+On Windows, you can either install `Visual Studio <https://visualstudio.microsoft.com/>`__, or use the command line. As
+MOSA currently targets .NET 8, you'll need Visual Studio 2022 17.9 or newer.
 
 Linux
 =====
 
 On Linux, the following prerequisites are necessary:
 
-* `.NET 7 <https://dotnet.microsoft.com/>`__
+* `.NET 8 <https://dotnet.microsoft.com/>`__
 * `Git <https://git-scm.com/>`__ (only if you want to clone and build manually)
 * `QEMU <https://www.qemu.org/>`__
 
@@ -30,7 +31,7 @@ If you're using Ubuntu 22.04, you can use the following commands to quickly set 
 	# Install the .NET Core SDK
 	sudo add-apt-repository universe
 	sudo apt-get update
-	sudo apt-get -y install dotnet-sdk-7.0
+	sudo apt-get -y install dotnet-sdk-8.0
 
 	# Intall QEMU and GIT
 	sudo apt-get -y install qemu qemu-system qemu-system-x86 git
@@ -88,7 +89,8 @@ The MOSA project is available on GitHub and can be cloned via Git:
 
 In order to build the solution, you can execute the following command:
 
-.. warning:: On Linux, you'd build the **Mosa.Linux.sln** solution instead of **Mosa.sln**. This is because some Windows-only tools haven't been yet ported to other platforms.
+.. warning:: On Linux, you'd build the **Mosa.Linux.sln** solution instead of **Mosa.sln**. This is because some
+	Windows-only tools haven't been yet ported to other platforms.
 
 .. code-block:: bash
 
@@ -112,4 +114,5 @@ Finally, to launch one of the demo applications, simply execute the GUI launcher
 
 	bin/Mosa.Tool.Launcher
 
-You can then select the demo application of your choice as source, perhaps modify a few options, then build! You can learn more about this launcher tool :doc:`here<tool-launcher>`.
+You can then select the demo application of your choice as source, perhaps modify a few options, then build! You can
+learn more about this launcher tool :doc:`here<tool-launcher>`.

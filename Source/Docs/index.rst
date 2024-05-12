@@ -5,7 +5,8 @@
 Join the Discussion
 *******************
 
-Join us on `Discord <https://discord.gg/tRNMn3npsv>`__. This is the most interactive way to connect to MOSA's development team.
+Join us on `Discord <https://discord.gg/tRNMn3npsv>`__. This is the most interactive way to connect to MOSA's
+development team.
 
 *******
 License

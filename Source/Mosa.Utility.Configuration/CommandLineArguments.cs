@@ -12,14 +12,15 @@ public static class CommandLineArguments
 	{
 		var map = new List<Argument>
 		{
+			new Argument { Name = "-settings", Setting ="Settings", Value= null, IsList = true},
+
+			// Compiler:
 			new Argument { Name = null, Setting =  Name.Compiler_SourceFiles, Value = null, IsList = true},
+			new Argument { Name = "-o", Setting = Name.Compiler_OutputFile},
 
 			new Argument { Name = "-threading", Setting = Name.Compiler_Multithreading, Value = "true"},
 			new Argument { Name = "-threading-off", Setting = Name.Compiler_Multithreading, Value = "false"},
 			new Argument { Name = "-threads", Setting = Name.Compiler_Multithreading_MaxThreads },
-			new Argument { Name = "-settings", Setting ="Settings", Value= null, IsList = true},
-
-			new Argument { Name = "-o", Setting = Name.Compiler_OutputFile},
 
 			new Argument { Name = "-base", Setting = Name.Compiler_BaseAddress},
 			new Argument { Name = "-scanner", Setting = Name.Compiler_MethodScanner, Value = "true"},
@@ -53,8 +54,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-devirtualization", Setting = Name.Optimizations_Devirtualization, Value = "true"},
 			new Argument { Name = "-devirtualization-off", Setting = Name.Optimizations_Devirtualization, Value = "false"},
 			new Argument { Name = "-inline-level", Setting = Name.Optimizations_Inline_Maximum},
-			new Argument { Name = "-scanwindow", Setting = Name.Optimizations_ScanWindow},
 			new Argument { Name = "-reduce-size", Setting = Name.Optimizations_ReduceCodeSize, Value = "true"},
+			new Argument { Name = "-scanwindow", Setting = Name.Optimizations_ScanWindow},
 
 			// Compiler - Platforms:
 			new Argument { Name = "-platform", Setting = Name.Compiler_Platform},
@@ -73,10 +74,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-output-inlined", Setting = Name.CompilerDebug_InlinedFile, Value = "%DEFAULT%"},
 			new Argument { Name = "-output-hash", Setting = Name.CompilerDebug_PreLinkHashFile, Value = "%DEFAULT%"},
 			new Argument { Name = "-output-hash", Setting = Name.CompilerDebug_PostLinkHashFile, Value = "%DEFAULT%"},
-			new Argument { Name = "-output-debug-file", Setting = Name.CompilerDebug_DebugFile},
 			new Argument { Name = "-asm", Setting = Name.CompilerDebug_AsmFile, Value = "%DEFAULT%"},
 			new Argument { Name = "-map", Setting = Name.CompilerDebug_MapFile, Value = "%DEFAULT%"},
-			new Argument { Name = "-counters", Setting = Name.CompilerDebug_CounterFile},
 			new Argument { Name = "-counters-filter", Setting = Name.CompilerDebug_CounterFilter},
 
 			// Compiler - Debug:
@@ -91,10 +90,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-emit-all-symbols-off", Setting = Name.Linker_Symbols, Value = "false"},
 			new Argument { Name = "-emit-relocations", Setting = Name.Linker_StaticRelocations, Value = "true"},
 			new Argument { Name = "-emit-relocations-off", Setting = Name.Linker_StaticRelocations, Value = "false"},
-			new Argument { Name = "-emit-static-relocations", Setting = Name.Linker_StaticRelocations, Value = "true"},
 			new Argument { Name = "-emit-dwarf", Setting = Name.Linker_Dwarf, Value = "true"},
 			new Argument { Name = "-emit-dwarf-off", Setting = Name.Linker_Dwarf, Value = "false"},
-			new Argument { Name = "-dwarf", Setting = Name.Linker_Dwarf, Value = "true"},
 
 			// Explorer:
 			new Argument { Name = "-filter", Setting = Name.Explorer_Filter, Value = null},
@@ -109,38 +106,48 @@ public static class CommandLineArguments
 			new Argument { Name = "-autolaunch", Setting = Name.Launcher_Launch, Value = "true"},
 			new Argument { Name = "-autolaunch-off", Setting = Name.Launcher_Launch, Value = "false"},
 
-			new Argument { Name = "-destination", Setting = Name.Image_Folder},
-			new Argument { Name = "-dest", Setting = Name.Image_Folder},
-
-			new Argument { Name = "-launch", Setting = Name.Launcher_Launch, Value = "true"},
-			new Argument { Name = "-launch-off", Setting = Name.Launcher_Launch, Value = "false"},
-
 			// Launcher - Emulator:
 			new Argument { Name = "-emulator", Setting = Name.Emulator},
 			new Argument { Name = "-qemu", Setting = Name.Emulator, Value = "qemu"},
 			new Argument { Name = "-vmware", Setting = Name.Emulator, Value = "vmware"},
 			new Argument { Name = "-bochs", Setting = Name.Emulator, Value = "bochs"},
 			new Argument { Name = "-virtualbox", Setting = Name.Emulator, Value = "virtualbox"},
+
 			new Argument { Name = "-display", Setting = Name.Emulator_Display, Value = "on"},
 			new Argument { Name = "-display-off", Setting = Name.Emulator_Display, Value = "off"},
 			new Argument { Name = "-memory", Setting = Name.Emulator_Memory},
 			new Argument { Name = "-cores", Setting = Name.Emulator_Cores},
 			new Argument { Name = "-gdb", Setting = Name.Emulator_GDB, Value = "true"},
+			new Argument { Name = "-vmware-svga", Setting = Name.Emulator_Graphics, Value = "vmware"},
+			new Argument { Name = "-virtio-vga", Setting = Name.Emulator_Graphics, Value = "virtio"},
 
 			// Launcher - Image:
+			new Argument { Name = "-image", Setting = Name.Image_ImageFile},
+			new Argument { Name = "-destination", Setting = Name.Image_Folder},
+
 			new Argument { Name = "-vhd", Setting = Name.Image_Format, Value = "vhd"},
 			new Argument { Name = "-img", Setting = Name.Image_Format, Value = "img"},
 			new Argument { Name = "-vdi", Setting = Name.Image_Format, Value = "vdi"},
 			new Argument { Name = "-vmdk", Setting = Name.Image_Format, Value = "vmdk"},
-			new Argument { Name = "-image", Setting = Name.Image_ImageFile},
 
 			new Argument { Name = "-blocks", Setting = Name.Image_DiskBlocks},
 			new Argument { Name = "-volume-label", Setting = Name.Image_VolumeLabel},
 			new Argument { Name = "-mbr", Setting = Name.Image_MasterBootRecordFile},
 			new Argument { Name = "-boot", Setting = Name.Image_BootBlockFile},
 
-			new Argument { Name = "-m", Setting = Name.Image_MasterBootRecordFile},
-			new Argument { Name = "-b", Setting = Name.Image_BootBlockFile},
+			new Argument { Name = "-include", Setting = Name.Image_FileSystem_RootInclude },
+
+			new Argument { Name = "-bios", Setting = Name.Image_Firmware, Value = "bios"},
+			new Argument { Name = "-uefi", Setting = Name.Image_Firmware, Value = "uefi"},
+			new Argument { Name = "-firmware", Setting = Name.Image_Firmware},
+
+			new Argument { Name = "-video", Setting = Name.Multiboot_Video, Value = "true"},
+			new Argument { Name = "-video-width", Setting = Name.Multiboot_Video_Width},
+			new Argument { Name = "-video-height", Setting = Name.Multiboot_Video_Height},
+
+			new Argument { Name = "-osname", Setting = Name.OS_Name},
+			new Argument { Name = "-bootoptions", Setting = Name.OS_BootOptions},
+			new Argument { Name = "-bootloader-timeout", Setting = Name.BootLoaderTimeout},
 
 			// Launcher - Boot:
 			new Argument { Name = "-multiboot-v2", Setting = Name.Multiboot_Version, Value = "v2"},
@@ -155,21 +162,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-serial-connection-port", Setting = Name.Emulator_Serial_Port},
 			new Argument { Name = "-serial-connection-host", Setting = Name.Emulator_Serial_Host},
 
-			new Argument { Name = "-video", Setting = Name.Multiboot_Video, Value = "true"},
-			new Argument { Name = "-video-width", Setting = Name.Multiboot_Video_Width},
-			new Argument { Name = "-video-height", Setting = Name.Multiboot_Video_Height},
-
-			new Argument { Name = "-vmware-svga", Setting = Name.Emulator_Graphics, Value = "vmware"},
-			new Argument { Name = "-virtio-vga", Setting = Name.Emulator_Graphics, Value = "virtio"},
-
-			new Argument { Name = "-acceleration", Setting = Name.Emulator_Acceleration, Value = "true"},
-
 			new Argument { Name = "-gdb-port", Setting = Name.GDB_Port},
 			new Argument { Name = "-gdb-host", Setting = Name.GDB_Host},
-
-			new Argument { Name = "-osname", Setting = Name.OS_Name},
-			new Argument { Name = "-bootoptions", Setting = Name.OS_BootOptions},
-			new Argument { Name = "-bootloader-timeout", Setting = Name.BootLoaderTimeout},
 
 			new Argument { Name = "-launch-gdb", Setting = Name.Launcher_GDB, Value = "true"},
 			new Argument { Name = "-launch-debugger", Setting = Name.Launcher_Debugger, Value = "true"},
@@ -181,13 +175,6 @@ public static class CommandLineArguments
 
 			new Argument { Name = "-timeout", Setting = Name.Emulator_MaxRuntime},
 
-			// Base directory is the output directory
-			new Argument { Name = "-include", Setting = Name.Image_FileSystem_RootInclude },
-
-			new Argument { Name = "-bios", Setting = Name.Image_Firmware, Value = "bios"},
-			new Argument { Name = "-uefi", Setting = Name.Image_Firmware, Value = "uefi"},
-			new Argument { Name = "-firmware", Setting = Name.Image_Firmware},
-
 			// Advanced:
 			new Argument { Name = "-plug-kernel", Setting = Name.Launcher_PlugKernel, Value = "true"},
 			new Argument { Name = "-plug-korlib", Setting = Name.Launcher_PlugKorlib, Value = "true"},
@@ -198,7 +185,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-breakpoints", Setting = Name.Debugger_BreakpointFile},
 			new Argument { Name = "-watch", Setting = Name.Debugger_WatchFile},
 
-			// Unit Test:
+			// Unit Tests:
 			new Argument { Name = "-filter", Setting = Name.UnitTest_Filter, Value = null},
 			new Argument { Name = "-maxerrors", Setting = Name.UnitTest_MaxErrors},
 

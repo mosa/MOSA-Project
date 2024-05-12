@@ -33,7 +33,7 @@ public static class Startup
 		Console.ForegroundColor = ConsoleColor.Yellow;
 		Console.Clear();
 
-		Console.WriteLine("MOSA BareMetal v2.4");
+		Console.WriteLine("MOSA BareMetal v2.6");
 
 		Console.WriteLine();
 
@@ -58,12 +58,6 @@ public static class Startup
 	public static void EntryPoint()
 	{
 		Debug.WriteLine("Startup.EntryPoint()");
-
-		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> Enabling debug logging...");
-		Debug.Setup();
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.WriteLine(" [Completed]");
 
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Boot page allocator...");
@@ -105,11 +99,6 @@ public static class Startup
 		Console.ForegroundColor = ConsoleColor.LightGreen;
 		Console.Write("> Garbage collection...");
 		GCMemory.Setup();
-		Console.ForegroundColor = ConsoleColor.DarkGray;
-		Console.WriteLine(" [Completed]");
-		Console.ForegroundColor = ConsoleColor.LightGreen;
-		Console.Write("> Initializing interrupt handler...");
-		InterruptManager.SetHandler(null);
 		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.WriteLine(" [Completed]");
 
@@ -251,7 +240,7 @@ public static class Startup
 
 	private static void ProcessInterrupt(uint interrupt, uint errorCode)
 	{
-		if (interrupt is >= 0x20 and < 0x30)        // FIXME: X86 specific
+		if (interrupt is >= 0x20 and < 0x30) // FIXME: X86 specific
 		{
 			HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 		}

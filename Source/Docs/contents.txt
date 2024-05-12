@@ -1,45 +1,19 @@
 
 .. toctree::
-   :hidden:
    :caption: Introduction
+   :hidden:
    :maxdepth: 1
 
    introduction
    faq
 
 .. toctree::
-   :hidden:
    :caption: Getting Started
+   :hidden:
    :maxdepth: 1
 
    getting-started
    demos
-   create-operating-system
-
-.. toctree::
-   :hidden:
-   :caption: Structure
-   :maxdepth: 1
-
-   mosa-project-structure
-
-.. toctree::
-   :caption: Compiler
-   :hidden:
-   :maxdepth: 2
-
-   compiler-design
-   compiler-optimizations
-   compiler-transformations
-
-.. toctree::
-   :caption: Settings
-   :hidden:
-   :maxdepth: 1
-
-   optimization-options
-   settings-options
-   command-line-arguments
 
 .. toctree::
    :caption: Tools
@@ -53,12 +27,30 @@
    tool-debugger
 
 .. toctree::
-   :caption: Advanced
+   :caption: Settings
    :hidden:
    :maxdepth: 1
 
-   unit-tests
-   usb-flash-drive-installation
+   optimization-options
+   settings-options
+   command-line-arguments
+
+.. toctree::
+   :caption: Internals
+   :hidden:
+   :maxdepth: 1
+
+   project-structure
+   a-dive-into-baremetal
+
+.. toctree::
+   :caption: Compiler
+   :hidden:
+   :maxdepth: 2
+
+   compiler-design
+   compiler-optimizations
+   compiler-transformations
 
 .. toctree::
    :caption: Runtime
@@ -66,6 +58,14 @@
    :maxdepth: 1
 
    runtime-tables
+
+.. toctree::
+   :caption: Advanced
+   :hidden:
+   :maxdepth: 1
+
+   unit-tests
+   usb-flash-drive-installation
 
 .. toctree::
    :caption: Contribute

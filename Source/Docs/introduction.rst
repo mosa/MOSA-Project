@@ -20,24 +20,24 @@ Current Status
 
 The target platforms are:
 
-- 32-bit x86 (stable)
-- 64-bit x86 (x64) (in development)
+- 32-bit x86
+- 64-bit x86 (x64; in development)
 - 32-bit ARMv8+ (in early development)
 - 64-bit ARMv8+ (in early development)
 
-The MOSA compiler supports most object and non-object oriented code, including:
+The MOSA compiler supports most object and non-object oriented code, including but not limited to:
 
-- Generic Code (example: List<T>)
+- Generic Code (e.g. List<T>)
 - Delegates (static and non-static) and with optional parameters
 - Exception Handling (try, finally, and catch code blocks)
 
-The MOSA compiler seeks to provide high quality code generation using the following optimizations:
+The MOSA compiler seeks to provide high quality code generation using the following optimizations (non-exhaustive):
 
-- Constant Folding and Propagation 
+- Constant Folding and Propagation
 - Strength Reduction optimization
 - Dead Code Elimination
 - Single Static Assignment (SSA)
-- Global Value Numbering / Common Subexpession Elimination
+- Global Value Numbering / Common Subexpression Elimination
 - Sparse Conditional Constant Propagation
 - Inlined Expansion
 - Loop-Invariant Code Motion
@@ -46,4 +46,4 @@ The MOSA compiler seeks to provide high quality code generation using the follow
 - Block Reordering
 - Greedy Register Allocation
 
-See the :doc:`Compiler Optimizations<compiler-optimizations>` for a description of each of these optimization methods. 
+For an exhaustive list, see :doc:`Compiler Optimizations<compiler-optimizations>` which also gives a description of each of these optimizations.
