@@ -21,6 +21,7 @@
    :maxdepth: 2
 
    tool-compiler
+   tool-createcorelib
    tool-launcher
    tool-launcher-console
    tool-explorer
