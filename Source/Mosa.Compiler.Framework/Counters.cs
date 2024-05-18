@@ -17,29 +17,41 @@ public sealed class Counters
 
 	public void Update(string name, int count)
 	{
-		UpdateCounter(name, count);
+		UpdateCounter(name, count, false);
+	}
+
+	public void Set(string name, int count)
+	{
+		UpdateCounter(name, count, true);
 	}
 
 	public void Update(Counter counter)
 	{
-		UpdateCounter(counter.Name, counter.Count);
+		UpdateCounter(counter.Name, counter.Count, false);
 	}
 
 	public void Update(Counters counters)
 	{
 		foreach (var counter in counters.Entries.Values)
 		{
-			UpdateCounter(counter.Name, counter.Count);
+			UpdateCounter(counter.Name, counter.Count, false);
 		}
 	}
 
-	private void UpdateCounter(string name, int count)
+	private void UpdateCounter(string name, int count, bool reset = false)
 	{
 		lock (_lock)
 		{
 			if (Entries.TryGetValue(name, out var counter))
 			{
-				counter.Increment(count);
+				if (reset)
+				{
+					counter.Set(count);
+				}
+				else
+				{
+					counter.Increment(count);
+				}
 			}
 			else
 			{
