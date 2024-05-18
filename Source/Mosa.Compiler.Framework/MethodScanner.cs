@@ -79,14 +79,14 @@ public class MethodScanner
 			}
 		}
 
-		Compiler.GlobalCounters.Update("MethodScanner.TotalTypes", totalTypes);
-		Compiler.GlobalCounters.Update("MethodScanner.TotalMethods", totalMethods);
+		Compiler.GlobalCounters.Set("MethodScanner.TotalTypes", totalTypes);
+		Compiler.GlobalCounters.Set("MethodScanner.TotalMethods", totalMethods);
 
-		Compiler.GlobalCounters.Update("MethodScanner.AllocatedTypes", allocatedTypes.Count);
-		Compiler.GlobalCounters.Update("MethodScanner.InvokedMethods", invokedMethods.Count);
-		Compiler.GlobalCounters.Update("MethodScanner.ScheduledMethods", scheduledMethods.Count);
-		Compiler.GlobalCounters.Update("MethodScanner.AccessedFields", accessedFields.Count);
-		Compiler.GlobalCounters.Update("MethodScanner.InvokedInterfaceType", invokedInteraceTypes.Count);
+		Compiler.GlobalCounters.Set("MethodScanner.AllocatedTypes", allocatedTypes.Count);
+		Compiler.GlobalCounters.Set("MethodScanner.InvokedMethods", invokedMethods.Count);
+		Compiler.GlobalCounters.Set("MethodScanner.ScheduledMethods", scheduledMethods.Count);
+		Compiler.GlobalCounters.Set("MethodScanner.AccessedFields", accessedFields.Count);
+		Compiler.GlobalCounters.Set("MethodScanner.InvokedInterfaceType", invokedInteraceTypes.Count);
 
 		Compiler.PostTraceLog(trace);
 	}

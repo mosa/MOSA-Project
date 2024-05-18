@@ -16,14 +16,16 @@ public sealed class LinkerEmitStage : BaseCompilerStage
 		if (string.IsNullOrEmpty(MosaSettings.OutputFile))
 			return;
 
-		Compiler.PostEvent(CompilerEvent.LinkingStart);
-
 		File.Delete(MosaSettings.OutputFile);
+
+		Compiler.PostEvent(CompilerEvent.LinkingStart);
 
 		using (var file = new FileStream(MosaSettings.OutputFile, FileMode.Create))
 		{
 			Linker.Emit(file);
 		}
+
+		Compiler.LinkerTime.Stop();
 
 		Compiler.PostEvent(CompilerEvent.LinkingEnd);
 	}
