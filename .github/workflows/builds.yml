@@ -300,7 +300,7 @@ jobs:
       - name: Demo Test - BareMetal TestWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal Console CoolWorld
-        run: bin\Mosa.Tool.Launcher.Console.dll bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions consolemode
+        run: bin\Mosa.Tool.Launcher.Console.dll bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions coolworldui=consolemode,bootoptions=serialdebug
       - name: Demo Test - BareMetal Graphical CoolWorld
         run: bin\Mosa.Tool.Launcher.Console.dll bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin\Include
 
@@ -336,7 +336,7 @@ jobs:
       - name: Demo Test - BareMetal TestWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal Console CoolWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions consolemode
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions coolworldui=consolemode,bootoptions=serialdebug
       - name: Demo Test - BareMetal Graphical CoolWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin/Include
 
@@ -370,7 +370,7 @@ jobs:
       - name: Demo Test - BareMetal TestWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal Console CoolWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions consolemode
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions coolworldui=consolemode,bootoptions=serialdebug
       - name: Demo Test - BareMetal Graphical CoolWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin/Include
 

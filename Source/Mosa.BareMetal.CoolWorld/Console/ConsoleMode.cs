@@ -58,10 +58,4 @@ public static class ConsoleMode
 		System.Console.Write("*");
 		System.Console.ForegroundColor = restore;
 	}
-
-	[Plug("Mosa.Runtime.StartUp::BootOptions")]
-	public static void SetBootOptions()
-	{
-		BootSettings.EnableDebugOutput = true;
-	}
 }
