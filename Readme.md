@@ -1,6 +1,6 @@
 [![License][source-image]][source-target]  [![License][github-license]][github-license-link]  [![Discord Chat][discord-image]][discord-chat]
 
-[![Build status][build-status-image]][build-status]  [![Test status][test-status-image]][test-status]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  
+[![Build status][build-status-image]][build-status]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  
 
 [build-status-image]: https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg?branch=master
 [build-status]: https://github.com/mosa/MOSA-Project/actions

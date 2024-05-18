@@ -78,6 +78,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{624E8284-4F0A-4C3F-B5F2-271105E48ECF}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\builds.yml = ..\.github\workflows\builds.yml
+		..\.github\workflows\docs.yml = ..\.github\workflows\docs.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A406F567-5C89-45AB-88CE-E20616B28FFD}"
@@ -252,7 +253,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Template", "Template", "{A1
 		TemplateLibrary.txt = TemplateLibrary.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Explorer.Avalonia", "Mosa.Tool.Explorer.Avalonia\Mosa.Tool.Explorer.Avalonia.csproj", "{763FDCF2-2501-4756-A7A1-62813D610B00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Tool.Explorer.Avalonia", "Mosa.Tool.Explorer.Avalonia\Mosa.Tool.Explorer.Avalonia.csproj", "{763FDCF2-2501-4756-A7A1-62813D610B00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
