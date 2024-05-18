@@ -1,0 +1,16 @@
+namespace System.Diagnostics;
+
+public sealed class UnreachableException : Exception
+{
+	public UnreachableException()
+	{
+	}
+
+	public UnreachableException(string? message)
+	{
+	}
+
+	public UnreachableException(string? message, Exception? innerException)
+	{
+	}
+}

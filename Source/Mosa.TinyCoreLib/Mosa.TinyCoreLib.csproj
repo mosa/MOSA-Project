@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../Mosa.BareMetal.targets" />
+
+    <PropertyGroup>
+        <!-- TODO: Uncomment the line below when we replace Mosa.Korlib -->
+        <!-- <AssemblyName>System.Runtime</AssemblyName> -->
+        <RootNamespace />
+		<AssemblyVersion>8.0.0.0</AssemblyVersion>
+		<WarningLevel>0</WarningLevel>
+    </PropertyGroup>
+
+</Project>
