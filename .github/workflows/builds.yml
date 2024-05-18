@@ -140,7 +140,6 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
-          compression-level: 9
          
   macos-build:
     name: MacOS Build
