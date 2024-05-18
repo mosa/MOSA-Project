@@ -10,7 +10,7 @@ public static class R8
 	{
 		get
 		{
-			if (series == null) series = GetSeries();
+			series ??= GetSeries();
 
 			foreach (var value in series)
 				yield return value;

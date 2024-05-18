@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
+
 namespace Mosa.Utility.UnitTests.Numbers;
 
 public static class I4
@@ -10,7 +12,7 @@ public static class I4
 	{
 		get
 		{
-			if (series == null) series = GetSeries();
+			series ??= GetSeries();
 
 			foreach (var value in series)
 				yield return value;
@@ -44,6 +46,15 @@ public static class I4
 		AddNegatives(list);
 
 		list = list.Distinct().ToList();
+
+		//for (var i = 0; i < 32; i++)
+		//{
+		//	var v = 1 << i;
+		//	list.AddIfNew(v);
+		//	list.AddIfNew(v + 1);
+		//	list.AddIfNew(v - 2);
+		//}
+
 		list.Sort();
 
 		return list;
