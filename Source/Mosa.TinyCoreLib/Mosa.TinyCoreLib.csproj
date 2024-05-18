@@ -7,6 +7,7 @@
         <!-- <AssemblyName>System.Runtime</AssemblyName> -->
         <RootNamespace />
 		<AssemblyVersion>8.0.0.0</AssemblyVersion>
+		<WarningLevel>0</WarningLevel>
     </PropertyGroup>
 
 </Project>
