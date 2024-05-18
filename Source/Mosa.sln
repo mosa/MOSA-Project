@@ -258,6 +258,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Tool.Explorer.Avalonia
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.CreateCoreLib", "Mosa.Utility.CreateCoreLib\Mosa.Utility.CreateCoreLib.csproj", "{B940F546-628B-45C0-9FA5-4479F166033F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TinyCoreLib", "Mosa.TinyCoreLib\Mosa.TinyCoreLib.csproj", "{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1478,6 +1480,24 @@ Global
 		{B940F546-628B-45C0-9FA5-4479F166033F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B940F546-628B-45C0-9FA5-4479F166033F}.Release|x86.ActiveCfg = Release|Any CPU
 		{B940F546-628B-45C0-9FA5-4479F166033F}.Release|x86.Build.0 = Release|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Debug|x86.Build.0 = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Description|x86.ActiveCfg = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Description|x86.Build.0 = Debug|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1556,6 +1576,7 @@ Global
 		{A1660856-2153-477F-BAAC-39E8BEB75971} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
 		{763FDCF2-2501-4756-A7A1-62813D610B00} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{B940F546-628B-45C0-9FA5-4479F166033F} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
+		{0E0E772E-5824-4ABA-8524-AA0B00BBD9BB} = {079CE6E3-8038-44F5-B18A-2D586A827D95}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
