@@ -1,6 +1,6 @@
 using CommandLine;
 
-namespace Mosa.Tool.CreateCoreLib;
+namespace Mosa.Utility.CreateCoreLib;
 
 public class Options
 {

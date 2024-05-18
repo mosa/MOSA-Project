@@ -4,7 +4,7 @@ using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
 using ICSharpCode.Decompiler.Metadata;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Mosa.Tool.CreateCoreLib;
+using Mosa.Utility.CreateCoreLib;
 
 var options = Parser.Default.ParseArguments<Options>(args).Value;
 if (options == null) return;
@@ -14,7 +14,7 @@ var copyFiles = options.CopyFiles;
 
 if (string.IsNullOrEmpty(outputDirectory))
 {
-    Console.WriteLine("Invalid output directory. Usage: Mosa.Tool.CreateCoreLib --output/-o <directory>");
+    Console.WriteLine("Invalid output directory. Usage: Mosa.Utility.CreateCoreLib --output/-o <directory>");
     return;
 }
 

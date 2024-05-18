@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Mosa.Tool.CreateCoreLib;
+namespace Mosa.Utility.CreateCoreLib;
 
 /// <summary>
 /// A custom patch system. It isn't designed to be particularly fast, but is rather designed with the simplicity of a singular patch in mind.
