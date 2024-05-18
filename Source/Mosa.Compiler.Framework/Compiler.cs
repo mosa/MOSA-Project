@@ -113,6 +113,12 @@ public sealed class Compiler
 
 	public bool HasError { get; private set; }
 
+	public Stopwatch CompileTime { get; } = new Stopwatch();
+
+	public Stopwatch TotalCompileTime { get; } = new Stopwatch();
+
+	public Stopwatch LinkerTime { get; } = new Stopwatch();
+
 	#endregion Properties
 
 	#region Static Methods
@@ -131,8 +137,8 @@ public sealed class Compiler
 		!string.IsNullOrEmpty(mosaSettings.PreLinkHashFile) ? new PreLinkHashFileStage() : null,
 		new LinkerLayoutStage(),
 		!string.IsNullOrEmpty(mosaSettings.PostLinkHashFile) ? new PostLinkHashFileStage() : null,
-		!string.IsNullOrEmpty(mosaSettings.CompileTimeFile) ? new MethodCompileTimeStage() : null,
 		!string.IsNullOrEmpty(mosaSettings.OutputFile) && mosaSettings.EmitBinary ? new LinkerEmitStage() : null,
+		!string.IsNullOrEmpty(mosaSettings.CompileTimeFile) ? new MethodCompileTimeStage() : null,
 		!string.IsNullOrEmpty(mosaSettings.MapFile) ? new MapFileStage() : null,
 		!string.IsNullOrEmpty(mosaSettings.CounterFile) ? new CounterFileStage() : null,
 		!string.IsNullOrEmpty(mosaSettings.DebugFile) ? new DebugFileStage() : null,
@@ -448,7 +454,12 @@ public sealed class Compiler
 
 	public void ExecuteCompile(int maxThreads)
 	{
+		GlobalCounters.Set("Compiler.MaxThreads", maxThreads);
+
 		PostEvent(CompilerEvent.CompilingMethodsStart);
+
+		CompileTime.Start();
+		TotalCompileTime.Start();
 
 		if (maxThreads > 0)
 		{
@@ -461,7 +472,9 @@ public sealed class Compiler
 			threads.ForEach(x => x.Join());
 		}
 		else
+		{
 			CompilePass();
+		}
 
 		PostEvent(CompilerEvent.CompilingMethodsCompleted);
 	}
@@ -490,6 +503,9 @@ public sealed class Compiler
 	/// </remarks>
 	internal void Finalization()
 	{
+		CompileTime.Stop();
+		GlobalCounters.Set("Elapsed.Total.Milliseconds", (int)CompileTime.ElapsedMilliseconds);
+
 		PostEvent(CompilerEvent.FinalizationStart);
 
 		// Sum up the counters
@@ -519,6 +535,10 @@ public sealed class Compiler
 
 			PostEvent(CompilerEvent.FinalizationStageEnd, stage.Name);
 		}
+
+		TotalCompileTime.Stop();
+		GlobalCounters.Set("Elapsed.TotalCompile.Milliseconds", (int)TotalCompileTime.ElapsedMilliseconds);
+		GlobalCounters.Set("Compiler.TotalMethods", MethodScheduler.TotalMethods);
 
 		MethodScanner.Complete();
 
