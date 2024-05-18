@@ -293,8 +293,6 @@ jobs:
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal HelloWorld
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal CoolWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
 
@@ -329,9 +327,9 @@ jobs:
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal HelloWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal CoolWorld
+      - name: Demo Test - BareMetal Console CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include -bootoptions consolemode
+      - name: Demo Test - BareMetal Graphical CoolWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
 
   macos-demo-testing:
@@ -363,9 +361,9 @@ jobs:
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal HelloWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal CoolWorld
+      - name: Demo Test - BareMetal Console CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include -bootoptions consolemode
+      - name: Demo Test - BareMetal Graphical CoolWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
 
   linux-x64-compile-test:
@@ -387,26 +385,26 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
-      - name: x64 Compile Test - BareMetal HelloWorld - o0
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o0 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o1
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o1 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o2
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o2 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o3
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o3 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o4
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o4 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o5
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o5 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o6
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o6 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o7
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o7 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o8
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o8 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o9
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o9 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o0
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o0 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o1
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o1 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o2
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o2 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o3
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o3 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o4
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o4 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o5
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o5 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o6
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o6 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o7
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o7 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o8
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o8 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o9
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o9 -check -autolaunch-off -output-counters
 
   linux-arm32-compile-test:
     name: Linux - ARM32 Compile Tests
@@ -427,23 +425,23 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o0
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o0 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o1
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o1 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o2
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o2 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o3
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o3 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o4
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o4 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o5
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o5 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o6
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o6 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o7
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o7 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o8
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o8 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o9
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o9 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o0
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o0 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o1
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o1 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o2
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o2 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o3
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o3 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o4
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o4 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o5
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o5 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o6
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o6 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o7
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o7 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o8
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o8 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o9
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o9 -check -autolaunch-off -output-counters
