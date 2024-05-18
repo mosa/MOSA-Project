@@ -147,6 +147,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BareMetal.Demos", "BareMeta
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{A4028807-1B21-4D14-9CE3-5FD1AAD9EDD7}"
 	ProjectSection(SolutionItems) = preProject
+		Docs\a-dive-into-baremetal.rst = Docs\a-dive-into-baremetal.rst
 		Docs\authors.rst = Docs\authors.rst
 		Docs\build-status.rst = Docs\build-status.rst
 		Docs\command-line-arguments.rst = Docs\command-line-arguments.rst
@@ -163,6 +164,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Docs\introduction.rst = Docs\introduction.rst
 		Docs\license.rst = Docs\license.rst
 		Docs\mosa-runtime-tables.dot = Docs\mosa-runtime-tables.dot
+		Docs\optimization-options.rst = Docs\optimization-options.rst
+		Docs\project-structure.rst = Docs\project-structure.rst
 		Docs\runtime-tables.rst = Docs\runtime-tables.rst
 		Docs\settings-options.rst = Docs\settings-options.rst
 		Docs\tool-compiler.rst = Docs\tool-compiler.rst
@@ -172,9 +175,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Docs\tool-launcher.rst = Docs\tool-launcher.rst
 		Docs\unit-tests.rst = Docs\unit-tests.rst
 		Docs\usb-flash-drive-installation.rst = Docs\usb-flash-drive-installation.rst
-		Docs\project-structure.rst = Docs\project-structure.rst
-		Docs\optimization-options.rst = Docs\optimization-options.rst
-		Docs\a-dive-into-baremetal.rst = Docs\a-dive-into-baremetal.rst
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.BareMetal.HelloWorld.x64", "Mosa.BareMetal.HelloWorld.x64\Mosa.BareMetal.HelloWorld.x64.csproj", "{5F4136A8-EB83-41BE-9D81-B16E723AAE29}"
@@ -238,6 +238,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Workspace.GDB.Debug", "Mosa.Workspace.GDB.Debug\Mosa.Workspace.GDB.Debug.csproj", "{00512754-29C4-4AA3-8619-8C04120D7B55}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Explorer.Avalonia", "Mosa.Tool.Explorer.Avalonia\Mosa.Tool.Explorer.Avalonia.csproj", "{FBC3B0CD-D775-41C6-A735-F59118838397}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.CreateCoreLib", "Mosa.Utility.CreateCoreLib\Mosa.Utility.CreateCoreLib.csproj", "{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1405,6 +1407,24 @@ Global
 		{FBC3B0CD-D775-41C6-A735-F59118838397}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FBC3B0CD-D775-41C6-A735-F59118838397}.Release|x86.ActiveCfg = Release|Any CPU
 		{FBC3B0CD-D775-41C6-A735-F59118838397}.Release|x86.Build.0 = Release|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Debug|x86.Build.0 = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Description|x86.ActiveCfg = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Description|x86.Build.0 = Debug|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Release|x86.ActiveCfg = Release|Any CPU
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1479,6 +1499,7 @@ Global
 		{00512754-29C4-4AA3-8619-8C04120D7B55} = {D1C4B715-9764-4430-B3D3-676B0EBCE75A}
 		{A4028807-1B21-4D14-9CE3-5FD1AAD9EDD7} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
 		{FBC3B0CD-D775-41C6-A735-F59118838397} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
+		{3347E41D-AD8B-4891-9A9B-5EE36BACA6F1} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
