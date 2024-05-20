@@ -30,7 +30,7 @@ public static class BootOptions
 	{
 		var result = GetValue(RuntimeOptions, key);
 
-		if (result != null)
+		if (string.IsNullOrEmpty(result))
 		{
 			result = GetValue(StaticOptions, key);
 		}
@@ -122,6 +122,9 @@ public static class BootOptions
 
 			if (c == 0)
 				break;
+
+			if (index == valuelen)
+				return true;
 
 			if (c == value[index])
 				index++;
