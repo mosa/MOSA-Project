@@ -4,11 +4,21 @@
 	"classifications": [ "Common", "OS", "Kernel" ],
 	"identity": "Mosa.Starter",
 	"sourceName": "Mosa.Starter",
+	"defaultName": "MosaKernel",
 	"name": "MOSA Kernel",
 	"shortName": "mosakrnl",
 	"preferNameDirectory": true,
 	"tags": {
 		"language": "C#",
 		"type": "solution"
+	},
+	"symbols": {
+		"BundleQemuWindows": {
+			"type": "parameter",
+			"description": "Defines if QEMU for Windows should be bundled by default in the project.",
+			"datatype": "bool",
+			"displayName": "Bundle QEMU for Windows",
+			"defaultValue": "true"
+		}
 	}
 }
