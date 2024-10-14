@@ -1039,9 +1039,9 @@ public partial class MosaSettings
 			try
 			{
 				return (string)Registry.CurrentUser
-						.OpenSubKey(WindowsRegistry.Software)
-						.OpenSubKey(WindowsRegistry.MosaApp)
-						.GetValue(name, defaultValue);
+						.OpenSubKey(WindowsRegistry.Software)?
+						.OpenSubKey(WindowsRegistry.MosaApp)?
+						.GetValue(name, defaultValue) ?? defaultValue;
 			}
 			catch
 			{

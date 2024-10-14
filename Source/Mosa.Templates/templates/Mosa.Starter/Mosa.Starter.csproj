@@ -16,7 +16,11 @@
 	<ItemGroup>
 		<PackageReference Include="Mosa.Platform" Version="*" />
 		<PackageReference Include="Mosa.DeviceSystem" Version="*" />
+		<!--#if (BundleQemuWindows) -->
 		<PackageReference Include="Mosa.Tools.Package.Qemu" Version="*" />
+		<!--#else -->
+		<PackageReference Include="Mosa.Tools.Package" Version="*" />
+		<!--#endif -->
 	</ItemGroup>
 
 </Project>
