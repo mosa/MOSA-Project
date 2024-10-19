@@ -467,7 +467,7 @@ public partial class MainForm : Form
 		if (Compiler == null)
 			return;
 
-		if (MosaSettings.EmitBinary & !Directory.Exists(MosaSettings.DefaultFolder))
+		if (MosaSettings.EmitBinary && !Directory.Exists(MosaSettings.DefaultFolder))
 		{
 			Directory.CreateDirectory(MosaSettings.DefaultFolder);
 		}
