@@ -13,7 +13,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
-using Reko.Core;
+
 using static Mosa.Utility.Configuration.MosaSettings;
 
 namespace Mosa.Tool.Explorer;
@@ -466,6 +466,11 @@ public partial class MainForm : Form
 	{
 		if (Compiler == null)
 			return;
+
+		if (MosaSettings.EmitBinary && !Directory.Exists(MosaSettings.DefaultFolder))
+		{
+			Directory.CreateDirectory(MosaSettings.DefaultFolder);
+		}
 
 		CompilerData.Stopwatch.Restart();
 
