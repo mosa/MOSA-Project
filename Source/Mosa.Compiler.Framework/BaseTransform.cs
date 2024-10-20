@@ -951,9 +951,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			if (at.IsBlockEndInstruction)
 				return TriState.Unknown;
 
-			if (at.Instruction == IR.StableObjectTracking
-				|| at.Instruction == IR.UnstableObjectTracking
-				|| at.Instruction == IR.Kill
+			if (at.Instruction == IR.Kill
 				|| at.Instruction == IR.KillAll
 				|| at.Instruction == IR.KillAllExcept
 				|| at.Instruction == IR.Gen)

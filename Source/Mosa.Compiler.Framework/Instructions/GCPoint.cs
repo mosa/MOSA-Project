@@ -5,11 +5,11 @@
 namespace Mosa.Compiler.Framework.Instructions;
 
 /// <summary>
-/// StableObjectTracking
+/// GCPoint
 /// </summary>
-public sealed class StableObjectTracking : BaseIRInstruction
+public sealed class GCPoint : BaseIRInstruction
 {
-	public StableObjectTracking()
+	public GCPoint()
 		: base(0, 0)
 	{
 	}
