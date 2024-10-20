@@ -122,7 +122,7 @@
   <section id="mosa-runtime-tables">
 <h1>MOSA Runtime Tables<a class="headerlink" href="#mosa-runtime-tables" title="Link to this heading"></a></h1>
 <p>This diagram represents the internal runtime tables within the MOSA virtual machine:</p>
-<div class="graphviz"><object data="_images/graphviz-0c4dd1236f76ab4c466533675bcc3861507f4624.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-1ba431e69b5deb2f23cb0c72ce65aa6dd71bdc0b.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph &quot;MOSA Runtime Tables&quot;
 {
 
@@ -151,7 +151,7 @@
 	];
 
 	&quot;AssemblyDefinition&quot; [
-		label = &quot;&lt;f0&gt;Assembly|&lt;f1&gt;Pointer to Assembly Name|&lt;f2&gt;~Pointer to Custom Attributes|&lt;f3&gt;Flags: IsReflectionOnly|&lt;f4&gt;Number of Types|&lt;f5&gt;Pointer to Type  Definition 1|...|Pointer to Type  Definition N&quot;
+		label = &quot;&lt;f0&gt;Assembly|&lt;f1&gt;Pointer to Assembly Name|&lt;f2&gt;~Pointer to Custom Attributes|&lt;f3&gt;Flags: IsReflectionOnly|&lt;f4&gt;Number of Types|&lt;f5&gt;Pointer to Type  Definition 1|...|Pointer to Type Definition N&quot;
 		shape = &quot;record&quot;
 	];
 
@@ -195,7 +195,7 @@
 
 	&quot;TypeDefinition&quot;:f9 -&gt; &quot;MethodDefinition&quot;:f0 [
 		id = 0
-		color = &quot;green&quot;
+		color = &quot;purple&quot;
 	];
 
 	&quot;TypeDefinition&quot;:f10 -&gt; &quot;PropertiesTable&quot;:f0 [
@@ -272,12 +272,12 @@
 
 	&quot;PropertyDefinition&quot;:f5 -&gt; &quot;MethodDefinition&quot;:f0 [
 		id = 0
-		color = &quot;green&quot;
+		color = &quot;purple&quot;
 	];
 
 	&quot;PropertyDefinition&quot;:f6 -&gt; &quot;MethodDefinition&quot;:f0 [
 		id = 0
-		color = &quot;green&quot;
+		color = &quot;purple&quot;
 	];
 
 	&quot;MethodLookupTable&quot; [
@@ -287,11 +287,11 @@
 
 	&quot;MethodLookupTable&quot;:f3 -&gt; &quot;MethodDefinition&quot;:f0 [
 		id = 0
-		color = &quot;green&quot;
+		color = &quot;purple&quot;
 	];
 
 	&quot;ProtectedRegionTable&quot; [
-		label = &quot;&lt;f0&gt;Protected Region Table|&lt;f1&gt;Number of Regions|&lt;f2&gt;Pointer to Protected Region Definition 1|...|Protected Region Definition N&quot;
+		label = &quot;&lt;f0&gt;Protected Region Table|&lt;f1&gt;Number of Regions|&lt;f2&gt;Pointer to Protected Region Definition 1|...|Pointer to Protected Region Definition N&quot;
 		shape = &quot;record&quot;
 	];
 
@@ -330,13 +330,13 @@
 
 	&quot;InterfaceMethodTable&quot;:f3 -&gt; &quot;MethodDefinition&quot;:f0 [
 		id = 0
-		color = &quot;green&quot;
+		color = &quot;purple&quot;
 	];
 
 	&quot;MethodDefinition&quot; [
-		label = &quot;&lt;f0&gt;Method Definition|&lt;f1&gt;Pointer to Method Name|&lt;f2&gt;~Pointer to Custom Attributes|&lt;f3&gt;Method Attributes|&lt;f4&gt;Local &amp; Parameter Stack Size|&lt;f5&gt;Pointer to Method|&lt;f6&gt;Pointer to Return Type Definition|&lt;f7&gt;~Pointer to Protected Region Table|&lt;f8&gt;Pointer to GC Tracking Information|&lt;f9&gt;Number of Parameters|&lt;f10&gt;Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N&quot;
+		label = &quot;&lt;f0&gt;Method Definition|&lt;f1&gt;Pointer to Method Name|&lt;f2&gt;~Pointer to Custom Attributes|&lt;f3&gt;Method Attributes|&lt;f4&gt;Local &amp; Parameter Stack Size|&lt;f5&gt;Pointer to Method|&lt;f6&gt;Pointer to Return Type Definition|&lt;f7&gt;~Pointer to Protected Region Table|&lt;f8&gt;Pointer to SafePoint Table|&lt;f9&gt;Number of Parameters|&lt;f10&gt;Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N&quot;
 		shape = &quot;record&quot;
-		color = &quot;green&quot;
+		color = &quot;purple&quot;
 	];
 
 	&quot;MethodDefinition&quot;:f7 -&gt; &quot;ProtectedRegionTable&quot;:f0 [
@@ -357,7 +357,7 @@
 		color = &quot;blue&quot;
 	];
 
-	&quot;MethodDefinition&quot;:f8 -&gt; &quot;GCTrackingInformation&quot;:f0 [
+	&quot;MethodDefinition&quot;:f8 -&gt; &quot;SafePointTable&quot;:f0 [
 		id = 0
 	];
 
@@ -384,9 +384,19 @@
 		color = &quot;blue&quot;
 	];
 
-	&quot;GCTrackingInformation&quot; [
-		label = &quot;&lt;f0&gt;GC Tracking Information|TODO&quot;
+	&quot;SafePointTable&quot; [
+		label = &quot;&lt;f0&gt;SafePoint Table|&lt;f1&gt;Number of SafePoints|&lt;f2&gt;SafePoint 1|..|SafePoint N&quot;
 		shape = &quot;record&quot;
+	];
+	
+	&quot;SafePoint&quot; [
+		label = &quot;&lt;f0&gt;SafePoint|&lt;f1&gt;Address Offset|&lt;f2&gt;Address Range (signed)|&lt;f3&gt;Breakpoint Indicator|&lt;f4&gt;CPU Registers Bitmap (64 bit)&quot;
+		shape = &quot;record&quot;
+	];
+	
+	&quot;SafePointTable&quot;:f2 -&gt; &quot;SafePoint&quot;:f0 [
+		id = 0
+		style = &quot;dotted&quot;
 	];
 
 	&quot;CustomAttributesTable&quot; [
@@ -410,7 +420,7 @@
 
 	&quot;CustomAttribute&quot;:f2 -&gt; &quot;MethodDefinition&quot;:f0 [
 		id = 0
-		color = &quot;green&quot;
+		color = &quot;purple&quot;
 	];
 
 	&quot;CustomAttribute&quot;:f4 -&gt; &quot;CustomAttributeArgument&quot;:f0 [
