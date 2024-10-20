@@ -257,7 +257,7 @@ public partial class MainWindow : Window
 
 		InstructionsStage.SelectedIndex = 0;
 
-		for (;;)
+		for (; ; )
 		{
 			UpdateInstructionStageSelection();
 
@@ -275,7 +275,7 @@ public partial class MainWindow : Window
 
 		DebugStage.SelectedIndex = 0;
 
-		for (;;)
+		for (; ; )
 		{
 			UpdateDebugResults();
 
@@ -413,7 +413,6 @@ public partial class MainWindow : Window
 	private void Next_OnClick(object _, RoutedEventArgs e) => SetTransformationStep(transformStep + 1);
 
 	private void Last_OnClick(object _, RoutedEventArgs e) => SetTransformationStep(int.MaxValue);
-
 
 	private void SetBlock_OnIsCheckedChanged(object _, RoutedEventArgs e)
 		=> TransformsGrid_OnSelectionChanged(null, null);
@@ -622,8 +621,8 @@ public partial class MainWindow : Window
 		if (string.IsNullOrEmpty(Debug.Text) || !Debug.Text.StartsWith("digraph blocks"))
 			return false;
 
-		var dot = Path.GetTempFileName();
-		var img = Path.GetTempFileName();
+		var dot = Path.GetRandomFileName();
+		var img = Path.GetRandomFileName();
 
 		try
 		{
