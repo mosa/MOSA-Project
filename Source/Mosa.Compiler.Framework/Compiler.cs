@@ -198,7 +198,7 @@ public sealed class Compiler
 		new DeadBlockStage(),
 		new AdvancedBlockOrderingStage(),
 
-		//new PreciseGCStage(),
+		new SafePointStage(),
 
 		new CodeGenerationStage(),
 		mosaSettings.EmitBinary ? new ProtectedRegionLayoutStage() : null,

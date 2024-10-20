@@ -1494,7 +1494,7 @@
 			"IgnoreInstructionBasicBlockTargets": "true"
 		},
 		{
-			"Name": "GCPoint",
+			"Name": "SafePoint",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,

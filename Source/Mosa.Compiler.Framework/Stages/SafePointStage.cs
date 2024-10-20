@@ -3,9 +3,9 @@
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
-/// This stage determines were object references are located in code.
+/// This stage inserts the GC safe points.
 /// </summary>
-public class PreciseGCStage : BaseMethodCompilerStage
+public class SafePointStage : BaseMethodCompilerStage
 {
 	private TraceLog trace;
 
