@@ -5,11 +5,11 @@
 namespace Mosa.Compiler.Framework.Instructions;
 
 /// <summary>
-/// GCPoint
+/// SafePoint
 /// </summary>
-public sealed class GCPoint : BaseIRInstruction
+public sealed class SafePoint : BaseIRInstruction
 {
-	public GCPoint()
+	public SafePoint()
 		: base(0, 0)
 	{
 	}
