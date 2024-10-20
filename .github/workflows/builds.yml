@@ -38,7 +38,7 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
       - name: Setup Nuget.exe
-        uses: nuget/setup-nuget@v1
+        uses: nuget/setup-nuget@v2
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.sln
       - name: Build

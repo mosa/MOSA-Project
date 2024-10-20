@@ -1335,8 +1335,8 @@ public partial class MainForm : Form
 		if (!tbDebugResult.Text.Contains("digraph blocks"))
 			return false;
 
-		var dot = Path.GetTempFileName();
-		var bmp = Path.GetTempFileName();
+		var dot = Path.GetRandomFileName();
+		var bmp = Path.GetRandomFileName();
 
 		try
 		{
