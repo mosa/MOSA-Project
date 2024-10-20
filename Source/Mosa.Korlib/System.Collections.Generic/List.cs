@@ -348,7 +348,8 @@ public class List<T> : IList<T>, IList, IReadOnlyList<T>
 		_size++;
 		for (int i = index; i < _size; i++)
 		{
-			_items[i] = _items[i + 1];
+			//_items[i] = _items[i + 1];
+			_items[i + 1] = _items[i];
 		}
 
 		_items[index] = item;
