@@ -224,7 +224,7 @@ public static class IR
 	public static readonly BaseInstruction Truncate64x32 = new Truncate64x32();
 	public static readonly BaseInstruction TryEnd = new TryEnd();
 	public static readonly BaseInstruction TryStart = new TryStart();
-	public static readonly BaseInstruction GCPoint = new GCPoint();
+	public static readonly BaseInstruction SafePoint = new SafePoint();
 	public static readonly BaseInstruction Rethrow = new Rethrow();
 	public static readonly BaseInstruction GetVirtualFunctionPtr = new GetVirtualFunctionPtr();
 	public static readonly BaseInstruction MemoryCopy = new MemoryCopy();
