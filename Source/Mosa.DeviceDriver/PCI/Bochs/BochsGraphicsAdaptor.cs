@@ -4,6 +4,9 @@ using Mosa.DeviceSystem.Framework;
 
 namespace Mosa.DeviceDriver.PCI.Bochs;
 
+// Bochs VBE Extensions
+// https://wiki.osdev.org/Bochs_VBE_Extensions
+
 /// <summary>
 /// The southbridge of the generic Intel chipset <see cref="BochsGraphicsAdaptor"/>.
 /// </summary>
