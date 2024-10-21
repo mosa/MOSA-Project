@@ -150,15 +150,13 @@ public static class Setup
 
 		new PCIDeviceDriverRegistryEntry
 		{
-			Name = "BochsGraphicsAdaptor",
+			Name = "QEMUStandardVGA",
 			Platform = PlatformArchitecture.X86AndX64,
 			VendorID = 0x1234,
 			DeviceID = 0x1111,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
-			Factory = () => new PCI.Bochs.BochsGraphicsAdaptor()
+			Factory = () => new PCI.QEMU.QEMUStandardVGA()
 		},
-
-		//
 
 		new PCIDeviceDriverRegistryEntry
 		{
