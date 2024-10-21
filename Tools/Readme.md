@@ -3,7 +3,7 @@ These tools are used by the MOSA project under their respective licenses.
 qemu
 - GPL License
 - http://www.qemu.org
-- Version: 7.1.0
+- Version: 9.1.0
 
 bochs
 - LGPL License
@@ -16,7 +16,7 @@ bochs
 nasm & ndisasm
 - Simplified BSD License
 - http://www.nasm.us/
-- Version 2.14.03rc2
+- Version 2.16.03
 
 xunit
 - Apache License, Version 2.0
@@ -36,12 +36,6 @@ gdb
 - GPL License v3
 - https://www.gnu.org/software/gdb/
 - Version: 7.6.1
-
-rufus
-- GNU License v3
-- https://github.com/pbatard/rufus
-- https://rufus.ie/
-- Version: 3.6
 
 Raspberry Pi Firmware
 - See LICENCE.broadcom
