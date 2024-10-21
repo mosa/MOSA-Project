@@ -29,7 +29,7 @@ public static class ListTests
 
 		list.Add(101);
 
-		return list.Count == 1;
+		return list[0] == 101 && list.Count == 1;
 	}
 
 	[MosaUnitTest]
@@ -40,7 +40,77 @@ public static class ListTests
 		list.Add(101);
 		list.Add(202);
 
-		return list.Count == 2;
+		return list[0] == 101 && list[1] == 202 && list.Count == 2;
+	}
+
+	[MosaUnitTest]
+	public static bool Add4()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		return list[0] == 0 && list[1] == 1 && list[2] == 2 && list[3] == 3 && list[4] == 4 && list[5] == 5;
+	}
+
+	[MosaUnitTest]
+	public static int Check0()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		return list[0];
+	}
+
+	[MosaUnitTest]
+	public static int Check1()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		return list[1];
+	}
+
+	[MosaUnitTest]
+	public static int Check2()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		return list[2];
+	}
+
+	[MosaUnitTest]
+	public static int Check4()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		return list[4];
 	}
 
 	[MosaUnitTest]
@@ -108,6 +178,150 @@ public static class ListTests
 		list.Remove(202);
 
 		return list.IndexOf(101) == 0;
+	}
+
+	[MosaUnitTest]
+	public static bool RemoveAt0()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.RemoveAt(0);
+
+		return list[0] == 1 && list[1] == 2 && list[2] == 3 && list[3] == 4;
+	}
+
+	[MosaUnitTest]
+	public static bool RemoveAt1()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.RemoveAt(1);
+
+		return list[0] == 0 && list[1] == 2 && list[2] == 3 && list[3] == 3;
+	}
+
+	[MosaUnitTest]
+	public static bool RemoveAt3()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.RemoveAt(4);
+
+		return list[0] == 0 && list[1] == 1 && list[2] == 2 && list[3] == 4;
+	}
+
+	[MosaUnitTest]
+	public static bool RemoveAt4()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.RemoveAt(4);
+
+		return list[0] == 0 && list[1] == 1 && list[2] == 2 && list[3] == 3;
+	}
+
+	[MosaUnitTest]
+	public static bool Insert0()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.Insert(0, 99);
+
+		return list[0] == 99 && list[1] == 0 && list[2] == 1 && list[3] == 2 && list[4] == 3 && list[5] == 4;
+	}
+
+	[MosaUnitTest]
+	public static bool Insert1()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.Insert(1, 99);
+
+		return list[0] == 0 && list[1] == 99 && list[2] == 1 && list[3] == 2 && list[4] == 3 && list[5] == 4;
+	}
+
+	[MosaUnitTest]
+	public static bool Insert2()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.Insert(2, 99);
+
+		return list[0] == 0 && list[1] == 1 && list[2] == 99 && list[3] == 2 && list[4] == 3 && list[5] == 4;
+	}
+
+	[MosaUnitTest]
+	public static bool Insert3()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.Insert(3, 99);
+
+		return list[0] == 0 && list[1] == 1 && list[2] == 2 && list[3] == 99 && list[4] == 3 && list[5] == 4;
+	}
+
+	[MosaUnitTest]
+	public static bool Insert4()
+	{
+		var list = new List<int>();
+
+		list.Add(0);
+		list.Add(1);
+		list.Add(2);
+		list.Add(3);
+		list.Add(4);
+
+		list.Insert(4, 99);
+
+		return list[0] == 0 && list[1] == 1 && list[2] == 2 && list[3] == 3 && list[4] == 99 && list[5] == 4;
 	}
 
 	private static List<int> Populate(int count)
