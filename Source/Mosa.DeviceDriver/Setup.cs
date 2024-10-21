@@ -105,7 +105,7 @@ public static class Setup
 			VendorID = 0x8086,
 			DeviceID = 0x2E10,
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
-			Factory = () => new PCI.Intel.Intel4SeriesChipsetIntegratedGraphicsController()
+			Factory = () => new PCI.Intel.Intel4SeriesChipsetIntegratedGraphicsController2E10()
 		},
 
 		new PCIDeviceDriverRegistryEntry
