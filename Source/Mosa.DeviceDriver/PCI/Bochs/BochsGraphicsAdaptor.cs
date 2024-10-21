@@ -7,9 +7,6 @@ namespace Mosa.DeviceDriver.PCI.Bochs;
 // Bochs VBE Extensions
 // https://wiki.osdev.org/Bochs_VBE_Extensions
 
-/// <summary>
-/// The southbridge of the generic Intel chipset <see cref="BochsGraphicsAdaptor"/>.
-/// </summary>
 //[PCIDeviceDriver(VendorID = 0x1234, DeviceID = 0x1111, Platforms = PlatformArchitecture.X86AndX64)]
 public class BochsGraphicsAdaptor : BaseDeviceDriver
 {
