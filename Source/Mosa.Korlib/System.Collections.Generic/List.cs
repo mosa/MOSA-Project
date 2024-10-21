@@ -345,12 +345,11 @@ public class List<T> : IList<T>, IList, IReadOnlyList<T>
 	{
 		EnsureCapacity(_size + 1);
 
-		_size++;
 		for (int i = index; i < _size; i++)
 		{
-			//_items[i] = _items[i + 1];
 			_items[i + 1] = _items[i];
 		}
+		_size++;
 
 		_items[index] = item;
 	}
