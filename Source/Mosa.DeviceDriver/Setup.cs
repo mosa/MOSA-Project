@@ -120,6 +120,16 @@ public static class Setup
 
 		new PCIDeviceDriverRegistryEntry
 		{
+			Name = "IntelEthernetController82540EM",
+			Platform = PlatformArchitecture.X86AndX64,
+			VendorID = 0x8086,
+			DeviceID = 0x100E,
+			PCIFields = PCIField.VendorID | PCIField.DeviceID,
+			Factory = () => new PCI.Intel.IntelEthernetController82540EM()
+		},
+
+		new PCIDeviceDriverRegistryEntry
+		{
 			Name = "Intel4SeriesChipsetPCIExpressRootPort",
 			Platform = PlatformArchitecture.X86AndX64,
 			VendorID = 0x8086,
@@ -137,6 +147,18 @@ public static class Setup
 			PCIFields = PCIField.VendorID | PCIField.DeviceID,
 			Factory = () => new PCI.Intel.Intel4SeriesChipsetPCIExpressRootPort()
 		},
+
+		new PCIDeviceDriverRegistryEntry
+		{
+			Name = "BochsGraphicsAdaptor",
+			Platform = PlatformArchitecture.X86AndX64,
+			VendorID = 0x1234,
+			DeviceID = 0x1111,
+			PCIFields = PCIField.VendorID | PCIField.DeviceID,
+			Factory = () => new PCI.Bochs.BochsGraphicsAdaptor()
+		},
+
+		//
 
 		new PCIDeviceDriverRegistryEntry
 		{
