@@ -1,7 +1,7 @@
-# curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20230810.exe --output qemu-installer.exe
-# del /S /Q qemu
-# 7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y qemu-installer.exe
-# del /Q qemu-installer.exe
+curl https://qemu.weilnetz.de/w64/2024/qemu-w64-setup-20240903.exe --output qemu-installer.exe
+del /S /Q qemu
+7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y qemu-installer.exe
+del /Q qemu-installer.exe
 
 del /S /Q qemu\share\icons
 del /S /Q qemu\share\doc
@@ -75,5 +75,5 @@ del /S /Q qemu\lib\gdk-pixbuf-2.0\2.10.0\qemu-uninstall.exe.nsis
 del /S /Q qemu\share\petalogix-*.dtb
 del /S /Q qemu\share\trace-events-all
 del /S /Q qemu\share\s390-ccw.img
-
-
+del /S /Q qemu\share\edk2-riscv*.fd
+del /S /Q qemu\share\hppa-firmware64.img

@@ -261,38 +261,6 @@ public static class ListTests
 	}
 
 	[MosaUnitTest]
-	public static bool Insert0b()
-	{
-		var list = new List<int>();
-
-		list.Add(0);
-		list.Add(1);
-		list.Add(2);
-		list.Add(3);
-		list.Add(4);
-
-		list.Insert(0, 99);
-
-		return list[0] == 99 && list[1] == 0;// && list[2] == 1;// && list[3] == 2 && list[4] == 3 && list[5] == 4;
-	}
-
-	[MosaUnitTest]
-	public static bool Insert0c()
-	{
-		var list = new List<int>();
-
-		list.Add(0);
-		list.Add(1);
-		list.Add(2);
-		list.Add(3);
-		list.Add(4);
-
-		list.Insert(0, 99);
-
-		return list[0] == 99 && list[1] == 0 && list[2] == 1;// && list[3] == 2 && list[4] == 3 && list[5] == 4;
-	}
-
-	[MosaUnitTest]
 	public static bool Insert1()
 	{
 		var list = new List<int>();
