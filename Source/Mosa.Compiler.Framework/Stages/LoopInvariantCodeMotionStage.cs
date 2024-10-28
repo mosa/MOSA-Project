@@ -53,7 +53,9 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 
 		if (trace != null)
 		{
-			DumpLoops(loops);
+			var loopTrace = CreateTraceLog("Loops");
+
+			LoopDetector.DumpLoops(loopTrace, loops);
 		}
 
 		SortLoopsByBlockCount(loops);
@@ -72,35 +74,6 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 	protected override void Finish()
 	{
 		ParamStoreSet = null;
-	}
-
-	public void DumpLoops(List<Loop> loops)
-	{
-		var loopTrace = CreateTraceLog("Loops");
-
-		if (loopTrace == null)
-			return;
-
-		foreach (var loop in loops)
-		{
-			loopTrace.Log($"Header: {loop.Header}");
-			foreach (var backedge in loop.Backedges)
-			{
-				loopTrace.Log($"   Backedge: {backedge}");
-			}
-
-			var sb = new StringBuilder();
-
-			foreach (var block in loop.LoopBlocks)
-			{
-				sb.Append(block);
-				sb.Append(", ");
-			}
-
-			sb.Length -= 2;
-
-			loopTrace.Log($"   Members: {sb}");
-		}
 	}
 
 	private static void SortLoopsByBlockCount(List<Loop> loops)

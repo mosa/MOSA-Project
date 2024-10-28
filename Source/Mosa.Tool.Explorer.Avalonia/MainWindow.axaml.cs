@@ -681,7 +681,7 @@ public partial class MainWindow : Window
 	private static void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline)
 		=> pipeline.InsertAfterFirst<TypeInitializerStage>(new ExplorerMethodCompileTimeStage());
 
-	private void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)
+	private void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
 		pipeline.Add(new DisassemblyStage());
 		pipeline.Add(new DebugInfoStage());
