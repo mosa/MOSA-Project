@@ -575,7 +575,7 @@ public partial class MainForm : Form
 		);
 	}
 
-	private void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)
+	private void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
 		pipeline.Add(new DisassemblyStage());
 		pipeline.Add(new DebugInfoStage());

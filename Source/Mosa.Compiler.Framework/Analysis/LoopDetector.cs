@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Text;
 using Mosa.Compiler.Framework.Common;
 
 namespace Mosa.Compiler.Framework.Analysis;
@@ -83,6 +84,33 @@ public sealed class LoopDetector
 
 				worklist.Push(previous);
 			}
+		}
+	}
+
+	public static void DumpLoops(TraceLog loopTrace, List<Loop> loops)
+	{
+		if (loopTrace == null)
+			return;
+
+		foreach (var loop in loops)
+		{
+			loopTrace.Log($"Header: {loop.Header}");
+			foreach (var backedge in loop.Backedges)
+			{
+				loopTrace.Log($"   Backedge: {backedge}");
+			}
+
+			var sb = new StringBuilder();
+
+			foreach (var block in loop.LoopBlocks)
+			{
+				sb.Append(block);
+				sb.Append(", ");
+			}
+
+			sb.Length -= 2;
+
+			loopTrace.Log($"   Members: {sb}");
 		}
 	}
 }

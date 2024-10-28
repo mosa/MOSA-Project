@@ -145,64 +145,78 @@ public sealed class Compiler
 		!string.IsNullOrEmpty(mosaSettings.InlinedFile) ? new InlinedFileStage() : null,
 	};
 
-	private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(MosaSettings mosaSettings) => new List<BaseMethodCompilerStage>
+	private static void InitializeMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
-		new CILDecoderStage(),
-		new ExceptionStage(),
-		new FastBlockOrderingStage(),
-		mosaSettings.Devirtualization ? new DevirtualizeCallStage() : null,
-		mosaSettings.BasicOptimizations ? new OptimizationStage(false) : null,
-		new IRTransformsStage(),
-		new PlugStage(),
-		new RuntimeStage(),
+		pipeline.Add(
+		[
+			new CILDecoderStage(),
+			new ExceptionStage(),
+			new FastBlockOrderingStage(),
+			mosaSettings.Devirtualization ? new DevirtualizeCallStage() : null,
+			mosaSettings.BasicOptimizations ? new OptimizationStage(false) : null,
+			new IRTransformsStage(),
+			new PlugStage(),
+			new RuntimeStage(),
 
-		mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineStage() : null,
+			mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineStage() : null,
 
-		mosaSettings.BasicOptimizations ? new OptimizationStage(false) : null,
-		mosaSettings.SSA ? new EdgeSplitStage() : null,
-		mosaSettings.SSA ? new EnterSSAStage() : null,
-		mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(false) : null,
+			mosaSettings.BasicOptimizations ? new OptimizationStage(false) : null,
+			mosaSettings.SSA ? new EdgeSplitStage() : null,
+			mosaSettings.SSA ? new EnterSSAStage() : null,
+			mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(false) : null,
 
-		mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
-		mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
-		mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
-		mosaSettings.BasicOptimizations && mosaSettings.SSA && (mosaSettings.ValueNumbering || mosaSettings.LoopInvariantCodeMotion || mosaSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
-		mosaSettings.BitTracker ? new BitTrackerStage() : null,
-		mosaSettings.LoopRangeTracker && mosaSettings.SSA ? new LoopRangeTrackerStage() : null,
-		mosaSettings.BasicOptimizations  ? new OptimizationStage(mosaSettings.LongExpansion) : null,
+			mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
+			mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
+			mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
+			mosaSettings.BasicOptimizations && mosaSettings.SSA && (mosaSettings.ValueNumbering || mosaSettings.LoopInvariantCodeMotion || mosaSettings.SparseConditionalConstantPropagation) ? new OptimizationStage(false) : null,
+			mosaSettings.BitTracker ? new BitTrackerStage() : null,
+			mosaSettings.LoopRangeTracker && mosaSettings.SSA ? new LoopRangeTrackerStage() : null,
+			mosaSettings.BasicOptimizations ? new OptimizationStage(mosaSettings.LongExpansion) : null,
 
-		mosaSettings.TwoPassOptimization && mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
-		mosaSettings.TwoPassOptimization && mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
-		mosaSettings.TwoPassOptimization && mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
-		mosaSettings.TwoPassOptimization && mosaSettings.BitTracker ? new BitTrackerStage() : null,
-		mosaSettings.TwoPassOptimization && mosaSettings.LoopRangeTracker && mosaSettings.SSA ? new LoopRangeTrackerStage() : null,
-		mosaSettings.TwoPassOptimization && mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(mosaSettings.LongExpansion) : null,
+			mosaSettings.TwoPassOptimization && mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
+			mosaSettings.TwoPassOptimization && mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
+			mosaSettings.TwoPassOptimization && mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
+			mosaSettings.TwoPassOptimization && mosaSettings.BitTracker ? new BitTrackerStage() : null,
+			mosaSettings.TwoPassOptimization && mosaSettings.LoopRangeTracker && mosaSettings.SSA ? new LoopRangeTrackerStage() : null,
+			mosaSettings.TwoPassOptimization && mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(mosaSettings.LongExpansion) : null,
 
-		new NopRemovalStage(),
-		new FastBlockOrderingStage(),
+			new NopRemovalStage(),
+			new FastBlockOrderingStage(),
 
-		mosaSettings.SSA ? new ExitSSAStage() : null,
+			mosaSettings.SSA ? new ExitSSAStage() : null,
 
-		new DeadBlockStage(),
+			new DeadBlockStage(),
 
-		mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineEvaluationStage() : null,
-		new NewObjectStage(),
-		new CallStage(),
-		new CompoundStage(),
-		new PlatformIntrinsicStage(),
+			mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineEvaluationStage() : null,
+			new NewObjectStage(),
+			new CallStage(),
+			new CompoundStage(),
+			new PlatformIntrinsicStage(),
 
-		new PlatformEdgeSplitStage(),
-		new VirtualRegisterReindexStage(),
-		new GreedyRegisterAllocatorStage(),
-		new StackLayoutStage(),
-		new DeadBlockStage(),
-		new AdvancedBlockOrderingStage(),
+			new PlatformEdgeSplitStage(),
+			new VirtualRegisterReindexStage(),
+			new GreedyRegisterAllocatorStage(),
+			new StackLayoutStage(),
 
-		new SafePointStage(),
+			new CodeGenerationStage(),
+		]);
+	}
 
-		new CodeGenerationStage(),
-		mosaSettings.EmitBinary ? new ProtectedRegionLayoutStage() : null,
-	};
+	private static void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings)
+	{
+		pipeline.InsertBefore<CodeGenerationStage>(
+		[
+			new DeadBlockStage(),
+			new SafePointStage(),
+			new AdvancedBlockOrderingStage(),
+			new JumpOptimizationStage()
+		]);
+
+		pipeline.InsertAfterLast<CodeGenerationStage>(
+		[
+			new ProtectedRegionLayoutStage(),
+		]);
+	}
 
 	#endregion Static Methods
 
@@ -334,12 +348,17 @@ public sealed class Compiler
 
 			MethodStagePipelines[threadID] = pipeline;
 
-			pipeline.Add(GetDefaultMethodPipeline(MosaSettings));
+			// Setup the initial pipeline
+			InitializeMethodCompilerPipeline(pipeline, MosaSettings);
 
 			// Call hook to allow for the extension of the pipeline
-			CompilerHooks.ExtendMethodCompilerPipeline?.Invoke(pipeline);
+			CompilerHooks.ExtendMethodCompilerPipeline?.Invoke(pipeline, MosaSettings);
 
+			// Extend pipeline with architecture stages
 			Architecture.ExtendMethodCompilerPipeline(pipeline, MosaSettings);
+
+			// Extend pipeline after all hooks and architecture stages are added
+			ExtendMethodCompilerPipeline(pipeline, MosaSettings);
 
 			foreach (var stage in pipeline)
 			{
