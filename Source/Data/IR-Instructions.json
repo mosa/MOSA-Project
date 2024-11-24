@@ -1502,6 +1502,22 @@
 			"UnspecifiedSideEffect": "true"
 		},
 		{
+			"Name": "UnstableRegionStart",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"UnspecifiedSideEffect": "true"
+		},
+		{
+			"Name": "UnstableRegionEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"UnspecifiedSideEffect": "true"
+		},
+		{
 			"Name": "Rethrow",
 			"FamilyName": "IR",
 			"ResultCount": 1,

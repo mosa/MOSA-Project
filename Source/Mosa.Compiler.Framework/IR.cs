@@ -225,6 +225,8 @@ public static class IR
 	public static readonly BaseInstruction TryEnd = new TryEnd();
 	public static readonly BaseInstruction TryStart = new TryStart();
 	public static readonly BaseInstruction SafePoint = new SafePoint();
+	public static readonly BaseInstruction UnstableRegionStart = new UnstableRegionStart();
+	public static readonly BaseInstruction UnstableRegionEnd = new UnstableRegionEnd();
 	public static readonly BaseInstruction Rethrow = new Rethrow();
 	public static readonly BaseInstruction GetVirtualFunctionPtr = new GetVirtualFunctionPtr();
 	public static readonly BaseInstruction MemoryCopy = new MemoryCopy();
