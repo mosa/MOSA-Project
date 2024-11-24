@@ -28,7 +28,7 @@ public abstract class BaseCompoundTransform : BaseTransform
 
 		context.SetInstruction(IR.UnstableRegionStart);
 
-		context.SetInstruction(transform.AddInstruction, srcReg, sourceBase, source);
+		context.AppendInstruction(transform.AddInstruction, srcReg, sourceBase, source);
 		context.AppendInstruction(transform.AddInstruction, dstReg, destinationBase, destination);
 
 		var tmp = transform.VirtualRegisters.AllocateNativeInteger();
@@ -73,7 +73,7 @@ public abstract class BaseCompoundTransform : BaseTransform
 			}
 		}
 
-		context.SetInstruction(IR.UnstableRegionEnd);
+		context.AppendInstruction(IR.UnstableRegionEnd);
 	}
 
 	#endregion Helpers
