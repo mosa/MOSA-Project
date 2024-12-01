@@ -11,7 +11,7 @@ digraph "MOSA Runtime Tables"
 	];
 
 	"NameString" [
-		label = "<f0>String Object|<f1>Object Header|<f2>Pointer to Method Table|<f3>String Length|<f4>Unicode String"
+		label = "<f0>Internal String Object|<f1>Object Header|<f2>Pointer to Method Table|<f3>String Length|<f4>Unicode String"
 		shape = "record"
 		color = "red"
 	];
@@ -209,7 +209,7 @@ digraph "MOSA Runtime Tables"
 	];
 
 	"MethodDefinition" [
-		label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local & Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>~Pointer to Protected Region Table|<f8>Pointer to SafePoint Table|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
+		label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local & Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>~Pointer to Protected Region Table|<f8>Pointer to Method GC Data|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
 		shape = "record"
 		color = "purple"
 	];
@@ -232,7 +232,7 @@ digraph "MOSA Runtime Tables"
 		color = "blue"
 	];
 
-	"MethodDefinition":f8 -> "SafePointTable":f0 [
+	"MethodDefinition":f8 -> "Method GC Data":f0 [
 		id = 0
 	];
 
@@ -258,6 +258,16 @@ digraph "MOSA Runtime Tables"
 		id = 0
 		color = "blue"
 	];
+	
+	"Method GC Data" [
+		label = "<f0>Method GC Data|<f1>Pointer to SafePoint Table|<f2>Pointer to Method GC Stack Data"
+		shape = "record"
+	];
+	
+	"Method GC Data":f1 -> "SafePoint":f0 [
+		id = 0
+		style = "dotted"
+	];
 
 	"SafePointTable" [
 		label = "<f0>SafePoint Table|<f1>Number of SafePoints|<f2>SafePoint 1|..|SafePoint N"
@@ -265,7 +275,7 @@ digraph "MOSA Runtime Tables"
 	];
 	
 	"SafePoint" [
-		label = "<f0>SafePoint|<f1>Address Offset|<f2>Address Range (signed)|<f3>Breakpoint Indicator|<f4>CPU Registers Bitmap (64 bit)"
+		label = "<f0>SafePoint|<f1>Address Offset|<f2>Address Range (signed)|<f3>Breakpoint Indicator|<f4>CPU Registers Bitmap (32 bit)"
 		shape = "record"
 	];
 	
