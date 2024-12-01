@@ -81,7 +81,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Runtime Tables</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Runtime Tables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#internal-string-object">Internal String Object</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
 <ul>
@@ -122,7 +125,7 @@
   <section id="mosa-runtime-tables">
 <h1>MOSA Runtime Tables<a class="headerlink" href="#mosa-runtime-tables" title="Link to this heading"></a></h1>
 <p>This diagram represents the internal runtime tables within the MOSA virtual machine:</p>
-<div class="graphviz"><object data="_images/graphviz-1ba431e69b5deb2f23cb0c72ce65aa6dd71bdc0b.svg" type="image/svg+xml" class="graphviz">
+<div class="graphviz"><object data="_images/graphviz-6a6b65dc2026a5e6698ca882b2116c416d01d499.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph &quot;MOSA Runtime Tables&quot;
 {
 
@@ -136,7 +139,7 @@
 	];
 
 	&quot;NameString&quot; [
-		label = &quot;&lt;f0&gt;String Object|&lt;f1&gt;Object Header|&lt;f2&gt;Pointer to Method Table|&lt;f3&gt;String Length|&lt;f4&gt;Unicode String&quot;
+		label = &quot;&lt;f0&gt;Internal String Object|&lt;f1&gt;Object Header|&lt;f2&gt;Pointer to Method Table|&lt;f3&gt;String Length|&lt;f4&gt;Unicode String&quot;
 		shape = &quot;record&quot;
 		color = &quot;red&quot;
 	];
@@ -334,7 +337,7 @@
 	];
 
 	&quot;MethodDefinition&quot; [
-		label = &quot;&lt;f0&gt;Method Definition|&lt;f1&gt;Pointer to Method Name|&lt;f2&gt;~Pointer to Custom Attributes|&lt;f3&gt;Method Attributes|&lt;f4&gt;Local &amp; Parameter Stack Size|&lt;f5&gt;Pointer to Method|&lt;f6&gt;Pointer to Return Type Definition|&lt;f7&gt;~Pointer to Protected Region Table|&lt;f8&gt;Pointer to SafePoint Table|&lt;f9&gt;Number of Parameters|&lt;f10&gt;Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N&quot;
+		label = &quot;&lt;f0&gt;Method Definition|&lt;f1&gt;Pointer to Method Name|&lt;f2&gt;~Pointer to Custom Attributes|&lt;f3&gt;Method Attributes|&lt;f4&gt;Local &amp; Parameter Stack Size|&lt;f5&gt;Pointer to Method|&lt;f6&gt;Pointer to Return Type Definition|&lt;f7&gt;~Pointer to Protected Region Table|&lt;f8&gt;Pointer to Method GC Data|&lt;f9&gt;Number of Parameters|&lt;f10&gt;Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N&quot;
 		shape = &quot;record&quot;
 		color = &quot;purple&quot;
 	];
@@ -357,7 +360,7 @@
 		color = &quot;blue&quot;
 	];
 
-	&quot;MethodDefinition&quot;:f8 -&gt; &quot;SafePointTable&quot;:f0 [
+	&quot;MethodDefinition&quot;:f8 -&gt; &quot;Method GC Data&quot;:f0 [
 		id = 0
 	];
 
@@ -383,6 +386,16 @@
 		id = 0
 		color = &quot;blue&quot;
 	];
+	
+	&quot;Method GC Data&quot; [
+		label = &quot;&lt;f0&gt;Method GC Data|&lt;f1&gt;Pointer to SafePoint Table|&lt;f2&gt;Pointer to Method GC Stack Data&quot;
+		shape = &quot;record&quot;
+	];
+	
+	&quot;Method GC Data&quot;:f1 -&gt; &quot;SafePoint&quot;:f0 [
+		id = 0
+		style = &quot;dotted&quot;
+	];
 
 	&quot;SafePointTable&quot; [
 		label = &quot;&lt;f0&gt;SafePoint Table|&lt;f1&gt;Number of SafePoints|&lt;f2&gt;SafePoint 1|..|SafePoint N&quot;
@@ -390,7 +403,7 @@
 	];
 	
 	&quot;SafePoint&quot; [
-		label = &quot;&lt;f0&gt;SafePoint|&lt;f1&gt;Address Offset|&lt;f2&gt;Address Range (signed)|&lt;f3&gt;Breakpoint Indicator|&lt;f4&gt;CPU Registers Bitmap (64 bit)&quot;
+		label = &quot;&lt;f0&gt;SafePoint|&lt;f1&gt;Address Offset|&lt;f2&gt;Address Range (signed)|&lt;f3&gt;Breakpoint Indicator|&lt;f4&gt;CPU Registers Bitmap (32 bit)&quot;
 		shape = &quot;record&quot;
 	];
 	
@@ -443,6 +456,28 @@
 	];
 
 }</p></object></div>
+<section id="internal-string-object">
+<h2>Internal String Object<a class="headerlink" href="#internal-string-object" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Fields</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Object Header</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Method Table</p></td>
+</tr>
+<tr class="row-even"><td><p>String Length</p></td>
+</tr>
+<tr class="row-odd"><td><p>Unicode String</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 
 
