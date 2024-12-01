@@ -6,7 +6,11 @@ namespace Mosa.Compiler.Framework.Stages;
 
 // TODO:
 // 1. Analyze method and determine:
+<<<<<<< HEAD
 //    A. Determine if method contains any references to objects, or have any managed pointers
+=======
+//    A. Determine if method contain any refernces to objects, or have any managed pointers
+>>>>>>> d95db0ac4b68e28fc2e97b50da5bb5aebe7dabce
 //    B. Determine start/end ranges of objects and managed pointers on the local stack and parameters
 //    C. Place SafePoint at:
 //       i.  Method prologue
