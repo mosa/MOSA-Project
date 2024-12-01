@@ -25,7 +25,7 @@ Internal String Object
    :widths: 200
 	
 	Number of Assemblies
-	Pointer to Assembly 1…N
+	Pointer to Assembly 1..N
 
 Assembly
 --------
