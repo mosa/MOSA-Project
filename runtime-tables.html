@@ -83,6 +83,10 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Runtime Tables</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#internal-string-object">Internal String Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Internal String Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assembly">Assembly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#type-definition">Type Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fields-table">Fields Table</a></li>
 </ul>
 </li>
 </ul>
@@ -463,17 +467,159 @@
 <col style="width: 100.0%" />
 </colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Fields</p></th>
+<tr class="row-odd"><th class="head"><p>Object Header</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Object Header</p></td>
+<tr class="row-even"><td><p>Pointer to Method Table</p></td>
 </tr>
-<tr class="row-odd"><td><p>Pointer to Method Table</p></td>
+<tr class="row-odd"><td><p>String Length</p></td>
 </tr>
-<tr class="row-even"><td><p>String Length</p></td>
+<tr class="row-even"><td><p>Unicode String</p></td>
 </tr>
-<tr class="row-odd"><td><p>Unicode String</p></td>
+</tbody>
+</table>
+</section>
+<section id="id1">
+<h2>Internal String Object<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Assembly Table</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Number of Assemblies</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Assembly 1..N</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="assembly">
+<h2>Assembly<a class="headerlink" href="#assembly" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Assembly</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pointer to Assembly Name</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Custom Attributes</p></td>
+</tr>
+<tr class="row-even"><td><p>Flags: IsReflectionOnly</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of Types</p></td>
+</tr>
+<tr class="row-even"><td><p>Pointer to Type Definition 1..N</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="type-definition">
+<h2>Type Definition<a class="headerlink" href="#type-definition" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Type Definition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pointer to Typeame</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Custom Attributes</p></td>
+</tr>
+<tr class="row-even"><td><p>Type Code &amp; Attributes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Type Size</p></td>
+</tr>
+<tr class="row-even"><td><p>Pointer to Assembly</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Parent Type</p></td>
+</tr>
+<tr class="row-even"><td><p>Pointer to Declaring Type</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Element Type</p></td>
+</tr>
+<tr class="row-even"><td><p>Pointer to Default Constructor Method</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Properties Table</p></td>
+</tr>
+<tr class="row-even"><td><p>Pointer to Fields Table</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Interface Slot Table</p></td>
+</tr>
+<tr class="row-even"><td><p>Pointer to Interface Bitmap</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of Methods</p></td>
+</tr>
+<tr class="row-even"><td><p>Pointer to Method 1..N</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Method Definition 1..N</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fields-table">
+<h2>Fields Table<a class="headerlink" href="#fields-table" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Fields Table</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Number of Fields</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Field Definition 1..N</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field Definition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pointer to Fieldame</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Custom Attributes</p></td>
+</tr>
+<tr class="row-even"><td><p>Field Attributes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Field Type</p></td>
+</tr>
+<tr class="row-even"><td><p>Address</p></td>
+</tr>
+<tr class="row-odd"><td><p>Offset / Size</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 100.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Properties Table</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Number of Properties</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointer to Property Definition 1..N</p></td>
 </tr>
 </tbody>
 </table>
