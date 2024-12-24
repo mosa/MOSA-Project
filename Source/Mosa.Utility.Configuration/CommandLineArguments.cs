@@ -81,7 +81,6 @@ public static class CommandLineArguments
 
 			// Compiler - Debug:
 			new Argument { Name = "-inline-exclude", Setting = Name.Optimizations_Inline_Exclude, IsList = true},
-			new Argument { Name = "-test-filter", Setting = Name.CompilerDebug_TestFilter},
 			new Argument { Name = "-check", Setting = Name.CompilerDebug_FullCheckMode, Value = "true"},
 
 			new Argument { Name = "-interrupt-method", Setting = Name.X86_InterruptMethodName},
@@ -134,8 +133,8 @@ public static class CommandLineArguments
 
 			new Argument { Name = "-blocks", Setting = Name.Image_DiskBlocks},
 			new Argument { Name = "-volume-label", Setting = Name.Image_VolumeLabel},
-			new Argument { Name = "-mbr", Setting = Name.Image_MasterBootRecordFile},
-			new Argument { Name = "-boot", Setting = Name.Image_BootBlockFile},
+			//new Argument { Name = "-mbr", Setting = Name.Image_MasterBootRecordFile},
+			//new Argument { Name = "-boot", Setting = Name.Image_BootBlockFile},
 
 			new Argument { Name = "-include", Setting = Name.Image_FileSystem_RootInclude },
 
@@ -171,7 +170,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-launch-debugger", Setting = Name.Launcher_Debugger, Value = "true"},
 
 			new Argument { Name = "-output-serial-connection", Setting = Name.Launcher_Serial},
-			new Argument { Name = "-output-serial-file", Setting = Name.Launcher_Serial_File},
+			//new Argument { Name = "-output-serial-file", Setting = Name.Launcher_Serial_File},
 			new Argument { Name = "-debug", Setting = Name.Launcher_Serial, Value = "true"},
 			new Argument { Name = "-debug", Setting = Name.OS_BootOptions, Value = "bootoptions=serialdebug"},
 

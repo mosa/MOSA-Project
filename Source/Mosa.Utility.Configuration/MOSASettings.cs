@@ -223,6 +223,18 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Image_Format, value);
 	}
 
+	public string VolumeLabel
+	{
+		get => Settings.GetValue(Name.Image_VolumeLabel, null);
+		set => Settings.SetValue(Name.Image_VolumeLabel, value);
+	}
+
+	public int DiskBlocks
+	{
+		get => Settings.GetValue(Name.Image_DiskBlocks, 0);
+		set => Settings.SetValue(Name.Image_DiskBlocks, value);
+	}
+
 	public string InlinedFile
 	{
 		get => Settings.GetValue(Name.CompilerDebug_InlinedFile, null);
@@ -281,12 +293,6 @@ public partial class MosaSettings
 	{
 		get => Settings.GetValue(Name.CompilerDebug_CounterFilter, null);
 		set => Settings.SetValue(Name.CompilerDebug_CounterFilter, value);
-	}
-
-	public string TestFilter
-	{
-		get => Settings.GetValue(Name.CompilerDebug_TestFilter, null);
-		set => Settings.SetValue(Name.CompilerDebug_TestFilter, value);
 	}
 
 	public int MaxThreads
@@ -821,6 +827,8 @@ public partial class MosaSettings
 		ImageFile = "%DEFAULT%";
 
 		OSName = "MOSA";
+		VolumeLabel = "MOSA";
+		DiskBlocks = 0;
 
 		MaxErrors = Constant.MaxErrors;
 		ConnectionTimeOut = Constant.ConnectionTimeOut;
@@ -876,6 +884,8 @@ public partial class MosaSettings
 
 		if (InlineAggressiveMaximum < 0)
 			InlineAggressiveMaximum = 0;
+
+		VolumeLabel ??= OSName;
 	}
 
 	public void ResolveDefaults()

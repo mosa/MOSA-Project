@@ -4,7 +4,8 @@ using Mosa.DeviceSystem.Misc;
 
 namespace Mosa.Utility.BootImage;
 
-//https://github.com/limine-bootloader/limine/blob/v4.0-binary/limine-deploy.c
+// https://github.com/limine-bootloader/limine/blob/v4.0-binary/limine-deploy.c
+
 public static class Limine
 {
 	private static readonly byte[] BootloaderImg =
