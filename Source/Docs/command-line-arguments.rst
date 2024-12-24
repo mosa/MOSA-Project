@@ -140,8 +140,6 @@ Below are the command line arguments available:
 
     -blocks,Image.DiskBlocks,{value}
     -volume-label,Image.VolumeLabel,{value}
-    -mbr,Image.MasterBootRecordFile,{value}
-    -boot,Image.BootBlockFile,{value}
 
     -include,Image.FileSystem.RootInclude,{value}
 

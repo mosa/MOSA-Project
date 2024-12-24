@@ -162,7 +162,7 @@ public static class Generator
 				},
 				FloppyMedia = false,
 				VolumeLabel = options.VolumeLabel,
-				SerialID = new byte[] { 0x01, 0x02, 0x03, 0x04 },
+				SerialID = [0x01, 0x02, 0x03, 0x04],
 				SectorsPerTrack = diskGeometry.SectorsPerTrack,
 				NumberOfHeads = diskGeometry.Heads,
 				HiddenSectors = diskGeometry.SectorsPerTrack,

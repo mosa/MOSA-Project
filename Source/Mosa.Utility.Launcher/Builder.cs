@@ -110,24 +110,24 @@ public class Builder : BaseLauncher
 		switch (MosaSettings.ImageFormat)
 		{
 			case "vmdk":
-			{
-				var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
-				CreateDiskImage(imageFile);
-				CreateVMDK(imageFile);
-				break;
-			}
+				{
+					var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
+					CreateDiskImage(imageFile);
+					CreateVMDK(imageFile);
+					break;
+				}
 			case "vdi":
-			{
-				var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
-				CreateDiskImage(imageFile);
-				CreateVDI(imageFile);
-				break;
-			}
+				{
+					var imageFile = Path.Combine(MosaSettings.TemporaryFolder, $"{Path.GetFileNameWithoutExtension(MosaSettings.ImageFile)}.img");
+					CreateDiskImage(imageFile);
+					CreateVDI(imageFile);
+					break;
+				}
 			default:
-			{
-				CreateDiskImage(MosaSettings.ImageFile);
-				break;
-			}
+				{
+					CreateDiskImage(MosaSettings.ImageFile);
+					break;
+				}
 		}
 	}
 
@@ -142,6 +142,7 @@ public class Builder : BaseLauncher
 	private void CreateDiskImage(string imageFile)
 	{
 		var bootImageOptions = new BootImageOptions();
+
 		bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetLimineCFG()));
 		bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
 		bootImageOptions.IncludeFiles.Add(new IncludeFile(MosaSettings.OutputFile, "kernel.bin"));
@@ -159,7 +160,8 @@ public class Builder : BaseLauncher
 			}
 		}
 
-		bootImageOptions.VolumeLabel = MosaSettings.OSName;
+		bootImageOptions.VolumeLabel = MosaSettings.VolumeLabel;
+		bootImageOptions.BlockCount = (uint)MosaSettings.DiskBlocks;
 		bootImageOptions.DiskImageFileName = imageFile;
 		bootImageOptions.ImageFirmware = MosaSettings.ImageFirmware switch
 		{
@@ -187,13 +189,13 @@ public class Builder : BaseLauncher
 	}
 
 	private byte[] GetLimineCFG() => Encoding.ASCII.GetBytes($"""
-															  TIMEOUT={MosaSettings.BootLoaderTimeout}
-															  INTERFACE_RESOLUTION=640x480
-															  INTERFACE_BRANDING=Managed Operating System Alliance
-															  :{MosaSettings.OSName}
-															  PROTOCOL=multiboot2
-															  KERNEL_PATH=boot:///kernel.bin
-															  """);
+		TIMEOUT={MosaSettings.BootLoaderTimeout}
+		INTERFACE_RESOLUTION=640x480
+		INTERFACE_BRANDING=Managed Operating System Alliance
+		:{MosaSettings.OSName}
+		PROTOCOL=multiboot2
+		KERNEL_PATH=boot:///kernel.bin
+		""");
 
 	private void CreateVMDK(string source)
 		=> LaunchApplicationWithOutput(MosaSettings.QemuImgApp, $"convert -f raw -O vmdk \"{source}\" \"{MosaSettings.ImageFile}\"");
@@ -266,26 +268,26 @@ public class Builder : BaseLauncher
 		switch (compilerEvent)
 		{
 			case CompilerEvent.Exception:
-			{
-				var status = $"[Exception] {message}";
+				{
+					var status = $"[Exception] {message}";
 
-				OutputStatus(status);
-				break;
-			}
+					OutputStatus(status);
+					break;
+				}
 			case CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error:
-			{
-				var status = compilerEvent.ToText();
-				if (!string.IsNullOrEmpty(message))
-					status += $" => {message}";
+				{
+					var status = compilerEvent.ToText();
+					if (!string.IsNullOrEmpty(message))
+						status += $" => {message}";
 
-				OutputStatus(status);
-				break;
-			}
+					OutputStatus(status);
+					break;
+				}
 			case CompilerEvent.Counter:
-			{
-				AddCounters(message);
-				break;
-			}
+				{
+					AddCounters(message);
+					break;
+				}
 		}
 	}
 }
