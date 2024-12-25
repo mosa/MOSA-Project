@@ -143,6 +143,8 @@ Image Settings
     Image.Destination,Destination directory of the image file
     Image.ImageFile,Filename of the image file
 	Image.FileSystem.RootInclude,Include files in specified directory
+	Image.DiskBlocks,Number of blocks in image (0=automatic)
+    Image.VolumeLabel,Volume Label
 
 Emulator Settings
 -----------------
