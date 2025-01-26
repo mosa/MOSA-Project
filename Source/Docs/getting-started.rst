@@ -1,5 +1,5 @@
 ***************
-Getting Started
+Getting started
 ***************
 
 Prerequisites
@@ -20,12 +20,12 @@ On Linux, the following prerequisites are necessary:
 * `Git <https://git-scm.com/>`__ (only if you want to clone and build manually)
 * `QEMU <https://www.qemu.org/>`__
 
-If you're using Ubuntu 22.04, you can use the following commands to quickly set everything up:
+If you're using Ubuntu 24.04, you can use the following commands to quickly set everything up:
 
 .. code-block:: bash
 
 	# Register Microsoft package repository
-	wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+	wget -q https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 	sudo dpkg -i packages-microsoft-prod.deb
 
 	# Install the .NET Core SDK

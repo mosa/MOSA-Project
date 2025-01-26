@@ -13,6 +13,7 @@
    :maxdepth: 1
 
    getting-started
+   usb-flash-drive-installation
    demos
 
 .. toctree::
@@ -25,6 +26,15 @@
    tool-launcher-console
    tool-explorer
    tool-debugger
+
+.. toctree::
+   :caption: Utilities
+   :hidden:
+   :maxdepth: 1
+
+   unit-tests
+   create-core-library
+   source-code-generator
 
 .. toctree::
    :caption: Settings
@@ -58,14 +68,6 @@
    :maxdepth: 1
 
    runtime-tables
-
-.. toctree::
-   :caption: Advanced
-   :hidden:
-   :maxdepth: 1
-
-   unit-tests
-   usb-flash-drive-installation
 
 .. toctree::
    :caption: Contribute

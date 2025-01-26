@@ -46,4 +46,4 @@ The MOSA compiler seeks to provide high quality code generation using the follow
 - Block Reordering
 - Greedy Register Allocation
 
-For an exhaustive list, see :doc:`Compiler Optimizations<compiler-optimizations>` which also gives a description of each of these optimizations.
+For an exhaustive list, see :doc:`compiler-optimizations` which also gives a description of each of these optimizations.

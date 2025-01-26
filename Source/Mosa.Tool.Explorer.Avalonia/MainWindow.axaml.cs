@@ -98,7 +98,7 @@ public partial class MainWindow : Window
 
 		SetRequiredSettings();
 
-		graphvizFound = File.Exists(mosaSettings.GraphwizApp);
+		graphvizFound = File.Exists(mosaSettings.GraphvizApp);
 
 		UpdateDisplay();
 	}
@@ -630,7 +630,7 @@ public partial class MainWindow : Window
 
 			var startInfo = new ProcessStartInfo
 			{
-				FileName = mosaSettings.GraphwizApp,
+				FileName = mosaSettings.GraphvizApp,
 				Arguments = $"-Tpng -o \"{img}\" \"{dot}\"",
 				CreateNoWindow = true
 			};

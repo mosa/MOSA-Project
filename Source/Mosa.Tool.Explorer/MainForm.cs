@@ -60,7 +60,7 @@ public partial class MainForm : Form
 
 	private Stopwatch Stopwatch = new Stopwatch();
 
-	private bool GraphwizFound = false;
+	private bool GraphvizFound = false;
 
 	public MainForm()
 	{
@@ -128,7 +128,7 @@ public partial class MainForm : Form
 
 		SetRequiredSettings();
 
-		GraphwizFound = File.Exists(MosaSettings.GraphwizApp);
+		GraphvizFound = File.Exists(MosaSettings.GraphvizApp);
 
 		UpdateDisplay();
 	}
@@ -1111,8 +1111,8 @@ public partial class MainForm : Form
 			_ => cbPlatform.SelectedIndex
 		};
 
-		cbGraphviz.Checked = GraphwizFound;
-		cbGraphviz.Enabled = GraphwizFound;
+		cbGraphviz.Checked = GraphvizFound;
+		cbGraphviz.Enabled = GraphvizFound;
 	}
 
 	private void UpdateInstructionLabels()
@@ -1326,7 +1326,7 @@ public partial class MainForm : Form
 	{
 		panel1.Controls.Clear();
 
-		if (!GraphwizFound)
+		if (!GraphvizFound)
 			return false;
 
 		if (!cbGraphviz.Checked)
@@ -1344,7 +1344,7 @@ public partial class MainForm : Form
 
 			var process = new Process();
 
-			process.StartInfo.FileName = MosaSettings.GraphwizApp;
+			process.StartInfo.FileName = MosaSettings.GraphvizApp;
 			process.StartInfo.Arguments = $"dot -Tbmp -o \"{bmp}\" \"{dot}\"";
 			process.StartInfo.CreateNoWindow = true;
 

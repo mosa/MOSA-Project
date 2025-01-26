@@ -39,7 +39,7 @@ public static class AppLocationsSettings
 		mosaSettings.NdisasmApp = FindNdisasm();
 		mosaSettings.MkisofsApp = FindMkisofs();
 		mosaSettings.GDBApp = FindGDB();
-		mosaSettings.GraphwizApp = FindGraphwiz();
+		mosaSettings.GraphvizApp = FindGraphviz();
 	}
 
 	private static string FindQemuX86()
@@ -409,7 +409,7 @@ public static class AppLocationsSettings
 				});
 	}
 
-	private static string FindGraphwiz()
+	private static string FindGraphviz()
 	{
 		return
 			IsWindows ? TryFind("dot.exe",

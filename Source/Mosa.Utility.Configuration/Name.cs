@@ -18,7 +18,7 @@ public static class Name
 	public const string AppLocation_QemuImg = "AppLocation.QemuImg";
 	public const string AppLocation_VmwarePlayer = "AppLocation.VmwarePlayer";
 	public const string AppLocation_VmwareWorkstation = "AppLocation.VmwareWorkstation";
-	public const string AppLocation_Graphwiz = "AppLocation.Graphwiz";
+	public const string AppLocation_Graphviz = "AppLocation.Graphviz";
 
 	public const string AppLocation_QemuEDK2X86 = "AppLocation.QemuEDK2X86";
 	public const string AppLocation_QemuEDK2X64 = "AppLocation.QemuEDK2X64";
