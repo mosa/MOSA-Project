@@ -6,8 +6,8 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOSA Explorer &mdash; MOSA Project  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+  <title>Explorer &mdash; MOSA Project  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="_static/css/sphinx_prompt_css.css?v=b8d0e3b8" />
@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="MOSA Debugger" href="tool-debugger.html" />
-    <link rel="prev" title="MOSA Launcher Console" href="tool-launcher-console.html" /> 
+    <link rel="next" title="Debugger" href="tool-debugger.html" />
+    <link rel="prev" title="Console launcher" href="tool-launcher-console.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,50 +51,52 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">Installing onto a USB flash drive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tools</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Explorer</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">Console launcher</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Explorer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">Debugger</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-core-library.html">Create core library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source-code-generator.html">Source code generator</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Settings</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="a-dive-into-baremetal.html">A dive into the BareMetal kernel</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler optimizations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler transformations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA runtime tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="get-involved.html">Get Involved</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get-involved.html">Get involved</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
@@ -113,7 +115,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">MOSA Explorer</li>
+      <li class="breadcrumb-item active">Explorer</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/tool-explorer.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -123,9 +125,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="mosa-explorer">
-<h1>MOSA Explorer<a class="headerlink" href="#mosa-explorer" title="Link to this heading"></a></h1>
-<p>The <strong>MOSA Explorer</strong> is GUI application used to visualize the compiler transformation of a method from the highest respresentation to the lowest, lowest level. The instruction stream at each stage can be viewed. In addition, specific stage logs is also available. In some cases, these logs describe why certain transforms were made.</p>
+  <section id="explorer">
+<h1>Explorer<a class="headerlink" href="#explorer" title="Link to this heading"></a></h1>
+<p>The <strong>MOSA Explorer</strong> is GUI application used to visualize the compiler transformation of a method from the highest representation to the lowest, lowest level. The instruction stream at each stage can be viewed. In addition, specific stage logs is also available. In some cases, these logs describe why certain transforms were made.</p>
 <img alt="_images/mosa-explorer.png" src="_images/mosa-explorer.png" />
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
@@ -138,11 +140,6 @@
 <section id="command-line-options">
 <h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Link to this heading"></a></h2>
 <p>See the <a class="reference internal" href="command-line-arguments.html"><span class="doc">command line arguments</span></a> for a list of available options.</p>
-<p>Here are the most common options available:</p>
-<dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">-filter</span></code></dt><dd><p>Specifies the default method filter name when Explorer is launched</p>
-</dd>
-</dl>
 </section>
 </section>
 
@@ -150,8 +147,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tool-launcher-console.html" class="btn btn-neutral float-left" title="MOSA Launcher Console" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tool-debugger.html" class="btn btn-neutral float-right" title="MOSA Debugger" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tool-launcher-console.html" class="btn btn-neutral float-left" title="Console launcher" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tool-debugger.html" class="btn btn-neutral float-right" title="Debugger" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

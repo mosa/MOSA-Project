@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; MOSA Project  documentation</title>
+  <title>Create core library &mdash; MOSA Project  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Frequently Asked Questions (FAQs)" href="faq.html" />
-    <link rel="prev" title="Introduction" href="index.html" /> 
+    <link rel="next" title="Source code generator" href="source-code-generator.html" />
+    <link rel="prev" title="Unit tests" href="unit-tests.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,11 +45,8 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#current-status">Current Status</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQs)</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
@@ -67,9 +64,9 @@
 <li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">Debugger</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="create-core-library.html">Create core library</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Create core library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source-code-generator.html">Source code generator</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Settings</span></p>
@@ -114,9 +111,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Introduction</li>
+      <li class="breadcrumb-item active">Create core library</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/create-core-library.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -124,58 +121,80 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <p><a class="reference external" href="https://github.com/mosa/MOSA-Project"><img alt="source" src="https://img.shields.io/badge/Source%20Code-GitHub%20Repository-yellow.svg" /></a> <a class="reference external" href="https://github.com/mosa/MOSA-Project"><img alt="license" src="https://img.shields.io/badge/License-New%20BSD-blue.svg" /></a> <a class="reference external" href="https://discord.gg/tRNMn3npsv"><img alt="discord" src="https://img.shields.io/badge/Chat-On%20Discord%20-blue.svg" /></a></p>
-<p><a class="reference external" href="https://github.com/mosa/MOSA-Project/actions"><img alt="github-build" src="https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg?branch=master" /></a> <a class="reference external" href="https://github.com/mosa/MOSA-Project/issues"><img alt="issues" src="https://img.shields.io/github/issues/mosa/MOSA-Project.svg" /></a> <a class="reference external" href="https://github.com/mosa/MOSA-Project/network"><img alt="forks" src="https://img.shields.io/github/forks/mosa/MOSA-Project.svg" /></a> <a class="reference external" href="https://github.com/mosa/MOSA-Project/stargazers"><img alt="stars" src="https://img.shields.io/github/stars/mosa/MOSA-Project.svg" /></a></p>
-<section id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
-<p>MOSA is an open source software project that natively executes .NET applications within a virtual hypervisor or on bare metal hardware!</p>
-<p>The MOSA project consists of:</p>
-<ul class="simple">
-<li><p>Compiler - a high quality, multi-threaded, cross-platform, optimizing .NET compiler</p></li>
-<li><p>Kernel - a small kernel operating system</p></li>
-<li><p>Device Drivers Framework - a modular, device drivers framework and device drivers</p></li>
-<li><p>Debugger - QEMU-based debugger</p></li>
-</ul>
-<section id="current-status">
-<h2>Current Status<a class="headerlink" href="#current-status" title="Link to this heading"></a></h2>
-<p>The target platforms are:</p>
-<ul class="simple">
-<li><p>32-bit x86</p></li>
-<li><p>64-bit x86 (x64; in development)</p></li>
-<li><p>32-bit ARMv8+ (in early development)</p></li>
-<li><p>64-bit ARMv8+ (in early development)</p></li>
-</ul>
-<p>The MOSA compiler supports most object and non-object oriented code, including but not limited to:</p>
-<ul class="simple">
-<li><p>Generic Code (e.g. List&lt;T&gt;)</p></li>
-<li><p>Delegates (static and non-static) and with optional parameters</p></li>
-<li><p>Exception Handling (try, finally, and catch code blocks)</p></li>
-</ul>
-<p>The MOSA compiler seeks to provide high quality code generation using the following optimizations (non-exhaustive):</p>
-<ul class="simple">
-<li><p>Constant Folding and Propagation</p></li>
-<li><p>Strength Reduction optimization</p></li>
-<li><p>Dead Code Elimination</p></li>
-<li><p>Single Static Assignment (SSA)</p></li>
-<li><p>Global Value Numbering / Common Subexpression Elimination</p></li>
-<li><p>Sparse Conditional Constant Propagation</p></li>
-<li><p>Inlined Expansion</p></li>
-<li><p>Loop-Invariant Code Motion</p></li>
-<li><p>Null Check Elimination</p></li>
-<li><p>Devirtualization</p></li>
-<li><p>Block Reordering</p></li>
-<li><p>Greedy Register Allocation</p></li>
-</ul>
-<p>For an exhaustive list, see <a class="reference internal" href="compiler-optimizations.html"><span class="doc">Compiler optimizations</span></a> which also gives a description of each of these optimizations.</p>
-</section>
+  <section id="create-core-library">
+<h1>Create core library<a class="headerlink" href="#create-core-library" title="Link to this heading"></a></h1>
+<p>To implement its own core library, MOSA generates a “dummy” one that includes all the public APIs but without the actual implementation code. The <strong>Create core library</strong> utility takes care of doing that work. To clone the official .NET core library repository, it requires <code class="docutils literal notranslate"><span class="pre">git</span></code>. Here are the available command line arguments for the utility:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Short name</p></th>
+<th class="head"><p>Long name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-o</p></td>
+<td><p>--output</p></td>
+<td><p>Sets the output directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>-c</p></td>
+<td><p>--copy-files</p></td>
+<td><p>If enabled, only copies and patches the source files and stops.</p></td>
+</tr>
+</tbody>
+</table>
+<p>To run the utility, simply execute the following command on any platform:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>bin/Mosa.Utility.CreateCoreLib.dll<span class="w"> </span>-o<span class="w"> </span>Output
+</pre></div>
+</div>
+<p>The process can take between a few seconds to a few minutes depending on the speed of your internet connection and PC. At the end, you should get a <code class="docutils literal notranslate"><span class="pre">System.Runtime.dll</span></code> file at the directory where you executed the utility. At the end, you should get a console output that looks like this:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Cloning .NET runtime GitHub repository...
+Cloning into &#39;runtime&#39;...
+remote: Enumerating objects: 65953, done.
+remote: Counting objects: 100% (65953/65953), done.
+remote: Compressing objects: 100% (42248/42248), done.
+Receiving objects: 100% (65953/65953), 88.04 MiB | 9.16 MiB/s, done.
+remote: Total 65953 (delta 25898), reused 34761 (delta 20956), pack-reused 0 (from 0)
+Resolving deltas: 100% (25898/25898), done.
+Updating files: 100% (58901/58901), done.
+Parsing input files...
+Patching System.DirectoryServices.manual.cs...
+Patching System.Net.Http.Json.cs...
+Patching System.Net.Http.WinHttpHandler.cs...
+Patching System.Configuration.ConfigurationManager.cs...
+Patching System.Data.Common.cs...
+Compiling source files...
+Decompiling assembly...
+Removing project file...
+Removing Properties folder...
+Patching System.Collections.Generic/PriorityQueue.cs...
+Patching System.Collections.Generic/PriorityQueue.cs...
+Patching System/Nullable.cs...
+Patching System/ReadOnlySpan.cs...
+Patching System.Runtime.InteropServices/Marshal.cs...
+Patching System.Runtime.InteropServices/MemoryMarshal.cs...
+Patching System.Runtime.CompilerServices/Unsafe.cs...
+Patching System.Numerics/Vector.cs...
+Patching System.Runtime.Intrinsics/Vector64.cs...
+Patching System.Runtime.Intrinsics/Vector128.cs...
+Patching System.Runtime.Intrinsics/Vector256.cs...
+Patching System.Runtime.Intrinsics/Vector512.cs...
+Patching System.Threading/Volatile.cs...
+Patching System.Threading/Interlocked.cs...
+</pre></div>
+</div>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="faq.html" class="btn btn-neutral float-right" title="Frequently Asked Questions (FAQs)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="unit-tests.html" class="btn btn-neutral float-left" title="Unit tests" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="source-code-generator.html" class="btn btn-neutral float-right" title="Source code generator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,5 +1,5 @@
 ######################
-Compiler Optimizations
+Compiler optimizations
 ######################
 
 Optimizations

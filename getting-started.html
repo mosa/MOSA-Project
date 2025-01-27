@@ -6,8 +6,8 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started &mdash; MOSA Project  documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+  <title>Getting started &mdash; MOSA Project  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
       <link rel="stylesheet" type="text/css" href="_static/css/sphinx_prompt_css.css?v=b8d0e3b8" />
@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Demos" href="demos.html" />
+    <link rel="next" title="Installing onto a USB flash drive" href="usb-flash-drive-installation.html" />
     <link rel="prev" title="Frequently Asked Questions (FAQs)" href="faq.html" /> 
 </head>
 
@@ -51,7 +51,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a></li>
@@ -61,45 +61,47 @@
 <li class="toctree-l2"><a class="reference internal" href="#clone-and-build-manually">Clone and build manually</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">Installing onto a USB flash drive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tools</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">Console launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">Explorer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">Debugger</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-core-library.html">Create core library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source-code-generator.html">Source code generator</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Settings</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization Options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimization-options.html">Optimization options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings-options.html">Settings options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Internals</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project-structure.html">Project structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="a-dive-into-baremetal.html">A dive into the BareMetal kernel</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Compiler</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler optimizations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler transformations</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Runtime</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA Runtime Tables</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Advanced</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime-tables.html">MOSA runtime tables</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Contribute</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="get-involved.html">Get Involved</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get-involved.html">Get involved</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
@@ -118,7 +120,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Getting Started</li>
+      <li class="breadcrumb-item active">Getting started</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/getting-started.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -129,7 +131,7 @@
            <div itemprop="articleBody">
              
   <section id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
 </section>
@@ -146,9 +148,9 @@ MOSA currently targets .NET 8, you’ll need Visual Studio 2022 17.9 or newer.</
 <li><p><a class="reference external" href="https://git-scm.com/">Git</a> (only if you want to clone and build manually)</p></li>
 <li><p><a class="reference external" href="https://www.qemu.org/">QEMU</a></p></li>
 </ul>
-<p>If you’re using Ubuntu 22.04, you can use the following commands to quickly set everything up:</p>
+<p>If you’re using Ubuntu 24.04, you can use the following commands to quickly set everything up:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Register Microsoft package repository</span>
-wget<span class="w"> </span>-q<span class="w"> </span>https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb<span class="w"> </span>-O<span class="w"> </span>packages-microsoft-prod.deb
+wget<span class="w"> </span>-q<span class="w"> </span>https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb<span class="w"> </span>-O<span class="w"> </span>packages-microsoft-prod.deb
 sudo<span class="w"> </span>dpkg<span class="w"> </span>-i<span class="w"> </span>packages-microsoft-prod.deb
 
 <span class="c1"># Install the .NET Core SDK</span>
@@ -237,7 +239,7 @@ learn more about this launcher tool <a class="reference internal" href="tool-lau
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="faq.html" class="btn btn-neutral float-left" title="Frequently Asked Questions (FAQs)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="demos.html" class="btn btn-neutral float-right" title="Demos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="usb-flash-drive-installation.html" class="btn btn-neutral float-right" title="Installing onto a USB flash drive" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

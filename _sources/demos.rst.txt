@@ -12,7 +12,7 @@ CoolWorld
 
 It's MOSA's flagship demo. It can boot into either console mode (containing a shell with a few basic commands) or
 graphical mode (which makes use of the GPU and some other features offered by MOSA). You can boot into console mode by
-inserting the `-bootoptions coolworldui=consolemode` command line option when starting the MOSA launcher.
+inserting the ``-bootoptions coolworldui=consolemode`` command line option when starting the MOSA launcher.
 
 Console mode:
 

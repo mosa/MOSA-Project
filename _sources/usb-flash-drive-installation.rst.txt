@@ -1,89 +1,31 @@
-############################
-USB Flash Drive Installation
-############################
+#################################
+Installing onto a USB flash drive
+#################################
 
 While most of the development and testing of MOSA is done using virtualization software, MOSA does indeed boot on real hardware too.
 
 There are several ways to put MOSA on a USB flash drive. Below are the most common ones, including the one we'll be following here:
 
-- `Ventoy <https://ventoy.net/>`__ (All platforms)
+- `Ventoy <https://ventoy.net/>`__ (Windows, Linux), allows reusing the same drive for multiple images and other content
 - `Rufus <https://rufus.ie/>`__ (Windows only)
-- dd (Linux, `unofficial Windows version <http://www.chrysocome.net/dd>`__ exists)
+- `dd <https://en.wikipedia.org/wiki/Dd_(Unix)>`__ (Linux, `unofficial Windows version <http://www.chrysocome.net/dd>`__ exists)
 
-We'll be following the ``dd`` way here.
+We'll be following the ``Ventoy`` path here. Let's get started!
 
-Windows
-=======
+1. Create a MOSA disk image using the :doc:`launcher<tool-launcher>` or the :doc:`console launcher<tool-launcher-console>` tool.
 
-1. Create a MOSA disk image using the MOSA Launcher Tool.
+2. Download the latest version of Ventoy for your platform and extract the archive.
 
-2. Download the unofficial dd utility for Windows, as linked above.
+3. Launch the GUI program for your computer's architecture. You should now see a window that looks roughly like this:
 
-3. Open a command prompt window and change directory to the build directory (usually a subfolder under ``%TEMP%``).
+.. image:: images/ventoy2disk-gui.png
 
-.. code-block:: text
+Go to ``Option``, and select the correct partition style for the target machine (``MBR`` for BIOS, ``GPT`` for UEFI, although some recent BIOS-based machines can still read GPT-based drives). You'll need to follow `extra steps <https://www.ventoy.net/en/doc_secure.html>`__ for booting with Secure Boot though.
 
-  cd %TEMP%\MOSA 
+4. Select your drive in the drop down, then, when you're ready, click ``Install``.
 
-4. Copy the ``dd.exe`` executable to the current directory.
+.. danger:: When installing Ventoy for the first time, all data on the USB flash drive will be lost!
 
-5. Connect the USB flash drive you wish to ERASE and install the MOSA image onto.
+If you just wish to update an existing Ventoy installation on the drive though, click ``Update``. This will not erase any data on the drive and will instead only update Ventoy's partition on the drive.
 
-.. danger:: Data on the USB flash drive will be lost!
-
-6. Determine the device path for the USB flash drive.
-
-Get a list all the block devices on your system by typing the command below. Find the one for the USB flash drive you just connected.
-
-.. danger:: Be careful! A mistype or wrong drive selection may corrupt your hard drive or other storage devices. Do not proceed unless you entirely understand these steps.
-
-.. code-block:: text
-
-  dd -list
-
-7. Type the following and substitute the ``of=`` parameter with the device path found in the previous step.
-
-.. code-block:: text
-
-  dd of=\\?\Device\HarddiskX\PartitionX if=bootimage.img bs=512 –progress
-
-8. Wait until all the blocks are written to the USB flash drive before disconnecting it.
-
-9. Now boot a PC with the USB flash drive connected!
-
-Linux
-=====
-
-1. Create a MOSA disk image using the MOSA Launcher Tool.
-
-2. Download the unofficial dd utility for Windows, as linked above.
-
-3. Open a command prompt window and change directory to the build directory (usually a subfolder under ``%TEMP%``).
-
-.. code-block:: text
-
-  cd /tmp/MOSA
-
-4. Connect the USB flash drive you wish to ERASE and install the MOSA image onto.
-
-.. danger:: Data on the USB flash drive will be lost!
-
-5. Determine the device path for the USB flash drive.
-
-Get a list all the block devices on your system by typing the command below. Find the one for the USB flash drive you just connected. 
-
-.. danger:: Be careful! A mistype or wrong drive selection may corrupt your hard drive or other storage devices. Do not proceed unless you entirely understand these steps.
-
-.. code-block:: text
-
-  sudo fdisk -l
-
-6. Type the following and substitute the ``of=`` parameter with the device path found in the previous step.
-
-.. code-block:: text
-
-  dd of=/dev/XXXX if=bootimage.img bs=512 status=progress
-
-7. Wait until all the blocks are written to the USB flash drive before disconnecting it.
-
-8. Now boot a PC with the USB flash drive connected!
+5. Close out of the Ventoy GUI, and navigate to your USB flash drive's main partition. All that's left to do is to copy the disk image you previously created, and paste it onto your USB flash drive, and you're done!

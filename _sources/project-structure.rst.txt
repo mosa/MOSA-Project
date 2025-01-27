@@ -1,5 +1,5 @@
 #################
-Project Structure
+Project structure
 #################
 
 MOSA has a lot of projects, which can seem daunting at first. This page will exclusively cover all the types of projects
