@@ -706,10 +706,10 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Multiboot_Video_Height, value);
 	}
 
-	public string GraphwizApp
+	public string GraphvizApp
 	{
-		get => Settings.GetValue(Name.AppLocation_Graphwiz, null);
-		set => Settings.SetValue(Name.AppLocation_Graphwiz, value);
+		get => Settings.GetValue(Name.AppLocation_Graphviz, null);
+		set => Settings.SetValue(Name.AppLocation_Graphviz, value);
 	}
 
 	public string OSBootOptions

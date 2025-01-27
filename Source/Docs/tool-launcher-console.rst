@@ -1,15 +1,15 @@
-#####################
-MOSA Launcher Console
-#####################
+################
+Console launcher
+################
 
-The **MOSA Launcher Console** is a console application that automates the entire build process including launching of a virtual machine.
+The **MOSA Console Launcher** is a console application that automates the entire build process including launching of a virtual machine.
 
-.. tip:: Check out the :doc:`MOSA Launcher <tool-launcher>` for a graphic user interface version of this console application.
+.. tip:: Check out the :doc:`launcher <tool-launcher>` for a GUI version of this tool.
 
 Usage
 -----
 
-A quick example that compiles `Mosa.BareMetal.HelloWorld.x86.dll` demo with `-oMax` (all optimization enabled) and launches it using `QEMU`:
+Here's a quick example that compiles ``Mosa.BareMetal.HelloWorld.x86.dll`` demo with ``-oMax`` (all optimizations enabled) and launches it using ``QEMU``:
 
 .. code-block:: text
 
@@ -32,8 +32,3 @@ Command Line Options
 --------------------
 
 See the :doc:`command line arguments<command-line-arguments>` for a list of available options.
-
-Here are the most common options available:
-
-`-autostart-off`
-	Does not immediate start the compiler

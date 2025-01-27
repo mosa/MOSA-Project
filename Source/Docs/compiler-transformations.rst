@@ -1,5 +1,5 @@
 ########################
-Compiler Transformations
+Compiler transformations
 ########################
 
 The MOSA compiler uses a database of transformations to represent specific types of optimizations. These transformation

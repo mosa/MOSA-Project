@@ -1,5 +1,5 @@
 ##########
-Unit Tests
+Unit tests
 ##########
 
 The MOSA project has an extensive set of unit tests to help validate that the MOSA compiler is emitting correct binary code.

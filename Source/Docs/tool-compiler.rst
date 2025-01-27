@@ -1,6 +1,6 @@
-#############
-MOSA Compiler
-#############
+########
+Compiler
+########
 
 The **MOSA Compiler** is a console application used to compile a .NET application to a binary object file.
 
