@@ -9,19 +9,9 @@ public sealed class StructLayoutAttribute : Attribute
 
 	public int Size;
 
-	public LayoutKind Value
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public LayoutKind Value { get; }
 
-	public StructLayoutAttribute(short layoutKind)
-	{
-	}
+	public StructLayoutAttribute(short layoutKind) => Value = (LayoutKind)layoutKind;
 
-	public StructLayoutAttribute(LayoutKind layoutKind)
-	{
-	}
+	public StructLayoutAttribute(LayoutKind layoutKind) => Value = layoutKind;
 }

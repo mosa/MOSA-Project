@@ -1,7 +1,7 @@
 namespace System.Runtime.InteropServices;
 
 [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-public sealed class DllImportAttribute : Attribute
+public sealed class DllImportAttribute(string dllName) : Attribute
 {
 	public bool BestFitMapping;
 
@@ -19,15 +19,5 @@ public sealed class DllImportAttribute : Attribute
 
 	public bool ThrowOnUnmappableChar;
 
-	public string Value
-	{
-		get
-		{
-			throw null;
-		}
-	}
-
-	public DllImportAttribute(string dllName)
-	{
-	}
+	public string Value { get; } = dllName;
 }

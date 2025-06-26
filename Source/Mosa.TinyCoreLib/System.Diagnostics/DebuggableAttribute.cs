@@ -13,35 +13,14 @@ public sealed class DebuggableAttribute : Attribute
 		DisableOptimizations = 0x100
 	}
 
-	public DebuggingModes DebuggingFlags
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public DebuggingModes DebuggingFlags => throw new NotImplementedException();
 
-	public bool IsJITOptimizerDisabled
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsJITOptimizerDisabled => throw new NotImplementedException();
 
-	public bool IsJITTrackingEnabled
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsJITTrackingEnabled => throw new NotImplementedException();
 
 	public DebuggableAttribute(bool isJITTrackingEnabled, bool isJITOptimizerDisabled)
-	{
-	}
+		=> throw new NotImplementedException();
 
-	public DebuggableAttribute(DebuggingModes modes)
-	{
-	}
+	public DebuggableAttribute(DebuggingModes modes) {}
 }

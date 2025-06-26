@@ -1,17 +1,7 @@
 namespace System.Reflection;
 
 [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
-public sealed class AssemblyConfigurationAttribute : Attribute
+public sealed class AssemblyConfigurationAttribute(string configuration) : Attribute
 {
-	public string Configuration
-	{
-		get
-		{
-			throw null;
-		}
-	}
-
-	public AssemblyConfigurationAttribute(string configuration)
-	{
-	}
+	public string Configuration { get; } = configuration;
 }
