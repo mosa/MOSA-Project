@@ -1,17 +1,7 @@
 namespace System.Reflection;
 
 [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
-public sealed class AssemblyFileVersionAttribute : Attribute
+public sealed class AssemblyFileVersionAttribute(string version) : Attribute
 {
-	public string Version
-	{
-		get
-		{
-			throw null;
-		}
-	}
-
-	public AssemblyFileVersionAttribute(string version)
-	{
-	}
+	public string Version { get; } = version ?? throw new ArgumentNullException(nameof(version));
 }

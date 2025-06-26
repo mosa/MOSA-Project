@@ -1,17 +1,7 @@
 namespace System.Diagnostics.CodeAnalysis;
 
 [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
-public sealed class NotNullWhenAttribute : Attribute
+public sealed class NotNullWhenAttribute(bool returnValue) : Attribute
 {
-	public bool ReturnValue
-	{
-		get
-		{
-			throw null;
-		}
-	}
-
-	public NotNullWhenAttribute(bool returnValue)
-	{
-	}
+	public bool ReturnValue { get; } = returnValue;
 }

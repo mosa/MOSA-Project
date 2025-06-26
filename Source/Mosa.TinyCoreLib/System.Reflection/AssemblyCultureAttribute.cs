@@ -1,17 +1,7 @@
 namespace System.Reflection;
 
 [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
-public sealed class AssemblyCultureAttribute : Attribute
+public sealed class AssemblyCultureAttribute(string culture) : Attribute
 {
-	public string Culture
-	{
-		get
-		{
-			throw null;
-		}
-	}
-
-	public AssemblyCultureAttribute(string culture)
-	{
-	}
+	public string Culture { get; } = culture;
 }

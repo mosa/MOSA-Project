@@ -1,17 +1,7 @@
 namespace System.Reflection;
 
 [AttributeUsage(AttributeTargets.Assembly, Inherited = false)]
-public sealed class AssemblyProductAttribute : Attribute
+public sealed class AssemblyProductAttribute(string product) : Attribute
 {
-	public string Product
-	{
-		get
-		{
-			throw null;
-		}
-	}
-
-	public AssemblyProductAttribute(string product)
-	{
-	}
+	public string Product { get; } = product;
 }

@@ -5,23 +5,11 @@ public sealed class MethodImplAttribute : Attribute
 {
 	public MethodCodeType MethodCodeType;
 
-	public MethodImplOptions Value
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public MethodImplOptions Value { get; }
 
-	public MethodImplAttribute()
-	{
-	}
+	public MethodImplAttribute() {}
 
-	public MethodImplAttribute(short value)
-	{
-	}
+	public MethodImplAttribute(short value) => Value = (MethodImplOptions)value;
 
-	public MethodImplAttribute(MethodImplOptions methodImplOptions)
-	{
-	}
+	public MethodImplAttribute(MethodImplOptions methodImplOptions) => Value = methodImplOptions;
 }
