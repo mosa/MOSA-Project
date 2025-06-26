@@ -4,13 +4,7 @@ namespace System.Reflection;
 
 public class CustomAttributeData
 {
-	public virtual Type AttributeType
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public virtual Type AttributeType { get; }
 
 	public virtual ConstructorInfo Constructor
 	{
@@ -20,21 +14,9 @@ public class CustomAttributeData
 		}
 	}
 
-	public virtual IList<CustomAttributeTypedArgument> ConstructorArguments
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public virtual IList<CustomAttributeTypedArgument> ConstructorArguments { get; }
 
-	public virtual IList<CustomAttributeNamedArgument> NamedArguments
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public virtual IList<CustomAttributeNamedArgument> NamedArguments { get; }
 
 	protected CustomAttributeData()
 	{

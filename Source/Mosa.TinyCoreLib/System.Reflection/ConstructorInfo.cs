@@ -4,9 +4,9 @@ namespace System.Reflection;
 
 public abstract class ConstructorInfo : MethodBase
 {
-	public static readonly string ConstructorName;
+	public static readonly string ConstructorName = Internal.Impl.ConstructorInfo.ConstructorName;
 
-	public static readonly string TypeConstructorName;
+	public static readonly string TypeConstructorName = Internal.Impl.ConstructorInfo.TypeConstructorName;
 
 	public override MemberTypes MemberType
 	{

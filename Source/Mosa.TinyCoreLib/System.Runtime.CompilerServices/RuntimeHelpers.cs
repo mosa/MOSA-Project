@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Internal;
 
 namespace System.Runtime.CompilerServices;
 
@@ -31,20 +32,14 @@ public static class RuntimeHelpers
 	{
 	}
 
-	public new static bool Equals(object? o1, object? o2)
-	{
-		throw null;
-	}
+	public new static bool Equals(object? o1, object? o2) => Impl.RuntimeHelpers.Equals(o1, o2);
 
 	[Obsolete("The Constrained Execution Region (CER) feature is not supported.", DiagnosticId = "SYSLIB0004", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
 	public static void ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, object? userData)
 	{
 	}
 
-	public static int GetHashCode(object? o)
-	{
-		throw null;
-	}
+	public static int GetHashCode(object? o) => Impl.RuntimeHelpers.GetHashCode(o);
 
 	[return: NotNullIfNotNull("obj")]
 	public static object? GetObjectValue(object? obj)
@@ -63,13 +58,9 @@ public static class RuntimeHelpers
 	}
 
 	public static void InitializeArray(Array array, RuntimeFieldHandle fldHandle)
-	{
-	}
+		=> Impl.RuntimeHelpers.InitializeArray(array, fldHandle);
 
-	public static bool IsReferenceOrContainsReferences<T>()
-	{
-		throw null;
-	}
+	public static bool IsReferenceOrContainsReferences<T>() => Impl.RuntimeHelpers.IsReferenceOrContainsReferences<T>();
 
 	[Obsolete("The Constrained Execution Region (CER) feature is not supported.", DiagnosticId = "SYSLIB0004", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
 	public static void PrepareConstrainedRegions()

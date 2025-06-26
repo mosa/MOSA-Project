@@ -2,42 +2,25 @@ namespace System;
 
 public class Object
 {
-	public virtual bool Equals(object? obj)
-	{
-		throw null;
-	}
+	public virtual bool Equals(object? obj) => Internal.Impl.RuntimeHelpers.Equals(this, obj);
 
-	public static bool Equals(object? objA, object? objB)
-	{
-		throw null;
-	}
+	public static bool Equals(object? objA, object? objB) => ReferenceEquals(objA, objB) || objA.Equals(objB);
 
-	~Object()
-	{
-	}
+	~Object() {}
 
-	public virtual int GetHashCode()
-	{
-		throw null;
-	}
+	public virtual int GetHashCode() => Internal.Impl.RuntimeHelpers.GetHashCode(this);
 
-	public Type GetType()
-	{
-		throw null;
-	}
+	public Type GetType() => Internal.Impl.Object.GetType(this);
 
-	protected object MemberwiseClone()
-	{
-		throw null;
-	}
+	protected object MemberwiseClone() => Internal.Impl.Object.MemberwiseClone(this);
 
 	public static bool ReferenceEquals(object? objA, object? objB)
 	{
-		throw null;
+		if (objA is null || objB is null)
+			return false;
+
+		return objA == objB;
 	}
 
-	public virtual string? ToString()
-	{
-		throw null;
-	}
+	public virtual string? ToString() => GetType().ToString();
 }
