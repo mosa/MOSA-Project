@@ -4,26 +4,33 @@ namespace System.Buffers;
 
 public struct MemoryHandle : IDisposable
 {
-	private object _dummy;
+	private unsafe void* pointer;
+	private GCHandle handle;
+	private IPinnable? pinnable;
 
-	private int _dummyPrimitive;
-
-	[CLSCompliant(false)]
-	public unsafe void* Pointer
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	[CLSCompliant(false)] public unsafe void* Pointer => pointer;
 
 	[CLSCompliant(false)]
-	public unsafe MemoryHandle(void* pointer, GCHandle handle = default(GCHandle), IPinnable? pinnable = null)
+	public unsafe MemoryHandle(void* pointer, GCHandle handle = default, IPinnable? pinnable = null)
 	{
-		throw null;
+		this.pointer = pointer;
+		this.handle = handle;
+		this.pinnable = pinnable;
 	}
 
 	public void Dispose()
 	{
+		handle.Free();
+		
+		if (pinnable != null)
+		{
+			pinnable.Unpin();
+			pinnable = null;
+		}
+
+		unsafe
+		{
+			pointer = null;
+		}
 	}
 }

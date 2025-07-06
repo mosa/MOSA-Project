@@ -18,13 +18,7 @@ public abstract class PropertyInfo : MemberInfo
 		}
 	}
 
-	public bool IsSpecialName
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsSpecialName => (Attributes & PropertyAttributes.SpecialName) == PropertyAttributes.SpecialName;
 
 	public override MemberTypes MemberType
 	{

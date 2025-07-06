@@ -23,21 +23,9 @@ public abstract class MethodBase : MemberInfo
 		}
 	}
 
-	public bool IsAbstract
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsAbstract => (Attributes & MethodAttributes.Abstract) == MethodAttributes.Abstract;
 
-	public bool IsAssembly
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsAssembly => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
 
 	public virtual bool IsConstructedGenericMethod
 	{
@@ -47,45 +35,16 @@ public abstract class MethodBase : MemberInfo
 		}
 	}
 
-	public bool IsConstructor
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsConstructor => this is ConstructorInfo && !IsStatic && (Attributes & MethodAttributes.RTSpecialName)
+		== MethodAttributes.RTSpecialName;
 
-	public bool IsFamily
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsFamily => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Family;
 
-	public bool IsFamilyAndAssembly
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsFamilyAndAssembly => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamANDAssem;
 
-	public bool IsFamilyOrAssembly
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsFamilyOrAssembly => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamORAssem;
 
-	public bool IsFinal
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsFinal => (Attributes & MethodAttributes.Final) == MethodAttributes.Final;
 
 	public virtual bool IsGenericMethod
 	{
@@ -103,29 +62,11 @@ public abstract class MethodBase : MemberInfo
 		}
 	}
 
-	public bool IsHideBySig
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsHideBySig => (Attributes & MethodAttributes.HideBySig) == MethodAttributes.HideBySig;
 
-	public bool IsPrivate
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsPrivate => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Private;
 
-	public bool IsPublic
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsPublic => (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public;
 
 	public virtual bool IsSecurityCritical
 	{
@@ -151,29 +92,11 @@ public abstract class MethodBase : MemberInfo
 		}
 	}
 
-	public bool IsSpecialName
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsSpecialName => (Attributes & MethodAttributes.SpecialName) == MethodAttributes.SpecialName;
 
-	public bool IsStatic
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsStatic => (Attributes & MethodAttributes.Static) == MethodAttributes.Static;
 
-	public bool IsVirtual
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsVirtual => (Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual;
 
 	public abstract RuntimeMethodHandle MethodHandle { get; }
 

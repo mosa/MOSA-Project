@@ -36,7 +36,7 @@ public struct HashCode
 
 	public static int Combine<T1, T2, T3, T4>(T1 value1, T2 value2, T3 value3, T4 value4)
 	{
-		throw null;
+		throw new NotImplementedException();
 	}
 
 	public static int Combine<T1, T2, T3, T4, T5>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)

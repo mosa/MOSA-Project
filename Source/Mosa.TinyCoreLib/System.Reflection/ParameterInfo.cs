@@ -42,53 +42,17 @@ public class ParameterInfo : ICustomAttributeProvider, IObjectReference
 		}
 	}
 
-	public virtual bool HasDefaultValue
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public virtual bool HasDefaultValue => (Attributes & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault;
 
-	public bool IsIn
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsIn => (Attributes & ParameterAttributes.In) == ParameterAttributes.In;
 
-	public bool IsLcid
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsLcid => (Attributes & ParameterAttributes.Lcid) == ParameterAttributes.Lcid;
 
-	public bool IsOptional
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsOptional => (Attributes & ParameterAttributes.Optional) == ParameterAttributes.Optional;
 
-	public bool IsOut
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsOut => (Attributes & ParameterAttributes.Out) == ParameterAttributes.Out;
 
-	public bool IsRetval
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsRetval => (Attributes & ParameterAttributes.Retval) == ParameterAttributes.Retval;
 
 	public virtual MemberInfo Member
 	{

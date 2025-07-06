@@ -10,86 +10,26 @@ public abstract class FieldInfo : MemberInfo
 
 	public abstract Type FieldType { get; }
 
-	public bool IsAssembly
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsAssembly => (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Assembly;
 
-	public bool IsFamily
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsFamily => (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Family;
 
-	public bool IsFamilyAndAssembly
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsFamilyAndAssembly => (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.FamANDAssem;
 
-	public bool IsFamilyOrAssembly
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsFamilyOrAssembly => (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.FamORAssem;
 
-	public bool IsInitOnly
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsInitOnly => (Attributes & FieldAttributes.InitOnly) == FieldAttributes.InitOnly;
 
-	public bool IsLiteral
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsLiteral => (Attributes & FieldAttributes.Literal) == FieldAttributes.Literal;
 
 	[Obsolete("Formatter-based serialization is obsolete and should not be used.", DiagnosticId = "SYSLIB0050", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
-	public bool IsNotSerialized
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsNotSerialized => (Attributes & FieldAttributes.NotSerialized) == FieldAttributes.NotSerialized;
 
-	public bool IsPinvokeImpl
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsPinvokeImpl => (Attributes & FieldAttributes.PinvokeImpl) == FieldAttributes.PinvokeImpl;
 
-	public bool IsPrivate
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsPrivate => (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Private;
 
-	public bool IsPublic
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsPublic => (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Public;
 
 	public virtual bool IsSecurityCritical
 	{
@@ -115,21 +55,9 @@ public abstract class FieldInfo : MemberInfo
 		}
 	}
 
-	public bool IsSpecialName
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsSpecialName => (Attributes & FieldAttributes.SpecialName) == FieldAttributes.SpecialName;
 
-	public bool IsStatic
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsStatic => (Attributes & FieldAttributes.Static) == FieldAttributes.Static;
 
 	public override MemberTypes MemberType
 	{
