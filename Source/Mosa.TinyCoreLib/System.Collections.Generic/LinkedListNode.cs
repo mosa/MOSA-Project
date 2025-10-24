@@ -1,51 +1,22 @@
 namespace System.Collections.Generic;
 
-public sealed class LinkedListNode<T>
+public sealed class LinkedListNode<T>(T value)
 {
-	public LinkedList<T>? List
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public LinkedList<T>? List => list;
 
-	public LinkedListNode<T>? Next
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public LinkedListNode<T>? Next => next;
 
-	public LinkedListNode<T>? Previous
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public LinkedListNode<T>? Previous => previous;
 
 	public T Value
 	{
-		get
-		{
-			throw null;
-		}
-		set
-		{
-		}
+		get => nodeValue;
+		set => nodeValue = value;
 	}
 
-	public ref T ValueRef
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public ref T ValueRef => ref nodeValue;
 
-	public LinkedListNode(T value)
-	{
-	}
+	internal LinkedList<T>? list;
+	internal LinkedListNode<T>? next, previous;
+	internal T nodeValue = value;
 }
