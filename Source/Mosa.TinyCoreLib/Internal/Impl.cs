@@ -82,4 +82,22 @@ internal static class Impl
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern Type MemberwiseClone(object obj);
 	}
+
+	public static class Queue
+	{
+		public const int InitialArraySize = 16;
+		public const double NextCapacityMultiplySize = 1.1;
+	}
+
+	public static class List
+	{
+		public const int InitialArraySize = 16;
+		public const double NextCapacityMultiplySize = 1.1;
+		public const double CapacityTrimThreshold = 0.9;
+	}
+
+	public static class Stack
+	{
+		public const int InitialArraySize = 16;
+	}
 }
