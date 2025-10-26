@@ -587,11 +587,7 @@ public sealed class MethodCompiler
 
 		if (filename != null)
 		{
-			var bytes = Compiler.SearchPathsForFileAndLoad(filename);
-
-			// TODO: Generate an error if the file is not found
-			// CompilerException.FileNotFound
-
+			var bytes = Compiler.SearchPathsForFileAndLoad(filename) ?? throw new CompilerException($"Could not find extern method module: {filename}");
 			Symbol.SetData(bytes);
 		}
 
