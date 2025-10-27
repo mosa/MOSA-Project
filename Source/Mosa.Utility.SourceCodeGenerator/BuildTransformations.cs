@@ -133,7 +133,7 @@ public class BuildTransformations : BuildBaseTemplate
 		Lines.Clear();
 		First = true;
 
-		DestinationFile = $"{type}\\{name}{subName}.cs";
+		DestinationFile = $"{type}/{name}{subName}.cs";
 		AddSourceHeader();
 
 		if (!Path.Contains("Framework"))

@@ -74,7 +74,7 @@ public static class X64
 	public static readonly BaseInstruction Leave = new Leave();
 	public static readonly BaseInstruction Lgdt = new Lgdt();
 	public static readonly BaseInstruction Lidt = new Lidt();
-	public static readonly BaseInstruction Lock = new Lock();
+	public static readonly BaseInstruction Lock = new Instructions.Lock();
 	public static readonly BaseInstruction MovLoadSeg32 = new MovLoadSeg32();
 	public static readonly BaseInstruction MovLoadSeg64 = new MovLoadSeg64();
 	public static readonly BaseInstruction MovStoreSeg32 = new MovStoreSeg32();
