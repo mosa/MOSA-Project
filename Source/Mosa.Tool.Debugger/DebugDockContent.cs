@@ -1,8 +1,9 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.Debugger.DebugData;
 using Mosa.Tool.Debugger.GDB;
 using WeifenLuo.WinFormsUI.Docking;
+using System.ComponentModel;
 
 namespace Mosa.Tool.Debugger;
 
@@ -20,6 +21,7 @@ public partial class DebugDockContent : DockContent
 		MainForm = mainForm;
 	}
 
+	[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 	public string Status
 	{ set => MainForm.Status = value; }
 
@@ -44,14 +46,19 @@ public partial class DebugDockContent : DockContent
 
 	public bool IsPaused => GDBConnector.IsPaused;
 
+	[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 	public bool IsDockUpdatable { get; set; } = true;
 
+	[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 	public ulong InstructionPointer { get; set; }
 
+	[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 	public ulong StackFrame { get; set; }
 
+	[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 	public ulong StackPointer { get; set; }
 
+	[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 	public ulong StatusFlag { get; set; }
 
 	protected bool IsReady
