@@ -90,7 +90,7 @@
 							<Button Name="SaveB" Click="SaveB_OnClick">Save B</Button>
 						</StackPanel>
 
-						<TextBox Grid.Row="1" Name="Instructions" IsReadOnly="True"/>
+						<TextBox Grid.Row="1" Name="Instructions" FontFamily="Monospace" IsReadOnly="True"/>
 					</Grid>
 				</TabItem>
 
@@ -106,7 +106,7 @@
 						</StackPanel>
 
 						<Grid Grid.Row="1" ColumnDefinitions="*, 5, *">
-							<TextBox Grid.Column="0" Name="Debug" IsReadOnly="True"/>
+							<TextBox Grid.Column="0" Name="Debug" FontFamily="Monospace" IsReadOnly="True"/>
 							<GridSplitter Grid.Column="1"/>
 							<Panel Grid.Column="2" Name="DebugPanel"/>
 						</Grid>
@@ -142,7 +142,7 @@
 									<Label Name="Total">##</Label>
 								</StackPanel>
 
-								<TextBox Grid.Row="1" Name="Transforms" IsReadOnly="True"/>
+								<TextBox Grid.Row="1" Name="Transforms" FontFamily="Monospace" IsReadOnly="True"/>
 							</Grid>
 
 							<GridSplitter Grid.Column="1"/>
@@ -181,7 +181,7 @@
 							</Grid>
 						</StackPanel>
 
-						<TextBox Grid.Row="1" Name="CompilerLogs" IsReadOnly="True"/>
+						<TextBox Grid.Row="1" Name="CompilerLogs" FontFamily="Monospace" IsReadOnly="True"/>
 					</Grid>
 				</TabItem>
 

@@ -28,11 +28,11 @@ public static class BootOptions
 
 	public static string GetValue(string key)
 	{
-		var result = GetValue(RuntimeOptions, key);
+		var result = GetValue(StaticOptions, key);
 
 		if (string.IsNullOrEmpty(result))
 		{
-			result = GetValue(StaticOptions, key);
+			result = GetValue(RuntimeOptions, key);
 		}
 
 		return result;
@@ -40,10 +40,10 @@ public static class BootOptions
 
 	public static bool Contains(string value)
 	{
-		if (Contains(RuntimeOptions, value))
+		if (Contains(StaticOptions, value))
 			return true;
 
-		return Contains(StaticOptions, value);
+		return Contains(RuntimeOptions, value);
 	}
 
 	private static string GetValue(Pointer options, string key)

@@ -659,6 +659,8 @@ public partial class MainWindow : Window
 
 	private void OpenFile()
 	{
+		InstructionsStage.SelectedIndex = -1;
+
 		UpdateSettings();
 		UpdateSettings(lastOpenedFile);
 		LoadAssembly();
