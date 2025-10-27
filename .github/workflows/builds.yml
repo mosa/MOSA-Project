@@ -23,10 +23,10 @@ jobs:
     env:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -82,10 +82,10 @@ jobs:
     env:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -117,10 +117,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -147,10 +147,10 @@ jobs:
     runs-on: macos-13
     timeout-minutes: 15
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -212,10 +212,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -250,10 +250,10 @@ jobs:
     timeout-minutes: 15
     needs: macos-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -314,10 +314,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -350,10 +350,10 @@ jobs:
     timeout-minutes: 15
     needs: macos-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -380,10 +380,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -420,10 +420,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
