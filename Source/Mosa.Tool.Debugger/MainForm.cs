@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using Mosa.Compiler.Framework;
