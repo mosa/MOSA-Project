@@ -20,8 +20,11 @@ public static class RuntimeCallTransforms
 		//new RemSigned64(),
 		//new RemUnsigned64(),
 		new ConvertR4ToI64(),
+		new ConvertR8ToI32(),
 		new ConvertR8ToI64(),
+		new ConvertR4ToU32(),
 		new ConvertR4ToU64(),
+		new ConvertR8ToU32(),
 		new ConvertR8ToU64(),
 	};
 }
