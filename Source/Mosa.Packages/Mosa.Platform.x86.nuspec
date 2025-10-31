@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <package>
 	<metadata>
 		<id>Mosa.Platform.x86</id>
@@ -11,8 +11,9 @@
 		<icon>images/Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA x86 platform libraries</summary>
-		<description>This package contains the x86 implementations of the BareMetal kernel and runtime libraries (including the core library).</description>
-		<copyright>Copyright © MOSA Project 2024</copyright>
+		<description
+		>This package contains the x86 implementations of the BareMetal kernel and runtime libraries (including the core library).</description>
+		<copyright>Copyright © MOSA Project 2025</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Platform" version="$version$" />
@@ -20,9 +21,9 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
-		<file src="..\..\bin\Mosa.Kernel.BareMetal.Intel.dll" target="lib\net8.0" />
-		<file src="..\..\bin\Mosa.Kernel.BareMetal.x86.dll" target="lib\net8.0" />
-		<file src="..\..\bin\Mosa.Runtime.x86.dll" target="lib\net8.0" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.x86.dll" target="lib\net8.0" />
+		<file src="..\..\bin\Mosa.Kernel.BareMetal.Intel.dll" target="lib\net9.0" />
+		<file src="..\..\bin\Mosa.Kernel.BareMetal.x86.dll" target="lib\net9.0" />
+		<file src="..\..\bin\Mosa.Runtime.x86.dll" target="lib\net9.0" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.x86.dll" target="lib\net9.0" />
 	</files>
 </package>

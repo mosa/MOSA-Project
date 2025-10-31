@@ -23,7 +23,7 @@ Directory.CreateDirectory(outputDirectory);
 if (!Directory.Exists("runtime"))
 {
 	Console.WriteLine("Cloning .NET runtime GitHub repository...");
-	Process.Start("git", "clone https://github.com/dotnet/runtime -b release/8.0 --depth=1")?.WaitForExit();
+	Process.Start("git", "clone https://github.com/dotnet/runtime -b release/9.0 --depth=1")?.WaitForExit();
 }
 
 Console.WriteLine(copyFiles ? "Copying files..." : "Parsing input files...");
@@ -71,14 +71,21 @@ foreach (var folder in Directory.EnumerateDirectories(Path.Combine("runtime", "s
         }
 
         text ??= File.ReadAllText(file);
-        syntaxTrees.Add(CSharpSyntaxTree.ParseText(text, new CSharpParseOptions(preprocessorSymbols: ["NETCOREAPP"])));
+        syntaxTrees.Add(CSharpSyntaxTree.ParseText(text, new CSharpParseOptions(preprocessorSymbols: ["NET", "NET8_0_OR_GREATER"])));
     }
 }
 
 if (copyFiles) return;
 
-var compilation = CSharpCompilation.Create("System.Runtime", syntaxTrees, null,
-    new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, allowUnsafe: true));
+var compilation = CSharpCompilation.Create(
+    "System.Runtime",
+    syntaxTrees, null,
+    new CSharpCompilationOptions(
+        OutputKind.DynamicallyLinkedLibrary,
+        allowUnsafe: true,
+        specificDiagnosticOptions: [new KeyValuePair<string, ReportDiagnostic>("SYSLIB5005", ReportDiagnostic.Suppress)]
+    )
+);
 var outputFile = compilation.AssemblyName + ".dll";
 
 Console.WriteLine("Compiling source files...");

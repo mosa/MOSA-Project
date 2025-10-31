@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<OutputPath>bin</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageType>Template</PackageType>
-		<PackageVersion>2.4</PackageVersion>
+		<PackageVersion>2.6</PackageVersion>
 		<PackageId>Mosa.Templates</PackageId>
 		<Title>MOSA Templates</Title>
 		<Author>MOSA-Project</Author>

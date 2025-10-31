@@ -30,7 +30,7 @@ public class Compiler
 
 		// always print header with version information
 		Console.WriteLine("MOSA Compiler, Version {0}.", CompilerVersion.VersionString);
-		Console.WriteLine("Copyright 2024 by the MOSA Project. Licensed under the New BSD License.");
+		Console.WriteLine("Copyright 2025 by the MOSA Project. Licensed under the New BSD License.");
 
 		//OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
 
