@@ -198,6 +198,7 @@ public static class AppLocationsSettings
 		return
 			IsWindows ? TryFind("VBoxManage.exe",
 				new string[] {
+					@"%ProgramFiles%\Oracle\VirtualBox",
 					@"%ProgramFiles%\Oracle",
 					@"%ProgramFiles(x86)%\Oracle",
 				})
