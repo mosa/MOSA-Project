@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<LangVersion>11.0</LangVersion>
+		<TargetFramework>net9.0</TargetFramework>
+		<LangVersion>13.0</LangVersion>
 		<OutputPath>bin</OutputPath>
 	</PropertyGroup>
 
@@ -16,7 +16,11 @@
 	<ItemGroup>
 		<PackageReference Include="Mosa.Platform" Version="*" />
 		<PackageReference Include="Mosa.DeviceSystem" Version="*" />
+		<!--#if (BundleQemuWindows) -->
 		<PackageReference Include="Mosa.Tools.Package.Qemu" Version="*" />
+		<!--#else -->
+		<PackageReference Include="Mosa.Tools.Package" Version="*" />
+		<!--#endif -->
 	</ItemGroup>
 
 </Project>

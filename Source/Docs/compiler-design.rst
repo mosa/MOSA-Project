@@ -1,5 +1,5 @@
 ###############
-Compiler Design
+Compiler design
 ###############
 
 The MOSA Compiler framework is designed around two pipelines, each with multiple stages, and a type system.

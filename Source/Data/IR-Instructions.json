@@ -1252,14 +1252,6 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "StableObjectTracking",
-			"FamilyName": "IR",
-			"ResultCount": 0,
-			"OperandCount": 0,
-			"IgnoreDuringCodeGeneration": "true",
-			"UnspecifiedSideEffect": "true"
-		},
-		{
 			"Name": "StoreCompound",
 			"FamilyName": "IR",
 			"ResultCount": 0,
@@ -1502,7 +1494,23 @@
 			"IgnoreInstructionBasicBlockTargets": "true"
 		},
 		{
-			"Name": "UnstableObjectTracking",
+			"Name": "SafePoint",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"UnspecifiedSideEffect": "true"
+		},
+		{
+			"Name": "UnstableRegionStart",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"UnspecifiedSideEffect": "true"
+		},
+		{
+			"Name": "UnstableRegionEnd",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,

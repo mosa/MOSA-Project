@@ -384,7 +384,7 @@ public class Starter : BaseLauncher
 		sb.AppendLine(MosaSettings.EmulatorMemory.ToString());
 
 		sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
-		sb.AppendLine("cpuid: mmx=1,sep=1,simd=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
+		sb.AppendLine("cpu: model=core2_penryn_t9600, count=1");
 		sb.AppendLine("boot: cdrom,disk");
 
 		sb.Append("log: \"");

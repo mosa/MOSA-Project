@@ -34,7 +34,9 @@ public class BuildInstructionList : BuildBaseTemplate
 
 		foreach (var entry in Entries.Instructions)
 		{
-			Lines.AppendLine("\tpublic static readonly BaseInstruction " + entry.Name + " = new " + entry.Name + "();");
+			// .NET 9 added a new System.Threading.Lock class, which interferes with instructions named that way
+			var className = entry.Name == "Lock" ? "Instructions.Lock" : entry.Name;
+			Lines.AppendLine("\tpublic static readonly BaseInstruction " + entry.Name + " = new " + className + "();");
 		}
 
 		Lines.AppendLine("}");

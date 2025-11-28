@@ -152,24 +152,18 @@ public sealed class Architecture : BaseArchitecture
 		);
 
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(
-			new BaseMethodCompilerStage[]
-			{
-				//new AdvanceIRTransformStage(),
-				new IRTransformationStage(),
-				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-				new PlatformTransformStage(),
-			});
+		[
+			//new AdvanceIRTransformStage(),
+			new IRTransformationStage(),
+			mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+			new PlatformTransformStage(),
+		]);
 
 		pipeline.InsertBefore<CodeGenerationStage>(
-			new BaseMethodCompilerStage[]
-			{
-				new PlatformTransformStage(),
-				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-			});
-
-		pipeline.InsertBefore<CodeGenerationStage>(
-			new JumpOptimizationStage()
-		);
+		[
+			new PlatformTransformStage(),
+			mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+		]);
 	}
 
 	/// <summary>

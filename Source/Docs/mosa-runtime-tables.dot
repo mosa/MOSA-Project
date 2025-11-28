@@ -11,7 +11,7 @@ digraph "MOSA Runtime Tables"
 	];
 
 	"NameString" [
-		label = "<f0>String Object|<f1>Object Header|<f2>Pointer to Method Table|<f3>String Length|<f4>Unicode String"
+		label = "<f0>Internal String Object|<f1>Object Header|<f2>Pointer to Method Table|<f3>String Length|<f4>Unicode String"
 		shape = "record"
 		color = "red"
 	];
@@ -26,7 +26,7 @@ digraph "MOSA Runtime Tables"
 	];
 
 	"AssemblyDefinition" [
-		label = "<f0>Assembly|<f1>Pointer to Assembly Name|<f2>~Pointer to Custom Attributes|<f3>Flags: IsReflectionOnly|<f4>Number of Types|<f5>Pointer to Type  Definition 1|...|Pointer to Type  Definition N"
+		label = "<f0>Assembly|<f1>Pointer to Assembly Name|<f2>~Pointer to Custom Attributes|<f3>Flags: IsReflectionOnly|<f4>Number of Types|<f5>Pointer to Type  Definition 1|...|Pointer to Type Definition N"
 		shape = "record"
 	];
 
@@ -70,7 +70,7 @@ digraph "MOSA Runtime Tables"
 
 	"TypeDefinition":f9 -> "MethodDefinition":f0 [
 		id = 0
-		color = "green"
+		color = "purple"
 	];
 
 	"TypeDefinition":f10 -> "PropertiesTable":f0 [
@@ -147,12 +147,12 @@ digraph "MOSA Runtime Tables"
 
 	"PropertyDefinition":f5 -> "MethodDefinition":f0 [
 		id = 0
-		color = "green"
+		color = "purple"
 	];
 
 	"PropertyDefinition":f6 -> "MethodDefinition":f0 [
 		id = 0
-		color = "green"
+		color = "purple"
 	];
 
 	"MethodLookupTable" [
@@ -162,11 +162,11 @@ digraph "MOSA Runtime Tables"
 
 	"MethodLookupTable":f3 -> "MethodDefinition":f0 [
 		id = 0
-		color = "green"
+		color = "purple"
 	];
 
 	"ProtectedRegionTable" [
-		label = "<f0>Protected Region Table|<f1>Number of Regions|<f2>Pointer to Protected Region Definition 1|...|Protected Region Definition N"
+		label = "<f0>Protected Region Table|<f1>Number of Regions|<f2>Pointer to Protected Region Definition 1|...|Pointer to Protected Region Definition N"
 		shape = "record"
 	];
 
@@ -205,13 +205,13 @@ digraph "MOSA Runtime Tables"
 
 	"InterfaceMethodTable":f3 -> "MethodDefinition":f0 [
 		id = 0
-		color = "green"
+		color = "purple"
 	];
 
 	"MethodDefinition" [
-		label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local & Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>~Pointer to Protected Region Table|<f8>Pointer to GC Tracking Information|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
+		label = "<f0>Method Definition|<f1>Pointer to Method Name|<f2>~Pointer to Custom Attributes|<f3>Method Attributes|<f4>Local & Parameter Stack Size|<f5>Pointer to Method|<f6>Pointer to Return Type Definition|<f7>~Pointer to Protected Region Table|<f8>Pointer to Method GC Data|<f9>Number of Parameters|<f10>Pointer to Parameter Definition 1|...|Pointer to Parameter Definition N"
 		shape = "record"
-		color = "green"
+		color = "purple"
 	];
 
 	"MethodDefinition":f7 -> "ProtectedRegionTable":f0 [
@@ -232,7 +232,7 @@ digraph "MOSA Runtime Tables"
 		color = "blue"
 	];
 
-	"MethodDefinition":f8 -> "GCTrackingInformation":f0 [
+	"MethodDefinition":f8 -> "Method GC Data":f0 [
 		id = 0
 	];
 
@@ -258,10 +258,30 @@ digraph "MOSA Runtime Tables"
 		id = 0
 		color = "blue"
 	];
-
-	"GCTrackingInformation" [
-		label = "<f0>GC Tracking Information|TODO"
+	
+	"Method GC Data" [
+		label = "<f0>Method GC Data|<f1>Pointer to SafePoint Table|<f2>Pointer to Method GC Stack Data"
 		shape = "record"
+	];
+	
+	"Method GC Data":f1 -> "SafePoint":f0 [
+		id = 0
+		style = "dotted"
+	];
+
+	"SafePointTable" [
+		label = "<f0>SafePoint Table|<f1>Number of SafePoints|<f2>SafePoint 1|..|SafePoint N"
+		shape = "record"
+	];
+	
+	"SafePoint" [
+		label = "<f0>SafePoint|<f1>Address Offset|<f2>Address Range (signed)|<f3>Breakpoint Indicator|<f4>CPU Registers Bitmap (32 bit)"
+		shape = "record"
+	];
+	
+	"SafePointTable":f2 -> "SafePoint":f0 [
+		id = 0
+		style = "dotted"
 	];
 
 	"CustomAttributesTable" [
@@ -285,7 +305,7 @@ digraph "MOSA Runtime Tables"
 
 	"CustomAttribute":f2 -> "MethodDefinition":f0 [
 		id = 0
-		color = "green"
+		color = "purple"
 	];
 
 	"CustomAttribute":f4 -> "CustomAttributeArgument":f0 [

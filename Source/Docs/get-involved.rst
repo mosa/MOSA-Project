@@ -1,5 +1,5 @@
 ############
-Get Involved
+Get involved
 ############
 
 We need your help!
@@ -35,5 +35,5 @@ contributions if you:
 Please be careful with any contribution you make regarding to patents, other open source licenses and any potential
 restrictions. We can only accept contributions compatible with the
 `New BSD License <http://en.wikipedia.org/wiki/BSD_licenses>`__. MIT license is a compatible license, while GNU licenses
-are incomparable. Read more about our :doc:`license` policy.
+are incomparable. Read more about our :doc:`license<license>` policy.
 

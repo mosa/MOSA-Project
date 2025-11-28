@@ -10,17 +10,17 @@ MOSA includes three demos applications to demonstrate various capabilities of th
 CoolWorld
 =========
 
-It uses the GPU and some other features offered by MOSA to make a nice graphical demo.
+It's MOSA's flagship demo. It can boot into either console mode (containing a shell with a few basic commands) or
+graphical mode (which makes use of the GPU and some other features offered by MOSA). You can boot into console mode by
+inserting the ``-bootoptions coolworldui=consolemode`` command line option when starting the MOSA launcher.
 
-.. image:: images/mosa-demo-coolworld.png
+Console mode:
 
-HelloWorld
-==========
+.. image:: images/mosa-demo-coolworld-console.png
 
-It implements a basic shell with a few basic commands, like boot information, memory usage, and
-device information.
+Graphical mode:
 
-.. image:: images/mosa-demo-helloworld.png
+.. image:: images/mosa-demo-coolworld-graphical.png
 
 TestWorld
 =========

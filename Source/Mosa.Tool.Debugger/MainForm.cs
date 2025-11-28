@@ -1,5 +1,6 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using Mosa.Compiler.Framework;
@@ -49,6 +50,7 @@ public partial class MainForm : Form
 
 	public MosaSettings MosaSettings { get; private set; } = new MosaSettings();
 
+	[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 	public DebugSource DebugSource { get; set; } = new DebugSource();
 
 	public List<BreakPoint> BreakPoints { get; } = new List<BreakPoint>();
@@ -73,6 +75,7 @@ public partial class MainForm : Form
 
 	private Stopwatch Stopwatch = new Stopwatch();
 
+	[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
 	public string Status
 	{
 		set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); }

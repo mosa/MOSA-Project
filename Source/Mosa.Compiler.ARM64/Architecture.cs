@@ -187,27 +187,21 @@ public sealed class Architecture : BaseArchitecture
 	public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
 		pipeline.InsertBefore<CallStage>(
-			new Stages.RuntimeCallStage()
+			new RuntimeCallStage()
 		);
 
 		pipeline.InsertAfterLast<PlatformIntrinsicStage>(
-			new BaseMethodCompilerStage[]
-			{
-				new IRTransformStage(),
-				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-				new PlatformTransformStage(),
-			});
+		[
+			new IRTransformStage(),
+			mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+			new PlatformTransformStage(),
+		]);
 
 		pipeline.InsertBefore<CodeGenerationStage>(
-			new BaseMethodCompilerStage[]
-			{
-				new PlatformTransformStage(),
-				mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
-			});
-
-		pipeline.InsertBefore<CodeGenerationStage>(
-			new JumpOptimizationStage()
-		);
+		[
+			new PlatformTransformStage(),
+			mosaSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+		]);
 
 		//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
 		//	new StopStage()

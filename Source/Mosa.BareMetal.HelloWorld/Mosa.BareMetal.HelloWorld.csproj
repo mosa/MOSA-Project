@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-	<Import Project="../Mosa.BareMetal.targets" />
-
-	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
-	</ItemGroup>
-
-</Project>

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Compiler.Framework;
 
@@ -24,7 +25,7 @@ public class CompilerHooks
 
 	public delegate void ExtendCompilerPipelineHandler(Pipeline<BaseCompilerStage> pipeline);
 
-	public delegate void ExtendMethodCompilerPipelineHandler(Pipeline<BaseMethodCompilerStage> pipeline);
+	public delegate void ExtendMethodCompilerPipelineHandler(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings);
 
 	public delegate int? GetMethodTraceLevelHandler(MosaMethod method);
 

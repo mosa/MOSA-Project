@@ -98,7 +98,7 @@ public partial class MainWindow : Window
 
 		SetRequiredSettings();
 
-		graphvizFound = File.Exists(mosaSettings.GraphwizApp);
+		graphvizFound = File.Exists(mosaSettings.GraphvizApp);
 
 		UpdateDisplay();
 	}
@@ -257,7 +257,7 @@ public partial class MainWindow : Window
 
 		InstructionsStage.SelectedIndex = 0;
 
-		for (;;)
+		for (; ; )
 		{
 			UpdateInstructionStageSelection();
 
@@ -275,7 +275,7 @@ public partial class MainWindow : Window
 
 		DebugStage.SelectedIndex = 0;
 
-		for (;;)
+		for (; ; )
 		{
 			UpdateDebugResults();
 
@@ -413,7 +413,6 @@ public partial class MainWindow : Window
 	private void Next_OnClick(object _, RoutedEventArgs e) => SetTransformationStep(transformStep + 1);
 
 	private void Last_OnClick(object _, RoutedEventArgs e) => SetTransformationStep(int.MaxValue);
-
 
 	private void SetBlock_OnIsCheckedChanged(object _, RoutedEventArgs e)
 		=> TransformsGrid_OnSelectionChanged(null, null);
@@ -622,8 +621,8 @@ public partial class MainWindow : Window
 		if (string.IsNullOrEmpty(Debug.Text) || !Debug.Text.StartsWith("digraph blocks"))
 			return false;
 
-		var dot = Path.GetTempFileName();
-		var img = Path.GetTempFileName();
+		var dot = Path.GetRandomFileName();
+		var img = Path.GetRandomFileName();
 
 		try
 		{
@@ -631,7 +630,7 @@ public partial class MainWindow : Window
 
 			var startInfo = new ProcessStartInfo
 			{
-				FileName = mosaSettings.GraphwizApp,
+				FileName = mosaSettings.GraphvizApp,
 				Arguments = $"-Tpng -o \"{img}\" \"{dot}\"",
 				CreateNoWindow = true
 			};
@@ -660,6 +659,8 @@ public partial class MainWindow : Window
 
 	private void OpenFile()
 	{
+		InstructionsStage.SelectedIndex = -1;
+
 		UpdateSettings();
 		UpdateSettings(lastOpenedFile);
 		LoadAssembly();
@@ -682,7 +683,7 @@ public partial class MainWindow : Window
 	private static void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline)
 		=> pipeline.InsertAfterFirst<TypeInitializerStage>(new ExplorerMethodCompileTimeStage());
 
-	private void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)
+	private void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, MosaSettings mosaSettings)
 	{
 		pipeline.Add(new DisassemblyStage());
 		pipeline.Add(new DebugInfoStage());

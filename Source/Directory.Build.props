@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
 	<PropertyGroup>
 		<OutputPath>../../bin</OutputPath>
-		<TargetFramework>net8.0</TargetFramework>
-		<LangVersion>11.0</LangVersion>
+		<TargetFramework>net9.0</TargetFramework>
+		<RollForward>major</RollForward>
+		<LangVersion>13.0</LangVersion>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<!--		<WarningsAsErrors>nullable</WarningsAsErrors>-->
@@ -12,7 +13,8 @@
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<CodeAnalysisRuleSet>../Common.ruleset</CodeAnalysisRuleSet>
 		<Company>MOSA Project</Company>
-		<Copyright>Copyright © MOSA Project 2024</Copyright>
-		<AssemblyVersion>2.6.0.0</AssemblyVersion>
+		<Copyright>Copyright © MOSA Project 2025</Copyright>
+		<AssemblyVersion>2.6.1.0</AssemblyVersion>
 	</PropertyGroup>
+
 </Project>

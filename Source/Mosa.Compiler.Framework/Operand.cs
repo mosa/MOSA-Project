@@ -37,7 +37,7 @@ public sealed partial class Operand
 
 	#region Member Data
 
-	private BitValue bitValue;
+	//private BitValue bitValue;
 
 	#endregion Member Data
 

@@ -1,8 +1,8 @@
-#############
-MOSA Debugger
-#############
+########
+Debugger
+########
 
-The **MOSA Debugger** is GUI application used to debug a MOSA compiled application using `QEMU Virtual Machine Emulator <https://www.qemu.org>`__.
+The **MOSA Debugger** is GUI application used to debug a MOSA compiled application using `QEMU <https://www.qemu.org>`__.
 
 .. image:: images/mosa-debugger.png
 

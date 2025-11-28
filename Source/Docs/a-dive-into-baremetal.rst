@@ -198,7 +198,7 @@ good example of this is the ``PCService``, or even the aforementioned ``DeviceSe
 fulfills the purpose of handling power management, like shutting down or rebooting the system. This service must be
 queryable at any point in time, whenever the user wishes to shut down or reboot their PC. Similarly (but more so
 to the end user), the ``DeviceService`` allows querying any initialized device driver in the system. This is
-particularly useful if you want to, say, get all ``IGraphicsDevice``s in the system, or even get a very specific device
+particularly useful if you want to, say, get all ``IGraphicsDevice`` devices in the system, or even get a very specific device
 like a ``StandardKeyboard``.
 
 Either way, here, we initialize a total of **5 new services**, all of which most likely need no introduction now. But,

@@ -1,12 +1,12 @@
-#############
-MOSA Launcher
-#############
+########
+Launcher
+########
 
-The **MOSA Launcher** is GUI application used to select various compiler and build options. Once options are select, the tool automates the entire build process including launching of a virtual machine.
+The **MOSA Launcher** is GUI application used to select various compiler and build options. Once options are selected, the tool automates the entire build process including launching a virtual machine.
 
 .. image:: images/mosa-launcher.png
 
-.. tip:: Check out the :doc:`MOSA Launcher Console <tool-launcher-console>` for a console version of this application.
+.. tip:: Check out the :doc:`console launcher <tool-launcher-console>` for a console version of this tool.
 
 Usage
 -----
@@ -24,8 +24,3 @@ Command Line Options
 --------------------
 
 See the :doc:`command line arguments<command-line-arguments>` for a list of available options.
-
-Here are the most common options available:
-
-`-autostart-off`
-	Does not immediate start the compiler

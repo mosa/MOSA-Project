@@ -18,7 +18,7 @@ public static class Name
 	public const string AppLocation_QemuImg = "AppLocation.QemuImg";
 	public const string AppLocation_VmwarePlayer = "AppLocation.VmwarePlayer";
 	public const string AppLocation_VmwareWorkstation = "AppLocation.VmwareWorkstation";
-	public const string AppLocation_Graphwiz = "AppLocation.Graphwiz";
+	public const string AppLocation_Graphviz = "AppLocation.Graphviz";
 
 	public const string AppLocation_QemuEDK2X86 = "AppLocation.QemuEDK2X86";
 	public const string AppLocation_QemuEDK2X64 = "AppLocation.QemuEDK2X64";
@@ -48,7 +48,6 @@ public static class Name
 	public const string CompilerDebug_PreLinkHashFile = "CompilerDebug.PreLinkHashFile";
 	public const string CompilerDebug_Statistics = "CompilerDebug.Statistics";
 	public const string CompilerDebug_CounterFilter = "CompilerDebug.CounterFilter";
-	public const string CompilerDebug_TestFilter = "CompilerDebug.TestFilter";
 	public const string Debugger_BreakpointFile = "Debugger.BreakpointFile";
 	public const string Debugger_WatchFile = "Debugger.WatchFile";
 	public const string DefaultFolder = "DefaultFolder";
@@ -130,9 +129,9 @@ public static class Name
 
 	public const string Image_DiskBlocks = "Image.DiskBlocks";
 	public const string Image_VolumeLabel = "Image.VolumeLabel";
-	public const string Image_MasterBootRecordFile = "Image.MasterBootRecordFile";
-	public const string Image_BootBlockFile = "Image.BootBlockFile";
-	public const string Launcher_Serial_File = "Launcher.Serial_File";
+	//public const string Image_MasterBootRecordFile = "Image.MasterBootRecordFile";
+	//public const string Image_BootBlockFile = "Image.BootBlockFile";
+	//public const string Launcher_Serial_File = "Launcher.Serial_File";
 
 	public const string X86_InterruptMethodName = "X86.InterruptMethodName";
 }

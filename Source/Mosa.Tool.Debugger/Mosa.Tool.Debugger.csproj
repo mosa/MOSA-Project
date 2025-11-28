@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net9.0-windows</TargetFramework>
 		<OutputType>WinExe</OutputType>
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
@@ -164,7 +164,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="dnlib" Version="4.4.0" />
+		<PackageReference Include="dnlib" Version="4.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -173,4 +173,3 @@
 	</ItemGroup>
 
 </Project>
-

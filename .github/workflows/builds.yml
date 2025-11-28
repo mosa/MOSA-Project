@@ -23,10 +23,10 @@ jobs:
     env:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -38,7 +38,7 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
       - name: Setup Nuget.exe
-        uses: nuget/setup-nuget@v1
+        uses: nuget/setup-nuget@v2
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.sln
       - name: Build
@@ -52,6 +52,7 @@ jobs:
         with:
           name: windows-build-artifact
           path: bin
+          compression-level: 9
       - name: Create Package - Mosa.Tools.Package
         run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Tools.Package.Qemu
@@ -73,7 +74,7 @@ jobs:
           path: bin\nupkg
 
   windows-build-packaging:
-    name: Windows Build Packaging
+    name: Build Windows Packaging
     needs: [windows-build, linux-build, macos-build, windows-unit-testing, linux-unit-testing, macos-unit-testing, windows-demo-testing, linux-demo-testing, macos-demo-testing]
     runs-on: windows-latest
     timeout-minutes: 15
@@ -81,10 +82,10 @@ jobs:
     env:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -116,10 +117,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -139,16 +140,17 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
-         
+          compression-level: 9
+       
   macos-build:
     name: MacOS Build
     runs-on: macos-13
     timeout-minutes: 15
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -168,6 +170,7 @@ jobs:
         with:
           name: macos-build-artifact
           path: bin
+          compression-level: 9
 
   windows-unit-testing:
     strategy:
@@ -191,12 +194,13 @@ jobs:
       - name: Make Artifact Folder
         run: mkdir artifact
       - name: Unit Test
-        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }} -counters artifact\windows-counters-unittests-o${{ matrix.optimization }}.txt
+        run: bin\Mosa.Utility.UnitTests.exe -check -o${{ matrix.optimization }} -counters artifact\counters-windows-unittests-o${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: windows-counters-unittests-o${{ matrix.optimization }}
+          name: counters-windows-unittests-o${{ matrix.optimization }}
           path: artifact
+          retention-days: 2
 
   linux-unit-testing:
     strategy:
@@ -208,10 +212,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -228,12 +232,13 @@ jobs:
       - name: Make Artifact Folder
         run: mkdir artifact
       - name: Perform Unit Testing
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/linux-counters-unittests-o${{ matrix.optimization }}.txt
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/counters-linux-unittests-o${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: linux-counters-unittests-o${{ matrix.optimization }}
+          name: counters-linux-unittests-o${{ matrix.optimization }}
           path: artifact
+          retention-days: 2
           
   macos-unit-testing:
     strategy:
@@ -245,10 +250,10 @@ jobs:
     timeout-minutes: 15
     needs: macos-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -263,12 +268,13 @@ jobs:
       - name: Make Artifact Folder
         run: mkdir artifact
       - name: Unit Test 
-        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/macos-counters-unittests-o${{ matrix.optimization }}.txt
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/counters-macos-unittests-o${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: macos-counters-unittests-o${{ matrix.optimization }}
+          name: counters-macos-unittests-o${{ matrix.optimization }}
           path: artifact
+          retention-days: 2
 
   windows-demo-testing:
     strategy:
@@ -293,10 +299,10 @@ jobs:
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
         run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal HelloWorld
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal CoolWorld
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin\Include
+      - name: Demo Test - BareMetal Console CoolWorld
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions coolworldui=consolemode,bootoptions=serialdebug
+      - name: Demo Test - BareMetal Graphical CoolWorld
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin\Include
 
   linux-demo-testing:
     strategy:
@@ -308,10 +314,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -329,10 +335,10 @@ jobs:
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal HelloWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal CoolWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
+      - name: Demo Test - BareMetal Console CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions coolworldui=consolemode,bootoptions=serialdebug
+      - name: Demo Test - BareMetal Graphical CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin/Include
 
   macos-demo-testing:
     strategy:
@@ -344,10 +350,10 @@ jobs:
     timeout-minutes: 15
     needs: macos-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -363,10 +369,10 @@ jobs:
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.Starter.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
       - name: Demo Test - BareMetal TestWorld
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal HelloWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters
-      - name: Demo Test - BareMetal CoolWorld
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -vmware-svga -include bin/Include
+      - name: Demo Test - BareMetal Console CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -bootoptions coolworldui=consolemode,bootoptions=serialdebug
+      - name: Demo Test - BareMetal Graphical CoolWorld
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.CoolWorld.x86.dll -o${{ matrix.optimization }} -check -test -output-counters -vmware-svga -include bin/Include
 
   linux-x64-compile-test:
     name: Linux - X64 Compile Tests
@@ -374,10 +380,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -387,26 +393,26 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
-      - name: x64 Compile Test - BareMetal HelloWorld - o0
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o0 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o1
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o1 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o2
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o2 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o3
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o3 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o4
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o4 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o5
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o5 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o6
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o6 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o7
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o7 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o8
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o8 -check -autolaunch-off -output-counters
-      - name: x64 Compile Test - BareMetal HelloWorld - o9
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.x64.dll -x64 -o9 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o0
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o0 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o1
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o1 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o2
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o2 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o3
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o3 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o4
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o4 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o5
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o5 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o6
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o6 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o7
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o7 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o8
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o8 -check -autolaunch-off -output-counters
+      - name: x64 Compile Test - BareMetal TestWorld - o9
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.x64.dll -x64 -o9 -check -autolaunch-off -output-counters
 
   linux-arm32-compile-test:
     name: Linux - ARM32 Compile Tests
@@ -414,10 +420,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net8.0
+      - name: Set net9.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -427,23 +433,37 @@ jobs:
         with:
           name: linux-build-artifact
           path: bin
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o0
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o0 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o1
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o1 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o2
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o2 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o3
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o3 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o4
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o4 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o5
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o5 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o6
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o6 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o7
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o7 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o8
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o8 -check -autolaunch-off -output-counters
-      - name: ARM32 Compile Test - BareMetal HelloWorld - o9
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.HelloWorld.ARM32.dll -arm32 -o9 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o0
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o0 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o1
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o1 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o2
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o2 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o3
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o3 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o4
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o4 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o5
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o5 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o6
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o6 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o7
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o7 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o8
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o8 -check -autolaunch-off -output-counters
+      - name: ARM32 Compile Test - BareMetal TestWorld - o9
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o9 -check -autolaunch-off -output-counters
+
+  merge-artifacts:
+     name: Merge Artifacts
+     runs-on: ubuntu-latest
+     needs: [windows-unit-testing, linux-unit-testing, macos-unit-testing]
+     timeout-minutes: 15
+     steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+            name: counters-unit-tests
+            pattern: counters-*
+            compression-level: 9
+

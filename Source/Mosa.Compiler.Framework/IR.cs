@@ -190,7 +190,6 @@ public static class IR
 	public static readonly BaseInstruction ShiftLeft64 = new ShiftLeft64();
 	public static readonly BaseInstruction ShiftRight32 = new ShiftRight32();
 	public static readonly BaseInstruction ShiftRight64 = new ShiftRight64();
-	public static readonly BaseInstruction StableObjectTracking = new StableObjectTracking();
 	public static readonly BaseInstruction StoreCompound = new StoreCompound();
 	public static readonly BaseInstruction StoreR4 = new StoreR4();
 	public static readonly BaseInstruction StoreR8 = new StoreR8();
@@ -225,7 +224,9 @@ public static class IR
 	public static readonly BaseInstruction Truncate64x32 = new Truncate64x32();
 	public static readonly BaseInstruction TryEnd = new TryEnd();
 	public static readonly BaseInstruction TryStart = new TryStart();
-	public static readonly BaseInstruction UnstableObjectTracking = new UnstableObjectTracking();
+	public static readonly BaseInstruction SafePoint = new SafePoint();
+	public static readonly BaseInstruction UnstableRegionStart = new UnstableRegionStart();
+	public static readonly BaseInstruction UnstableRegionEnd = new UnstableRegionEnd();
 	public static readonly BaseInstruction Rethrow = new Rethrow();
 	public static readonly BaseInstruction GetVirtualFunctionPtr = new GetVirtualFunctionPtr();
 	public static readonly BaseInstruction MemoryCopy = new MemoryCopy();

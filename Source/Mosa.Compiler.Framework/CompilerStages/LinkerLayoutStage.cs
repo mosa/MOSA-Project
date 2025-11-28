@@ -17,9 +17,11 @@ public sealed class LinkerLayoutStage : BaseCompilerStage
 
 		Linker.FinalizeLayout();
 
-		Compiler.GlobalCounters.Update("Linker.Text", (int)Linker.Sections[(int)SectionKind.Text].Size);
-		Compiler.GlobalCounters.Update("Linker.Data", (int)Linker.Sections[(int)SectionKind.Data].Size);
-		Compiler.GlobalCounters.Update("Linker.ROData", (int)Linker.Sections[(int)SectionKind.ROData].Size);
-		Compiler.GlobalCounters.Update("Linker.BSS", (int)Linker.Sections[(int)SectionKind.BSS].Size);
+		Compiler.LinkerTime.Reset();
+
+		Compiler.GlobalCounters.Set("Linker.Text", (int)Linker.Sections[(int)SectionKind.Text].Size);
+		Compiler.GlobalCounters.Set("Linker.Data", (int)Linker.Sections[(int)SectionKind.Data].Size);
+		Compiler.GlobalCounters.Set("Linker.ROData", (int)Linker.Sections[(int)SectionKind.ROData].Size);
+		Compiler.GlobalCounters.Set("Linker.BSS", (int)Linker.Sections[(int)SectionKind.BSS].Size);
 	}
 }

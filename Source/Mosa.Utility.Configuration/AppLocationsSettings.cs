@@ -39,7 +39,7 @@ public static class AppLocationsSettings
 		mosaSettings.NdisasmApp = FindNdisasm();
 		mosaSettings.MkisofsApp = FindMkisofs();
 		mosaSettings.GDBApp = FindGDB();
-		mosaSettings.GraphwizApp = FindGraphwiz();
+		mosaSettings.GraphvizApp = FindGraphviz();
 	}
 
 	private static string FindQemuX86()
@@ -162,11 +162,11 @@ public static class AppLocationsSettings
 		return
 			IsWindows ? TryFind("ndisasm.exe",
 				new string[] {
-					@"%CURRENT%\..\Tools\ndisasm",
-					@"%CURRENT%\Tools\ndisasm",
+					@"%CURRENT%\..\Tools\nasm",
+					@"%CURRENT%\Tools\nasm",
 
-					@"%APPDIR%\Tools\ndisasm",
-					@"%APPDIR%\..\Tools\ndisasm"
+					@"%APPDIR%\Tools\nasm",
+					@"%APPDIR%\..\Tools\nasm"
 				})
 			: TryFind("ndisasm", LinuxDirectories);
 	}
@@ -209,22 +209,10 @@ public static class AppLocationsSettings
 		return
 			IsWindows ? TryFind("bochs.exe",
 				new string[] {
-					@"%ProgramFiles%\Bochs-2.6.9",
-					@"%ProgramFiles(x86)%\Bochs-2.6.9",
-					@"%ProgramFiles%\Bochs-2.6.8",
-					@"%ProgramFiles(x86)%\Bochs-2.6.8",
-					@"%ProgramFiles%\Bochs-2.6.5",
-					@"%ProgramFiles(x86)%\Bochs-2.6.5",
-					@"%ProgramFiles%\Bochs-2.6.2",
-					@"%ProgramFiles(x86)%\Bochs-2.6.2",
+					@"%ProgramFiles%\Bochs-2.8",
+					@"%ProgramFiles(x86)%\Bochs-2.8",
 					@"%ProgramFiles%\Bochs-2.7",
 					@"%ProgramFiles(x86)%\Bochs-2.7",
-
-					@"%CURRENT%\..\Tools\Bochs",
-					@"%CURRENT%\Tools\Bochs",
-
-					@"%APPDIR%\Tools\Bochs",
-					@"%APPDIR%\..\Tools\Bochs"
 				 })
 			: TryFind("bochs", LinuxDirectories);
 	}
@@ -234,22 +222,10 @@ public static class AppLocationsSettings
 		return
 			IsWindows ? TryFind("BIOS-bochs-latest",
 					new string[] {
-						@"%ProgramFiles%\Bochs-2.6.9",
-						@"%ProgramFiles(x86)%\Bochs-2.6.9",
-						@"%ProgramFiles%\Bochs-2.6.8",
-						@"%ProgramFiles(x86)%\Bochs-2.6.8",
-						@"%ProgramFiles%\Bochs-2.6.5",
-						@"%ProgramFiles(x86)%\Bochs-2.6.5",
-						@"%ProgramFiles%\Bochs-2.6.2",
-						@"%ProgramFiles(x86)%\Bochs-2.6.2",
+						@"%ProgramFiles%\Bochs-2.8",
+						@"%ProgramFiles(x86)%\Bochs-2.8",
 						@"%ProgramFiles%\Bochs-2.7",
 						@"%ProgramFiles(x86)%\Bochs-2.7",
-
-						@"%CURRENT%\..\Tools\Bochs",
-						@"%CURRENT%\Tools\Bochs",
-
-						@"%APPDIR%\Tools\Bochs",
-						@"%APPDIR%\..\Tools\Bochs"
 					})
 				: TryFind("BIOS-bochs-latest",
 					new string[] {
@@ -433,7 +409,7 @@ public static class AppLocationsSettings
 				});
 	}
 
-	private static string FindGraphwiz()
+	private static string FindGraphviz()
 	{
 		return
 			IsWindows ? TryFind("dot.exe",
