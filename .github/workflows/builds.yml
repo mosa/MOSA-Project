@@ -144,7 +144,7 @@ jobs:
        
   macos-build:
     name: MacOS Build
-    runs-on: macos-13
+    runs-on: macos-26
     timeout-minutes: 15
     steps:
       - name: Set net9.0
