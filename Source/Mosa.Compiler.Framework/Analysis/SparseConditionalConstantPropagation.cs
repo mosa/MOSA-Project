@@ -381,7 +381,7 @@ public sealed class SparseConditionalConstantPropagation
 			AddExecutionBlock(block.NextBlocks[0]);
 		}
 
-		ProcessInstructionsContinuiously(block.First);
+		ProcessInstructionsContinuously(block.First);
 
 		// re-analyze phi statements
 		var phiUse = phiStatements.Get(block);
@@ -395,7 +395,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private void ProcessInstructionsContinuiously(Node node)
+	private void ProcessInstructionsContinuously(Node node)
 	{
 		// instead of adding items to the worklist, the whole block will be processed
 		for (; !node.IsBlockEndInstruction; node = node.Next)
@@ -423,7 +423,7 @@ public sealed class SparseConditionalConstantPropagation
 				|| node.Instruction == IR.BranchObject)
 			{
 				// special case
-				ProcessInstructionsContinuiously(node);
+				ProcessInstructionsContinuously(node);
 			}
 			else
 			{
@@ -1396,6 +1396,11 @@ public sealed class SparseConditionalConstantPropagation
 
 		MainTrace?.Log($"Loop: {currentBlock.PreviousBlocks.Count}");
 
+		// Check if any source blocks haven't been analyzed yet (back-edges in loops)
+		// If so, we must be conservative and mark as OverDefined to avoid incorrect optimizations
+		var hasUnanalyzedPredecessors = false;
+		var analyzedCount = 0;
+
 		for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
 		{
 			var predecessor = sourceBlocks[index];
@@ -1405,6 +1410,34 @@ public sealed class SparseConditionalConstantPropagation
 			var executable = blockStates[predecessor.Sequence];
 
 			MainTrace?.Log($"# {index}: {predecessor} {(executable ? "Yes" : "No")}");
+
+			if (executable)
+			{
+				analyzedCount++;
+			}
+			else
+			{
+				hasUnanalyzedPredecessors = true;
+			}
+		}
+
+		// CRITICAL FIX: If we have unanalyzed predecessors (back-edges in loops),
+		// and we're dealing with object references, mark as OverDefined to prevent
+		// incorrect null-check elimination
+		if (hasUnanalyzedPredecessors && analyzedCount > 0 && result.IsReferenceType)
+		{
+			// We have a partial view - some blocks analyzed, some not (loop back-edge case)
+			// Mark both value and reference state as OverDefined to be conservative
+			UpdateToOverDefined(result);
+			SetReferenceOverdefined(result);
+			return;
+		}
+
+		for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
+		{
+			var predecessor = sourceBlocks[index];
+
+			var executable = blockStates[predecessor.Sequence];
 
 			if (!executable)
 				continue;
