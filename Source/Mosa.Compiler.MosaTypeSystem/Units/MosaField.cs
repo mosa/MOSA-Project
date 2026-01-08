@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.MosaTypeSystem;
 
@@ -38,38 +38,38 @@ public sealed class MosaField : MosaUnit, IEquatable<MosaField>
 
 	public class Mutator : MosaUnit.MutatorBase
 	{
-		private readonly MosaField field;
+		private readonly MosaField internalField;
 
 		internal Mutator(MosaField field)
 			: base(field)
 		{
-			this.field = field;
+			internalField = field;
 		}
 
-		public MosaFieldAttributes FieldAttributes { set => field.FieldAttributes = value; }
+		public MosaFieldAttributes FieldAttributes { set => internalField.FieldAttributes = value; }
 
-		public MosaType? DeclaringType { set => field.DeclaringType = value; }
+		public MosaType? DeclaringType { set => internalField.DeclaringType = value; }
 
-		public MosaType? FieldType { set => field.FieldType = value; }
+		public MosaType? FieldType { set => internalField.FieldType = value; }
 
-		public bool IsLiteral { set => field.IsLiteral = value; }
+		public bool IsLiteral { set => internalField.IsLiteral = value; }
 
-		public bool IsStatic { set => field.IsStatic = value; }
+		public bool IsStatic { set => internalField.IsStatic = value; }
 
-		public bool HasDefault { set => field.HasDefault = value; }
+		public bool HasDefault { set => internalField.HasDefault = value; }
 
-		public uint? Offset { set => field.Offset = value; }
+		public uint? Offset { set => internalField.Offset = value; }
 
-		public byte[] Data { set => field.Data = value; }
+		public byte[] Data { set => internalField.Data = value; }
 
-		public bool HasOpenGenericParams { set => field.HasOpenGenericParams = value; }
+		public bool HasOpenGenericParams { set => internalField.HasOpenGenericParams = value; }
 
 		public override void Dispose()
 		{
-			if (field.FieldType != null)
+			if (internalField.FieldType != null)
 			{
-				field.FullName = string.Concat(field.DeclaringType?.FullName, "::", field.Name, " ", field.FieldType.FullName);
-				field.ShortName = string.Concat(field.Name, " : ", field.FieldType.ShortName);
+				internalField.FullName = string.Concat(internalField.DeclaringType?.FullName, "::", internalField.Name, " ", internalField.FieldType.FullName);
+				internalField.ShortName = string.Concat(internalField.Name, " : ", internalField.FieldType.ShortName);
 			}
 		}
 	}
