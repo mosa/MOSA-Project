@@ -18,9 +18,9 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
-		<file src="..\..\bin\Mosa.Kernel.BareMetal.dll" target="lib\net9.0" />
-		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net9.0" />
-		<file src="..\..\bin\System.Runtime.dll" target="lib\net9.0" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net9.0" />
+		<file src="..\..\bin\Mosa.Kernel.BareMetal.dll" target="lib\net10.0" />
+		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net10.0" />
+		<file src="..\..\bin\System.Runtime.dll" target="lib\net10.0" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net10.0" />
 	</files>
 </package>

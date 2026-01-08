@@ -21,8 +21,8 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
-		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net9.0" />
-		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net9.0" />
-		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net9.0" />
+		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net10.0" />
+		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net10.0" />
+		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net10.0" />
 	</files>
 </package>
