@@ -13,7 +13,7 @@
 		<summary>MOSA Tools without QEMU</summary>
 		<description
 		>This package contains all the tools for MOSA without QEMU binaries.</description>
-		<copyright>Copyright © MOSA Project 2025</copyright>
+		<copyright>Copyright © MOSA Project 2026</copyright>
 		<tags>MOSA Compiler</tags>
 		<contentFiles>
 			<files include="**/*.*" buildAction="None" copyToOutput="true" />
