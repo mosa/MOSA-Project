@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using System.Text;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Instructions;
 
 namespace Mosa.Compiler.Framework.Analysis;
 
@@ -235,9 +236,9 @@ public sealed class SparseConditionalConstantPropagation
 		Is32BitPlatform = is32BitPlatform;
 
 		variableStates = new Dictionary<Operand, VariableState>();
+		phiStatements = new KeyedList<BasicBlock, Node>();
 		instructionWorkList = new Stack<Node>();
 		blockWorklist = new Stack<BasicBlock>();
-		phiStatements = new KeyedList<BasicBlock, Node>();
 		executedStatements = new HashSet<Node>();
 
 		MainTrace = CreateTrace("SparseConditionalConstantPropagation", 5);
@@ -249,8 +250,8 @@ public sealed class SparseConditionalConstantPropagation
 			blockStates[i] = false;
 		}
 
-		AddExecutionBlocks(BasicBlocks.HeadBlocks);
-		AddExecutionBlocks(BasicBlocks.HandlerHeadBlocks);
+		QueueExecutionBlocks(BasicBlocks.HeadBlocks);
+		QueueExecutionBlocks(BasicBlocks.HandlerHeadBlocks);
 
 		while (blockWorklist.Count > 0 || instructionWorkList.Count > 0)
 		{
@@ -331,13 +332,13 @@ public sealed class SparseConditionalConstantPropagation
 		}
 	}
 
-	private void AddExecutionBlocks(List<BasicBlock> blocks)
+	private void QueueExecutionBlocks(List<BasicBlock> blocks)
 	{
 		foreach (var block in blocks)
-			AddExecutionBlock(block);
+			QueueExecutionBlock(block);
 	}
 
-	private void AddExecutionBlock(BasicBlock block)
+	private void QueueExecutionBlock(BasicBlock block)
 	{
 		if (blockStates[block.Sequence])
 			return;
@@ -346,18 +347,23 @@ public sealed class SparseConditionalConstantPropagation
 		blockWorklist.Push(block);
 	}
 
-	private void AddInstruction(Node node)
+	private void QueueInstruction(Node node)
 	{
 		instructionWorkList.Push(node);
 	}
 
-	private void AddInstruction(VariableState variable)
+	private void QueueInstruction(VariableState variable)
 	{
 		foreach (var use in variable.Operand.Uses)
 		{
+			// only instructions with results or branch targets can be re-evaluated
+			if ((use.ResultCount == 0 && use.BranchTargetsCount == 0) || use.IsEmptyOrNop)
+				continue;
+
+			// only previousily evaulated statements can be re-evaluated
 			if (executedStatements.Contains(use))
 			{
-				AddInstruction(use);
+				QueueInstruction(use);
 			}
 		}
 	}
@@ -378,7 +384,7 @@ public sealed class SparseConditionalConstantPropagation
 		// if the block has only one successor block, add successor block to executed block list
 		if (block.NextBlocks.Count == 1)
 		{
-			AddExecutionBlock(block.NextBlocks[0]);
+			QueueExecutionBlock(block.NextBlocks[0]);
 		}
 
 		ProcessInstructionsContinuiously(block.First);
@@ -389,9 +395,9 @@ public sealed class SparseConditionalConstantPropagation
 		if (phiUse == null)
 			return;
 
-		foreach (var index in phiUse)
+		foreach (var use in phiUse)
 		{
-			AddInstruction(index);
+			QueueInstruction(use);
 		}
 	}
 
@@ -400,14 +406,17 @@ public sealed class SparseConditionalConstantPropagation
 		// instead of adding items to the worklist, the whole block will be processed
 		for (; !node.IsBlockEndInstruction; node = node.Next)
 		{
-			if (node.IsEmpty)
+			if (node.IsEmptyOrNop)
 				continue;
 
-			var @continue = ProcessInstruction(node);
+			var more = ProcessInstruction(node);
 
-			executedStatements.Add(node);
+			if (node.ResultCount != 0 || node.BranchTargetsCount != 0)
+			{
+				executedStatements.Add(node);
+			}
 
-			if (!@continue)
+			if (!more)
 				return;
 		}
 	}
@@ -417,6 +426,8 @@ public sealed class SparseConditionalConstantPropagation
 		while (instructionWorkList.Count > 0)
 		{
 			var node = instructionWorkList.Pop();
+
+			//MainTrace?.Log(node.ToString());
 
 			if (node.Instruction == IR.Branch32
 				|| node.Instruction == IR.Branch64
@@ -434,8 +445,6 @@ public sealed class SparseConditionalConstantPropagation
 
 	private bool ProcessInstruction(Node node)
 	{
-		//MainTrace?.Log(node.ToString());
-
 		var instruction = node.Instruction;
 
 		if (instruction == IR.Move32
@@ -667,7 +676,7 @@ public sealed class SparseConditionalConstantPropagation
 		{
 			MainTrace?.Log(variable.ToString());
 
-			AddInstruction(variable);
+			QueueInstruction(variable);
 		}
 	}
 
@@ -680,7 +689,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		MainTrace?.Log(variable.ToString());
 
-		AddInstruction(variable);
+		QueueInstruction(variable);
 	}
 
 	private void AssignedNewObject(VariableState variable)
@@ -702,7 +711,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		MainTrace?.Log(variable.ToString());
 
-		AddInstruction(variable);
+		QueueInstruction(variable);
 	}
 
 	private void SetReferenceNotNull(VariableState variable)
@@ -714,7 +723,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		MainTrace?.Log(variable.ToString());
 
-		AddInstruction(variable);
+		QueueInstruction(variable);
 	}
 
 	private void Jmp(Node node)
@@ -1330,7 +1339,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		foreach (var block in node.BranchTargets)
 		{
-			AddExecutionBlock(block);
+			QueueExecutionBlock(block);
 		}
 	}
 
@@ -1342,8 +1351,6 @@ public sealed class SparseConditionalConstantPropagation
 
 	private void IfThenElse(Node node)
 	{
-		MainTrace?.Log(node.ToString());
-
 		var result = GetVariableState(node.Result);
 		var operand1 = GetVariableState(node.Operand2);
 		var operand2 = GetVariableState(node.Operand3);
@@ -1384,17 +1391,17 @@ public sealed class SparseConditionalConstantPropagation
 
 	private void Phi(Node node)
 	{
-		MainTrace?.Log(node.ToString());
+		//MainTrace?.Log("Phi: " + node.ToString());
 
 		var result = GetVariableState(node.Result);
 
-		if (result.IsOverDefined)
+		if (result.IsOverDefined && (!result.IsReferenceType || result.IsReferenceOverDefined))
 			return;
 
 		var sourceBlocks = node.PhiBlocks;
 		var currentBlock = node.Block;
 
-		MainTrace?.Log($"Loop: {currentBlock.PreviousBlocks.Count}");
+		//MainTrace?.Log($"Count: {currentBlock.PreviousBlocks.Count}");
 
 		for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
 		{
@@ -1404,21 +1411,20 @@ public sealed class SparseConditionalConstantPropagation
 
 			var executable = blockStates[predecessor.Sequence];
 
-			MainTrace?.Log($"# {index}: {predecessor} {(executable ? "Yes" : "No")}");
+			//MainTrace?.Log($"# {index}: {predecessor} {(executable ? "Yes" : "No")}");
 
 			if (!executable)
 				continue;
 
-			if (result.IsOverDefined)
-				continue;
-
 			var op = node.GetOperand(index);
-
 			var operand = GetVariableState(op);
 
-			MainTrace?.Log($"# {index}: {operand}");
+			//MainTrace?.Log($"# {index}: {operand}");
 
 			CheckAndUpdateNullAssignment(result, operand);
+
+			if (result.IsOverDefined && (!result.IsReferenceType || result.IsReferenceOverDefined))
+				continue;
 
 			if (operand.IsOverDefined)
 			{
