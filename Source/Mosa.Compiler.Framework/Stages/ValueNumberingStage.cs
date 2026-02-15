@@ -588,9 +588,14 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		var operand = node.Operand1;
 		var operandVN = GetValueNumber(operand);
 
+		if (operandVN == null)
+			return false;
+
 		foreach (var op in node.Operands)
 		{
-			if (operandVN == GetValueNumber(op))
+			var vn = GetValueNumber(op);
+
+			if (vn == null || operandVN != vn)
 				return false;
 		}
 
