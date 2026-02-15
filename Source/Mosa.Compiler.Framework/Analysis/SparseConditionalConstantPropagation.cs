@@ -19,38 +19,30 @@ public sealed class SparseConditionalConstantPropagation
 		private enum ReferenceStatusType
 		{ Unknown, DefinedNotNull, OverDefined }
 
+		private const int MaxConstants = 4;
+
 		private VariableStatusType Status;
 
 		private ReferenceStatusType ReferenceStatus;
 
 		public int ConstantCount;
 
-		private ulong Constant_1;
-		private ulong Constant_2;
-		private ulong Constant_3;
-		private ulong Constant_4;
+		private readonly ulong[] ConstantValues = new ulong[MaxConstants];
 
 		public IEnumerable<ulong> GetConstants()
 		{
 			if (ConstantCount == 0)
 				yield break;
 
-			if (ConstantCount >= 1)
-				yield return Constant_1;
-
-			if (ConstantCount >= 2)
-				yield return Constant_2;
-
-			if (ConstantCount >= 3)
-				yield return Constant_3;
-
-			if (ConstantCount >= 4)
-				yield return Constant_4;
+			for (var i = 0; i < ConstantCount && i < ConstantValues.Length; i++)
+			{
+				yield return ConstantValues[i];
+			}
 		}
 
-		public ulong ConstantUnsignedLongInteger => Constant_1;
+		public ulong ConstantUnsignedLongInteger => ConstantValues[0];
 
-		public long ConstantSignedLongInteger => (long)Constant_1;
+		public long ConstantSignedLongInteger => (long)ConstantValues[0];
 
 		public bool ConstantsContainZero
 		{
@@ -58,14 +50,11 @@ public sealed class SparseConditionalConstantPropagation
 			{
 				if (ConstantCount == 0)
 					return false;
-				if (ConstantCount >= 1 && Constant_1 == 0)
-					return true;
-				if (ConstantCount >= 2 && Constant_2 == 0)
-					return true;
-				if (ConstantCount >= 3 && Constant_3 == 0)
-					return true;
-				if (ConstantCount >= 4 && Constant_4 == 0)
-					return true;
+				for (var i = 0; i < ConstantCount && i < ConstantValues.Length; i++)
+				{
+					if (ConstantValues[i] == 0)
+						return true;
+				}
 				return false;
 			}
 		}
@@ -160,43 +149,23 @@ public sealed class SparseConditionalConstantPropagation
 			if (Status == VariableStatusType.OverDefined)
 				return false;
 
-			if (ConstantCount >= 1 && Constant_1 == value)
-				return false;
-
-			if (ConstantCount >= 2 && Constant_2 == value)
-				return false;
-
-			if (ConstantCount >= 3 && Constant_3 == value)
-				return false;
-
-			if (ConstantCount >= 4 && Constant_4 == value)
-				return false;
+			for (var i = 0; i < ConstantCount && i < ConstantValues.Length; i++)
+			{
+				if (ConstantValues[i] == value)
+					return false;
+			}
 
 			if (ConstantCount == 0)
 			{
-				Constant_1 = value;
+				ConstantValues[0] = value;
 				ConstantCount = 1;
 				Status = VariableStatusType.SingleConstant;
 				return true;
 			}
-			else if (ConstantCount == 1)
+			else if (ConstantCount < MaxConstants)
 			{
-				Constant_2 = value;
-				ConstantCount = 2;
-				Status = VariableStatusType.MultipleConstants;
-				return true;
-			}
-			else if (ConstantCount == 2)
-			{
-				Constant_3 = value;
-				ConstantCount = 3;
-				Status = VariableStatusType.MultipleConstants;
-				return true;
-			}
-			else if (ConstantCount == 3)
-			{
-				Constant_4 = value;
-				ConstantCount = 4;
+				ConstantValues[ConstantCount] = value;
+				ConstantCount++;
 				Status = VariableStatusType.MultipleConstants;
 				return true;
 			}
@@ -231,11 +200,12 @@ public sealed class SparseConditionalConstantPropagation
 			else if (HasMultipleConstants)
 			{
 				sb.Append($" ({ConstantCount}) =");
-				foreach (var i in GetConstants())
+				for (var i = 0; i < ConstantCount && i < ConstantValues.Length; i++)
 				{
-					sb.Append($" {i},");
+					sb.Append($" {ConstantValues[i]},");
 				}
-				sb.Length--;
+				if (sb.Length > 0 && sb[sb.Length - 1] == ',')
+					sb.Length--;
 			}
 
 			sb.Append(" [null: ");
@@ -436,10 +406,10 @@ public sealed class SparseConditionalConstantPropagation
 			QueueExecutionBlock(block.NextBlocks[0]);
 		}
 
-		ProcessInstructionsContinuiously(block.First);
+		ProcessInstructionsContinuously(block.First);
 	}
 
-	private void ProcessInstructionsContinuiously(Node node)
+	private void ProcessInstructionsContinuously(Node node)
 	{
 		// instead of adding items to the worklist, the whole block will be processed
 		for (; !node.IsBlockEndInstruction; node = node.Next)
@@ -472,7 +442,7 @@ public sealed class SparseConditionalConstantPropagation
 				|| node.Instruction == IR.BranchObject)
 			{
 				// special case
-				ProcessInstructionsContinuiously(node);
+				ProcessInstructionsContinuously(node);
 			}
 			else
 			{
