@@ -574,11 +574,11 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			return null;
 	}
 
-	private void SetValueNumber(Operand operand, Operand valueVumber)
+	private void SetValueNumber(Operand operand, Operand valueNumber)
 	{
-		trace?.Log($"Set: {operand} => {valueVumber}");
+		trace?.Log($"Set: {operand} => {valueNumber}");
 
-		MapToValueNumber[operand] = valueVumber;
+		MapToValueNumber[operand] = valueNumber;
 	}
 
 	private bool IsPhiUseless(Node node)
@@ -588,9 +588,14 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		var operand = node.Operand1;
 		var operandVN = GetValueNumber(operand);
 
+		if (operandVN == null)
+			return false;
+
 		foreach (var op in node.Operands)
 		{
-			if (operandVN == GetValueNumber(op))
+			var vn = GetValueNumber(op);
+
+			if (vn == null || operandVN != vn)
 				return false;
 		}
 

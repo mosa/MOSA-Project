@@ -11,7 +11,7 @@ public static class Alignment
 
 	public static int AlignUp(int position, int alignment)
 	{
-		return (int)AlignDown((uint)position, (uint)alignment);
+		return (int)AlignUp((uint)position, (uint)alignment);
 	}
 
 	public static ulong AlignUp(ulong position, uint alignment)

@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Transforms.Plug
 
 		public static bool IsPlugged(Context context, Transform transform)
 		{
-			if (context.Operand1.Method == null)
+			if (context.Operand1 == null || context.Operand1.Method == null)
 				return false;
 
 			return transform.Compiler.PlugSystem.GetReplacement(context.Operand1.Method) != null;

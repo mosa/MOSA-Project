@@ -34,7 +34,7 @@ public class RelocationAddendEntry
 	/// <summary>
 	/// Gets the Info field for 64bit elf
 	/// </summary>
-	public ushort Info64 => (ushort)((Symbol << 32) | ((ushort)RelocationType & 0xFFFFFFFF));
+	public ulong Info64 => (ulong)((Symbol << 32) | ((ulong)RelocationType & 0xFFFFFFFF));
 
 	public static uint GetEntrySize(LinkerFormatType elfType)
 	{
