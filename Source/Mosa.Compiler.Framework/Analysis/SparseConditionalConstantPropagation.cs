@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using System.Text;
-using Microsoft.VisualBasic;
 
 namespace Mosa.Compiler.Framework.Analysis;
 
@@ -954,7 +953,7 @@ public sealed class SparseConditionalConstantPropagation
 			result = (ulong)-((long)operand1);
 			return true;
 		}
-		else if (instruction == IR.Not32 || instruction == IR.Neg64)
+		else if (instruction == IR.Not32 || instruction == IR.Not64)
 		{
 			result = ~operand1;
 			return true;
@@ -1141,7 +1140,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (instruction == IR.ZeroExtend16x32)
 		{
-			result = (byte)operand1;
+			result = (ushort)operand1;
 			return true;
 		}
 		else if (instruction == IR.ZeroExtend8x64)
@@ -1201,7 +1200,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		if (node.ResultCount == 2)
 		{
-			var result2 = GetVariableState(node.Result);
+			var result2 = GetVariableState(node.Result2);
 
 			UpdateToOverDefined(result2);
 			SetReferenceOverdefined(result2);
@@ -1366,7 +1365,8 @@ public sealed class SparseConditionalConstantPropagation
 		if (result.IsOverDefined)
 			return;
 
-		if (operand1.IsOverDefined is true or true)
+		// If either branch produces an overdefined value, result is overdefined
+		if (operand1.IsOverDefined || operand2.IsOverDefined)
 		{
 			UpdateToOverDefined(result);
 		}
