@@ -13,14 +13,14 @@
 		<summary>MOSA BareMetal kernel and runtime libraries</summary>
 		<description
 		>This package contains the platform-agnostic BareMetal kernel and runtime libraries (including the core library).</description>
-		<copyright>Copyright © MOSA Project 2025</copyright>
+		<copyright>Copyright © MOSA Project 2026</copyright>
 		<tags>MOSA Compiler</tags>
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
-		<file src="..\..\bin\Mosa.Kernel.BareMetal.dll" target="lib\net9.0" />
-		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net9.0" />
-		<file src="..\..\bin\System.Runtime.dll" target="lib\net9.0" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net9.0" />
+		<file src="..\..\bin\Mosa.Kernel.BareMetal.dll" target="lib\net10.0" />
+		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net10.0" />
+		<file src="..\..\bin\System.Runtime.dll" target="lib\net10.0" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net10.0" />
 	</files>
 </package>

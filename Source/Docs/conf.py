@@ -15,25 +15,27 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
-project = 'MOSA Project'
-copyright = '2008-{}, Mosa Project & contributors'.format(2025)
-author = 'Phil Garcia'
+project = "MOSA Project"
+copyright = "2008-{}, Mosa Project & contributors".format(2026)
+author = "Phil Garcia"
 
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings.  They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autosectionlabel',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinxcontrib.httpdomain',
-    'sphinx_tabs.tabs',
-    'sphinx-prompt',
-	'sphinx.ext.graphviz',]
+extensions = [
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
+    "sphinxcontrib.httpdomain",
+    "sphinx_tabs.tabs",
+    "sphinx-prompt",
+    "sphinx.ext.graphviz",
+]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -49,13 +51,15 @@ html_theme = "sphinx_rtd_theme"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory.  They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # Activate autosectionlabel plugin
 autosectionlabel_prefix_document = True
 
+
 def setup(app):
-    app.add_css_file('css/sphinx_prompt_css.css')
+    app.add_css_file("css/sphinx_prompt_css.css")
+
 
 # -- GraphViz configuration ----------------------------------
-graphviz_output_format = 'svg'
+graphviz_output_format = "svg"

@@ -13,7 +13,7 @@
 		<summary>MOSA device drivers framework and file system</summary>
 		<description
 		>This package contains the MOSA device drivers framework along with the VFS (Virtual File System) and the file systems implementations.</description>
-		<copyright>Copyright © MOSA Project 2025</copyright>
+		<copyright>Copyright © MOSA Project 2026</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Platform" version="$version$" />
@@ -21,8 +21,8 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images" />
-		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net9.0" />
-		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net9.0" />
-		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net9.0" />
+		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net10.0" />
+		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net10.0" />
+		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net10.0" />
 	</files>
 </package>

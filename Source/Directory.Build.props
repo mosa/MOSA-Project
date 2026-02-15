@@ -3,9 +3,9 @@
 
 	<PropertyGroup>
 		<OutputPath>../../bin</OutputPath>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<RollForward>major</RollForward>
-		<LangVersion>13.0</LangVersion>
+		<LangVersion>14.0</LangVersion>
 		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<!--		<WarningsAsErrors>nullable</WarningsAsErrors>-->
@@ -13,7 +13,7 @@
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 		<CodeAnalysisRuleSet>../Common.ruleset</CodeAnalysisRuleSet>
 		<Company>MOSA Project</Company>
-		<Copyright>Copyright © MOSA Project 2025</Copyright>
+		<Copyright>Copyright © MOSA Project 2026</Copyright>
 		<AssemblyVersion>2.6.1.0</AssemblyVersion>
 	</PropertyGroup>
 
