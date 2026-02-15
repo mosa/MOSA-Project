@@ -799,7 +799,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreAll64BitsKnown)
 		{
-			result.SetValue((ulong)(-value1.BitsSet32));
+			result.SetValue((ulong)(-(long)value1.BitsSet));
 		}
 		else
 		{
@@ -1212,7 +1212,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
 			// divide by zero!
 			return;
@@ -1244,7 +1244,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
 		{
 			// divide by zero!
 			return;
@@ -1329,7 +1329,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value1.AreAll64BitsKnown && value2.AreLower6BitsKnown)
 		{
-			result.SetValue(value1.BitsSet32 << shift);
+			result.SetValue(value1.BitsSet << shift);
 		}
 		else if (value2.AreLower6BitsKnown && shift == 0)
 		{
@@ -1529,7 +1529,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreLower8BitsKnown)
 		{
-			result.SetValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
+			result.SetValue(value1.BitsSet8 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
 		}
 		else if (!knownSignedBit)
 		{
@@ -1557,7 +1557,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreLower8BitsKnown)
 		{
-			result.SetValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
+			result.SetValue(value1.BitsSet8 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
 		}
 		else if (!knownSignedBit)
 		{
@@ -1621,8 +1621,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowMin(value1.MinValue > byte.MaxValue ? 0 : value1.MinValue)
-				.NarrowMax(Math.Min(byte.MaxValue, value1.MaxValue))
+				.NarrowMin(value1.MinValue > ushort.MaxValue ? 0 : value1.MinValue)
+				.NarrowMax(Math.Min(ushort.MaxValue, value1.MaxValue))
 				.NarrowSetBits(value1.BitsSet16)
 				.NarrowClearBits(value1.BitsClear | Upper48BitsSet)
 				.SetStable(value1);
