@@ -18,6 +18,9 @@ public sealed class StoreLoadParam32 : BaseTransform
 		if (previous.Operand1 != context.Operand1)
 			return false;
 
+		if (previous.Result != context.Operand2)
+			return false;
+
 		return true;
 	}
 
