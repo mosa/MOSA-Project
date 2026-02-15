@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 
 				sourceBlocks.RemoveAt(index);
 
-				for (var i = index; index < node.OperandCount - 1; index++)
+				for (var i = index; i < node.OperandCount - 1; i++)
 				{
 					node.SetOperand(i, node.GetOperand(i + 1));
 				}
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework
 
 				phiBlocks.RemoveAt(index);
 
-				for (var i = index; index < node.OperandCount - 1; index++)
+				for (var i = index; i < node.OperandCount - 1; i++)
 				{
 					node.SetOperand(i, node.GetOperand(i + 1));
 				}

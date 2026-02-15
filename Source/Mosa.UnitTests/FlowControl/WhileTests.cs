@@ -183,4 +183,169 @@ public static class WhileTests
 
 		return count;
 	}
+
+	// === SCCP Bug Regression Tests ===
+	// These tests specifically target the bug where SCCP incorrectly eliminated null checks
+	// in while loops traversing linked objects, causing infinite loops
+
+	private class LinkedNode
+	{
+		public int Value;
+		public LinkedNode Next;
+
+		public LinkedNode(int value)
+		{
+			Value = value;
+		}
+	}
+
+	[MosaUnitTest]
+	public static int WhileObjectTraversalNullCheck()
+	{
+		// Create a simple linked list: 1 -> 2 -> 3 -> null
+		var head = new LinkedNode(1);
+		head.Next = new LinkedNode(2);
+		head.Next.Next = new LinkedNode(3);
+
+		var sum = 0;
+		var current = head;
+
+		// This while loop with null check was being incorrectly optimized by SCCP
+		while (current != null)
+		{
+			sum += current.Value;
+			current = current.Next;
+		}
+
+		return sum; // Should be 6
+	}
+
+	[MosaUnitTest]
+	public static int WhileObjectTraversalCount()
+	{
+		// Create a longer chain to ensure the loop iterates multiple times
+		var head = new LinkedNode(10);
+		var current = head;
+
+		for (int i = 1; i < 5; i++)
+		{
+			current.Next = new LinkedNode(10 + i);
+			current = current.Next;
+		}
+
+		// Traverse and count
+		current = head;
+		int count = 0;
+
+		while (current != null)
+		{
+			count++;
+			current = current.Next;
+		}
+
+		return count; // Should be 5
+	}
+
+	[MosaUnitTest]
+	public static bool WhileObjectTraversalLongChain()
+	{
+		// Create a chain of 10 nodes
+		var head = new LinkedNode(0);
+		var current = head;
+
+		for (int i = 1; i < 10; i++)
+		{
+			current.Next = new LinkedNode(i);
+			current = current.Next;
+		}
+
+		// Traverse to end
+		current = head;
+		int lastValue = -1;
+
+		while (current != null)
+		{
+			lastValue = current.Value;
+			current = current.Next;
+		}
+
+		return lastValue == 9; // Last node should have value 9
+	}
+
+	[MosaUnitTest]
+	public static int WhileObjectTraversalSum()
+	{
+		// Create list: 10 -> 20 -> 30 -> 40
+		var head = new LinkedNode(10);
+		head.Next = new LinkedNode(20);
+		head.Next.Next = new LinkedNode(30);
+		head.Next.Next.Next = new LinkedNode(40);
+
+		int sum = 0;
+		var current = head;
+
+		// This is the exact pattern from GCTests::SumLinkedList that was failing
+		while (current != null)
+		{
+			sum += current.Value;
+			current = current.Next;
+		}
+
+		return sum; // Should be 100
+	}
+
+	[MosaUnitTest]
+	public static bool WhileObjectTraversalWithModification()
+	{
+		// Create a chain and modify values during traversal
+		var head = new LinkedNode(1);
+		head.Next = new LinkedNode(2);
+		head.Next.Next = new LinkedNode(3);
+
+		var current = head;
+		int product = 1;
+
+		while (current != null)
+		{
+			product *= current.Value;
+			current.Value *= 10; // Modify during traversal
+			current = current.Next;
+		}
+
+		// Verify both product (1*2*3 = 6) and modifications occurred
+		return product == 6 && head.Value == 10 && head.Next.Value == 20;
+	}
+
+	[MosaUnitTest]
+	public static int WhileObjectNullCheckAtStart()
+	{
+		// Test when list is initially null
+		LinkedNode head = null;
+		int count = 0;
+
+		while (head != null)
+		{
+			count++;
+			head = head.Next;
+		}
+
+		return count; // Should be 0
+	}
+
+	[MosaUnitTest]
+	public static int WhileObjectSingleNode()
+	{
+		// Test with single-node list
+		var head = new LinkedNode(42);
+		var current = head;
+		int sum = 0;
+
+		while (current != null)
+		{
+			sum += current.Value;
+			current = current.Next;
+		}
+
+		return sum; // Should be 42
+	}
 }

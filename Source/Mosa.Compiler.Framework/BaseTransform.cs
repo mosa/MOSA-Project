@@ -94,10 +94,10 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 			if (operand1.IsInteger && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 				return true;
 
-			if (operand1.IsR4 && operand1.IsR4 && operand1.ConstantDouble == operand2.ConstantDouble)
+			if (operand1.IsR4 && operand2.IsR4 && operand1.ConstantFloat == operand2.ConstantFloat)
 				return true;
 
-			if (operand1.IsR8 && operand1.IsR8 && operand2.ConstantFloat == operand2.ConstantFloat)
+			if (operand1.IsR8 && operand2.IsR8 && operand1.ConstantDouble == operand2.ConstantDouble)
 				return true;
 		}
 
@@ -156,7 +156,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static bool Contains(Operand operand1, ulong a, ulong b, ulong c)
 	{
-		return IsResolvedConstant(operand1) && (operand1.ConstantUnsigned64 == a || operand1.ConstantUnsigned64 == b && operand1.ConstantUnsigned64 == c);
+		return operand1.IsResolvedConstant && (operand1.ConstantUnsigned64 == a || operand1.ConstantUnsigned64 == b || operand1.ConstantUnsigned64 == c);
 	}
 
 	protected static bool IsEvenInteger(Operand operand)
@@ -287,12 +287,12 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static bool IsSignedIntegerPositive(Operand operand)
 	{
-		return operand.IsResolvedConstant && operand.IsResolvedConstant && operand.IsInteger && operand.ConstantSigned64 >= 0;
+		return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantSigned64 >= 0;
 	}
 
 	protected static bool IsUnsignedIntegerPositive(Operand operand)
 	{
-		return operand.IsResolvedConstant && operand.IsResolvedConstant && operand.IsInteger && operand.ConstantUnsigned64 >= 0;
+		return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantUnsigned64 >= 0;
 	}
 
 	protected static bool IsZero(Operand operand)
@@ -332,12 +332,12 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 
 	protected static bool IsSignedMax32(uint a)
 	{
-		return a == uint.MaxValue;
+		return a == (uint)int.MaxValue;
 	}
 
 	protected static bool IsUnsignedMax32(uint a)
 	{
-		return (int)a == int.MaxValue;
+		return a == uint.MaxValue;
 	}
 
 	protected static bool IsSignedMax64(ulong a)
@@ -1321,7 +1321,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		immediate = false;
 
-		if (window != 0)
+		if (window <= 0)
 			return null;
 
 		var previous = context.Node.Previous;
@@ -1381,7 +1381,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		immediate = false;
 
-		if (window != 0)
+		if (window <= 0)
 			return null;
 
 		var next = context.Node.Next;

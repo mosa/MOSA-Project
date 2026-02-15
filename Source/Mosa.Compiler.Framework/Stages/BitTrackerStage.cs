@@ -441,7 +441,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
-			result.SetValue(value1.BitsSet32 + value2.BitsSet32);
+			result.SetValue(value1.BitsSet + value2.BitsSet);
 		}
 		else if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{

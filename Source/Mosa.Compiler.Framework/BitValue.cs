@@ -38,7 +38,7 @@ public sealed class BitValue
 
 	public bool Is64Bit => !Is32Bit;
 
-	public bool AreAll64BitsKnown => (BitsKnown & ulong.MaxValue) == ulong.MaxValue;
+	public bool AreAll64BitsKnown => BitsKnown == ulong.MaxValue;
 
 	public bool AreLower16BitsKnown => (BitsKnown & ushort.MaxValue) == ushort.MaxValue;
 
@@ -84,7 +84,7 @@ public sealed class BitValue
 
 	public bool IsSignBitClear64 => ((BitsClear >> 63) & 1) == 1;
 
-	public bool IsZeroOrOne => MinValue <= 1 || BitsClear == ~((ulong)1);
+	public bool IsZeroOrOne => MaxValue <= 1 || BitsClear == ~1ul;
 
 	public bool IsZero => (MinValue == 0 && MaxValue == 0) || (BitsClear == ~0ul);
 
@@ -297,7 +297,7 @@ public sealed class BitValue
 
 	public BitValue SetStable(BitValue a, BitValue b, BitValue c)
 	{
-		return SetStable(a.IsStable && b.IsStable & c.IsStable);
+		return SetStable(a.IsStable && b.IsStable && c.IsStable);
 	}
 
 	public BitValue SetStable()
@@ -342,15 +342,28 @@ public sealed class BitValue
 
 	#endregion Private Methods
 
+	private static string ToBinaryString(ulong value, int bits)
+	{
+		var sb = new StringBuilder(bits);
+
+		for (int i = bits - 1; i >= 0; i--)
+		{
+			sb.Append(((value >> i) & 1) != 0 ? '1' : '0');
+		}
+
+		return sb.ToString();
+	}
+
 	public override string ToString()
 	{
 		var sb = new StringBuilder();
+		var bits = Is32Bit ? 32 : 64;
 
 		sb.AppendLine($" Min: {MinValue}");
 		sb.AppendLine($" Max: {MaxValue}");
-		sb.AppendLine($" BitsSet:   {Convert.ToString((long)BitsSet, 2).PadLeft(64, '0')}");
-		sb.AppendLine($" BitsClear: {Convert.ToString((long)BitsClear, 2).PadLeft(64, '0')}");
-		sb.AppendLine($" BitsKnown: {Convert.ToString((long)BitsKnown, 2).PadLeft(64, '0')}");
+		sb.AppendLine($" BitsSet:   {ToBinaryString(BitsSet, bits).PadLeft(64, '0')}");
+		sb.AppendLine($" BitsClear: {ToBinaryString(BitsClear, bits).PadLeft(64, '0')}");
+		sb.AppendLine($" BitsKnown: {ToBinaryString(BitsKnown, bits).PadLeft(64, '0')}");
 
 		return sb.ToString();
 	}
