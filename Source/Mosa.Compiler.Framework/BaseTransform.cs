@@ -1321,7 +1321,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		immediate = false;
 
-		if (window != 0)
+		if (window <= 0)
 			return null;
 
 		var previous = context.Node.Previous;
@@ -1381,7 +1381,7 @@ public abstract class BaseTransform : IComparable<BaseTransform>
 	{
 		immediate = false;
 
-		if (window != 0)
+		if (window <= 0)
 			return null;
 
 		var next = context.Node.Next;
