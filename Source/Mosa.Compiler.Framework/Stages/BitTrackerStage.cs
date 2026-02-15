@@ -303,9 +303,24 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (!value.IsResolved)
 			return;
 
+		ulong constantValue;
+
+		if (value.MinValue == value.MaxValue)
+		{
+			constantValue = value.MinValue;
+		}
+		else if (value.AreAll64BitsKnown)
+		{
+			constantValue = value.BitsSet;
+		}
+		else
+		{
+			return;
+		}
+
 		var constantOperand = virtualRegister.IsInt32
-			? Operand.CreateConstant32((uint)value.BitsSet)
-			: Operand.CreateConstant64(value.BitsSet);
+			? Operand.CreateConstant32((uint)constantValue)
+			: Operand.CreateConstant64(constantValue);
 
 		if (trace != null)
 		{
