@@ -95,12 +95,12 @@ public class BuildTransformations : BuildBaseTemplate
 		if (expression.Contains("R#"))
 		{
 			GenerateTransformation(R4(name), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result), R4(result2), prefilter), optimization, priority, variations, log, commutativeInstructions);
-			GenerateTransformation(R8(name), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), R4(result2), prefilter), optimization, priority, variations, log, commutativeInstructions);
+			GenerateTransformation(R8(name), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result), R8(result2), prefilter), optimization, priority, variations, log, commutativeInstructions);
 		}
 		else if (expression.Contains("##"))
 		{
 			GenerateTransformation(To32(name), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result), To32(result2), prefilter), optimization, priority, variations, log, commutativeInstructions);
-			GenerateTransformation(To64(name), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), To32(result2), prefilter), optimization, priority, variations, log, commutativeInstructions);
+			GenerateTransformation(To64(name), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result), To64(result2), prefilter), optimization, priority, variations, log, commutativeInstructions);
 		}
 		else
 		{
@@ -713,7 +713,6 @@ public class BuildTransformations : BuildBaseTemplate
 				if (!register)
 				{
 					var first = transform.LabelSet.GetFirstPosition(parameter.Value);
-
 					var parent = NodeNbrToNode[first.NodeNbr];
 
 					var operandName = GetOperandName(first.OperandIndex);
@@ -890,13 +889,11 @@ public class BuildTransformations : BuildBaseTemplate
 		{
 			EmitCondition($"context.{operandName}.ConstantUnsigned64 != {CreateConstantName(operand)}");
 		}
-
-		if (operand.IsDouble)
+		else if (operand.IsDouble)
 		{
 			EmitCondition($"context.{operandName}.ConstantDouble != {CreateConstantName(operand)}");
 		}
-
-		if (operand.IsFloat)
+		else if (operand.IsFloat)
 		{
 			EmitCondition($"context.{operandName}.ConstantFloat != {CreateConstantName(operand)}");
 		}
