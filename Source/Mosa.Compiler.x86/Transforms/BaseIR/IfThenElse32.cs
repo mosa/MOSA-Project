@@ -32,14 +32,14 @@ public sealed class IfThenElse32 : BaseIRTransform
 		else if (operand2.IsConstant && !operand3.IsConstant)
 		{
 			context.SetInstruction(X86.Cmp32, null, operand1, Operand.Constant32_0);
-			context.AppendInstruction(X86.Mov32, result, operand2);                                 // true
+			context.AppendInstruction(X86.Mov32, result, operand2);                                     // true
 			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
 		}
 		else if (!operand2.IsConstant && operand3.IsConstant)
 		{
 			context.SetInstruction(X86.Cmp32, null, operand1, Operand.Constant32_0);
-			context.AppendInstruction(X86.Mov32, result, operand2);                                     // true
-			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
+			context.AppendInstruction(X86.Mov32, result, operand3);                                     // true
+			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, operand2);    // false
 		}
 		else if (!operand2.IsConstant && !operand3.IsConstant)
 		{
