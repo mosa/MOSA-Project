@@ -24,7 +24,7 @@ public sealed class SparseConditionalConstantPropagation
 
 		private ReferenceStatusType ReferenceStatus;
 
-		public int ConstantCount;
+		private int ConstantCount;
 
 		private readonly ulong[] ConstantValues = new ulong[MaxConstants];
 
