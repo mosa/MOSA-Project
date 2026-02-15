@@ -28,9 +28,9 @@ public sealed class MulCarryOut64ByOne : BaseTransform
 
 		var t1 = context.Operand1;
 
-		var e1 = Operand.Constant32_0;
+		var e1 = Operand.Constant64_0;
 
 		context.SetInstruction(IR.Move64, result, t1);
-		context.AppendInstruction(IR.Move32, result2, e1);
+		context.AppendInstruction(IR.Move64, result2, e1);
 	}
 }
