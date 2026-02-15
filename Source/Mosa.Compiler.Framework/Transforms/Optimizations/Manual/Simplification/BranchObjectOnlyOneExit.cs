@@ -18,7 +18,7 @@ public sealed class BranchObjectOnlyOneExit : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		var target = context.BranchTarget1;
+		var target = context.Block.NextBlocks[0];
 
 		context.SetNop();
 
