@@ -1239,8 +1239,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
 		{
 			result
-				.NarrowMax(value2.BitsSet - 1)
-				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet - 1))
+				.NarrowMax(value2.BitsSet32 - 1)
+				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet32 - 1))
 				.SetStable(value1, value2);
 		}
 		else
