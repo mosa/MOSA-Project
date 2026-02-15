@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using System.Text;
+using Microsoft.VisualBasic;
 
 namespace Mosa.Compiler.Framework.Analysis;
 
@@ -10,8 +11,6 @@ namespace Mosa.Compiler.Framework.Analysis;
 /// </summary>
 public sealed class SparseConditionalConstantPropagation
 {
-	private const int MaxConstants = 3;
-
 	private sealed class VariableState
 	{
 		private enum VariableStatusType
@@ -24,22 +23,59 @@ public sealed class SparseConditionalConstantPropagation
 
 		private ReferenceStatusType ReferenceStatus;
 
-		public int ConstantCount => Constants?.Count ?? 0;
+		public int ConstantCount;
 
-		public List<ulong> Constants { get; private set; }
+		private ulong Constant_1;
+		private ulong Constant_2;
+		private ulong Constant_3;
+		private ulong Constant_4;
 
-		public ulong ConstantUnsignedLongInteger => Constants[0];
+		public IEnumerable<ulong> GetConstants()
+		{
+			if (ConstantCount == 0)
+				yield break;
 
-		public long ConstantSignedLongInteger => (long)Constants[0];
+			if (ConstantCount >= 1)
+				yield return Constant_1;
 
-		public bool ConstantsContainZero { get; set; }
+			if (ConstantCount >= 2)
+				yield return Constant_2;
+
+			if (ConstantCount >= 3)
+				yield return Constant_3;
+
+			if (ConstantCount >= 4)
+				yield return Constant_4;
+		}
+
+		public ulong ConstantUnsignedLongInteger => Constant_1;
+
+		public long ConstantSignedLongInteger => (long)Constant_1;
+
+		public bool ConstantsContainZero
+		{
+			get
+			{
+				if (ConstantCount == 0)
+					return false;
+				if (ConstantCount >= 1 && Constant_1 == 0)
+					return true;
+				if (ConstantCount >= 2 && Constant_2 == 0)
+					return true;
+				if (ConstantCount >= 3 && Constant_3 == 0)
+					return true;
+				if (ConstantCount >= 4 && Constant_4 == 0)
+					return true;
+				return false;
+			}
+		}
 
 		public Operand Operand { get; }
 
 		public bool IsOverDefined
 		{
 			get => Status == VariableStatusType.OverDefined;
-			set { Status = VariableStatusType.OverDefined; Constants = null; Debug.Assert(value); }
+			set { Status = VariableStatusType.OverDefined; Debug.Assert(value); }
 		}
 
 		public bool IsUnknown => Status == VariableStatusType.Unknown;
@@ -86,7 +122,6 @@ public sealed class SparseConditionalConstantPropagation
 
 			IsVirtualRegister = operand.IsVirtualRegister;
 			IsReferenceType = operand.IsObject;
-			ConstantsContainZero = false;
 
 			if (IsVirtualRegister)
 			{
@@ -120,44 +155,54 @@ public sealed class SparseConditionalConstantPropagation
 			}
 		}
 
-		private void AppendConstant(ulong value)
-		{
-			Constants.Add(value);
-
-			if (value == 0)
-			{
-				ConstantsContainZero = true;
-			}
-		}
-
 		public bool AddConstant(ulong value)
 		{
 			if (Status == VariableStatusType.OverDefined)
 				return false;
 
-			if (Constants != null)
+			if (ConstantCount >= 1 && Constant_1 == value)
+				return false;
+
+			if (ConstantCount >= 2 && Constant_2 == value)
+				return false;
+
+			if (ConstantCount >= 3 && Constant_3 == value)
+				return false;
+
+			if (ConstantCount >= 4 && Constant_4 == value)
+				return false;
+
+			if (ConstantCount == 0)
 			{
-				if (Constants.Contains(value))
-					return false;
-			}
-			else
-			{
-				Constants = new List<ulong>(2);
-				AppendConstant(value);
+				Constant_1 = value;
+				ConstantCount = 1;
 				Status = VariableStatusType.SingleConstant;
 				return true;
 			}
-
-			if (Constants.Count > MaxConstants)
+			else if (ConstantCount == 1)
 			{
-				Status = VariableStatusType.OverDefined;
-				Constants = null;
+				Constant_2 = value;
+				ConstantCount = 2;
+				Status = VariableStatusType.MultipleConstants;
+				return true;
+			}
+			else if (ConstantCount == 2)
+			{
+				Constant_3 = value;
+				ConstantCount = 3;
+				Status = VariableStatusType.MultipleConstants;
+				return true;
+			}
+			else if (ConstantCount == 3)
+			{
+				Constant_4 = value;
+				ConstantCount = 4;
+				Status = VariableStatusType.MultipleConstants;
 				return true;
 			}
 
-			AppendConstant(value);
-
-			Status = VariableStatusType.MultipleConstants;
+			ConstantCount = 0;
+			Status = VariableStatusType.OverDefined;
 			return true;
 		}
 
@@ -185,8 +230,8 @@ public sealed class SparseConditionalConstantPropagation
 			}
 			else if (HasMultipleConstants)
 			{
-				sb.Append($" ({Constants.Count}) =");
-				foreach (var i in Constants)
+				sb.Append($" ({ConstantCount}) =");
+				foreach (var i in GetConstants())
 				{
 					sb.Append($" {i},");
 				}
@@ -746,7 +791,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (operand.HasOnlyConstants)
 		{
-			foreach (var c in operand.Constants)
+			foreach (var c in operand.GetConstants())
 			{
 				UpdateToConstant(result, c);
 
@@ -857,7 +902,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (operand1.HasOnlyConstants)
 		{
-			foreach (var c1 in operand1.Constants)
+			foreach (var c1 in operand1.GetConstants())
 			{
 				if (SignOrZeroExtend(node.Instruction, c1, out var value))
 				{
@@ -909,7 +954,7 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (operand1.HasOnlyConstants)
 		{
-			foreach (var c1 in operand1.Constants)
+			foreach (var c1 in operand1.GetConstants())
 			{
 				if (IntegerOperation1(node.Instruction, c1, out var value))
 				{
@@ -984,9 +1029,9 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (operand1.HasOnlyConstants && operand2.HasOnlyConstants)
 		{
-			foreach (var c1 in operand1.Constants)
+			foreach (var c1 in operand1.GetConstants())
 			{
-				foreach (var c2 in operand2.Constants)
+				foreach (var c2 in operand2.GetConstants())
 				{
 					if (IntegerOperation(node.Instruction, c1, c2, node.ConditionCode, out var value))
 					{
@@ -1241,9 +1286,9 @@ public sealed class SparseConditionalConstantPropagation
 		{
 			bool? final = null;
 
-			foreach (var c1 in operand1.Constants)
+			foreach (var c1 in operand1.GetConstants())
 			{
-				foreach (var c2 in operand2.Constants)
+				foreach (var c2 in operand2.GetConstants())
 				{
 					//bool? compare = Compare(c1, c2, node.ConditionCode);
 
@@ -1357,14 +1402,14 @@ public sealed class SparseConditionalConstantPropagation
 		}
 		else if (operand1.HasOnlyConstants && operand2.HasOnlyConstants)
 		{
-			foreach (var c in operand1.Constants)
+			foreach (var c in operand1.GetConstants())
 			{
 				UpdateToConstant(result, c);
 
 				if (result.IsOverDefined)
 					return;
 			}
-			foreach (var c in operand2.Constants)
+			foreach (var c in operand2.GetConstants())
 			{
 				UpdateToConstant(result, c);
 
@@ -1431,7 +1476,7 @@ public sealed class SparseConditionalConstantPropagation
 			}
 			else if (operand.HasMultipleConstants)
 			{
-				foreach (var c in operand.Constants)
+				foreach (var c in operand.GetConstants())
 				{
 					UpdateToConstant(result, c);
 
