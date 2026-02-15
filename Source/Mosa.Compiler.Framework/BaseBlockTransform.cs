@@ -8,7 +8,7 @@ public abstract class BaseBlockTransform : IComparable<BaseBlockTransform>
 
 	public bool Log { get; private set; }
 
-	public string Name { get; }
+	public string Name { get; init; }
 
 	public virtual int Priority { get; } = 0;
 

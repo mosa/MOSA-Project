@@ -225,27 +225,27 @@ public class DataRow
 
 	public bool HasVersion(DataRowVersion version)
 	{
-		throw null;
+		throw new NotImplementedException();
 	}
 
 	public bool IsNull(DataColumn column)
 	{
-		throw null;
+		throw new NotImplementedException();
 	}
 
 	public bool IsNull(DataColumn column, DataRowVersion version)
 	{
-		throw null;
+		throw new NotImplementedException();
 	}
 
 	public bool IsNull(int columnIndex)
 	{
-		throw null;
+		throw new NotImplementedException();
 	}
 
 	public bool IsNull(string columnName)
 	{
-		throw null;
+		throw new NotImplementedException();
 	}
 
 	public void RejectChanges()
