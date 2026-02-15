@@ -19,16 +19,21 @@ public sealed class Switch : BaseTransform
 	public override void Transform(Context context, Transform transform)
 	{
 		var index = context.Operand1.ConstantSigned32;
-		var max = context.BranchTargets.Count - 1;
+		var count = context.BranchTargetsCount;
 
-		var targets = new List<BasicBlock>(context.BranchTargets.Count);
-
-		foreach (var target in context.BranchTargets)
+		// Guard: no branch targets -> nothing to fold
+		if (count == 0)
 		{
-			targets.Add(target);
+			context.SetNop();
+			return;
 		}
 
-		if (index < max)
+		// Copy targets for phi update after modifications
+		var targets = new List<BasicBlock>(context.BranchTargets);
+
+		// If the constant index is inside the valid target range, jump to that target.
+		// Otherwise, fall through.
+		if (index >= 0 && index < count)
 		{
 			var newtarget = context.BranchTargets[index];
 
