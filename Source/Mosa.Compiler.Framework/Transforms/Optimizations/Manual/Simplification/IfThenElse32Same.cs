@@ -15,6 +15,6 @@ public sealed class IfThenElse32Same : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IR.Move32, context.Result, context.Operand1);
+		context.SetInstruction(IR.Move32, context.Result, context.Operand2);
 	}
 }

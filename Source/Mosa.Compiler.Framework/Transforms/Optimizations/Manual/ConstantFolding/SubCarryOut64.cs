@@ -5,7 +5,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding;
 
 /// <summary>
-/// AddCarryOut64
+/// SubCarryOut64
 /// </summary>
 public sealed class SubCarryOut64 : BaseTransform
 {

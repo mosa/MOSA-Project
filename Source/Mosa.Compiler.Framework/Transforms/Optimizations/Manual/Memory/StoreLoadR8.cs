@@ -30,6 +30,9 @@ public sealed class StoreLoadR8 : BaseTransform
 		if (previous.Operand2.ConstantUnsigned64 != context.Operand2.ConstantUnsigned64)
 			return false;
 
+		if (previous.Result != context.Operand3)
+			return false;
+
 		return true;
 	}
 

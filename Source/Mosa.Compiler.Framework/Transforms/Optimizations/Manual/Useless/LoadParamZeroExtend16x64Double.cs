@@ -30,6 +30,6 @@ public sealed class LoadParamZeroExtend16x64Double : BaseTransform
 		var result = context.Result;
 		var operand1 = context.Operand1;
 
-		context.SetInstruction(IR.Move32, result, operand1);
+		context.SetInstruction(IR.Move64, result, operand1);
 	}
 }

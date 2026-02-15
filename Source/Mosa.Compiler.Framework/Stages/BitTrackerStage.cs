@@ -40,116 +40,91 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(InstructionsRemovedCount);
 		Register(BranchesRemovedCount);
 
-		Register(IR.Phi32, Phi32);
-		Register(IR.Phi64, Phi64);
-
-		Register(IR.Move32, Move32);
-		Register(IR.Move64, Move64);
-
-		Register(IR.Truncate64x32, Truncate64x32);
-
-		Register(IR.GetLow32, GetLow32);
-		Register(IR.GetHigh32, GetHigh32);
-		Register(IR.To64, To64);
-
-		Register(IR.Or32, Or32);
-		Register(IR.Or64, Or64);
+		Register(IR.Add32, Add32);
+		Register(IR.Add64, Add64);
+		Register(IR.AddCarryIn32, AddCarryIn32);
+		Register(IR.AddCarryIn64, AddCarryIn64);
+		Register(IR.AddCarryOut32, Result2NarrowToBoolean);
+		Register(IR.AddCarryOut64, Result2NarrowToBoolean);
+		Register(IR.AddOverflowOut32, Result2NarrowToBoolean);
+		Register(IR.AddOverflowOut64, Result2NarrowToBoolean);
 		Register(IR.And32, And32);
 		Register(IR.And64, And64);
-		Register(IR.Xor32, Xor32);
-		Register(IR.Xor64, Xor64);
-		Register(IR.Neg32, Neg32);
-		Register(IR.Neg64, Neg64);
-		Register(IR.Not32, Not32);
-		Register(IR.Not64, Not64);
-
-		Register(IR.LoadZeroExtend8x32, LoadZeroExtend8x32);
-		Register(IR.LoadZeroExtend16x32, LoadZeroExtend16x32);
-
-		Register(IR.LoadZeroExtend8x64, LoadZeroExtend8x64);
-		Register(IR.LoadZeroExtend16x64, LoadZeroExtend16x64);
-		Register(IR.LoadZeroExtend32x64, LoadZeroExtend32x64);
-
+		Register(IR.ArithShiftRight32, ArithShiftRight32);
+		Register(IR.ArithShiftRight64, ArithShiftRight64);
+		Register(IR.Compare32x32, Compare);
+		Register(IR.Compare32x64, Compare);
+		Register(IR.Compare64x32, Compare);
+		Register(IR.Compare64x64, Compare);
+		Register(IR.CompareManagedPointer, Compare);
+		Register(IR.CompareObject, Compare);
+		Register(IR.CompareR4, Compare);
+		Register(IR.CompareR8, Compare);
+		Register(IR.DivSigned32, DivSigned32);
+		Register(IR.DivSigned64, DivSigned64);
+		Register(IR.DivUnsigned32, DivUnsigned32);
+		Register(IR.DivUnsigned64, DivUnsigned64);
+		Register(IR.GetHigh32, GetHigh32);
+		Register(IR.GetLow32, GetLow32);
+		Register(IR.IfThenElse32, IfThenElse32);
+		Register(IR.IfThenElse64, IfThenElse64);
 		Register(IR.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
 		Register(IR.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
 		Register(IR.LoadParamZeroExtend8x64, LoadParamZeroExtend8x64);
 		Register(IR.LoadParamZeroExtend16x64, LoadParamZeroExtend16x64);
 		Register(IR.LoadParamZeroExtend32x64, LoadParamZeroExtend32x64);
-
-		Register(IR.ShiftRight32, ShiftRight32);
-		Register(IR.ShiftRight64, ShiftRight64);
-
-		Register(IR.ArithShiftRight32, ArithShiftRight32);
-		Register(IR.ArithShiftRight64, ArithShiftRight64);
-
-		Register(IR.ShiftLeft32, ShiftLeft32);
-		Register(IR.ShiftLeft64, ShiftLeft64);
-
-		Register(IR.Compare32x32, Compare);
-		Register(IR.Compare32x64, Compare);
-		Register(IR.Compare64x32, Compare);
-		Register(IR.Compare64x64, Compare);
-		Register(IR.CompareObject, Compare);
-		Register(IR.CompareManagedPointer, Compare);
-		Register(IR.CompareR4, Compare);
-		Register(IR.CompareR8, Compare);
-
-		Register(IR.MulUnsigned32, MulUnsigned32);
-		Register(IR.MulUnsigned64, MulUnsigned64);
-
+		Register(IR.LoadZeroExtend8x32, LoadZeroExtend8x32);
+		Register(IR.LoadZeroExtend16x32, LoadZeroExtend16x32);
+		Register(IR.LoadZeroExtend8x64, LoadZeroExtend8x64);
+		Register(IR.LoadZeroExtend16x64, LoadZeroExtend16x64);
+		Register(IR.LoadZeroExtend32x64, LoadZeroExtend32x64);
+		Register(IR.Move32, Move32);
+		Register(IR.Move64, Move64);
 		Register(IR.MulSigned32, MulSigned32);
 		Register(IR.MulSigned64, MulSigned64);
-
-		Register(IR.Add32, Add32);
-		Register(IR.Add64, Add64);
-		Register(IR.AddCarryIn32, AddCarryIn32);
-
-		Register(IR.SignExtend16x32, SignExtend16x32);
-		Register(IR.SignExtend8x32, SignExtend8x32);
-		Register(IR.SignExtend16x64, SignExtend16x64);
-		Register(IR.SignExtend8x64, SignExtend8x64);
-		Register(IR.SignExtend32x64, SignExtend32x64);
-
-		Register(IR.ZeroExtend16x32, ZeroExtend16x32);
-		Register(IR.ZeroExtend8x32, ZeroExtend8x32);
-		Register(IR.ZeroExtend16x64, ZeroExtend16x64);
-		Register(IR.ZeroExtend8x64, ZeroExtend8x64);
-		Register(IR.ZeroExtend32x64, ZeroExtend32x64);
-
+		Register(IR.MulUnsigned32, MulUnsigned32);
+		Register(IR.MulUnsigned64, MulUnsigned64);
+		Register(IR.Neg32, Neg32);
+		Register(IR.Neg64, Neg64);
+		Register(IR.NewArray, NewArray);
+		Register(IR.NewObject, NewObject);
+		Register(IR.NewString, NewString);
+		Register(IR.Not32, Not32);
+		Register(IR.Not64, Not64);
+		Register(IR.Or32, Or32);
+		Register(IR.Or64, Or64);
+		Register(IR.Phi32, Phi32);
+		Register(IR.Phi64, Phi64);
+		Register(IR.RemSigned32, RemSigned32);
+		Register(IR.RemSigned64, RemSigned64);
 		Register(IR.RemUnsigned32, RemUnsigned32);
 		Register(IR.RemUnsigned64, RemUnsigned64);
-
-		Register(IR.IfThenElse32, IfThenElse32);
-		Register(IR.IfThenElse64, IfThenElse64);
-		Register(IR.NewString, NewString);
-		Register(IR.NewObject, NewObject);
-		Register(IR.NewArray, NewArray);
-
-		Register(IR.DivUnsigned32, DivUnsigned32);
-		Register(IR.DivUnsigned64, DivUnsigned64);
-
-		Register(IR.AddCarryOut32, Result2NarrowToBoolean);
-		Register(IR.AddCarryOut64, Result2NarrowToBoolean);
+		Register(IR.ShiftLeft32, ShiftLeft32);
+		Register(IR.ShiftLeft64, ShiftLeft64);
+		Register(IR.ShiftRight32, ShiftRight32);
+		Register(IR.ShiftRight64, ShiftRight64);
+		Register(IR.SignExtend8x32, SignExtend8x32);
+		Register(IR.SignExtend16x32, SignExtend16x32);
+		Register(IR.SignExtend8x64, SignExtend8x64);
+		Register(IR.SignExtend16x64, SignExtend16x64);
+		Register(IR.SignExtend32x64, SignExtend32x64);
+		Register(IR.Sub32, Sub32);
+		Register(IR.Sub64, Sub64);
+		Register(IR.SubCarryIn32, SubCarryIn32);
+		Register(IR.SubCarryIn64, SubCarryIn64);
 		Register(IR.SubCarryOut32, Result2NarrowToBoolean);
 		Register(IR.SubCarryOut64, Result2NarrowToBoolean);
 		Register(IR.SubOverflowOut32, Result2NarrowToBoolean);
 		Register(IR.SubOverflowOut64, Result2NarrowToBoolean);
-		Register(IR.AddOverflowOut32, Result2NarrowToBoolean);
-		Register(IR.AddOverflowOut64, Result2NarrowToBoolean);
-
-		// TODO:
-
-		// DivSigned32	-- if known to be unsigned, then treat like DivUnsigned
-		// DivSigned64	-- if known to be unsigned, then treat like DivUnsigned
-		// RemSigned32	-- if known to be unsigned, then treat like RemUnsigned
-		// RemSigned64	-- if known to be unsigned, then treat like RemUnsigned
-
-		// Sub32
-		// Sub64
-		// AddCarryIn32
-		// AddCarryIn64
-		// SubCarryIn32
-		// SubCarryIn64
+		Register(IR.To64, To64);
+		Register(IR.Truncate64x32, Truncate64x32);
+		Register(IR.Xor32, Xor32);
+		Register(IR.Xor64, Xor64);
+		Register(IR.ZeroExtend8x32, ZeroExtend8x32);
+		Register(IR.ZeroExtend16x32, ZeroExtend16x32);
+		Register(IR.ZeroExtend8x64, ZeroExtend8x64);
+		Register(IR.ZeroExtend16x64, ZeroExtend16x64);
+		Register(IR.ZeroExtend32x64, ZeroExtend32x64);
 	}
 
 	private void Register(BaseInstruction instruction, NodeVisitationDelegate method)
@@ -303,9 +278,24 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (!value.IsResolved)
 			return;
 
+		ulong constantValue;
+
+		if (value.MinValue == value.MaxValue)
+		{
+			constantValue = value.MinValue;
+		}
+		else if (value.AreAll64BitsKnown)
+		{
+			constantValue = value.BitsSet;
+		}
+		else
+		{
+			return;
+		}
+
 		var constantOperand = virtualRegister.IsInt32
-			? Operand.CreateConstant32((uint)value.BitsSet)
-			: Operand.CreateConstant64(value.BitsSet);
+			? Operand.CreateConstant32((uint)constantValue)
+			: Operand.CreateConstant64(constantValue);
 
 		if (trace != null)
 		{
@@ -488,6 +478,113 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			result.Narrow(value2).SetStable(value2);
 		}
 		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0 && value3.AreLower32BitsKnown && value3.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2, value3);
+		}
+	}
+
+	private static void AddCarryIn64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+		var value3 = node.Operand3.BitValue;
+
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value3.AreAll64BitsKnown)
+		{
+			result.SetValue(value1.BitsSet + value2.BitsSet + value3.BitsSet);
+		}
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 0 && value3.AreAll64BitsKnown && value3.BitsSet == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0 && value3.AreAll64BitsKnown && value3.BitsSet == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2, value3);
+		}
+	}
+
+	private static void Sub32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result.SetValue(value1.BitsSet32 - value2.BitsSet32);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+	}
+
+	private static void Sub64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result.SetValue(value1.BitsSet - value2.BitsSet);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+	}
+
+	private static void SubCarryIn32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+		var value3 = node.Operand3.BitValue;
+
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && value3.AreLower32BitsKnown)
+		{
+			result.SetValue(value1.BitsSet32 - value2.BitsSet32 - value3.BitsSet32);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0 && value3.AreLower32BitsKnown && value3.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2, value3);
+		}
+	}
+
+	private static void SubCarryIn64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+		var value3 = node.Operand3.BitValue;
+
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value3.AreAll64BitsKnown)
+		{
+			result.SetValue(value1.BitsSet - value2.BitsSet - value3.BitsSet);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0 && value3.AreAll64BitsKnown && value3.BitsSet == 0)
 		{
 			result.Narrow(value1).SetStable(value1);
 		}
@@ -799,7 +896,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreAll64BitsKnown)
 		{
-			result.SetValue((ulong)(-value1.BitsSet32));
+			result.SetValue((ulong)(-(long)value1.BitsSet));
 		}
 		else
 		{
@@ -1009,11 +1106,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// TODO: Special power of two handling for bits, handle similar to shift left
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1058,11 +1155,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// FUTURE: Special power of two handling for bits, handle similar to shift left
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1102,11 +1199,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// FUTURE: Special power of two handling for bits, handle similar to shift left
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1212,7 +1309,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
 			// divide by zero!
 			return;
@@ -1224,8 +1321,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
 		{
 			result
-				.NarrowMax(value2.BitsSet - 1)
-				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet - 1))
+				.NarrowMax(value2.BitsSet32 - 1)
+				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet32 - 1))
 				.SetStable(value1, value2);
 		}
 		else
@@ -1240,11 +1337,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
 			// divide by zero!
 			return;
@@ -1253,7 +1350,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(value1.BitsSet % value2.BitsSet);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet != 0)
 		{
 			result
 				.NarrowMax(value2.BitsSet - 1)
@@ -1323,13 +1420,13 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// FUTURE: Using the known highest and lowers bit sequences, the bit sets and ranges can be set and narrower respectively
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
 		else if (value1.AreAll64BitsKnown && value2.AreLower6BitsKnown)
 		{
-			result.SetValue(value1.BitsSet32 << shift);
+			result.SetValue(value1.BitsSet << shift);
 		}
 		else if (value2.AreLower6BitsKnown && shift == 0)
 		{
@@ -1401,7 +1498,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		var shift = (int)(value2.BitsSet & 0b111111);
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1529,7 +1626,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreLower8BitsKnown)
 		{
-			result.SetValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
+			result.SetValue(value1.BitsSet8 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
 		}
 		else if (!knownSignedBit)
 		{
@@ -1557,7 +1654,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (value1.AreLower8BitsKnown)
 		{
-			result.SetValue(value1.BitsSet16 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
+			result.SetValue(value1.BitsSet8 | (((value1.BitsSet >> 7) & 1) == 1 ? Upper56BitsSet : 0));
 		}
 		else if (!knownSignedBit)
 		{
@@ -1621,8 +1718,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowMin(value1.MinValue > byte.MaxValue ? 0 : value1.MinValue)
-				.NarrowMax(Math.Min(byte.MaxValue, value1.MaxValue))
+				.NarrowMin(value1.MinValue > ushort.MaxValue ? 0 : value1.MinValue)
+				.NarrowMax(Math.Min(ushort.MaxValue, value1.MaxValue))
 				.NarrowSetBits(value1.BitsSet16)
 				.NarrowClearBits(value1.BitsClear | Upper48BitsSet)
 				.SetStable(value1);
@@ -1802,7 +1899,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1811,7 +1908,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			// divide by zero!
 			return;
 		}
-		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet != 0)
 		{
 			result.SetValue(value1.BitsSet / value2.BitsSet);
 		}
@@ -1822,6 +1919,154 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 				.NarrowMax(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue)
 				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue))
 				.SetStable(value1, value2);
+		}
+	}
+
+	private static void DivSigned32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+
+		// If known to be unsigned, treat like DivUnsigned
+		var isUnsigned = !IntegerTwiddling.HasSignBitSet((int)value1.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((int)value2.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((int)value1.MinValue)
+			&& !IntegerTwiddling.HasSignBitSet((int)value2.MinValue);
+
+		if (isUnsigned)
+		{
+			DivUnsigned32(node);
+			return;
+		}
+
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		{
+			result.SetValue(0);
+		}
+		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
+		{
+			result.SetValue((ulong)(int)((int)value1.BitsSet32 / (int)value2.BitsSet32));
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			// divide by zero!
+			return;
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+	}
+
+	private static void DivSigned64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+
+		// If known to be unsigned, treat like DivUnsigned
+		var isUnsigned = !IntegerTwiddling.HasSignBitSet((long)value1.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
+			&& !IntegerTwiddling.HasSignBitSet((long)value2.MinValue);
+
+		if (isUnsigned)
+		{
+			DivUnsigned64(node);
+			return;
+		}
+
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+		{
+			result.SetValue(0);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			// divide by zero!
+			return;
+		}
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet != 0)
+		{
+			result.SetValue((ulong)((long)value1.BitsSet / (long)value2.BitsSet));
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+	}
+
+	private static void RemSigned32(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+
+		// If known to be unsigned, treat like RemUnsigned
+		var isUnsigned = !IntegerTwiddling.HasSignBitSet((int)value1.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((int)value2.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((int)value1.MinValue)
+			&& !IntegerTwiddling.HasSignBitSet((int)value2.MinValue);
+
+		if (isUnsigned)
+		{
+			RemUnsigned32(node);
+			return;
+		}
+
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		{
+			result.SetValue(0);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			// divide by zero!
+			return;
+		}
+		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result.SetValue((ulong)(int)((int)value1.BitsSet32 % (int)value2.BitsSet32));
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+	}
+
+	private static void RemSigned64(Node node)
+	{
+		var result = node.Result.BitValue;
+		var value1 = node.Operand1.BitValue;
+		var value2 = node.Operand2.BitValue;
+
+		// If known to be unsigned, treat like RemUnsigned
+		var isUnsigned = !IntegerTwiddling.HasSignBitSet((long)value1.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
+			&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
+			&& !IntegerTwiddling.HasSignBitSet((long)value2.MinValue);
+
+		if (isUnsigned)
+		{
+			RemUnsigned64(node);
+			return;
+		}
+
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+		{
+			result.SetValue(0);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			// divide by zero!
+			return;
+		}
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet != 0)
+		{
+			result.SetValue((ulong)((long)value1.BitsSet % (long)value2.BitsSet));
+		}
+		else
+		{
+			result.SetStable(value1, value2);
 		}
 	}
 

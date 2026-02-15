@@ -15,6 +15,6 @@ public sealed class IfThenElse64Same : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
-		context.SetInstruction(IR.Move64, context.Result, context.Operand1);
+		context.SetInstruction(IR.Move64, context.Result, context.Operand2);
 	}
 }

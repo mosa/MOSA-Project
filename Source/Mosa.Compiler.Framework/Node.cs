@@ -298,7 +298,10 @@ public sealed class Node
 		}
 		set
 		{
-			Options |= InstructionOption.Marked;
+			if (value)
+				Options |= InstructionOption.Marked;
+			else
+				Options &= ~InstructionOption.Marked;
 		}
 	}
 
@@ -313,7 +316,10 @@ public sealed class Node
 		}
 		set
 		{
-			Options |= InstructionOption.SetFlags;
+			if (value)
+				Options |= InstructionOption.SetFlags;
+			else
+				Options &= ~InstructionOption.SetFlags;
 		}
 	}
 
@@ -328,7 +334,10 @@ public sealed class Node
 		}
 		set
 		{
-			Options |= InstructionOption.UpDirection;
+			if (value)
+				Options |= InstructionOption.UpDirection;
+			else
+				Options &= ~InstructionOption.UpDirection;
 		}
 	}
 
@@ -344,7 +353,10 @@ public sealed class Node
 		}
 		set
 		{
-			Options |= InstructionOption.PrefixAdd;
+			if (value)
+				Options |= InstructionOption.PrefixAdd;
+			else
+				Options &= ~InstructionOption.PrefixAdd;
 		}
 	}
 
@@ -360,7 +372,10 @@ public sealed class Node
 		}
 		set
 		{
-			Options |= InstructionOption.Writeback;
+			if (value)
+				Options |= InstructionOption.Writeback;
+			else
+				Options &= ~InstructionOption.Writeback;
 		}
 	}
 
