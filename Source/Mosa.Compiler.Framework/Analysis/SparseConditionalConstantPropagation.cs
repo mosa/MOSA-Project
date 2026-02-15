@@ -2,8 +2,6 @@
 
 using System.Diagnostics;
 using System.Text;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Instructions;
 
 namespace Mosa.Compiler.Framework.Analysis;
 
@@ -12,7 +10,7 @@ namespace Mosa.Compiler.Framework.Analysis;
 /// </summary>
 public sealed class SparseConditionalConstantPropagation
 {
-	private const int MAXCONSTANTS = 5;
+	private const int MaxConstants = 3;
 
 	private sealed class VariableState
 	{
@@ -150,7 +148,7 @@ public sealed class SparseConditionalConstantPropagation
 				return true;
 			}
 
-			if (Constants.Count > MAXCONSTANTS)
+			if (Constants.Count > MaxConstants)
 			{
 				Status = VariableStatusType.OverDefined;
 				Constants = null;
@@ -221,7 +219,7 @@ public sealed class SparseConditionalConstantPropagation
 	private readonly BaseMethodCompilerStage.CreateTraceHandler CreateTrace;
 	private readonly TraceLog MainTrace;
 
-	private readonly KeyedList<BasicBlock, Node> phiStatements;
+	private readonly HashSet<Node> phiStatements;
 
 	private readonly bool Is32BitPlatform;
 
@@ -236,12 +234,12 @@ public sealed class SparseConditionalConstantPropagation
 		Is32BitPlatform = is32BitPlatform;
 
 		variableStates = new Dictionary<Operand, VariableState>();
-		phiStatements = new KeyedList<BasicBlock, Node>();
+		phiStatements = new HashSet<Node>();
 		instructionWorkList = new Stack<Node>();
 		blockWorklist = new Stack<BasicBlock>();
 		executedStatements = new HashSet<Node>();
 
-		MainTrace = CreateTrace("SparseConditionalConstantPropagation", 5);
+		MainTrace = CreateTrace("Process", 5);
 
 		blockStates = new bool[BasicBlocks.Count];
 
@@ -256,6 +254,12 @@ public sealed class SparseConditionalConstantPropagation
 		while (blockWorklist.Count > 0 || instructionWorkList.Count > 0)
 		{
 			ProcessBlocks();
+
+			foreach (var use in phiStatements)
+			{
+				QueueInstruction(use);
+			}
+
 			ProcessInstructions();
 		}
 
@@ -388,17 +392,6 @@ public sealed class SparseConditionalConstantPropagation
 		}
 
 		ProcessInstructionsContinuiously(block.First);
-
-		// re-analyze phi statements
-		var phiUse = phiStatements.Get(block);
-
-		if (phiUse == null)
-			return;
-
-		foreach (var use in phiUse)
-		{
-			QueueInstruction(use);
-		}
 	}
 
 	private void ProcessInstructionsContinuiously(Node node)
@@ -1407,7 +1400,7 @@ public sealed class SparseConditionalConstantPropagation
 		{
 			var predecessor = sourceBlocks[index];
 
-			phiStatements.AddIfNew(predecessor, node);
+			phiStatements.Add(node);
 
 			var executable = blockStates[predecessor.Sequence];
 
