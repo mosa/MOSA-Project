@@ -30,6 +30,10 @@ public sealed class DivUnsignedMagicNumber64 : BaseTransform
 		if (IsPowerOfTwo64(context.Operand2))
 			return false;
 
+		// GetMagicNumber only supports 32-bit divisors
+		if (context.Operand2.ConstantUnsigned64 > uint.MaxValue)
+			return false;
+
 		return true;
 	}
 
@@ -38,7 +42,7 @@ public sealed class DivUnsignedMagicNumber64 : BaseTransform
 		var result = context.Result;
 
 		var n = context.Operand1;
-		var d = context.Operand2.ConstantUnsigned32;
+		var d = (uint)context.Operand2.ConstantUnsigned64;
 
 		var (M, s, a) = DivisionTwiddling.GetMagicNumber(d);
 
