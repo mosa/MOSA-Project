@@ -179,7 +179,7 @@
 			"Expression": "IR.AddCarryOut## a b",
 			"Filter": "IsBitValueSignBitCleared##(a) && IsBitValueSignBitCleared##(b)",
 			"Result": "(IR.Add## a b)",
-			"Result2": "(IR.Move## [To32(0)])",
+			"Result2": "(IR.Move## [To##(0)])",
 			"Priority": "20",
 			"Variations": "No",
 			"Log": "Yes"
