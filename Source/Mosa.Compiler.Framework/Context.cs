@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
 
@@ -282,12 +282,12 @@ public sealed class Context
 	}
 
 	/// <summary>
-	/// Inserts an instruction before the current instruction.
+	/// Inserts an instruction after the current instruction.
 	/// </summary>
 	/// <returns></returns>
 	public Context InsertAfter()
 	{
-		Debug.Assert(!IsBlockStartInstruction);
+		Debug.Assert(!IsBlockEndInstruction);
 
 		var node = new Node
 		{
