@@ -837,6 +837,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(0);
 		}
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == uint.MaxValue)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
 		else
 		{
 			result
@@ -861,6 +869,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
 			result.SetValue(0);
+		}
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == ulong.MaxValue)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == ulong.MaxValue)
+		{
+			result.Narrow(value1).SetStable(value1);
 		}
 		else
 		{
@@ -954,6 +970,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(value2);
 		}
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
 		else
 		{
 			result
@@ -979,6 +1003,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(value2);
 		}
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
 		else
 		{
 			result
@@ -1002,6 +1034,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue((value1.BitsSet32 ^ value2.BitsSet32) & uint.MaxValue);
 		}
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
 		else
 		{
 			result
@@ -1022,6 +1062,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 		{
 			result.SetValue(value1.BitsSet ^ value2.BitsSet);
+		}
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
 		}
 		else
 		{
@@ -1929,7 +1977,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value2 = node.Operand2.BitValue;
 
 		// If known to be unsigned, treat like DivUnsigned
-		var isUnsigned = !IntegerTwiddling.HasSignBitSet((int)value1.MaxValue)
+			var isUnsigned = !IntegerTwiddling.HasSignBitSet((int)value1.MaxValue)
 			&& !IntegerTwiddling.HasSignBitSet((int)value2.MaxValue)
 			&& !IntegerTwiddling.HasSignBitSet((int)value1.MinValue)
 			&& !IntegerTwiddling.HasSignBitSet((int)value2.MinValue);
