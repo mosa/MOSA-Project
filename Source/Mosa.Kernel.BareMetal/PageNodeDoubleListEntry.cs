@@ -23,7 +23,7 @@ namespace Mosa.Kernel.BareMetal
 		}
 
 		public bool IsNextPage { get { return Next.IsNull(); } }
-		public bool IsPreviousPage { get { return Next.IsNull(); } }
+		public bool IsPreviousPage { get { return Previous.IsNull(); } }
 
 		public PageNodeDoubleListEntry(IntPtr page)
 		{
