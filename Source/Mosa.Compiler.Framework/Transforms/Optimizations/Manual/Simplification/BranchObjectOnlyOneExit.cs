@@ -18,8 +18,10 @@ public sealed class BranchObjectOnlyOneExit : BaseTransform
 
 	public override void Transform(Context context, Transform transform)
 	{
+		var target = context.BranchTarget1;
+
 		context.SetNop();
 
-		//context.SetInstruction(IRInstruction.Branch64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
+		Framework.Transform.UpdatePhiBlock(target);
 	}
 }
