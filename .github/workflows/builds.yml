@@ -3,10 +3,10 @@ name: Builds
 on:
   push:
     paths-ignore:
-      - 'Source/Docs/**'
+      - "Source/Docs/**"
   pull_request:
     paths-ignore:
-      - 'Source/Docs/**'
+      - "Source/Docs/**"
 
 permissions:
   contents: write
@@ -15,7 +15,6 @@ env:
   BUILD_VERSION: 2.6.0.${{ github.run_number }}
 
 jobs:
-
   windows-build:
     name: Windows Build
     runs-on: windows-latest
@@ -23,10 +22,10 @@ jobs:
     env:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -45,7 +44,7 @@ jobs:
         run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Unit Test
         run: dotnet test Source/Mosa.sln
-      - name: Cleanup 
+      - name: Cleanup
         run: cmd.exe /C "rmdir /s /q bin\reko bin\cs bin\de bin\es bin\fr bin\it bin\ja bin\ko bin\pl bin\pt-BR bin\ru bin\tr bin\zh-Hans bin\zh-Hant"
       - name: Store Build Artifact
         uses: actions/upload-artifact@v4
@@ -75,17 +74,28 @@ jobs:
 
   windows-build-packaging:
     name: Build Windows Packaging
-    needs: [windows-build, linux-build, macos-build, windows-unit-testing, linux-unit-testing, macos-unit-testing, windows-demo-testing, linux-demo-testing, macos-demo-testing]
+    needs:
+      [
+        windows-build,
+        linux-build,
+        macos-build,
+        windows-unit-testing,
+        linux-unit-testing,
+        macos-unit-testing,
+        windows-demo-testing,
+        linux-demo-testing,
+        macos-demo-testing,
+      ]
     runs-on: windows-latest
     timeout-minutes: 15
     if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
     env:
       NUGET_ENABLE_LEGACY_CSPROJ_PACK: true
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -117,10 +127,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -141,16 +151,16 @@ jobs:
           name: linux-build-artifact
           path: bin
           compression-level: 9
-       
+
   macos-build:
     name: MacOS Build
     runs-on: macos-26
     timeout-minutes: 15
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}
       - name: View Github Info
@@ -175,7 +185,7 @@ jobs:
   windows-unit-testing:
     strategy:
       matrix:
-        optimization: [0,1,2,3,4,5,6,7,8,9]
+        optimization: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       fail-fast: false
     name: Windows - Unit Test -o${{ matrix.optimization }}
     runs-on: windows-latest
@@ -205,17 +215,17 @@ jobs:
   linux-unit-testing:
     strategy:
       matrix:
-        optimization: [0,1,2,3,4,5,6,7,8,9]
+        optimization: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       fail-fast: false
     name: Linux - Unit Test -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -239,21 +249,21 @@ jobs:
           name: counters-linux-unittests-o${{ matrix.optimization }}
           path: artifact
           retention-days: 2
-          
+
   macos-unit-testing:
     strategy:
       matrix:
-        optimization: [0,1,2,3,4,5,6,7,8,9]
+        optimization: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       fail-fast: false
     name: MacOS - Unit Test -o${{ matrix.optimization }}
     runs-on: macos-26
     timeout-minutes: 15
     needs: macos-build
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -267,7 +277,7 @@ jobs:
         run: brew install qemu
       - name: Make Artifact Folder
         run: mkdir artifact
-      - name: Unit Test 
+      - name: Unit Test
         run: dotnet bin/Mosa.Utility.UnitTests.dll -check -o${{ matrix.optimization }} -counters artifact/counters-macos-unittests-o${{ matrix.optimization }}.txt
       - name: Store Counter Artifact
         uses: actions/upload-artifact@v4
@@ -279,7 +289,7 @@ jobs:
   windows-demo-testing:
     strategy:
       matrix:
-        optimization: [0,1,2,3,4,5,6,7,8,9]
+        optimization: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       fail-fast: false
     name: Windows - Demo Test -o${{ matrix.optimization }}
     runs-on: windows-latest
@@ -307,17 +317,17 @@ jobs:
   linux-demo-testing:
     strategy:
       matrix:
-        optimization: [0,1,2,3,4,5,6,7,8,9]
+        optimization: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       fail-fast: false
     name: Linux - Demo Test -o${{ matrix.optimization }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -343,17 +353,17 @@ jobs:
   macos-demo-testing:
     strategy:
       matrix:
-        optimization: [0,1,2,3,4,5,6,7,8,9]
+        optimization: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
       fail-fast: false
     name: MacOS - Demo Test -o${{ matrix.optimization }}
     runs-on: macos-26
     timeout-minutes: 15
     needs: macos-build
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -380,10 +390,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -420,10 +430,10 @@ jobs:
     timeout-minutes: 15
     needs: linux-build
     steps:
-      - name: Set net9.0
+      - name: Set net10.0
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -455,15 +465,14 @@ jobs:
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o9 -check -autolaunch-off -output-counters
 
   merge-artifacts:
-     name: Merge Artifacts
-     runs-on: ubuntu-latest
-     needs: [windows-unit-testing, linux-unit-testing, macos-unit-testing]
-     timeout-minutes: 15
-     steps:
+    name: Merge Artifacts
+    runs-on: ubuntu-latest
+    needs: [windows-unit-testing, linux-unit-testing, macos-unit-testing]
+    timeout-minutes: 15
+    steps:
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-            name: counters-unit-tests
-            pattern: counters-*
-            compression-level: 9
-
+          name: counters-unit-tests
+          pattern: counters-*
+          compression-level: 9
