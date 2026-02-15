@@ -73,7 +73,6 @@ public sealed class Context
 	public BasicBlock BranchTarget2 => Node.BranchTarget2;
 
 	/// <summary>
-	/// <summary>
 	/// Gets the branch targets count.
 	/// </summary>
 	public int BranchTargetsCount => Node.BranchTargetsCount;
