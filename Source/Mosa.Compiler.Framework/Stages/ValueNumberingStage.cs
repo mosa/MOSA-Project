@@ -574,11 +574,11 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			return null;
 	}
 
-	private void SetValueNumber(Operand operand, Operand valueVumber)
+	private void SetValueNumber(Operand operand, Operand valueNumber)
 	{
-		trace?.Log($"Set: {operand} => {valueVumber}");
+		trace?.Log($"Set: {operand} => {valueNumber}");
 
-		MapToValueNumber[operand] = valueVumber;
+		MapToValueNumber[operand] = valueNumber;
 	}
 
 	private bool IsPhiUseless(Node node)
