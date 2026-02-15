@@ -1024,11 +1024,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// TODO: Special power of two handling for bits, handle similar to shift left
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1073,11 +1073,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// FUTURE: Special power of two handling for bits, handle similar to shift left
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1117,11 +1117,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// FUTURE: Special power of two handling for bits, handle similar to shift left
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1255,11 +1255,11 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 		{
 			// divide by zero!
 			return;
@@ -1268,7 +1268,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(value1.BitsSet % value2.BitsSet);
 		}
-		else if (value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
+		else if (value2.AreAll64BitsKnown && value2.BitsSet != 0)
 		{
 			result
 				.NarrowMax(value2.BitsSet - 1)
@@ -1338,7 +1338,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		// FUTURE: Using the known highest and lowers bit sequences, the bit sets and ranges can be set and narrower respectively
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1416,7 +1416,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		var shift = (int)(value2.BitsSet & 0b111111);
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1817,7 +1817,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
-		if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+		if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 		{
 			result.SetValue(0);
 		}
@@ -1826,7 +1826,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			// divide by zero!
 			return;
 		}
-		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet != 0)
 		{
 			result.SetValue(value1.BitsSet / value2.BitsSet);
 		}
