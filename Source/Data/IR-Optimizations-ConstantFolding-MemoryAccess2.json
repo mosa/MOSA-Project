@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "IR-Optimizations-ConstantFolding-MemoryAccess2",
 	"Family": "IR",
 	"Section": "Optimizations.Auto",
 	"Optimizations": [

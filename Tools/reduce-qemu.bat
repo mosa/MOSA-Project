@@ -1,7 +1,7 @@
-curl https://qemu.weilnetz.de/w64/2025/qemu-w64-setup-20250826.exe --output qemu-installer.exe
+curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20251224.exe --output qemu-installer.exe
 del /S /Q qemu
 7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y qemu-installer.exe
-del /Q qemu-installer.exe
+rem del /Q qemu-installer.exe
 
 del /S /Q qemu\share\icons
 del /S /Q qemu\share\doc
@@ -79,4 +79,8 @@ del /S /Q qemu\share\edk2-riscv*.fd
 del /S /Q qemu\share\edk2-loongarch64*.fd
 del /S /Q qemu\share\firmware\60-edk2-riscv*.json
 del /S /Q qemu\share\firmware\60-edk2-loongarch64*.json
+del /S /Q qemu\share\dtb\pegasos1.dtb
+del /S /Q qemu\share\dtb\pegasos2.dtb
+del /S /Q qemu\share\u-boot-sam460.bin
 del /S /Q qemu\share\hppa-firmware64.img
+del /S /Q qemu\share\hppa-firmware.img

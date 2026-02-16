@@ -27,6 +27,9 @@ public sealed class Sub64x2 : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
+		if (IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
+			return false;
+
 		return true;
 	}
 

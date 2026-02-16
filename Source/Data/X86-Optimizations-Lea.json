@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "X86-Optimizations-Lea",
 	"Family": "x86",
 	"Section": "Optimizations.Auto",
 	"Commutative": [

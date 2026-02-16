@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "IR-Optimizations-Rewrite",
 	"Family": "IR",
 	"Section": "Optimizations.Auto",
 	"Commutative": [
@@ -103,6 +104,15 @@
 			"Filter": "",
 			"Result": "(IR.IfThenElse## a x y)",
 			"Variations": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "IfThenElse##",
+			"SubName": "Compare##",
+			"Expression": "IR.IfThenElse## (IR.Compare##x## {==} a b) x x",
+			"Filter": "",
+			"Result": "(IR.Move## x)",
+			"Variations": "No"
 		},
 		{
 			"Type": "Rewrite",

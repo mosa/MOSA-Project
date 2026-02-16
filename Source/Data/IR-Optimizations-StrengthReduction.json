@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "IR-Optimizations-StrengthReduction",
 	"Family": "IR",
 	"Section": "Optimizations.Auto",
 	"Commutative": [
@@ -432,7 +433,6 @@
 			"Priority": "80",
 			"Variations": "Yes"
 		},
-
 		{
 			"Type": "StrengthReduction",
 			"Name": "SubCarryOut##",
@@ -477,7 +477,6 @@
 			"Priority": "80",
 			"Variations": "Yes"
 		},
-
 		{
 			"Type": "StrengthReduction",
 			"Name": "MulCarryOut##",
@@ -497,6 +496,17 @@
 			"Filter": "!IsResult2Used(@)",
 			"Result": "(IR.Move## [To##(0)]))",
 			"Result2": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+
+		{
+			"Type": "StrengthReduction",
+			"Name": "RemSigned##",
+			"SubName": "ByNegative1",
+			"Expression": "IR.RemSigned## x -1",
+			"Filter": "",
+			"Result": "(IR.Move## [To##(0)])",
 			"Priority": "80",
 			"Variations": "Yes"
 		}

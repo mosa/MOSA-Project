@@ -27,6 +27,9 @@ public sealed class SubAdd32 : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
+		if (IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
+			return false;
+
 		return true;
 	}
 
@@ -65,6 +68,9 @@ public sealed class SubAdd32_v1 : BaseTransform
 			return false;
 
 		if (!IsResolvedConstant(context.Operand2))
+			return false;
+
+		if (IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
 			return false;
 
 		return true;
