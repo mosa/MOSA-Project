@@ -129,7 +129,7 @@
 			"Expression": "IR.IfThenElse## (IR.Compare##x## {==} a b) x x",
 			"Filter": "",
 			"Result": "(IR.Move## x)",
-			"Variations": "Yes"
+			"Variations": "No"
 		},
 		{
 			"Type": "Rewrite",

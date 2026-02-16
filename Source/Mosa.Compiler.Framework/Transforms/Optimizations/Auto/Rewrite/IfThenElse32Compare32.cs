@@ -39,39 +39,3 @@ public sealed class IfThenElse32Compare32 : BaseTransform
 		context.SetInstruction(IR.Move32, result, t1);
 	}
 }
-
-public sealed class IfThenElse32Compare32_v1 : BaseTransform
-{
-	public IfThenElse32Compare32_v1() : base(IR.IfThenElse32, TransformType.Auto | TransformType.Optimization)
-	{
-	}
-
-	public override bool Match(Context context, Transform transform)
-	{
-		if (!context.Operand1.IsVirtualRegister)
-			return false;
-
-		if (!context.Operand1.IsDefinedOnce)
-			return false;
-
-		if (context.Operand1.Definitions[0].Instruction != IR.Compare32x32)
-			return false;
-
-		if (context.Operand1.Definitions[0].ConditionCode != ConditionCode.Equal)
-			return false;
-
-		if (!AreSame(context.Operand2, context.Operand3))
-			return false;
-
-		return true;
-	}
-
-	public override void Transform(Context context, Transform transform)
-	{
-		var result = context.Result;
-
-		var t1 = context.Operand2;
-
-		context.SetInstruction(IR.Move32, result, t1);
-	}
-}

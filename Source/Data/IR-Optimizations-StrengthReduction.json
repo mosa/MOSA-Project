@@ -432,7 +432,6 @@
 			"Priority": "80",
 			"Variations": "Yes"
 		},
-
 		{
 			"Type": "StrengthReduction",
 			"Name": "SubCarryOut##",
@@ -500,15 +499,6 @@
 			"Variations": "Yes"
 		},
 
-		{
-			"Type": "StrengthReduction",
-			"Name": "DivSigned##",
-			"SubName": "ByPowerOfTwo",
-			"Expression": "IR.DivSigned## x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo##(c) & !IsZero(c) & !IsOne(c)",
-			"Result": "(IR.ArithShiftRight## x [GetPowerOfTwo(To32(c))])",
-			"Variations": "Yes"
-		},
 		{
 			"Type": "StrengthReduction",
 			"Name": "RemSigned##",
