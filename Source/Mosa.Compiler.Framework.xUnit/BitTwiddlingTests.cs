@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
 using Mosa.Compiler.Common;
 using Xunit;
 
@@ -11,75 +10,101 @@ public class BitTwiddlingTests
 	[Fact]
 	public void IsPowerOfTwo()
 	{
-		Debug.Assert(BitTwiddling.IsPowerOfTwo(4096UL));
-		Debug.Assert(!BitTwiddling.IsPowerOfTwo(0UL));
-		Debug.Assert(!BitTwiddling.IsPowerOfTwo(67UL));
+		Assert.True(BitTwiddling.IsPowerOfTwo(4096UL));
+		Assert.False(BitTwiddling.IsPowerOfTwo(0UL));
+		Assert.False(BitTwiddling.IsPowerOfTwo(67UL));
 	}
 
 	[Fact]
 	public void GetPowerOfTwo()
 	{
-		Debug.Assert(BitTwiddling.GetPowerOfTwo(0b1000000000000UL) == 12);
-		Debug.Assert(BitTwiddling.GetPowerOfTwo(0b100000000000UL) != 12);
+		Assert.Equal(12u, BitTwiddling.GetPowerOfTwo(0b1000000000000UL));
+		Assert.NotEqual(12u, BitTwiddling.GetPowerOfTwo(0b100000000000UL));
+	}
+
+	[Fact]
+	public void GetPowerOfTwoZero()
+	{
+		Assert.Equal(0u, BitTwiddling.GetPowerOfTwo(0UL));
+	}
+
+	[Fact]
+	public void GetPowerOfTwoSmallPowers()
+	{
+		Assert.Equal(0u, BitTwiddling.GetPowerOfTwo(1UL));
+		Assert.Equal(1u, BitTwiddling.GetPowerOfTwo(2UL));
+		Assert.Equal(2u, BitTwiddling.GetPowerOfTwo(4UL));
+		Assert.Equal(3u, BitTwiddling.GetPowerOfTwo(8UL));
+		Assert.Equal(4u, BitTwiddling.GetPowerOfTwo(16UL));
+		Assert.Equal(5u, BitTwiddling.GetPowerOfTwo(32UL));
+	}
+
+	[Fact]
+	public void GetPowerOfTwoLargePowers()
+	{
+		Assert.Equal(10u, BitTwiddling.GetPowerOfTwo(1024UL));
+		Assert.Equal(16u, BitTwiddling.GetPowerOfTwo(65536UL));
+		Assert.Equal(20u, BitTwiddling.GetPowerOfTwo(1048576UL));
+		Assert.Equal(32u, BitTwiddling.GetPowerOfTwo(4294967296UL));
 	}
 
 	[Fact]
 	public void CountTrailingZeros()
 	{
-		Debug.Assert(BitTwiddling.CountTrailingZeros(ulong.MaxValue) == 0);
-		Debug.Assert(BitTwiddling.CountTrailingZeros(0b1111000000UL) == 6);
-		Debug.Assert(BitTwiddling.CountTrailingZeros(0b0UL) == 64);
-		Debug.Assert(BitTwiddling.CountTrailingZeros(0b1111UL) != 4);
+		Assert.Equal(0, BitTwiddling.CountTrailingZeros(ulong.MaxValue));
+		Assert.Equal(6, BitTwiddling.CountTrailingZeros(0b1111000000UL));
+		Assert.Equal(64, BitTwiddling.CountTrailingZeros(0b0UL));
+		Assert.NotEqual(4, BitTwiddling.CountTrailingZeros(0b1111UL));
 	}
 
 	[Fact]
 	public void CountLeadingZeros()
 	{
-		Debug.Assert(BitTwiddling.CountLeadingZeros(uint.MaxValue) == 0);
-		Debug.Assert(BitTwiddling.CountLeadingZeros(0b1111111111U) == 22);
-		Debug.Assert(BitTwiddling.CountLeadingZeros(0b0U) == 32);
-		Debug.Assert(BitTwiddling.CountLeadingZeros(0b1111U) != 4);
+		Assert.Equal(0, BitTwiddling.CountLeadingZeros(uint.MaxValue));
+		Assert.Equal(22, BitTwiddling.CountLeadingZeros(0b1111111111U));
+		Assert.Equal(32, BitTwiddling.CountLeadingZeros(0b0U));
+		Assert.NotEqual(4, BitTwiddling.CountLeadingZeros(0b1111U));
 
-		Debug.Assert(BitTwiddling.CountLeadingZeros(ulong.MaxValue) == 0);
-		Debug.Assert(BitTwiddling.CountLeadingZeros(0b1111111111UL) == 54);
-		Debug.Assert(BitTwiddling.CountLeadingZeros(0b0UL) == 64);
-		Debug.Assert(BitTwiddling.CountLeadingZeros(0b1111UL) != 4);
+		Assert.Equal(0, BitTwiddling.CountLeadingZeros(ulong.MaxValue));
+		Assert.Equal(54, BitTwiddling.CountLeadingZeros(0b1111111111UL));
+		Assert.Equal(64, BitTwiddling.CountLeadingZeros(0b0UL));
+		Assert.NotEqual(4, BitTwiddling.CountLeadingZeros(0b1111UL));
 	}
 
 	[Fact]
 	public void GetHighestSetBitPosition()
 	{
-		Debug.Assert(BitTwiddling.GetHighestSetBitPosition(uint.MaxValue) == 32);
-		Debug.Assert(BitTwiddling.GetHighestSetBitPosition(0b1111111111U) == 10);
-		Debug.Assert(BitTwiddling.GetHighestSetBitPosition(0b0U) == 0);
-		Debug.Assert(BitTwiddling.GetHighestSetBitPosition(0b1111U) != 0);
+		Assert.Equal(32, BitTwiddling.GetHighestSetBitPosition(uint.MaxValue));
+		Assert.Equal(10, BitTwiddling.GetHighestSetBitPosition(0b1111111111U));
+		Assert.Equal(0, BitTwiddling.GetHighestSetBitPosition(0b0U));
+		Assert.NotEqual(0, BitTwiddling.GetHighestSetBitPosition(0b1111U));
 
-		Debug.Assert(BitTwiddling.GetHighestSetBitPosition(ulong.MaxValue) == 64);
-		Debug.Assert(BitTwiddling.GetHighestSetBitPosition(0b1111111111UL) == 10);
-		Debug.Assert(BitTwiddling.GetHighestSetBitPosition(0b0UL) == 0);
-		Debug.Assert(BitTwiddling.GetHighestSetBitPosition(0b1111UL) != 0);
+		Assert.Equal(64, BitTwiddling.GetHighestSetBitPosition(ulong.MaxValue));
+		Assert.Equal(10, BitTwiddling.GetHighestSetBitPosition(0b1111111111UL));
+		Assert.Equal(0, BitTwiddling.GetHighestSetBitPosition(0b0UL));
+		Assert.NotEqual(0, BitTwiddling.GetHighestSetBitPosition(0b1111UL));
 	}
 
 	[Fact]
 	public void GetBitsOver()
 	{
-		Debug.Assert(BitTwiddling.GetBitsOver(0b11UL) == 0b1111111111111111111111111111111111111111111111111111111111111100UL);
-		Debug.Assert(BitTwiddling.GetBitsOver(0b1111111111UL) == 0b1111111111111111111111111111111111111111111111111111110000000000UL);
-		Debug.Assert(BitTwiddling.GetBitsOver(0b0UL) == 0b1111111111111111111111111111111111111111111111111111111111111111UL);
-		Debug.Assert(BitTwiddling.GetBitsOver(0b1UL) != ulong.MaxValue);
+		Assert.Equal(0b1111111111111111111111111111111111111111111111111111111111111100UL, BitTwiddling.GetBitsOver(0b11UL));
+		Assert.Equal(0b1111111111111111111111111111111111111111111111111111110000000000UL, BitTwiddling.GetBitsOver(0b1111111111UL));
+		Assert.Equal(0b1111111111111111111111111111111111111111111111111111111111111111UL, BitTwiddling.GetBitsOver(0b0UL));
+		Assert.NotEqual(ulong.MaxValue, BitTwiddling.GetBitsOver(0b1UL));
 	}
 
 	[Fact]
 	public void CountSetBits()
 	{
-		Debug.Assert(BitTwiddling.CountSetBits(uint.MaxValue) == 32);
-		Debug.Assert(BitTwiddling.CountSetBits(0b110U) == 2);
-		Debug.Assert(BitTwiddling.CountSetBits(0b1U) == 1);
-		Debug.Assert(BitTwiddling.CountSetBits(0b1111U) != 5);
+		Assert.Equal(32, BitTwiddling.CountSetBits(uint.MaxValue));
+		Assert.Equal(2, BitTwiddling.CountSetBits(0b110U));
+		Assert.Equal(1, BitTwiddling.CountSetBits(0b1U));
+		Assert.NotEqual(5, BitTwiddling.CountSetBits(0b1111U));
 
-		Debug.Assert(BitTwiddling.CountSetBits(ulong.MaxValue) == 64);
-		Debug.Assert(BitTwiddling.CountSetBits(0b110UL) == 2);
-		Debug.Assert(BitTwiddling.CountSetBits(0b1UL) == 1);
-		Debug.Assert(BitTwiddling.CountSetBits(0b1111UL) != 5);
+		Assert.Equal(64, BitTwiddling.CountSetBits(ulong.MaxValue));
+		Assert.Equal(2, BitTwiddling.CountSetBits(0b110UL));
+		Assert.Equal(1, BitTwiddling.CountSetBits(0b1UL));
+		Assert.NotEqual(5, BitTwiddling.CountSetBits(0b1111UL));
 	}
 }

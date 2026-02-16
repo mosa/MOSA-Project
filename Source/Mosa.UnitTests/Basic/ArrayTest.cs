@@ -15,7 +15,7 @@ public static class ArrayTest
 			myArray[1] = 20;
 			return false;
 		}
-		catch (IndexOutOfRangeException ex)
+		catch (IndexOutOfRangeException)
 		{
 			return true;
 		}

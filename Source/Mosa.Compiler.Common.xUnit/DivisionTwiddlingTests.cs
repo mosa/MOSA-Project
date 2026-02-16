@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
 using Xunit;
 
 namespace Mosa.Compiler.Common.xUnit;
@@ -11,67 +10,60 @@ public class DivisionTwiddlingTests
 	public static void SignedMagic_3()
 	{
 		var (M, s) = DivisionTwiddling.GetMagicNumber(3);
-		Debug.Assert(M == 0x55555556);
-		Debug.Assert(s == 0);
+		Assert.Equal(0x55555556u, M);
+		Assert.Equal(0u, s);
 	}
 
 	[Fact]
 	public static void SignedMagic_7()
 	{
 		var (M, s) = DivisionTwiddling.GetMagicNumber(7);
-		Debug.Assert(M == 0x92492493);
-		Debug.Assert(s == 2);
+		Assert.Equal(0x92492493u, M);
+		Assert.Equal(2u, s);
 	}
 
 	[Fact]
 	public static void UnsignedMagic_3()
 	{
 		var (M, s, a) = DivisionTwiddling.GetMagicNumber(3u);
-		Debug.Assert(M == 0xAAAAAAAB);
-		Debug.Assert(s == 1);
-		Debug.Assert(!a);
+		Assert.Equal(0xAAAAAAABu, M);
+		Assert.Equal(1u, s);
+		Assert.False(a);
 	}
 
 	[Fact]
 	public static void UnsignedMagic_7()
 	{
 		var (M, s, a) = DivisionTwiddling.GetMagicNumber(7u);
-		Debug.Assert(M == 0x24924925);
-		Debug.Assert(s == 3);
-		Debug.Assert(a);
+		Assert.Equal(0x24924925u, M);
+		Assert.Equal(3u, s);
+		Assert.True(a);
 	}
-
-	//[Fact]
-	//public static void UnsignedMagic_11()
-	//{
-	//	var result = DivisionMagicNumber.GetMagicNumber(13u);
-	//	Debug.Assert(result.M + result.a + result.s == ((uint)-1171354717) + 0 + 3);
-	//}
 
 	[Fact]
 	public static void UnsignedMagic_13()
 	{
 		var (M, s, a) = DivisionTwiddling.GetMagicNumber(13u);
-		Debug.Assert(M == 1321528399);
-		Debug.Assert(s == 2);
-		Debug.Assert(!a);
+		Assert.Equal(1321528399u, M);
+		Assert.Equal(2u, s);
+		Assert.False(a);
 	}
 
 	[Fact]
 	public static void UnsignedMagic2_3()
 	{
 		var (M, s, a) = DivisionTwiddling.GetMagicNumber(3u);
-		Debug.Assert(M == 0xAAAAAAAB);
-		Debug.Assert(s == 1);
-		Debug.Assert(!a);
+		Assert.Equal(0xAAAAAAABu, M);
+		Assert.Equal(1u, s);
+		Assert.False(a);
 	}
 
 	[Fact]
 	public static void UnsignedMagic2_7()
 	{
 		var (M, s, a) = DivisionTwiddling.GetMagicNumber(7u);
-		Debug.Assert(M == 0x24924925);
-		Debug.Assert(s == 3);
-		Debug.Assert(a);
+		Assert.Equal(0x24924925u, M);
+		Assert.Equal(3u, s);
+		Assert.True(a);
 	}
 }

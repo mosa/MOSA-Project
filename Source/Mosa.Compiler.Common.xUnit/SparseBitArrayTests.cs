@@ -11,11 +11,11 @@ public class SparseBitArrayTests
 	{
 		var bitarray = new SparseBitArray();
 
-		Assert.True(!bitarray.Get(0));
-		Assert.True(!bitarray.Get(1));
-		Assert.True(!bitarray.Get(2));
-		Assert.True(!bitarray.Get(100));
-		Assert.True(!bitarray.Get(1000));
+		Assert.False(bitarray.Get(0));
+		Assert.False(bitarray.Get(1));
+		Assert.False(bitarray.Get(2));
+		Assert.False(bitarray.Get(100));
+		Assert.False(bitarray.Get(1000));
 	}
 
 	[Fact]
@@ -31,6 +31,6 @@ public class SparseBitArrayTests
 		Assert.True(bitarray.Get(1));
 		Assert.True(bitarray.Get(2));
 		Assert.True(bitarray.Get(3));
-		Assert.True(!bitarray.Get(4));
+		Assert.False(bitarray.Get(4));
 	}
 }

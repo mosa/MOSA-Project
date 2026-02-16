@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
 using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit;
@@ -8,49 +7,48 @@ namespace Mosa.Compiler.Framework.xUnit;
 public class BitValueTests
 {
 	[Fact]
-	public void TestNarrowMax1Then0()
+	public void NarrowMax1Then0()
 	{
 		var bitValue = new BitValue(true);
 
 		bitValue.NarrowMax(1);
 
-		Debug.Assert(bitValue.MaxValue == 1);
-		Debug.Assert(bitValue.MinValue == 0);
-		Debug.Assert(bitValue.IsSignBitClear32);
-		Debug.Assert(bitValue.BitsClear == ~(ulong)1);
-		Debug.Assert(bitValue.BitsClear32 == ~(uint)1);
-		Debug.Assert(bitValue.BitsSet == 0);
-		Debug.Assert(bitValue.IsZeroOrOne);
-		//Debug.Assert(bitValue.IsNotZero);
+		Assert.Equal(1ul, bitValue.MaxValue);
+		Assert.Equal(0ul, bitValue.MinValue);
+		Assert.True(bitValue.IsSignBitClear32);
+		Assert.Equal(~(ulong)1, bitValue.BitsClear);
+		Assert.Equal(~(uint)1, bitValue.BitsClear32);
+		Assert.Equal(0ul, bitValue.BitsSet);
+		Assert.True(bitValue.IsZeroOrOne);
 
 		bitValue.NarrowMax(0);
 
-		Debug.Assert(bitValue.MaxValue == 0);
-		Debug.Assert(bitValue.MinValue == 0);
-		Debug.Assert(bitValue.IsSignBitClear32);
-		Debug.Assert(bitValue.BitsClear == ulong.MaxValue);
-		Debug.Assert(bitValue.BitsClear32 == uint.MaxValue);
-		Debug.Assert(bitValue.BitsSet == 0);
-		Debug.Assert(bitValue.IsZeroOrOne);
-		Debug.Assert(bitValue.IsZero);
-		Debug.Assert(!bitValue.IsNotZero);
+		Assert.Equal(0ul, bitValue.MaxValue);
+		Assert.Equal(0ul, bitValue.MinValue);
+		Assert.True(bitValue.IsSignBitClear32);
+		Assert.Equal(ulong.MaxValue, bitValue.BitsClear);
+		Assert.Equal(uint.MaxValue, bitValue.BitsClear32);
+		Assert.Equal(0ul, bitValue.BitsSet);
+		Assert.True(bitValue.IsZeroOrOne);
+		Assert.True(bitValue.IsZero);
+		Assert.False(bitValue.IsNotZero);
 	}
 
 	[Fact]
-	public void TestNarrowMin1()
+	public void NarrowMin1()
 	{
 		var bitValue = new BitValue(true);
 
 		bitValue.NarrowMin(1);
 
-		Debug.Assert(bitValue.MaxValue == uint.MaxValue);
-		Debug.Assert(bitValue.MinValue == 1);
-		Debug.Assert(!bitValue.IsSignBitClear32);
-		Debug.Assert(bitValue.IsNotZero);
-		Debug.Assert(!bitValue.IsZero);
-		Debug.Assert(!bitValue.IsOne);
-		Debug.Assert(bitValue.BitsSet == 0);
-		Debug.Assert(bitValue.BitsClear == ~(ulong)uint.MaxValue);
+		Assert.Equal(uint.MaxValue, bitValue.MaxValue);
+		Assert.Equal(1ul, bitValue.MinValue);
+		Assert.False(bitValue.IsSignBitClear32);
+		Assert.True(bitValue.IsNotZero);
+		Assert.False(bitValue.IsZero);
+		Assert.False(bitValue.IsOne);
+		Assert.Equal(0ul, bitValue.BitsSet);
+		Assert.Equal(~(ulong)uint.MaxValue, bitValue.BitsClear);
 	}
 
 	[Fact]
@@ -60,14 +58,14 @@ public class BitValueTests
 
 		bitValue.SetValue(0);
 
-		Debug.Assert(bitValue.MaxValue == 0);
-		Debug.Assert(bitValue.MinValue == 0);
-		Debug.Assert(bitValue.BitsClear == ulong.MaxValue);
-		Debug.Assert(bitValue.BitsClear32 == uint.MaxValue);
-		Debug.Assert(bitValue.BitsSet == 0);
-		Debug.Assert(bitValue.IsZero);
-		Debug.Assert(bitValue.IsSignBitClear32);
-		Debug.Assert(!bitValue.IsNotZero);
+		Assert.Equal(0ul, bitValue.MaxValue);
+		Assert.Equal(0ul, bitValue.MinValue);
+		Assert.Equal(ulong.MaxValue, bitValue.BitsClear);
+		Assert.Equal(uint.MaxValue, bitValue.BitsClear32);
+		Assert.Equal(0ul, bitValue.BitsSet);
+		Assert.True(bitValue.IsZero);
+		Assert.True(bitValue.IsSignBitClear32);
+		Assert.False(bitValue.IsNotZero);
 	}
 
 	[Fact]
@@ -77,14 +75,14 @@ public class BitValueTests
 
 		bitValue.SetValue(1);
 
-		Debug.Assert(bitValue.MaxValue == 1);
-		Debug.Assert(bitValue.MinValue == 1);
-		Debug.Assert(bitValue.BitsClear == ~1ul);
-		Debug.Assert(bitValue.BitsSet == 1);
-		Debug.Assert(!bitValue.IsZero);
-		Debug.Assert(bitValue.IsOne);
-		Debug.Assert(bitValue.IsSignBitClear32);
-		Debug.Assert(bitValue.IsNotZero);
+		Assert.Equal(1ul, bitValue.MaxValue);
+		Assert.Equal(1ul, bitValue.MinValue);
+		Assert.Equal(~1ul, bitValue.BitsClear);
+		Assert.Equal(1ul, bitValue.BitsSet);
+		Assert.False(bitValue.IsZero);
+		Assert.True(bitValue.IsOne);
+		Assert.True(bitValue.IsSignBitClear32);
+		Assert.True(bitValue.IsNotZero);
 	}
 
 	[Fact]
@@ -94,13 +92,13 @@ public class BitValueTests
 
 		bitValue.SetValue(2);
 
-		Debug.Assert(bitValue.MaxValue == 2);
-		Debug.Assert(bitValue.MinValue == 2);
-		Debug.Assert(bitValue.BitsClear == ~2ul);
-		Debug.Assert(bitValue.BitsSet == 2);
-		Debug.Assert(!bitValue.IsZero);
-		Debug.Assert(!bitValue.IsOne);
-		Debug.Assert(bitValue.IsSignBitClear32);
-		Debug.Assert(bitValue.IsNotZero);
+		Assert.Equal(2ul, bitValue.MaxValue);
+		Assert.Equal(2ul, bitValue.MinValue);
+		Assert.Equal(~2ul, bitValue.BitsClear);
+		Assert.Equal(2ul, bitValue.BitsSet);
+		Assert.False(bitValue.IsZero);
+		Assert.False(bitValue.IsOne);
+		Assert.True(bitValue.IsSignBitClear32);
+		Assert.True(bitValue.IsNotZero);
 	}
 }

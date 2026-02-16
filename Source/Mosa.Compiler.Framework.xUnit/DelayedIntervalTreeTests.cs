@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
 using Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
 using Xunit;
 
@@ -19,8 +18,8 @@ public class DelayedIntervalTreeTests
 
 			for (int n = 0; n <= i; n++)
 			{
-				Debug.Assert(tree.Contains(n * 2));
-				Debug.Assert(tree.Contains(n * 2, n * 2 + 1));
+				Assert.True(tree.Contains(n * 2));
+				Assert.True(tree.Contains(n * 2, n * 2 + 1));
 			}
 		}
 	}
@@ -38,7 +37,7 @@ public class DelayedIntervalTreeTests
 		for (int i = 0; i < 100; i += 2)
 		{
 			tree.Remove(i * 2, i * 2 + 1);
-			Debug.Assert(!tree.Contains(i * 2));
+			Assert.False(tree.Contains(i * 2));
 		}
 	}
 
@@ -50,22 +49,22 @@ public class DelayedIntervalTreeTests
 		int i = 0;
 
 		tree.Add(1, 2, ++i);
-		Debug.Assert(tree.Contains(1));
+		Assert.True(tree.Contains(1));
 		tree.Remove(1, 2);
-		Debug.Assert(!tree.Contains(1));
-		Debug.Assert(!tree.Contains(2));
+		Assert.False(tree.Contains(1));
+		Assert.False(tree.Contains(2));
 		tree.Add(1, 2, ++i);
-		Debug.Assert(tree.Contains(1));
+		Assert.True(tree.Contains(1));
 		tree.Remove(1, 2);
-		Debug.Assert(!tree.Contains(1));
+		Assert.False(tree.Contains(1));
 		tree.Add(1, 2, ++i);
-		Debug.Assert(tree.Contains(1));
+		Assert.True(tree.Contains(1));
 		tree.Add(3, 4, ++i);
-		Debug.Assert(tree.Contains(3));
+		Assert.True(tree.Contains(3));
 		tree.Remove(1, 2);
-		Debug.Assert(!tree.Contains(1));
-		Debug.Assert(!tree.Contains(2));
+		Assert.False(tree.Contains(1));
+		Assert.False(tree.Contains(2));
 		tree.Remove(3, 4);
-		Debug.Assert(!tree.Contains(3));
+		Assert.False(tree.Contains(3));
 	}
 }
