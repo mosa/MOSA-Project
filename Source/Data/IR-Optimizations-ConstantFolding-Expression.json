@@ -38,7 +38,7 @@
 			"Name": "Add##",
 			"SubName": "x2",
 			"Expression": "IR.Add## (IR.Add## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.Add## a [Add##(To##(b), To##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -48,7 +48,7 @@
 			"Name": "AddR#",
 			"SubName": "x2",
 			"Expression": "IR.AddR# (IR.AddR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.AddR# a [AddR#(ToR#(b), ToR#(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -58,7 +58,7 @@
 			"Name": "Sub##",
 			"SubName": "x2",
 			"Expression": "IR.Sub## (IR.Sub## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.Sub## a [Sub##(To##(b), To##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -68,7 +68,7 @@
 			"Name": "SubR#",
 			"SubName": "x2",
 			"Expression": "IR.SubR# (IR.SubR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.SubR# a [SubR#(ToR#(b), ToR#(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -78,7 +78,7 @@
 			"Name": "MulSigned##",
 			"SubName": "x2",
 			"Expression": "IR.MulSigned## (IR.MulSigned## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.MulSigned## a [MulSigned##(ToSigned##(b), ToSigned##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -88,7 +88,7 @@
 			"Name": "MulR#",
 			"SubName": "x2",
 			"Expression": "IR.MulR# (IR.MulR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.MulR# a [MulR#(ToR#(b), ToR#(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -98,7 +98,7 @@
 			"Name": "MulUnsigned##",
 			"SubName": "x2",
 			"Expression": "IR.MulUnsigned## (IR.MulUnsigned## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.MulUnsigned## a [MulUnsigned##(To##(b), To##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -108,7 +108,7 @@
 			"Name": "Or##",
 			"SubName": "x2",
 			"Expression": "IR.Or## (IR.Or## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.Or## a [Or##(To##(b), To##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -118,7 +118,7 @@
 			"Name": "And##",
 			"SubName": "x2",
 			"Expression": "IR.And## (IR.And## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.And## a [And##(To##(b), To##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -128,7 +128,7 @@
 			"Name": "Xor##",
 			"SubName": "x2",
 			"Expression": "IR.Xor## (IR.Xor## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.Xor## a [Xor##(To##(b), To##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -138,7 +138,7 @@
 			"Name": "AddSub##",
 			"SubName": "",
 			"Expression": "IR.Add## (IR.Sub## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.Sub## a [Add##(To##(b), To##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -148,7 +148,7 @@
 			"Name": "AddSubR#",
 			"SubName": "",
 			"Expression": "IR.AddR# (IR.SubR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.SubR# a [AddR#(ToR#(b), ToR#(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -158,7 +158,7 @@
 			"Name": "SubAdd##",
 			"SubName": "",
 			"Expression": "IR.Sub## (IR.Add## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.Add## a [Sub##(To##(b), To##(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
@@ -168,7 +168,7 @@
 			"Name": "SubAddR#",
 			"SubName": "",
 			"Expression": "IR.SubR# (IR.AddR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & !IsResolvedConstant(a)",
 			"Result": "(IR.AddR# a [SubR#(ToR#(b), ToR#(c))])",
 			"Priority": "90",
 			"Variations": "Yes"

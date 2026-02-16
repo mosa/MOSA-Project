@@ -509,16 +509,6 @@
 			"Result": "(IR.Move## [To##(0)])",
 			"Priority": "80",
 			"Variations": "Yes"
-		},
-		{
-			"Type": "StrengthReduction",
-			"Name": "And##And##",
-			"SubName": "Consecutive",
-			"Expression": "IR.And## (IR.And## x c1) c2",
-			"Filter": "IsResolvedConstant(c1) & IsResolvedConstant(c2)",
-			"Result": "(IR.And## x [And##(To##(c1), To##(c2))])",
-			"Priority": "85",
-			"Variations": "Yes"
 		}
 	]
 }
