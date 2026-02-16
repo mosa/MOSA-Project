@@ -477,7 +477,6 @@
 			"Priority": "80",
 			"Variations": "Yes"
 		},
-
 		{
 			"Type": "StrengthReduction",
 			"Name": "MulCarryOut##",
@@ -498,6 +497,36 @@
 			"Result": "(IR.Move## [To##(0)]))",
 			"Result2": "(IR.Move## [To##(0)])",
 			"Priority": "80",
+			"Variations": "Yes"
+		},
+
+		{
+			"Type": "StrengthReduction",
+			"Name": "DivSigned##",
+			"SubName": "ByPowerOfTwo",
+			"Expression": "IR.DivSigned## x c",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo##(c) & !IsZero(c) & !IsOne(c)",
+			"Result": "(IR.ArithShiftRight## x [GetPowerOfTwo(To32(c))])",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "RemSigned##",
+			"SubName": "ByNegative1",
+			"Expression": "IR.RemSigned## x -1",
+			"Filter": "",
+			"Result": "(IR.Move## [To##(0)])",
+			"Priority": "80",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "StrengthReduction",
+			"Name": "And##And##",
+			"SubName": "Consecutive",
+			"Expression": "IR.And## (IR.And## x c1) c2",
+			"Filter": "IsResolvedConstant(c1) & IsResolvedConstant(c2)",
+			"Result": "(IR.And## x [And##(To##(c1), To##(c2))])",
+			"Priority": "85",
 			"Variations": "Yes"
 		}
 	]
