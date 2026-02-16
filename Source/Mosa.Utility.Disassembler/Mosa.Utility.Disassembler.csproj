@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="Reko.Decompiler.Runtime" Version="0.12.1" />
+		<PackageReference Include="Reko.Decompiler.Runtime" Version="0.12.2" />
 	</ItemGroup>
 
 	<ItemGroup>
