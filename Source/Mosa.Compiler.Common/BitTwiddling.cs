@@ -48,9 +48,6 @@ public static class BitTwiddling
 
 	public static ulong GetBitsOver(ulong value)
 	{
-		if (value == 0)
-			return 0;
-
 		var count = BitOperations.LeadingZeroCount(value);
 
 		if (count == 0)
