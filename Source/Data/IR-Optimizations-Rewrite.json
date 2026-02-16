@@ -106,6 +106,33 @@
 		},
 		{
 			"Type": "Rewrite",
+			"Name": "CompareObject",
+			"SubName": "LessThanZero",
+			"Expression": "IR.CompareObject {< u} a b",
+			"Filter": "IsZero(b)",
+			"Result": "(IR.CompareObject {!= u} 0 a)",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "CompareManagedPointer",
+			"SubName": "LessThanZero",
+			"Expression": "IR.CompareManagedPointer {< u} a b",
+			"Filter": "IsZero(b)",
+			"Result": "(IR.CompareManagedPointer {!= u} 0 a)",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "Rewrite",
+			"Name": "IfThenElse##",
+			"SubName": "Compare##",
+			"Expression": "IR.IfThenElse## (IR.Compare##x## {==} a b) x x",
+			"Filter": "",
+			"Result": "(IR.Move## x)",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "Rewrite",
 			"Name": "DivSigned32",
 			"SubName": "ToUnsignedDivide",
 			"Expression": "IR.DivSigned32 a c",
