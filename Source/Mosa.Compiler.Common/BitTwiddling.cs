@@ -10,6 +10,9 @@ public static class BitTwiddling
 
 	public static uint GetPowerOfTwo(ulong n)
 	{
+		if (n == 0)
+			return 0;
+
 		var bits = 0U;
 
 		while (n != 0)
@@ -27,12 +30,27 @@ public static class BitTwiddling
 
 	public static int CountLeadingZeros(uint value) => BitOperations.LeadingZeroCount(value);
 
-	public static int GetHighestSetBitPosition(ulong value) => 64 - BitOperations.LeadingZeroCount(value);
+	public static int GetHighestSetBitPosition(ulong value)
+	{
+		if (value == 0)
+			return 0;
 
-	public static int GetHighestSetBitPosition(uint value) => 32 - BitOperations.LeadingZeroCount(value);
+		return 64 - BitOperations.LeadingZeroCount(value);
+	}
+
+	public static int GetHighestSetBitPosition(uint value)
+	{
+		if (value == 0)
+			return 0;
+
+		return 32 - BitOperations.LeadingZeroCount(value);
+	}
 
 	public static ulong GetBitsOver(ulong value)
 	{
+		if (value == 0)
+			return 0;
+
 		var count = BitOperations.LeadingZeroCount(value);
 
 		if (count == 0)
