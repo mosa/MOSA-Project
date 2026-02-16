@@ -32,15 +32,15 @@ public static class IntegerTwiddling
 
 	public static bool IsSubSignedOverflow(int a, int b) => b switch
 	{
-		< 0 when a > int.MaxValue + b => true,
-		> 0 when a < int.MinValue + b => true,
+		< 0 when a < int.MinValue - b => true,
+		> 0 when a > int.MaxValue - b => true,
 		_ => false
 	};
 
 	public static bool IsSubSignedOverflow(long a, long b) => b switch
 	{
-		< 0 when a > long.MaxValue + b => true,
-		> 0 when a < long.MinValue + b => true,
+		< 0 when a < long.MinValue - b => true,
+		> 0 when a > long.MaxValue - b => true,
 		_ => false
 	};
 
