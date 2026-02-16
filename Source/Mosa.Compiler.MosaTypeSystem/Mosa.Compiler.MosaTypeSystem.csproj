@@ -4,4 +4,8 @@
 	  <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);CS8632</NoWarn>
+  </PropertyGroup>
+
 </Project>

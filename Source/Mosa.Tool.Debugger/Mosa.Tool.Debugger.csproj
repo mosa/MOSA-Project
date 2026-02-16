@@ -4,6 +4,7 @@
 		<TargetFramework>net10.0-windows</TargetFramework>
 		<OutputType>WinExe</OutputType>
 		<UseWindowsForms>true</UseWindowsForms>
+		<NoWarn>$(NoWarn);CA2002</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup>

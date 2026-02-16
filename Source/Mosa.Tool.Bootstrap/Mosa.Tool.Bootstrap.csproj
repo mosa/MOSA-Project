@@ -5,6 +5,7 @@
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+		<NoWarn>$(NoWarn);CS8621</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
