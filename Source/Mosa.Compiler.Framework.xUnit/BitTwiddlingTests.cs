@@ -23,6 +23,32 @@ public class BitTwiddlingTests
 	}
 
 	[Fact]
+	public void GetPowerOfTwoZero()
+	{
+		Assert.Equal(0u, BitTwiddling.GetPowerOfTwo(0UL));
+	}
+
+	[Fact]
+	public void GetPowerOfTwoSmallPowers()
+	{
+		Assert.Equal(0u, BitTwiddling.GetPowerOfTwo(1UL));
+		Assert.Equal(1u, BitTwiddling.GetPowerOfTwo(2UL));
+		Assert.Equal(2u, BitTwiddling.GetPowerOfTwo(4UL));
+		Assert.Equal(3u, BitTwiddling.GetPowerOfTwo(8UL));
+		Assert.Equal(4u, BitTwiddling.GetPowerOfTwo(16UL));
+		Assert.Equal(5u, BitTwiddling.GetPowerOfTwo(32UL));
+	}
+
+	[Fact]
+	public void GetPowerOfTwoLargePowers()
+	{
+		Assert.Equal(10u, BitTwiddling.GetPowerOfTwo(1024UL));
+		Assert.Equal(16u, BitTwiddling.GetPowerOfTwo(65536UL));
+		Assert.Equal(20u, BitTwiddling.GetPowerOfTwo(1048576UL));
+		Assert.Equal(32u, BitTwiddling.GetPowerOfTwo(4294967296UL));
+	}
+
+	[Fact]
 	public void CountTrailingZeros()
 	{
 		Assert.Equal(0, BitTwiddling.CountTrailingZeros(ulong.MaxValue));
