@@ -1,6 +1,6 @@
-curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20251224.exe --output qemu-installer.exe
+curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20251224.exe --output %temp%\mosa\qemu-installer.exe
 del /S /Q qemu
-7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y qemu-installer.exe
+7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y %temp%\mosa\qemu-installer.exe
 rem del /Q qemu-installer.exe
 
 del /S /Q qemu\share\icons
