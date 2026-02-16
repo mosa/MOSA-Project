@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "IR-Optimizations-Simplification",
 	"Family": "IR",
 	"Section": "Optimizations.Auto",
 	"Commutative": [

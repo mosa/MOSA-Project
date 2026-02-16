@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "IR-Optimizations-Useless",
 	"Family": "IR",
 	"Section": "Optimizations.Auto",
 	"Commutative": [

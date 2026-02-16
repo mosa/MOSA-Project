@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "IR-Optimizations-Reorder",
 	"Family": "IR",
 	"Section": "Optimizations.Auto",
 	"Commutative": [

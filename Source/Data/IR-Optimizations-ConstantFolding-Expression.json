@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "IR-Optimizations-ConstantFolding-Expression",
 	"Family": "IR",
 	"Section": "Optimizations.Auto",
 	"Commutative": [

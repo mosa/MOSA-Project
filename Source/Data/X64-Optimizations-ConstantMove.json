@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "X64-Optimizations-ConstantMove",
 	"Family": "x86",
 	"Section": "Optimizations.Auto",
 	"Commutative": [

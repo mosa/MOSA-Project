@@ -1,4 +1,5 @@
 ﻿{
+	"Name": "X86-Optimizations-IRTransform",
 	"Family": "x86",
 	"Section": "IRTransform.Auto",
 	"Commutative": [
