@@ -9,18 +9,18 @@ public class AlignmmentTests
 	[Fact]
 	public void AlignUp()
 	{
-		Assert.Equal(Alignment.AlignUp(3, 1), 3);
-		Assert.Equal(Alignment.AlignUp(3, 2), 4);
-		Assert.Equal(Alignment.AlignUp(4096 * 2, 4096), 4096 * 2);
-		Assert.Equal(Alignment.AlignUp(4096 + 1, 4096), 4096 * 2);
+		Assert.Equal(3, Alignment.AlignUp(3, 1));
+		Assert.Equal(4, Alignment.AlignUp(3, 2));
+		Assert.Equal(4096 * 2, Alignment.AlignUp(4096 * 2, 4096));
+		Assert.Equal(4096 * 2, Alignment.AlignUp(4096 + 1, 4096));
 	}
 
 	[Fact]
 	public void AlignDown()
 	{
-		Assert.Equal(Alignment.AlignDown(3, 1), 3);
-		Assert.Equal(Alignment.AlignDown(3, 2), 2);
-		Assert.Equal(Alignment.AlignDown(4096 * 2, 4096), 4096 * 2);
-		Assert.Equal(Alignment.AlignDown((4096 * 2) + 10, 4096), 4096 * 2);
+		Assert.Equal(3, Alignment.AlignDown(3, 1));
+		Assert.Equal(2, Alignment.AlignDown(3, 2));
+		Assert.Equal(4096 * 2, Alignment.AlignDown(4096 * 2, 4096));
+		Assert.Equal(4096 * 2, Alignment.AlignDown((4096 * 2) + 10, 4096));
 	}
 }
