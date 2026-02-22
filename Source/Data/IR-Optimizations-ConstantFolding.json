@@ -152,7 +152,7 @@
 			"Name": "RemUnsigned##",
 			"SubName": "",
 			"Expression": "IR.RemUnsigned## a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & !IsZero(b)",
 			"Result": "(IR.Move## [RemUnsigned##(To##(a),To##(b))])",
 			"Priority": "100"
 		},
@@ -161,7 +161,7 @@
 			"Name": "RemSigned##",
 			"SubName": "",
 			"Expression": "IR.RemSigned## a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & !IsZero(b)",
 			"Result": "(IR.Move## [RemSigned##(ToSigned##(a),ToSigned##(b))])",
 			"Priority": "100"
 		},
@@ -170,7 +170,7 @@
 			"Name": "RemR#",
 			"SubName": "",
 			"Expression": "IR.RemR# a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & !IsZero(b)",
 			"Result": "(IR.MoveR# [RemR#(ToR#(a),ToR#(b))])",
 			"Priority": "100"
 		},

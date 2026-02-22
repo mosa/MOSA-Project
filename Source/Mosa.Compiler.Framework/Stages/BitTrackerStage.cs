@@ -1944,7 +1944,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		{
 			result.SetValue(0);
 		}
-		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
+		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && !value2.IsZero)
 		{
 			result.SetValue((ulong)(int)((int)value1.BitsSet32 / (int)value2.BitsSet32));
 		}
@@ -1986,7 +1986,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			// divide by zero!
 			return;
 		}
-		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet != 0)
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value2.IsZero)
 		{
 			result.SetValue((ulong)((long)value1.BitsSet / (long)value2.BitsSet));
 		}
@@ -2023,7 +2023,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			// divide by zero!
 			return;
 		}
-		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		else if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && !value2.IsZero)
 		{
 			result.SetValue((ulong)(int)((int)value1.BitsSet32 % (int)value2.BitsSet32));
 		}
@@ -2060,7 +2060,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			// divide by zero!
 			return;
 		}
-		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet != 0)
+		else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value2.IsZero)
 		{
 			result.SetValue((ulong)((long)value1.BitsSet % (long)value2.BitsSet));
 		}
