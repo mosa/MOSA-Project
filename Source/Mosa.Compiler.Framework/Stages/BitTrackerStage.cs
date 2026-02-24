@@ -840,8 +840,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
-				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowSetBits(value1.BitsSet & value2.BitsSet)
 				.NarrowClearBits(value2.BitsClear | value1.BitsClear)
 				.SetStable(value1, value2);
@@ -865,8 +863,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
-				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowSetBits(value1.BitsSet & value2.BitsSet)
 				.NarrowClearBits(value2.BitsClear | value1.BitsClear)
 				.SetStable(value1, value2);
@@ -957,8 +953,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
-				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowSetBits(value1.BitsSet | value2.BitsSet)
 				.NarrowClearBits(value2.BitsClear & value1.BitsClear)
 				.SetStable(value1, value2);
@@ -982,8 +976,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		else
 		{
 			result
-				.NarrowMin(Math.Min(value1.MinValue, value2.MinValue))
-				.NarrowMax(Math.Max(value1.MaxValue, value2.MaxValue))
 				.NarrowSetBits(value1.BitsSet | value2.BitsSet)
 				.NarrowClearBits(value2.BitsClear & value1.BitsClear)
 				.SetStable(value1, value2);
