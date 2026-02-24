@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit;
@@ -100,5 +101,35 @@ public class BitValueTests
 		Assert.False(bitValue.IsOne);
 		Assert.True(bitValue.IsSignBitClear32);
 		Assert.True(bitValue.IsNotZero);
+	}
+
+	[Fact]
+	public void Xor1()
+	{
+		var operand1 = new BitValue(true).NarrowClearBits(0b1111111);
+		var operand2 = new BitValue(true, 77892622);
+
+		var bitsKnown = operand1.BitsKnown & operand2.BitsKnown & uint.MaxValue;
+
+		var xor = operand1.BitsSet ^ operand2.BitsSet & bitsKnown;
+
+		var result = new BitValue(true)
+			.NarrowSetBits(xor)
+			.NarrowClearBits((~xor) & bitsKnown)
+			.SetStable(operand1, operand2);
+
+		Assert.Equal((ulong)0b0001110, result.BitsSet);
+	}
+
+	[Fact]
+	public void Xor2()
+	{
+		var operand1 = new BitValue(true).NarrowClearBits(0b1111111);
+		var operand2 = new BitValue(true, 77892622);
+
+		var result = new BitValue(true)
+			.NarrowBits(operand1.BitsSet ^ operand2.BitsSet, operand1.BitsKnown & operand2.BitsKnown);
+
+		Assert.Equal((ulong)0b0001110, result.BitsSet);
 	}
 }

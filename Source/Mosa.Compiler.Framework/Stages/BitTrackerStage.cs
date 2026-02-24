@@ -996,19 +996,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
-		var bitsKnown = value1.BitsKnown & value2.BitsKnown & uint.MaxValue;
-
-		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
-		{
-			result.SetValue((value1.BitsSet32 ^ value2.BitsSet32) & uint.MaxValue);
-		}
-		else
-		{
-			result
-				.NarrowSetBits((value1.BitsSet ^ value2.BitsSet) & bitsKnown)
-				.NarrowClearBits((value2.BitsClear ^ value1.BitsClear) & bitsKnown)
-				.SetStable(value1, value2);
-		}
+		result.NarrowBits(value1.BitsSet ^ value2.BitsSet, value1.BitsKnown & value2.BitsKnown);
 	}
 
 	private static void Xor64(Node node)
@@ -1017,19 +1005,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
-		var bitsKnown = value1.BitsKnown & value2.BitsKnown;
-
-		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
-		{
-			result.SetValue(value1.BitsSet ^ value2.BitsSet);
-		}
-		else
-		{
-			result
-				.NarrowSetBits((value1.BitsSet ^ value2.BitsSet) & bitsKnown)
-				.NarrowClearBits((value2.BitsClear ^ value1.BitsClear) & bitsKnown)
-				.SetStable(value1, value2);
-		}
+		result.NarrowBits(value1.BitsSet ^ value2.BitsSet, value1.BitsKnown & value2.BitsKnown);
 	}
 
 	private static void Move32(Node node)

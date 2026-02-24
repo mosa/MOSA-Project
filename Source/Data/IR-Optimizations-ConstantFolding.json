@@ -62,7 +62,7 @@
 			"Name": "DivUnsigned##",
 			"SubName": "",
 			"Expression": "IR.DivUnsigned## a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & !IsZero(b)",
 			"Result": "(IR.Move## [DivUnsigned##(To##(a),To##(b))])",
 			"Priority": "100"
 		},
@@ -71,7 +71,7 @@
 			"Name": "DivSigned##",
 			"SubName": "",
 			"Expression": "IR.DivSigned## a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & !IsZero(b)",
 			"Result": "(IR.Move## [DivSigned##(ToSigned##(a),ToSigned##(b))])",
 			"Priority": "100"
 		},
@@ -80,7 +80,7 @@
 			"Name": "DivR#",
 			"SubName": "",
 			"Expression": "IR.DivR# a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & !IsZero(b)",
 			"Result": "(IR.MoveR# [DivR#(ToR#(a),ToR#(b))])",
 			"Priority": "100"
 		},

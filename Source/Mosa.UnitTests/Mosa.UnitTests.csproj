@@ -3,6 +3,14 @@
 	<Import Project="../Mosa.BareMetal.targets" />
 
 	<ItemGroup>
+	  <Compile Remove="Fuzzy\Fuzz0000.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Fuzzy\Fuzz0000.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 	</ItemGroup>
 
