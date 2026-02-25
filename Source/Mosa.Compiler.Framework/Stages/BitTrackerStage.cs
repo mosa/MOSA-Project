@@ -990,7 +990,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowBits(value1.BitsSet ^ value2.BitsSet, value1.BitsKnown & value2.BitsKnown)
-			.SetStable(value1, value2); ;
+			.SetStable(value1, value2);
 	}
 
 	private static void Xor64(Node node)
@@ -1001,7 +1001,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		result
 			.NarrowBits(value1.BitsSet ^ value2.BitsSet, value1.BitsKnown & value2.BitsKnown)
-			.SetStable(value1, value2); ;
+			.SetStable(value1, value2);
 	}
 
 	private static void Move32(Node node)

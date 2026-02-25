@@ -1,12 +1,14 @@
-curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20251224.exe --output %temp%\mosa\qemu-installer.exe
+mkdir %temp%\MOSA
+del /Q %temp%\MOSA\qemu-installer.exe
+
+curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20251224.exe --output %temp%\MOSA\qemu-installer.exe
+
 del /S /Q qemu
-7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y %temp%\mosa\qemu-installer.exe
-rem del /Q qemu-installer.exe
+7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y %temp%\MOSA\qemu-installer.exe
 
 del /S /Q qemu\share\icons
 del /S /Q qemu\share\doc
 del /S /Q qemu\share\man
-
 del /S /Q qemu\qemu-edid.exe
 del /S /Q qemu\qemu-ga.exe
 del /S /Q qemu\qemu-io.exe
@@ -70,7 +72,6 @@ del /S /Q qemu\qemu-system-i386w.exe
 del /S /Q qemu\qemu-system-armw.exe
 del /S /Q qemu\qemu-system-x86_64w.exe
 del /S /Q qemu\$PLUGINSDIR
-
 del /S /Q qemu\lib
 del /S /Q qemu\share\dtb\petalogix-*.dtb
 del /S /Q qemu\share\trace-events-all
