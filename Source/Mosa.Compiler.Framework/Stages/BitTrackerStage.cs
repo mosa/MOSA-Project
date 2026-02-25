@@ -988,7 +988,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
-		result.NarrowBits(value1.BitsSet ^ value2.BitsSet, value1.BitsKnown & value2.BitsKnown);
+		result
+			.NarrowBits(value1.BitsSet ^ value2.BitsSet, value1.BitsKnown & value2.BitsKnown)
+			.SetStable(value1, value2); ;
 	}
 
 	private static void Xor64(Node node)
@@ -997,7 +999,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		var value1 = node.Operand1.BitValue;
 		var value2 = node.Operand2.BitValue;
 
-		result.NarrowBits(value1.BitsSet ^ value2.BitsSet, value1.BitsKnown & value2.BitsKnown);
+		result
+			.NarrowBits(value1.BitsSet ^ value2.BitsSet, value1.BitsKnown & value2.BitsKnown)
+			.SetStable(value1, value2); ;
 	}
 
 	private static void Move32(Node node)

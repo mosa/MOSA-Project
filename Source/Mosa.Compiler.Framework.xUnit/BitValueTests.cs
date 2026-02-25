@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit;
