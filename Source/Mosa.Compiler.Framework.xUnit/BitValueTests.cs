@@ -110,7 +110,7 @@ public class BitValueTests
 
 		var bitsKnown = operand1.BitsKnown & operand2.BitsKnown & uint.MaxValue;
 
-		var xor = operand1.BitsSet ^ operand2.BitsSet & bitsKnown;
+		var xor = (operand1.BitsSet ^ operand2.BitsSet) & bitsKnown;
 
 		var result = new BitValue(true)
 			.NarrowSetBits(xor)
