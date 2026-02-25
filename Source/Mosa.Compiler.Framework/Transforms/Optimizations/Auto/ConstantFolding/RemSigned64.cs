@@ -18,6 +18,9 @@ public sealed class RemSigned64 : BaseTransform
 		if (!IsResolvedConstant(context.Operand2))
 			return false;
 
+		if (IsZero(context.Operand2))
+			return false;
+
 		return true;
 	}
 
