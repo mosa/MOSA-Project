@@ -212,6 +212,11 @@ public sealed class BitValue
 		return this;
 	}
 
+	public BitValue NarrowBits(ulong bits, ulong bitsKnown)
+	{
+		return NarrowSetBits(bits & bitsKnown).NarrowClearBits(~bits & bitsKnown);
+	}
+
 	public BitValue NarrowSetBits(ulong bitsSet)
 	{
 		if (IsFixed)

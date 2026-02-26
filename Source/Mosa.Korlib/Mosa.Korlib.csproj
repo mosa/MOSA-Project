@@ -8,7 +8,7 @@
 		<SkipCommonResourcesIncludes>true</SkipCommonResourcesIncludes>
 		<RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
 		<AssemblyVersion>8.0.0.0</AssemblyVersion>
-		<NoWarn>$(NoWarn);CA1033;CA1065;CA2231;CS3021</NoWarn>
+		<NoWarn>$(NoWarn);CA1033;CA1065;CA2231;CS3021;CS0649;CS0219;CA2214</NoWarn>
 	</PropertyGroup>
 
 </Project>

@@ -79,7 +79,7 @@ public static class LauncherHunter
 
 		if (!Directory.Exists(globalPackageDirectory)) return null;
 
-		string? bestLocation = null;
+		string bestLocation = null;
 		FileVersionInfo bestVersion = null;
 
 		foreach (var directory in Directory.GetDirectories(globalPackageDirectory))
@@ -115,7 +115,7 @@ public static class LauncherHunter
 		return !File.Exists(location) ? null : FileVersionInfo.GetVersionInfo(location);
 	}
 
-	private static int CompareTo(FileVersionInfo? older, FileVersionInfo? newer)
+	private static int CompareTo(FileVersionInfo older, FileVersionInfo newer)
 	{
 		if (newer == null && older != null) return -1;
 		if (newer != null && older == null) return 1;

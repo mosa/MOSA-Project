@@ -2,6 +2,10 @@
 
 	<Import Project="../Mosa.BareMetal.targets" />
 
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);CS0219;CS0168;CA1033</NoWarn>
+	</PropertyGroup>
+	
 	<ItemGroup>
 	  <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 	</ItemGroup>

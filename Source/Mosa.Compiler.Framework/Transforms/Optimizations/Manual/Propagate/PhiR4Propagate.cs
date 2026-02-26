@@ -10,6 +10,9 @@ public sealed class PhiR4Propagate : BaseTransform
 
 	public override bool Match(Context context, Transform transform)
 	{
+		if (context.OperandCount == 0)
+			return false;
+
 		if (context.OperandCount == 1)
 			return true;
 
