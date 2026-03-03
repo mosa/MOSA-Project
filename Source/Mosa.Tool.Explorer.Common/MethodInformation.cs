@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Tool.Explorer;
+namespace Mosa.Tool.Explorer.Common;
 
-public class MethodData
+public class MethodInformation
 {
 	//public MosaMethod Method;
 
@@ -19,4 +19,6 @@ public class MethodData
 	public Dictionary<string, List<string>> DebugLogs = new Dictionary<string, List<string>>();
 
 	public List<string> MethodCounters = new List<string>();
+
+	public List<string> Counters => MethodCounters;
 }

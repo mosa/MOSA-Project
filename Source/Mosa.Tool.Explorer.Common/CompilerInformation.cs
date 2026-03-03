@@ -2,14 +2,14 @@
 
 using System.Diagnostics;
 
-namespace Mosa.Tool.Explorer.Avalonia;
+namespace Mosa.Tool.Explorer.Common;
 
-public class CompilerData
+public class CompilerInformation
 {
 	public readonly Dictionary<string, List<string>> Logs = new Dictionary<string, List<string>>();
 	public readonly List<string> LogSections = new List<string>();
 
-	public readonly Stopwatch Stopwatch = new Stopwatch();
+	public Stopwatch Stopwatch = new Stopwatch();
 
 	public bool DirtyLog = true;
 	public bool DirtyLogSections = true;
@@ -38,7 +38,9 @@ public class CompilerData
 			}
 
 			lock (log)
+			{
 				log.AddRange(lines);
+			}
 
 			DirtyLog = dirty;
 		}
@@ -57,7 +59,9 @@ public class CompilerData
 			}
 
 			lock (log)
+			{
 				log.Add(line);
+			}
 
 			DirtyLog = true;
 		}
@@ -66,7 +70,12 @@ public class CompilerData
 	public List<string> GetLog(string section)
 	{
 		lock (Logs)
-			return Logs.GetValueOrDefault(section);
+		{
+			if (Logs.TryGetValue(section, out List<string> log))
+				return log;
+
+			return null;
+		}
 	}
 
 	public void AddTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
@@ -80,21 +89,21 @@ public class CompilerData
 		var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
 		var msg = $"{compilerEvent.ToText()}{part}";
 
-		var timeLog = $"{Stopwatch.Elapsed.TotalSeconds:00.00} | [{threadID}] {msg}";
+		var timelog = $"{Stopwatch.Elapsed.TotalSeconds:00.00} | [{threadID}] {msg}";
 
 		if (compilerEvent == CompilerEvent.Error)
 		{
 			UpdateLog("Error", msg);
-			UpdateLog("Compiler", timeLog);
+			UpdateLog("Compiler", timelog);
 		}
 		if (compilerEvent == CompilerEvent.Exception)
 		{
 			UpdateLog("Exception", msg);
-			UpdateLog("Compiler", timeLog);
+			UpdateLog("Compiler", timelog);
 		}
 		else
 		{
-			UpdateLog("Compiler", timeLog);
+			UpdateLog("Compiler", timelog);
 		}
 	}
 
@@ -102,11 +111,12 @@ public class CompilerData
 	{
 		lock (Logs)
 		{
-			if (!Logs.TryGetValue(section, out List<string> lines))
-				return;
-
-			lines.Sort();
-			Logs[section] = lines;
+			if (Logs.ContainsKey(section))
+			{
+				var lines = Logs[section];
+				lines.Sort();
+				Logs[section] = lines;
+			}
 		}
 	}
 }

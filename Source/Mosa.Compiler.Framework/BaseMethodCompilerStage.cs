@@ -572,15 +572,20 @@ public abstract class BaseMethodCompilerStage
 		{
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmptyOrNop || node.Instruction.HasVariableOperands)
+				if (node.IsEmptyOrNop)
 					continue;
 
-				if (node.Instruction.DefaultResultCount != node.ResultCount)
+				var instruction = node.Instruction;
+
+				if (instruction.HasVariableOperands)
+					continue;
+
+				if (instruction.DefaultResultCount != node.ResultCount)
 				{
 					throw new CompilerException($"CHECK-FAILED: Too many results: {block} at {node}");
 				}
 
-				if (node.Instruction.DefaultOperandCount != node.OperandCount)
+				if (instruction.DefaultOperandCount != node.OperandCount)
 				{
 					throw new CompilerException($"CHECK-FAILED: Too many operands: {block} at {node}");
 				}

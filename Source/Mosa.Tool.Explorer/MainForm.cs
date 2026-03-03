@@ -11,7 +11,9 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Stages.Diagnostic;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
-using Mosa.Tool.Explorer.Stages;
+using Mosa.Tool.Explorer.Common;
+using Mosa.Tool.Explorer.Common.CompilerStage;
+using Mosa.Tool.Explorer.Common.Stages;
 using Mosa.Utility.Configuration;
 
 using static Mosa.Utility.Configuration.MosaSettings;
@@ -40,7 +42,7 @@ public partial class MainForm : Form
 
 	private readonly object _statusLock = new object();
 	private readonly BindingList<CounterEntry> CompilerCounters = new BindingList<CounterEntry>();
-	private readonly CompilerData CompilerData = new CompilerData();
+	private readonly CompilerInformation CompilerInformation = new CompilerInformation();
 	private readonly BindingList<CounterEntry> MethodCounters = new BindingList<CounterEntry>();
 	private readonly MethodStore MethodStore = new MethodStore();
 
@@ -51,7 +53,7 @@ public partial class MainForm : Form
 	private string CurrentLogSection = string.Empty;
 
 	private MosaMethod CurrentMethod = null;
-	private MethodData CurrentMethodData = null;
+	private MethodInformation CurrentMethodInformation = null;
 
 	private string Status = null;
 	private int TotalMethods = 0;
@@ -95,7 +97,7 @@ public partial class MainForm : Form
 
 	public void ClearAllLogs()
 	{
-		CompilerData.ClearAllLogs();
+		CompilerInformation.ClearAllLogs();
 
 		ClearSectionDropDown();
 
@@ -367,7 +369,7 @@ public partial class MainForm : Form
 
 		CurrentLogSection = formatted.Substring(formatted.IndexOf(' ') + 1);
 
-		CompilerData.DirtyLog = true;
+		CompilerInformation.DirtyLog = true;
 
 		RefreshCompilerLog();
 	}
@@ -455,8 +457,8 @@ public partial class MainForm : Form
 	{
 		cbCompilerSections.Items.Clear();
 
-		CompilerData.DirtyLogSections = true;
-		CompilerData.DirtyLog = true;
+		CompilerInformation.DirtyLogSections = true;
+		CompilerInformation.DirtyLog = true;
 
 		RefreshCompilerSelectionDropDown();
 		RefreshCompilerLog();
@@ -472,7 +474,7 @@ public partial class MainForm : Form
 			Directory.CreateDirectory(MosaSettings.DefaultFolder);
 		}
 
-		CompilerData.Stopwatch.Restart();
+		CompilerInformation.Stopwatch.Restart();
 
 		Compiler.ScheduleAll();
 
@@ -497,7 +499,7 @@ public partial class MainForm : Form
 
 		SetStatus("Compiled!");
 
-		CompilerData.SortLog("Counters");
+		CompilerInformation.SortLog("Counters");
 
 		UpdateTree();
 	}
@@ -611,12 +613,12 @@ public partial class MainForm : Form
 
 	private List<string> GetCurrentDebugLines()
 	{
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return null;
 
 		var stage = GetCurrentDebugStage();
 
-		return CurrentMethodData.DebugLogs[stage];
+		return CurrentMethodInformation.DebugLogs[stage];
 	}
 
 	private string GetCurrentDebugStage()
@@ -631,12 +633,12 @@ public partial class MainForm : Form
 
 	private List<InstructionRecord> GetCurrentInstructionLines()
 	{
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return null;
 
 		var stage = GetCurrentInstructionStage();
 
-		return CurrentMethodData.InstructionLogs[stage];
+		return CurrentMethodInformation.InstructionLogs[stage];
 	}
 
 	private string GetCurrentInstructionStage()
@@ -651,7 +653,7 @@ public partial class MainForm : Form
 		return node == null ? null : node.Tag as MosaMethod;
 	}
 
-	private MethodData GetCurrentMethodData()
+	private Common.MethodInformation GetCurrentMethodData()
 	{
 		var method = CurrentMethod;
 
@@ -670,12 +672,12 @@ public partial class MainForm : Form
 
 	private List<InstructionRecord> GetCurrentTransformRecords()
 	{
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return null;
 
 		var stage = GetCurrentTransformStage();
 
-		var logs = CurrentMethodData.TransformLogs[stage];
+		var logs = CurrentMethodInformation.TransformLogs[stage];
 
 		logs.TryGetValue(TransformStep, out var log);
 
@@ -684,12 +686,12 @@ public partial class MainForm : Form
 
 	private int GetTransformMaxSteps()
 	{
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return 0;
 
 		var stage = GetCurrentTransformStage();
 
-		var logs = CurrentMethodData.TransformLogs[stage];
+		var logs = CurrentMethodInformation.TransformLogs[stage];
 
 		return logs.Count;
 	}
@@ -734,7 +736,7 @@ public partial class MainForm : Form
 		if (method == null)
 			return;
 
-		CompilerData.Stopwatch.Reset();
+		CompilerInformation.Stopwatch.Reset();
 
 		Compiler.CompileSingleMethod(method);
 	}
@@ -753,8 +755,8 @@ public partial class MainForm : Form
 
 		SubmitTraceEvent(compilerEvent, message, threadID);
 
-		if (CurrentMethodData == null)
-			CurrentMethodData = GetCurrentMethodData();
+		if (CurrentMethodInformation == null)
+			CurrentMethodInformation = GetCurrentMethodData();
 	}
 
 	private void NotifyMethodCompiled(MosaMethod method)
@@ -813,7 +815,7 @@ public partial class MainForm : Form
 		}
 		else if (traceLog.Type == TraceType.GlobalDebug)
 		{
-			CompilerData.UpdateLog(traceLog.Section, traceLog.Lines, traceLog.Section == CurrentLogSection);
+			CompilerInformation.UpdateLog(traceLog.Section, traceLog.Lines, traceLog.Section == CurrentLogSection);
 		}
 	}
 
@@ -855,12 +857,12 @@ public partial class MainForm : Form
 
 	private void RefreshCompilerLog()
 	{
-		if (!CompilerData.DirtyLog)
+		if (!CompilerInformation.DirtyLog)
 			return;
 
 		if (tabControl.SelectedTab == tabLogs)
 		{
-			tbCompilerLogs.Text = CreateText(CompilerData.GetLog(CurrentLogSection));
+			tbCompilerLogs.Text = CreateText(CompilerInformation.GetLog(CurrentLogSection));
 		}
 
 		if (tabControl.SelectedTab == tabCompilerCounters)
@@ -868,21 +870,21 @@ public partial class MainForm : Form
 			UpdateCompilerCounters();
 		}
 
-		CompilerData.DirtyLog = false;
+		CompilerInformation.DirtyLog = false;
 	}
 
 	private void RefreshCompilerSelectionDropDown()
 	{
-		if (!CompilerData.DirtyLogSections)
+		if (!CompilerInformation.DirtyLogSections)
 			return;
 
-		CompilerData.DirtyLogSections = false;
+		CompilerInformation.DirtyLogSections = false;
 
-		lock (CompilerData.Logs)
+		lock (CompilerInformation.Logs)
 		{
-			for (int i = cbCompilerSections.Items.Count; i < CompilerData.LogSections.Count; i++)
+			for (int i = cbCompilerSections.Items.Count; i < CompilerInformation.LogSections.Count; i++)
 			{
-				var formatted = $"[{i}] {CompilerData.LogSections[i]}";
+				var formatted = $"[{i}] {CompilerInformation.LogSections[i]}";
 
 				cbCompilerSections.Items.Add(formatted);
 			}
@@ -910,7 +912,7 @@ public partial class MainForm : Form
 
 	private void SetStatus(string status)
 	{
-		toolStripStatusLabel.Text = $"{CompilerData.Stopwatch.Elapsed.TotalSeconds:00.00} | {status}"; ;
+		toolStripStatusLabel.Text = $"{CompilerInformation.Stopwatch.Elapsed.TotalSeconds:00.00} | {status}"; ;
 	}
 
 	private void SetTranformationStep(int step)
@@ -942,12 +944,12 @@ public partial class MainForm : Form
 
 	private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		CompilerData.AddTraceEvent(compilerEvent, message, threadID);
+		CompilerInformation.AddTraceEvent(compilerEvent, message, threadID);
 	}
 
 	private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 	{
-		CompilerData.DirtyLog = true;
+		CompilerInformation.DirtyLog = true;
 
 		RefreshCompilerLog();
 	}
@@ -1009,14 +1011,14 @@ public partial class MainForm : Form
 	private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
 	{
 		CurrentMethod = GetCurrentMethod();
-		CurrentMethodData = GetCurrentMethodData();
+		CurrentMethodInformation = GetCurrentMethodData();
 		NodeSelected();
 	}
 
 	private void treeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
 	{
 		CurrentMethod = GetCurrentMethod();
-		CurrentMethodData = GetCurrentMethodData();
+		CurrentMethodInformation = GetCurrentMethodData();
 	}
 
 	private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -1028,7 +1030,7 @@ public partial class MainForm : Form
 	{
 		CompilerCounters.Clear();
 
-		var lines = CompilerData.GetLog("Counters");
+		var lines = CompilerInformation.GetLog("Counters");
 
 		if (lines == null)
 			return;
@@ -1066,10 +1068,10 @@ public partial class MainForm : Form
 	{
 		cbDebugStages.Items.Clear();
 
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return;
 
-		foreach (string stage in CurrentMethodData.OrderedDebugStageNames)
+		foreach (string stage in CurrentMethodInformation.OrderedDebugStageNames)
 		{
 			cbDebugStages.Items.Add(stage);
 		}
@@ -1148,17 +1150,17 @@ public partial class MainForm : Form
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbInstructions.Text = FormatInstructions.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
+		tbInstructions.Text = FormatInstruction.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
 	}
 
 	private void UpdateInstructionStages()
 	{
 		cbInstructionStages.Items.Clear();
 
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return;
 
-		foreach (var stage in CurrentMethodData.OrderedStageNames)
+		foreach (var stage in CurrentMethodInformation.OrderedStageNames)
 		{
 			cbInstructionStages.Items.Add(stage);
 		}
@@ -1170,16 +1172,16 @@ public partial class MainForm : Form
 	{
 		tbMethodCounters.Text = string.Empty;
 
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return;
 
-		tbMethodCounters.Text = CreateText(CurrentMethodData.MethodCounters);
+		tbMethodCounters.Text = CreateText(CurrentMethodInformation.MethodCounters);
 
 		MethodCounters.Clear();
 
 		var filter = tbCounterFilter.Text;
 
-		foreach (var line in CurrentMethodData.MethodCounters)
+		foreach (var line in CurrentMethodInformation.MethodCounters)
 		{
 			if (!line.Contains(filter))
 				continue;
@@ -1277,17 +1279,17 @@ public partial class MainForm : Form
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbTransforms.Text = FormatInstructions.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
+		tbTransforms.Text = FormatInstruction.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
 	}
 
 	private void UpdateTransformStages()
 	{
 		cbTransformStages.Items.Clear();
 
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return;
 
-		foreach (var stage in CurrentMethodData.OrderedTransformStageNames)
+		foreach (var stage in CurrentMethodInformation.OrderedTransformStageNames)
 		{
 			cbTransformStages.Items.Add(stage);
 		}
@@ -1389,89 +1391,21 @@ public partial class MainForm : Form
 		UpdateGraphviz();
 	}
 
-	private class TranformEntry
-	{
-		public int ID { get; set; }
-
-		public string Name { get; set; }
-
-		public string Before { get; set; }
-
-		public string After { get; set; }
-
-		public string Block { get; set; }
-
-		public int Pass { get; set; }
-	}
-
 	private void PopulateTransformList()
 	{
 		dataGridView1.DataSource = null;
 
-		if (CurrentMethodData == null)
+		if (CurrentMethodInformation == null)
 			return;
 
 		var stage = GetCurrentTransformStage();
 
-		if (!CurrentMethodData.DebugLogs.ContainsKey(stage))
+		if (!CurrentMethodInformation.DebugLogs.ContainsKey(stage))
 			return;
 
-		var debug = CurrentMethodData.DebugLogs[stage];
+		var debug = CurrentMethodInformation.DebugLogs[stage];
 
-		if (debug.Contains("*** Pass"))
-			return;
-
-		var list = new List<TranformEntry>();
-
-		list.Add(new TranformEntry() { ID = 0, Name = "***Start***" });
-
-		var pass = 0;
-		TranformEntry entry = null;
-
-		foreach (var line in debug)
-		{
-			if (string.IsNullOrEmpty(line))
-				continue;
-
-			if (line.StartsWith("*** Pass"))
-			{
-				pass = Convert.ToInt32(line[10..]);
-				continue;
-			}
-
-			if (line.StartsWith("Merge Blocking: ") || line.StartsWith("Removed Unreachable Block:"))
-				continue;
-
-			var parts = line.Split('\t');
-
-			if (parts.Length != 2)
-				continue;
-
-			var part1 = parts[1].Substring(1).Trim();
-
-			if (parts[0].StartsWith("L_"))
-			{
-				entry.Block = parts[0].TrimEnd();
-				entry.Before = part1;
-				continue;
-			}
-
-			if (parts[0].StartsWith(' '))
-			{
-				entry.After = part1;
-				continue;
-			}
-
-			entry = new TranformEntry
-			{
-				ID = Convert.ToInt32(parts[0].Trim()),
-				Name = part1,
-				Pass = pass
-			};
-
-			list.Add(entry);
-		}
-
+		var list = TransformListBuilder.BuildTransformList(debug);
 		dataGridView1.DataSource = list;
 		dataGridView1.AutoResizeColumns();
 	}
@@ -1481,7 +1415,7 @@ public partial class MainForm : Form
 		if (dataGridView1.CurrentCell == null)
 			return;
 
-		var entry = dataGridView1.CurrentCell.OwningRow.DataBoundItem as TranformEntry;
+		var entry = dataGridView1.CurrentCell.OwningRow.DataBoundItem as TransformEntry;
 
 		if (cbSetBlock.Checked && !string.IsNullOrEmpty(entry.Block))
 		{

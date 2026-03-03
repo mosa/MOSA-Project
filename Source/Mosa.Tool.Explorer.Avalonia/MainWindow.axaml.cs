@@ -12,10 +12,13 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Stages.Diagnostic;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
-using Mosa.Tool.Explorer.Avalonia.CompilerStage;
-using Mosa.Tool.Explorer.Avalonia.Stages;
+using Mosa.Tool.Explorer.Common;
+using Mosa.Tool.Explorer.Common.CompilerStage;
+using Mosa.Tool.Explorer.Common.Stages;
 using Mosa.Utility.Configuration;
 using Timer = System.Timers.Timer;
+using ExplorerCompilerData = Mosa.Tool.Explorer.Common.CompilerInformation;
+using ExplorerMethodData = Mosa.Tool.Explorer.Common.MethodInformation;
 
 namespace Mosa.Tool.Explorer.Avalonia;
 
@@ -23,7 +26,7 @@ public partial class MainWindow : Window
 {
 	private readonly object statusLock = new object();
 
-	private readonly CompilerData compilerData = new CompilerData();
+	private readonly ExplorerCompilerData compilerData = new ExplorerCompilerData();
 	private readonly MethodStore methodStore = new MethodStore();
 
 	private readonly ObservableCollection<CounterEntry> counterCollection = new ObservableCollection<CounterEntry>();
@@ -36,7 +39,7 @@ public partial class MainWindow : Window
 	private string currentLogSection = string.Empty;
 
 	private MosaMethod currentMethod;
-	private MethodData currentMethodData;
+	private ExplorerMethodData currentMethodData;
 
 	private string status;
 	private int totalMethods, transformStep;
@@ -516,56 +519,7 @@ public partial class MainWindow : Window
 		if (!currentMethodData.DebugLogs.TryGetValue(stage, out var debug))
 			return;
 
-		if (debug.Contains("*** Pass"))
-			return;
-
-		var list = new List<TransformEntry> { new TransformEntry { ID = 0, Name = "***Start***" } };
-		var pass = 0;
-		TransformEntry entry = null;
-
-		foreach (var line in debug)
-		{
-			if (string.IsNullOrEmpty(line))
-				continue;
-
-			if (line.StartsWith("*** Pass"))
-			{
-				pass = Convert.ToInt32(line[10..]);
-				continue;
-			}
-
-			if (line.StartsWith("Merge Blocking: ") || line.StartsWith("Removed Unreachable Block:"))
-				continue;
-
-			var parts = line.Split('\t');
-			if (parts.Length != 2)
-				continue;
-
-			var part1 = parts[1][1..].Trim();
-
-			if (parts[0].StartsWith("L_") && entry != null)
-			{
-				entry.Block = parts[0].TrimEnd();
-				entry.Before = part1;
-				continue;
-			}
-
-			if (parts[0].StartsWith(' ') && entry != null)
-			{
-				entry.After = part1;
-				continue;
-			}
-
-			entry = new TransformEntry
-			{
-				ID = Convert.ToInt32(parts[0].Trim()),
-				Name = part1,
-				Pass = pass
-			};
-
-			list.Add(entry);
-		}
-
+		var list = TransformListBuilder.BuildTransformList(debug);
 		TransformsGrid.ItemsSource = list;
 	}
 
@@ -826,7 +780,7 @@ public partial class MainWindow : Window
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		Instructions.Text = FormatInstructions.Format(records, label, !ShowOperandTypes.IsChecked,
+		Instructions.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked,
 			RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
 	}
 
@@ -846,7 +800,7 @@ public partial class MainWindow : Window
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		Transforms.Text = FormatInstructions.Format(records, label, !ShowOperandTypes.IsChecked,
+		Transforms.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked,
 			RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
 	}
 
@@ -936,7 +890,7 @@ public partial class MainWindow : Window
 
 	private MosaMethod GetCurrentMethod() => ((TreeViewItem)TreeView.SelectedItem)?.Tag as MosaMethod;
 
-	private MethodData GetCurrentMethodData() => currentMethod == null ? null : methodStore.GetMethodData(currentMethod, false);
+	private ExplorerMethodData GetCurrentMethodData() => currentMethod == null ? null : methodStore.GetMethodData(currentMethod, false);
 
 	private void CreateTree()
 	{
