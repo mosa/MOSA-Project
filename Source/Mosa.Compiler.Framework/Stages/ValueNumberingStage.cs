@@ -311,7 +311,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		UpdatePhiSuccesors(block);
 
 		var children = AnalysisDominance.GetChildren(block);
-		if (children != null || children.Count == 0)
+		if (children != null || children.Count != 0)
 		{
 			nextblocks = GetOrderedChildBlocks(children);
 		}
