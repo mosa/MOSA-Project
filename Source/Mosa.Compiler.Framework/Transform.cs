@@ -238,40 +238,45 @@ public sealed class Transform
 		if (!transform.Match(context, this))
 			return false;
 
-		TraceBefore(context, transform);
+		TraceBefore(context.Node, transform);
 
 		transform.Transform(context, this);
 
-		TraceAfter(context);
+		TraceAfter(context.Node);
 
 		return true;
 	}
 
 	#region Trace
 
-	private void TraceBefore(Context context, BaseTransform transformation)
+	public void TraceBefore(Node node, string name = null, bool log = false)
 	{
 		TransformCount++;
 
 		if (!IsTraceTransforms)
 			return;
 
-		TraceLog?.Log($"{TransformCount,-7}\t| {transformation.Name}");
+		TraceLog?.Log($"{TransformCount,-7}\t| {name ?? string.Empty}");
 
-		if (transformation.Log)
-			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName} at {context}");
+		if (log)
+			SpecialTraceLog?.Log($"{name ?? string.Empty}\t{Method.FullName} at {node}");
 
-		TraceLog?.Log($"{context.Block}\t| {context}");
+		TraceLog?.Log($"{node.Block}\t| {node}");
 	}
 
-	private void TraceAfter(Context context)
+	public void TraceBefore(Node node, BaseTransform transformation)
+	{
+		TraceBefore(node, transformation.Name, transformation.Log);
+	}
+
+	public void TraceAfter(Node node)
 	{
 		if (!IsTraceTransforms)
 			return;
 
 		TraceInstructions();
 
-		TraceLog?.Log($"       \t| {context}");
+		TraceLog?.Log($"       \t| {node}");
 		TraceLog?.Log();
 	}
 

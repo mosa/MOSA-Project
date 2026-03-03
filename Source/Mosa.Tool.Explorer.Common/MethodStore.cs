@@ -3,18 +3,18 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Tool.Explorer;
+namespace Mosa.Tool.Explorer.Common;
 
 public class MethodStore
 {
-	private readonly Dictionary<MosaMethod, MethodData> methodDataStore = new Dictionary<MosaMethod, MethodData>();
+	private readonly Dictionary<MosaMethod, MethodInformation> methodDataStore = new Dictionary<MosaMethod, MethodInformation>();
 
 	public void Clear()
 	{
 		methodDataStore.Clear();
 	}
 
-	private static void ClearMethodDataOnNewVersion(int version, MethodData methodData)
+	private static void ClearMethodDataOnNewVersion(int version, MethodInformation methodData)
 	{
 		if (methodData.Version != version)
 		{
@@ -29,15 +29,15 @@ public class MethodStore
 		}
 	}
 
-	public MethodData GetMethodData(MosaMethod method, bool create)
+	public MethodInformation GetMethodData(MosaMethod method, bool create)
 	{
 		lock (methodDataStore)
 		{
-			if (!methodDataStore.TryGetValue(method, out MethodData methodData))
+			if (!methodDataStore.TryGetValue(method, out MethodInformation methodData))
 			{
 				if (create)
 				{
-					methodData = new MethodData();
+					methodData = new MethodInformation();
 					methodDataStore.Add(method, methodData);
 				}
 			}

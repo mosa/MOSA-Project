@@ -197,10 +197,10 @@ public sealed class Context
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Context" /> class.
 	/// </summary>
-	/// <param name="instructionNode">The instruction node.</param>
-	public Context(Node instructionNode)
+	/// <param name="node">The instruction node.</param>
+	public Context(Node node)
 	{
-		Node = instructionNode;
+		Node = node;
 	}
 
 	/// <summary>
