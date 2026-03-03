@@ -9,13 +9,14 @@ public abstract class TypeSystemTreeBase<TTree, TNode>
 	where TNode : class
 {
 	public TTree TreeView { get; }
+
 	public TypeSystem TypeSystem { get; }
+
 	public MosaTypeLayout TypeLayout { get; }
 
 	private readonly bool showSizes;
 
 	private readonly Dictionary<object, TNode> map = new Dictionary<object, TNode>();
-	private readonly HashSet<object> contains = new HashSet<object>();
 	private readonly HashSet<MosaUnit> included;
 
 	public bool HasFilter => included != null && included.Count != 0;
@@ -59,13 +60,21 @@ public abstract class TypeSystemTreeBase<TTree, TNode>
 	}
 
 	protected abstract void BeginUpdate();
+
 	protected abstract void EndUpdate();
+
 	protected abstract void ClearTree();
+
 	protected abstract TNode CreateNode(string header, object tag = null);
+
 	protected abstract string GetHeader(TNode node);
+
 	protected abstract void SetHeader(TNode node, string header);
+
 	protected abstract void AddRootNode(TNode node);
+
 	protected abstract void AddChildNode(TNode parent, TNode node);
+
 	protected abstract IEnumerable<TNode> GetChildren(TNode node);
 
 	private void CreateTreeBase()
@@ -86,9 +95,6 @@ public abstract class TypeSystemTreeBase<TTree, TNode>
 
 	private void AddToTree(TNode node, TNode parent)
 	{
-		if (contains.Contains(node))
-			return;
-
 		if (parent == null)
 			AddRootNode(node);
 		else
