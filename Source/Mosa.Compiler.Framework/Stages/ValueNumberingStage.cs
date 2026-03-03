@@ -310,6 +310,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		// For each successor of the block, adjust the φ-function inputs
 		UpdatePhiSuccesors(block);
 
+		// Determine next blocks
 		var children = AnalysisDominance.GetChildren(block);
 		if (children != null || children.Count != 0)
 		{
