@@ -471,7 +471,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v6
         with:
           name: counters-unit-tests
           pattern: counters-*
