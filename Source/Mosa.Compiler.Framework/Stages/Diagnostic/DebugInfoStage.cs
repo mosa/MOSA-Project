@@ -13,7 +13,7 @@ public class DebugInfoStage : BaseMethodCompilerStage
 
 	protected void DumpByInstructions()
 	{
-		var trace = CreateTraceLog("Instructions");
+		var trace = CreateTraceLog("Instructions", 5);
 
 		if (trace == null)
 			return;

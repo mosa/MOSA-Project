@@ -451,10 +451,12 @@ public sealed class MethodCompiler
 			var lastMS = Stopwatch.ElapsedMilliseconds;
 
 			MethodData.ElapsedTicks = lastTick;
+			MethodData.TotalElapsedTicks += lastTick;
 
 			MethodData.Counters.Set("ExecutionTime.Setup.Milliseconds", (int)startMS);
 			MethodData.Counters.Set("ExecutionTime.Execution.Milliseconds", (int)(lastMS - startMS));
 			MethodData.Counters.Set("ExecutionTime.Total.Milliseconds", (int)lastMS);
+			MethodData.Counters.Set("ExecutionTime.TotalAllCompiles.Milliseconds", (int)(MethodData.TotalElapsedTicks / TimeSpan.TicksPerMillisecond));
 
 			var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", MethodData.Version);
 

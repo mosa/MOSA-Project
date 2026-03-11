@@ -29,6 +29,8 @@ public partial class MosaSettings
 		public const int Optimizations_ScanWindow = 30;
 		public const int Optimizations_Inline_Maximum = 12;
 		public const int Optimizations_Inline_AggressiveMaximum = 24;
+
+		public const double MultithreadingProcessorMultiplier = 1.2;
 	}
 
 	#endregion Constants
@@ -624,6 +626,12 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Optimizations_Platform, value);
 	}
 
+	public bool DebugOutput
+	{
+		get => Settings.GetValue(Name.CompilerDebug_EmitDebug, true);
+		set => Settings.SetValue(Name.CompilerDebug_EmitDebug, value);
+	}
+
 	public bool EmitStatistics
 	{
 		get => Settings.GetValue(Name.CompilerDebug_Statistics, true);
@@ -773,7 +781,6 @@ public partial class MosaSettings
 		TemporaryFolder = Path.Combine(Path.GetTempPath(), "MOSA");
 
 		MethodScanner = false;
-		Multithreading = true;
 		Platform = "%DEFAULT%";
 		Multithreading = true;
 		BaseAddress = 0x00400000;
@@ -854,6 +861,10 @@ public partial class MosaSettings
 		ExplorerFilter = "%REGISTRY%";
 
 		InitialStackLocation = 0;
+		DebugOutput = false;
+		EmitStatistics = false;
+
+		MaxThreads = Multithreading ? (int)(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 0;
 	}
 
 	public void NormalizeSettings()
@@ -872,6 +883,12 @@ public partial class MosaSettings
 			case "arm32": Platform = "ARM32"; break;
 			case "arm64": Platform = "ARM64"; break;
 		}
+
+		if (!Multithreading)
+			MaxThreads = 1;
+
+		if (MaxThreads <= 0)
+			MaxThreads = Multithreading ? (int)(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 1;
 	}
 
 	public void AdjustSettings()

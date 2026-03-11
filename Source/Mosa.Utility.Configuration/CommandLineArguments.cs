@@ -78,6 +78,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-map", Setting = Name.CompilerDebug_MapFile, Value = "%DEFAULT%"},
 			new Argument { Name = "-counters", Setting = Name.CompilerDebug_CounterFile},
 			new Argument { Name = "-counters-filter", Setting = Name.CompilerDebug_CounterFilter},
+			new Argument { Name = "-emit-debug", Setting = Name.CompilerDebug_EmitDebug, Value = "true"},
 
 			// Compiler - Debug:
 			new Argument { Name = "-inline-exclude", Setting = Name.Optimizations_Inline_Exclude, IsList = true},

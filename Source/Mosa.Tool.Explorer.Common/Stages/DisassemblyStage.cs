@@ -51,7 +51,7 @@ public class DisassemblyStage : BaseMethodCompilerStage
 
 	private void TracePatchRequests()
 	{
-		var trace = CreateTraceLog("Patch-Requests");
+		var trace = CreateTraceLog("Patch-Requests", 5);
 		if (trace == null)
 			return;
 

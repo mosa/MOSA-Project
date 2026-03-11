@@ -100,8 +100,11 @@ public class MethodScanner
 
 		methodData.IsInvoked = true;
 
+		var lockTimer = Stopwatch.StartNew();
 		lock (invokedMethods)
 		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, invokedMethods);
+
 			invokedMethods.Add(method);
 		}
 	}
@@ -111,8 +114,11 @@ public class MethodScanner
 		if (!IsEnabled)
 			return;
 
+		var lockTimer1 = Stopwatch.StartNew();
 		lock (allocatedTypes)
 		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer1, allocatedTypes);
+
 			if (allocatedTypes.Contains(type))
 				return;
 
@@ -121,8 +127,11 @@ public class MethodScanner
 
 		if (trace != null)
 		{
+			var lockTimer2 = Stopwatch.StartNew();
 			lock (trace)
 			{
+				Compiler.LockMonitor.RecordLockWait(lockTimer2, trace);
+
 				if ((lastSource == null && source != null) || lastSource != source)
 				{
 					trace.Log($"> Method: {(source == null ? "[NULL]" : source.FullName)}");
@@ -132,8 +141,11 @@ public class MethodScanner
 			}
 		}
 
+		var lockTimer3 = Stopwatch.StartNew();
 		lock (_lock)
 		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer3, _lock);
+
 			Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
 
 			// find all invoked methods for this type
@@ -192,8 +204,11 @@ public class MethodScanner
 
 		if (trace != null)
 		{
+			var lockTimer1 = Stopwatch.StartNew();
 			lock (trace)
 			{
+				Compiler.LockMonitor.RecordLockWait(lockTimer1, trace);
+
 				if ((lastSource == null && source != null) || lastSource != source)
 				{
 					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
@@ -204,8 +219,11 @@ public class MethodScanner
 			}
 		}
 
+		var lockTimer2 = Stopwatch.StartNew();
 		lock (_lock)
 		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer2, _lock);
+
 			invokedInteraceTypes.Add(method.DeclaringType);
 
 			var slot = TypeLayout.GetMethodSlot(method);
@@ -222,8 +240,11 @@ public class MethodScanner
 				if (!type.Interfaces.Contains(interfaceType))
 					continue;
 
+				var lockTimer3 = Stopwatch.StartNew();
 				lock (allocatedTypes)
 				{
+					Compiler.LockMonitor.RecordLockWait(lockTimer3, allocatedTypes);
+
 					if (!allocatedTypes.Contains(type))
 						continue;
 				}
@@ -297,8 +318,11 @@ public class MethodScanner
 		{
 			bool contains;
 
+			var lockTimer = Stopwatch.StartNew();
 			lock (allocatedTypes)
 			{
+				Compiler.LockMonitor.RecordLockWait(lockTimer, allocatedTypes);
+
 				contains = allocatedTypes.Contains(derived);
 			}
 
@@ -327,8 +351,11 @@ public class MethodScanner
 			{
 				bool contains;
 
+				var lockTimer = Stopwatch.StartNew();
 				lock (invokedMethods)
 				{
+					Compiler.LockMonitor.RecordLockWait(lockTimer, invokedMethods);
+
 					contains = invokedMethods.Contains(method);
 				}
 
@@ -431,8 +458,11 @@ public class MethodScanner
 		if (!field.IsStatic)
 			return;
 
+		var lockTimer = Stopwatch.StartNew();
 		lock (accessedFields)
 		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, accessedFields);
+
 			accessedFields.AddIfNew(field);
 		}
 	}

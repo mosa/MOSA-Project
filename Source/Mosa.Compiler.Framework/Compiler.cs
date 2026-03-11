@@ -17,15 +17,23 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public sealed class Compiler
 {
-	private const uint MaxThreads = 1024;
+	private static class Constant
+	{
+		public const uint MaxThreads = 1024;
+		public const long LockContentionThresholdMs = 100;
+	}
 
 	#region Data Members
-
-	private readonly Pipeline<BaseMethodCompilerStage>[] MethodStagePipelines;
 
 	private Dictionary<string, IntrinsicMethodDelegate> InternalIntrinsicMethods { get; } = new Dictionary<string, IntrinsicMethodDelegate>();
 
 	private Dictionary<string, StubMethodDelegate> InternalStubMethods { get; } = new Dictionary<string, StubMethodDelegate>();
+
+	private readonly Pipeline<BaseMethodCompilerStage>[] MethodStagePipelines;
+
+	private int ActiveThreadCount;
+	private long[] ThreadCPUTicks;
+	private long[] ThreadWallTicks;
 
 	#endregion Data Members
 
@@ -64,7 +72,7 @@ public sealed class Compiler
 	/// <summary>
 	/// Gets the counters.
 	/// </summary>
-	public Counters GlobalCounters { get; } = new Counters();
+	public Counters GlobalCounters { get; }
 
 	/// <summary>
 	/// Gets the scheduler.
@@ -94,7 +102,7 @@ public sealed class Compiler
 	/// <summary>
 	/// Gets the compiler data.
 	/// </summary>
-	public CompilerData CompilerData { get; } = new CompilerData();
+	public CompilerData CompilerData { get; private set; }
 
 	/// <summary>
 	/// Gets or sets a value indicating whether [all stop].
@@ -118,6 +126,8 @@ public sealed class Compiler
 	public Stopwatch TotalCompileTime { get; } = new Stopwatch();
 
 	public Stopwatch LinkerTime { get; } = new Stopwatch();
+
+	public LockMonitor LockMonitor { get; }
 
 	#endregion Properties
 
@@ -238,11 +248,16 @@ public sealed class Compiler
 
 		PostEvent(CompilerEvent.CompilerStart);
 
+		GlobalCounters = new Counters(this, "Global");
+		CompilerData = new CompilerData(this);
 		Linker = new MosaLinker(this);
+		LockMonitor = new LockMonitor(this);
 
 		ObjectHeaderSize = Architecture.NativePointerSize + 4 + 4; // Method Table Ptr + Hash Value (32-bit) + Lock & Status (32-bit)
 
-		MethodStagePipelines = new Pipeline<BaseMethodCompilerStage>[MaxThreads];
+		MethodStagePipelines = new Pipeline<BaseMethodCompilerStage>[Constant.MaxThreads];
+		ThreadCPUTicks = new long[Constant.MaxThreads];
+		ThreadWallTicks = new long[Constant.MaxThreads];
 
 		MethodScheduler = new MethodScheduler(this);
 		MethodScanner = new MethodScanner(this);
@@ -305,21 +320,21 @@ public sealed class Compiler
 	/// </summary>
 	/// <param name="method">The method.</param>
 	/// <param name="basicBlocks">The basic blocks.</param>
-	/// <param name="threadID">The thread identifier.</param>
-	public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
+	/// <param name="threadSlot">The thread slot.</param>
+	public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, int threadSlot = 0)
 	{
-		PostEvent(CompilerEvent.MethodCompileStart, method.FullName, threadID);
+		PostEvent(CompilerEvent.MethodCompileStart, method.FullName, threadSlot);
 
-		var pipeline = GetOrCreateMethodStagePipeline(threadID);
+		var pipeline = GetMethodStagePipeline(threadSlot);
 
-		var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID)
+		var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadSlot)
 		{
 			Pipeline = pipeline
 		};
 
 		methodCompiler.Compile();
 
-		PostEvent(CompilerEvent.MethodCompileEnd, method.FullName, threadID);
+		PostEvent(CompilerEvent.MethodCompileEnd, method.FullName, threadSlot);
 
 		CompilerHooks.NotifyMethodCompiled?.Invoke(method);
 	}
@@ -328,7 +343,7 @@ public sealed class Compiler
 	{
 		PostEvent(CompilerEvent.MethodCompileStart, transform.Method.FullName, transform.MethodCompiler.ThreadID);
 
-		var pipeline = GetOrCreateMethodStagePipeline(transform.MethodCompiler.ThreadID);
+		var pipeline = GetMethodStagePipeline(transform.MethodCompiler.ThreadID);
 
 		transform.MethodCompiler.Pipeline = pipeline;
 		transform.MethodCompiler.Compile();
@@ -338,32 +353,32 @@ public sealed class Compiler
 		CompilerHooks.NotifyMethodCompiled?.Invoke(transform.Method);
 	}
 
-	private Pipeline<BaseMethodCompilerStage> GetOrCreateMethodStagePipeline(int threadID)
+	private Pipeline<BaseMethodCompilerStage> GetMethodStagePipeline(int threadSlot)
 	{
-		var pipeline = MethodStagePipelines[threadID];
+		var pipeline = MethodStagePipelines[threadSlot];
 
-		if (pipeline == null)
+		if (pipeline != null)
+			return pipeline;
+
+		pipeline = new Pipeline<BaseMethodCompilerStage>();
+
+		MethodStagePipelines[threadSlot] = pipeline;
+
+		// Setup the initial pipeline
+		InitializeMethodCompilerPipeline(pipeline, MosaSettings);
+
+		// Call hook to allow for the extension of the pipeline
+		CompilerHooks.ExtendMethodCompilerPipeline?.Invoke(pipeline, MosaSettings);
+
+		// Extend pipeline with architecture stages
+		Architecture.ExtendMethodCompilerPipeline(pipeline, MosaSettings);
+
+		// Extend pipeline after all hooks and architecture stages are added
+		ExtendMethodCompilerPipeline(pipeline, MosaSettings);
+
+		foreach (var stage in pipeline)
 		{
-			pipeline = new Pipeline<BaseMethodCompilerStage>();
-
-			MethodStagePipelines[threadID] = pipeline;
-
-			// Setup the initial pipeline
-			InitializeMethodCompilerPipeline(pipeline, MosaSettings);
-
-			// Call hook to allow for the extension of the pipeline
-			CompilerHooks.ExtendMethodCompilerPipeline?.Invoke(pipeline, MosaSettings);
-
-			// Extend pipeline with architecture stages
-			Architecture.ExtendMethodCompilerPipeline(pipeline, MosaSettings);
-
-			// Extend pipeline after all hooks and architecture stages are added
-			ExtendMethodCompilerPipeline(pipeline, MosaSettings);
-
-			foreach (var stage in pipeline)
-			{
-				stage.Initialize(this);
-			}
+			stage.Initialize(this);
 		}
 
 		return pipeline;
@@ -416,23 +431,28 @@ public sealed class Compiler
 			if (IsStopped)
 				return;
 
-			if (ProcessQueue() == null)
+			if (ProcessQueue(0) == null)
 				break;
 		}
 
 		PostEvent(CompilerEvent.CompilingMethodsCompleted);
 	}
 
-	private MosaMethod ProcessQueue(int threadID = 0)
+	private MosaMethod ProcessQueue(int threadSlot)
 	{
+		var methodData = MethodScheduler.Get();
+
+		return CompileMethod(methodData, threadSlot);
+	}
+
+	public MosaMethod CompileMethod(MethodData methodData, int threadSlot)
+	{
+		if (methodData == null)
+			return null;
+
 		try
 		{
-			var methodData = MethodScheduler.GetMethodToCompile();
-
-			if (methodData == null)
-				return null;
-
-			CompileMethod(methodData.Method, threadID);
+			CompileMethod(methodData.Method, threadSlot);
 
 			return methodData.Method;
 		}
@@ -441,6 +461,10 @@ public sealed class Compiler
 			LogException(exception, exception.Message, "ProcessQueue");
 			Stop();
 			return null;
+		}
+		finally
+		{
+			MethodScheduler.MarkCompleted(methodData);
 		}
 	}
 
@@ -454,16 +478,19 @@ public sealed class Compiler
 		CompileMethod(method, 0);
 	}
 
-	private MosaMethod CompileMethod(MosaMethod method, int threadID)
+	private MosaMethod CompileMethod(MosaMethod method, int threadSlot)
 	{
 		if (method.IsCompilerGenerated)
 			return method;
 
 		Debug.Assert(!method.HasOpenGenericParams);
 
+		var lockTimer = Stopwatch.StartNew();
 		lock (method)
 		{
-			CompileMethod(method, null, threadID);
+			LockMonitor.RecordLockWait(lockTimer, method, null, location: "Method");
+
+			CompileMethod(method, null, threadSlot);
 		}
 
 		CompilerHooks.NotifyProgress?.Invoke(MethodScheduler.TotalMethods, MethodScheduler.TotalMethods - MethodScheduler.TotalQueuedMethods);
@@ -473,6 +500,8 @@ public sealed class Compiler
 
 	public void ExecuteCompile(int maxThreads)
 	{
+		ActiveThreadCount = maxThreads;
+
 		GlobalCounters.Set("Compiler.MaxThreads", maxThreads);
 
 		PostEvent(CompilerEvent.CompilingMethodsStart);
@@ -482,36 +511,33 @@ public sealed class Compiler
 
 		if (maxThreads > 0)
 		{
-			var threads = Enumerable
-				.Range(0, maxThreads)
-				.Select(x => new Thread(CompilePass))
-				.ToList();
+			var pool = new PipelinePool(MethodScheduler, this, maxThreads);
 
-			threads.ForEach(x => x.Start());
-			threads.ForEach(x => x.Join());
+			// Connect the pool to the scheduler for profiling
+			MethodScheduler.SetPipelinePool(pool);
+
+			// subscribe scheduler -> pool signal
+			var schedulerSubscription = MethodScheduler.Subscribe(pool.NotifyWorkAdded);
+
+			// wait until done
+			pool.Completion.GetAwaiter().GetResult();
+
+			schedulerSubscription.Dispose();
+
+			pool.DisposeAsync().AsTask().GetAwaiter().GetResult();
 		}
 		else
 		{
-			CompilePass();
+			while (true)
+			{
+				var result = ProcessQueue(0);
+
+				if (result == null)
+					return;
+			}
 		}
 
 		PostEvent(CompilerEvent.CompilingMethodsCompleted);
-	}
-
-	private void CompilePass()
-	{
-		var threadID = Thread.CurrentThread.ManagedThreadId;
-		var success = 0;
-
-		while (true)
-		{
-			var result = ProcessQueue(threadID);
-
-			if (result == null)
-				return;
-
-			success++;
-		}
 	}
 
 	/// <summary>
@@ -526,6 +552,9 @@ public sealed class Compiler
 		GlobalCounters.Set("Elapsed.Total.Milliseconds", (int)CompileTime.ElapsedMilliseconds);
 
 		PostEvent(CompilerEvent.FinalizationStart);
+
+		// Emit per-thread performance metrics to GlobalCounters
+		EmitThreadPerformanceMetrics();
 
 		// Sum up the counters
 		foreach (var methodData in CompilerData.MethodData)
@@ -562,6 +591,9 @@ public sealed class Compiler
 		MethodScanner.Complete();
 
 		EmitCounters();
+
+		// Output lock contention summary
+		LockMonitor.GetLockContentionSummary(Constant.LockContentionThresholdMs);
 
 		PostEvent(CompilerEvent.FinalizationEnd);
 		PostEvent(CompilerEvent.CompilerEnd);
@@ -607,7 +639,7 @@ public sealed class Compiler
 
 	private void EmitCounters()
 	{
-		foreach (var counter in GlobalCounters.GetCounters())
+		foreach (var counter in GlobalCounters.GetSortedCounters())
 		{
 			PostEvent(CompilerEvent.Counter, counter.ToString());
 		}
@@ -645,10 +677,10 @@ public sealed class Compiler
 	/// </summary>
 	/// <param name="compilerEvent">The compiler event.</param>
 	/// <param name="message">The message.</param>
-	/// <param name="threadID">The thread identifier.</param>
-	public void PostEvent(CompilerEvent compilerEvent, string message = null, int threadID = 0)
+	/// <param name="threadSlot">The thread identifier.</param>
+	public void PostEvent(CompilerEvent compilerEvent, string message = null, int threadSlot = 0)
 	{
-		CompilerHooks.NotifyEvent?.Invoke(compilerEvent, message ?? string.Empty, threadID);
+		CompilerHooks.NotifyEvent?.Invoke(compilerEvent, message ?? string.Empty, threadSlot);
 	}
 
 	private MosaType GetPlatformInternalRuntimeType()
@@ -664,6 +696,76 @@ public sealed class Compiler
 	public MethodData GetMethodData(MosaMethod method)
 	{
 		return CompilerData.GetMethodData(method);
+	}
+
+	private void EmitThreadPerformanceMetrics()
+	{
+		if (ActiveThreadCount == 0)
+			return;
+
+		double wallClockMs = CompileTime.ElapsedMilliseconds;
+
+		// Per-thread metrics
+		for (var threadId = 0; threadId < ActiveThreadCount; threadId++)
+		{
+			long processingTicks = ThreadCPUTicks[threadId];
+			long wallTicks = ThreadWallTicks[threadId];
+			double processingMs = processingTicks / 10000.0;
+			double wallMs = wallTicks / 10000.0;
+			double utilityPercent = wallMs > 0 ? (processingMs / wallMs) * 100 : 0;
+
+			GlobalCounters.Set($"Compiler.Performance.Thread.{threadId}.CPUTime.Milliseconds", (int)processingMs);
+			GlobalCounters.Set($"Compiler.Performance.Thread.{threadId}.WallTime.Milliseconds", (int)wallMs);
+			GlobalCounters.Set($"Compiler.Performance.Thread.{threadId}.Utility.Percent", (int)utilityPercent);
+		}
+
+		// Aggregate metrics
+		long totalProcessingTicks = 0;
+		for (var i = 0; i < ActiveThreadCount; i++)
+		{
+			totalProcessingTicks += ThreadCPUTicks[i];
+		}
+
+		double totalProcessingMs = totalProcessingTicks / 10000.0;
+		double avgProcessingMs = ActiveThreadCount > 0 ? totalProcessingMs / ActiveThreadCount : 0;
+
+		GlobalCounters.Set("Compiler.Performance.TotalProcessingTime.Milliseconds", (int)totalProcessingMs);
+		GlobalCounters.Set("Compiler.Performance.WallClockTime.Millisecondss", (int)wallClockMs);
+		GlobalCounters.Set("Compiler.Performance.AveragePerThread.Milliseconds", (int)avgProcessingMs);
+
+		// Min/Max thread analysis
+		if (ActiveThreadCount > 0)
+		{
+			var maxThreadId = 0;
+			var minThreadId = 0;
+			var maxTicks = ThreadCPUTicks[0];
+			var minTicks = ThreadCPUTicks[0];
+
+			for (var i = 1; i < ActiveThreadCount; i++)
+			{
+				var ticks = ThreadCPUTicks[i];
+				if (ticks > maxTicks)
+				{
+					maxTicks = ticks;
+					maxThreadId = i;
+				}
+				if (ticks < minTicks)
+				{
+					minTicks = ticks;
+					minThreadId = i;
+				}
+			}
+
+			double maxThreadMs = maxTicks / 10000.0;
+			double minThreadMs = minTicks / 10000.0;
+			double imbalancePercent = minTicks > 0 ? ((maxTicks - minTicks) / (double)maxTicks) * 100 : 0;
+
+			GlobalCounters.Set("Compiler.Performance.MaxThread.Milliseconds", (int)maxThreadMs);
+			GlobalCounters.Set("Compiler.Performance.MinThread.Milliseconds", (int)minThreadMs);
+			GlobalCounters.Set("Compiler.Performance.MaxThread.ID", maxThreadId);
+			GlobalCounters.Set("Compiler.Performance.MinThread.ID", minThreadId);
+			GlobalCounters.Set("Compiler.Performance.ThreadImbalance.Percent", (int)imbalancePercent);
+		}
 	}
 
 	#endregion Helper Methods

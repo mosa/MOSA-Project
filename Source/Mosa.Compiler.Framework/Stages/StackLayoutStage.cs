@@ -23,7 +23,7 @@ public sealed class StackLayoutStage : BaseMethodCompilerStage
 
 	private void TraceStackLocals()
 	{
-		var trace = CreateTraceLog("Stack Local");
+		var trace = CreateTraceLog("Stack Local", 5);
 
 		if (trace == null)
 			return;

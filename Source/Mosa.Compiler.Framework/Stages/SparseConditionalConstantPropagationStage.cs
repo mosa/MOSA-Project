@@ -32,7 +32,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 	protected override void Setup()
 	{
-		trace = CreateTraceLog();
+		trace = CreateTraceLog(5);
 
 		changed = false;
 	}

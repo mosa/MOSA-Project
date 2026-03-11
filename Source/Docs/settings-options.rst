@@ -69,6 +69,7 @@ Compiler Debug Settings
     CompilerDebug.PreLinkHashFile,File name to emit a list of all methods with their hash value prior to linking
     CompilerDebug.Statistics,"If true, enables statistics gathering"
 	CompilerDebug.CounterFilter,Filters the global counters within the global counters file
+	CompilerDebug.Emit,Emit debug/diagnostics information
 
 Debugger Settings
 -----------------

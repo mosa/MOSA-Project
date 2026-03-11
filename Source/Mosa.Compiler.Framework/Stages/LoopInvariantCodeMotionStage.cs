@@ -53,7 +53,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 
 		if (trace != null)
 		{
-			var loopTrace = CreateTraceLog("Loops");
+			var loopTrace = CreateTraceLog("Loops", 5);
 
 			LoopDetector.DumpLoops(loopTrace, loops);
 		}

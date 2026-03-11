@@ -89,6 +89,7 @@ Below are the command line arguments available:
     -inline-exclude,Optimizations.Inline.Exclude,{list}
     -test-filter,CompilerDebug.TestFilter,{value}
     -check,CompilerDebug.FullCheckMode,true
+	-emit-debug,CompilerDebug.Emit,true
 
     -interrupt-method,X86.InterruptMethodName,{value}
 

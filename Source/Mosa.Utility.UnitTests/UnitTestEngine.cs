@@ -97,8 +97,6 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.AddSourceFile("Mosa.UnitTests.dll");
 
 		MosaSettings.AddSearchPath(AppContext.BaseDirectory);
-
-		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
 	}
 
 	private void Initialize()
@@ -245,9 +243,11 @@ public class UnitTestEngine : IDisposable
 	{
 		Stopwatch.Restart();
 
-		//MosaSettings.AddSearchPath(TestAssemblyPath);
-		//MosaSettings.ClearSourceFiles();
-		//MosaSettings.AddSourceFile(Path.Combine(TestAssemblyPath, TestSuiteFile));
+		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
+		OutputStatus($"Output file: {MosaSettings.OutputFile}");
+		OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
+		OutputStatus($"Max Threads: {MosaSettings.MaxThreads}");
+		OutputStatus($"Platform: {MosaSettings.Platform}");
 
 		var compilerHook = CreateCompilerHook();
 
@@ -277,20 +277,22 @@ public class UnitTestEngine : IDisposable
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (compilerEvent != CompilerEvent.MethodCompileEnd
-			&& compilerEvent != CompilerEvent.MethodCompileStart
-			&& compilerEvent != CompilerEvent.Counter
-			&& compilerEvent != CompilerEvent.SetupStageStart
-			&& compilerEvent != CompilerEvent.SetupStageEnd
-			&& compilerEvent != CompilerEvent.FinalizationStageStart
-			&& compilerEvent != CompilerEvent.FinalizationStageEnd
-		   )
-		{
-			var eventname = compilerEvent.ToText();
-			message = string.IsNullOrWhiteSpace(message) ? eventname : $"{eventname}: {message}";
+		if (compilerEvent is CompilerEvent.MethodCompileEnd
+			or CompilerEvent.MethodCompileStart
+			or CompilerEvent.Counter
+			or CompilerEvent.SetupStageStart
+			or CompilerEvent.SetupStageEnd
+			or CompilerEvent.FinalizationStageStart
+			or CompilerEvent.FinalizationStageEnd)
+			return;
 
-			OutputStatus(message);
-		}
+		if (compilerEvent == CompilerEvent.Debug && !MosaSettings.DebugOutput)
+			return;
+
+		var eventname = compilerEvent.ToText();
+		message = string.IsNullOrWhiteSpace(message) ? eventname : $"{eventname}: {message}";
+
+		OutputStatus(message);
 	}
 
 	private void NotifyProgress(int totalMethods, int completedMethods)
