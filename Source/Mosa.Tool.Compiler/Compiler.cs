@@ -52,7 +52,7 @@ public class Compiler
 
 			OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
 
-			if (MosaSettings.SourceFiles == null && MosaSettings.SourceFiles.Count == 0)
+			if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
 			{
 				OutputStatus("ERROR: No input file(s) specified.");
 				return 1;

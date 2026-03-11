@@ -554,7 +554,7 @@ public sealed class Compiler
 		PostEvent(CompilerEvent.FinalizationStart);
 
 		// Emit per-thread performance metrics to GlobalCounters
-		EmitThreadPerformanceMetrics();
+		//EmitThreadPerformanceMetrics();
 
 		// Sum up the counters
 		foreach (var methodData in CompilerData.MethodData)
@@ -730,7 +730,7 @@ public sealed class Compiler
 		double avgProcessingMs = ActiveThreadCount > 0 ? totalProcessingMs / ActiveThreadCount : 0;
 
 		GlobalCounters.Set("Compiler.Performance.TotalProcessingTime.Milliseconds", (int)totalProcessingMs);
-		GlobalCounters.Set("Compiler.Performance.WallClockTime.Millisecondss", (int)wallClockMs);
+		GlobalCounters.Set("Compiler.Performance.WallClockTime.Milliseconds", (int)wallClockMs);
 		GlobalCounters.Set("Compiler.Performance.AveragePerThread.Milliseconds", (int)avgProcessingMs);
 
 		// Min/Max thread analysis

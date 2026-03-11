@@ -10,7 +10,10 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public sealed class MethodScheduler
 {
-	private const int QueueReportIntervalSeconds = 1; // Report queue status every 2 seconds
+	private struct Constant
+	{
+		public const int QueueReportIntervalSeconds = 1; // Report queue status every second
+	}
 
 	#region Data Members
 
@@ -325,7 +328,7 @@ public sealed class MethodScheduler
 
 		// Periodic queue status reporting
 		var currentTicks = queueProfileTimer.ElapsedTicks;
-		var timeThresholdMet = currentTicks - lastQueueReportTicks >= Stopwatch.Frequency * QueueReportIntervalSeconds;
+		var timeThresholdMet = currentTicks - lastQueueReportTicks >= Stopwatch.Frequency * Constant.QueueReportIntervalSeconds;
 
 		if (timeThresholdMet)
 		{
