@@ -10,10 +10,9 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public sealed class LockMonitor
 {
-	private struct Contants
+	private struct Constant
 	{
 		public const long LockWaitWarningThresholdMs = 50;
-		public const long LockReportIntervalTicks = TimeSpan.TicksPerSecond * 2;
 	}
 
 	private struct LockStats
@@ -64,7 +63,7 @@ public sealed class LockMonitor
 			currentStats = lockStat;
 		}
 
-		if (waitMs < Contants.LockWaitWarningThresholdMs)
+		if (waitMs < Constant.LockWaitWarningThresholdMs)
 			return;
 
 		ReportLockContention(lockName, currentStats, waitMs, location);
