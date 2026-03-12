@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
 using System.IO.Pipes;
@@ -12,6 +12,8 @@ using Mosa.Utility.Launcher;
 using Mosa.Utility.UnitTests.DebugEngine;
 
 namespace Mosa.Utility.UnitTests;
+
+public delegate void OutputStatusDelegate(string status);
 
 public class UnitTestEngine : IDisposable
 {
@@ -41,6 +43,8 @@ public class UnitTestEngine : IDisposable
 	protected Starter Starter;
 	protected Process Process;
 
+	private readonly OutputStatusDelegate OutputStatus;
+
 	private MosaSettings MosaSettings = new();
 
 	private readonly object _lock = new();
@@ -64,8 +68,10 @@ public class UnitTestEngine : IDisposable
 
 	#endregion Private Data Members
 
-	public UnitTestEngine(MosaSettings mosaSettings)
+	public UnitTestEngine(MosaSettings mosaSettings, OutputStatusDelegate outputStatus)
 	{
+		OutputStatus = outputStatus;
+
 		MosaSettings.LoadAppLocations();
 		MosaSettings.SetDefaultSettings();
 		MosaSettings.Merge(mosaSettings);
@@ -302,11 +308,6 @@ public class UnitTestEngine : IDisposable
 	private void NotifyStatus(string status)
 	{
 		OutputStatus($"{status}");
-	}
-
-	private void OutputStatus(string status)
-	{
-		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 
 	public bool LaunchVirtualMachine()

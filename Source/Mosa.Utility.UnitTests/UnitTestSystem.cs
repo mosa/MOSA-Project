@@ -35,7 +35,7 @@ public class UnitTestSystem
 		OutputStatus($"Found Tests: {DiscoveredUnitTests.Count} in {Stopwatch.ElapsedMilliseconds / 1000.0:F2} secs");
 		OutputStatus("Starting Unit Test Engine...");
 
-		var unitTestEngine = new UnitTestEngine(MosaSettings);
+		var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus);
 
 		if (unitTestEngine.IsAborted)
 		{
@@ -57,8 +57,6 @@ public class UnitTestSystem
 
 		unitTestEngine.Terminate();
 
-		OutputStatus(string.Empty);
-
 		var failures = 0;
 		var passed = 0;
 		var skipped = 0;
@@ -79,8 +77,8 @@ public class UnitTestSystem
 			}
 		}
 
-		if (failures != 0)
-			OutputStatus(string.Empty);
+		//if (failures != 0)
+		//	OutputStatus();
 
 		OutputStatus("Unit Test Results:");
 		OutputStatus($"  Passed:     {passed}");
@@ -88,7 +86,6 @@ public class UnitTestSystem
 		OutputStatus($"  Incomplete: {incomplete}");
 		OutputStatus($"  Failures:   {failures}");
 		OutputStatus($"  Total:      {passed + skipped + failures + incomplete}");
-		OutputStatus(string.Empty);
 
 		if (unitTestEngine.IsAborted)
 		{
