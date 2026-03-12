@@ -77,9 +77,6 @@ public class UnitTestSystem
 			}
 		}
 
-		//if (failures != 0)
-		//	OutputStatus();
-
 		OutputStatus("Unit Test Results:");
 		OutputStatus($"  Passed:     {passed}");
 		OutputStatus($"  Skipped:    {skipped}");
@@ -161,7 +158,6 @@ public class UnitTestSystem
 		var cmd = new List<int>(4 + 4 + 4 + 4 + unitTest.MosaMethod.Signature.Parameters.Count)
 		{
 			(int)address,
-			//(int)(address>>32),
 			GetReturnResultType(unitTest.MosaMethod.Signature.ReturnType),
 			0
 		};
