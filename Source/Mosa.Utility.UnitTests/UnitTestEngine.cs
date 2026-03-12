@@ -17,6 +17,19 @@ public delegate void OutputStatusDelegate(string status);
 
 public class UnitTestEngine : IDisposable
 {
+	#region Constants
+
+	private struct Constant
+	{
+		public const int MaxSentQueue = 10000;
+		public const int MaxSendBatch = 1000;
+		public const int MinSendBatch = 200;
+		public const int ConnectionDelay = 150;
+		public const int MaxConnectionErrors = 20;
+	}
+
+	#endregion Constants
+
 	#region Public Methods
 
 	public bool IsAborted => Aborted;
@@ -26,16 +39,6 @@ public class UnitTestEngine : IDisposable
 	public MosaLinker Linker { get; internal set; }
 
 	#endregion Public Methods
-
-	#region Constants
-
-	private const int MaxSentQueue = 10000;
-	private const int MaxSendBatch = 1000;
-	private const int MinSendBatch = 200;
-	private const int ConnectionDelay = 150;
-	private const int MaxConnectionErrors = 20;
-
-	#endregion Constants
 
 	#region Private Data Members
 
@@ -168,12 +171,12 @@ public class UnitTestEngine : IDisposable
 				if (Aborted)
 					return;
 
-				var count = MaxSendBatch;
+				var count = Constant.MaxSendBatch;
 
 				count = Math.Min(count, Queue.Count);
-				count = Math.Min(count, MaxSentQueue - Active.Count);
+				count = Math.Min(count, Constant.MaxSentQueue - Active.Count);
 
-				if (count < MinSendBatch & SendOneCount == 0 & Queue.Count > MinSendBatch)
+				if (count < Constant.MinSendBatch & SendOneCount == 0 & Queue.Count > Constant.MinSendBatch)
 				{
 					count = 0;
 				}
@@ -449,7 +452,7 @@ public class UnitTestEngine : IDisposable
 					KillVirtualMachine();
 				}
 
-				Thread.Sleep(ConnectionDelay);
+				Thread.Sleep(Constant.ConnectionDelay);
 			}
 
 			return false;
@@ -620,7 +623,7 @@ public class UnitTestEngine : IDisposable
 
 	private void CheckAbort()
 	{
-		if (Errors >= MosaSettings.MaxErrors || ConnectionErrors >= MaxConnectionErrors)
+		if (Errors >= MosaSettings.MaxErrors || ConnectionErrors >= Constant.MaxConnectionErrors)
 		{
 			Aborted = true;
 		}
