@@ -295,7 +295,7 @@ public class UnitTestEngine : IDisposable
 			or CompilerEvent.FinalizationStageEnd)
 			return;
 
-		if (compilerEvent == CompilerEvent.Debug && !MosaSettings.DebugOutput)
+		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
 			return;
 
 		var eventname = compilerEvent.ToText();

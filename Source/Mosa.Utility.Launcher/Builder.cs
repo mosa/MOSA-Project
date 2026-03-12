@@ -274,7 +274,7 @@ public class Builder : BaseLauncher
 					OutputStatus(status);
 					break;
 				}
-			case CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error or CompilerEvent.Debug:
+			case CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error or CompilerEvent.Diagnostic:
 				{
 					var status = compilerEvent.ToText();
 					if (!string.IsNullOrEmpty(message))

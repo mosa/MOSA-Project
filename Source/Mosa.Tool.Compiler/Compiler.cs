@@ -132,7 +132,7 @@ public class Compiler
 			or CompilerEvent.FinalizationStageEnd)
 			return;
 
-		if (compilerEvent == CompilerEvent.Debug && !MosaSettings.DebugOutput)
+		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
 			return;
 
 		message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";

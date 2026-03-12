@@ -60,7 +60,6 @@ Compiler Debug Settings
     CompilerDebug.AsmFile,File name to emit ASM disassembly
     CompilerDebug.CompileTimeFile,File name to emit compile times for each method
     CompilerDebug.DebugFile,File name to emit MOSA-specific debug information
-	CompilerDebug.FullCheckMode,"If true, causes the compiler to run internal validate checks (used to test the compiler)"
     CompilerDebug.InlinedFile,File name to emit a list of all inlined methods
     CompilerDebug.MapFile,File name to emit a map of all symbols
     CompilerDebug.CounterFile,File name to emit the global counters
@@ -69,7 +68,16 @@ Compiler Debug Settings
     CompilerDebug.PreLinkHashFile,File name to emit a list of all methods with their hash value prior to linking
     CompilerDebug.Statistics,"If true, enables statistics gathering"
 	CompilerDebug.CounterFilter,Filters the global counters within the global counters file
-	CompilerDebug.Emit,Emit debug/diagnostics information
+	
+Compiler Diagnostic Settings
+----------------------------
+
+.. csv-table::
+   :header: "Settings", "Description"
+   :widths: 50, 200
+
+	Compiler.FullCheckMode,"If true, causes the compiler to run internal validate checks (used to test the compiler)"
+	Compiler.Diagnostic,Emit debug/diagnostics information
 
 Debugger Settings
 -----------------

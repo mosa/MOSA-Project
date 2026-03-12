@@ -626,10 +626,10 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Optimizations_Platform, value);
 	}
 
-	public bool DebugOutput
+	public bool Diagnostic
 	{
-		get => Settings.GetValue(Name.CompilerDebug_EmitDebug, true);
-		set => Settings.SetValue(Name.CompilerDebug_EmitDebug, value);
+		get => Settings.GetValue(Name.Compiler_Diagnostic, true);
+		set => Settings.SetValue(Name.Compiler_Diagnostic, value);
 	}
 
 	public bool EmitStatistics
@@ -668,8 +668,8 @@ public partial class MosaSettings
 
 	public bool FullCheckMode
 	{
-		get => Settings.GetValue(Name.CompilerDebug_FullCheckMode, false);
-		set => Settings.SetValue(Name.CompilerDebug_FullCheckMode, value);
+		get => Settings.GetValue(Name.Compiler_FullCheckMode, false);
+		set => Settings.SetValue(Name.Compiler_FullCheckMode, value);
 	}
 
 	public string BreakpointFile
@@ -861,7 +861,7 @@ public partial class MosaSettings
 		ExplorerFilter = "%REGISTRY%";
 
 		InitialStackLocation = 0;
-		DebugOutput = false;
+		Diagnostic = false;
 		EmitStatistics = false;
 
 		MaxThreads = Multithreading ? (int)(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 0;

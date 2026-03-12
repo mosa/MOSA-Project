@@ -78,11 +78,14 @@ public static class CommandLineArguments
 			new Argument { Name = "-map", Setting = Name.CompilerDebug_MapFile, Value = "%DEFAULT%"},
 			new Argument { Name = "-counters", Setting = Name.CompilerDebug_CounterFile},
 			new Argument { Name = "-counters-filter", Setting = Name.CompilerDebug_CounterFilter},
-			new Argument { Name = "-emit-debug", Setting = Name.CompilerDebug_EmitDebug, Value = "true"},
 
 			// Compiler - Debug:
 			new Argument { Name = "-inline-exclude", Setting = Name.Optimizations_Inline_Exclude, IsList = true},
-			new Argument { Name = "-check", Setting = Name.CompilerDebug_FullCheckMode, Value = "true"},
+
+			// Compiler - Diagnostic:
+			new Argument { Name = "-diagnostic", Setting = Name.Compiler_Diagnostic, Value = "true"},
+			new Argument { Name = "-diag", Setting = Name.Compiler_Diagnostic, Value = "true"},
+			new Argument { Name = "-check", Setting = Name.Compiler_FullCheckMode, Value = "true"},
 
 			new Argument { Name = "-interrupt-method", Setting = Name.X86_InterruptMethodName},
 

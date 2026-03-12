@@ -79,7 +79,7 @@ public sealed class LockMonitor
 		if (snapshot.Count == 0)
 			return;
 
-		compiler.PostEvent(CompilerEvent.Debug, "Lock Contention Summary:");
+		compiler.PostEvent(CompilerEvent.Diagnostic, "Lock Contention Summary:");
 
 		foreach (var kvp in snapshot)
 		{
@@ -89,7 +89,7 @@ public sealed class LockMonitor
 			var avgWaitMs = stats.Count > 0 ? stats.TotalWaitMs / (double)stats.Count : 0;
 
 			compiler.PostEvent(
-				CompilerEvent.Debug,
+				CompilerEvent.Diagnostic,
 				$"[Lock Contention] Count: {stats.Count} | Peak: {stats.PeakWaitMs}ms | Avg: {avgWaitMs:F1}ms | Wait: {stats.TotalWaitMs}ms -> {lockName} {stats.Type}");
 		}
 	}
@@ -100,7 +100,7 @@ public sealed class LockMonitor
 		location = location == null ? string.Empty : $"[{location}] ";
 
 		compiler.PostEvent(
-			CompilerEvent.Debug,
+			CompilerEvent.Diagnostic,
 			$"[Lock Contention] Count: {stats.Count} | Current: {waitMs}ms | Peak: {stats.PeakWaitMs}ms | Avg: {avgWaitMs:F1}ms | Wait: {stats.TotalWaitMs}ms -> {location}{lockName} {stats.Type} ");
 	}
 }

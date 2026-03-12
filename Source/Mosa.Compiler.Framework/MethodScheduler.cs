@@ -372,7 +372,7 @@ public sealed class MethodScheduler
 		var deferredCount = totalDeferred;
 
 		Compiler.PostEvent(
-			CompilerEvent.Debug,
+			CompilerEvent.Diagnostic,
 			$"[Queue] Size: {currentQueueSize} | Deferred: {deferredCount} | " +
 			$"Active: {activeWorkers}/{maxWorkers} ({utilizationPercent:F1}%) | Idle: {idleWorkers} | " +
 			$"Enqueue: {enqueueRate}/s | Dequeue: {dequeueRate}/s | " +
