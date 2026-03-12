@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using dnlib;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Utility.Configuration;
@@ -86,10 +85,10 @@ public class Compiler
 
 			compiler.Compile();
 		}
-		catch (Exception ce)
+		catch (Exception ex)
 		{
-			OutputStatus($"Exception: {ce.Message}");
-			OutputStatus($"Exception: {ce.StackTrace}");
+			OutputStatus($"Exception: {ex.Message}");
+			OutputStatus($"Exception: {ex.StackTrace}");
 			return 1;
 		}
 

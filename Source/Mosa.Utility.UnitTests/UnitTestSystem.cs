@@ -25,80 +25,89 @@ public class UnitTestSystem
 
 	public int Start(string[] args)
 	{
-		MosaSettings.LoadArguments(args);
-		Stopwatch.Start();
-
-		OutputStatus("Discovering Unit Tests...");
-
-		DiscoveredUnitTests = Discovery.DiscoverUnitTests(MosaSettings.UnitTestFilter);
-
-		OutputStatus($"Found Tests: {DiscoveredUnitTests.Count} in {Stopwatch.ElapsedMilliseconds / 1000.0:F2} secs");
-		OutputStatus("Starting Unit Test Engine...");
-
-		var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus);
-
-		if (unitTestEngine.IsAborted)
+		try
 		{
-			OutputStatus("ERROR: Compilation aborted!");
-			return 1;
-		}
+			MosaSettings.LoadArguments(args);
+			Stopwatch.Start();
 
-		UnitTests = PrepareUnitTest(DiscoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
+			OutputStatus("Discovering Unit Tests...");
 
-		var executeStart = Stopwatch.ElapsedMilliseconds;
+			DiscoveredUnitTests = Discovery.DiscoverUnitTests(MosaSettings.UnitTestFilter);
 
-		unitTestEngine.QueueUnitTests(UnitTests);
-		unitTestEngine.WaitUntilComplete();
+			OutputStatus($"Found Tests: {DiscoveredUnitTests.Count} in {Stopwatch.ElapsedMilliseconds / 1000.0:F2} secs");
+			OutputStatus("Starting Unit Test Engine...");
 
-		var elapse = Stopwatch.ElapsedMilliseconds;
+			var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus);
 
-		OutputStatus($"Unit Testing: {(elapse - executeStart) / 1000.0:F2} secs");
-		OutputStatus($"Total: {elapse / 1000.0} secs");
-
-		unitTestEngine.Terminate();
-
-		var failures = 0;
-		var passed = 0;
-		var skipped = 0;
-		var incomplete = 0;
-
-		foreach (var unitTest in UnitTests)
-		{
-			switch (unitTest.Status)
+			if (unitTestEngine.IsAborted)
 			{
-				case UnitTestStatus.Passed: passed++; break;
-				case UnitTestStatus.Skipped: skipped++; break;
-				case UnitTestStatus.Pending: incomplete++; break;
-				case UnitTestStatus.FailedByCrash:
-				case UnitTestStatus.Failed:
-					failures++;
-					OutputStatus(FormatUnitTestResult(unitTest));
-					break;
+				OutputStatus("ERROR: Compilation aborted!");
+				return 1;
+			}
+
+			UnitTests = PrepareUnitTest(DiscoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
+
+			var executeStart = Stopwatch.ElapsedMilliseconds;
+
+			unitTestEngine.QueueUnitTests(UnitTests);
+			unitTestEngine.WaitUntilComplete();
+
+			var elapse = Stopwatch.ElapsedMilliseconds;
+
+			OutputStatus($"Unit Testing: {(elapse - executeStart) / 1000.0:F2} secs");
+			OutputStatus($"Total: {elapse / 1000.0} secs");
+
+			unitTestEngine.Terminate();
+
+			var failures = 0;
+			var passed = 0;
+			var skipped = 0;
+			var incomplete = 0;
+
+			foreach (var unitTest in UnitTests)
+			{
+				switch (unitTest.Status)
+				{
+					case UnitTestStatus.Passed: passed++; break;
+					case UnitTestStatus.Skipped: skipped++; break;
+					case UnitTestStatus.Pending: incomplete++; break;
+					case UnitTestStatus.FailedByCrash:
+					case UnitTestStatus.Failed:
+						failures++;
+						OutputStatus(FormatUnitTestResult(unitTest));
+						break;
+				}
+			}
+
+			OutputStatus("Unit Test Results:");
+			OutputStatus($"  Passed:     {passed}");
+			OutputStatus($"  Skipped:    {skipped}");
+			OutputStatus($"  Incomplete: {incomplete}");
+			OutputStatus($"  Failures:   {failures}");
+			OutputStatus($"  Total:      {passed + skipped + failures + incomplete}");
+
+			if (unitTestEngine.IsAborted)
+			{
+				OutputStatus("ERROR: Unit tests aborted due to failures!");
+				return 1;
+			}
+
+			if (failures + incomplete == 0)
+			{
+				OutputStatus("All unit tests passed successfully!");
+				return 0;
+			}
+			else
+			{
+				OutputStatus("ERROR: Failures occurred in the unit tests!");
+				return failures + incomplete;
 			}
 		}
-
-		OutputStatus("Unit Test Results:");
-		OutputStatus($"  Passed:     {passed}");
-		OutputStatus($"  Skipped:    {skipped}");
-		OutputStatus($"  Incomplete: {incomplete}");
-		OutputStatus($"  Failures:   {failures}");
-		OutputStatus($"  Total:      {passed + skipped + failures + incomplete}");
-
-		if (unitTestEngine.IsAborted)
+		catch (Exception ex)
 		{
-			OutputStatus("ERROR: Unit tests aborted due to failures!");
+			OutputStatus($"Exception: {ex.Message}");
+			OutputStatus($"Exception: {ex.StackTrace}");
 			return 1;
-		}
-
-		if (failures + incomplete == 0)
-		{
-			OutputStatus("All unit tests passed successfully!");
-			return 0;
-		}
-		else
-		{
-			OutputStatus("ERROR: Failures occurred in the unit tests!");
-			return failures + incomplete;
 		}
 	}
 
