@@ -12,7 +12,11 @@ internal static class Program
 		{
 			RegisterPlatforms();
 
-			Environment.Exit(UnitTestSystem.Start(args));
+			var UnitTestSystem = new UnitTestSystem();
+
+			var code = UnitTestSystem.Start(args);
+
+			Environment.Exit(code);
 		}
 		catch (Exception ex)
 		{

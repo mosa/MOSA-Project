@@ -544,7 +544,7 @@ public class UnitTestEngine : IDisposable
 					foreach (var entry in Active)
 					{
 						entry.Value.Status = UnitTestStatus.FailedByCrash;
-						OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(entry.Value)}");
+						OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(entry.Value)}");
 					}
 				}
 				else
@@ -609,7 +609,7 @@ public class UnitTestEngine : IDisposable
 			{
 				unittest.Status = UnitTestStatus.Failed;
 
-				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unittest)}");
+				OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(unittest)}");
 
 				Errors++;
 				CheckAbort();
