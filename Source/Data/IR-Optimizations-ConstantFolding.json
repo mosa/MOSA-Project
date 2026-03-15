@@ -44,7 +44,7 @@
 			"Name": "ShiftRight##",
 			"SubName": "",
 			"Expression": "IR.ShiftRight## a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) ",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
 			"Result": "(IR.Move## [ShiftRight##(To##(a),ToSigned##(b))])",
 			"Priority": "100"
 		},

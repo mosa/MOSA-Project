@@ -354,24 +354,6 @@
 		},
 		{
 			"Type": "Simplification",
-			"Name": "Add##",
-			"SubName": "v1",
-			"Expression": "IR.Add## (IR.Sub## a b) b)",
-			"Filter": "",
-			"Result": "(IR.Move## b)",
-			"Variations": "Yes"
-		},
-		{
-			"Type": "Simplification",
-			"Name": "Sub##",
-			"SubName": "v1",
-			"Expression": "IR.Sub## (IR.Add## a b) a)",
-			"Filter": "",
-			"Result": "(IR.Move## b)",
-			"Variations": "Yes"
-		},
-		{
-			"Type": "Simplification",
 			"Name": "Compare32x##",
 			"SubName": "SwapToZero",
 			"Expression": "IR.Compare32x## {!=} (IR.And## a 1) 1)",
@@ -549,6 +531,24 @@
 			"Filter": "!IsResult2Used(@)",
 			"Result": "(IR.MulSigned## a b)",
 			"Variations": "No"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "ShiftRight##",
+			"SubName": "",
+			"Expression": "IR.ShiftRight## a b",
+			"Filter": "!IsResolvedConstant(a) & & IsResolvedConstant(b) & IsGreaterOrEqual(To##(b),##)",
+			"Result": "(IR.ShiftRight## a [Sub##(And##(To##(b),##),1)])",
+			"Priority": "25"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "ShiftLeft##",
+			"SubName": "",
+			"Expression": "IR.ShiftLeft## a b",
+			"Filter": "!IsResolvedConstant(a) & IsResolvedConstant(b) & IsGreaterOrEqual(To##(b),##)",
+			"Result": "(IR.ShiftLeft## a [Sub##(And##(To##(b),##),1)])",
+			"Priority": "25"
 		}
 	]
 }

@@ -499,7 +499,6 @@
 			"Priority": "80",
 			"Variations": "Yes"
 		},
-
 		{
 			"Type": "StrengthReduction",
 			"Name": "RemSigned##",
