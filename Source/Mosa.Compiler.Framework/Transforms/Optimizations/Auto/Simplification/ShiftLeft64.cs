@@ -31,7 +31,7 @@ public sealed class ShiftLeft64 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = Operand.CreateConstant(And64(Sub64(To64(t2), 64), 1));
+		var e1 = Operand.CreateConstant(And64(To64(t2), Sub64(64, 1)));
 
 		context.SetInstruction(IR.ShiftLeft64, result, t1, e1);
 	}
