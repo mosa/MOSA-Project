@@ -31,7 +31,7 @@ public sealed class ShiftLeft32 : BaseTransform
 		var t1 = context.Operand1;
 		var t2 = context.Operand2;
 
-		var e1 = Operand.CreateConstant(Sub32(And32(To32(t2), 32), 1));
+		var e1 = Operand.CreateConstant(And32(Sub32(To32(t2), 32), 1));
 
 		context.SetInstruction(IR.ShiftLeft32, result, t1, e1);
 	}

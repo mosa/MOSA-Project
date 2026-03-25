@@ -176,7 +176,7 @@ public class UnitTestEngine : IDisposable
 				count = Math.Min(count, Queue.Count);
 				count = Math.Min(count, Constant.MaxSentQueue - Active.Count);
 
-				if (count < Constant.MinSendBatch & SendOneCount == 0 & Queue.Count > Constant.MinSendBatch)
+				if (count < Constant.MinSendBatch && SendOneCount == 0 && Queue.Count > Constant.MinSendBatch)
 				{
 					count = 0;
 				}

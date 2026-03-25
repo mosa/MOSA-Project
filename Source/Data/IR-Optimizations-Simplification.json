@@ -537,8 +537,8 @@
 			"Name": "ShiftRight##",
 			"SubName": "",
 			"Expression": "IR.ShiftRight## a b",
-			"Filter": "!IsResolvedConstant(a) & & IsResolvedConstant(b) & IsGreaterOrEqual(To##(b),##)",
-			"Result": "(IR.ShiftRight## a [Sub##(And##(To##(b),##),1)])",
+			"Filter": "!IsResolvedConstant(a) & IsResolvedConstant(b) & IsGreaterOrEqual(To##(b),##)",
+			"Result": "(IR.ShiftRight## a [And##(Sub##(To##(b),##),1)])",
 			"Priority": "25"
 		},
 		{
@@ -547,7 +547,7 @@
 			"SubName": "",
 			"Expression": "IR.ShiftLeft## a b",
 			"Filter": "!IsResolvedConstant(a) & IsResolvedConstant(b) & IsGreaterOrEqual(To##(b),##)",
-			"Result": "(IR.ShiftLeft## a [Sub##(And##(To##(b),##),1)])",
+			"Result": "(IR.ShiftLeft## a [And##(Sub##(To##(b),##),1)])",
 			"Priority": "25"
 		}
 	]
