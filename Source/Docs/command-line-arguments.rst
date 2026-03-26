@@ -92,7 +92,7 @@ Below are the command line arguments available:
 	Compiler - Diagnostic:
     -check,Compiler.FullCheckMode,true
 	-diagnostic,Compiler.Diagnostic,true
-
+	-diag,Compiler.Diagnostic,true
     -interrupt-method,X86.InterruptMethodName,{value}
 
     Linker:
