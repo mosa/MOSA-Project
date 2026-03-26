@@ -628,7 +628,7 @@ public partial class MosaSettings
 
 	public bool Diagnostic
 	{
-		get => Settings.GetValue(Name.Compiler_Diagnostic, true);
+		get => Settings.GetValue(Name.Compiler_Diagnostic, false);
 		set => Settings.SetValue(Name.Compiler_Diagnostic, value);
 	}
 

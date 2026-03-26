@@ -49,13 +49,13 @@ public class Compiler
 			MosaSettings.AddStandardPlugs();
 			MosaSettings.ExpandSearchPaths();
 
-			OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
-
 			if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
 			{
 				OutputStatus("ERROR: No input file(s) specified.");
 				return 1;
 			}
+
+			OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
 
 			var compiler = new MosaCompiler(MosaSettings, CreateCompilerHooks(), new ClrModuleLoader(), new ClrTypeResolver());
 
