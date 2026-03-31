@@ -65,8 +65,9 @@ public static class Name
 	public const string Emulator_Graphics = "Emulator.Graphics";
 	public const string Emulator_Acceleration = "Emulator.Acceleration";
 
-	public const string Explorer_DebugDiagnostic = "Explorer.DebugDiagnostic";
+	//public const string Explorer_DebugDiagnostic = "Explorer.DebugDiagnostic";
 	public const string Explorer_Filter = "Explorer.Filter";
+
 	public const string Explorer_Start = "Explorer.Start";
 	public const string GDB_Host = "GDB.Host";
 	public const string GDB_Port = "GDB.Port";

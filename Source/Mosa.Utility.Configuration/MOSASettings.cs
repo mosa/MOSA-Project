@@ -690,12 +690,6 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Explorer_Start, value);
 	}
 
-	public bool DebugDiagnostic
-	{
-		get => Settings.GetValue(Name.Explorer_DebugDiagnostic, false);
-		set => Settings.SetValue(Name.Explorer_DebugDiagnostic, value);
-	}
-
 	public bool MultibootVideo
 	{
 		get => Settings.GetValue(Name.Multiboot_Video, false);

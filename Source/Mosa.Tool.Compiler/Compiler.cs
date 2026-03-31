@@ -14,8 +14,8 @@ public class Compiler
 {
 	#region Data
 
-	private static readonly Stopwatch Stopwatch = new();
-	private static readonly MosaSettings MosaSettings = new();
+	private readonly Stopwatch Stopwatch = new();
+	private readonly MosaSettings MosaSettings = new();
 
 	#endregion Data
 
@@ -139,7 +139,7 @@ public class Compiler
 		OutputStatus($"{compilerEvent.ToText()}{message}");
 	}
 
-	private static void OutputStatus(string status)
+	private void OutputStatus(string status)
 	{
 		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}

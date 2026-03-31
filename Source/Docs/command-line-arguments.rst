@@ -105,7 +105,6 @@ Below are the command line arguments available:
 
     Explorer:
     -filter,Explorer.Filter,{value}
-	-explorer-debug,Explorer.DebugDiagnostic,true
 	-autostart,Explorer.Start,true
 
     Launcher:

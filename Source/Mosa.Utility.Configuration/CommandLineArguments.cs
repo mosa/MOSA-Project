@@ -99,7 +99,6 @@ public static class CommandLineArguments
 
 			// Explorer:
 			new Argument { Name = "-filter", Setting = Name.Explorer_Filter, Value = null},
-			new Argument { Name = "-explorer-debug", Setting = Name.Explorer_DebugDiagnostic, Value = "true"},
 			new Argument { Name = "-autostart", Setting = Name.Explorer_Start, Value = "true"},
 
 			// Launcher:

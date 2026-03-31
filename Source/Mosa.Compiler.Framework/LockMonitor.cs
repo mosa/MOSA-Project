@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.Instructions;
 
 namespace Mosa.Compiler.Framework;
 
@@ -39,7 +40,7 @@ public sealed class LockMonitor
 	{
 		var waitMs = lockTimer.ElapsedMilliseconds;
 
-		LockStats currentStats;
+		LockStats currentStat;
 
 		lock (_lock)
 		{
@@ -60,13 +61,13 @@ public sealed class LockMonitor
 			if (waitMs > lockStat.PeakWaitMs)
 				lockStat.PeakWaitMs = waitMs;
 
-			currentStats = lockStat;
+			currentStat = lockStat;
 		}
 
 		if (waitMs < Constant.LockWaitWarningThresholdMs)
 			return;
 
-		ReportLockContention(lockName, currentStats, waitMs, location);
+		ReportLockContention(currentStat.Name, currentStat, waitMs, location);
 	}
 
 	public void GetLockContentionSummary(long waitThresholdMs)

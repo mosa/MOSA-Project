@@ -509,7 +509,7 @@ public sealed class Compiler
 		CompileTime.Start();
 		TotalCompileTime.Start();
 
-		if (maxThreads > 0)
+		if (maxThreads > 1)
 		{
 			var pool = new PipelinePool(MethodScheduler, this, maxThreads);
 
