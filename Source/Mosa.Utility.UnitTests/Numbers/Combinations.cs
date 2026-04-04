@@ -367,6 +367,19 @@ public static class Combinations
 		}
 	}
 
+	public static IEnumerable<object[]> I4MiniI4MiniI4MiniI4MiniI4Mini
+	{
+		get
+		{
+			foreach (var i1 in Series.I4Mini)
+				foreach (var i2 in Series.I4Mini)
+					foreach (var i3 in Series.I4Mini)
+						foreach (var i4 in Series.I4Mini)
+							foreach (var i5 in Series.I4Mini)
+								yield return new object[] { i1, i2, i3, i4, i5 };
+		}
+	}
+
 	public static IEnumerable<object[]> I4SmallI4SmallI4SmallI4SmallI4SmallI4SmallI4Small
 	{
 		get
@@ -498,6 +511,18 @@ public static class Combinations
 				foreach (var i2 in Numbers.U1.Series)
 					foreach (var i3 in Numbers.U1.Series)
 						yield return new object[] { i1, i2, i3 };
+		}
+	}
+
+	public static IEnumerable<object[]> U1U1U1U1
+	{
+		get
+		{
+			foreach (var i1 in Numbers.U1.Series)
+				foreach (var i2 in Numbers.U1.Series)
+					foreach (var i3 in Numbers.U1.Series)
+						foreach (var i4 in Numbers.U1.Series)
+							yield return new object[] { i1, i2, i3, i4 };
 		}
 	}
 

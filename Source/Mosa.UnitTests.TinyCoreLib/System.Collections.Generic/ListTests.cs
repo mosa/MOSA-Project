@@ -22,10 +22,10 @@ public static class ListTests
 		return list.Count == 0 && list.Capacity >= 10;
 	}
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_Constructor_FromCollection(int val1, int val2, int val3, int val4, int val5)
 	{
-		var source = new int[] { val1, val2, val3, val4, val5 };
+		int[] source = [val1, val2, val3, val4, val5];
 		var list = new List<int>(source);
 		return list.Count == 5 && list[0] == val1 && list[4] == val5;
 	}
@@ -60,26 +60,26 @@ public static class ListTests
 
 	//  == AddRange tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_AddRange_ValidCollection(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2 };
-		var toAdd = new int[] { val3, val4, val5 };
+		int[] toAdd = [val3, val4, val5];
 		list.AddRange(toAdd);
 		return list.Count == 5 && list[0] == val1 && list[4] == val5;
 	}
 
 	[MosaUnitTest(Series = "I4I4")]
-	public static int Test_AddRange_EmptyCollection(int val1, int val2)
+	public static bool Test_AddRange_EmptyCollection(int val1, int val2)
 	{
 		var list = new List<int> { val1, val2 };
-		list.AddRange(new int[] { });
-		return list.Count;
+		list.AddRange([]);
+		return list.Count == 2 && list[0] == val1 && list[1] == val2;
 	}
 
 	//  == Insert tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_Insert_AtBeginning(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val2, val3, val4 };
@@ -105,11 +105,11 @@ public static class ListTests
 
 	//  == InsertRange tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_InsertRange_ValidCollection(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val5 };
-		var toInsert = new int[] { val2, val3, val4 };
+		int[] toInsert = [val2, val3, val4];
 		list.InsertRange(1, toInsert);
 		return list.Count == 5 && list[1] == val2 && list[2] == val3 && list[3] == val4;
 	}
@@ -120,7 +120,7 @@ public static class ListTests
 	public static bool Test_Remove_ExistingItem(int val1, int val2, int val3, int val4)
 	{
 		var list = new List<int> { val1, val2, val3, val4 };
-		bool removed = list.Remove(val3);
+		var removed = list.Remove(val3);
 		return removed && list.Count == 3 && !list.Contains(val3);
 	}
 
@@ -146,13 +146,13 @@ public static class ListTests
 	public static bool Test_RemoveAll_WithPredicate()
 	{
 		var list = new List<int> { 1, 2, 3, 4, 5, 6 };
-		int removed = list.RemoveAll(x => x % 2 == 0);
+		var removed = list.RemoveAll(x => x % 2 == 0);
 		return removed == 3 && list.Count == 3 && list.Contains(1) && list.Contains(3) && list.Contains(5);
 	}
 
 	//  == RemoveRange tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_RemoveRange_ValidRange(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -162,11 +162,11 @@ public static class ListTests
 
 	//  == IndexOf tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static int Test_IndexOf_ExistingItem(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
-		int index = list.IndexOf(val3);
+		var index = list.IndexOf(val3);
 		return index;
 	}
 
@@ -182,7 +182,7 @@ public static class ListTests
 	public static int Test_IndexOf_WithStartIndex(int val1, int val2, int val3, int val4)
 	{
 		var list = new List<int> { val1, val2, val3, val2, val4 };
-		int index = list.IndexOf(val2, 2);
+		var index = list.IndexOf(val2, 2);
 		return index;
 	}
 
@@ -192,7 +192,7 @@ public static class ListTests
 	public static int Test_LastIndexOf_ExistingItem(int val1, int val2, int val3, int val4)
 	{
 		var list = new List<int> { val1, val2, val3, val2, val4 };
-		int index = list.LastIndexOf(val2);
+		var index = list.LastIndexOf(val2);
 		return index;
 	}
 
@@ -206,7 +206,7 @@ public static class ListTests
 
 	//  == Contains tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_Contains_ExistingItem(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -222,10 +222,10 @@ public static class ListTests
 
 	//  == Clear tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
-	public static int Test_Clear_NonEmptyList(int val1, int val2, int val3, int val4, int val5)
+	[MosaUnitTest]
+	public static int Test_Clear_NonEmptyList()
 	{
-		var list = new List<int> { val1, val2, val3, val4, val5 };
+		var list = new List<int> { 1, 2, 3, 4, 5 };
 		list.Clear();
 		return list.Count;
 	}
@@ -273,7 +273,7 @@ public static class ListTests
 
 	//  == GetRange tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_GetRange_ValidRange(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -283,7 +283,7 @@ public static class ListTests
 
 	//  == Reverse tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_Reverse_EntireList(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -291,7 +291,7 @@ public static class ListTests
 		return list[0] == val5 && list[1] == val4 && list[3] == val2 && list[4] == val1;
 	}
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_Reverse_WithRange(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -319,7 +319,7 @@ public static class ListTests
 
 	//  == Find tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static int Test_Find_ExistingItem(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -355,7 +355,7 @@ public static class ListTests
 
 	//  == FindIndex tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static int Test_FindIndex_ExistingItem(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -373,7 +373,7 @@ public static class ListTests
 
 	//  == FindLast tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static int Test_FindLast_ExistingItem(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -383,7 +383,7 @@ public static class ListTests
 
 	//  == FindLastIndex tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static int Test_FindLastIndex_ExistingItem(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -393,7 +393,7 @@ public static class ListTests
 
 	//  == Exists tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_Exists_WithMatch(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
@@ -464,7 +464,7 @@ public static class ListTests
 
 	//  == BinarySearch tests
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static int Test_BinarySearch_ExistingItem(int val1, int val2, int val3, int val4, int val5)
 	{
 		var list = new List<int> { val1, val2, val3, val4, val5 };
