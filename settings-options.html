@@ -76,6 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#application-location-settings">Application Location Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#compiler-settings">Compiler Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#compiler-debug-settings">Compiler Debug Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-diagnostic-settings">Compiler Diagnostic Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#debugger-settings">Debugger Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#emulator-settings">Emulator Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#explorer-settings">Explorer Settings</a></li>
@@ -288,32 +289,51 @@
 <tr class="row-even"><td><p>CompilerDebug.DebugFile</p></td>
 <td><p>File name to emit MOSA-specific debug information</p></td>
 </tr>
-<tr class="row-odd"><td><p>CompilerDebug.FullCheckMode</p></td>
-<td><p>If true, causes the compiler to run internal validate checks (used to test the compiler)</p></td>
-</tr>
-<tr class="row-even"><td><p>CompilerDebug.InlinedFile</p></td>
+<tr class="row-odd"><td><p>CompilerDebug.InlinedFile</p></td>
 <td><p>File name to emit a list of all inlined methods</p></td>
 </tr>
-<tr class="row-odd"><td><p>CompilerDebug.MapFile</p></td>
+<tr class="row-even"><td><p>CompilerDebug.MapFile</p></td>
 <td><p>File name to emit a map of all symbols</p></td>
 </tr>
-<tr class="row-even"><td><p>CompilerDebug.CounterFile</p></td>
+<tr class="row-odd"><td><p>CompilerDebug.CounterFile</p></td>
 <td><p>File name to emit the global counters</p></td>
 </tr>
-<tr class="row-odd"><td><p>CompilerDebug.NasmFile</p></td>
+<tr class="row-even"><td><p>CompilerDebug.NasmFile</p></td>
 <td><p>File name to emit disassembly using the NASM tool</p></td>
 </tr>
-<tr class="row-even"><td><p>CompilerDebug.PostLinkHashFile</p></td>
+<tr class="row-odd"><td><p>CompilerDebug.PostLinkHashFile</p></td>
 <td><p>File name to emit a list of all methods with their hash value after linking</p></td>
 </tr>
-<tr class="row-odd"><td><p>CompilerDebug.PreLinkHashFile</p></td>
+<tr class="row-even"><td><p>CompilerDebug.PreLinkHashFile</p></td>
 <td><p>File name to emit a list of all methods with their hash value prior to linking</p></td>
 </tr>
-<tr class="row-even"><td><p>CompilerDebug.Statistics</p></td>
+<tr class="row-odd"><td><p>CompilerDebug.Statistics</p></td>
 <td><p>If true, enables statistics gathering</p></td>
 </tr>
-<tr class="row-odd"><td><p>CompilerDebug.CounterFilter</p></td>
+<tr class="row-even"><td><p>CompilerDebug.CounterFilter</p></td>
 <td><p>Filters the global counters within the global counters file</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="compiler-diagnostic-settings">
+<h2>Compiler Diagnostic Settings<a class="headerlink" href="#compiler-diagnostic-settings" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Compiler.FullCheckMode</p></td>
+<td><p>If true, causes the compiler to run internal validate checks (used to test the compiler)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compiler.Diagnostic</p></td>
+<td><p>Emit debug/diagnostics information</p></td>
 </tr>
 </tbody>
 </table>

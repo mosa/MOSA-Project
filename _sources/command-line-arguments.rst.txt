@@ -88,8 +88,11 @@ Below are the command line arguments available:
     Compiler - Debug:
     -inline-exclude,Optimizations.Inline.Exclude,{list}
     -test-filter,CompilerDebug.TestFilter,{value}
-    -check,CompilerDebug.FullCheckMode,true
 
+	Compiler - Diagnostic:
+    -check,Compiler.FullCheckMode,true
+	-diagnostic,Compiler.Diagnostic,true
+	-diag,Compiler.Diagnostic,true
     -interrupt-method,X86.InterruptMethodName,{value}
 
     Linker:
@@ -102,7 +105,6 @@ Below are the command line arguments available:
 
     Explorer:
     -filter,Explorer.Filter,{value}
-	-explorer-debug,Explorer.DebugDiagnostic,true
 	-autostart,Explorer.Start,true
 
     Launcher:
