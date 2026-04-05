@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework.Instructions;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
@@ -589,13 +590,16 @@ public abstract class BaseMethodCompilerStage
 		{
 			if (!CheckVirtualRegisterTrace(use.Block, defBlocks))
 			{
-				throw new CompilerException($"CHECK-FAILED: Virtual register used before being defined: {operand}");
+				throw new CompilerException($"CHECK-FAILED: Virtual register used before being defined: {operand} starting from {use.Block}");
 			}
 		}
 	}
 
 	private bool CheckVirtualRegisterTrace(BasicBlock startBlock, HashSet<BasicBlock> defBlocks)
 	{
+		if (defBlocks.Contains(startBlock))
+			return true;
+
 		var visited = new HashSet<BasicBlock>();
 		var stack = new Stack<BasicBlock>();
 
@@ -611,6 +615,9 @@ public abstract class BaseMethodCompilerStage
 
 			if (block.IsTryHeadBlock || block.IsHandlerHeadBlock)
 				return true;
+
+			if (!block.HasPreviousBlocks && !block.IsHeadBlock)
+				return true; // dead block(s)
 
 			foreach (var previous in block.PreviousBlocks)
 			{

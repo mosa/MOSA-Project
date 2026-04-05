@@ -19,6 +19,8 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 	private Dictionary<Operand, List<BasicBlock>> assignments;
 	private Dictionary<Operand, Operand> parentOperand;
 	private List<Context> phiInstructions;
+	private Dictionary<BasicBlock, HashSet<Operand>> liveIn;
+	private HashSet<(BasicBlock block, Operand operand)> placedPhi;
 
 	private TraceLog trace;
 
@@ -31,6 +33,8 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		assignments = new Dictionary<Operand, List<BasicBlock>>();
 		parentOperand = new Dictionary<Operand, Operand>();
 		phiInstructions = new List<Context>();
+		liveIn = new Dictionary<BasicBlock, HashSet<Operand>>();
+		placedPhi = new HashSet<(BasicBlock block, Operand operand)>();
 	}
 
 	protected override void Run()
@@ -50,6 +54,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		}
 
 		CollectAssignments();
+		ComputeLiveIn();
 
 		PlacePhiFunctionsMinimal();
 
@@ -71,6 +76,8 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 		assignments = null;
 		blockAnalysis = null;
 		parentOperand = null;
+		liveIn = null;
+		placedPhi = null;
 	}
 
 	#endregion Overrides
@@ -123,6 +130,88 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 			foreach (var def in operand.Definitions)
 			{
 				blocks.AddIfNew(def.Block);
+			}
+		}
+	}
+
+	private void ComputeLiveIn()
+	{
+		var use = new Dictionary<BasicBlock, HashSet<Operand>>();
+		var def = new Dictionary<BasicBlock, HashSet<Operand>>();
+		var liveOut = new Dictionary<BasicBlock, HashSet<Operand>>();
+
+		foreach (var block in BasicBlocks)
+		{
+			var useSet = new HashSet<Operand>();
+			var defSet = new HashSet<Operand>();
+
+			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				for (var i = 0; i < node.OperandCount; i++)
+				{
+					var operand = node.GetOperand(i);
+
+					if (operand == null || !operand.IsVirtualRegister)
+						continue;
+
+					if (!defSet.Contains(operand))
+					{
+						useSet.Add(operand);
+					}
+				}
+
+				if (node.ResultCount >= 1 && node.Result != null && node.Result.IsVirtualRegister)
+				{
+					defSet.Add(node.Result);
+				}
+
+				if (node.ResultCount == 2 && node.Result2 != null && node.Result2.IsVirtualRegister)
+				{
+					defSet.Add(node.Result2);
+				}
+			}
+
+			use.Add(block, useSet);
+			def.Add(block, defSet);
+			liveIn.Add(block, new HashSet<Operand>());
+			liveOut.Add(block, new HashSet<Operand>());
+		}
+
+		var changed = true;
+
+		while (changed)
+		{
+			changed = false;
+
+			for (var i = BasicBlocks.Count - 1; i >= 0; i--)
+			{
+				var block = BasicBlocks[i];
+
+				var outSet = new HashSet<Operand>();
+				foreach (var next in block.NextBlocks)
+				{
+					outSet.UnionWith(liveIn[next]);
+				}
+
+				var inSet = new HashSet<Operand>(use[block]);
+				var outMinusDef = new HashSet<Operand>(outSet);
+				outMinusDef.ExceptWith(def[block]);
+				inSet.UnionWith(outMinusDef);
+
+				if (!liveOut[block].SetEquals(outSet))
+				{
+					liveOut[block] = outSet;
+					changed = true;
+				}
+
+				if (!liveIn[block].SetEquals(inSet))
+				{
+					liveIn[block] = inSet;
+					changed = true;
+				}
 			}
 		}
 	}
@@ -318,6 +407,7 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 	private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
 	{
 		var analysis = blockAnalysis[headBlock];
+		var reachable = new HashSet<BasicBlock>(BasicBlocks.GetConnectedBlocksStartingAtHead(headBlock));
 
 		foreach (var t in assignments)
 		{
@@ -326,18 +416,60 @@ public sealed class EnterSSAStage : BaseMethodCompilerStage
 
 			trace?.Log($"Operand {operand}");
 
-			if (blocks.Count < 2)
+			var definitionBlocks = new HashSet<BasicBlock>();
+			foreach (var block in blocks)
+			{
+				if (reachable.Contains(block))
+				{
+					definitionBlocks.Add(block);
+				}
+			}
+
+			if (definitionBlocks.Count < 2)
 				continue;
 
-			foreach (var block in analysis.IteratedDominanceFrontier(blocks))
+			var workList = new Queue<BasicBlock>(definitionBlocks);
+			var inWorkList = new HashSet<BasicBlock>(definitionBlocks);
+			var hasAlready = new HashSet<BasicBlock>();
+
+			while (workList.Count > 0)
 			{
-				InsertPhiInstruction(block, operand);
+				var block = workList.Dequeue();
+				inWorkList.Remove(block);
+
+				var dominanceFrontier = analysis.GetDominanceFrontier(block);
+				if (dominanceFrontier == null)
+					continue;
+
+				foreach (var frontierBlock in dominanceFrontier)
+				{
+					if (!reachable.Contains(frontierBlock))
+						continue;
+
+					if (hasAlready.Contains(frontierBlock))
+						continue;
+
+					if (!liveIn[frontierBlock].Contains(operand))
+						continue;
+
+					InsertPhiInstruction(frontierBlock, operand);
+					hasAlready.Add(frontierBlock);
+
+					if (!inWorkList.Contains(frontierBlock))
+					{
+						workList.Enqueue(frontierBlock);
+						inWorkList.Add(frontierBlock);
+					}
+				}
 			}
 		}
 	}
 
 	private Context InsertPhiInstruction(BasicBlock block, Operand variable)
 	{
+		if (!placedPhi.Add((block, variable)))
+			return null;
+
 		trace?.Log($"     Phi: {variable} into {block}");
 
 		var instruction = GetPhiInstruction(variable.Primitive);
