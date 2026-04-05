@@ -9,14 +9,14 @@ public static class AppLocationsSettings
 	private static readonly string ProgramFiles86 = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
 	private static readonly string ProgramFiles = Environment.GetEnvironmentVariable("ProgramFiles");
 	private static readonly string UserProfile = Environment.GetEnvironmentVariable("UserProfile");
+	private static readonly string PathEnv = Environment.GetEnvironmentVariable("PATH");
 	private static readonly string CurrentDirectory = Directory.GetCurrentDirectory();
 	private static readonly string AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
 	private static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-	private static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 	private static readonly bool IsOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-	private static readonly string[] LinuxDirectories = new string[] { "/bin", "/usr/bin", "/opt/homebrew/bin", "/usr/local/bin/", "/usr/local/Cellar" };
+	private static readonly string[] LinuxBinDirectories = ["/bin", "/usr/bin", "/opt/homebrew/bin", "/usr/local/bin/", "/usr/local/Cellar"];
 
 	public static void GetAppLocations(MosaSettings mosaSettings)
 	{
@@ -46,7 +46,7 @@ public static class AppLocationsSettings
 	{
 		return
 			IsWindows ? TryFind("qemu-system-i386.exe",
-				new string[] {
+				[
 					@"%CURRENT%\qemu",
 					@"%CURRENT%\..\Tools\qemu",
 					@"%CURRENT%\Tools\qemu",
@@ -57,15 +57,15 @@ public static class AppLocationsSettings
 
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
-				})
-			: TryFind("qemu-system-i386", LinuxDirectories);
+				])
+			: TryFind("qemu-system-i386", LinuxBinDirectories);
 	}
 
 	private static string FindQemuX64()
 	{
 		return
 			IsWindows ? TryFind("qemu-system-x86_64.exe",
-				new string[] {
+				[
 					@"%CURRENT%\qemu",
 					@"%CURRENT%\..\Tools\qemu",
 					@"%CURRENT%\Tools\qemu",
@@ -76,15 +76,15 @@ public static class AppLocationsSettings
 
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
-				})
-			: TryFind("qemu-system-x86_64", LinuxDirectories);
+				])
+			: TryFind("qemu-system-x86_64", LinuxBinDirectories);
 	}
 
 	private static string FindQemuARM32()
 	{
 		return
 			IsWindows ? TryFind("qemu-system-arm.exe",
-				new string[] {
+				[
 					@"%CURRENT%\qemu",
 					@"%CURRENT%\..\Tools\qemu",
 					@"%CURRENT%\Tools\qemu",
@@ -95,15 +95,15 @@ public static class AppLocationsSettings
 
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
-				})
-			: TryFind("qemu-system-arm", LinuxDirectories);
+				])
+			: TryFind("qemu-system-arm", LinuxBinDirectories);
 	}
 
 	private static string FindQemuARM64()
 	{
 		return
 			IsWindows ? TryFind("qemu-system-aarch64.exe",
-				new string[] {
+				[
 					@"%CURRENT%\qemu",
 					@"%CURRENT%\..\Tools\qemu",
 					@"%CURRENT%\Tools\qemu",
@@ -114,15 +114,15 @@ public static class AppLocationsSettings
 
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
-				})
-			: TryFind("qemu-system-aarch64", LinuxDirectories);
+				])
+			: TryFind("qemu-system-aarch64", LinuxBinDirectories);
 	}
 
 	private static string FindGDB()
 	{
 		return
 			IsWindows ? TryFind("gdb.exe",
-				new string[] {
+				[
 					@"%CURRENT%\..\Tools\gdb",
 					@"%CURRENT%\Tools\gdb",
 
@@ -134,15 +134,15 @@ public static class AppLocationsSettings
 					@"C:\cygwin\bin",
 					@"C:\mingw\bin",
 					@"C:\mingw32\bin",
-				})
-			: TryFind("gdb", LinuxDirectories);
+				])
+			: TryFind("gdb", LinuxBinDirectories);
 	}
 
 	private static string FindMkisofs()
 	{
 		return
 			IsWindows ? TryFind("mkisofs.exe",
-				new string[] {
+				[
 					@"%CURRENT%\..\Tools\mkisofs",
 					@"%CURRENT%\Tools\mkisofs",
 
@@ -153,93 +153,93 @@ public static class AppLocationsSettings
 					@"%ProgramFiles(x86)%\VMware\VMware Player",
 					@"%ProgramFiles%\cdrtools",
 					@"%ProgramFiles(x86)%\cdrtools",
-				})
-			: TryFind("mkisofs", LinuxDirectories);
+				])
+			: TryFind("mkisofs", LinuxBinDirectories);
 	}
 
 	private static string FindNdisasm()
 	{
 		return
 			IsWindows ? TryFind("ndisasm.exe",
-				new string[] {
+				[
 					@"%CURRENT%\..\Tools\nasm",
 					@"%CURRENT%\Tools\nasm",
 
 					@"%APPDIR%\Tools\nasm",
 					@"%APPDIR%\..\Tools\nasm"
-				})
-			: TryFind("ndisasm", LinuxDirectories);
+				])
+			: TryFind("ndisasm", LinuxBinDirectories);
 	}
 
 	private static string FindVmwarePlayer()
 	{
 		return
 			IsWindows ? TryFind("vmplayer.exe",
-				new string[] {
+				[
 					@"%ProgramFiles%\VMware\VMware Player",
 					@"%ProgramFiles(x86)%\VMware\VMware Player",
-				})
-			: TryFind("vmplayer", LinuxDirectories);
+				])
+			: TryFind("vmplayer", LinuxBinDirectories);
 	}
 
 	private static string FindVmwareWorkstation()
 	{
 		return
 			IsWindows ? TryFind("vmware.exe",
-				new string[] {
+				[
 					@"%ProgramFiles%\VMware\VMware Workstation",
 					@"%ProgramFiles(x86)%\VMware\VMware Workstation",
-				})
-			: TryFind("vmware", LinuxDirectories);
+				])
+			: TryFind("vmware", LinuxBinDirectories);
 	}
 
 	private static string FindVirtualBox()
 	{
 		return
 			IsWindows ? TryFind("VBoxManage.exe",
-				new string[] {
+				[
 					@"%ProgramFiles%\Oracle\VirtualBox",
 					@"%ProgramFiles%\Oracle",
 					@"%ProgramFiles(x86)%\Oracle",
-				})
-			: TryFind("VBoxManage", LinuxDirectories);
+				])
+			: TryFind("VBoxManage", LinuxBinDirectories);
 	}
 
 	private static string FindBochs()
 	{
 		return
 			IsWindows ? TryFind("bochs.exe",
-				new string[] {
+				[
 					@"%ProgramFiles%\Bochs-2.8",
 					@"%ProgramFiles(x86)%\Bochs-2.8",
 					@"%ProgramFiles%\Bochs-2.7",
 					@"%ProgramFiles(x86)%\Bochs-2.7",
-				 })
-			: TryFind("bochs", LinuxDirectories);
+				 ])
+			: TryFind("bochs", LinuxBinDirectories);
 	}
 
 	private static string FindBochsBIOS()
 	{
 		return
 			IsWindows ? TryFind("BIOS-bochs-latest",
-					new string[] {
+					[
 						@"%ProgramFiles%\Bochs-2.8",
 						@"%ProgramFiles(x86)%\Bochs-2.8",
 						@"%ProgramFiles%\Bochs-2.7",
 						@"%ProgramFiles(x86)%\Bochs-2.7",
-					})
+					])
 				: TryFind("BIOS-bochs-latest",
-					new string[] {
+					[
 						"/usr/share/bochs",
 						"/opt/homebrew/share/bochs/"
-					});
+					]);
 	}
 
 	private static string FindBochsVGABIOS()
 	{
 		return
 			IsWindows ? TryFind("VGABIOS-lgpl-latest",
-					new string[] {
+					[
 						@"%ProgramFiles%\Bochs-2.6.9",
 						@"%ProgramFiles(x86)%\Bochs-2.6.9",
 						@"%ProgramFiles%\Bochs-2.6.8",
@@ -256,20 +256,19 @@ public static class AppLocationsSettings
 
 						@"%APPDIR%\Tools\Bochs",
 						@"%APPDIR%\..\Tools\Bochs"
-					})
+					])
 				: TryFind("VGABIOS-lgpl-latest",
-					new string[] {
+					[
 						"/usr/share/bochs",
 						"/opt/homebrew/share/bochs/"
-					});
+					]);
 	}
 
 	private static string FindQemuImg()
 	{
 		return
 			IsWindows ? TryFind("qemu-img.exe",
-				new string[]
-				{
+				[
 					@"%CURRENT%\..\Tools\qemu",
 					@"%CURRENT%\Tools\qemu",
 
@@ -279,15 +278,15 @@ public static class AppLocationsSettings
 					@"%ProgramFiles%\qemu",
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\Mosa-Project\Tools\qemu",
-				})
-			: TryFind("qemu-img", LinuxDirectories);
+				])
+			: TryFind("qemu-img", LinuxBinDirectories);
 	}
 
 	private static string FindQemuBIOS()
 	{
 		return Path.GetDirectoryName(
 			IsWindows ? TryFind("bios.bin",
-					new string[] {
+					[
 						@"%CURRENT%\..\Tools\qemu\share",
 						@"%CURRENT%\Tools\qemu\share",
 
@@ -298,13 +297,13 @@ public static class AppLocationsSettings
 						@"%ProgramFiles%\qemu\share",
 						@"%ProgramFiles(x86)%\qemu",
 						@"%ProgramFiles(x86)%\qemu\share",
-					})
+					])
 				: TryFind("bios.bin",
-					new string[] {
+					[
 						"/usr/share/qemu",
 						"/usr/share/seabios",
 						"/opt/homebrew/share/qemu/"
-					})
+					])
 		);
 	}
 
@@ -312,7 +311,7 @@ public static class AppLocationsSettings
 	{
 		return
 			IsWindows ? TryFind("edk2-i386-code.fd",
-				new string[] {
+				[
 					@"%CURRENT%\..\Tools\qemu\share",
 					@"%CURRENT%\Tools\qemu\share",
 
@@ -323,21 +322,21 @@ public static class AppLocationsSettings
 					@"%ProgramFiles%\qemu\share",
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\share",
-				})
+				])
 			: TryFind("edk2-i386-code.fd",
-				new string[] {
+				[
 					"/usr/share/qemu",
 					"/usr/share/ovmf",
 					"/usr/share/OVMF",
 					"/opt/homebrew/share/qemu/"
-				});
+				]);
 	}
 
 	private static string FindQemuEDK2X64()
 	{
 		return
 			IsWindows ? TryFind("edk2-x86_64-code.fd",
-				new string[] {
+				[
 					@"%CURRENT%\..\Tools\qemu\share",
 					@"%CURRENT%\Tools\qemu\share",
 
@@ -348,21 +347,21 @@ public static class AppLocationsSettings
 					@"%ProgramFiles%\qemu\share",
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\share"
-				})
+				])
 			: TryFind("edk2-x86_64-code.fd",
-				new string[] {
+				[
 					"/usr/share/qemu",
 					"/usr/share/ovmf",
 					"/usr/share/OVMF",
 					"/opt/homebrew/share/qemu/"
-				});
+				]);
 	}
 
 	private static string FindQemuEDK2ARM32()
 	{
 		return
 			IsWindows ? TryFind("edk2-arm-code.fd",
-				new string[] {
+				[
 					@"%CURRENT%\..\Tools\qemu\share",
 					@"%CURRENT%\Tools\qemu\share",
 
@@ -373,22 +372,22 @@ public static class AppLocationsSettings
 					@"%ProgramFiles%\qemu\share",
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\share"
-				})
+				])
 			: IsOSX ? TryFind("edk2-arm-code.fd", "/opt/homebrew/bin/qemu-system-arm32")
 			: TryFind("edk2-arm-code.fd",
-				new string[] {
+				[
 					"/usr/share/qemu",
 					"/usr/share/ovmf",
 					"/usr/share/OVMF",
 					"/opt/homebrew/share/qemu/"
-				});
+				]);
 	}
 
 	private static string FindQemuEDK2ARM64()
 	{
 		return
 			IsWindows ? TryFind("edk2-aarch64-code.fd",
-				new string[] {
+				[
 					@"%CURRENT%\..\Tools\qemu\share",
 					@"%CURRENT%\Tools\qemu\share",
 
@@ -399,26 +398,26 @@ public static class AppLocationsSettings
 					@"%ProgramFiles%\qemu\share",
 					@"%ProgramFiles(x86)%\qemu",
 					@"%ProgramFiles(x86)%\qemu\share"
-				})
+				])
 			: IsOSX ? TryFind("edk2-aarch64-code.fd", "/opt/homebrew/bin/qemu-system-aarch64")
 			: TryFind("edk2-aarch64-code.fd",
-				new string[] {
+				[
 					"/usr/share/qemu",
 					"/usr/share/ovmf",
 					"/usr/share/OVMF",
 					"/opt/homebrew/share/qemu/"
-				});
+				]);
 	}
 
 	private static string FindGraphviz()
 	{
 		return
 			IsWindows ? TryFind("dot.exe",
-				new string[] {
+				[
 					@"%ProgramFiles%\Graphviz\bin",
 					@"%ProgramFiles(x86)%\Graphviz\bin",
-				})
-			: TryFind("dot", LinuxDirectories);
+				])
+			: TryFind("dot", LinuxBinDirectories);
 	}
 
 	public static string ReplaceWithParameters(string directory)
@@ -453,20 +452,20 @@ public static class AppLocationsSettings
 	private static string TryFind(string file, IList<string> searchdirectories = null)
 	{
 		if (searchdirectories != null)
-		{
 			foreach (var directory in searchdirectories)
 			{
-				var dir = ReplaceWithParameters(directory);
-
-				if (dir == null)
-					continue;
-
-				var location = Path.Combine(dir, file);
-
-				if (File.Exists(location))
+				var location = TryFind(file, directory);
+				if (location != null)
 					return location;
 			}
-		}
+
+		if (!string.IsNullOrEmpty(PathEnv))
+			foreach (var directory in PathEnv.Split(IsWindows ? ';' : ':'))
+			{
+				var location = TryFind(file, directory);
+				if (location != null)
+					return location;
+			}
 
 		return null;
 	}
@@ -474,29 +473,12 @@ public static class AppLocationsSettings
 	private static string TryFind(string file, string searchdirectory)
 	{
 		var dir = ReplaceWithParameters(searchdirectory);
-
 		if (dir == null)
 			return null;
 
 		var location = Path.Combine(dir, file);
-
 		if (File.Exists(location))
 			return location;
-
-		return null;
-	}
-
-	private static string SearchSubdirectories(string path, string filename)
-	{
-		if (Directory.Exists(path))
-		{
-			var result = Directory.GetFiles(path, filename, SearchOption.AllDirectories);
-
-			if (result?.Length >= 1)
-			{
-				return result[0];
-			}
-		}
 
 		return null;
 	}
