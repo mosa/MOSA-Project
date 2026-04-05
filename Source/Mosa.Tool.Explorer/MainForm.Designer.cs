@@ -68,9 +68,9 @@
 			cbHideEmptyBlocks = new ToolStripMenuItem();
 			advanceToolStripMenuItem = new ToolStripMenuItem();
 			cbEnableMultithreading = new ToolStripMenuItem();
+			cbEnableFullCheckMode = new ToolStripMenuItem();
 			cbEnableMethodScanner = new ToolStripMenuItem();
 			cbEnableDebugDiagnostic = new ToolStripMenuItem();
-			cbEnableFullCheckMode = new ToolStripMenuItem();
 			cbDumpAllMethodStages = new ToolStripMenuItem();
 			openFileDialog = new OpenFileDialog();
 			treeView = new TreeView();
@@ -454,6 +454,7 @@
 			cbHideEmptyBlocks.Name = "cbHideEmptyBlocks";
 			cbHideEmptyBlocks.Size = new Size(185, 22);
 			cbHideEmptyBlocks.Text = "Hide Empty Blocks";
+			cbHideEmptyBlocks.CheckStateChanged += DisplayCheckStateChanged;
 			// 
 			// advanceToolStripMenuItem
 			// 
@@ -472,6 +473,13 @@
 			cbEnableMultithreading.Size = new Size(206, 22);
 			cbEnableMultithreading.Text = "Enable Multithreading";
 			// 
+			// cbEnableFullCheckMode
+			// 
+			cbEnableFullCheckMode.CheckOnClick = true;
+			cbEnableFullCheckMode.Name = "cbEnableFullCheckMode";
+			cbEnableFullCheckMode.Size = new Size(206, 22);
+			cbEnableFullCheckMode.Text = "Enable Full Check Mode";
+			// 
 			// cbEnableMethodScanner
 			// 
 			cbEnableMethodScanner.CheckOnClick = true;
@@ -485,13 +493,6 @@
 			cbEnableDebugDiagnostic.Name = "cbEnableDebugDiagnostic";
 			cbEnableDebugDiagnostic.Size = new Size(206, 22);
 			cbEnableDebugDiagnostic.Text = "Enable Debug Diagnostic";
-			// 
-			// cbEnableFullCheckMode
-			// 
-			cbEnableFullCheckMode.CheckOnClick = true;
-			cbEnableFullCheckMode.Name = "cbEnableFullCheckMode";
-			cbEnableFullCheckMode.Size = new Size(206, 22);
-			cbEnableFullCheckMode.Text = "Enable Full Check Mode";
 			// 
 			// cbDumpAllMethodStages
 			// 
