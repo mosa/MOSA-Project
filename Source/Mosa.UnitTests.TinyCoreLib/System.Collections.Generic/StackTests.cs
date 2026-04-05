@@ -22,32 +22,32 @@ public static class StackTests
 		return stack.Count;
 	}
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
-	public static int Test_Stack_Constructor_FromCollection(int val1, int val2, int val3, int val4, int val5)
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
+	public static bool Test_Stack_Constructor_FromCollection(int val1, int val2, int val3, int val4, int val5)
 	{
-		var source = new int[] { val1, val2, val3, val4, val5 };
+		int[] source = [val1, val2, val3, val4, val5];
 		var stack = new Stack<int>(source);
-		return stack.Count;
+		return stack.Count == 5 && stack.Peek() == val5;
 	}
 
 	// == Push tests
 
 	[MosaUnitTest(Series = "I4")]
-	public static int Test_Stack_Push_SingleItem(int value)
+	public static bool Test_Stack_Push_SingleItem(int value)
 	{
 		var stack = new Stack<int>();
 		stack.Push(value);
-		return stack.Count;
+		return stack.Count == 1 && stack.Peek() == value;
 	}
 
 	[MosaUnitTest(Series = "I4I4I4")]
-	public static int Test_Stack_Push_MultipleItems(int val1, int val2, int val3)
+	public static bool Test_Stack_Push_MultipleItems(int val1, int val2, int val3)
 	{
 		var stack = new Stack<int>();
 		stack.Push(val1);
 		stack.Push(val2);
 		stack.Push(val3);
-		return stack.Count;
+		return stack.Count == 3 && stack.Peek() == val3;
 	}
 
 	// == Pop tests
@@ -57,17 +57,17 @@ public static class StackTests
 	{
 		var stack = new Stack<int>();
 		stack.Push(value);
-		int result = stack.Pop();
+		var result = stack.Pop();
 		return result == value && stack.Count == 0;
 	}
 
-	[MosaUnitTest(Series = "I4I4I4")]
-	public static int Test_Stack_Pop_MultipleItems(int val1, int val2, int val3)
+	[MosaUnitTest]
+	public static int Test_Stack_Pop_MultipleItems()
 	{
 		var stack = new Stack<int>();
-		stack.Push(val1);
-		stack.Push(val2);
-		stack.Push(val3);
+		stack.Push(1);
+		stack.Push(2);
+		stack.Push(3);
 		stack.Pop();
 		stack.Pop();
 		return stack.Count;
@@ -90,17 +90,17 @@ public static class StackTests
 	{
 		var stack = new Stack<int>();
 		stack.Push(value);
-		int result = stack.Peek();
+		var result = stack.Peek();
 		return result;
 	}
 
 	[MosaUnitTest(Series = "I4")]
-	public static int Test_Stack_Peek_DoesNotRemove(int value)
+	public static bool Test_Stack_Peek_DoesNotRemove(int value)
 	{
 		var stack = new Stack<int>();
 		stack.Push(value);
-		stack.Peek();
-		return stack.Count;
+		var result = stack.Peek();
+		return stack.Count == 1 && result == value;
 	}
 
 	// == Contains tests
@@ -126,13 +126,13 @@ public static class StackTests
 
 	// == Clear tests
 
-	[MosaUnitTest(Series = "I4I4I4")]
-	public static int Test_Stack_Clear_NonEmptyStack(int val1, int val2, int val3)
+	[MosaUnitTest]
+	public static int Test_Stack_Clear_NonEmptyStack()
 	{
 		var stack = new Stack<int>();
-		stack.Push(val1);
-		stack.Push(val2);
-		stack.Push(val3);
+		stack.Push(1);
+		stack.Push(2);
+		stack.Push(3);
 		stack.Clear();
 		return stack.Count;
 	}
@@ -171,7 +171,7 @@ public static class StackTests
 	{
 		var stack = new Stack<int>();
 		stack.Push(value);
-		bool success = stack.TryPop(out int result);
+		var success = stack.TryPop(out int result);
 		return success && result == value && stack.Count == 0;
 	}
 
@@ -190,7 +190,7 @@ public static class StackTests
 	{
 		var stack = new Stack<int>();
 		stack.Push(value);
-		bool success = stack.TryPeek(out int result);
+		var success = stack.TryPeek(out int result);
 		return success && result == value && stack.Count == 1;
 	}
 

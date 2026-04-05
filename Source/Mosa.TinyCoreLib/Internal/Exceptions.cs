@@ -29,6 +29,10 @@ internal static class Exceptions
 		[DoesNotReturn] public static void ThrowMultiDimensionalArrayException(string name) => throw new ArgumentException("The array has more than one dimension.", name);
 		[DoesNotReturn] public static void ThrowArrayNotZeroBasedIndexingException(string name) => throw new ArgumentException("The array doesn't use zero-based indexing.", name);
 		[DoesNotReturn] public static void ThrowArrayTypeMismatchException(string name) => throw new ArgumentException("The array's element type doesn't match the collection's element type.", name);
+		[DoesNotReturn] public static void Overflow() => throw new OverflowException();
+		[DoesNotReturn] public static void NotSupported() => throw new NotSupportedException();
+		[DoesNotReturn] public static void InvalidOperation() => throw new InvalidOperationException();
+		[DoesNotReturn] public static void ObjectDisposed(string name) => throw new ObjectDisposedException(name);
 	}
 
 	public static class LinkedList
@@ -80,5 +84,35 @@ internal static class Exceptions
 	public static class EqualityComparer
 	{
 		[DoesNotReturn] public static void ThrowInvalidTypeException(string name) => throw new ArgumentException("The parameter is of a type that cannot be cast to the compared type.", name);
+	}
+
+	public static class Color
+	{
+		[DoesNotReturn] public static void ThrowComponentOutOfRangeException(string name) => throw new ArgumentException("The color component value is out of range.", name);
+	}
+
+	public static class Span
+	{
+		[DoesNotReturn] public static void ThrowReferenceException() => throw new ArgumentException("The span's child type is a reference type or contains reference types.");
+		[DoesNotReturn] public static void ThrowTypeMismatchException() => throw new ArrayTypeMismatchException("The span's child type is a reference type, and the array is not of the chosen type.");
+		[DoesNotReturn] public static void ThrowDestinationShorterException() => throw new ArgumentException("The destination span is shorter than the source span.");
+	}
+
+	public static class Stream
+	{
+		[DoesNotReturn] public static void ThrowClosedStreamException() => throw new ObjectDisposedException(null);
+	}
+
+	public static class MemoryStream
+	{
+		[DoesNotReturn] public static void ThrowBufferTooSmallException(string name) => throw new ArgumentException("The buffer is too small for the specified count.", name);
+		[DoesNotReturn] public static void ThrowBufferNotVisibleException() => throw new UnauthorizedAccessException("The MemoryStream wasn't created with a publicly visible buffer.");
+		[DoesNotReturn] public static void ThrowInvalidSeekOriginException(string name) => throw new ArgumentException("The seek origin value is invalid.", name);
+		[DoesNotReturn] public static void ThrowSeekingBeforeBeginningException() => throw new IOException("The offset caused the position to become negative.");
+	}
+
+	public static class CollectionBase
+	{
+		[DoesNotReturn] public static void ThrowValueNotFoundException() => throw new ArgumentException("The value wasn't found inside the collection.");
 	}
 }

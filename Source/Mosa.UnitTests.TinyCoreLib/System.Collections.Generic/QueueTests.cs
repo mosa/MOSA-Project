@@ -22,32 +22,32 @@ public static class QueueTests
 		return queue.Count;
 	}
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
-	public static int Test_Queue_Constructor_FromCollection(int val1, int val2, int val3, int val4, int val5)
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
+	public static bool Test_Queue_Constructor_FromCollection(int val1, int val2, int val3, int val4, int val5)
 	{
-		var source = new int[] { val1, val2, val3, val4, val5 };
+		int[] source = [val1, val2, val3, val4, val5];
 		var queue = new Queue<int>(source);
-		return queue.Count;
+		return queue.Count == 5 && queue.Peek() == val1;
 	}
 
 	// == Enqueue tests
 
 	[MosaUnitTest(Series = "I4")]
-	public static int Test_Queue_Enqueue_SingleItem(int value)
+	public static bool Test_Queue_Enqueue_SingleItem(int value)
 	{
 		var queue = new Queue<int>();
 		queue.Enqueue(value);
-		return queue.Count;
+		return queue.Count == 1 && queue.Peek() == value;
 	}
 
 	[MosaUnitTest(Series = "I4I4I4")]
-	public static int Test_Queue_Enqueue_MultipleItems(int val1, int val2, int val3)
+	public static bool Test_Queue_Enqueue_MultipleItems(int val1, int val2, int val3)
 	{
 		var queue = new Queue<int>();
 		queue.Enqueue(val1);
 		queue.Enqueue(val2);
 		queue.Enqueue(val3);
-		return queue.Count;
+		return queue.Count == 3 && queue.Peek() == val1;
 	}
 
 	// == Dequeue tests
@@ -57,17 +57,17 @@ public static class QueueTests
 	{
 		var queue = new Queue<int>();
 		queue.Enqueue(value);
-		int result = queue.Dequeue();
+		var result = queue.Dequeue();
 		return result == value && queue.Count == 0;
 	}
 
-	[MosaUnitTest(Series = "I4I4I4")]
-	public static int Test_Queue_Dequeue_MultipleItems(int val1, int val2, int val3)
+	[MosaUnitTest]
+	public static int Test_Queue_Dequeue_MultipleItems()
 	{
 		var queue = new Queue<int>();
-		queue.Enqueue(val1);
-		queue.Enqueue(val2);
-		queue.Enqueue(val3);
+		queue.Enqueue(1);
+		queue.Enqueue(2);
+		queue.Enqueue(3);
 		queue.Dequeue();
 		queue.Dequeue();
 		return queue.Count;
@@ -90,17 +90,17 @@ public static class QueueTests
 	{
 		var queue = new Queue<int>();
 		queue.Enqueue(value);
-		int result = queue.Peek();
+		var result = queue.Peek();
 		return result;
 	}
 
 	[MosaUnitTest(Series = "I4")]
-	public static int Test_Queue_Peek_DoesNotRemove(int value)
+	public static bool Test_Queue_Peek_DoesNotRemove(int value)
 	{
 		var queue = new Queue<int>();
 		queue.Enqueue(value);
-		queue.Peek();
-		return queue.Count;
+		var result = queue.Peek();
+		return queue.Count == 1 && result == value;
 	}
 
 	// == Contains tests
@@ -126,13 +126,13 @@ public static class QueueTests
 
 	// == Clear tests
 
-	[MosaUnitTest(Series = "I4I4I4")]
-	public static int Test_Queue_Clear_NonEmptyQueue(int val1, int val2, int val3)
+	[MosaUnitTest]
+	public static int Test_Queue_Clear_NonEmptyQueue()
 	{
 		var queue = new Queue<int>();
-		queue.Enqueue(val1);
-		queue.Enqueue(val2);
-		queue.Enqueue(val3);
+		queue.Enqueue(1);
+		queue.Enqueue(2);
+		queue.Enqueue(3);
 		queue.Clear();
 		return queue.Count;
 	}
@@ -152,7 +152,7 @@ public static class QueueTests
 
 	// == CopyTo tests
 
-	[MosaUnitTest(Series = "I4I4I4I4")]
+	[MosaUnitTest(Series = "I4I4I4")]
 	public static bool Test_Queue_CopyTo_ValidArray(int val1, int val2, int val3)
 	{
 		var queue = new Queue<int>();
@@ -171,7 +171,7 @@ public static class QueueTests
 	{
 		var queue = new Queue<int>();
 		queue.Enqueue(value);
-		bool success = queue.TryDequeue(out int result);
+		var success = queue.TryDequeue(out int result);
 		return success && result == value && queue.Count == 0;
 	}
 
@@ -190,7 +190,7 @@ public static class QueueTests
 	{
 		var queue = new Queue<int>();
 		queue.Enqueue(value);
-		bool success = queue.TryPeek(out int result);
+		var success = queue.TryPeek(out int result);
 		return success && result == value && queue.Count == 1;
 	}
 

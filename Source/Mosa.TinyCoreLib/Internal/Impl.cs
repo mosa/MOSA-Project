@@ -1,8 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 
 namespace Internal;
 
@@ -97,6 +99,96 @@ internal static class Impl
 	}
 
 	public static class Stack
+	{
+		public const int InitialArraySize = 16;
+	}
+
+	public static unsafe class Unsafe
+	{
+		[Intrinsic]
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void* AsPointer<T>(ref T value) => throw new PlatformNotSupportedException();
+
+		[Intrinsic]
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static int SizeOf<T>() => throw new PlatformNotSupportedException();
+
+		[Intrinsic]
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[return: NotNullIfNotNull("value")]
+		public static T As<T>([AllowNull] object value) where T : class => throw new PlatformNotSupportedException();
+
+		[Intrinsic]
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static ref TTo As<TFrom, TTo>(ref TFrom source) => throw new PlatformNotSupportedException();
+
+		[Intrinsic]
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool AreSame<T>([AllowNull] ref T left, [AllowNull] ref T right)
+			=> throw new PlatformNotSupportedException();
+
+		[Intrinsic]
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static ref T AddByteOffset<T>(ref T source, IntPtr byteOffset)
+			=> throw new PlatformNotSupportedException();
+	}
+
+	public static class File
+	{
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern byte[] ReadAllBytes(string path);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern string[] ReadAllLines(string path);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern string ReadAllText(string path);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void WriteAllBytes(string path, byte[] bytes);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void WriteAllLines(string path, string[] lines);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void WriteAllText(string path, string text);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern bool Exists(string path);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Create(string path);
+	}
+
+	public static class Path
+	{
+		public const char AltDirectorySeparatorChar = '\\';
+		public const char DirectorySeparatorChar = '/';
+	}
+
+	public static class Stream
+	{
+		public const int CopyBufferSize = short.MaxValue + 1;
+	}
+
+	public static class MemoryStream
+	{
+		public const double NextCapacityMultiplySize = 1.1;
+	}
+
+	public static class Marshal
+	{
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern IntPtr GetFunctionPointerForDelegateInternal(Delegate d);
+	}
+
+	public static class CollectionBase
 	{
 		public const int InitialArraySize = 16;
 	}
