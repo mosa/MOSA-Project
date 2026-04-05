@@ -2,84 +2,29 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System;
 
-public readonly struct Index : IEquatable<Index>
+public readonly struct Index(int value, bool fromEnd = false) : IEquatable<Index>
 {
-	private readonly int _dummyPrimitive;
+	public static Index End { get; } = new(0, true);
 
-	public static Index End
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool IsFromEnd { get; } = fromEnd;
 
-	public bool IsFromEnd
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public static Index Start { get; } = new(0);
 
-	public static Index Start
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public int Value { get; } = value;
 
-	public int Value
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public bool Equals(Index other) => Value == other.Value && IsFromEnd == other.IsFromEnd;
 
-	public Index(int value, bool fromEnd = false)
-	{
-		throw null;
-	}
+	public override bool Equals([NotNullWhen(true)] object? value) => value is Index index && Equals(index);
 
-	public bool Equals(Index other)
-	{
-		throw null;
-	}
+	public static Index FromEnd(int value) => new(value, true);
 
-	public override bool Equals([NotNullWhen(true)] object? value)
-	{
-		throw null;
-	}
+	public static Index FromStart(int value) => new(value);
 
-	public static Index FromEnd(int value)
-	{
-		throw null;
-	}
+	public override int GetHashCode() => HashCode.Combine(Value, IsFromEnd);
 
-	public static Index FromStart(int value)
-	{
-		throw null;
-	}
+	public int GetOffset(int length) => IsFromEnd ? length - Value : Value;
 
-	public override int GetHashCode()
-	{
-		throw null;
-	}
+	public static implicit operator Index(int value) => new(value);
 
-	public int GetOffset(int length)
-	{
-		throw null;
-	}
-
-	public static implicit operator Index(int value)
-	{
-		throw null;
-	}
-
-	public override string ToString()
-	{
-		throw null;
-	}
+	public override string ToString() => IsFromEnd ? $"^{Value}" : Value.ToString();
 }
