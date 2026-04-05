@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.MosaTypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework;
 
@@ -9,6 +10,11 @@ namespace Mosa.Compiler.Framework;
 /// </summary>
 public sealed class MethodScheduler
 {
+	private struct Constant
+	{
+		public const int QueueReportIntervalSeconds = 1; // Report queue status every second
+	}
+
 	#region Data Members
 
 	public Compiler Compiler;
@@ -19,8 +25,34 @@ public sealed class MethodScheduler
 
 	private readonly HashSet<MethodData> queueSet = new HashSet<MethodData>();
 
+	private readonly HashSet<MethodData> currentlyCompiling = new HashSet<MethodData>();
+
+	private readonly HashSet<MethodData> deferredQueue = new HashSet<MethodData>();
+
+	// Reference to pipeline pool for tracking active workers
+	private PipelinePool pipelinePool;
+
 	private int totalMethods;
 	private int totalQueued;
+	private int totalDeferred;
+
+	// Queue profiling metrics
+	private readonly Stopwatch queueProfileTimer = Stopwatch.StartNew();
+
+	private int peakQueueSize;
+
+	private long totalDequeueOperations;
+	private long totalEnqueueOperations;
+	private long lastQueueReportTicks;
+	private long lastReportedDequeueCount;
+	private long lastReportedEnqueueCount;
+
+	// CPU monitoring
+	private readonly Process currentProcess = Process.GetCurrentProcess();
+
+	private TimeSpan lastCpuTime;
+	private long lastCpuCheckTicks;
+	private readonly int processorCount = Environment.ProcessorCount;
 
 	#endregion Data Members
 
@@ -44,12 +76,48 @@ public sealed class MethodScheduler
 	/// </value>
 	public int TotalQueuedMethods => totalQueued;
 
+	/// <summary>
+	/// Gets the deferred methods waiting for recompilation.
+	/// </summary>
+	/// <value>
+	/// The deferred methods.
+	/// </value>
+	public int TotalDeferredMethods => totalDeferred;
+
+	/// <summary>
+	/// Gets the peak queue size observed.
+	/// </summary>
+	public int PeakQueueSize => peakQueueSize;
+
+	/// <summary>
+	/// Gets the total number of dequeue operations.
+	/// </summary>
+	public long TotalDequeueOperations => totalDequeueOperations;
+
+	/// <summary>
+	/// Gets the total number of enqueue operations.
+	/// </summary>
+	public long TotalEnqueueOperations => totalEnqueueOperations;
+
 	#endregion Properties
 
 	public MethodScheduler(Compiler compiler)
 	{
 		Compiler = compiler;
 		PassCount = 0;
+		lastQueueReportTicks = queueProfileTimer.ElapsedTicks;
+		lastReportedDequeueCount = 0;
+		lastReportedEnqueueCount = 0;
+		lastCpuTime = currentProcess.TotalProcessorTime;
+		lastCpuCheckTicks = queueProfileTimer.ElapsedTicks;
+	}
+
+	/// <summary>
+	/// Sets the pipeline pool reference for tracking active workers.
+	/// </summary>
+	internal void SetPipelinePool(PipelinePool pool)
+	{
+		pipelinePool = pool;
 	}
 
 	public void ScheduleAll(TypeSystem typeSystem)
@@ -104,91 +172,241 @@ public sealed class MethodScheduler
 		if (!IsCompilable(method))
 			return;
 
-		AddToQueue(method);
+		Add(method);
 	}
 
-	private void AddToQueue(MosaMethod method)
+	public void Add(MosaMethod method)
 	{
 		var methodData = Compiler.GetMethodData(method);
-		AddToQueue(methodData);
+		Add(methodData);
 	}
 
-	private void AddToQueue(MethodData methodData)
+	public void Add(MethodData methodData)
 	{
-		lock (workingSet)
-		{
-			if (!workingSet.Contains(methodData))
-			{
-				workingSet.Add(methodData);
+		int queueSize;
 
-				Interlocked.Increment(ref totalMethods);
-			}
-		}
-
+		var lockTimer = Stopwatch.StartNew();
 		lock (queue)
 		{
-			if (queueSet.Contains(methodData))
-			{
-				//Debug.WriteLine($"Already in Queue: {method}");
+			Compiler.LockMonitor.RecordLockWait(lockTimer, queue, "MethodScheduler.queue");
 
-				return; // already queued
-			}
-
-			//Debug.WriteLine($"Queued: {method}");
-			var priority = GetCompilePriorityLevel(methodData);
-
-			queue.Enqueue(methodData, priority);
-			queueSet.Add(methodData);
-
-			Interlocked.Increment(ref totalQueued);
+			AddInsideLock(methodData);
+			queueSize = totalQueued;
 		}
+
+		UpdateQueueMetrics(queueSize);
+		SignalEnqueued();
 	}
 
-	public MethodData GetMethodToCompile()
+	public void Add(HashSet<MosaMethod> methods)
 	{
+		int queueSize;
+
+		var lockTimer = Stopwatch.StartNew();
 		lock (queue)
 		{
-			if (queue.TryDequeue(out var methodData, out var priority))
+			Compiler.LockMonitor.RecordLockWait(lockTimer, queue, "MethodScheduler.queue");
+
+			foreach (var method in methods)
+			{
+				var methodData = Compiler.GetMethodData(method);
+
+				AddInsideLock(methodData);
+			}
+
+			queueSize = totalQueued;
+		}
+
+		UpdateQueueMetrics(queueSize);
+		SignalEnqueued();
+	}
+
+	private void AddInsideLock(MethodData methodData)
+	{
+		if (!workingSet.Contains(methodData))
+		{
+			workingSet.Add(methodData);
+
+			Interlocked.Increment(ref totalMethods);
+		}
+
+		// If currently being compiled, defer it
+		if (currentlyCompiling.Contains(methodData))
+		{
+			if (!deferredQueue.Contains(methodData))
+			{
+				deferredQueue.Add(methodData);
+				Interlocked.Increment(ref totalDeferred);
+			}
+			return; // Don't add to priority queue yet
+		}
+
+		if (queueSet.Contains(methodData))
+			return; // already queued
+
+		var priority = GetCompilePriorityLevel(methodData);
+
+		queue.Enqueue(methodData, priority);
+		queueSet.Add(methodData);
+
+		Interlocked.Increment(ref totalQueued);
+		Interlocked.Increment(ref totalEnqueueOperations);
+	}
+
+	public MethodData Get()
+	{
+		MethodData methodData;
+		int queueSize;
+
+		var lockTimer = Stopwatch.StartNew();
+		lock (queue)
+		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, queue, "MethodScheduler.queue");
+
+			if (queue.TryDequeue(out methodData, out var priority))
 			{
 				queueSet.Remove(methodData);
+				currentlyCompiling.Add(methodData);  // Track as being compiled
 
 				Interlocked.Decrement(ref totalQueued);
+				Interlocked.Increment(ref totalDequeueOperations);
 
-				//Debug.WriteLine($"Dequeued: {method}");
-
-				return methodData;
+				queueSize = totalQueued;
 			}
 			else
 			{
-				return null;
+				queueSize = 0;
+			}
+		}
+
+		UpdateQueueMetrics(queueSize);
+
+		return methodData;
+	}
+
+	public void MarkCompleted(MethodData methodData)
+	{
+		bool shouldRequeue = false;
+		int queueSize;
+
+		var lockTimer = Stopwatch.StartNew();
+		lock (queue)
+		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, queue, "MethodScheduler.queue");
+
+			currentlyCompiling.Remove(methodData);
+
+			// Check if it needs recompilation
+			if (deferredQueue.Remove(methodData))
+			{
+				Interlocked.Decrement(ref totalDeferred);
+				shouldRequeue = true;
+				AddInsideLock(methodData);
+			}
+
+			queueSize = totalQueued;
+		}
+
+		if (shouldRequeue)
+		{
+			UpdateQueueMetrics(queueSize);
+			SignalEnqueued();
+		}
+	}
+
+	private void UpdateQueueMetrics(int currentQueueSize)
+	{
+		// Update peak queue size
+		int currentPeak = peakQueueSize;
+		while (currentQueueSize > currentPeak)
+		{
+			var original = Interlocked.CompareExchange(ref peakQueueSize, currentQueueSize, currentPeak);
+			if (original == currentPeak)
+				break;
+			currentPeak = original;
+		}
+
+		// Periodic queue status reporting
+		var currentTicks = queueProfileTimer.ElapsedTicks;
+		var timeThresholdMet = currentTicks - lastQueueReportTicks >= Stopwatch.Frequency * Constant.QueueReportIntervalSeconds;
+
+		if (timeThresholdMet)
+		{
+			var wasLastReportTicks = Interlocked.Read(ref lastQueueReportTicks);
+			// Use CompareExchange to ensure only one thread reports (thread-safe)
+			if (Interlocked.CompareExchange(ref lastQueueReportTicks, currentTicks, wasLastReportTicks) == wasLastReportTicks)
+			{
+				var currentDequeueCount = totalDequeueOperations;
+				var previousDequeueCount = Interlocked.Exchange(ref lastReportedDequeueCount, currentDequeueCount);
+				var currentEnqueueCount = totalEnqueueOperations;
+				var previousEnqueueCount = Interlocked.Exchange(ref lastReportedEnqueueCount, currentEnqueueCount);
+
+				ReportQueueStatus(currentQueueSize, currentTicks, wasLastReportTicks,
+					currentDequeueCount, previousDequeueCount, currentEnqueueCount, previousEnqueueCount);
 			}
 		}
 	}
 
-	public void AddToRecompileQueue(HashSet<MosaMethod> methods)
+	private void ReportQueueStatus(int currentQueueSize, long currentTicks, long previousTicks,
+		long currentDequeueCount, long previousDequeueCount, long currentEnqueueCount, long previousEnqueueCount)
 	{
-		foreach (var method in methods)
+		// Calculate instantaneous rates (since last report)
+		var ticksDelta = currentTicks - previousTicks;
+		var secondsDelta = ticksDelta / (double)Stopwatch.Frequency;
+
+		var dequeueDelta = currentDequeueCount - previousDequeueCount;
+		var enqueueDelta = currentEnqueueCount - previousEnqueueCount;
+
+		var dequeueRate = secondsDelta > 0 ? (uint)(dequeueDelta / secondsDelta) : 0;
+		var enqueueRate = secondsDelta > 0 ? (uint)(enqueueDelta / secondsDelta) : 0;
+
+		var activeWorkers = pipelinePool?.ActiveWorkers ?? 0;
+		var maxWorkers = pipelinePool?.MaxWorkers ?? 0;
+		var utilizationPercent = maxWorkers > 0 ? (activeWorkers * 100.0 / maxWorkers) : 0;
+		var idleWorkers = maxWorkers - activeWorkers;
+
+		// Calculate CPU usage with equivalent core count
+		var cpuPercent = CalculateCpuUsage(currentTicks);
+		var equivalentCores = (cpuPercent * processorCount) / 100.0;
+
+		var deferredCount = totalDeferred;
+
+		Compiler.PostEvent(
+			CompilerEvent.Diagnostic,
+			$"[Queue] Size: {currentQueueSize} | Deferred: {deferredCount} | " +
+			$"Active: {activeWorkers}/{maxWorkers} ({utilizationPercent:F1}%) | Idle: {idleWorkers} | " +
+			$"Enqueue: {enqueueRate}/s | Dequeue: {dequeueRate}/s | " +
+			$"CPU: {cpuPercent:F1}% ({equivalentCores:F1}/{processorCount} cores)"
+		);
+	}
+
+	private double CalculateCpuUsage(long currentTicks)
+	{
+		try
 		{
-			AddToQueue(method);
-		}
-	}
+			currentProcess.Refresh();
+			var currentCpuTime = currentProcess.TotalProcessorTime;
+			var cpuTimeDelta = (currentCpuTime - lastCpuTime).TotalMilliseconds;
 
-	public void AddToRecompileQueue(HashSet<MethodData> methodDatas)
-	{
-		foreach (var methodData in methodDatas)
+			var ticksDelta = currentTicks - lastCpuCheckTicks;
+			var wallTimeDelta = (ticksDelta / (double)Stopwatch.Frequency) * 1000.0; // Convert to milliseconds
+
+			lastCpuTime = currentCpuTime;
+			lastCpuCheckTicks = currentTicks;
+
+			if (wallTimeDelta > 0 && wallTimeDelta < 60000) // Sanity check: < 60 seconds
+			{
+				// CPU percentage divided by cores to match Task Manager (0-100% scale)
+				var cpuPercent = (cpuTimeDelta / wallTimeDelta / processorCount) * 100.0;
+				return Math.Clamp(cpuPercent, 0.0, 100.0);
+			}
+		}
+		catch
 		{
-			AddToQueue(methodData);
+			// Ignore any errors in CPU calculation
 		}
-	}
 
-	public void AddToRecompileQueue(MosaMethod method)
-	{
-		AddToQueue(method);
-	}
-
-	public void AddToRecompileQueue(MethodData methodData)
-	{
-		AddToQueue(methodData);
+		return 0.0;
 	}
 
 	private static int GetCompilePriorityLevel(MethodData methodData)
@@ -247,5 +465,36 @@ public sealed class MethodScheduler
 		//	adjustment += 5;
 
 		return 100 - adjustment;
+	}
+
+	#region Subscription
+
+	private Action? _onEnqueued;
+
+	public IDisposable Subscribe(Action onEnqueued)
+	{
+		_onEnqueued += onEnqueued;
+		return new Unsubscriber(() => _onEnqueued -= onEnqueued);
+	}
+
+	private void SignalEnqueued() => _onEnqueued?.Invoke();
+
+	private sealed class Unsubscriber : IDisposable
+	{
+		private readonly Action _dispose;
+
+		public Unsubscriber(Action dispose) => _dispose = dispose;
+
+		public void Dispose() => _dispose();
+	}
+
+	#endregion Subscription
+
+	public void ResetRates()
+	{
+		Interlocked.Exchange(ref totalEnqueueOperations, 0);
+		Interlocked.Exchange(ref totalDequeueOperations, 0);
+		Interlocked.Exchange(ref lastReportedDequeueCount, 0);
+		Interlocked.Exchange(ref lastReportedEnqueueCount, 0);
 	}
 }

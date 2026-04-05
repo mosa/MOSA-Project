@@ -132,7 +132,7 @@ public partial class MainWindow : Window
 		MethodScanner.IsChecked = mosaSettings.MethodScanner;
 		MultiThreading.IsChecked = mosaSettings.Multithreading;
 		TreeFilter.Text = mosaSettings.ExplorerFilter;
-		DebugDiagnostic.IsChecked = mosaSettings.DebugDiagnostic;
+		//DebugDiagnostic.IsChecked = mosaSettings.DebugDiagnostic;
 		CodeSizeReduction.IsChecked = mosaSettings.ReduceCodeSize;
 
 		Platform.SelectedIndex = mosaSettings.Platform.ToLowerInvariant() switch
@@ -780,8 +780,7 @@ public partial class MainWindow : Window
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		Instructions.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked,
-			RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
+		Instructions.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked, RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
 	}
 
 	private void UpdateTransforms()
@@ -800,8 +799,7 @@ public partial class MainWindow : Window
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		Transforms.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked,
-			RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
+		Transforms.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked, RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
 	}
 
 	private List<InstructionRecord> GetCurrentTransformRecords()

@@ -39,7 +39,6 @@ public static class Name
 	public const string CompilerDebug_AsmFile = "CompilerDebug.AsmFile";
 	public const string CompilerDebug_CompileTimeFile = "CompilerDebug.CompileTimeFile";
 	public const string CompilerDebug_DebugFile = "CompilerDebug.DebugFile";
-	public const string CompilerDebug_FullCheckMode = "CompilerDebug.FullCheckMode";
 	public const string CompilerDebug_InlinedFile = "CompilerDebug.InlinedFile";
 	public const string CompilerDebug_MapFile = "CompilerDebug.MapFile";
 	public const string CompilerDebug_CounterFile = "CompilerDebug.CounterFile";
@@ -48,6 +47,8 @@ public static class Name
 	public const string CompilerDebug_PreLinkHashFile = "CompilerDebug.PreLinkHashFile";
 	public const string CompilerDebug_Statistics = "CompilerDebug.Statistics";
 	public const string CompilerDebug_CounterFilter = "CompilerDebug.CounterFilter";
+	public const string Compiler_FullCheckMode = "Compiler.FullCheckMode";
+	public const string Compiler_Diagnostic = "Compiler.Diagnostic";
 	public const string Debugger_BreakpointFile = "Debugger.BreakpointFile";
 	public const string Debugger_WatchFile = "Debugger.WatchFile";
 	public const string DefaultFolder = "DefaultFolder";
@@ -64,8 +65,9 @@ public static class Name
 	public const string Emulator_Graphics = "Emulator.Graphics";
 	public const string Emulator_Acceleration = "Emulator.Acceleration";
 
-	public const string Explorer_DebugDiagnostic = "Explorer.DebugDiagnostic";
+	//public const string Explorer_DebugDiagnostic = "Explorer.DebugDiagnostic";
 	public const string Explorer_Filter = "Explorer.Filter";
+
 	public const string Explorer_Start = "Explorer.Start";
 	public const string GDB_Host = "GDB.Host";
 	public const string GDB_Port = "GDB.Port";

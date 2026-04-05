@@ -29,7 +29,7 @@ public enum CompilerEvent
 	MethodScheduled,   // unused
 	InlineMethodsScheduled,
 
-	DebugInfo,
+	Diagnostic,
 
 	Error,
 	Exception,
@@ -60,11 +60,11 @@ public static class CompilerEventExtension
 			CompilerEvent.SetupEnd => "Setting Up [Completed]",
 			CompilerEvent.FinalizationStart => "Finalizing",
 			CompilerEvent.FinalizationEnd => "Finalizing [Completed]",
-			CompilerEvent.SetupStageStart => "Setting Up Stage ",
+			CompilerEvent.SetupStageStart => "Setting Up Stage",
 			CompilerEvent.SetupStageEnd => "Setting Up Stage [Completed]",
 			CompilerEvent.FinalizationStageStart => "Finalizing Stage",
 			CompilerEvent.FinalizationStageEnd => "Finalizing Stage [Completed]",
-			CompilerEvent.DebugInfo => "Debug Info",
+			CompilerEvent.Diagnostic => "Diagnostic",
 			CompilerEvent.Warning => "Warning",
 			CompilerEvent.Error => "Error",
 			CompilerEvent.Exception => "Exception",

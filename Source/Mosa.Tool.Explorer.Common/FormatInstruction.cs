@@ -8,7 +8,7 @@ public class FormatInstruction
 {
 	private const int Padding = 34;
 
-	public static string Format(List<InstructionRecord> records, string blockLabel, bool strip, bool removeNop, bool lineBetweenBlocks)
+	public static string Format(List<InstructionRecord> records, string blockLabel, bool strip, bool removeNop, bool lineBetweenBlocks, bool removeEmptyBlocks = false)
 	{
 		var sb = new StringBuilder();
 		var blocks = new StringBuilder();
@@ -18,6 +18,9 @@ public class FormatInstruction
 
 		var allLines = string.IsNullOrWhiteSpace(blockLabel);
 		var inblock = allLines;
+
+		var lastBlockInstructionCount = 1; // anything but 0
+		var lastBlockStartLength = 0;
 
 		foreach (var record in records)
 		{
@@ -32,6 +35,9 @@ public class FormatInstruction
 				case "S":
 					{
 						inblock = record.BlockLabel == blockLabel;
+
+						lastBlockStartLength = sb.Length;
+						lastBlockInstructionCount = 0;
 
 						if (!inblock && !allLines)
 							continue;
@@ -71,6 +77,8 @@ public class FormatInstruction
 
 						if (removeNop && record.Instruction == "IR.Nop")
 							continue;
+
+						lastBlockInstructionCount++;
 
 						sb.Append($"      ");
 
@@ -129,7 +137,7 @@ public class FormatInstruction
 						}
 
 						// Operands
-						for (int i = 0; i < record.OperandCount; i++)
+						for (var i = 0; i < record.OperandCount; i++)
 						{
 							if (i != 0)
 								sb.Append(", ");
@@ -149,7 +157,7 @@ public class FormatInstruction
 						{
 							sb.Append(" (");
 
-							for (int i = 0; i < record.PhiBlockCount; i++)
+							for (var i = 0; i < record.PhiBlockCount; i++)
 							{
 								if (i != 0)
 									sb.Append(", ");
@@ -173,6 +181,13 @@ public class FormatInstruction
 				case "E":
 					{
 						inblock = false;
+
+						if (removeEmptyBlocks && lastBlockInstructionCount == 0)
+						{
+							sb.Length = lastBlockStartLength;
+							lastBlockInstructionCount = 1;
+							break;
+						}
 
 						if (!inblock && !allLines)
 							continue;

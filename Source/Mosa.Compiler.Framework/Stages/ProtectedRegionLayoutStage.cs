@@ -41,7 +41,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 
 	private void EmitProtectedRegionTable()
 	{
-		var trace = CreateTraceLog("Regions");
+		var trace = CreateTraceLog("Regions", 5);
 
 		var protectedRegionTableSymbol = Linker.DefineSymbol(Metadata.ProtectedRegionTable + Method.FullName, SectionKind.ROData, Architecture.NativeAlignment, 0);
 		var writer = new BinaryWriter(protectedRegionTableSymbol.Stream);

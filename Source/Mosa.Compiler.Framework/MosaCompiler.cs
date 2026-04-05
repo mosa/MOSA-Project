@@ -150,7 +150,7 @@ public sealed class MosaCompiler
 			Stage = CompileStage.Executing;
 		}
 
-		var maxThreads = MosaSettings.Multithreading ? MosaSettings.MaxThreads > 0 ? MosaSettings.MaxThreads : (int)(Environment.ProcessorCount * 1.2) : 0;
+		var maxThreads = MosaSettings.Multithreading ? MosaSettings.MaxThreads : 1;
 
 		Compiler.ExecuteCompile(maxThreads);
 

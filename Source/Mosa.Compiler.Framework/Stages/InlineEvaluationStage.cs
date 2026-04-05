@@ -35,7 +35,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 
 	protected override void Run()
 	{
-		var trace = CreateTraceLog();
+		var trace = CreateTraceLog(5);
 
 		MethodData.HasAddressOfInstruction = false;
 		MethodData.HasLoops = false;
@@ -176,7 +176,7 @@ public class InlineEvaluationStage : BaseMethodCompilerStage
 		}
 
 		// If previous or current is inline, schedule all references from previous
-		MethodScheduler.AddToRecompileQueue(previous.References);
+		MethodScheduler.Add(previous.References);
 	}
 
 	private bool StaticCanNotInline(MethodData methodData)

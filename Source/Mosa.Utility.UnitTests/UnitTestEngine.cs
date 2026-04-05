@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
 using System.IO.Pipes;
@@ -13,8 +13,23 @@ using Mosa.Utility.UnitTests.DebugEngine;
 
 namespace Mosa.Utility.UnitTests;
 
+public delegate void OutputStatusDelegate(string status);
+
 public class UnitTestEngine : IDisposable
 {
+	#region Constants
+
+	private struct Constant
+	{
+		public const int MaxSentQueue = 10000;
+		public const int MaxSendBatch = 1000;
+		public const int MinSendBatch = 200;
+		public const int ConnectionDelay = 150;
+		public const int MaxConnectionErrors = 20;
+	}
+
+	#endregion Constants
+
 	#region Public Methods
 
 	public bool IsAborted => Aborted;
@@ -25,21 +40,13 @@ public class UnitTestEngine : IDisposable
 
 	#endregion Public Methods
 
-	#region Constants
-
-	private const int MaxSentQueue = 10000;
-	private const int MaxSendBatch = 1000;
-	private const int MinSendBatch = 200;
-	private const int ConnectionDelay = 150;
-	private const int MaxConnectionErrors = 20;
-
-	#endregion Constants
-
 	#region Private Data Members
 
 	protected DebugServerEngine DebugServerEngine;
 	protected Starter Starter;
 	protected Process Process;
+
+	private readonly OutputStatusDelegate OutputStatus;
 
 	private MosaSettings MosaSettings = new();
 
@@ -64,8 +71,10 @@ public class UnitTestEngine : IDisposable
 
 	#endregion Private Data Members
 
-	public UnitTestEngine(MosaSettings mosaSettings)
+	public UnitTestEngine(MosaSettings mosaSettings, OutputStatusDelegate outputStatus)
 	{
+		OutputStatus = outputStatus;
+
 		MosaSettings.LoadAppLocations();
 		MosaSettings.SetDefaultSettings();
 		MosaSettings.Merge(mosaSettings);
@@ -97,8 +106,6 @@ public class UnitTestEngine : IDisposable
 		MosaSettings.AddSourceFile("Mosa.UnitTests.dll");
 
 		MosaSettings.AddSearchPath(AppContext.BaseDirectory);
-
-		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
 	}
 
 	private void Initialize()
@@ -164,12 +171,12 @@ public class UnitTestEngine : IDisposable
 				if (Aborted)
 					return;
 
-				var count = MaxSendBatch;
+				var count = Constant.MaxSendBatch;
 
 				count = Math.Min(count, Queue.Count);
-				count = Math.Min(count, MaxSentQueue - Active.Count);
+				count = Math.Min(count, Constant.MaxSentQueue - Active.Count);
 
-				if (count < MinSendBatch & SendOneCount == 0 & Queue.Count > MinSendBatch)
+				if (count < Constant.MinSendBatch && SendOneCount == 0 && Queue.Count > Constant.MinSendBatch)
 				{
 					count = 0;
 				}
@@ -245,9 +252,11 @@ public class UnitTestEngine : IDisposable
 	{
 		Stopwatch.Restart();
 
-		//MosaSettings.AddSearchPath(TestAssemblyPath);
-		//MosaSettings.ClearSourceFiles();
-		//MosaSettings.AddSourceFile(Path.Combine(TestAssemblyPath, TestSuiteFile));
+		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
+		OutputStatus($"Output file: {MosaSettings.OutputFile}");
+		OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
+		OutputStatus($"Max Threads: {MosaSettings.MaxThreads}");
+		OutputStatus($"Platform: {MosaSettings.Platform}");
 
 		var compilerHook = CreateCompilerHook();
 
@@ -277,20 +286,22 @@ public class UnitTestEngine : IDisposable
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (compilerEvent != CompilerEvent.MethodCompileEnd
-			&& compilerEvent != CompilerEvent.MethodCompileStart
-			&& compilerEvent != CompilerEvent.Counter
-			&& compilerEvent != CompilerEvent.SetupStageStart
-			&& compilerEvent != CompilerEvent.SetupStageEnd
-			&& compilerEvent != CompilerEvent.FinalizationStageStart
-			&& compilerEvent != CompilerEvent.FinalizationStageEnd
-		   )
-		{
-			var eventname = compilerEvent.ToText();
-			message = string.IsNullOrWhiteSpace(message) ? eventname : $"{eventname}: {message}";
+		if (compilerEvent is CompilerEvent.MethodCompileEnd
+			or CompilerEvent.MethodCompileStart
+			or CompilerEvent.Counter
+			or CompilerEvent.SetupStageStart
+			or CompilerEvent.SetupStageEnd
+			or CompilerEvent.FinalizationStageStart
+			or CompilerEvent.FinalizationStageEnd)
+			return;
 
-			OutputStatus(message);
-		}
+		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+			return;
+
+		var eventname = compilerEvent.ToText();
+		message = string.IsNullOrWhiteSpace(message) ? eventname : $"{eventname}: {message}";
+
+		OutputStatus(message);
 	}
 
 	private void NotifyProgress(int totalMethods, int completedMethods)
@@ -300,11 +311,6 @@ public class UnitTestEngine : IDisposable
 	private void NotifyStatus(string status)
 	{
 		OutputStatus($"{status}");
-	}
-
-	private void OutputStatus(string status)
-	{
-		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 
 	public bool LaunchVirtualMachine()
@@ -446,7 +452,7 @@ public class UnitTestEngine : IDisposable
 					KillVirtualMachine();
 				}
 
-				Thread.Sleep(ConnectionDelay);
+				Thread.Sleep(Constant.ConnectionDelay);
 			}
 
 			return false;
@@ -542,7 +548,7 @@ public class UnitTestEngine : IDisposable
 					foreach (var entry in Active)
 					{
 						entry.Value.Status = UnitTestStatus.FailedByCrash;
-						OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(entry.Value)}");
+						OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(entry.Value)}");
 					}
 				}
 				else
@@ -607,7 +613,7 @@ public class UnitTestEngine : IDisposable
 			{
 				unittest.Status = UnitTestStatus.Failed;
 
-				OutputStatus($"ERROR: {UnitTestSystem.OutputUnitTestResult(unittest)}");
+				OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(unittest)}");
 
 				Errors++;
 				CheckAbort();
@@ -617,7 +623,7 @@ public class UnitTestEngine : IDisposable
 
 	private void CheckAbort()
 	{
-		if (Errors >= MosaSettings.MaxErrors || ConnectionErrors >= MaxConnectionErrors)
+		if (Errors >= MosaSettings.MaxErrors || ConnectionErrors >= Constant.MaxConnectionErrors)
 		{
 			Aborted = true;
 		}

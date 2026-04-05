@@ -20,7 +20,7 @@ public class DominanceAnalysisStage : BaseMethodCompilerStage
 
 	private void OutputList()
 	{
-		var trace = CreateTraceLog("List");
+		var trace = CreateTraceLog("List", 5);
 		var sb = new StringBuilder();
 
 		foreach (var headBlock in BasicBlocks.HeadBlocks)
@@ -54,7 +54,7 @@ public class DominanceAnalysisStage : BaseMethodCompilerStage
 
 	private void OutputDiagram()
 	{
-		var trace = CreateTraceLog("DominanceTree-graphviz");
+		var trace = CreateTraceLog("DominanceTree-graphviz", 5);
 
 		trace.Log("digraph blocks {");
 
@@ -78,7 +78,7 @@ public class DominanceAnalysisStage : BaseMethodCompilerStage
 
 	private void OutputDominanceBlock()
 	{
-		var trace = CreateTraceLog("DominanceBlock");
+		var trace = CreateTraceLog("DominanceBlock", 5);
 		var sb = new StringBuilder();
 
 		foreach (var headBlock in BasicBlocks.HeadBlocks)

@@ -65,8 +65,10 @@
 			cbLineBetweenBlocks = new ToolStripMenuItem();
 			cbShowOperandTypes = new ToolStripMenuItem();
 			showSizes = new ToolStripMenuItem();
+			cbHideEmptyBlocks = new ToolStripMenuItem();
 			advanceToolStripMenuItem = new ToolStripMenuItem();
 			cbEnableMultithreading = new ToolStripMenuItem();
+			cbEnableFullCheckMode = new ToolStripMenuItem();
 			cbEnableMethodScanner = new ToolStripMenuItem();
 			cbEnableDebugDiagnostic = new ToolStripMenuItem();
 			cbDumpAllMethodStages = new ToolStripMenuItem();
@@ -404,7 +406,7 @@
 			// 
 			// displayOptionsToolStripMenuItem
 			// 
-			displayOptionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbRemoveIRNop, cbLineBetweenBlocks, cbShowOperandTypes, showSizes });
+			displayOptionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbRemoveIRNop, cbLineBetweenBlocks, cbShowOperandTypes, showSizes, cbHideEmptyBlocks });
 			displayOptionsToolStripMenuItem.Name = "displayOptionsToolStripMenuItem";
 			displayOptionsToolStripMenuItem.Size = new Size(57, 20);
 			displayOptionsToolStripMenuItem.Text = "Display";
@@ -413,7 +415,7 @@
 			// 
 			cbRemoveIRNop.CheckOnClick = true;
 			cbRemoveIRNop.Name = "cbRemoveIRNop";
-			cbRemoveIRNop.Size = new Size(184, 22);
+			cbRemoveIRNop.Size = new Size(185, 22);
 			cbRemoveIRNop.Text = "Remove IR.Nop";
 			cbRemoveIRNop.CheckStateChanged += DisplayCheckStateChanged;
 			// 
@@ -423,7 +425,7 @@
 			cbLineBetweenBlocks.CheckOnClick = true;
 			cbLineBetweenBlocks.CheckState = CheckState.Checked;
 			cbLineBetweenBlocks.Name = "cbLineBetweenBlocks";
-			cbLineBetweenBlocks.Size = new Size(184, 22);
+			cbLineBetweenBlocks.Size = new Size(185, 22);
 			cbLineBetweenBlocks.Text = "Line Between Blocks";
 			cbLineBetweenBlocks.CheckStateChanged += DisplayCheckStateChanged;
 			// 
@@ -431,7 +433,7 @@
 			// 
 			cbShowOperandTypes.CheckOnClick = true;
 			cbShowOperandTypes.Name = "cbShowOperandTypes";
-			cbShowOperandTypes.Size = new Size(184, 22);
+			cbShowOperandTypes.Size = new Size(185, 22);
 			cbShowOperandTypes.Text = "Show Operand Types";
 			cbShowOperandTypes.CheckStateChanged += DisplayCheckStateChanged;
 			// 
@@ -441,15 +443,23 @@
 			showSizes.CheckOnClick = true;
 			showSizes.CheckState = CheckState.Checked;
 			showSizes.Name = "showSizes";
-			showSizes.Size = new Size(184, 22);
+			showSizes.Size = new Size(185, 22);
 			showSizes.Text = "Show Sizes";
 			showSizes.CheckStateChanged += DisplayCheckStateChanged;
 			showSizes.Click += showSizesToolStripMenuItem_Click;
 			// 
+			// cbHideEmptyBlocks
+			// 
+			cbHideEmptyBlocks.CheckOnClick = true;
+			cbHideEmptyBlocks.Name = "cbHideEmptyBlocks";
+			cbHideEmptyBlocks.Size = new Size(185, 22);
+			cbHideEmptyBlocks.Text = "Hide Empty Blocks";
+			cbHideEmptyBlocks.CheckStateChanged += DisplayCheckStateChanged;
+			// 
 			// advanceToolStripMenuItem
 			// 
 			advanceToolStripMenuItem.CheckOnClick = true;
-			advanceToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbEnableMultithreading, cbEnableMethodScanner, cbEnableDebugDiagnostic, cbDumpAllMethodStages });
+			advanceToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbEnableMultithreading, cbEnableFullCheckMode, cbEnableMethodScanner, cbEnableDebugDiagnostic, cbDumpAllMethodStages });
 			advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
 			advanceToolStripMenuItem.Size = new Size(65, 20);
 			advanceToolStripMenuItem.Text = "Advance";
@@ -462,6 +472,13 @@
 			cbEnableMultithreading.Name = "cbEnableMultithreading";
 			cbEnableMultithreading.Size = new Size(206, 22);
 			cbEnableMultithreading.Text = "Enable Multithreading";
+			// 
+			// cbEnableFullCheckMode
+			// 
+			cbEnableFullCheckMode.CheckOnClick = true;
+			cbEnableFullCheckMode.Name = "cbEnableFullCheckMode";
+			cbEnableFullCheckMode.Size = new Size(206, 22);
+			cbEnableFullCheckMode.Text = "Enable Full Check Mode";
 			// 
 			// cbEnableMethodScanner
 			// 
@@ -1418,5 +1435,7 @@
 		private ToolStripMenuItem cbEnableCodeSizeReduction;
 		private ToolStripMenuItem cbEnableLoopRangeTracker;
 		private ToolStripMenuItem cbLineBetweenBlocks;
+		private ToolStripMenuItem cbEnableFullCheckMode;
+		private ToolStripMenuItem cbHideEmptyBlocks;
 	}
 }

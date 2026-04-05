@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework.Instructions;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
@@ -556,14 +557,79 @@ public abstract class BaseMethodCompilerStage
 	{
 		foreach (var operand in MethodCompiler.VirtualRegisters)
 		{
-			if ((full && operand.IsUsed && !operand.IsDefined)
-			|| (!full && operand.IsUsed && !operand.IsDefined && !operand.HasParent && !operand.IsParent))
-			{
-				throw new CompilerException($"CHECK-FAILED: Virtual register used by not defined: {operand}");
-			}
+			CheckVirtualRegister(operand, full);
 		}
 
 		return true;
+	}
+
+	private void CheckVirtualRegister(Operand operand, bool full)
+	{
+		if ((full && operand.IsUsed && !operand.IsDefined)
+			|| (!full && operand.IsUsed && !operand.IsDefined && !operand.HasParent && !operand.IsParent))
+		{
+			throw new CompilerException($"CHECK-FAILED: Virtual register used by not defined: {operand}");
+		}
+
+		if (full)
+		{
+			CheckVirtualRegisterTrace(operand);
+		}
+	}
+
+	private void CheckVirtualRegisterTrace(Operand operand)
+	{
+		var defBlocks = new HashSet<BasicBlock>();
+
+		foreach (var def in operand.Definitions)
+		{
+			defBlocks.Add(def.Block);
+		}
+
+		foreach (var use in operand.Uses)
+		{
+			if (!CheckVirtualRegisterTrace(use.Block, defBlocks))
+			{
+				throw new CompilerException($"CHECK-FAILED: Virtual register used before being defined: {operand} starting from {use.Block}");
+			}
+		}
+	}
+
+	private bool CheckVirtualRegisterTrace(BasicBlock startBlock, HashSet<BasicBlock> defBlocks)
+	{
+		if (defBlocks.Contains(startBlock))
+			return true;
+
+		var visited = new HashSet<BasicBlock>();
+		var stack = new Stack<BasicBlock>();
+
+		stack.Push(startBlock);
+		visited.Add(startBlock);
+
+		while (stack.Count > 0)
+		{
+			var block = stack.Pop();
+
+			if (defBlocks.Contains(block))
+				return true;
+
+			if (block.IsTryHeadBlock || block.IsHandlerHeadBlock)
+				return true;
+
+			if (!block.HasPreviousBlocks && !block.IsHeadBlock)
+				return true; // dead block(s)
+
+			foreach (var previous in block.PreviousBlocks)
+			{
+				if (!visited.Contains(previous))
+				{
+					stack.Push(previous);
+					visited.Add(previous);
+				}
+			}
+		}
+
+		return false;
 	}
 
 	protected bool CheckAllInstructions()

@@ -81,7 +81,11 @@ public static class CommandLineArguments
 
 			// Compiler - Debug:
 			new Argument { Name = "-inline-exclude", Setting = Name.Optimizations_Inline_Exclude, IsList = true},
-			new Argument { Name = "-check", Setting = Name.CompilerDebug_FullCheckMode, Value = "true"},
+
+			// Compiler - Diagnostic:
+			new Argument { Name = "-diagnostic", Setting = Name.Compiler_Diagnostic, Value = "true"},
+			new Argument { Name = "-diag", Setting = Name.Compiler_Diagnostic, Value = "true"},
+			new Argument { Name = "-check", Setting = Name.Compiler_FullCheckMode, Value = "true"},
 
 			new Argument { Name = "-interrupt-method", Setting = Name.X86_InterruptMethodName},
 
@@ -95,7 +99,6 @@ public static class CommandLineArguments
 
 			// Explorer:
 			new Argument { Name = "-filter", Setting = Name.Explorer_Filter, Value = null},
-			new Argument { Name = "-explorer-debug", Setting = Name.Explorer_DebugDiagnostic, Value = "true"},
 			new Argument { Name = "-autostart", Setting = Name.Explorer_Start, Value = "true"},
 
 			// Launcher:

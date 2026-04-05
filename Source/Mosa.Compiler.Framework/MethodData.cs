@@ -1,18 +1,21 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework;
 
 /// <summary>
-/// Compiler Metho dData
+/// Compiler Method Data
 /// </summary>
 public sealed class MethodData
 {
 	#region Properties
 
 	public MosaMethod Method { get; }
+
+	public Compiler Compiler { get; internal set; }
 
 	public LinkerSymbol Symbol { get; set; }
 
@@ -68,6 +71,8 @@ public sealed class MethodData
 
 	public long ElapsedTicks { get; set; }
 
+	public long TotalElapsedTicks { get; set; }
+
 	public bool DoNotInline { get; set; }
 
 	public bool IsReferenced { get; set; }
@@ -75,7 +80,17 @@ public sealed class MethodData
 	public bool HasCode { get; set; }
 
 	public bool Inlined
-	{ get { lock (_lock) { return InlineMethodData.IsInlined; } } }
+	{
+		get
+		{
+			var lockTimer = Stopwatch.StartNew();
+			lock (_lock)
+			{
+				Compiler.LockMonitor.RecordLockWait(lockTimer, _lock, this.ToString());
+				return InlineMethodData.IsInlined;
+			}
+		}
+	}
 
 	public MosaMethod ReplacedBy { get; set; }
 
@@ -95,12 +110,14 @@ public sealed class MethodData
 
 	#endregion Data Members
 
-	public MethodData(MosaMethod mosaMethod)
+	public MethodData(MosaMethod mosaMethod, Compiler compiler)
 	{
 		Method = mosaMethod;
+		Compiler = compiler;
 
+		Counters = new Counters(compiler, $"Counters: {mosaMethod.FullName}");
 		LabelRegions = new List<LabelRegion>();
-		Counters = new Counters();
+
 		Version = 0;
 		DoNotInline = false;
 		InlineMethodData = new InlineMethodData(null, 0);
@@ -133,8 +150,11 @@ public sealed class MethodData
 
 	public InlineMethodData GetInlineMethodDataForUseBy(MosaMethod method)
 	{
+		var lockTimer = Stopwatch.StartNew();
 		lock (_lock)
 		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, _lock, this.ToString());
+
 			InlineMethodData.AddReference(method);
 			return InlineMethodData;
 		}
@@ -142,8 +162,11 @@ public sealed class MethodData
 
 	public InlineMethodData SwapInlineMethodData(BasicBlocks basicBlocks)
 	{
+		var lockTimer = Stopwatch.StartNew();
 		lock (_lock)
 		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, _lock, this.ToString());
+
 			var tmp = InlineMethodData;
 
 			InlineMethodData = new InlineMethodData(basicBlocks, Version);
@@ -154,8 +177,11 @@ public sealed class MethodData
 
 	public InlineMethodData GetInlineMethodData()
 	{
+		var lockTimer = Stopwatch.StartNew();
 		lock (_lock)
 		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, _lock, this.ToString());
+
 			return InlineMethodData;
 		}
 	}

@@ -33,7 +33,7 @@ public class InlineStage : BaseMethodCompilerStage
 
 	protected override void Run()
 	{
-		var trace = CreateTraceLog("Inlined");
+		var trace = CreateTraceLog("Inlined", 5);
 
 		if (cache == null || cache.Count != 0)
 		{

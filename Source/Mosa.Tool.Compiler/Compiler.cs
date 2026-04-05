@@ -14,7 +14,8 @@ public class Compiler
 {
 	#region Data
 
-	private static readonly Stopwatch Stopwatch = new();
+	private readonly Stopwatch Stopwatch = new();
+	private readonly MosaSettings MosaSettings = new();
 
 	#endregion Data
 
@@ -38,27 +39,25 @@ public class Compiler
 
 		try
 		{
-			var mosaSettings = new MosaSettings();
+			MosaSettings.LoadAppLocations();
+			MosaSettings.SetDefaultSettings();
+			MosaSettings.LoadArguments(args);
+			MosaSettings.NormalizeSettings();
+			MosaSettings.ResolveDefaults();
+			SetRequiredSettings(MosaSettings);
+			MosaSettings.ResolveFileAndPathSettings();
+			MosaSettings.AddStandardPlugs();
+			MosaSettings.ExpandSearchPaths();
 
-			mosaSettings.LoadAppLocations();
-			mosaSettings.SetDefaultSettings();
-			mosaSettings.LoadArguments(args);
-			mosaSettings.NormalizeSettings();
-			mosaSettings.ResolveDefaults();
-			SetRequiredSettings(mosaSettings);
-			mosaSettings.ResolveFileAndPathSettings();
-			mosaSettings.AddStandardPlugs();
-			mosaSettings.ExpandSearchPaths();
-
-			OutputStatus($"Compiling: {mosaSettings.SourceFiles[0]}");
-
-			if (mosaSettings.SourceFiles == null && mosaSettings.SourceFiles.Count == 0)
+			if (MosaSettings.SourceFiles == null || MosaSettings.SourceFiles.Count == 0)
 			{
 				OutputStatus("ERROR: No input file(s) specified.");
 				return 1;
 			}
 
-			var compiler = new MosaCompiler(mosaSettings, CreateCompilerHooks(), new ClrModuleLoader(), new ClrTypeResolver());
+			OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
+
+			var compiler = new MosaCompiler(MosaSettings, CreateCompilerHooks(), new ClrModuleLoader(), new ClrTypeResolver());
 
 			if (string.IsNullOrEmpty(compiler.MosaSettings.OutputFile))
 			{
@@ -78,16 +77,18 @@ public class Compiler
 			OutputStatus($"Input file(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SourceFiles.ToArray()))}");
 			OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SearchPaths.ToArray()))}");
 			OutputStatus($"Output file: {compiler.MosaSettings.OutputFile}");
+			OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
+			OutputStatus($"Max Threads: {compiler.MosaSettings.MaxThreads}");
 			OutputStatus($"Platform: {compiler.MosaSettings.Platform}");
 
 			compiler.Load();
 
 			compiler.Compile();
 		}
-		catch (Exception ce)
+		catch (Exception ex)
 		{
-			OutputStatus($"Exception: {ce.Message}");
-			OutputStatus($"Exception: {ce.StackTrace}");
+			OutputStatus($"Exception: {ex.Message}");
+			OutputStatus($"Exception: {ex.StackTrace}");
 			return 1;
 		}
 
@@ -122,20 +123,23 @@ public class Compiler
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (compilerEvent != CompilerEvent.MethodCompileEnd
-			&& compilerEvent != CompilerEvent.MethodCompileStart
-			&& compilerEvent != CompilerEvent.Counter
-			&& compilerEvent != CompilerEvent.SetupStageStart
-			&& compilerEvent != CompilerEvent.SetupStageEnd
-			&& compilerEvent != CompilerEvent.FinalizationStageStart
-			&& compilerEvent != CompilerEvent.FinalizationStageEnd)
-		{
-			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
-			OutputStatus($"{compilerEvent.ToText()}{message}");
-		}
+		if (compilerEvent is CompilerEvent.MethodCompileEnd
+			or CompilerEvent.MethodCompileStart
+			or CompilerEvent.Counter
+			or CompilerEvent.SetupStageStart
+			or CompilerEvent.SetupStageEnd
+			or CompilerEvent.FinalizationStageStart
+			or CompilerEvent.FinalizationStageEnd)
+			return;
+
+		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+			return;
+
+		message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
+		OutputStatus($"{compilerEvent.ToText()}{message}");
 	}
 
-	private static void OutputStatus(string status)
+	private void OutputStatus(string status)
 	{
 		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}

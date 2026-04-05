@@ -8,17 +8,13 @@ internal static class Program
 {
 	private static void Main(string[] args)
 	{
-		try
-		{
-			RegisterPlatforms();
+		RegisterPlatforms();
 
-			Environment.Exit(UnitTestSystem.Start(args));
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex);
-			Environment.Exit(1);
-		}
+		var unitTestSystem = new UnitTestSystem();
+
+		var returncode = unitTestSystem.Start(args);
+
+		Environment.Exit(returncode);
 	}
 
 	private static void RegisterPlatforms()

@@ -1101,8 +1101,8 @@ public partial class MainForm : Form
 		cbEnableMethodScanner.Checked = MosaSettings.MethodScanner;
 		cbEnableMultithreading.Checked = MosaSettings.Multithreading;
 		tbFilter.Text = MosaSettings.ExplorerFilter; ;
-		cbEnableDebugDiagnostic.Checked = MosaSettings.DebugDiagnostic;
 		cbEnableCodeSizeReduction.Checked = MosaSettings.ReduceCodeSize;
+		cbEnableFullCheckMode.Checked = MosaSettings.FullCheckMode;
 
 		cbPlatform.SelectedIndex = MosaSettings.Platform.ToLowerInvariant() switch
 		{
@@ -1150,7 +1150,7 @@ public partial class MainForm : Form
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbInstructions.Text = FormatInstruction.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
+		tbInstructions.Text = FormatInstruction.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked, cbHideEmptyBlocks.Checked);
 	}
 
 	private void UpdateInstructionStages()
@@ -1226,6 +1226,7 @@ public partial class MainForm : Form
 		MosaSettings.InlineMethods = cbEnableInline.Checked;
 		MosaSettings.InlineExplicit = cbInlineExplicit.Checked;
 		MosaSettings.ReduceCodeSize = cbEnableCodeSizeReduction.Checked;
+		MosaSettings.FullCheckMode = cbEnableFullCheckMode.Checked;
 
 		MosaSettings.TraceLevel = 10;
 		//MosaSettings.InlineMaximum = 12;
@@ -1279,7 +1280,7 @@ public partial class MainForm : Form
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		tbTransforms.Text = FormatInstruction.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked);
+		tbTransforms.Text = FormatInstruction.Format(records, label, !cbShowOperandTypes.Checked, cbRemoveIRNop.Checked, cbLineBetweenBlocks.Checked, cbHideEmptyBlocks.Checked);
 	}
 
 	private void UpdateTransformStages()

@@ -29,6 +29,8 @@ public partial class MosaSettings
 		public const int Optimizations_ScanWindow = 30;
 		public const int Optimizations_Inline_Maximum = 12;
 		public const int Optimizations_Inline_AggressiveMaximum = 24;
+
+		public const double MultithreadingProcessorMultiplier = 1.2;
 	}
 
 	#endregion Constants
@@ -624,6 +626,12 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Optimizations_Platform, value);
 	}
 
+	public bool Diagnostic
+	{
+		get => Settings.GetValue(Name.Compiler_Diagnostic, false);
+		set => Settings.SetValue(Name.Compiler_Diagnostic, value);
+	}
+
 	public bool EmitStatistics
 	{
 		get => Settings.GetValue(Name.CompilerDebug_Statistics, true);
@@ -660,8 +668,8 @@ public partial class MosaSettings
 
 	public bool FullCheckMode
 	{
-		get => Settings.GetValue(Name.CompilerDebug_FullCheckMode, false);
-		set => Settings.SetValue(Name.CompilerDebug_FullCheckMode, value);
+		get => Settings.GetValue(Name.Compiler_FullCheckMode, false);
+		set => Settings.SetValue(Name.Compiler_FullCheckMode, value);
 	}
 
 	public string BreakpointFile
@@ -680,12 +688,6 @@ public partial class MosaSettings
 	{
 		get => Settings.GetValue(Name.Explorer_Start, false);
 		set => Settings.SetValue(Name.Explorer_Start, value);
-	}
-
-	public bool DebugDiagnostic
-	{
-		get => Settings.GetValue(Name.Explorer_DebugDiagnostic, false);
-		set => Settings.SetValue(Name.Explorer_DebugDiagnostic, value);
 	}
 
 	public bool MultibootVideo
@@ -773,7 +775,6 @@ public partial class MosaSettings
 		TemporaryFolder = Path.Combine(Path.GetTempPath(), "MOSA");
 
 		MethodScanner = false;
-		Multithreading = true;
 		Platform = "%DEFAULT%";
 		Multithreading = true;
 		BaseAddress = 0x00400000;
@@ -854,6 +855,10 @@ public partial class MosaSettings
 		ExplorerFilter = "%REGISTRY%";
 
 		InitialStackLocation = 0;
+		Diagnostic = false;
+		EmitStatistics = false;
+
+		MaxThreads = Multithreading ? (int)(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 0;
 	}
 
 	public void NormalizeSettings()
@@ -872,6 +877,12 @@ public partial class MosaSettings
 			case "arm32": Platform = "ARM32"; break;
 			case "arm64": Platform = "ARM64"; break;
 		}
+
+		if (!Multithreading)
+			MaxThreads = 1;
+
+		if (MaxThreads <= 0)
+			MaxThreads = Multithreading ? (int)(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 1;
 	}
 
 	public void AdjustSettings()

@@ -89,7 +89,7 @@ public class CompilerInformation
 		var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
 		var msg = $"{compilerEvent.ToText()}{part}";
 
-		var timelog = $"{Stopwatch.Elapsed.TotalSeconds:00.00} | [{threadID}] {msg}";
+		var timelog = $"{Stopwatch.Elapsed.TotalSeconds:00.00} | [{threadID:00}] {msg}";
 
 		if (compilerEvent == CompilerEvent.Error)
 		{

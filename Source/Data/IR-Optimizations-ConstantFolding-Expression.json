@@ -172,26 +172,6 @@
 			"Result": "(IR.AddR# a [SubR#(ToR#(b), ToR#(c))])",
 			"Priority": "90",
 			"Variations": "Yes"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "ShiftLeft##",
-			"SubName": "x2",
-			"Expression": "IR.ShiftLeft## (IR.ShiftLeft## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And##(b) & IsIntegerBetween0And64(c)",
-			"Result": "(IR.ShiftLeft## a [Add##(To##(b),To##(c))])",
-			"Priority": "90",
-			"Variations": "Yes"
-		},
-		{
-			"Type": "ConstantFolding",
-			"Name": "ShiftRight##",
-			"SubName": "x2",
-			"Expression": "IR.ShiftRight## (IR.ShiftRight## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And##(b) & IsIntegerBetween0And64(c)",
-			"Result": "(IR.ShiftRight## a [Add##(To##(b),To##(c))])",
-			"Priority": "90",
-			"Variations": "Yes"
 		}
 	]
 }

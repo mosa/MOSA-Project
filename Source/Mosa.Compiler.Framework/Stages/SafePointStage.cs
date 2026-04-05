@@ -25,13 +25,13 @@ public class SafePointStage : BaseMethodCompilerStage
 		if (MethodCompiler.IsMethodPlugged)
 			return;
 
-		trace = CreateTraceLog();
+		trace = CreateTraceLog(5);
 
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 
 		if (trace != null)
 		{
-			var loopTrace = CreateTraceLog("Loops");
+			var loopTrace = CreateTraceLog("Loops", 5);
 
 			loopTrace.Log($"Loops: Total = {loops.Count}");
 			loopTrace.Log();
