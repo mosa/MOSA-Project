@@ -38,8 +38,8 @@ public static class EqualityComparerTests
 	public static bool Test_EqualityComparer_GetHashCode_SameValue(int value)
 	{
 		var comparer = EqualityComparer<int>.Default;
-		int hash1 = comparer.GetHashCode(value);
-		int hash2 = comparer.GetHashCode(value);
+		var hash1 = comparer.GetHashCode(value);
+		var hash2 = comparer.GetHashCode(value);
 		return hash1 == hash2;
 	}
 
@@ -47,8 +47,8 @@ public static class EqualityComparerTests
 	public static bool Test_EqualityComparer_GetHashCode_DifferentValues(int value)
 	{
 		var comparer = EqualityComparer<int>.Default;
-		int hash1 = comparer.GetHashCode(value);
-		int hash2 = comparer.GetHashCode(value + 1);
+		var hash1 = comparer.GetHashCode(value);
+		var hash2 = comparer.GetHashCode(value + 1);
 		return hash1 != hash2;
 	}
 

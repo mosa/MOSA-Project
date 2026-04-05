@@ -5,61 +5,27 @@ namespace System;
 
 public struct RuntimeMethodHandle : IEquatable<RuntimeMethodHandle>, ISerializable
 {
-	private object _dummy;
+	public IntPtr Value { get; }
 
-	private int _dummyPrimitive;
+	internal RuntimeMethodHandle(IntPtr value) => Value = value;
 
-	public IntPtr Value
-	{
-		get
-		{
-			throw null;
-		}
-	}
+	public override bool Equals(object? obj) => obj is RuntimeMethodHandle handle && Equals(handle);
 
-	public override bool Equals(object? obj)
-	{
-		throw null;
-	}
+	public bool Equals(RuntimeMethodHandle handle) => Value == handle.Value;
 
-	public bool Equals(RuntimeMethodHandle handle)
-	{
-		throw null;
-	}
+	public IntPtr GetFunctionPointer() => throw new NotImplementedException();
 
-	public IntPtr GetFunctionPointer()
-	{
-		throw null;
-	}
-
-	public override int GetHashCode()
-	{
-		throw null;
-	}
+	public override int GetHashCode() => Value.GetHashCode();
 
 	[Obsolete("This API supports obsolete formatter-based serialization. It should not be called or extended by application code.", DiagnosticId = "SYSLIB0051", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public void GetObjectData(SerializationInfo info, StreamingContext context)
-	{
-	}
+	public void GetObjectData(SerializationInfo info, StreamingContext context) => throw new NotImplementedException();
 
-	public static RuntimeMethodHandle FromIntPtr(IntPtr value)
-	{
-		throw null;
-	}
+	public static RuntimeMethodHandle FromIntPtr(IntPtr value) => new(value);
 
-	public static IntPtr ToIntPtr(RuntimeMethodHandle value)
-	{
-		throw null;
-	}
+	public static IntPtr ToIntPtr(RuntimeMethodHandle value) => value.Value;
 
-	public static bool operator ==(RuntimeMethodHandle left, RuntimeMethodHandle right)
-	{
-		throw null;
-	}
+	public static bool operator ==(RuntimeMethodHandle left, RuntimeMethodHandle right) => left.Equals(right);
 
-	public static bool operator !=(RuntimeMethodHandle left, RuntimeMethodHandle right)
-	{
-		throw null;
-	}
+	public static bool operator !=(RuntimeMethodHandle left, RuntimeMethodHandle right) => !left.Equals(right);
 }

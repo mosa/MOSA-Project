@@ -15,10 +15,10 @@ public static class LinkedListTests
 		return list.Count == 0 && list.First == null && list.Last == null;
 	}
 
-	[MosaUnitTest(Series = "I4I4I4I4I4")]
+	[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4MiniI4Mini")]
 	public static bool Test_Constructor_FromCollection(int val1, int val2, int val3, int val4, int val5)
 	{
-		var source = new int[] { val1, val2, val3, val4, val5 };
+		int[] source = [val1, val2, val3, val4, val5];
 		var list = new LinkedList<int>(source);
 		return list.Count == 5 && list.First!.Value == val1 && list.Last!.Value == val5;
 	}
@@ -285,13 +285,13 @@ public static class LinkedListTests
 
 	// == Clear tests
 
-	[MosaUnitTest(Series = "I4I4I4")]
-	public static bool Test_Clear_NonEmptyList(int val1, int val2, int val3)
+	[MosaUnitTest]
+	public static bool Test_Clear_NonEmptyList()
 	{
 		var list = new LinkedList<int>();
-		list.AddLast(val1);
-		list.AddLast(val2);
-		list.AddLast(val3);
+		list.AddLast(1);
+		list.AddLast(2);
+		list.AddLast(3);
 		list.Clear();
 		return list.Count == 0 && list.First == null && list.Last == null;
 	}

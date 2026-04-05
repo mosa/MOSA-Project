@@ -2,42 +2,16 @@ using System.ComponentModel;
 
 namespace System.Collections;
 
-public struct DictionaryEntry
+public struct DictionaryEntry(object key, object? value)
 {
-	private object _dummy;
+	public object Key { get; set; } = key;
 
-	private int _dummyPrimitive;
-
-	public object Key
-	{
-		get
-		{
-			throw null;
-		}
-		set
-		{
-		}
-	}
-
-	public object? Value
-	{
-		get
-		{
-			throw null;
-		}
-		set
-		{
-		}
-	}
-
-	public DictionaryEntry(object key, object? value)
-	{
-		throw null;
-	}
+	public object? Value { get; set; } = value;
 
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public void Deconstruct(out object key, out object? value)
 	{
-		throw null;
+		key = Key;
+		value = Value;
 	}
 }
