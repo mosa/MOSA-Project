@@ -10,8 +10,6 @@ public class FormatInstruction
 
 	public static string Format(List<InstructionRecord> records, string blockLabel, bool strip, bool removeNop, bool lineBetweenBlocks, bool removeEmptyBlocks = false)
 	{
-		removeEmptyBlocks = removeNop; //temp
-
 		var sb = new StringBuilder();
 		var blocks = new StringBuilder();
 
