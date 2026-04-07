@@ -1,56 +1,158 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="Mosa.Tool.Explorer.Avalonia.MainWindow"
-        Title="Managed Operating System Alliance - Explorer"
-        Width="1000" Height="600"
-        WindowStartupLocation="CenterScreen"
-        Loaded="Control_OnLoaded">
+﻿<Window
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="Mosa.Tool.Explorer.Avalonia.MainWindow"
+	Title="Managed Operating System Alliance - Explorer"
+	Width="1000"
+	Height="600"
+	WindowStartupLocation="CenterScreen"
+	Loaded="Control_OnLoaded"
+>
 	<Grid RowDefinitions="Auto, Auto, *, Auto">
 		<Menu Grid.Row="0">
 			<MenuItem Header="File">
-				<MenuItem Name="OpenMenuItem" Header="Open..." Click="Open_OnClick"/>
-				<Separator/>
-				<MenuItem Name="Quit" Header="Quit" Click="Quit_OnClick"/>
+				<MenuItem Name="OpenMenuItem" Header="Open..." Click="Open_OnClick" />
+				<Separator />
+				<MenuItem Name="Quit" Header="Quit" Click="Quit_OnClick" />
 			</MenuItem>
 			<MenuItem Header="Compile">
-				<MenuItem Name="CompileNow" Header="Now" Click="Compile_OnClick"/>
+				<MenuItem Name="CompileNow" Header="Now" Click="Compile_OnClick" />
 			</MenuItem>
 			<MenuItem Header="Optimizations">
-				<MenuItem Name="EnableAllOptimizations" Header="Enable All" Click="EnableAllOptimizations_OnClick"/>
-				<MenuItem Name="DisableAllOptimizations" Header="Disable All" Click="DisableAllOptimizations_OnClick"/>
-				<Separator/>
-				<MenuItem Name="StaticSingleAssignment" ToggleType="CheckBox" Header="SSA"/>
-				<MenuItem Name="BasicOptimizations" ToggleType="CheckBox" Header="Basic Optimizations"/>
-				<MenuItem Name="ValueNumbering" ToggleType="CheckBox" Header="Value Numbering"/>
-				<MenuItem Name="ConditionalConstantPropagation" ToggleType="CheckBox" Header="Conditional Constant Propagation"/>
-				<MenuItem Name="Devirtualization" ToggleType="CheckBox" Header="Devirtualization"/>
-				<MenuItem Name="Inline" ToggleType="CheckBox" Header="Inline"/>
-				<MenuItem Name="InlineExplicit" ToggleType="CheckBox" Header="Inline Explicit"/>
-				<MenuItem Name="LongExpansion" ToggleType="CheckBox" Header="Long Expansion"/>
-				<MenuItem Name="LoopInvariantCodeMotion" ToggleType="CheckBox" Header="Loop Invariant Code Motion"/>
-				<MenuItem Name="BitTracker" ToggleType="CheckBox" Header="Bit Tracker"/>
-				<MenuItem Name="LoopRangeTracker" ToggleType="CheckBox" Header="Loop Range Tracker"/>
-				<MenuItem Name="TwoOptimizationPasses" ToggleType="CheckBox" Header="Two Optimization Passes"/>
-				<MenuItem Name="PlatformOptimizations" ToggleType="CheckBox" Header="Platform Optimizations"/>
-				<MenuItem Name="BinaryCodeGeneration" ToggleType="CheckBox" Header="Binary Code Generation"/>
-				<MenuItem Name="CodeSizeReduction" ToggleType="CheckBox" Header="Code Size Reduction"/>
+				<MenuItem
+					Name="EnableAllOptimizations"
+					Header="Enable All"
+					Click="EnableAllOptimizations_OnClick"
+				/>
+				<MenuItem
+					Name="DisableAllOptimizations"
+					Header="Disable All"
+					Click="DisableAllOptimizations_OnClick"
+				/>
+				<Separator />
+				<MenuItem Name="StaticSingleAssignment" ToggleType="CheckBox" Header="SSA" />
+				<MenuItem
+					Name="BasicOptimizations"
+					ToggleType="CheckBox"
+					Header="Basic Optimizations"
+				/>
+				<MenuItem
+					Name="ValueNumbering"
+					ToggleType="CheckBox"
+					Header="Value Numbering"
+				/>
+				<MenuItem
+					Name="ConditionalConstantPropagation"
+					ToggleType="CheckBox"
+					Header="Conditional Constant Propagation"
+				/>
+				<MenuItem
+					Name="Devirtualization"
+					ToggleType="CheckBox"
+					Header="Devirtualization"
+				/>
+				<MenuItem Name="Inline" ToggleType="CheckBox" Header="Inline" />
+				<MenuItem
+					Name="InlineExplicit"
+					ToggleType="CheckBox"
+					Header="Inline Explicit"
+				/>
+				<MenuItem Name="LongExpansion" ToggleType="CheckBox" Header="Long Expansion" />
+				<MenuItem
+					Name="LoopInvariantCodeMotion"
+					ToggleType="CheckBox"
+					Header="Loop Invariant Code Motion"
+				/>
+				<MenuItem Name="BitTracker" ToggleType="CheckBox" Header="Bit Tracker" />
+				<MenuItem
+					Name="LoopRangeTracker"
+					ToggleType="CheckBox"
+					Header="Loop Range Tracker"
+				/>
+				<MenuItem
+					Name="TwoOptimizationPasses"
+					ToggleType="CheckBox"
+					Header="Two Optimization Passes"
+				/>
+				<MenuItem
+					Name="PlatformOptimizations"
+					ToggleType="CheckBox"
+					Header="Platform Optimizations"
+				/>
+				<MenuItem
+					Name="BinaryCodeGeneration"
+					ToggleType="CheckBox"
+					Header="Binary Code Generation"
+				/>
+				<MenuItem
+					Name="CodeSizeReduction"
+					ToggleType="CheckBox"
+					Header="Code Size Reduction"
+				/>
 			</MenuItem>
 			<MenuItem Header="Display">
-				<MenuItem Name="RemoveIrNop" ToggleType="CheckBox" Header="Remove IR.Nop" Click="DisplayClick"/>
-				<MenuItem Name="LineBetweenBlocks" ToggleType="CheckBox" IsChecked="True" Header="Line Between Blocks" Click="DisplayClick"/>
-				<MenuItem Name="ShowOperandTypes" ToggleType="CheckBox" Header="Show Operand Types" Click="DisplayClick"/>
-				<MenuItem Name="ShowSizes" ToggleType="CheckBox" IsChecked="True" Header="Show Sizes" Click="ShowSizes_OnClick"/>
+				<MenuItem
+					Name="RemoveIrNop"
+					ToggleType="CheckBox"
+					Header="Remove IR.Nop"
+					Click="DisplayClick"
+				/>
+				<MenuItem
+					Name="LineBetweenBlocks"
+					ToggleType="CheckBox"
+					IsChecked="True"
+					Header="Line Between Blocks"
+					Click="DisplayClick"
+				/>
+				<MenuItem
+					Name="ShowOperandTypes"
+					ToggleType="CheckBox"
+					Header="Show Operand Types"
+					Click="DisplayClick"
+				/>
+				<MenuItem
+					Name="ShowSizes"
+					ToggleType="CheckBox"
+					IsChecked="True"
+					Header="Show Sizes"
+					Click="ShowSizes_OnClick"
+				/>
+				<MenuItem
+					Name="HideEmptyBlocks"
+					ToggleType="CheckBox"
+					IsChecked="False"
+					Header="Hide Empty Blocks"
+					Click="HideEmptyBlocks_OnClick"
+				/>
 			</MenuItem>
 			<MenuItem Header="Advanced">
-				<MenuItem Name="MultiThreading" ToggleType="CheckBox" Header="Multi-threading"/>
-				<MenuItem Name="MethodScanner" ToggleType="CheckBox" Header="Method Scanner"/>
-				<MenuItem Name="DebugDiagnostic" ToggleType="CheckBox" Header="Debug Diagnostic"/>
-				<MenuItem Name="DumpAllMethodStages" Header="Dump All Method Stages" Click="DumpAllMethodStages_OnClick"/>
+				<MenuItem
+					Name="MultiThreading"
+					ToggleType="CheckBox"
+					Header="Multi-threading"
+				/>
+				<MenuItem Name="MethodScanner" ToggleType="CheckBox" Header="Method Scanner" />
+				<MenuItem
+					Name="DebugDiagnostic"
+					ToggleType="CheckBox"
+					Header="Debug Diagnostic"
+				/>
+				<MenuItem
+					Name="DumpAllMethodStages"
+					Header="Dump All Method Stages"
+					Click="DumpAllMethodStages_OnClick"
+				/>
+				<MenuItem Name="FullCheckMode" ToggleType="CheckBox" Header="Full Check Mode" />
 			</MenuItem>
 		</Menu>
 
 		<StackPanel Grid.Row="1" Name="MainPanel" Orientation="Horizontal">
-			<ComboBox Name="Platform" MinWidth="80" SelectedIndex="0" SelectionChanged="Platform_OnSelectionChanged">
+			<ComboBox
+				Name="Platform"
+				MinWidth="80"
+				SelectedIndex="0"
+				SelectionChanged="Platform_OnSelectionChanged"
+			>
 				<ComboBoxItem>x86</ComboBoxItem>
 				<ComboBoxItem>x64</ComboBoxItem>
 				<ComboBoxItem>ARM32</ComboBoxItem>
@@ -64,33 +166,61 @@
 			<Grid Grid.Column="0" RowDefinitions="Auto, *">
 				<Grid Grid.Row="0" ColumnDefinitions="Auto, *">
 					<Label Grid.Column="0">Filter:</Label>
-					<TextBox Grid.Column="1" Name="TreeFilter" MinWidth="100" TextChanged="TreeFilter_OnTextChanged"/>
+					<TextBox
+						Grid.Column="1"
+						Name="TreeFilter"
+						MinWidth="100"
+						TextChanged="TreeFilter_OnTextChanged"
+					/>
 				</Grid>
 
-				<TreeView Grid.Row="1" Name="TreeView" SelectionChanged="TreeView_OnSelectionChanged"/>
+				<TreeView
+					Grid.Row="1"
+					Name="TreeView"
+					SelectionChanged="TreeView_OnSelectionChanged"
+				/>
 			</Grid>
 
-			<GridSplitter Grid.Column="1"/>
+			<GridSplitter Grid.Column="1" />
 
-			<TabControl Grid.Column="2" Name="TabControl" SelectionChanged="TabControl_OnSelectionChanged">
+			<TabControl
+				Grid.Column="2"
+				Name="TabControl"
+				SelectionChanged="TabControl_OnSelectionChanged"
+			>
 				<TabItem Header="Instructions" FontSize="15">
 					<Grid RowDefinitions="Auto, *">
 						<StackPanel Grid.Row="0" Orientation="Horizontal">
 							<Grid ColumnDefinitions="Auto, *">
 								<Label Grid.Column="0">Stage:</Label>
-								<ComboBox Grid.Column="1" Name="InstructionsStage" MinWidth="100" SelectionChanged="InstructionsStage_OnSelectionChanged"/>
+								<ComboBox
+									Grid.Column="1"
+									Name="InstructionsStage"
+									MinWidth="100"
+									SelectionChanged="InstructionsStage_OnSelectionChanged"
+								/>
 							</Grid>
 
 							<Grid ColumnDefinitions="Auto, *">
 								<Label Grid.Column="0">Block:</Label>
-								<ComboBox Grid.Column="1" Name="InstructionsBlock" MinWidth="100" SelectionChanged="InstructionsBlock_OnSelectionChanged"/>
+								<ComboBox
+									Grid.Column="1"
+									Name="InstructionsBlock"
+									MinWidth="100"
+									SelectionChanged="InstructionsBlock_OnSelectionChanged"
+								/>
 							</Grid>
 
 							<Button Name="SaveA" Click="SaveA_OnClick">Save A</Button>
 							<Button Name="SaveB" Click="SaveB_OnClick">Save B</Button>
 						</StackPanel>
 
-						<TextBox Grid.Row="1" Name="Instructions" FontFamily="Monospace" IsReadOnly="True"/>
+						<TextBox
+							Grid.Row="1"
+							Name="Instructions"
+							FontFamily="Monospace"
+							IsReadOnly="True"
+						/>
 					</Grid>
 				</TabItem>
 
@@ -99,16 +229,29 @@
 						<StackPanel Grid.Row="0" Orientation="Horizontal">
 							<Grid ColumnDefinitions="Auto, *">
 								<Label Grid.Column="0">Stage:</Label>
-								<ComboBox Grid.Column="1" Name="DebugStage" MinWidth="100" SelectionChanged="DebugStage_OnSelectionChanged"/>
+								<ComboBox
+									Grid.Column="1"
+									Name="DebugStage"
+									MinWidth="100"
+									SelectionChanged="DebugStage_OnSelectionChanged"
+								/>
 							</Grid>
 
-							<CheckBox Name="DisplayGraphviz" IsCheckedChanged="DisplayGraphviz_OnIsCheckedChanged">Display Graphviz</CheckBox>
+							<CheckBox
+								Name="DisplayGraphviz"
+								IsCheckedChanged="DisplayGraphviz_OnIsCheckedChanged"
+							>Display Graphviz</CheckBox>
 						</StackPanel>
 
 						<Grid Grid.Row="1" ColumnDefinitions="*, 5, *">
-							<TextBox Grid.Column="0" Name="Debug" FontFamily="Monospace" IsReadOnly="True"/>
-							<GridSplitter Grid.Column="1"/>
-							<Panel Grid.Column="2" Name="DebugPanel"/>
+							<TextBox
+								Grid.Column="0"
+								Name="Debug"
+								FontFamily="Monospace"
+								IsReadOnly="True"
+							/>
+							<GridSplitter Grid.Column="1" />
+							<Panel Grid.Column="2" Name="DebugPanel" />
 						</Grid>
 					</Grid>
 				</TabItem>
@@ -118,12 +261,22 @@
 						<StackPanel Grid.Row="0" Orientation="Horizontal">
 							<Grid ColumnDefinitions="Auto, *">
 								<Label Grid.Column="0">Stage:</Label>
-								<ComboBox Grid.Column="1" Name="TransformsStage" MinWidth="100" SelectionChanged="TransformsStage_OnSelectionChanged"/>
+								<ComboBox
+									Grid.Column="1"
+									Name="TransformsStage"
+									MinWidth="100"
+									SelectionChanged="TransformsStage_OnSelectionChanged"
+								/>
 							</Grid>
 
 							<Grid ColumnDefinitions="Auto, *">
 								<Label Grid.Column="0">Block:</Label>
-								<ComboBox Grid.Column="1" Name="TransformsBlock" MinWidth="100" SelectionChanged="TransformsBlock_OnSelectionChanged"/>
+								<ComboBox
+									Grid.Column="1"
+									Name="TransformsBlock"
+									MinWidth="100"
+									SelectionChanged="TransformsBlock_OnSelectionChanged"
+								/>
 							</Grid>
 
 							<Button Name="Save1" Click="Save1_OnClick">Save 1</Button>
@@ -142,17 +295,31 @@
 									<Label Name="Total">##</Label>
 								</StackPanel>
 
-								<TextBox Grid.Row="1" Name="Transforms" FontFamily="Monospace" IsReadOnly="True"/>
+								<TextBox
+									Grid.Row="1"
+									Name="Transforms"
+									FontFamily="Monospace"
+									IsReadOnly="True"
+								/>
 							</Grid>
 
-							<GridSplitter Grid.Column="1"/>
+							<GridSplitter Grid.Column="1" />
 
 							<Grid Grid.Column="2" RowDefinitions="Auto, *">
 								<StackPanel Grid.Row="0" Orientation="Horizontal">
-									<CheckBox Name="SetBlock" IsCheckedChanged="SetBlock_OnIsCheckedChanged">Set Block</CheckBox>
+									<CheckBox
+										Name="SetBlock"
+										IsCheckedChanged="SetBlock_OnIsCheckedChanged"
+									>Set Block</CheckBox>
 								</StackPanel>
 
-								<DataGrid Grid.Row="1" Name="TransformsGrid" AutoGenerateColumns="True" IsReadOnly="True" SelectionChanged="TransformsGrid_OnSelectionChanged"></DataGrid>
+								<DataGrid
+									Grid.Row="1"
+									Name="TransformsGrid"
+									AutoGenerateColumns="True"
+									IsReadOnly="True"
+									SelectionChanged="TransformsGrid_OnSelectionChanged"
+								/>
 							</Grid>
 						</Grid>
 					</Grid>
@@ -163,12 +330,25 @@
 						<StackPanel Grid.Row="0" Orientation="Horizontal">
 							<Grid ColumnDefinitions="Auto, *">
 								<Label Grid.Column="0">Filter:</Label>
-								<TextBox Grid.Column="1" Name="CountersGridFilter" Width="200" TextChanged="CountersGridFilter_OnTextChanged"/>
+								<TextBox
+									Grid.Column="1"
+									Name="CountersGridFilter"
+									Width="200"
+									TextChanged="CountersGridFilter_OnTextChanged"
+								/>
 							</Grid>
-							<Button Name="CopyCountersText" Click="CopyCountersText_OnClick">Copy Text</Button>
+							<Button
+								Name="CopyCountersText"
+								Click="CopyCountersText_OnClick"
+							>Copy Text</Button>
 						</StackPanel>
 
-						<DataGrid Grid.Row="1" Name="CountersGrid" AutoGenerateColumns="True" IsReadOnly="True"/>
+						<DataGrid
+							Grid.Row="1"
+							Name="CountersGrid"
+							AutoGenerateColumns="True"
+							IsReadOnly="True"
+						/>
 					</Grid>
 				</TabItem>
 
@@ -177,11 +357,21 @@
 						<StackPanel Grid.Row="0" Orientation="Horizontal">
 							<Grid ColumnDefinitions="Auto, *">
 								<Label Grid.Column="0">Section:</Label>
-								<ComboBox Grid.Column="1" Name="CompilerLogsSection" MinWidth="100" SelectionChanged="CompilerLogsSection_OnSelectionChanged"/>
+								<ComboBox
+									Grid.Column="1"
+									Name="CompilerLogsSection"
+									MinWidth="100"
+									SelectionChanged="CompilerLogsSection_OnSelectionChanged"
+								/>
 							</Grid>
 						</StackPanel>
 
-						<TextBox Grid.Row="1" Name="CompilerLogs" FontFamily="Monospace" IsReadOnly="True"/>
+						<TextBox
+							Grid.Row="1"
+							Name="CompilerLogs"
+							FontFamily="Monospace"
+							IsReadOnly="True"
+						/>
 					</Grid>
 				</TabItem>
 
@@ -190,19 +380,37 @@
 						<StackPanel Grid.Row="0" Orientation="Horizontal">
 							<Grid ColumnDefinitions="Auto, *">
 								<Label Grid.Column="0">Filter:</Label>
-								<TextBox Grid.Column="1" Name="CompilerCountersGridFilter" Width="200" TextChanged="CompilerCountersGridFilter_OnTextChanged"/>
+								<TextBox
+									Grid.Column="1"
+									Name="CompilerCountersGridFilter"
+									Width="200"
+									TextChanged="CompilerCountersGridFilter_OnTextChanged"
+								/>
 							</Grid>
-							<Button Name="CopyCompilerCountersText" Click="CopyCompilerCountersText_OnClick">Copy Text</Button>
+							<Button
+								Name="CopyCompilerCountersText"
+								Click="CopyCompilerCountersText_OnClick"
+							>Copy Text</Button>
 						</StackPanel>
 
-						<DataGrid Grid.Row="1" Name="CompilerCountersGrid" AutoGenerateColumns="True" IsReadOnly="True"/>
+						<DataGrid
+							Grid.Row="1"
+							Name="CompilerCountersGrid"
+							AutoGenerateColumns="True"
+							IsReadOnly="True"
+						/>
 					</Grid>
 				</TabItem>
 			</TabControl>
 		</Grid>
 
 		<Grid Grid.Row="3" ColumnDefinitions="Auto, Auto">
-			<ProgressBar Grid.Column="0" VerticalAlignment="Stretch" MaxWidth="200" Name="ProgressBar"/>
+			<ProgressBar
+				Grid.Column="0"
+				VerticalAlignment="Stretch"
+				MaxWidth="200"
+				Name="ProgressBar"
+			/>
 			<Label Grid.Column="1" Name="Status">00.00 | Ready!</Label>
 		</Grid>
 	</Grid>

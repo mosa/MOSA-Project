@@ -132,8 +132,8 @@ public partial class MainWindow : Window
 		MethodScanner.IsChecked = mosaSettings.MethodScanner;
 		MultiThreading.IsChecked = mosaSettings.Multithreading;
 		TreeFilter.Text = mosaSettings.ExplorerFilter;
-		//DebugDiagnostic.IsChecked = mosaSettings.DebugDiagnostic;
 		CodeSizeReduction.IsChecked = mosaSettings.ReduceCodeSize;
+		FullCheckMode.IsChecked = mosaSettings.FullCheckMode;
 
 		Platform.SelectedIndex = mosaSettings.Platform.ToLowerInvariant() switch
 		{
@@ -239,6 +239,12 @@ public partial class MainWindow : Window
 	private void ShowSizes_OnClick(object _, RoutedEventArgs e)
 	{
 		CreateTree();
+		UpdateInstructions();
+		UpdateTransforms();
+	}
+
+	private void HideEmptyBlocks_OnClick(object _, RoutedEventArgs e)
+	{
 		UpdateInstructions();
 		UpdateTransforms();
 	}
@@ -780,7 +786,7 @@ public partial class MainWindow : Window
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		Instructions.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked, RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
+		Instructions.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked, RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked, HideEmptyBlocks.IsChecked);
 	}
 
 	private void UpdateTransforms()
@@ -799,7 +805,7 @@ public partial class MainWindow : Window
 		if (string.IsNullOrWhiteSpace(label) || label == "All")
 			label = string.Empty;
 
-		Transforms.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked, RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked);
+		Transforms.Text = FormatInstruction.Format(records, label, !ShowOperandTypes.IsChecked, RemoveIrNop.IsChecked, LineBetweenBlocks.IsChecked, HideEmptyBlocks.IsChecked);
 	}
 
 	private List<InstructionRecord> GetCurrentTransformRecords()
@@ -1028,6 +1034,7 @@ public partial class MainWindow : Window
 		mosaSettings.InlineMethods = Inline.IsChecked;
 		mosaSettings.InlineExplicit = InlineExplicit.IsChecked;
 		mosaSettings.ReduceCodeSize = CodeSizeReduction.IsChecked;
+		mosaSettings.FullCheckMode = FullCheckMode.IsChecked;
 
 		mosaSettings.TraceLevel = 10;
 		//mosaSettings.InlineMaximum = 12;
