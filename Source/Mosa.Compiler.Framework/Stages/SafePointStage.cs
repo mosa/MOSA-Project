@@ -4,11 +4,6 @@ using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages;
 
-// TODO:
-// 2. For each SafePoint determine which registers contain objects or managed pointers
-//    (requires SafePoint instruction to support variable operands via the source generator,
-//    and liveness data to be available at this stage)
-
 /// <summary>
 /// This stage inserts the garbage collection safe points.
 /// </summary>
@@ -26,12 +21,10 @@ public class SafePointStage : BaseMethodCompilerStage
 
 		trace = CreateTraceLog(5);
 
-		// TODO 1A: Determine if method contains any references to objects or managed pointers
-		if (!HasGCRoots())
-			return;
-
-		// TODO 1B: Collect and trace GC root operands from locals and parameters
 		var roots = CollectGCRoots();
+
+		if (roots.Count == 0)
+			return;
 
 		if (trace != null)
 		{
@@ -44,10 +37,8 @@ public class SafePointStage : BaseMethodCompilerStage
 				rootTrace.Log($"  {root}");
 		}
 
-		// TODO 1C.i: Insert SafePoint at method prologue
 		InsertSafePointAtPrologue();
 
-		// TODO 1C.ii: Insert SafePoint at each loop backedge
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 
 		if (trace != null)
@@ -66,19 +57,6 @@ public class SafePointStage : BaseMethodCompilerStage
 	protected override void Finish()
 	{
 		trace = null;
-	}
-
-	private bool HasGCRoots()
-	{
-		foreach (var operand in MethodCompiler.LocalStack)
-			if (operand.IsObject || operand.IsManagedPointer)
-				return true;
-
-		foreach (var operand in MethodCompiler.Parameters)
-			if (operand.IsObject || operand.IsManagedPointer)
-				return true;
-
-		return false;
 	}
 
 	private List<Operand> CollectGCRoots()
