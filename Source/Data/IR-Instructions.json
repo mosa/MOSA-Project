@@ -1499,7 +1499,8 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"IgnoreDuringCodeGeneration": "true",
-			"UnspecifiedSideEffect": "true"
+			"UnspecifiedSideEffect": "false",
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "UnstableRegionStart",

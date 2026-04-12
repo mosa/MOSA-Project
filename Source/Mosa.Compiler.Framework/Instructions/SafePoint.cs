@@ -15,4 +15,6 @@ public sealed class SafePoint : BaseIRInstruction
 	}
 
 	public override bool IgnoreDuringCodeGeneration => true;
+
+	public override bool HasVariableOperands => true;
 }
