@@ -11,7 +11,16 @@ public class SafePointStage : BaseMethodCompilerStage
 {
 	private const int SmallLoopThreshold = 64;
 
+	private readonly Counter SafePointsInsertedCount = new("SafePoint.Total");
+	private readonly Counter SmallBoundedLoopsSkippedCount = new("SafePoint.SmallBoundedLoopsSkipped");
+
 	private TraceLog trace;
+
+	protected override void Initialize()
+	{
+		Register(SafePointsInsertedCount);
+		Register(SmallBoundedLoopsSkippedCount);
+	}
 
 	protected override void Run()
 	{
@@ -81,6 +90,8 @@ public class SafePointStage : BaseMethodCompilerStage
 		var ctx = new Context(BasicBlocks.PrologueBlock);
 		ctx.AppendInstruction(IR.SafePoint);
 
+		SafePointsInsertedCount.Increment();
+
 		trace?.Log($"SafePoint inserted at prologue: {BasicBlocks.PrologueBlock}");
 	}
 
@@ -90,11 +101,12 @@ public class SafePointStage : BaseMethodCompilerStage
 
 		foreach (var loop in loops)
 		{
-			//if (IsSmallBoundedLoop(loop))
-			//{
-			//	trace?.Log($"SafePoint skipped (small bounded loop): {loop.Header}");
-			//	continue;
-			//}
+			if (IsSmallBoundedLoop(loop))
+			{
+				SmallBoundedLoopsSkippedCount.Increment();
+				trace?.Log($"SafePoint skipped (small bounded loop): {loop.Header}");
+				continue;
+			}
 
 			foreach (var backedge in loop.Backedges)
 			{
@@ -103,6 +115,8 @@ public class SafePointStage : BaseMethodCompilerStage
 
 				var ctx = new Context(backedge.BeforeLast);
 				ctx.InsertBefore().SetInstruction(IR.SafePoint);
+
+				SafePointsInsertedCount.Increment();
 
 				trace?.Log($"SafePoint inserted at backedge: {backedge} -> {loop.Header}");
 			}
