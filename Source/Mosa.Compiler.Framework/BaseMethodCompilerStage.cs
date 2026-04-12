@@ -20,6 +20,10 @@ public abstract class BaseMethodCompilerStage
 
 	private List<TraceLog> traceLogs;
 
+	protected TraceLog SpecialTrace;
+
+	public Transform Transform { get; private set; }
+
 	#endregion Data Members
 
 	#region Stage Properties
@@ -176,8 +180,6 @@ public abstract class BaseMethodCompilerStage
 
 	#endregion Method Properties
 
-	public Transform Transform { get; private set; }
-
 	#region Methods
 
 	/// <summary>
@@ -196,6 +198,8 @@ public abstract class BaseMethodCompilerStage
 
 		Is32BitPlatform = Architecture.Is32BitPlatform;
 		Is64BitPlatform = Architecture.Is64BitPlatform;
+
+		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
 		Initialize();
 	}
@@ -230,6 +234,9 @@ public abstract class BaseMethodCompilerStage
 		{
 			PostTraceLogs(traceLogs);
 		}
+
+		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
+		SpecialTrace.Clear();
 
 		Finish();
 

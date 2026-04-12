@@ -70,6 +70,11 @@ public sealed class TraceLog
 		}
 	}
 
+	public void Clear()
+	{
+		Lines.Clear();
+	}
+
 	public override string ToString()
 	{
 		var sb = new StringBuilder();

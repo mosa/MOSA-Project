@@ -20,8 +20,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected TraceLog Trace;
 
-	protected TraceLog SpecialTrace;
-
 	protected bool EnableTransformOptimizations;
 	protected bool EnableBlockOptimizations;
 	protected bool AreCPURegistersAllocated;
@@ -57,7 +55,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		UpdateCounter(TransformCountStage, TransformCount);
 		UpdateCounter(OptimizationCountStage, OptimizationCount);
 
-		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
+		//MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
 
 		TransformCount = 0;
 		OptimizationCount = 0;
@@ -73,7 +71,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
 
-		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+		//SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
 		Transform.SetLogs(Trace, SpecialTrace);
 
