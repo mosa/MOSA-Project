@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Text;
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
-using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Mosa.Compiler.Common;
@@ -20,6 +19,7 @@ using Mosa.Utility.Configuration;
 using Timer = System.Timers.Timer;
 using ExplorerCompilerData = Mosa.Tool.Explorer.Common.CompilerInformation;
 using ExplorerMethodData = Mosa.Tool.Explorer.Common.MethodInformation;
+using Avalonia.Interactivity;
 
 namespace Mosa.Tool.Explorer.Avalonia;
 
