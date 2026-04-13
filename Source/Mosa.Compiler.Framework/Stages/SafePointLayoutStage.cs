@@ -46,7 +46,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		EmitGCData();
 	}
 
-	// ─── SafePoint collection ───────────────────────────────────────────────
+	#region SafePoint collection
 
 	private void CollectSafePoints()
 	{
@@ -54,7 +54,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 
 		foreach (var block in BasicBlocks)
 		{
-			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 			{
 				if (node.IsEmptyOrNop)
 					continue;
@@ -62,15 +62,14 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 				if (node.Instruction != IR.SafePoint)
 					continue;
 
-				var offset = GetNextCodeOffset(node);
-				var (registerBitmap, typeBitmap) = BuildBitmaps(node);
-
 				MethodData.SafePointEntries.Add(new SafePointEntry
 				{
-					Offset = offset,
-					RegisterBitmap = registerBitmap,
-					TypeBitmap = typeBitmap,
+					Offset = GetNextCodeOffset(node),
+					RegisterBitmap = node.Operand1 == null ? 0u : node.Operand1.ConstantUnsigned32,
+					TypeBitmap = node.Operand1 == null ? 0u : node.Operand2.ConstantUnsigned32,
 				});
+
+				break;
 			}
 		}
 	}
@@ -94,36 +93,9 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		return 0;
 	}
 
-	/// <summary>
-	/// Builds the register and type bitmaps from live GC-root operands attached to the SafePoint node
-	/// by <see cref="SafePointStage"/>. Bit N corresponds to <see cref="PhysicalRegister.Index"/> N.
-	/// Type bitmap: 0 = object reference, 1 = managed pointer.
-	/// </summary>
-	private static (uint registerBitmap, uint typeBitmap) BuildBitmaps(Node node)
-	{
-		uint registerBitmap = 0;
-		uint typeBitmap = 0;
+	#endregion
 
-		foreach (var operand in node.Operands)
-		{
-			if (!operand.IsPhysicalRegister)
-				continue;
-
-			var bit = operand.Register.Index;
-
-			if (bit >= 32)
-				continue;
-
-			registerBitmap |= 1u << bit;
-
-			if (operand.IsManagedPointer)
-				typeBitmap |= 1u << bit;
-		}
-
-		return (registerBitmap, typeBitmap);
-	}
-
-	// ─── GC stack map ───────────────────────────────────────────────────────
+	#region GC stack map
 
 	/// <summary>
 	/// Populates <see cref="MethodData.GCStackEntries"/> with live-range information for every
@@ -149,7 +121,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 			MethodData.GCStackEntries.Add(new GCStackEntry
 			{
 				StackOffset = (int)param.Offset,
-				IsManagedPointer = param.IsManagedPointer,
+				IsObject = param.IsObject,
 				LiveRanges = [(0, methodEnd)],
 			});
 		}
@@ -171,7 +143,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 			MethodData.GCStackEntries.Add(new GCStackEntry
 			{
 				StackOffset = (int)local.Offset,
-				IsManagedPointer = local.IsManagedPointer,
+				IsObject = local.IsObject,
 				LiveRanges = ranges,
 			});
 		}
@@ -298,7 +270,9 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		return merged;
 	}
 
-	// ─── Emission ───────────────────────────────────────────────────────────
+	#endregion
+
+	#region Emission
 
 	private void EmitSafePointTable()
 	{
@@ -382,13 +356,13 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		// 1. Stack Offset (frame-relative, native pointer width for alignment)
 		writer.Write(entry.StackOffset, TypeLayout.NativePointerSize);
 
-		// 2. Type: 0 = object reference, 1 = managed pointer
-		writer.Write(entry.IsManagedPointer ? 1u : 0u, TypeLayout.NativePointerSize);
+		// 2. Type: 0 = managed pointer, 1 = object reference
+		writer.Write(entry.IsObject ? 1u : 0u, TypeLayout.NativePointerSize);
 
 		// 3. Number of Live Ranges
 		writer.Write((uint)entry.LiveRanges.Count);
 
-		trace?.Log($"  Entry #{index}: StackOffset={entry.StackOffset} Type={(entry.IsManagedPointer ? "ManagedPointer" : "Object")} Ranges={entry.LiveRanges.Count}");
+		trace?.Log($"  Entry #{index}: StackOffset={entry.StackOffset} Type={(entry.IsObject ? "Object" : "ManagedPointer")} Ranges={entry.LiveRanges.Count}");
 
 		foreach (var (rangeStart, rangeLength) in entry.LiveRanges)
 		{
@@ -433,4 +407,6 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		}
 		writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 	}
+
+	#endregion
 }

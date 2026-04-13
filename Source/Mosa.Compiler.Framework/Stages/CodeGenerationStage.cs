@@ -117,10 +117,10 @@ public sealed class CodeGenerationStage : BaseMethodCompilerStage
 					continue;
 				}
 
+				node.Offset = CodeEmitter.CurrentPosition;
+
 				if (node.Instruction.IgnoreDuringCodeGeneration)
 					continue;
-
-				node.Offset = CodeEmitter.CurrentPosition;
 
 				if (node.Instruction.IsPlatformInstruction)
 				{

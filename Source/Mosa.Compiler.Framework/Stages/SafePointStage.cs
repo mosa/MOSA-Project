@@ -28,19 +28,6 @@ public class SafePointStage : BaseMethodCompilerStage
 
 		trace = CreateTraceLog(5);
 
-		//var roots = CollectGCRoots();
-
-		//if (trace != null)
-		//{
-		//	var rootTrace = CreateTraceLog("Roots", 5);
-
-		//	rootTrace.Log($"GC Roots: Total = {roots.Count}");
-		//	rootTrace.Log();
-
-		//	foreach (var root in roots)
-		//		rootTrace.Log($"  {root}");
-		//}
-
 		InsertSafePointAtPrologue();
 
 		var loops = LoopDetector.FindLoops(BasicBlocks);
@@ -65,20 +52,7 @@ public class SafePointStage : BaseMethodCompilerStage
 		trace = null;
 	}
 
-	private List<Operand> CollectGCRoots()
-	{
-		var roots = new List<Operand>();
-
-		foreach (var operand in MethodCompiler.LocalStack)
-			if (operand.IsObject || operand.IsManagedPointer)
-				roots.Add(operand);
-
-		foreach (var operand in MethodCompiler.Parameters)
-			if (operand.IsObject || operand.IsManagedPointer)
-				roots.Add(operand);
-
-		return roots;
-	}
+	#region Insertion
 
 	private void InsertSafePointAtPrologue()
 	{
@@ -101,8 +75,7 @@ public class SafePointStage : BaseMethodCompilerStage
 				if (!visited.Add(backedge))
 					continue;
 
-				var ctx = new Context(backedge.BeforeLast);
-				ctx.InsertBefore().SetInstruction(IR.SafePoint);
+				backedge.ContextBeforeBranch.InsertAfter().SetInstruction(IR.SafePoint);
 
 				SafePointsInsertedCount.Increment();
 
@@ -111,21 +84,26 @@ public class SafePointStage : BaseMethodCompilerStage
 		}
 	}
 
+	#endregion Insertion
+
+	#region Annotation
+
 	private void AnnotateSafePoints()
 	{
 		var numBlocks = BasicBlocks.Count;
 
-		// Phase 1: Compute GEN and KILL for each block (forward pass).
-		// GEN[B]  = physical registers first used as a GC root before any definition in B.
-		// KILL[B] = all physical registers defined in B (including every register killed by KillAll).
-		var gen = new HashSet<PhysicalRegister>[numBlocks];
-		var kill = new HashSet<PhysicalRegister>[numBlocks];
+		// Phase 1: Compute GEN and KILL bitmaps for each block (forward pass).
+		// genObject[B] = object-reference registers first used before any definition in B.
+		// genMPtr[B]   = managed-pointer registers first used before any definition in B.
+		// kill[B]      = all physical registers defined in B (kills both GC root types).
+		var genObject = new uint[numBlocks];
+		var genMPtr = new uint[numBlocks];
+		var kill = new uint[numBlocks];
 
 		for (var i = 0; i < numBlocks; i++)
 		{
 			var block = BasicBlocks[i];
-			var g = new HashSet<PhysicalRegister>();
-			var k = new HashSet<PhysicalRegister>();
+			uint go = 0, gm = 0, k = 0;
 
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
@@ -134,44 +112,50 @@ public class SafePointStage : BaseMethodCompilerStage
 
 				if (node.Instruction == IR.KillAll)
 				{
-					foreach (var physReg in Architecture.RegisterSet)
-						k.Add(physReg);
+					k = uint.MaxValue;
 					continue;
 				}
 
 				if (node.Instruction == IR.KillAllExcept)
 				{
 					var except = node.Operand1?.Register;
-					foreach (var physReg in Architecture.RegisterSet)
-						if (physReg != except)
-							k.Add(physReg);
+					var exceptBit = except != null ? (1u << except.Index) : 0u;
+					k |= ~exceptBit;
 					continue;
 				}
 
 				foreach (var operand in node.Operands)
-					if (operand.IsPhysicalRegister && IsGCRoot(operand) && !k.Contains(operand.Register))
-						g.Add(operand.Register);
+				{
+					if (operand.IsPhysicalRegister)
+					{
+						var bit = 1u << operand.Register.Index;
+						if ((k & bit) == 0)
+						{
+							if (operand.IsObject) go |= bit;
+							else if (operand.IsManagedPointer) gm |= bit;
+						}
+					}
+				}
 
 				foreach (var result in node.Results)
+				{
 					if (result.IsPhysicalRegister)
-						k.Add(result.Register);
+						k |= 1u << result.Register.Index;
+				}
 			}
 
-			gen[i] = g;
+			genObject[i] = go;
+			genMPtr[i] = gm;
 			kill[i] = k;
 		}
 
-		// Phase 2: Backward dataflow fixpoint.
+		// Phase 2: Backward dataflow fixpoint for object and managed-pointer roots.
 		// liveOut[B] = union of liveIn[S] for all successors S.
-		// liveIn[B]  = GEN[B] ∪ (liveOut[B] − KILL[B]).
-		var liveIn = new HashSet<PhysicalRegister>[numBlocks];
-		var liveOut = new HashSet<PhysicalRegister>[numBlocks];
-
-		for (var i = 0; i < numBlocks; i++)
-		{
-			liveIn[i] = new HashSet<PhysicalRegister>();
-			liveOut[i] = new HashSet<PhysicalRegister>();
-		}
+		// liveIn[B]  = GEN[B] | (liveOut[B] & ~KILL[B]).
+		var liveInObject = new uint[numBlocks];
+		var liveOutObject = new uint[numBlocks];
+		var liveInMPtr = new uint[numBlocks];
+		var liveOutMPtr = new uint[numBlocks];
 
 		bool changed;
 		do
@@ -182,33 +166,37 @@ public class SafePointStage : BaseMethodCompilerStage
 			{
 				var block = BasicBlocks[i];
 
-				var newLiveOut = new HashSet<PhysicalRegister>();
+				uint newLiveOutObject = 0, newLiveOutMPtr = 0;
 				foreach (var succ in block.NextBlocks)
-					newLiveOut.UnionWith(liveIn[succ.Sequence]);
-
-				var newLiveIn = new HashSet<PhysicalRegister>(gen[i]);
-				foreach (var r in newLiveOut)
-					if (!kill[i].Contains(r))
-						newLiveIn.Add(r);
-
-				if (!newLiveOut.SetEquals(liveOut[i]) || !newLiveIn.SetEquals(liveIn[i]))
 				{
-					liveOut[i] = newLiveOut;
-					liveIn[i] = newLiveIn;
+					newLiveOutObject |= liveInObject[succ.Sequence];
+					newLiveOutMPtr |= liveInMPtr[succ.Sequence];
+				}
+
+				var newLiveInObject = genObject[i] | (newLiveOutObject & ~kill[i]);
+				var newLiveInMPtr = genMPtr[i] | (newLiveOutMPtr & ~kill[i]);
+
+				if (newLiveOutObject != liveOutObject[i] || newLiveInObject != liveInObject[i]
+					|| newLiveOutMPtr != liveOutMPtr[i] || newLiveInMPtr != liveInMPtr[i])
+				{
+					liveOutObject[i] = newLiveOutObject;
+					liveInObject[i] = newLiveInObject;
+					liveOutMPtr[i] = newLiveOutMPtr;
+					liveInMPtr[i] = newLiveInMPtr;
 					changed = true;
 				}
 			}
 		} while (changed);
 
-		// Phase 3: Annotate each IR.SafePoint with its live GC-root physical register operands.
-		// For each block, traverse backward from liveOut[B], maintaining the live dictionary.
+		// Phase 3: Annotate each IR.SafePoint with register and type bitmaps encoded as two
+		// constant operands: Operand1 = registerBitmap, Operand2 = typeBitmap (1 = managed pointer).
+		// For each block, traverse backward from liveOut[B], maintaining two live bitmaps.
 		var liveTrace = trace != null ? CreateTraceLog("LiveRegisters", 5) : null;
 
 		foreach (var block in BasicBlocks)
 		{
-			var live = new Dictionary<PhysicalRegister, Operand>();
-			foreach (var physReg in liveOut[block.Sequence])
-				live[physReg] = null;
+			var liveObject = liveOutObject[block.Sequence];
+			var liveMPtr = liveOutMPtr[block.Sequence];
 
 			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 			{
@@ -217,66 +205,61 @@ public class SafePointStage : BaseMethodCompilerStage
 
 				if (node.Instruction == IR.SafePoint)
 				{
-					var liveRoots = new List<Operand>(live.Count);
-					foreach (var (physReg, op) in live)
+					var registerBitmap = liveObject | liveMPtr;
+					var typeBitmap = liveMPtr;
+
+					if (registerBitmap != 0)
 					{
-						var resolved = op ?? FindGCRootOperand(physReg);
-						if (resolved != null)
-							liveRoots.Add(resolved);
+						node.SetInstruction(IR.SafePoint, 2, 0);
+						node.SetOperand(0, Operand.CreateConstant32(registerBitmap));
+						node.SetOperand(1, Operand.CreateConstant32(typeBitmap));
 					}
 
-					if (liveRoots.Count > 0)
-					{
-						node.SetInstruction(IR.SafePoint, liveRoots.Count, 0);
-						for (var j = 0; j < liveRoots.Count; j++)
-							node.SetOperand(j, liveRoots[j]);
-					}
-
-					if (liveTrace != null)
-					{
-						liveTrace.Log($"SafePoint in {block}: {liveRoots.Count} live GC root(s)");
-						foreach (var op in liveRoots)
-							liveTrace.Log($"  {op}");
-					}
+					liveTrace?.Log($"SafePoint in {block}: registers=0x{registerBitmap:X8} managed-pointers=0x{typeBitmap:X8}");
 
 					continue;
 				}
 
 				if (node.Instruction == IR.KillAll)
 				{
-					live.Clear();
+					liveObject = 0;
+					liveMPtr = 0;
 					continue;
 				}
 
 				if (node.Instruction == IR.KillAllExcept)
 				{
 					var except = node.Operand1?.Register;
-					foreach (var physReg in live.Keys.Where(r => r != except).ToList())
-						live.Remove(physReg);
+					var exceptBit = except != null ? (1u << except.Index) : 0u;
+					liveObject &= exceptBit;
+					liveMPtr &= exceptBit;
 					continue;
 				}
 
-				// DEF kills the physical register from the live set.
+				// DEF kills the physical register from both live bitmaps.
 				foreach (var result in node.Results)
+				{
 					if (result.IsPhysicalRegister)
-						live.Remove(result.Register);
+					{
+						var killBit = ~(1u << result.Register.Index);
+						liveObject &= killBit;
+						liveMPtr &= killBit;
+					}
+				}
 
-				// USE adds GC-root physical registers to the live set with their operand.
+				// USE adds GC-root physical registers to the appropriate live bitmap.
 				foreach (var operand in node.Operands)
-					if (operand.IsPhysicalRegister && IsGCRoot(operand))
-						live[operand.Register] = operand;
+				{
+					if (operand.IsPhysicalRegister)
+					{
+						var bit = 1u << operand.Register.Index;
+						if (operand.IsObject) liveObject |= bit;
+						else if (operand.IsManagedPointer) liveMPtr |= bit;
+					}
+				}
 			}
 		}
 	}
 
-	private static bool IsGCRoot(Operand operand) =>
-		operand.IsObject || operand.IsManagedPointer;
-
-	private Operand FindGCRootOperand(PhysicalRegister physReg)
-	{
-		foreach (var operand in Transform.PhysicalRegisters)
-			if (operand.Register == physReg && IsGCRoot(operand))
-				return operand;
-		return null;
-	}
+	#endregion Annotation
 }

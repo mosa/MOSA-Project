@@ -240,3 +240,115 @@ When adding new files to existing projects:
 - **Tools/ directory**: Contains pre-built third-party tools (QEMU, NASM, 7-zip, etc.) used by the launcher at runtime — do not confuse with `Mosa.Tool.*` source projects.
 - **Nullable disabled**: The project deliberately disables nullable reference type checks (`<Nullable>disable</Nullable>`). Do not enable it per-file without a broader plan.
 - **net10.0 targeting**: The project targets `net10.0` with `<RollForward>major</RollForward>` in `Directory.Build.props`. For local development, the .NET 10 SDK is preferred. The CI installs the .NET 9 SDK and relies on roll-forward.
+
+---
+
+## Linker Metadata Emission Pattern
+
+All runtime metadata tables are emitted as binary linker symbols using a consistent pattern. Every method that emits a table follows these rules:
+
+### Idempotency guard
+Symbols that may be requested multiple times (e.g., method definitions referenced from both a type table and an interface table) must check for an existing symbol before emitting:
+
+```csharp
+var symbol = Linker.GetSymbol(symbolName);
+if (symbol.Size != 0)
+    return symbol;
+```
+
+### Emitting a table
+1. Call `Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, size)` -- pass `0` for `size` when the total is not known up front (the stream grows dynamically).
+2. Wrap the symbol's stream in a `BinaryWriter`.
+3. Write each field in order, annotated with numbered comments (`// 1.`, `// 2.`, etc.) matching the layout in `Docs/runtime-tables.rst`.
+4. For **pointer fields**: always call `Linker.Link(...)` first (registers the fixup at the current stream position), then call `writer.WriteZeroBytes(NativePointerSize)` to advance the stream. The zero bytes are a placeholder -- the linker fills in the real address at link time.
+5. For **scalar fields** (counts, flags, sizes): call `writer.Write(value, NativePointerSize)` directly -- no `Linker.Link` needed.
+6. If a count field appears before the items it counts (and the count is not known in advance), write a zero placeholder, iterate the items, then seek back with `writer.SetPosition(offset)` and overwrite the count.
+
+### Linking to another symbol
+```csharp
+// Conditional pointer field -- null if condition not met, zero placeholder always written
+if (someCondition)
+{
+    Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fromSymbol, writer.GetPosition(), toSymbolOrName, 0);
+}
+writer.WriteZeroBytes(NativePointerSize);
+```
+
+### Key types and members
+- `Linker.DefineSymbol(name, section, alignment, size)` -- creates or retrieves a writable symbol
+- `Linker.GetSymbol(name)` -- retrieves an existing symbol (size == 0 means not yet defined)
+- `Linker.Link(LinkType, PatchType, fromSymbol, offset, toSymbol/name, addend)` -- registers an address fixup
+- `NativePointerSize` -- pointer width in bytes for the current target (4 or 8)
+- `NativePatchType` -- the correct relocation type for the current target
+- `writer.GetPosition()` -- current byte offset into the symbol's stream (used as the fixup offset)
+- `writer.WriteZeroBytes(n)` -- advance stream by `n` zero bytes
+- `writer.SetPosition(offset)` -- seek to a specific offset for back-patching
+- Symbol name constants live in `Mosa.Compiler.Framework.Metadata` (e.g., `Metadata.TypeDefinition`, `Metadata.MethodDefinition`, `Metadata.ProtectedRegionTable`, `Metadata.GCData`)
+
+### Example skeleton
+```csharp
+private LinkerSymbol CreateFooTable(MosaFoo foo)
+{
+    var symbolName = Metadata.FooTable + foo.FullName;
+    var symbol = Linker.GetSymbol(symbolName);
+    if (symbol.Size != 0)
+        return symbol;
+
+    symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+    var writer = new BinaryWriter(symbol.Stream);
+
+    // 1. Count
+    writer.Write((uint)foo.Items.Count, NativePointerSize);
+
+    // 2. Pointer to Name
+    Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer.GetPosition(), nameSymbol, 0);
+    writer.WriteZeroBytes(NativePointerSize);
+
+    return symbol;
+}
+```
+
+---
+
+## Compiler Pipeline Extension Points
+
+The compiler has two nested pipelines, each with a distinct base class.
+
+### Per-application stages (`BaseCompilerStage`)
+Run once for the entire compilation (e.g., emitting global metadata tables, linking symbol tables). Override `Setup()`, `Finalization()`, or both. Register in `Compiler.ExtendCompilerPipeline()` in `Mosa.Compiler.Framework/Compiler.cs`.
+
+```csharp
+public sealed class MyCompilerStage : BaseCompilerStage
+{
+    protected override void Finalization()
+    {
+        // runs after all methods have been compiled
+    }
+}
+```
+
+### Per-method stages (`BaseMethodCompilerStage`)
+Run once per method. Override `Initialize()`, `Run()`, and `Finish()`. Register in `Compiler.ExtendMethodCompilerPipeline()` in `Compiler.cs`.
+
+```csharp
+public class MyMethodStage : BaseMethodCompilerStage
+{
+    protected override void Run()
+    {
+        // operates on BasicBlocks, MethodCompiler, etc.
+    }
+}
+```
+
+### Stage ordering
+- Method pipeline stages that need resolved native code offsets (e.g., safepoint table emission, protected region layout) must be placed **after** `CodeGenerationStage` in the pipeline. Instruction offsets are not valid before that point.
+- Use the existing stages as ordering anchors. In `ExtendMethodCompilerPipeline`, insert after `CodeGenerationStage` for post-codegen work:
+  ```csharp
+  pipeline.InsertAfterFirst<CodeGenerationStage>(new SafePointLayoutStage());
+  ```
+- Per-application stages that emit cross-method tables (e.g., `MetadataStage`) run in `Finalization()` after all per-method work is complete.
+
+### GC Safepoint infrastructure
+The safepoint system spans two stages:
+- `SafePointStage` (`BaseMethodCompilerStage`) -- inserts `IR.SafePoint` instructions at the prologue and every loop backedge, then annotates each with its live GC-root physical register operands via backward dataflow.
+- `SafePointLayoutStage` (`BaseMethodCompilerStage`, post-codegen) -- reads resolved offsets from the instruction stream, collects `SafePointEntry` records into `MethodData.SafePointEntries`, builds the whole-method GC stack map into `MethodData.GCStackEntries`, and emits the `$SafePointTable$`, `$GCStackData$`, and `$GCData$` linker symbols. `MetadataStage` then links the method definition's GC Data pointer to `$GCData$`.

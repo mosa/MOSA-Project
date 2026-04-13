@@ -15,9 +15,9 @@ public sealed class GCStackEntry
 	public int StackOffset { get; set; }
 
 	/// <summary>
-	/// False = object reference; true = managed pointer.
+	/// False = managed pointer; true = object reference.
 	/// </summary>
-	public bool IsManagedPointer { get; set; }
+	public bool IsObject { get; set; }
 
 	/// <summary>
 	/// Ordered, non-overlapping code ranges (method-relative start, length) over which this slot holds a live GC root.
