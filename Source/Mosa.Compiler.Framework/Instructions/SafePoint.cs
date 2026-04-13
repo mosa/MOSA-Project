@@ -10,11 +10,9 @@ namespace Mosa.Compiler.Framework.Instructions;
 public sealed class SafePoint : BaseIRInstruction
 {
 	public SafePoint()
-		: base(0, 0)
+		: base(2, 0)
 	{
 	}
 
 	public override bool IgnoreDuringCodeGeneration => true;
-
-	public override bool HasVariableOperands => true;
 }
