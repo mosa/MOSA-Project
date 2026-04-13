@@ -56,8 +56,7 @@ public class SafePointStage : BaseMethodCompilerStage
 
 	private void InsertSafePointAtPrologue()
 	{
-		var ctx = new Context(BasicBlocks.PrologueBlock);
-		ctx.AppendInstruction(IR.SafePoint);
+		BasicBlocks.PrologueBlock.ContextBeforeBranch.InsertAfter().SetInstruction(IR.SafePoint);
 
 		SafePointsInsertedCount.Increment();
 
@@ -208,16 +207,12 @@ public class SafePointStage : BaseMethodCompilerStage
 					var registerBitmap = liveObject | liveMPtr;
 					var typeBitmap = liveMPtr;
 
-					if (registerBitmap != 0)
-					{
-						node.SetInstruction(IR.SafePoint, 2, 0);
-						node.SetOperand(0, Operand.CreateConstant32(registerBitmap));
-						node.SetOperand(1, Operand.CreateConstant32(typeBitmap));
-					}
+					node.SetOperand(0, Operand.CreateConstant32(registerBitmap));
+					node.SetOperand(1, Operand.CreateConstant32(typeBitmap));
 
 					liveTrace?.Log($"SafePoint in {block}: registers=0x{registerBitmap:X8} managed-pointers=0x{typeBitmap:X8}");
 
-					continue;
+					break;
 				}
 
 				if (node.Instruction == IR.KillAll)
