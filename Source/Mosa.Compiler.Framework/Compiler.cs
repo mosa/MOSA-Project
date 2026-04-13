@@ -225,6 +225,7 @@ public sealed class Compiler
 		pipeline.InsertAfterLast<CodeGenerationStage>(
 		[
 			new ProtectedRegionLayoutStage(),
+			new SafePointLayoutStage(),
 		]);
 	}
 

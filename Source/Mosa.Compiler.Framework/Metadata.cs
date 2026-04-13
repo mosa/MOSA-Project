@@ -27,6 +27,9 @@ public struct Metadata
 
 	public const string ProtectedRegionTable = "$ProtectedRegionTable$";
 
+	public const string GCData = "$GCData$";
+	public const string SafePointTable = "$SafePointTable$";
+
 	public const string MethodLookupTable = "<$>MethodLookupTable";
 	public const string MethodExceptionLookupTable = "<$>MethodExceptionLookupTable";
 
