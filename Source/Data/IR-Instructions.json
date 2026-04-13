@@ -1499,7 +1499,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"IgnoreDuringCodeGeneration": "true",
-			"UnspecifiedSideEffect": "false",
+			"UnspecifiedSideEffect": "true",
 			"VariableOperands": "true"
 		},
 		{

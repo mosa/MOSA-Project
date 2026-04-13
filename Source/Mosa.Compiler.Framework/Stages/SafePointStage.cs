@@ -32,21 +32,18 @@ public class SafePointStage : BaseMethodCompilerStage
 
 		trace = CreateTraceLog(5);
 
-		var roots = CollectGCRoots();
+		//var roots = CollectGCRoots();
 
-		if (roots.Count == 0)
-			return;
+		//if (trace != null)
+		//{
+		//	var rootTrace = CreateTraceLog("Roots", 5);
 
-		if (trace != null)
-		{
-			var rootTrace = CreateTraceLog("Roots", 5);
+		//	rootTrace.Log($"GC Roots: Total = {roots.Count}");
+		//	rootTrace.Log();
 
-			rootTrace.Log($"GC Roots: Total = {roots.Count}");
-			rootTrace.Log();
-
-			foreach (var root in roots)
-				rootTrace.Log($"  {root}");
-		}
+		//	foreach (var root in roots)
+		//		rootTrace.Log($"  {root}");
+		//}
 
 		InsertSafePointAtPrologue();
 
