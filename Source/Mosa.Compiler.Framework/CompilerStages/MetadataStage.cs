@@ -612,7 +612,7 @@ public sealed class MetadataStage : BaseCompilerStage
 		writer.WriteZeroBytes(NativePointerSize);
 
 		// 8. Pointer to GC Data
-		if (targetMethodData.HasCode && targetMethodData.SafePointEntries.Count > 0)
+		if (targetMethodData.HasCode && (targetMethodData.SafePointEntries.Count > 0 || targetMethodData.GCStackEntries.Count > 0))
 		{
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.GetPosition(), Metadata.GCData + targetMethodData.Method.FullName, 0);
 		}
