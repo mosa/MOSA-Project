@@ -20,7 +20,12 @@ public sealed class GCStackEntry
 	public bool IsObject { get; set; }
 
 	/// <summary>
-	/// Ordered, non-overlapping code ranges (method-relative start, length) over which this slot holds a live GC root.
+	/// Method-relative byte offset where this GC root range begins.
 	/// </summary>
-	public List<(int Start, int Length)> LiveRanges { get; set; }
+	public int Start;
+
+	/// <summary>
+	/// Length in bytes of the live GC root range starting at <see cref="Start"/>.
+	/// </summary>
+	public int Length;
 }

@@ -122,7 +122,8 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 			{
 				StackOffset = (int)param.Offset,
 				IsObject = param.IsObject,
-				LiveRanges = [(0, methodEnd)],
+				Start = 0,
+				Length = methodEnd,
 			});
 		}
 
@@ -140,12 +141,16 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 			if (ranges.Count == 0)
 				continue;
 
-			MethodData.GCStackEntries.Add(new GCStackEntry
+			foreach (var (start, length) in ranges)
 			{
-				StackOffset = (int)local.Offset,
-				IsObject = local.IsObject,
-				LiveRanges = ranges,
-			});
+				MethodData.GCStackEntries.Add(new GCStackEntry
+				{
+					StackOffset = (int)local.Offset,
+					IsObject = local.IsObject,
+					Start = start,
+					Length = length,
+				});
+			}
 		}
 	}
 
@@ -360,20 +365,17 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		writer.Write(entry.IsObject ? 1u : 0u, TypeLayout.NativePointerSize);
 
 		// 3. Number of Live Ranges
-		writer.Write((uint)entry.LiveRanges.Count);
+		writer.Write(1u);
 
-		trace?.Log($"  Entry #{index}: StackOffset={entry.StackOffset} Type={(entry.IsObject ? "Object" : "ManagedPointer")} Ranges={entry.LiveRanges.Count}");
+		trace?.Log($"  Entry #{index}: StackOffset={entry.StackOffset} Type={(entry.IsObject ? "Object" : "ManagedPointer")} Ranges=1");
 
-		foreach (var (rangeStart, rangeLength) in entry.LiveRanges)
-		{
-			// 4a. Address Offset (method-relative)
-			writer.Write((uint)rangeStart, TypeLayout.NativePointerSize);
+		// 4a. Address Offset (method-relative)
+		writer.Write((uint)entry.Start, TypeLayout.NativePointerSize);
 
-			// 4b. Address Range (length in bytes)
-			writer.Write((uint)rangeLength, TypeLayout.NativePointerSize);
+		// 4b. Address Range (length in bytes)
+		writer.Write((uint)entry.Length, TypeLayout.NativePointerSize);
 
-			trace?.Log($"    Range: 0x{rangeStart:X4} len=0x{rangeLength:X4}");
-		}
+		trace?.Log($"    Range: 0x{entry.Start:X4} len=0x{entry.Length:X4}");
 
 		return symbol;
 	}
