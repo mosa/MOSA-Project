@@ -81,6 +81,8 @@ public sealed class MethodData
 
 	public List<SafePointEntry> SafePointEntries { get; }
 
+	public List<GCStackEntry> GCStackEntries { get; }
+
 	public bool Inlined
 	{
 		get
@@ -120,6 +122,7 @@ public sealed class MethodData
 		Counters = new Counters(compiler, $"Counters: {mosaMethod.FullName}");
 		LabelRegions = new List<LabelRegion>();
 		SafePointEntries = new List<SafePointEntry>();
+		GCStackEntries = new List<GCStackEntry>();
 
 		Version = 0;
 		DoNotInline = false;

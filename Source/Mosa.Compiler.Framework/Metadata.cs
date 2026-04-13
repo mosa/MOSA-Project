@@ -29,6 +29,8 @@ public struct Metadata
 
 	public const string GCData = "$GCData$";
 	public const string SafePointTable = "$SafePointTable$";
+	public const string GCStackData = "$GCStackData$";
+	public const string GCStackEntry = "$GCStackEntry$";
 
 	public const string MethodLookupTable = "<$>MethodLookupTable";
 	public const string MethodExceptionLookupTable = "<$>MethodExceptionLookupTable";
