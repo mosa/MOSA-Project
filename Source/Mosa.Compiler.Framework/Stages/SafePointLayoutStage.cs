@@ -66,7 +66,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 				{
 					Offset = GetNextCodeOffset(node),
 					RegisterBitmap = node.Operand1 == null ? 0u : node.Operand1.ConstantUnsigned32,
-					TypeBitmap = node.Operand1 == null ? 0u : node.Operand2.ConstantUnsigned32,
+					TypeBitmap = node.Operand2 == null ? 0u : node.Operand2.ConstantUnsigned32,
 				});
 
 				break;

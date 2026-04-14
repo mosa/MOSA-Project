@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Analysis;
 
@@ -12,6 +12,8 @@ public class SafePointStage : BaseMethodCompilerStage
 	private readonly Counter SafePointsInsertedCount = new("SafePoint.Total");
 
 	private TraceLog trace;
+
+	private const int MaxBitmapRegisterCount = 32;
 
 	protected override void Initialize()
 	{
@@ -117,29 +119,27 @@ public class SafePointStage : BaseMethodCompilerStage
 
 				if (node.Instruction == IR.KillAllExcept)
 				{
-					var except = node.Operand1?.Register;
-					var exceptBit = except != null ? (1u << except.Index) : 0u;
+					var exceptBit = TryGetBitmapBit(node.Operand1, out var bit) ? bit : 0;
 					k |= ~exceptBit;
 					continue;
 				}
 
 				foreach (var operand in node.Operands)
 				{
-					if (operand.IsPhysicalRegister)
+					if (!TryGetBitmapBit(operand, out var bit))
+						continue;
+
+					if ((k & bit) == 0)
 					{
-						var bit = 1u << operand.Register.Index;
-						if ((k & bit) == 0)
-						{
-							if (operand.IsObject) go |= bit;
-							else if (operand.IsManagedPointer) gm |= bit;
-						}
+						if (operand.IsObject) go |= bit;
+						else if (operand.IsManagedPointer) gm |= bit;
 					}
 				}
 
 				foreach (var result in node.Results)
 				{
-					if (result.IsPhysicalRegister)
-						k |= 1u << result.Register.Index;
+					if (TryGetBitmapBit(result, out var resultBit))
+						k |= resultBit;
 				}
 			}
 
@@ -224,8 +224,7 @@ public class SafePointStage : BaseMethodCompilerStage
 
 				if (node.Instruction == IR.KillAllExcept)
 				{
-					var except = node.Operand1?.Register;
-					var exceptBit = except != null ? (1u << except.Index) : 0u;
+					var exceptBit = TryGetBitmapBit(node.Operand1, out var bit) ? bit : 0;
 					liveObject &= exceptBit;
 					liveMPtr &= exceptBit;
 					continue;
@@ -234,26 +233,43 @@ public class SafePointStage : BaseMethodCompilerStage
 				// DEF kills the physical register from both live bitmaps.
 				foreach (var result in node.Results)
 				{
-					if (result.IsPhysicalRegister)
-					{
-						var killBit = ~(1u << result.Register.Index);
-						liveObject &= killBit;
-						liveMPtr &= killBit;
-					}
+					if (!TryGetBitmapBit(result, out var bit))
+						continue;
+
+					var killBit = ~bit;
+					liveObject &= killBit;
+					liveMPtr &= killBit;
 				}
 
 				// USE adds GC-root physical registers to the appropriate live bitmap.
 				foreach (var operand in node.Operands)
 				{
-					if (operand.IsPhysicalRegister)
-					{
-						var bit = 1u << operand.Register.Index;
-						if (operand.IsObject) liveObject |= bit;
-						else if (operand.IsManagedPointer) liveMPtr |= bit;
-					}
+					if (!TryGetBitmapBit(operand, out var bit))
+						continue;
+
+					if (operand.IsObject) liveObject |= bit;
+					else if (operand.IsManagedPointer) liveMPtr |= bit;
 				}
 			}
 		}
+	}
+
+	private static bool TryGetBitmapBit(Operand operand, out uint bit)
+	{
+		bit = 0;
+
+		if (operand == null || !operand.IsPhysicalRegister)
+			return false;
+
+		var register = operand.Register;
+		if (register == null || register.IsSpecial)
+			return false;
+
+		if ((uint)register.Index >= MaxBitmapRegisterCount)
+			return false;
+
+		bit = 1u << register.Index;
+		return true;
 	}
 
 	#endregion Annotation
