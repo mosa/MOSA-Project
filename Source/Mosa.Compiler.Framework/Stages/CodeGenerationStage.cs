@@ -185,7 +185,7 @@ public sealed class CodeGenerationStage : BaseMethodCompilerStage
 	private void BlockEnd(BasicBlock block)
 	{
 		// TODO: Adjust BaseCodeEmitter interface to mark the end of label sections, rather than create this special label:
-		CodeEmitter.Label(block.Label + 0x0F000000);
+		CodeEmitter.Label(block.EndLabel);
 	}
 
 	/// <summary>

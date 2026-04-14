@@ -156,16 +156,23 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 
 	/// <summary>
 	/// Computes the live ranges for a single GC-root local stack operand using block-level backward
-	/// liveness.  GEN[B] = true when the block contains any reference to the operand; KILL is
-	/// never set (conservative — we cannot safely determine if a store clears the slot without
-	/// type-tracking).
+	/// liveness with GEN and KILL sets derived from the IR use-def chains.
+	/// <para>
+	/// GEN[B]  = true when B contains an upward-exposed use (a read of the slot before any write in B).<br/>
+	/// KILL[B] = true when B contains a definition (store) of the slot, preventing liveness from
+	///           propagating backward past the definition into predecessor blocks so that blocks
+	///           before the first store are not incorrectly reported as live.
+	/// </para>
 	/// </summary>
 	private List<(int Start, int Length)> ComputeLocalLiveRanges(Operand operand)
 	{
 		var numBlocks = BasicBlocks.Count;
 		var gen = new bool[numBlocks];
+		var kill = new bool[numBlocks];
 
-		// Mark blocks that directly reference this operand via the use-def chain.
+		// Build per-block use/kill sets from the IR use-def chains.
+		var hasUse = new bool[numBlocks];
+
 		foreach (var node in operand.Uses)
 		{
 			var block = node.Block;
@@ -173,11 +180,32 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 			if (block == null || block.Sequence < 0 || block.Sequence >= numBlocks)
 				continue;
 
-			gen[block.Sequence] = true;
+			hasUse[block.Sequence] = true;
+		}
+
+		foreach (var node in operand.Definitions)
+		{
+			var block = node.Block;
+
+			if (block == null || block.Sequence < 0 || block.Sequence >= numBlocks)
+				continue;
+
+			kill[block.Sequence] = true;
+		}
+
+		// gen[B] = upward-exposed use:
+		//   - block has only uses (no def): gen = true
+		//   - block has both: scan forward to detect whether any use precedes the first def
+		for (var i = 0; i < numBlocks; i++)
+		{
+			if (!hasUse[i])
+				continue;
+
+			gen[i] = !kill[i] || HasUseBeforeFirstDefInBlock(operand, BasicBlocks[i]);
 		}
 
 		// Backward dataflow fixpoint:
-		//   liveIn[B]  = gen[B] OR liveOut[B]
+		//   liveIn[B]  = gen[B] | (liveOut[B] & ~kill[B])
 		//   liveOut[B] = OR of liveIn[S] for all successors S
 		var liveIn = new bool[numBlocks];
 		var liveOut = new bool[numBlocks];
@@ -197,7 +225,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 					if (liveIn[succ.Sequence]) { newOut = true; break; }
 				}
 
-				var newIn = gen[i] || newOut;
+				var newIn = gen[i] || (newOut && !kill[i]);
 
 				if (newOut == liveOut[i] && newIn == liveIn[i])
 					continue;
@@ -221,7 +249,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 			if (!MethodCompiler.Labels.TryGetValue(block.Label, out var start))
 				continue;
 
-			if (!MethodCompiler.Labels.TryGetValue(block.Label + 0x0F000000, out var end))
+			if (!MethodCompiler.Labels.TryGetValue(block.EndLabel, out var end))
 				continue;
 
 			if (end > start)
@@ -231,13 +259,40 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		return MergeRanges(codeRanges);
 	}
 
+	/// <summary>
+	/// Returns <c>true</c> if <paramref name="operand"/> is read before its first write in
+	/// <paramref name="block"/>, scanning instructions in forward order.
+	/// </summary>
+	private static bool HasUseBeforeFirstDefInBlock(Operand operand, BasicBlock block)
+	{
+		for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+		{
+			if (node.IsEmptyOrNop)
+				continue;
+
+			foreach (var use in node.Operands)
+			{
+				if (use == operand)
+					return true; // use seen before any def in this block
+			}
+
+			foreach (var result in node.Results)
+			{
+				if (result == operand)
+					return false; // def seen before any use in this block
+			}
+		}
+
+		return false;
+	}
+
 	private int GetMethodEndOffset()
 	{
 		var max = 0;
 
 		foreach (var block in BasicBlocks)
 		{
-			if (MethodCompiler.Labels.TryGetValue(block.Label + 0x0F000000, out var end) && end > max)
+			if (MethodCompiler.Labels.TryGetValue(block.EndLabel, out var end) && end > max)
 				max = end;
 		}
 
