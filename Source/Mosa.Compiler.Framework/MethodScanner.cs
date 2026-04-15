@@ -58,8 +58,6 @@ public class MethodScanner
 
 		MoreLogInfo();
 
-		Debug.WriteLine(Trace?.ToString()); // REMOVE
-
 		var totalTypes = 0;
 		var totalMethods = 0;
 

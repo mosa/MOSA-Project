@@ -549,6 +549,24 @@
 			"Filter": "!IsResolvedConstant(a) & IsResolvedConstant(b) & IsGreaterOrEqual(To##(b),##)",
 			"Result": "(IR.ShiftLeft## a [And##(To##(b),Sub##(##,1))])",
 			"Priority": "25"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "Add##",
+			"SubName": "v1",
+			"Expression": "IR.Add## (IR.Sub## a b) b)",
+			"Filter": "",
+			"Result": "(IR.Move## a)",
+			"Variations": "Yes"
+		},
+		{
+			"Type": "Simplification",
+			"Name": "Sub##",
+			"SubName": "v1",
+			"Expression": "IR.Sub## (IR.Add## a b) a)",
+			"Filter": "",
+			"Result": "(IR.Move## b)",
+			"Variations": "Yes"
 		}
 	]
 }
