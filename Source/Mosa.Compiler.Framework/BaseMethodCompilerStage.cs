@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.Instructions;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
@@ -18,9 +17,7 @@ public abstract class BaseMethodCompilerStage
 
 	#region Data Members
 
-	private List<TraceLog> traceLogs;
-
-	protected TraceLog SpecialTrace;
+	private List<TraceLog> TraceLogs;
 
 	public Transform Transform { get; private set; }
 
@@ -199,7 +196,7 @@ public abstract class BaseMethodCompilerStage
 		Is32BitPlatform = Architecture.Is32BitPlatform;
 		Is64BitPlatform = Architecture.Is64BitPlatform;
 
-		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+		TraceLogs = new List<TraceLog>();
 
 		Initialize();
 	}
@@ -214,8 +211,6 @@ public abstract class BaseMethodCompilerStage
 		MethodCompiler = methodCompiler;
 		BasicBlocks = methodCompiler.BasicBlocks;
 		Transform = methodCompiler.Transform;
-
-		traceLogs = new List<TraceLog>();
 
 		FormattedStageName = $"[{position:00}] {Name}";
 
@@ -232,11 +227,8 @@ public abstract class BaseMethodCompilerStage
 		}
 		finally
 		{
-			PostTraceLogs(traceLogs);
+			PostTraceLogs(TraceLogs);
 		}
-
-		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
-		SpecialTrace.Clear();
 
 		Finish();
 
@@ -246,7 +238,7 @@ public abstract class BaseMethodCompilerStage
 	public void CleanUp()
 	{
 		MethodCompiler = null;
-		traceLogs = null;
+		TraceLogs.Clear();
 	}
 
 	#endregion Methods
@@ -430,7 +422,7 @@ public abstract class BaseMethodCompilerStage
 
 		var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, MethodData.Version);
 
-		traceLogs.Add(traceLog);
+		TraceLogs.Add(traceLog);
 
 		return traceLog;
 	}
@@ -447,7 +439,7 @@ public abstract class BaseMethodCompilerStage
 
 		var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, MethodData.Version);
 
-		traceLogs.Add(traceLog);
+		TraceLogs.Add(traceLog);
 
 		return traceLog;
 	}

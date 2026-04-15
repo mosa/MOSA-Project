@@ -12,7 +12,7 @@ public class RemoveUnreachableBlocks : BaseBlockTransform
 	{
 		var basicBlocks = transform.BasicBlocks;
 		var hasProtectedRegions = transform.MethodCompiler.HasProtectedRegions;
-		var trace = transform.TraceLog;
+		var trace = transform.Trace;
 
 		var emptied = 0;
 

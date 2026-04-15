@@ -9,7 +9,7 @@ public class SkipEmptyBlocks : BaseBlockTransform
 		var basicBlocks = transform.BasicBlocks;
 		var hasProtectedRegions = transform.MethodCompiler.HasProtectedRegions;
 		var isInSSAForm = transform.IsInSSAForm;
-		var trace = transform.TraceLog;
+		var trace = transform.Trace;
 
 		var emptied = 0;
 

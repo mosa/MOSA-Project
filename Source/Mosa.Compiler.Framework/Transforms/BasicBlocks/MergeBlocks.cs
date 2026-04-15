@@ -11,7 +11,7 @@ public class MergeBlocks : BaseBlockTransform
 		var basicBlocks = transform.BasicBlocks;
 		var hasProtectedRegions = transform.MethodCompiler.HasProtectedRegions;
 		var isInSSAForm = transform.MethodCompiler.IsInSSAForm;
-		var trace = transform.TraceLog;
+		var trace = transform.Trace;
 
 		var emptied = 0;
 		var changed = true;

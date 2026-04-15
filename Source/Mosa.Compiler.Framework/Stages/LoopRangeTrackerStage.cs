@@ -12,7 +12,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 {
 	private readonly Counter RangeDetermined = new("LoopRangeTrackerStage.RangeDetermined");
 
-	private TraceLog trace;
+	private TraceLog Trace;
+	private TraceLog SpecialTrace;
 
 	protected override void Initialize()
 	{
@@ -21,7 +22,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
-		trace = null;
+		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
+		Trace = null;
 	}
 
 	protected override void Run()
@@ -39,7 +41,9 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		if (!MethodCompiler.IsInSSAForm)
 			return;
 
-		trace = CreateTraceLog(5);
+		Trace = CreateTraceLog(5);
+
+		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Loop Range Tracker");
 
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 
@@ -179,10 +183,10 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 					result.BitValue.NarrowMin(start).NarrowMax((ulong)end);
 
-					trace?.Log($"{result}");
-					trace?.Log($"** Start = {start}");
-					trace?.Log($"** End   = {end}");
-					trace?.Log($"{result.BitValue}");
+					Trace?.Log($"{result}");
+					Trace?.Log($"** Start = {start}");
+					Trace?.Log($"** End   = {end}");
+					Trace?.Log($"{result.BitValue}");
 
 					SpecialTrace?.Log($"Method: {Method}");
 					SpecialTrace?.Log($"  {result} range = {start} to {end}");
@@ -195,10 +199,10 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 					result.BitValue.NarrowSignRange(start, end);
 
-					trace?.Log($"{result}");
-					trace?.Log($"** Start = {start}");
-					trace?.Log($"** End   = {end}");
-					trace?.Log($"{result.BitValue}");
+					Trace?.Log($"{result}");
+					Trace?.Log($"** Start = {start}");
+					Trace?.Log($"** End   = {end}");
+					Trace?.Log($"{result.BitValue}");
 
 					SpecialTrace?.Log($"Method: {Method}");
 					SpecialTrace?.Log($"  {result} range = {start} to {end}");
@@ -220,10 +224,10 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 					result.BitValue.NarrowMax(start).NarrowMin((ulong)end);
 
-					trace?.Log($"{result}");
-					trace?.Log($"** Start = {start}");
-					trace?.Log($"** End   = {end}");
-					trace?.Log($"{result.BitValue}");
+					Trace?.Log($"{result}");
+					Trace?.Log($"** Start = {start}");
+					Trace?.Log($"** End   = {end}");
+					Trace?.Log($"{result.BitValue}");
 
 					SpecialTrace?.Log($"Method: {Method}");
 					SpecialTrace?.Log($"  {result} range = {start} to {end}");
@@ -236,10 +240,10 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 					result.BitValue.NarrowSignRange(start, end);
 
-					trace?.Log($"{result}");
-					trace?.Log($"** Start = {start}");
-					trace?.Log($"** End   = {end}");
-					trace?.Log($"{result.BitValue}");
+					Trace?.Log($"{result}");
+					Trace?.Log($"** Start = {start}");
+					Trace?.Log($"** End   = {end}");
+					Trace?.Log($"{result.BitValue}");
 
 					SpecialTrace?.Log($"Method: {Method}");
 					SpecialTrace?.Log($"  {result} range = {start} to {end}");

@@ -11,7 +11,7 @@ public class SafePointStage : BaseMethodCompilerStage
 {
 	private readonly Counter SafePointsInsertedCount = new("SafePoint.Total");
 
-	private TraceLog trace;
+	private TraceLog Trace;
 
 	private const int MaxBitmapRegisterCount = 32;
 
@@ -28,13 +28,13 @@ public class SafePointStage : BaseMethodCompilerStage
 		if (BasicBlocks.PrologueBlock == null)
 			return;
 
-		trace = CreateTraceLog(5);
+		Trace = CreateTraceLog(5);
 
 		InsertSafePointAtPrologue();
 
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 
-		if (trace != null)
+		if (Trace != null)
 		{
 			var loopTrace = CreateTraceLog("Loops", 5);
 
@@ -51,7 +51,7 @@ public class SafePointStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
-		trace = null;
+		Trace = null;
 	}
 
 	#region Insertion
@@ -62,7 +62,7 @@ public class SafePointStage : BaseMethodCompilerStage
 
 		SafePointsInsertedCount.Increment();
 
-		trace?.Log($"SafePoint inserted at prologue: {BasicBlocks.PrologueBlock}");
+		Trace?.Log($"SafePoint inserted at prologue: {BasicBlocks.PrologueBlock}");
 	}
 
 	private void InsertSafePointsAtBackedges(List<Loop> loops)
@@ -80,7 +80,7 @@ public class SafePointStage : BaseMethodCompilerStage
 
 				SafePointsInsertedCount.Increment();
 
-				trace?.Log($"SafePoint inserted at backedge: {backedge} -> {loop.Header}");
+				Trace?.Log($"SafePoint inserted at backedge: {backedge} -> {loop.Header}");
 			}
 		}
 	}
@@ -190,7 +190,7 @@ public class SafePointStage : BaseMethodCompilerStage
 		// Phase 3: Annotate each IR.SafePoint with register and type bitmaps encoded as two
 		// constant operands: Operand1 = registerBitmap, Operand2 = typeBitmap (1 = managed pointer).
 		// For each block, traverse backward from liveOut[B], maintaining two live bitmaps.
-		var liveTrace = trace != null ? CreateTraceLog("LiveRegisters", 5) : null;
+		var liveTrace = Trace != null ? CreateTraceLog("LiveRegisters", 5) : null;
 
 		foreach (var block in BasicBlocks)
 		{

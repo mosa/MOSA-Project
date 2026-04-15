@@ -17,8 +17,11 @@ public sealed class ExplorerMethodCompileTimeStage : MethodCompileTimeStage
 		var log = new TraceLog(TraceType.GlobalDebug, null, null, "Compiler Time");
 
 		log.Log("Milliseconds\tTotal Milliseconds\tCompiler Count\tMethod");
+
 		foreach (var data in methods)
+		{
 			log.Log($"{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.TotalElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.Version}{'\t'}{data.Method.FullName}");
+		}
 
 		PostTraceLog(log);
 	}

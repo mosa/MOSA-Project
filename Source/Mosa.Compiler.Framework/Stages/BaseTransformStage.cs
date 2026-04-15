@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Reflection.Metadata.Ecma335;
-
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
@@ -19,6 +17,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private readonly List<BaseBlockTransform> blockTransforms = new();
 
 	protected TraceLog Trace;
+	protected TraceLog SpecialTrace;
 
 	protected bool EnableTransformOptimizations;
 	protected bool EnableBlockOptimizations;
@@ -55,7 +54,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		UpdateCounter(TransformCountStage, TransformCount);
 		UpdateCounter(OptimizationCountStage, OptimizationCount);
 
-		//MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
+		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
 
 		TransformCount = 0;
 		OptimizationCount = 0;
@@ -71,7 +70,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
 
-		//SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
 		Transform.SetLogs(Trace, SpecialTrace);
 

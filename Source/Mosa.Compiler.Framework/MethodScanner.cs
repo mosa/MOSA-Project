@@ -29,7 +29,7 @@ public class MethodScanner
 
 	private MosaMethod lastSource;
 
-	private readonly TraceLog trace;
+	private readonly TraceLog Trace;
 
 	private readonly object _lock = new object();
 
@@ -42,7 +42,7 @@ public class MethodScanner
 
 		if (Compiler.IsTraceable(TraceLevel))
 		{
-			trace = new TraceLog(TraceType.GlobalDebug, null, null, "MethodScanner");
+			Trace = new TraceLog(TraceType.GlobalDebug, null, null, "MethodScanner");
 		}
 
 		Initialize();
@@ -58,7 +58,7 @@ public class MethodScanner
 
 		MoreLogInfo();
 
-		Debug.WriteLine(trace?.ToString()); // REMOVE
+		Debug.WriteLine(Trace?.ToString()); // REMOVE
 
 		var totalTypes = 0;
 		var totalMethods = 0;
@@ -88,7 +88,7 @@ public class MethodScanner
 		Compiler.GlobalCounters.Set("MethodScanner.AccessedFields", accessedFields.Count);
 		Compiler.GlobalCounters.Set("MethodScanner.InvokedInterfaceType", invokedInteraceTypes.Count);
 
-		Compiler.PostTraceLog(trace);
+		Compiler.PostTraceLog(Trace);
 	}
 
 	private void MarkMethodInvoked(MosaMethod method)
@@ -125,19 +125,19 @@ public class MethodScanner
 			allocatedTypes.Add(type);
 		}
 
-		if (trace != null)
+		if (Trace != null)
 		{
 			var lockTimer2 = Stopwatch.StartNew();
-			lock (trace)
+			lock (Trace)
 			{
-				Compiler.LockMonitor.RecordLockWait(lockTimer2, trace);
+				Compiler.LockMonitor.RecordLockWait(lockTimer2, Trace);
 
 				if ((lastSource == null && source != null) || lastSource != source)
 				{
-					trace.Log($"> Method: {(source == null ? "[NULL]" : source.FullName)}");
+					Trace.Log($"> Method: {(source == null ? "[NULL]" : source.FullName)}");
 					lastSource = source;
 				}
-				trace.Log($" >>> Allocated: {type.FullName}");
+				Trace.Log($" >>> Allocated: {type.FullName}");
 			}
 		}
 
@@ -202,20 +202,20 @@ public class MethodScanner
 
 		MarkMethodInvoked(method);
 
-		if (trace != null)
+		if (Trace != null)
 		{
 			var lockTimer1 = Stopwatch.StartNew();
-			lock (trace)
+			lock (Trace)
 			{
-				Compiler.LockMonitor.RecordLockWait(lockTimer1, trace);
+				Compiler.LockMonitor.RecordLockWait(lockTimer1, Trace);
 
 				if ((lastSource == null && source != null) || lastSource != source)
 				{
-					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
+					Trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
 					lastSource = source;
 				}
 
-				trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
+				Trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 			}
 		}
 
@@ -266,17 +266,17 @@ public class MethodScanner
 
 		MarkMethodInvoked(method);
 
-		if (trace != null)
+		if (Trace != null)
 		{
-			lock (trace)
+			lock (Trace)
 			{
 				if ((lastSource == null && source != null) || lastSource != source)
 				{
-					trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
+					Trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
 					lastSource = source;
 				}
 
-				trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
+				Trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 			}
 		}
 
@@ -385,7 +385,7 @@ public class MethodScanner
 
 			scheduledMethods.Add(method);
 
-			trace?.Log($" ==> Scheduling: {method}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
+			Trace?.Log($" ==> Scheduling: {method}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 
 			Compiler.MethodScheduler.Schedule(method);
 		}
@@ -500,14 +500,14 @@ public class MethodScanner
 
 			if (!IsTypeAllocated(type))
 			{
-				trace?.Log($"Type Excluded: {type.FullName}");
+				Trace?.Log($"Type Excluded: {type.FullName}");
 			}
 
 			foreach (var method in type.Methods)
 			{
 				if (!IsMethodInvoked(method))
 				{
-					trace?.Log($"Method Excluded: {method.FullName}");
+					Trace?.Log($"Method Excluded: {method.FullName}");
 				}
 			}
 		}

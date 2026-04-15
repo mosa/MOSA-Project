@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 {
-	protected TraceLog trace;
+	protected TraceLog Trace;
 
 	private readonly Counter ConstantCount = new("SparseConditionalConstantPropagation.ConstantVariables");
 	private readonly Counter ConditionalConstantPropagationCount = new("SparseConditionalConstantPropagation.ConstantPropagations");
@@ -32,7 +32,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 	protected override void Setup()
 	{
-		trace = CreateTraceLog(5);
+		Trace = CreateTraceLog(5);
 
 		changed = false;
 	}
@@ -65,7 +65,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
-		trace = null;
+		Trace = null;
 	}
 
 	protected void ReplaceVirtualRegistersWithConstants(List<Tuple<Operand, ulong>> constantVirtualRegisters)
@@ -78,7 +78,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 	protected void ReplaceVirtualRegisterWithConstant(Operand target, ulong value)
 	{
-		trace?.Log($"{target} = {value} Uses: {target.Uses.Count}");
+		Trace?.Log($"{target} = {value} Uses: {target.Uses.Count}");
 
 		if (target.IsUndefined)
 			return;
@@ -112,11 +112,11 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 					if (operand != target)
 						continue;
 
-					trace?.Log("*** ConditionalConstantPropagation");
-					trace?.Log($"BEFORE:\t{node}");
+					Trace?.Log("*** ConditionalConstantPropagation");
+					Trace?.Log($"BEFORE:\t{node}");
 					node.SetOperand(i, constant);
 					ConditionalConstantPropagationCount.Increment();
-					trace?.Log($"AFTER: \t{node}");
+					Trace?.Log($"AFTER: \t{node}");
 
 					changed = true;
 				}
@@ -130,7 +130,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 		var defNode = target.Definitions[0];
 
-		trace?.Log($"REMOVED:\t{defNode}");
+		Trace?.Log($"REMOVED:\t{defNode}");
 		defNode.SetNop();
 		InstructionsRemovedCount.Increment();
 
@@ -168,8 +168,8 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 				if (node.Instruction.IsBranch)
 				{
-					trace?.Log("*** RemoveBranchesToDeadBlocks");
-					trace?.Log($"REMOVED:\t{node}");
+					Trace?.Log("*** RemoveBranchesToDeadBlocks");
+					Trace?.Log($"REMOVED:\t{node}");
 					node.SetNop();
 					InstructionsRemovedCount.Increment();
 					continue;
@@ -177,10 +177,10 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 
 				if (node.Instruction == IR.Jmp)
 				{
-					trace?.Log("*** RemoveBranchesToDeadBlocks");
-					trace?.Log($"BEFORE:\t{node}");
+					Trace?.Log("*** RemoveBranchesToDeadBlocks");
+					Trace?.Log($"BEFORE:\t{node}");
 					node.UpdateBranchTarget(0, otherBlock);
-					trace?.Log($"AFTER: \t{node}");
+					Trace?.Log($"AFTER: \t{node}");
 					continue;
 				}
 
@@ -196,7 +196,7 @@ public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 		if (block.PreviousBlocks.Count != 0 || block.IsHeadBlock)
 			return;
 
-		trace?.Log($"*** Removed Block: {block}");
+		Trace?.Log($"*** Removed Block: {block}");
 
 		var nextBlocks = block.NextBlocks.ToArray();
 
