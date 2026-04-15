@@ -348,7 +348,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		var writer = new BinaryWriter(tableSymbol.Stream);
 
 		// 1. Number of SafePoints
-		writer.Write((uint)MethodData.SafePointEntries.Count);
+		writer.Write((uint)MethodData.SafePointEntries.Count, TypeLayout.NativePointerSize);
 
 		trace?.Log($"SafePoint Table: {Method.FullName} ({MethodData.SafePointEntries.Count} entries)");
 
