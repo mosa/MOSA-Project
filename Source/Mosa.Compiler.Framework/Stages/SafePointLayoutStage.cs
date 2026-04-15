@@ -102,8 +102,9 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 	/// GC-root stack slot so the GC can scan a thread paused at any instruction.
 	/// <para>
 	/// Parameters are conservatively marked live for the whole method (the caller holds the only
-	/// reference).  Locals use block-level backward liveness (GEN-only, no KILL) over the nodes
-	/// in <see cref="Operand.Uses"/> so ranges are tight while remaining safe.
+	/// reference). Locals use block-level backward liveness seeded from the nodes in
+	/// <see cref="Operand.Uses"/> and bounded by per-block definitions/KILL information from
+	/// <see cref="Operand.Definitions"/>, so ranges are tight while remaining safe.
 	/// </para>
 	/// </summary>
 	private void BuildGCStackMap()
