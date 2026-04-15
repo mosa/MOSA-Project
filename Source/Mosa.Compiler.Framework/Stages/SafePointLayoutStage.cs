@@ -46,7 +46,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		EmitGCData();
 	}
 
-	#region SafePoint collection
+	#region SafePoint Collection
 
 	private void CollectSafePoints()
 	{
@@ -93,9 +93,9 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		return 0;
 	}
 
-	#endregion
+	#endregion SafePoint Collection
 
-	#region GC stack map
+	#region GC Stack Map
 
 	/// <summary>
 	/// Populates <see cref="MethodData.GCStackEntries"/> with live-range information for every
@@ -330,7 +330,7 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		return merged;
 	}
 
-	#endregion
+	#endregion GC Stack Map
 
 	#region Emission
 
@@ -465,5 +465,5 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 		writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 	}
 
-	#endregion
+	#endregion Emission
 }

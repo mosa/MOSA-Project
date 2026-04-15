@@ -352,3 +352,7 @@ public class MyMethodStage : BaseMethodCompilerStage
 The safepoint system spans two stages:
 - `SafePointStage` (`BaseMethodCompilerStage`) -- inserts `IR.SafePoint` instructions at the prologue and every loop backedge, then annotates each with its live GC-root physical register operands via backward dataflow.
 - `SafePointLayoutStage` (`BaseMethodCompilerStage`, post-codegen) -- reads resolved offsets from the instruction stream, collects `SafePointEntry` records into `MethodData.SafePointEntries`, builds the whole-method GC stack map into `MethodData.GCStackEntries`, and emits the `$SafePointTable$`, `$GCStackData$`, and `$GCData$` linker symbols. `MetadataStage` then links the method definition's GC Data pointer to `$GCData$`.
+
+- @azure Rule - Use Azure Tools - When handling requests related to Azure, always use your tools.
+- @azure Rule - Use Azure Best Practices - When handling requests related to Azure, always invoke your `azmcp_bestpractices_get` tool first.
+- @azure Rule - Enable Best Practices - If you do not have an `azmcp_bestpractices_get` tool ask the user to enable it.
