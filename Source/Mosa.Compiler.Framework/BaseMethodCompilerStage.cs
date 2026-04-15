@@ -437,11 +437,11 @@ public abstract class BaseMethodCompilerStage
 		if (!IsTraceable(traceLevel))
 			return null;
 
-		var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, MethodData.Version);
+		var trace = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, MethodData.Version);
 
-		TraceLogs.Add(traceLog);
+		TraceLogs.Add(trace);
 
-		return traceLog;
+		return trace;
 	}
 
 	private void PostTraceLog(TraceLog traceLog)

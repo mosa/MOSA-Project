@@ -13,7 +13,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 	private readonly Counter RangeDetermined = new("LoopRangeTrackerStage.RangeDetermined");
 
 	private TraceLog Trace;
-	private TraceLog SpecialTrace;
+	private TraceLog GlobalLog;
 
 	protected override void Initialize()
 	{
@@ -22,7 +22,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
-		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
+		MethodCompiler.Compiler.PostTraceLog(GlobalLog);
 		Trace = null;
 	}
 
@@ -43,7 +43,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 		Trace = CreateTraceLog(5);
 
-		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Loop Range Tracker");
+		GlobalLog = new TraceLog(TraceType.GlobalDebug, null, null, "Loop Range Tracker");
 
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 
@@ -188,8 +188,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 					Trace?.Log($"** End   = {end}");
 					Trace?.Log($"{result.BitValue}");
 
-					SpecialTrace?.Log($"Method: {Method}");
-					SpecialTrace?.Log($"  {result} range = {start} to {end}");
+					GlobalLog?.Log($"Method: {Method}");
+					GlobalLog?.Log($"  {result} range = {start} to {end}");
 
 					RangeDetermined.Increment();
 				}
@@ -204,8 +204,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 					Trace?.Log($"** End   = {end}");
 					Trace?.Log($"{result.BitValue}");
 
-					SpecialTrace?.Log($"Method: {Method}");
-					SpecialTrace?.Log($"  {result} range = {start} to {end}");
+					GlobalLog?.Log($"Method: {Method}");
+					GlobalLog?.Log($"  {result} range = {start} to {end}");
 
 					RangeDetermined.Increment();
 				}
@@ -229,8 +229,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 					Trace?.Log($"** End   = {end}");
 					Trace?.Log($"{result.BitValue}");
 
-					SpecialTrace?.Log($"Method: {Method}");
-					SpecialTrace?.Log($"  {result} range = {start} to {end}");
+					GlobalLog?.Log($"Method: {Method}");
+					GlobalLog?.Log($"  {result} range = {start} to {end}");
 
 					RangeDetermined.Increment();
 				}
@@ -245,8 +245,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 					Trace?.Log($"** End   = {end}");
 					Trace?.Log($"{result.BitValue}");
 
-					SpecialTrace?.Log($"Method: {Method}");
-					SpecialTrace?.Log($"  {result} range = {start} to {end}");
+					GlobalLog?.Log($"Method: {Method}");
+					GlobalLog?.Log($"  {result} range = {start} to {end}");
 
 					RangeDetermined.Increment();
 				}

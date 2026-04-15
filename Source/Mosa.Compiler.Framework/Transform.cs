@@ -18,7 +18,7 @@ public sealed class Transform
 
 	public TraceLog Trace { get; private set; }
 
-	public TraceLog SpecialTraceLog { get; private set; }
+	public TraceLog TransformTrace { get; private set; }
 
 	public VirtualRegisters VirtualRegisters { get; private set; }
 
@@ -217,7 +217,7 @@ public sealed class Transform
 	public void ClearLogs()
 	{
 		Trace = null;
-		SpecialTraceLog = null;
+		TransformTrace = null;
 	}
 
 	public void SetLog(TraceLog traceLog)
@@ -228,7 +228,7 @@ public sealed class Transform
 	public void SetLogs(TraceLog traceLog = null, TraceLog specialTraceLog = null)
 	{
 		Trace = traceLog;
-		SpecialTraceLog = specialTraceLog;
+		TransformTrace = specialTraceLog;
 	}
 
 	#endregion Logs
@@ -259,7 +259,7 @@ public sealed class Transform
 		Trace?.Log($"{TransformCount,-7}\t| {name ?? string.Empty}");
 
 		if (log)
-			SpecialTraceLog?.Log($"{name ?? string.Empty}\t{Method.FullName} at {node}");
+			TransformTrace?.Log($"{name ?? string.Empty}\t{Method.FullName} at {node}");
 
 		Trace?.Log($"{node.Block}\t| {node}");
 	}
@@ -290,7 +290,7 @@ public sealed class Transform
 		Trace?.Log($"{TransformCount,-7}\t| {transformation.Name}");
 
 		if (transformation.Log)
-			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName}");
+			TransformTrace?.Log($"{transformation.Name}\t{Method.FullName}");
 
 		Trace?.Log($"{block}\t| {transformation.Name}");
 	}
