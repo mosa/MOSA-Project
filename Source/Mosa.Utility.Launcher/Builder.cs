@@ -276,6 +276,9 @@ public class Builder : BaseLauncher
 				}
 			case CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error or CompilerEvent.Diagnostic:
 				{
+					if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+						return;
+
 					var status = compilerEvent.ToText();
 					if (!string.IsNullOrEmpty(message))
 						status += $" => {message}";
