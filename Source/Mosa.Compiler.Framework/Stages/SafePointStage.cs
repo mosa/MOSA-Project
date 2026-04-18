@@ -211,7 +211,7 @@ public class SafePointStage : BaseMethodCompilerStage
 					node.SetOperand(1, Operand.CreateConstant32(typeBitmap));
 
 					liveTrace?.Log($"SafePoint in {block}: registers=0b{Convert.ToString(registerBitmap, 2).PadLeft(32, '0')} managed-pointers=0b{Convert.ToString(typeBitmap, 2).PadLeft(32, '0')}");
-					
+
 					break;
 				}
 
