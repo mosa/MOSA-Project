@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 
@@ -18,7 +17,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 
 	private HashSet<Operand> ParamStoreSet = new();
 
-	private TraceLog trace;
+	private TraceLog Trace;
 
 	protected override void Initialize()
 	{
@@ -42,7 +41,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		if (BasicBlocks.PrologueBlock == null)
 			return;
 
-		trace = CreateTraceLog(5);
+		Trace = CreateTraceLog(5);
 
 		ParamStoreSet = CollectParamStores();
 
@@ -51,7 +50,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 		if (loops.Count == 0)
 			return;
 
-		if (trace != null)
+		if (Trace != null)
 		{
 			var loopTrace = CreateTraceLog("Loops", 5);
 
@@ -98,7 +97,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 
 		var changed = true;
 
-		trace?.Log($"Loop: {loop.Header}");
+		Trace?.Log($"Loop: {loop.Header}");
 
 		while (changed)
 		{
@@ -138,7 +137,7 @@ public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 					invariantsSet.Add(node);
 					invariantsList.Add(node);
 
-					trace?.Log($"  {node}");
+					Trace?.Log($"  {node}");
 
 					changed = true;
 				}

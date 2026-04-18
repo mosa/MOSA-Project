@@ -23,7 +23,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private readonly Counter InstructionsRemovedCount = new("BitTracker.InstructionsRemoved");
 	private readonly Counter InstructionsUpdatedCount = new("BitTracker.InstructionsUpdated");
 
-	private TraceLog trace;
+	private TraceLog Trace;
 
 	private readonly NodeVisitationDelegate[] visitation = new NodeVisitationDelegate[MaxInstructions];
 
@@ -31,7 +31,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
-		trace = null;
+		Trace = null;
 	}
 
 	protected override void Initialize()
@@ -144,9 +144,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		if (BasicBlocks.PrologueBlock == null)
 			return;
 
-		trace = CreateTraceLog(5);
+		Trace = CreateTraceLog(5);
 
-		Transform.SetLog(trace);
+		Transform.SetLog(Trace);
 
 		EvaluateVirtualRegisters();
 
@@ -297,38 +297,38 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 			? Operand.CreateConstant32((uint)constantValue)
 			: Operand.CreateConstant64(constantValue);
 
-		if (trace != null)
+		if (Trace != null)
 		{
-			trace?.Log($"Virtual Register: {virtualRegister}");
+			Trace?.Log($"Virtual Register: {virtualRegister}");
 
-			trace?.Log($"  MaxValue:  {value.MaxValue}");
-			trace?.Log($"  MinValue:  {value.MinValue}");
+			Trace?.Log($"  MaxValue:  {value.MaxValue}");
+			Trace?.Log($"  MinValue:  {value.MinValue}");
 
 			if (value.BitsKnown != 0)
 			{
-				trace?.Log($"  BitsSet:   {Convert.ToString((long)value.BitsSet, 2).PadLeft(64, '0')}");
-				trace?.Log($"  BitsClear: {Convert.ToString((long)value.BitsClear, 2).PadLeft(64, '0')}");
-				trace?.Log($"  BitsKnown: {Convert.ToString((long)value.BitsKnown, 2).PadLeft(64, '0')}");
+				Trace?.Log($"  BitsSet:   {Convert.ToString((long)value.BitsSet, 2).PadLeft(64, '0')}");
+				Trace?.Log($"  BitsClear: {Convert.ToString((long)value.BitsClear, 2).PadLeft(64, '0')}");
+				Trace?.Log($"  BitsKnown: {Convert.ToString((long)value.BitsKnown, 2).PadLeft(64, '0')}");
 			}
 		}
 
 		foreach (var node2 in virtualRegister.Uses.ToArray())
 		{
-			trace?.Log($"BEFORE:\t{node2}");
+			Trace?.Log($"BEFORE:\t{node2}");
 
 			node2.ReplaceOperand(virtualRegister, constantOperand);
 
-			trace?.Log($"AFTER: \t{node2}");
+			Trace?.Log($"AFTER: \t{node2}");
 			InstructionsUpdatedCount.Increment();
 		}
 
 		Debug.Assert(virtualRegister.Uses.Count == 0);
 
 		var node = virtualRegister.Definitions[0];
-		trace?.Log($"REMOVED:\t{node}");
+		Trace?.Log($"REMOVED:\t{node}");
 
 		node.SetNop();
-		trace?.Log();
+		Trace?.Log();
 
 		InstructionsRemovedCount.Increment();
 	}
@@ -363,7 +363,7 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 			var newBranch = node.BranchTarget1;
 
-			trace?.Log($"REMOVED:\t{node}");
+			Trace?.Log($"REMOVED:\t{node}");
 			node.SetNop();
 			InstructionsRemovedCount.Increment();
 			BranchesRemovedCount.Increment();
@@ -376,9 +376,9 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 				node = node.Next;
 			}
 
-			trace?.Log($"BEFORE:\t{node}");
+			Trace?.Log($"BEFORE:\t{node}");
 			node.UpdateBranchTarget(0, newBranch);
-			trace?.Log($"AFTER:\t{node}");
+			Trace?.Log($"AFTER:\t{node}");
 		}
 	}
 

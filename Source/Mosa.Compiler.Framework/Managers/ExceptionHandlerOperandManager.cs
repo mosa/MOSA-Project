@@ -80,7 +80,6 @@ public class ExceptionHandlerOperandManager : BaseTransformManager
 			}
 		}
 
-
 		foreach (var def in operand.Definitions)
 		{
 			var block = def.Block;

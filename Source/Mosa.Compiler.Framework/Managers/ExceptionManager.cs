@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Dynamic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 

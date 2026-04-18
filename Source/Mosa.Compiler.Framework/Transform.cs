@@ -16,9 +16,9 @@ public sealed class Transform
 
 	public TypeSystem TypeSystem { get; private set; }
 
-	public TraceLog TraceLog { get; private set; }
+	public TraceLog Trace { get; private set; }
 
-	public TraceLog SpecialTraceLog { get; private set; }
+	public TraceLog TransformTrace { get; private set; }
 
 	public VirtualRegisters VirtualRegisters { get; private set; }
 
@@ -151,7 +151,7 @@ public sealed class Transform
 
 		Options = TransformStageOption.None;
 
-		TraceLog = null;
+		Trace = null;
 		Managers.Clear();
 
 		// clear - just in case
@@ -175,7 +175,7 @@ public sealed class Transform
 
 		IsTraceTransforms = methodCompiler.IsTraceTransforms;
 
-		TraceLog = null;
+		Trace = null;
 		Managers.Clear();
 
 		Stage = null;
@@ -216,19 +216,19 @@ public sealed class Transform
 
 	public void ClearLogs()
 	{
-		TraceLog = null;
-		SpecialTraceLog = null;
+		Trace = null;
+		TransformTrace = null;
 	}
 
 	public void SetLog(TraceLog traceLog)
 	{
-		TraceLog = traceLog;
+		Trace = traceLog;
 	}
 
 	public void SetLogs(TraceLog traceLog = null, TraceLog specialTraceLog = null)
 	{
-		TraceLog = traceLog;
-		SpecialTraceLog = specialTraceLog;
+		Trace = traceLog;
+		TransformTrace = specialTraceLog;
 	}
 
 	#endregion Logs
@@ -256,12 +256,12 @@ public sealed class Transform
 		if (!IsTraceTransforms)
 			return;
 
-		TraceLog?.Log($"{TransformCount,-7}\t| {name ?? string.Empty}");
+		Trace?.Log($"{TransformCount,-7}\t| {name ?? string.Empty}");
 
 		if (log)
-			SpecialTraceLog?.Log($"{name ?? string.Empty}\t{Method.FullName} at {node}");
+			TransformTrace?.Log($"{name ?? string.Empty}\t{Method.FullName} at {node}");
 
-		TraceLog?.Log($"{node.Block}\t| {node}");
+		Trace?.Log($"{node.Block}\t| {node}");
 	}
 
 	public void TraceBefore(Node node, BaseTransform transformation)
@@ -276,8 +276,8 @@ public sealed class Transform
 
 		TraceInstructions();
 
-		TraceLog?.Log($"       \t| {node}");
-		TraceLog?.Log();
+		Trace?.Log($"       \t| {node}");
+		Trace?.Log();
 	}
 
 	public void TraceBefore(BaseBlockTransform transformation, BasicBlock block)
@@ -287,12 +287,12 @@ public sealed class Transform
 		if (!IsTraceTransforms)
 			return;
 
-		TraceLog?.Log($"{TransformCount,-7}\t| {transformation.Name}");
+		Trace?.Log($"{TransformCount,-7}\t| {transformation.Name}");
 
 		if (transformation.Log)
-			SpecialTraceLog?.Log($"{transformation.Name}\t{Method.FullName}");
+			TransformTrace?.Log($"{transformation.Name}\t{Method.FullName}");
 
-		TraceLog?.Log($"{block}\t| {transformation.Name}");
+		Trace?.Log($"{block}\t| {transformation.Name}");
 	}
 
 	public void TraceAfter(BaseBlockTransform transformation)
@@ -302,8 +302,8 @@ public sealed class Transform
 
 		TraceInstructions();
 
-		TraceLog?.Log($"       \t| {transformation.Name}");
-		TraceLog?.Log();
+		Trace?.Log($"       \t| {transformation.Name}");
+		Trace?.Log();
 	}
 
 	public void TraceInstructions()

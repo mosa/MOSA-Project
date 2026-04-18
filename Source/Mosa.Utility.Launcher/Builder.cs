@@ -86,6 +86,11 @@ public class Builder : BaseLauncher
 
 	private bool Compile()
 	{
+		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
+		OutputStatus($"Output file: {MosaSettings.OutputFile}");
+		OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
+		OutputStatus($"Max Threads: {MosaSettings.MaxThreads}");
+		OutputStatus($"Platform: {MosaSettings.Platform}");
 		OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
 
 		var compiler = new MosaCompiler(MosaSettings, CompilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
@@ -276,6 +281,9 @@ public class Builder : BaseLauncher
 				}
 			case CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error or CompilerEvent.Diagnostic:
 				{
+					if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+						return;
+
 					var status = compilerEvent.ToText();
 					if (!string.IsNullOrEmpty(message))
 						status += $" => {message}";

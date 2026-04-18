@@ -252,12 +252,6 @@ public class UnitTestEngine : IDisposable
 	{
 		Stopwatch.Restart();
 
-		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
-		OutputStatus($"Output file: {MosaSettings.OutputFile}");
-		OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
-		OutputStatus($"Max Threads: {MosaSettings.MaxThreads}");
-		OutputStatus($"Platform: {MosaSettings.Platform}");
-
 		var compilerHook = CreateCompilerHook();
 
 		var builder = new Builder(MosaSettings, compilerHook);
@@ -441,7 +435,6 @@ public class UnitTestEngine : IDisposable
 
 				if (StartEngineEx())
 				{
-					//OutputStatus($"Engine started!");
 					return true;
 				}
 				else
@@ -475,7 +468,7 @@ public class UnitTestEngine : IDisposable
 
 		if (ConnectToDebugEngine())
 		{
-			OutputStatus($"Engine connected!");
+			OutputStatus("Engine connected!");
 		}
 		else
 		{
@@ -485,7 +478,7 @@ public class UnitTestEngine : IDisposable
 
 		if (WaitForReady())
 		{
-			OutputStatus($"Engine ready!");
+			OutputStatus("Engine ready!");
 			WatchDog.Restart();
 		}
 		else

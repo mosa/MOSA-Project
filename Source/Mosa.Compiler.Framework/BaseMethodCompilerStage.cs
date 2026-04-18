@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.Instructions;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
@@ -18,7 +17,9 @@ public abstract class BaseMethodCompilerStage
 
 	#region Data Members
 
-	private List<TraceLog> traceLogs;
+	private List<TraceLog> TraceLogs;
+
+	public Transform Transform { get; private set; }
 
 	#endregion Data Members
 
@@ -176,8 +177,6 @@ public abstract class BaseMethodCompilerStage
 
 	#endregion Method Properties
 
-	public Transform Transform { get; private set; }
-
 	#region Methods
 
 	/// <summary>
@@ -197,6 +196,8 @@ public abstract class BaseMethodCompilerStage
 		Is32BitPlatform = Architecture.Is32BitPlatform;
 		Is64BitPlatform = Architecture.Is64BitPlatform;
 
+		TraceLogs = new List<TraceLog>();
+
 		Initialize();
 	}
 
@@ -210,8 +211,6 @@ public abstract class BaseMethodCompilerStage
 		MethodCompiler = methodCompiler;
 		BasicBlocks = methodCompiler.BasicBlocks;
 		Transform = methodCompiler.Transform;
-
-		traceLogs = new List<TraceLog>();
 
 		FormattedStageName = $"[{position:00}] {Name}";
 
@@ -228,7 +227,7 @@ public abstract class BaseMethodCompilerStage
 		}
 		finally
 		{
-			PostTraceLogs(traceLogs);
+			PostTraceLogs(TraceLogs);
 		}
 
 		Finish();
@@ -239,7 +238,7 @@ public abstract class BaseMethodCompilerStage
 	public void CleanUp()
 	{
 		MethodCompiler = null;
-		traceLogs = null;
+		TraceLogs.Clear();
 	}
 
 	#endregion Methods
@@ -416,6 +415,11 @@ public abstract class BaseMethodCompilerStage
 		return MethodCompiler.IsTraceable(traceLevel);
 	}
 
+	public bool IsGlobalTraceable(int traceLevel)
+	{
+		return MethodCompiler.IsGlobalTraceable(traceLevel);
+	}
+
 	protected TraceLog CreateTraceLog(int traceLevel = 0)
 	{
 		if (!IsTraceable(traceLevel))
@@ -423,9 +427,26 @@ public abstract class BaseMethodCompilerStage
 
 		var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, MethodData.Version);
 
-		traceLogs.Add(traceLog);
+		TraceLogs.Add(traceLog);
 
 		return traceLog;
+	}
+
+	protected TraceLog CreateTraceLog(TraceType traceType, string section, int traceLevel)
+	{
+		if (traceType == TraceType.GlobalDebug)
+		{
+			if (!IsGlobalTraceable(traceLevel))
+				return null;
+		}
+		else if (!IsTraceable(traceLevel))
+			return null;
+
+		var trace = new TraceLog(traceType, null, null, section);
+
+		TraceLogs.Add(trace);
+
+		return trace;
 	}
 
 	public TraceLog CreateTraceLog(string section)
@@ -438,11 +459,11 @@ public abstract class BaseMethodCompilerStage
 		if (!IsTraceable(traceLevel))
 			return null;
 
-		var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, MethodData.Version);
+		var trace = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, MethodData.Version);
 
-		traceLogs.Add(traceLog);
+		TraceLogs.Add(trace);
 
-		return traceLog;
+		return trace;
 	}
 
 	private void PostTraceLog(TraceLog traceLog)

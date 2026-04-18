@@ -540,6 +540,11 @@ public sealed class MethodCompiler
 			return Compiler.IsTraceable(tracelevel);
 	}
 
+	public bool IsGlobalTraceable(int tracelevel)
+	{
+		return Compiler.IsTraceable(tracelevel);
+	}
+
 	private void PostTraceLog(TraceLog traceLog)
 	{
 		Compiler.PostTraceLog(traceLog);

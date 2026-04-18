@@ -201,7 +201,8 @@ Table Definitions
    :widths: 200
 
 	Stack Offset
-	Type (0=Object/1=Managed Pointer)
+	Type (1=Object/0=Managed Pointer)
+	Number of Live Ranges
 	Live Ranges 1..N
 	. Address Offset
 	. Address Range
