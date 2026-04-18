@@ -205,12 +205,12 @@ public class SafePointStage : BaseMethodCompilerStage
 				if (node.Instruction == IR.SafePoint)
 				{
 					var registerBitmap = liveObject | liveMPtr;
-					var typeBitmap = liveMPtr;
+					var typeBitmap = liveObject;
 
 					node.SetOperand(0, Operand.CreateConstant32(registerBitmap));
 					node.SetOperand(1, Operand.CreateConstant32(typeBitmap));
 
-					liveTrace?.Log($"SafePoint in {block}: registers=0b{Convert.ToString(registerBitmap, 2).PadLeft(32, '0')} managed-pointers=0b{Convert.ToString(typeBitmap, 2).PadLeft(32, '0')}");
+					liveTrace?.Log($"SafePoint in {block}: registers=0b{Convert.ToString(registerBitmap, 2).PadLeft(32, '0')} type=0b{Convert.ToString(typeBitmap, 2).PadLeft(32, '0')}");
 
 					break;
 				}
