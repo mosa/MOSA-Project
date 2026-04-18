@@ -41,6 +41,10 @@ internal static class Program
 
 			var compilerHooks = CreateCompilerHooks();
 
+			//OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
+			//OutputStatus($"Max Threads: {mosaSettings.MaxThreads}");
+			//OutputStatus($"Platform: {mosaSettings.Platform}");
+
 			Builder = new Builder(mosaSettings, compilerHooks);
 			Builder.Build();
 
