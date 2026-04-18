@@ -20,8 +20,6 @@ internal static class Program
 		System.Console.WriteLine("MOSA Launcher, Version {0}.", CompilerVersion.VersionString);
 		System.Console.WriteLine("Copyright 2026 by the MOSA Project. Licensed under the New BSD License.");
 
-		//OutputStatus($"Current Directory: {Environment.CurrentDirectory}");
-
 		Stopwatch.Start();
 
 		try
@@ -40,10 +38,6 @@ internal static class Program
 			mosaSettings.ExpandSearchPaths();
 
 			var compilerHooks = CreateCompilerHooks();
-
-			//OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
-			//OutputStatus($"Max Threads: {mosaSettings.MaxThreads}");
-			//OutputStatus($"Platform: {mosaSettings.Platform}");
 
 			Builder = new Builder(mosaSettings, compilerHooks);
 			Builder.Build();
