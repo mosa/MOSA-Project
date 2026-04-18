@@ -20,7 +20,7 @@ public sealed class SafePointEntry
 
 	/// <summary>
 	/// For each set bit in <see cref="RegisterBitmap"/>, the corresponding bit here encodes the GC type:
-	/// 0 = object reference, 1 = managed pointer.
+	/// 1 = object reference, 0 = managed pointer.
 	/// </summary>
 	public uint TypeBitmap { get; set; }
 }

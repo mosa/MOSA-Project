@@ -456,7 +456,7 @@ jobs:
       - name: ARM32 Compile Test - BareMetal TestWorld - o5
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o5 -check -diag -autolaunch-off -output-counters
       - name: ARM32 Compile Test - BareMetal TestWorld - o6
-        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o6 -check -autolaunch-off -output-counters
+        run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o6 -check -diag -autolaunch-off -output-counters
       - name: ARM32 Compile Test - BareMetal TestWorld - o7
         run: dotnet bin/Mosa.Tool.Launcher.Console.dll bin/Mosa.BareMetal.TestWorld.ARM32.dll -arm32 -o7 -check -diag -autolaunch-off -output-counters
       - name: ARM32 Compile Test - BareMetal TestWorld - o8
