@@ -554,7 +554,7 @@
 			"Type": "Simplification",
 			"Name": "Add##",
 			"SubName": "v1",
-			"Expression": "IR.Add## (IR.Sub## a b) b)",
+			"Expression": "IR.Add## (IR.Sub## a b) b",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
 			"Variations": "Yes"
@@ -563,7 +563,7 @@
 			"Type": "Simplification",
 			"Name": "Sub##",
 			"SubName": "v1",
-			"Expression": "IR.Sub## (IR.Add## a b) a)",
+			"Expression": "IR.Sub## (IR.Add## a b) a",
 			"Filter": "",
 			"Result": "(IR.Move## b)",
 			"Variations": "Yes"

@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Sub64v1 : BaseTransform
 {
-	public Sub64v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, true)
+	public Sub64v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
