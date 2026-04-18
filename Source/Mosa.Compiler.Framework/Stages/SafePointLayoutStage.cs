@@ -25,10 +25,8 @@ public sealed class SafePointLayoutStage : BaseMethodCompilerStage
 
 		CollectSafePoints();
 
-		if (MethodData.SafePointEntries.Count == 0)
-			return;
-
 		EmitSafePointTable();
+
 		EmitGCData();
 	}
 
