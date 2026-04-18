@@ -22,8 +22,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 	protected override void Finish()
 	{
-		MethodCompiler.Compiler.PostTraceLog(GlobalTrace);
 		Trace = null;
+		GlobalTrace = null;
 	}
 
 	protected override void Run()
@@ -43,7 +43,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 		Trace = CreateTraceLog(5);
 
-		GlobalTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Loop Range Tracker");
+		GlobalTrace = CreateTraceLog(TraceType.GlobalDebug, "Loop Range Tracker", 7);
 
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 

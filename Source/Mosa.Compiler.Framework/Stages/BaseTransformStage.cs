@@ -54,12 +54,11 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		UpdateCounter(TransformCountStage, TransformCount);
 		UpdateCounter(OptimizationCountStage, OptimizationCount);
 
-		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
-
 		TransformCount = 0;
 		OptimizationCount = 0;
 
 		Trace = null;
+		SpecialTrace = null;
 	}
 
 	protected override void Run()
@@ -70,7 +69,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
 
-		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+		SpecialTrace = CreateTraceLog(TraceType.GlobalDebug, "Special Optimizations", 7);
 
 		Transform.SetLogs(Trace, SpecialTrace);
 

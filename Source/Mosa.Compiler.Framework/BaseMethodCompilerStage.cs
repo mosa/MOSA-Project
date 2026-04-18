@@ -427,6 +427,18 @@ public abstract class BaseMethodCompilerStage
 		return traceLog;
 	}
 
+	protected TraceLog CreateTraceLog(TraceType traceType, string section, int traceLevel)
+	{
+		if (!IsTraceable(traceLevel))
+			return null;
+
+		var trace = new TraceLog(traceType, null, null, section);
+
+		TraceLogs.Add(trace);
+
+		return trace;
+	}
+
 	public TraceLog CreateTraceLog(string section)
 	{
 		return CreateTraceLog(section, -1);
