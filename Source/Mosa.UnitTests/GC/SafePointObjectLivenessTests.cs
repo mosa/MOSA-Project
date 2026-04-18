@@ -4,11 +4,11 @@ namespace Mosa.UnitTests.GC;
 
 public class SafePointObjectLivenessTests
 {
-	private class SimmpleObject
+	private class SimpleObject
 	{
 		public int Value;
 
-		public SimmpleObject(int value)
+		public SimpleObject(int value)
 		{
 			Value = value;
 		}
@@ -19,11 +19,11 @@ public class SafePointObjectLivenessTests
 	{
 		int sum = 0;
 
-		var o1 = new SimmpleObject(1);
-		var o2 = new SimmpleObject(2);
-		var o3 = new SimmpleObject(3);
-		var o4 = new SimmpleObject(4);
-		var o5 = new SimmpleObject(5);
+		var o1 = new SimpleObject(1);
+		var o2 = new SimpleObject(2);
+		var o3 = new SimpleObject(3);
+		var o4 = new SimpleObject(4);
+		var o5 = new SimpleObject(5);
 
 		for (int i = 0; i < 8; i++)
 		{
