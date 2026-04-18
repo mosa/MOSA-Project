@@ -20,12 +20,6 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		Register(RangeDetermined);
 	}
 
-	protected override void Finish()
-	{
-		Trace = null;
-		GlobalTrace = null;
-	}
-
 	protected override void Run()
 	{
 		if (HasProtectedRegions)
@@ -51,6 +45,12 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			return;
 
 		ProcessLoops(loops);
+	}
+
+	protected override void Finish()
+	{
+		Trace = null;
+		GlobalTrace = null;
 	}
 
 	private void ProcessLoops(List<Loop> loops)

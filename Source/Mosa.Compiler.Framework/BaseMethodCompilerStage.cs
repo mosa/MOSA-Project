@@ -415,6 +415,11 @@ public abstract class BaseMethodCompilerStage
 		return MethodCompiler.IsTraceable(traceLevel);
 	}
 
+	public bool IsGlobalTraceable(int traceLevel)
+	{
+		return MethodCompiler.IsGlobalTraceable(traceLevel);
+	}
+
 	protected TraceLog CreateTraceLog(int traceLevel = 0)
 	{
 		if (!IsTraceable(traceLevel))
@@ -429,7 +434,12 @@ public abstract class BaseMethodCompilerStage
 
 	protected TraceLog CreateTraceLog(TraceType traceType, string section, int traceLevel)
 	{
-		if (!IsTraceable(traceLevel))
+		if (traceType == TraceType.GlobalDebug)
+		{
+			if (!IsGlobalTraceable(traceLevel))
+				return null;
+		}
+		else if (!IsTraceable(traceLevel))
 			return null;
 
 		var trace = new TraceLog(traceType, null, null, section);
