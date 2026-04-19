@@ -217,4 +217,3 @@ Table Definitions
 	. Address Range
 	. CPU Registers Bitmap (32 bit)
 	. Type Bitmap (32 bit)
-	. Breakpoint Indicator
