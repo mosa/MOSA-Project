@@ -6,11 +6,11 @@
     "mapping": {
         "device": "flash",
         "executable": {
-            "filename": "/qemu/share//edk2-i386-secure-code.fd",
+            "filename": "/usr/local/share//edk2-i386-secure-code.fd",
             "format": "raw"
         },
         "nvram-template": {
-            "filename": "/qemu/share//edk2-i386-vars.fd",
+            "filename": "/usr/local/share//edk2-i386-vars.fd",
             "format": "raw"
         }
     },
