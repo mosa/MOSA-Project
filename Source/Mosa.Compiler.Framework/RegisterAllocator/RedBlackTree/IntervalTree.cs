@@ -55,10 +55,16 @@ public sealed partial class IntervalTree<T> where T : class
 	}
 
 	/// <summary>
+	/// Search interval tree for a given point, filling a caller-provided list to avoid allocation
+	/// </summary>
+	public void Search(int at, List<T> result)
+	{
+		SearchSubtree(Root, at, result);
+	}
+
+	/// <summary>
 	/// Search interval tree for intervals overlapping with given
 	/// </summary>
-	/// <param name="interval"></param>
-	/// <returns></returns>
 	public List<T> Search(int start, int end)
 	{
 		var result = new List<T>();
@@ -67,10 +73,16 @@ public sealed partial class IntervalTree<T> where T : class
 	}
 
 	/// <summary>
+	/// Search interval tree for intervals overlapping with given, filling a caller-provided list to avoid allocation
+	/// </summary>
+	public void Search(int start, int end, List<T> result)
+	{
+		SearchSubtree(Root, new Interval(start, end), result);
+	}
+
+	/// <summary>
 	/// Search interval tree for intervals overlapping with given
 	/// </summary>
-	/// <param name="interval"></param>
-	/// <returns></returns>
 	private List<T> Search(Interval interval)
 	{
 		var result = new List<T>();
@@ -81,20 +93,28 @@ public sealed partial class IntervalTree<T> where T : class
 	/// <summary>
 	/// Searches for the first overlapping interval
 	/// </summary>
-	/// <param name="interval"></param>
-	/// <returns></returns>
 	public T SearchFirstOverlapping(int start, int end)
 	{
-		return SearchFirstOverlapping(new Interval(start, end));
+		if (TrySearchFirstOverlapping(start, end, out var value))
+		{
+			return value;
+		}
+
+		throw new KeyNotFoundException("No overlapping interval found.");
 	}
 
-	private T SearchFirstOverlapping(Interval interval)
+	public bool TrySearchFirstOverlapping(int start, int end, out T value)
+	{
+		return TrySearchFirstOverlapping(new Interval(start, end), out value);
+	}
+
+	private bool TrySearchFirstOverlapping(Interval interval, out T value)
 	{
 		var node = Root;
 
 		while (node != Sentinel && !node.Interval.Overlaps(interval))
 		{
-			if (node.Left != Sentinel && node.Left.MaxEnd.CompareTo(interval.Start) > 0)
+			if (node.Left != Sentinel && node.Left.MaxEnd > interval.Start)
 			{
 				node = node.Left;
 			}
@@ -106,19 +126,31 @@ public sealed partial class IntervalTree<T> where T : class
 
 		if (node == Sentinel)
 		{
-			throw new KeyNotFoundException("No overlapping interval found.");
+			value = null;
+			return false;
 		}
 
-		return node.Value;
+		value = node.Value;
+		return true;
 	}
 
 	public T SearchFirstOverlapping(int at)
+	{
+		if (TrySearchFirstOverlapping(at, out var value))
+		{
+			return value;
+		}
+
+		throw new KeyNotFoundException("No overlapping interval found.");
+	}
+
+	public bool TrySearchFirstOverlapping(int at, out T value)
 	{
 		var node = Root;
 
 		while (node != Sentinel && !node.Interval.Overlaps(at))
 		{
-			if (node.Left != Sentinel && node.Left.MaxEnd.CompareTo(at) > 0)
+			if (node.Left != Sentinel && node.Left.MaxEnd > at)
 			{
 				node = node.Left;
 			}
@@ -130,10 +162,12 @@ public sealed partial class IntervalTree<T> where T : class
 
 		if (node == Sentinel)
 		{
-			throw new KeyNotFoundException("No overlapping interval found.");
+			value = null;
+			return false;
 		}
 
-		return node.Value;
+		value = node.Value;
+		return true;
 	}
 
 	private void SearchSubtree(Node<T> node, Interval interval, List<T> result)
@@ -143,7 +177,7 @@ public sealed partial class IntervalTree<T> where T : class
 			return;
 		}
 
-		if (node.Left != Sentinel)
+		if (node.Left != Sentinel && node.Left.MaxEnd >= interval.Start)
 		{
 			SearchSubtree(node.Left, interval, result);
 		}
@@ -153,8 +187,7 @@ public sealed partial class IntervalTree<T> where T : class
 			result.Add(node.Value);
 		}
 
-		// Interval start is greater than largest endpoint in this subtree
-		if (node.Right != Sentinel && interval.Start.CompareTo(node.MaxEnd) <= 0)
+		if (node.Right != Sentinel && node.Right.MaxEnd >= interval.Start)
 		{
 			SearchSubtree(node.Right, interval, result);
 		}
@@ -167,7 +200,7 @@ public sealed partial class IntervalTree<T> where T : class
 			return;
 		}
 
-		if (node.Left != Sentinel)
+		if (node.Left != Sentinel && node.Left.MaxEnd >= at)
 		{
 			SearchSubtree(node.Left, at, result);
 		}
@@ -177,62 +210,53 @@ public sealed partial class IntervalTree<T> where T : class
 			result.Add(node.Value);
 		}
 
-		// Interval start is greater than largest endpoint in this subtree
-		if (node.Right != Sentinel && at.CompareTo(node.MaxEnd) <= 0)
+		if (node.Right != Sentinel && node.Right.MaxEnd >= at)
 		{
 			SearchSubtree(node.Right, at, result);
 		}
 	}
 
+	/// <summary>
+	/// Returns true if any interval in the subtree overlaps the given interval.
+	/// The right-side tail recursion is replaced with a loop to reduce stack depth.
+	/// </summary>
 	private bool SearchSubtree(Node<T> node, Interval interval)
 	{
-		if (node == Sentinel)
+		while (node != Sentinel)
 		{
-			return false;
-		}
-
-		if (node.Left != Sentinel)
-		{
-			if (SearchSubtree(node.Left, interval))
+			if (node.Left != Sentinel && node.Left.MaxEnd >= interval.Start && SearchSubtree(node.Left, interval))
 				return true;
-		}
 
-		if (interval.Overlaps(node.Interval))
-		{
-			return true;
-		}
+			if (interval.Overlaps(node.Interval))
+				return true;
 
-		// Interval start is greater than largest endpoint in this subtree
-		if (node.Right != Sentinel && interval.Start.CompareTo(node.MaxEnd) <= 0)
-		{
-			return SearchSubtree(node.Right, interval);
+			if (node.Right == Sentinel || node.Right.MaxEnd < interval.Start)
+				return false;
+
+			node = node.Right;
 		}
 
 		return false;
 	}
 
+	/// <summary>
+	/// Returns true if any interval in the subtree contains the given point.
+	/// The right-side tail recursion is replaced with a loop to reduce stack depth.
+	/// </summary>
 	private bool SearchSubtree(Node<T> node, int at)
 	{
-		if (node == Sentinel)
+		while (node != Sentinel)
 		{
-			return false;
-		}
-
-		if (node.Left != Sentinel)
-		{
-			if (SearchSubtree(node.Left, at))
+			if (node.Left != Sentinel && node.Left.MaxEnd >= at && SearchSubtree(node.Left, at))
 				return true;
-		}
 
-		if (node.Interval.Contains(at))
-		{
-			return true;
-		}
+			if (node.Interval.Contains(at))
+				return true;
 
-		// Interval start is greater than largest endpoint in this subtree
-		if (node.Right != Sentinel && at.CompareTo(node.MaxEnd) <= 0)
-		{
-			return SearchSubtree(node.Right, at);
+			if (node.Right == Sentinel || node.Right.MaxEnd < at)
+				return false;
+
+			node = node.Right;
 		}
 
 		return false;
@@ -252,13 +276,10 @@ public sealed partial class IntervalTree<T> where T : class
 			if (val > 0)
 			{
 				tree = tree.Left;
-				continue;
 			}
-
-			if (val < 0)
+			else
 			{
 				tree = tree.Right;
-				continue;
 			}
 		}
 
@@ -312,56 +333,46 @@ public sealed partial class IntervalTree<T> where T : class
 	/// <param name="currentNode">subtree accessed in recursion</param>
 	private void InsertInterval(Node<T> node, Node<T> currentNode)
 	{
-		var addedNode = Sentinel;
-
-		var compare = node.Interval.CompareTo(currentNode.Interval);
-
-		if (compare < 0)
+		while (true)
 		{
-			if (currentNode.Left == Sentinel)
-			{
-				node.Parent = Sentinel;
-				node.Left = Sentinel;
-				node.Right = Sentinel;
-				node.Color = Color.RED;
-				addedNode = node;
+			var compare = node.Interval.CompareTo(currentNode.Interval);
 
-				currentNode.Left = addedNode;
-				addedNode.Parent = currentNode;
-			}
-			else
+			if (compare < 0)
 			{
-				InsertInterval(node, currentNode.Left);
-				return;
-			}
-		}
-		else if (compare > 0)
-		{
-			if (currentNode.Right == Sentinel)
-			{
-				node.Parent = Sentinel;
-				node.Left = Sentinel;
-				node.Right = Sentinel;
-				node.Color = Color.RED;
-				addedNode = node;
+				if (currentNode.Left == Sentinel)
+				{
+					currentNode.Left = node;
+					node.Parent = currentNode;
+					break;
+				}
 
-				currentNode.Right = addedNode;
-				addedNode.Parent = currentNode;
+				currentNode = currentNode.Left;
+				continue;
 			}
-			else
+
+			if (compare > 0)
 			{
-				InsertInterval(node, currentNode.Right);
-				return;
+				if (currentNode.Right == Sentinel)
+				{
+					currentNode.Right = node;
+					node.Parent = currentNode;
+					break;
+				}
+
+				currentNode = currentNode.Right;
+				continue;
 			}
-		}
-		else
-		{
+
 			return;
 		}
 
-		RecalculateMaxEnd(addedNode.Parent);
+		node.Left = Sentinel;
+		node.Right = Sentinel;
+		node.Color = Color.RED;
 
-		RenewConstraintsAfterInsert(addedNode);
+		RecalculateMaxEndUpwards(node.Parent);
+
+		RenewConstraintsAfterInsert(node);
 
 		Root.Color = Color.BLACK;
 	}
@@ -422,67 +433,69 @@ public sealed partial class IntervalTree<T> where T : class
 	}
 
 	/// <summary>
-	/// Validates and applies RB-tree constraints to node
+	/// Validates and applies RB-tree constraints to node.
+	/// The tail-recursive call is replaced with a loop to avoid O(log n) stack frames.
 	/// </summary>
-	/// <param name="node">node to be validated and fixed</param>
 	private void RenewConstraintsAfterInsert(Node<T> node)
 	{
-		if (node.Parent == Sentinel)
+		while (true)
 		{
-			return;
-		}
-
-		if (node.Parent.Color == Color.BLACK)
-		{
-			return;
-		}
-
-		var uncle = GetUncle(node);
-
-		if (uncle != Sentinel && uncle.Color == Color.RED)
-		{
-			node.Parent.Color = uncle.Color = Color.BLACK;
-
-			var grandparent = GetGrandParent(node);
-			if (grandparent != Sentinel && grandparent.Parent != Sentinel)
-			{
-				grandparent.Color = Color.RED;
-				RenewConstraintsAfterInsert(grandparent);
-			}
-		}
-		else
-		{
-			var parentDirection = GetParentDirection(node);
-			var parentParentDirection = GetParentDirection(node.Parent);
-
-			if (parentDirection == Direction.LEFT && parentParentDirection == Direction.RIGHT)
-			{
-				RotateLeft(node.Parent);
-				node = node.Left;
-			}
-			else if (parentDirection == Direction.RIGHT && parentParentDirection == Direction.LEFT)
-			{
-				RotateRight(node.Parent);
-				node = node.Right;
-			}
-
-			node.Parent.Color = Color.BLACK;
-
-			var grandparent = GetGrandParent(node);
-
-			if (grandparent == Sentinel)
-			{
+			if (node.Parent == Sentinel)
 				return;
-			}
-			grandparent.Color = Color.RED;
 
-			if (GetParentDirection(node) == Direction.RIGHT)
+			if (node.Parent.Color == Color.BLACK)
+				return;
+
+			var uncle = GetUncle(node);
+
+			if (uncle != Sentinel && uncle.Color == Color.RED)
 			{
-				RotateRight(grandparent);
+				node.Parent.Color = uncle.Color = Color.BLACK;
+
+				var grandparent = GetGrandParent(node);
+
+				if (grandparent == Sentinel || grandparent.Parent == Sentinel)
+					return;
+
+				grandparent.Color = Color.RED;
+				node = grandparent;
+				// continue loop instead of recursive call
 			}
 			else
 			{
-				RotateLeft(grandparent);
+				var parentDirection = GetParentDirection(node);
+				var parentParentDirection = GetParentDirection(node.Parent);
+
+				if (parentDirection == Direction.LEFT && parentParentDirection == Direction.RIGHT)
+				{
+					RotateLeft(node.Parent);
+					node = node.Left;
+				}
+				else if (parentDirection == Direction.RIGHT && parentParentDirection == Direction.LEFT)
+				{
+					RotateRight(node.Parent);
+					node = node.Right;
+				}
+
+				node.Parent.Color = Color.BLACK;
+
+				var grandparent = GetGrandParent(node);
+
+				if (grandparent == Sentinel)
+					return;
+
+				grandparent.Color = Color.RED;
+
+				if (GetParentDirection(node) == Direction.RIGHT)
+				{
+					RotateRight(grandparent);
+				}
+				else
+				{
+					RotateLeft(grandparent);
+				}
+
+				return;
 			}
 		}
 	}
@@ -492,7 +505,6 @@ public sealed partial class IntervalTree<T> where T : class
 	/// <summary>
 	/// Removes interval from tree (if present in tree)
 	/// </summary>
-	/// <param name="?"></param>
 	public void Remove(int start, int end)
 	{
 		RemoveNode(FindInterval(Root, new Interval(start, end)));
@@ -501,9 +513,6 @@ public sealed partial class IntervalTree<T> where T : class
 	/// <summary>
 	/// Replaces interval with new value
 	/// </summary>
-	/// <param name="start">The start.</param>
-	/// <param name="end">The end.</param>
-	/// <param name="value">The value.</param>
 	public void Replace(int start, int end, T value)
 	{
 		var node = FindInterval(Root, new Interval(start, end));
@@ -528,12 +537,7 @@ public sealed partial class IntervalTree<T> where T : class
 			node.Interval = temp.Interval;
 			node.Value = temp.Value;
 
-			RecalculateMaxEnd(node);
-			while (node.Parent != Sentinel)
-			{
-				node = node.Parent;
-				RecalculateMaxEnd(node);
-			}
+			RecalculateMaxEndUpwards(node);
 		}
 
 		node = temp;
@@ -558,14 +562,7 @@ public sealed partial class IntervalTree<T> where T : class
 				node.Parent.Right = temp;
 			}
 
-			var maxAux = node.Parent;
-			RecalculateMaxEnd(maxAux);
-
-			while (maxAux.Parent != Sentinel)
-			{
-				maxAux = maxAux.Parent;
-				RecalculateMaxEnd(maxAux);
-			}
+			RecalculateMaxEndUpwards(node.Parent);
 		}
 
 		if (node.Color == Color.BLACK)
@@ -578,7 +575,6 @@ public sealed partial class IntervalTree<T> where T : class
 	/// Ensures constraints still apply after node deletion
 	/// - made with the help of algorithm from Cormen et Al. Introduction to Algorithms 2nd ed.
 	/// </summary>
-	/// <param name="node">The node.</param>
 	private void RenewConstraintsAfterDelete(Node<T> node)
 	{
 		// Need to bubble up and fix
@@ -690,8 +686,9 @@ public sealed partial class IntervalTree<T> where T : class
 
 		pivot.Parent = parent;
 
-		RecalculateMaxEnd(pivot);
-		RecalculateMaxEnd(node);
+		RecalculateMaxEndLocal(node);
+		RecalculateMaxEndLocal(pivot);
+		RecalculateMaxEndUpwards(parent);
 	}
 
 	/// <summary>
@@ -729,39 +726,52 @@ public sealed partial class IntervalTree<T> where T : class
 
 		pivot.Parent = parent;
 
-		RecalculateMaxEnd(pivot);
-		RecalculateMaxEnd(node);
+		RecalculateMaxEndLocal(node);
+		RecalculateMaxEndLocal(pivot);
+		RecalculateMaxEndUpwards(parent);
 	}
 
 	/// <summary>
-	/// Refreshes the MaxEnd value after node manipulation
-	/// This is a local operation only
+	/// Refreshes the MaxEnd value after node manipulation — local only
 	/// </summary>
-	private void RecalculateMaxEnd(Node<T> node)
+	private void RecalculateMaxEndLocal(Node<T> node)
 	{
 		var max = node.Interval.End;
 
-		if (node.Right != Sentinel)
+		if (node.Right != Sentinel && node.Right.MaxEnd > max)
 		{
-			if (node.Right.MaxEnd.CompareTo(max) >= 0)
-			{
-				max = node.Right.MaxEnd;
-			}
+			max = node.Right.MaxEnd;
 		}
 
-		if (node.Left != Sentinel)
+		if (node.Left != Sentinel && node.Left.MaxEnd > max)
 		{
-			if (node.Left.MaxEnd.CompareTo(max) >= 0)
-			{
-				max = node.Left.MaxEnd;
-			}
+			max = node.Left.MaxEnd;
 		}
 
 		node.MaxEnd = max;
+	}
 
-		if (node.Parent != Sentinel)
+	/// <summary>
+	/// Walks up the tree recalculating MaxEnd, stopping early when no change is detected.
+	/// RecalculateMaxEndLocal is inlined here to eliminate the per-iteration method call.
+	/// </summary>
+	private void RecalculateMaxEndUpwards(Node<T> node)
+	{
+		while (node != Sentinel)
 		{
-			RecalculateMaxEnd(node.Parent);
+			var max = node.Interval.End;
+
+			if (node.Right != Sentinel && node.Right.MaxEnd > max)
+				max = node.Right.MaxEnd;
+
+			if (node.Left != Sentinel && node.Left.MaxEnd > max)
+				max = node.Left.MaxEnd;
+
+			if (node.MaxEnd == max)
+				break;
+
+			node.MaxEnd = max;
+			node = node.Parent;
 		}
 	}
 

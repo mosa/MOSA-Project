@@ -376,7 +376,7 @@ public sealed class MethodScheduler
 			$"[Queue] Size: {currentQueueSize} | Deferred: {deferredCount} | " +
 			$"Active: {activeWorkers}/{maxWorkers} ({utilizationPercent:F1}%) | Idle: {idleWorkers} | " +
 			$"Enqueue: {enqueueRate}/s | Dequeue: {dequeueRate}/s | " +
-			$"CPU: {cpuPercent:F1}% ({equivalentCores:F1}/{processorCount} cores)"
+			$"CPU: {cpuPercent:F1}%"
 		);
 	}
 

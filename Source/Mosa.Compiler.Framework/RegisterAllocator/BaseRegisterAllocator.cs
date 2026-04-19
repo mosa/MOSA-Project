@@ -278,7 +278,6 @@ public abstract class BaseRegisterAllocator
 
 	protected int GetIndex(Operand operand)
 	{
-		//FUTURE: Make private by refactoring
 		return operand.IsPhysicalRegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
 	}
 
