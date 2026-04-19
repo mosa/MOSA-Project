@@ -606,20 +606,24 @@ public abstract class BaseRegisterAllocator
 	private void ComputeGlobalLiveSets()
 	{
 		var changed = true;
+		var liveOut = new BitArray(RegisterCount);
+		var liveIn = new BitArray(RegisterCount);
+
 		while (changed)
 		{
 			changed = false;
 
 			foreach (var block in ExtendedBlocks)
 			{
-				var liveOut = new BitArray(RegisterCount);
+				liveOut.SetAll(false);
 
 				foreach (var next in block.BasicBlock.NextBlocks)
 				{
 					liveOut.Or(ExtendedBlocks[next.Sequence].LiveIn);
 				}
 
-				var liveIn = new BitArray(block.LiveOut);
+				liveIn.SetAll(false);
+				liveIn.Or(liveOut);
 
 				if (block.LiveKillNot != null)
 					liveIn.And(block.LiveKillNot);
@@ -628,17 +632,25 @@ public abstract class BaseRegisterAllocator
 
 				liveIn.Or(block.LiveGen);
 
-				// compare them for any changes
-				if (!changed)
+				var liveOutChanged = !block.LiveOut.AreSame(liveOut);
+				var liveInChanged = !block.LiveIn.AreSame(liveIn);
+
+				if (liveOutChanged)
 				{
-					if (!block.LiveOut.AreSame(liveOut) || !block.LiveIn.AreSame(liveIn))
-					{
-						changed = true;
-					}
+					block.LiveOut.SetAll(false);
+					block.LiveOut.Or(liveOut);
 				}
 
-				block.LiveOut = liveOut;
-				block.LiveIn = liveIn;
+				if (liveInChanged)
+				{
+					block.LiveIn.SetAll(false);
+					block.LiveIn.Or(liveIn);
+				}
+
+				if (!changed && (liveOutChanged || liveInChanged))
+				{
+					changed = true;
+				}
 			}
 		}
 	}
