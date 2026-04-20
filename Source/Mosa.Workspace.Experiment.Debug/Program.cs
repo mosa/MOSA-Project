@@ -28,10 +28,14 @@ internal static class Program
 		MosaSettings.Emulator = "qemu";
 		MosaSettings.EmulatorMemory = 128;
 		MosaSettings.EmulatorCores = 1;
+		MosaSettings.Multithreading = true;
+		MosaSettings.MaxThreads = Environment.ProcessorCount;
+		MosaSettings.MethodScanner = true;
 		MosaSettings.Launcher = true;
 		MosaSettings.LauncherStart = false;
 		MosaSettings.LauncherExit = true;
 		MosaSettings.TraceLevel = 0;
+		MosaSettings.Diagnostic = true;
 
 		MosaSettings.AddSourceFile($"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll");
 		MosaSettings.AddSourceFile("Mosa.UnitTests.dll");
@@ -78,11 +82,21 @@ internal static class Program
 		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod903");
 		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod904");
 
-		//compiler.ScheduleAll();
+		OutputStatus($"Elapsed: {Stopwatch.Elapsed.TotalSeconds - start:F2} secs");
 
-		//OutputStatus("Threaded Execution Time:");
-		//compiler.ThreadedCompile();
-		//compiler.Execute();
+		const int targetCount = 2000;
+		var methods = GetFuzzyMethods(compiler.TypeSystem, targetCount);
+
+		OutputStatus($"Queueing {methods.Count} fuzzy methods...");
+		start = Stopwatch.Elapsed.TotalSeconds;
+
+		foreach (var method in methods)
+		{
+			compiler.Schedule(method);
+		}
+
+		OutputStatus($"Compiling queued methods using {MosaSettings.MaxThreads} threads...");
+		compiler.Compile(skipFinalization: true);
 
 		OutputStatus($"Total Elapsed: {Stopwatch.Elapsed.TotalSeconds - start:F2} secs");
 
@@ -144,6 +158,30 @@ internal static class Program
 		}
 
 		return null;
+	}
+
+	private static List<MosaMethod> GetFuzzyMethods(TypeSystem typeSystem, int limit)
+	{
+		var methods = new List<MosaMethod>(limit);
+
+		foreach (var type in typeSystem.AllTypes)
+		{
+			if (!type.FullName.Contains("Mosa.UnitTests.Fuzzy."))
+				continue;
+
+			foreach (var method in type.Methods)
+			{
+				if (!method.FullName.Contains("::FuzzMethod"))
+					continue;
+
+				methods.Add(method);
+
+				if (methods.Count >= limit)
+					return methods;
+			}
+		}
+
+		return methods;
 	}
 
 	private static void OutputStatus(string status)
