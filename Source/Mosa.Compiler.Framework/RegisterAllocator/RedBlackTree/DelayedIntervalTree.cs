@@ -57,8 +57,8 @@ public sealed class DelayedIntervalTree<T> where T : class
 		if (delayedDelete && start >= delayedDeleteStart && end <= delayedDeleteEnd)
 			return false;
 
-		// Short-circuit: if pending add is relevant, include it
-		if (delayedAdd && (Contains(delayedAddStart, delayedAddEnd, start) || Contains(delayedAddStart, delayedAddEnd, end)))
+		// Short-circuit: if pending add overlaps this range, include it
+		if (delayedAdd && Overlaps(delayedAddStart, delayedAddEnd, start, end))
 			return true;
 
 		FlushDelete();
@@ -237,6 +237,10 @@ public sealed class DelayedIntervalTree<T> where T : class
 	{
 		FlushDelete();
 		FlushAdd();
+
+		var enumerator = tree.GetEnumerator();
+		if (!enumerator.MoveNext())
+			return string.Empty;
 		return tree.ToString();
 	}
 }
