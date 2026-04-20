@@ -114,7 +114,7 @@ public sealed partial class IntervalTree<T> where T : class
 
 		while (node != Sentinel && !node.Interval.Overlaps(interval))
 		{
-			if (node.Left != Sentinel && node.Left.MaxEnd > interval.Start)
+			if (node.Left != Sentinel && node.Left.MaxEnd >= interval.Start)
 			{
 				node = node.Left;
 			}
@@ -150,7 +150,7 @@ public sealed partial class IntervalTree<T> where T : class
 
 		while (node != Sentinel && !node.Interval.Overlaps(at))
 		{
-			if (node.Left != Sentinel && node.Left.MaxEnd > at)
+			if (node.Left != Sentinel && node.Left.MaxEnd >= at)
 			{
 				node = node.Left;
 			}

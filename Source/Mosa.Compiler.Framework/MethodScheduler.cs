@@ -366,7 +366,6 @@ public sealed class MethodScheduler
 
 		// Calculate CPU usage with equivalent core count
 		var cpuPercent = CalculateCpuUsage(currentTicks);
-		var equivalentCores = (cpuPercent * processorCount) / 100.0;
 
 		Compiler.PostEvent(
 			CompilerEvent.Diagnostic,

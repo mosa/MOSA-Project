@@ -85,7 +85,7 @@ public sealed class DelayedIntervalTree<T> where T : class
 	public void Add(int start, int end, T value)
 	{
 		// If pending delete overlaps, flush add and replace
-		if (delayedDelete && (Contains(delayedDeleteStart, delayedDeleteEnd, start) || Contains(delayedDeleteStart, delayedDeleteEnd, end)))
+		if (delayedDelete && Overlaps(delayedDeleteStart, delayedDeleteEnd, start, end))
 		{
 			FlushAdd();
 			tree.Replace(start, end, value);
