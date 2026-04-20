@@ -237,6 +237,10 @@ public sealed class DelayedIntervalTree<T> where T : class
 	{
 		FlushDelete();
 		FlushAdd();
+
+		var enumerator = tree.GetEnumerator();
+		if (!enumerator.MoveNext())
+			return string.Empty;
 		return tree.ToString();
 	}
 }
