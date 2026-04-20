@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Compiler.Platforms;
 using Mosa.Utility.Configuration;
 
 namespace Mosa.Tool.Compiler;
@@ -97,9 +98,7 @@ public class Compiler
 
 	private static void RegisterPlatforms()
 	{
-		PlatformRegistry.Add(new Mosa.Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Mosa.Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Mosa.Compiler.ARM32.Architecture());
+		PlatformRegistrations.Register();
 	}
 
 	#endregion Public Methods

@@ -9,6 +9,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Platforms;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
 
@@ -112,9 +113,7 @@ public partial class MainWindow : Window
 		IncDirTxt.Text = MosaSettings.FileSystemRootInclude;
 		TitleLbl.Content += CompilerVersion.VersionString;
 
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
+		PlatformRegistrations.Register();
 
 		UpdatePaths();
 		UpdateInterfaceAppLocations();

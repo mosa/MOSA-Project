@@ -5,8 +5,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Compiler.Platforms\Mosa.Compiler.Platforms.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
+		<ProjectReference Include="..\Mosa.Tool.Explorer.Common\Mosa.Tool.Explorer.Common.csproj" />
 	</ItemGroup>
 
 </Project>

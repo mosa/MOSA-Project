@@ -11,11 +11,11 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Stages.Diagnostic;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Compiler.Platforms;
 using Mosa.Tool.Explorer.Common;
 using Mosa.Tool.Explorer.Common.CompilerStage;
 using Mosa.Tool.Explorer.Common.Stages;
 using Mosa.Utility.Configuration;
-
 using static Mosa.Utility.Configuration.MosaSettings;
 
 namespace Mosa.Tool.Explorer;
@@ -337,10 +337,7 @@ public partial class MainForm : Form
 
 	private static void RegisterPlatforms()
 	{
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
-		//PlatformRegistry.Add(new Compiler.ARM64.Architecture());
+		PlatformRegistrations.Register();
 	}
 
 	private void btnFirst_Click(object sender, EventArgs e)

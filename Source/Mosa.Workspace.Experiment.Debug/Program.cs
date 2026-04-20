@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Utility.Configuration;
+using Mosa.Compiler.Platforms;
 
 namespace Mosa.Workspace.Experiment.Debug;
 
@@ -63,9 +64,7 @@ internal static class Program
 
 	private static void RegisterPlatforms()
 	{
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
+		PlatformRegistrations.Register();
 	}
 
 	private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, string methodName, int iterations = 10)

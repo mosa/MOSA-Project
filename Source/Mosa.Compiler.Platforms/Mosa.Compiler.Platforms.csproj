@@ -1,14 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-	</PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem.CLR\Mosa.Compiler.MosaTypeSystem.CLR.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.ARM32\Mosa.Compiler.ARM32.csproj" />
-		<ProjectReference Include="..\Mosa.Compiler.Platforms\Mosa.Compiler.Platforms.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.x64\Mosa.Compiler.x64.csproj" />
 		<ProjectReference Include="..\Mosa.Compiler.x86\Mosa.Compiler.x86.csproj" />
 	</ItemGroup>

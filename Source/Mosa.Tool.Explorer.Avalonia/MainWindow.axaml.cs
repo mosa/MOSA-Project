@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
+using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Mosa.Compiler.Common;
@@ -12,14 +13,14 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Stages.Diagnostic;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Compiler.Platforms;
 using Mosa.Tool.Explorer.Common;
 using Mosa.Tool.Explorer.Common.CompilerStage;
 using Mosa.Tool.Explorer.Common.Stages;
 using Mosa.Utility.Configuration;
-using Timer = System.Timers.Timer;
 using ExplorerCompilerData = Mosa.Tool.Explorer.Common.CompilerInformation;
 using ExplorerMethodData = Mosa.Tool.Explorer.Common.MethodInformation;
-using Avalonia.Interactivity;
+using Timer = System.Timers.Timer;
 
 namespace Mosa.Tool.Explorer.Avalonia;
 
@@ -69,10 +70,7 @@ public partial class MainWindow : Window
 
 		ClearAll();
 
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
-		//PlatformRegistry.Add(new Compiler.ARM64.Architecture());
+		PlatformRegistrations.Register();
 	}
 
 	private void Control_OnLoaded(object _, RoutedEventArgs e)
