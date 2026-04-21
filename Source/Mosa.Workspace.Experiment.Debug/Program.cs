@@ -1,11 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
+using System.Runtime.Intrinsics.X86;
+using Mosa.Compiler.ARM32.Instructions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
-using Mosa.Utility.Configuration;
 using Mosa.Compiler.Platforms;
+using Mosa.Utility.Configuration;
 
 namespace Mosa.Workspace.Experiment.Debug;
 
@@ -30,7 +32,7 @@ internal static class Program
 		MosaSettings.EmulatorCores = 1;
 		MosaSettings.Multithreading = true;
 		MosaSettings.MaxThreads = Environment.ProcessorCount;
-		MosaSettings.MethodScanner = true;
+		MosaSettings.MethodScanner = false;
 		MosaSettings.Launcher = true;
 		MosaSettings.LauncherStart = false;
 		MosaSettings.LauncherExit = true;
@@ -68,12 +70,38 @@ internal static class Program
 		RegisterPlatforms();
 		UpdateSettings();
 
-		var compiler = new MosaCompiler(MosaSettings, new CompilerHooks(), new ClrModuleLoader(), new ClrTypeResolver());
+		var compilerHook = CreateCompilerHook();
+		var compiler = new MosaCompiler(MosaSettings, compilerHook, new ClrModuleLoader(), new ClrTypeResolver());
 
 		compiler.Load();
 		compiler.Initialize();
 		compiler.Setup();
 
+		RunSingleMethodPerformanceTest(compiler);
+		RunMultithreadedFuzzPerformanceTest(compiler);
+	}
+
+	private static void RunMultithreadedFuzzPerformanceTest(MosaCompiler compiler)
+	{
+		var start = Stopwatch.Elapsed.TotalSeconds;
+
+		const int targetCount = 100;
+		var methods = GetFuzzyMethods(compiler.TypeSystem, targetCount);
+
+		OutputStatus($"Scheduling {methods.Count} fuzzy methods...");
+		foreach (var method in methods)
+		{
+			compiler.Schedule(method);
+		}
+
+		OutputStatus($"Compiling scheduled methods using {MosaSettings.MaxThreads} threads...");
+		compiler.Compile(skipFinalization: true);
+
+		OutputStatus($"Total Elapsed: {Stopwatch.Elapsed.TotalSeconds - start:F2} secs");
+	}
+
+	private static void RunSingleMethodPerformanceTest(MosaCompiler compiler)
+	{
 		var start = Stopwatch.Elapsed.TotalSeconds;
 
 		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod900");
@@ -83,29 +111,6 @@ internal static class Program
 		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod904");
 
 		OutputStatus($"Elapsed: {Stopwatch.Elapsed.TotalSeconds - start:F2} secs");
-
-		const int targetCount = 2000;
-		var methods = GetFuzzyMethods(compiler.TypeSystem, targetCount);
-
-		OutputStatus($"Queueing {methods.Count} fuzzy methods...");
-		start = Stopwatch.Elapsed.TotalSeconds;
-
-		foreach (var method in methods)
-		{
-			compiler.Schedule(method);
-		}
-
-		OutputStatus($"Compiling queued methods using {MosaSettings.MaxThreads} threads...");
-		compiler.Compile(skipFinalization: true);
-
-		OutputStatus($"Total Elapsed: {Stopwatch.Elapsed.TotalSeconds - start:F2} secs");
-
-		//Console.ReadKey();
-	}
-
-	private static void RegisterPlatforms()
-	{
-		PlatformRegistrations.Register();
 	}
 
 	private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, string methodName, int iterations = 100)
@@ -144,6 +149,52 @@ internal static class Program
 		OutputStatus($"  Elapsed: {max:F2} ms (worst)");
 		OutputStatus($"  Elapsed: {avg:F2} ms (average)");
 		OutputStatus($"  Elapsed: {min:F2} ms (best)");
+	}
+
+	private static CompilerHooks CreateCompilerHook()
+	{
+		var compilerHooks = new CompilerHooks
+		{
+			NotifyEvent = NotifyEvent,
+			NotifyProgress = NotifyProgress,
+			NotifyStatus = NotifyStatus,
+		};
+
+		return compilerHooks;
+	}
+
+	private static void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
+	{
+		if (compilerEvent is CompilerEvent.MethodCompileEnd
+			or CompilerEvent.MethodCompileStart
+			or CompilerEvent.Counter
+			or CompilerEvent.SetupStageStart
+			or CompilerEvent.SetupStageEnd
+			or CompilerEvent.FinalizationStageStart
+			or CompilerEvent.FinalizationStageEnd)
+			return;
+
+		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+			return;
+
+		var eventName = compilerEvent.ToText();
+		message = string.IsNullOrWhiteSpace(message) ? eventName : $"{eventName}: {message}";
+
+		OutputStatus(message);
+	}
+
+	private static void NotifyProgress(int totalMethods, int completedMethods)
+	{
+	}
+
+	private static void NotifyStatus(string status)
+	{
+		OutputStatus(status);
+	}
+
+	private static void RegisterPlatforms()
+	{
+		PlatformRegistrations.Register();
 	}
 
 	private static MosaMethod GetMethod(string partial, TypeSystem typeSystem)
