@@ -96,7 +96,7 @@ public class CompilerInformation
 			UpdateLog("Error", msg);
 			UpdateLog("Compiler", timelog);
 		}
-		if (compilerEvent == CompilerEvent.Exception)
+		else if (compilerEvent == CompilerEvent.Exception)
 		{
 			UpdateLog("Exception", msg);
 			UpdateLog("Compiler", timelog);
