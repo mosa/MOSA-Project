@@ -682,6 +682,9 @@ public partial class MainWindow : Window
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
+		if (compilerEvent == CompilerEvent.Diagnostic && !mosaSettings.Diagnostic)
+			return;
+
 		if (compilerEvent != CompilerEvent.Counter)
 		{
 			var newStatus = CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message);

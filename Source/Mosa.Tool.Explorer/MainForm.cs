@@ -740,6 +740,9 @@ public partial class MainForm : Form
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
+		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+			return;
+
 		if (compilerEvent != CompilerEvent.Counter)
 		{
 			var status = CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message);
