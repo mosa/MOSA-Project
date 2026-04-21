@@ -83,7 +83,7 @@ internal static class Program
 	{
 		var start = Stopwatch.Elapsed.TotalSeconds;
 
-		const int targetCount = 100;
+		const int targetCount = 100000;
 		var methods = GetFuzzyMethods(compiler.TypeSystem, targetCount);
 
 		OutputStatus($"Scheduling {methods.Count} fuzzy methods...");

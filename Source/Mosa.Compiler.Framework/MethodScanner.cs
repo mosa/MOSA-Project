@@ -394,7 +394,7 @@ public class MethodScanner
 		if (!IsEnabled)
 			return;
 
-		ScheduledEntryPoint();
+		ScheduleEntryPoint();
 
 		ScheduleRequiredMethods();
 
@@ -431,7 +431,7 @@ public class MethodScanner
 		}
 	}
 
-	private void ScheduledEntryPoint()
+	private void ScheduleEntryPoint()
 	{
 		var entryPoint = TypeSystem.EntryPoint;
 
