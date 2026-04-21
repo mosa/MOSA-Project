@@ -394,32 +394,15 @@ public class MethodScanner
 		if (!IsEnabled)
 			return;
 
-		var entryPoint = TypeSystem.EntryPoint;
+		ScheduledEntryPoint();
 
-		if (entryPoint != null)
-		{
-			MarkMethodInvoked(entryPoint);
-			ScheduleMethod(entryPoint);
-		}
+		ScheduleRequiredMethods();
 
-		var objectType = TypeSystem.GetType("System.Object");
-		allocatedTypes.Add(objectType);
+		//ScheduleUnitTests();
+	}
 
-		var stringType = TypeSystem.GetType("System.String");
-		allocatedTypes.Add(stringType);
-
-		var typeType = TypeSystem.GetType("System.Type");
-		allocatedTypes.Add(typeType);
-
-		var exceptionType = TypeSystem.GetType("System.Exception");
-		allocatedTypes.Add(exceptionType);
-
-		var delegateType = TypeSystem.GetType("System.Delegate");
-		allocatedTypes.Add(delegateType);
-
-		//var arrayType = TypeSystem.GetTypeByName("System", "Array");
-		//allocatedTypes.Add(arrayType);
-
+	private void ScheduleUnitTests()
+	{
 		// Collect all unit tests methods
 		foreach (var type in TypeSystem.AllTypes)
 		{
@@ -446,6 +429,38 @@ public class MethodScanner
 				TypeAllocated(type, null);
 			}
 		}
+	}
+
+	private void ScheduledEntryPoint()
+	{
+		var entryPoint = TypeSystem.EntryPoint;
+
+		if (entryPoint != null)
+		{
+			MarkMethodInvoked(entryPoint);
+			ScheduleMethod(entryPoint);
+		}
+	}
+
+	private void ScheduleRequiredMethods()
+	{
+		var objectType = TypeSystem.GetType("System.Object");
+		allocatedTypes.Add(objectType);
+
+		var stringType = TypeSystem.GetType("System.String");
+		allocatedTypes.Add(stringType);
+
+		var typeType = TypeSystem.GetType("System.Type");
+		allocatedTypes.Add(typeType);
+
+		var exceptionType = TypeSystem.GetType("System.Exception");
+		allocatedTypes.Add(exceptionType);
+
+		var delegateType = TypeSystem.GetType("System.Delegate");
+		allocatedTypes.Add(delegateType);
+
+		//var arrayType = TypeSystem.GetTypeByName("System", "Array");
+		//allocatedTypes.Add(arrayType);
 	}
 
 	public void AccessedField(MosaField field)

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using System.Runtime.Intrinsics.X86;
-using Mosa.Compiler.ARM32.Instructions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
@@ -32,7 +30,7 @@ internal static class Program
 		MosaSettings.EmulatorCores = 1;
 		MosaSettings.Multithreading = true;
 		MosaSettings.MaxThreads = Environment.ProcessorCount;
-		MosaSettings.MethodScanner = false;
+		MosaSettings.MethodScanner = true;
 		MosaSettings.Launcher = true;
 		MosaSettings.LauncherStart = false;
 		MosaSettings.LauncherExit = true;
@@ -89,13 +87,10 @@ internal static class Program
 		var methods = GetFuzzyMethods(compiler.TypeSystem, targetCount);
 
 		OutputStatus($"Scheduling {methods.Count} fuzzy methods...");
-		foreach (var method in methods)
-		{
-			compiler.Schedule(method);
-		}
+		compiler.Schedule(methods);
 
 		OutputStatus($"Compiling scheduled methods using {MosaSettings.MaxThreads} threads...");
-		compiler.Compile(skipFinalization: true);
+		compiler.Compile(true);
 
 		OutputStatus($"Total Elapsed: {Stopwatch.Elapsed.TotalSeconds - start:F2} secs");
 	}

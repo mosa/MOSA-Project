@@ -175,6 +175,12 @@ public sealed class MethodScheduler
 		Add(method);
 	}
 
+	public void Schedule(List<MosaMethod> methods)
+	{
+		foreach (var method in methods)
+			Add(method);
+	}
+
 	public void Add(MosaMethod method)
 	{
 		var methodData = Compiler.GetMethodData(method);
@@ -199,6 +205,29 @@ public sealed class MethodScheduler
 	}
 
 	public void Add(HashSet<MosaMethod> methods)
+	{
+		int queueSize;
+
+		var lockTimer = Stopwatch.StartNew();
+		lock (queue)
+		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, queue, "MethodScheduler.queue");
+
+			foreach (var method in methods)
+			{
+				var methodData = Compiler.GetMethodData(method);
+
+				AddInsideLock(methodData);
+			}
+
+			queueSize = totalQueued;
+		}
+
+		UpdateQueueMetrics(queueSize);
+		SignalEnqueued();
+	}
+
+	public void Add(List<MosaMethod> methods)
 	{
 		int queueSize;
 
