@@ -742,7 +742,7 @@ public partial class MainForm : Form
 	{
 		if (compilerEvent != CompilerEvent.Counter)
 		{
-			var status = $"{compilerEvent.ToText()}{(string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}")}";
+			var status = CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message);
 
 			lock (_statusLock)
 			{

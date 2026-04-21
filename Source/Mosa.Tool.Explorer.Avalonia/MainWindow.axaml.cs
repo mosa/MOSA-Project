@@ -684,9 +684,7 @@ public partial class MainWindow : Window
 	{
 		if (compilerEvent != CompilerEvent.Counter)
 		{
-			var newStatus = compilerEvent.ToText();
-			if (!string.IsNullOrWhiteSpace(message))
-				newStatus += $": {message}";
+			var newStatus = CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message);
 
 			lock (statusLock)
 				status = newStatus;

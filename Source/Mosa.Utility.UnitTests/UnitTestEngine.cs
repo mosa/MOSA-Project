@@ -280,22 +280,13 @@ public class UnitTestEngine : IDisposable
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (compilerEvent is CompilerEvent.MethodCompileEnd
-			or CompilerEvent.MethodCompileStart
-			or CompilerEvent.Counter
-			or CompilerEvent.SetupStageStart
-			or CompilerEvent.SetupStageEnd
-			or CompilerEvent.FinalizationStageStart
-			or CompilerEvent.FinalizationStageEnd)
+		if (CompilerHooks.IsStandardFilteredNotifyEvent(compilerEvent))
 			return;
 
 		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
 			return;
 
-		var eventname = compilerEvent.ToText();
-		message = string.IsNullOrWhiteSpace(message) ? eventname : $"{eventname}: {message}";
-
-		OutputStatus(message);
+		OutputStatus(CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message));
 	}
 
 	private void NotifyProgress(int totalMethods, int completedMethods)

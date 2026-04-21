@@ -122,20 +122,13 @@ public class Compiler
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (compilerEvent is CompilerEvent.MethodCompileEnd
-			or CompilerEvent.MethodCompileStart
-			or CompilerEvent.Counter
-			or CompilerEvent.SetupStageStart
-			or CompilerEvent.SetupStageEnd
-			or CompilerEvent.FinalizationStageStart
-			or CompilerEvent.FinalizationStageEnd)
+		if (CompilerHooks.IsStandardFilteredNotifyEvent(compilerEvent))
 			return;
 
 		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
 			return;
 
-		message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
-		OutputStatus($"{compilerEvent.ToText()}{message}");
+		OutputStatus(CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message));
 	}
 
 	private void OutputStatus(string status)

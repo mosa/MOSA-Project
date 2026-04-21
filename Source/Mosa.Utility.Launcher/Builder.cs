@@ -272,28 +272,34 @@ public class Builder : BaseLauncher
 	{
 		switch (compilerEvent)
 		{
+			case CompilerEvent.Counter:
+				{
+					AddCounters(message);
+					break;
+				}
+			case CompilerEvent.CompilerStart
+				or CompilerEvent.CompilerEnd
+				or CompilerEvent.CompilingMethodsStart
+				or CompilerEvent.CompilingMethodsCompleted
+				or CompilerEvent.InlineMethodsScheduled
+				or CompilerEvent.LinkingStart
+				or CompilerEvent.LinkingEnd
+				or CompilerEvent.Warning
+				or CompilerEvent.Error
+				or CompilerEvent.Diagnostic:
+				{
+					if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+						return;
+
+					OutputStatus(CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message));
+					break;
+				}
+
 			case CompilerEvent.Exception:
 				{
 					var status = $"[Exception] {message}";
 
 					OutputStatus(status);
-					break;
-				}
-			case CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error or CompilerEvent.Diagnostic:
-				{
-					if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
-						return;
-
-					var status = compilerEvent.ToText();
-					if (!string.IsNullOrEmpty(message))
-						status += $" => {message}";
-
-					OutputStatus(status);
-					break;
-				}
-			case CompilerEvent.Counter:
-				{
-					AddCounters(message);
 					break;
 				}
 		}

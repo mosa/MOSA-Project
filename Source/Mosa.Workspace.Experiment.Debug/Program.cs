@@ -165,22 +165,13 @@ internal static class Program
 
 	private static void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (compilerEvent is CompilerEvent.MethodCompileEnd
-			or CompilerEvent.MethodCompileStart
-			or CompilerEvent.Counter
-			or CompilerEvent.SetupStageStart
-			or CompilerEvent.SetupStageEnd
-			or CompilerEvent.FinalizationStageStart
-			or CompilerEvent.FinalizationStageEnd)
+		if (CompilerHooks.IsStandardFilteredNotifyEvent(compilerEvent))
 			return;
 
 		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
 			return;
 
-		var eventName = compilerEvent.ToText();
-		message = string.IsNullOrWhiteSpace(message) ? eventName : $"{eventName}: {message}";
-
-		OutputStatus(message);
+		OutputStatus(CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message));
 	}
 
 	private static void NotifyProgress(int totalMethods, int completedMethods)
