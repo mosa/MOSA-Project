@@ -145,7 +145,7 @@ internal static class Program
 
 		double avg = total / iterations;
 
-		OutputStatus($"  Interations: {iterations}");
+		OutputStatus($"  Iterations: {iterations}");
 		OutputStatus($"  Elapsed: {max:F2} ms (worst)");
 		OutputStatus($"  Elapsed: {avg:F2} ms (average)");
 		OutputStatus($"  Elapsed: {min:F2} ms (best)");
