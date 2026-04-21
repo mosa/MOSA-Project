@@ -429,7 +429,10 @@ public partial class MainWindow : Window
 		if (!MosaSettings.Launcher)
 			return;
 
-		foreach (var line in Builder!.Counters) AddCounters(line);
+		foreach (var line in Builder!.Counters)
+		{
+			AddCounters(line);
+		}
 
 		var starter = new Starter(Builder.MosaSettings, CompilerHooks, Builder.Linker);
 
