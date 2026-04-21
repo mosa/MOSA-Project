@@ -177,8 +177,7 @@ public sealed class MethodScheduler
 
 	public void Schedule(List<MosaMethod> methods)
 	{
-		foreach (var method in methods)
-			Add(method);
+		Add(methods);
 	}
 
 	public void Add(MosaMethod method)
