@@ -75,7 +75,7 @@ public sealed class UnitTestBisectorSystem
 
 			while (!bisector.IsComplete)
 			{
-				disabledTransformNames = [.. bisector.GetNextDisabledRules()];
+				disabledTransformNames = [.. bisector.GetNextDisabledItems()];
 				PrintIterationHeader(bisector.GetStatus());
 				PrintDisabledTransforms();
 
@@ -149,7 +149,7 @@ public sealed class UnitTestBisectorSystem
 		{
 			if (observedTransformNames.Add(transformName) && bisector != null)
 			{
-				bisector.ObserveRule(transformName);
+				bisector.ObserveItem(transformName);
 			}
 		}
 	}
@@ -227,9 +227,9 @@ public sealed class UnitTestBisectorSystem
 	private void PrintStatus(Bisector<string>.BisectorStatus status)
 	{
 		OutputStatus($"Status.Iteration: {status.Iteration}");
-		OutputStatus($"Status.TotalRules: {status.TotalRuleCount}");
-		OutputStatus($"Status.Suspects: {status.SuspectRuleCount}");
-		OutputStatus($"Status.BadRules: {status.ConfirmedBadRuleCount}");
+		OutputStatus($"Status.TotalItems: {status.TotalItemCount}");
+		OutputStatus($"Status.Suspects: {status.SuspectItemCount}");
+		OutputStatus($"Status.BadItems: {status.ConfirmedBadItemCount}");
 		OutputStatus($"Status.BadPairs: {status.ConfirmedBadPairCount}");
 		OutputStatus($"Status.PairwiseCompleted: {status.PairwiseTestsCompleted}");
 		OutputStatus($"Status.PairwiseRemaining: {status.PairwiseTestsRemaining}");
@@ -238,20 +238,20 @@ public sealed class UnitTestBisectorSystem
 	private void PrintFinalReport(Bisector<string> bisector)
 	{
 		OutputStatus($"Final Stage: {selectedStageType.FullName} ({selectedStageName})");
-		OutputStatus("Confirmed Bad Transforms:");
-		foreach (var transform in bisector.ConfirmedBadRules.OrderBy(t => t))
+		OutputStatus("Confirmed Bad Items:");
+		foreach (var transform in bisector.ConfirmedBadItems.OrderBy(t => t))
 		{
 			OutputStatus($"  {transform}");
 		}
 
 		OutputStatus("Confirmed Bad Pairs:");
-		foreach (var pair in bisector.ConfirmedBadPairs.OrderBy(p => p.Rule1).ThenBy(p => p.Rule2))
+		foreach (var pair in bisector.ConfirmedBadPairs.OrderBy(p => p.Item1).ThenBy(p => p.Item2))
 		{
-			OutputStatus($"  {pair.Rule1} + {pair.Rule2}");
+			OutputStatus($"  {pair.Item1} + {pair.Item2}");
 		}
 
 		OutputStatus("Remaining Suspects:");
-		foreach (var transform in bisector.RemainingSuspectRules.OrderBy(t => t))
+		foreach (var transform in bisector.RemainingSuspectItems.OrderBy(t => t))
 		{
 			OutputStatus($"  {transform}");
 		}

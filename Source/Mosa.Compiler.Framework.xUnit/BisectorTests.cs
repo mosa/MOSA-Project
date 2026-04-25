@@ -7,35 +7,35 @@ namespace Mosa.Compiler.Framework.xUnit;
 public class BisectorTests
 {
 	[Fact]
-	public void ConstructorRequiresAtLeastOneRule()
+	public void ConstructorRequiresAtLeastOneItem()
 	{
 		Assert.Throws<ArgumentException>(() => new Bisector<string>(Array.Empty<string>()));
 	}
 
 	[Fact]
-	public void ConstructorRejectsNullRule()
+	public void ConstructorRejectsNullItem()
 	{
 		Assert.Throws<ArgumentException>(() => new Bisector<string>(new[] { "A", null }));
 	}
 
 	[Fact]
-	public void DuplicateRulesAreIgnored()
+	public void DuplicateItemsAreIgnored()
 	{
 		var session = new Bisector<string>(new[] { "A", "B", "A", "B", "C" });
 		var status = session.GetStatus();
 
-		Assert.Equal(3, status.TotalRuleCount);
-		Assert.Equal(3, status.SuspectRuleCount);
+		Assert.Equal(3, status.TotalItemCount);
+		Assert.Equal(3, status.SuspectItemCount);
 	}
 
 	[Fact]
-	public void GetNextDisabledRulesRequiresPreviousResultToBeAccepted()
+	public void GetNextDisabledItemsRequiresPreviousResultToBeAccepted()
 	{
 		var session = new Bisector<string>(new[] { "A", "B" });
 
-		session.GetNextDisabledRules();
+		session.GetNextDisabledItems();
 
-		Assert.Throws<InvalidOperationException>(() => session.GetNextDisabledRules());
+		Assert.Throws<InvalidOperationException>(() => session.GetNextDisabledItems());
 	}
 
 	[Fact]
@@ -51,105 +51,105 @@ public class BisectorTests
 	{
 		var session = new Bisector<string>(new[] { "A", "B", "C" });
 
-		var disabledRules = session.GetNextDisabledRules();
-		Assert.Empty(disabledRules);
+		var disabledItems = session.GetNextDisabledItems();
+		Assert.Empty(disabledItems);
 
 		session.AcceptResult(true);
 
 		var status = session.GetStatus();
 		Assert.True(session.IsComplete);
 		Assert.Equal(Bisector<string>.BisectorPhase.Complete, status.Phase);
-		Assert.Equal(0, status.SuspectRuleCount);
-		Assert.Empty(session.ConfirmedBadRules);
+		Assert.Equal(0, status.SuspectItemCount);
+		Assert.Empty(session.ConfirmedBadItems);
 	}
 
 	[Fact]
-	public void GetNextDisabledRulesThrowsAfterCompletion()
+	public void GetNextDisabledItemsThrowsAfterCompletion()
 	{
 		var session = new Bisector<string>(new[] { "A", "B" });
 
-		session.GetNextDisabledRules();
+		session.GetNextDisabledItems();
 		session.AcceptResult(true);
 
-		Assert.Throws<InvalidOperationException>(() => session.GetNextDisabledRules());
+		Assert.Throws<InvalidOperationException>(() => session.GetNextDisabledItems());
 	}
 
 	[Fact]
-	public void SingleBadRuleIsConfirmed()
+	public void SingleBadItemIsConfirmed()
 	{
-		var rules = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
-		var session = new Bisector<string>(rules);
+		var items = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
+		var session = new Bisector<string>(items);
 
-		RunUntilComplete(session, disabledRules => !IsFailingSingle(disabledRules, "C"));
+		RunUntilComplete(session, disabledItems => !IsFailingSingle(disabledItems, "C"));
 
-		Assert.Equal(new HashSet<string> { "C" }, session.ConfirmedBadRules);
+		Assert.Equal(new HashSet<string> { "C" }, session.ConfirmedBadItems);
 		Assert.Empty(session.ConfirmedBadPairs);
-		Assert.Empty(session.RemainingSuspectRules);
+		Assert.Empty(session.RemainingSuspectItems);
 	}
 
 	[Fact]
-	public void ThresholdSizedSuspectSetGoesStraightToSingleRuleChecks()
+	public void ThresholdSizedSuspectSetGoesStraightToSingleItemChecks()
 	{
-		var rules = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new Bisector<string>(rules);
+		var items = new HashSet<string> { "A", "B", "C", "D" };
+		var session = new Bisector<string>(items);
 
-		session.GetNextDisabledRules();
+		session.GetNextDisabledItems();
 		session.AcceptResult(false);
 
 		var status = session.GetStatus();
-		Assert.Equal(Bisector<string>.BisectorPhase.SingleRuleChecks, status.Phase);
-		Assert.Equal(Bisector<string>.BisectorLevel.Level1SingleRuleSet, status.Level);
+		Assert.Equal(Bisector<string>.BisectorPhase.SingleItemChecks, status.Phase);
+		Assert.Equal(Bisector<string>.BisectorLevel.Level1SingleItemSet, status.Level);
 
-		RunUntilComplete(session, disabledRules => !IsFailingSingle(disabledRules, "D"));
+		RunUntilComplete(session, disabledItems => !IsFailingSingle(disabledItems, "D"));
 
-		Assert.Equal(new HashSet<string> { "D" }, session.ConfirmedBadRules);
+		Assert.Equal(new HashSet<string> { "D" }, session.ConfirmedBadItems);
 	}
 
 	[Fact]
-	public void MultipleBadRulesAreConfirmedAcrossCycles()
+	public void MultipleBadItemsAreConfirmedAcrossCycles()
 	{
-		var rules = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
-		var session = new Bisector<string>(rules);
+		var items = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
+		var session = new Bisector<string>(items);
 
-		RunUntilComplete(session, disabledRules =>
+		RunUntilComplete(session, disabledItems =>
 		{
-			var enabledRules = GetEnabledRules(rules, disabledRules);
-			return !(enabledRules.Contains("B") || enabledRules.Contains("E"));
+			var enabledItems = GetEnabledItems(items, disabledItems);
+			return !(enabledItems.Contains("B") || enabledItems.Contains("E"));
 		});
 
-		Assert.Equal(new HashSet<string> { "B", "E" }, session.ConfirmedBadRules);
+		Assert.Equal(new HashSet<string> { "B", "E" }, session.ConfirmedBadItems);
 		Assert.Empty(session.ConfirmedBadPairs);
-		Assert.Empty(session.RemainingSuspectRules);
+		Assert.Empty(session.RemainingSuspectItems);
 	}
 
 	[Fact]
-	public void CustomComparerControlsRuleIdentity()
+	public void CustomComparerControlsItemIdentity()
 	{
-		var rules = new[] { "alpha", "ALPHA", "beta", "gamma" };
-		var session = new Bisector<string>(rules, StringComparer.OrdinalIgnoreCase);
+		var items = new[] { "alpha", "ALPHA", "beta", "gamma" };
+		var session = new Bisector<string>(items, StringComparer.OrdinalIgnoreCase);
 
-		RunUntilComplete(session, disabledRules => disabledRules.Contains("ALPHA"));
+		RunUntilComplete(session, disabledItems => disabledItems.Contains("ALPHA"));
 
-		Assert.Single(session.ConfirmedBadRules);
-		Assert.Contains("alpha", session.ConfirmedBadRules, StringComparer.OrdinalIgnoreCase);
-		Assert.Empty(session.RemainingSuspectRules);
+		Assert.Single(session.ConfirmedBadItems);
+		Assert.Contains("alpha", session.ConfirmedBadItems, StringComparer.OrdinalIgnoreCase);
+		Assert.Empty(session.RemainingSuspectItems);
 	}
 
 	[Fact]
-	public void Level2StartsAutomaticallyAfterSingleRuleChecks()
+	public void Level2StartsAutomaticallyAfterSingleItemChecks()
 	{
-		var rules = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new Bisector<string>(rules);
+		var items = new HashSet<string> { "A", "B", "C", "D" };
+		var session = new Bisector<string>(items);
 
-		var disabledRules = session.GetNextDisabledRules();
-		Assert.Empty(disabledRules);
+		var disabledItems = session.GetNextDisabledItems();
+		Assert.Empty(disabledItems);
 		Assert.Equal(Bisector<string>.BisectorPhase.Baseline, session.GetStatus().Phase);
 
 		session.AcceptResult(false);
 
-		for (var i = 0; i < rules.Count; i++)
+		for (var i = 0; i < items.Count; i++)
 		{
-			disabledRules = session.GetNextDisabledRules();
+			disabledItems = session.GetNextDisabledItems();
 			session.AcceptResult(true);
 		}
 
@@ -163,37 +163,37 @@ public class BisectorTests
 	[Fact]
 	public void PairwiseInteractionIsDetected()
 	{
-		var rules = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new Bisector<string>(rules);
+		var items = new HashSet<string> { "A", "B", "C", "D" };
+		var session = new Bisector<string>(items);
 
-		RunUntilComplete(session, disabledRules =>
+		RunUntilComplete(session, disabledItems =>
 		{
-			var enabledRules = GetEnabledRules(rules, disabledRules);
-			return !(enabledRules.Contains("B") && enabledRules.Contains("D"));
+			var enabledItems = GetEnabledItems(items, disabledItems);
+			return !(enabledItems.Contains("B") && enabledItems.Contains("D"));
 		});
 
-		Assert.Empty(session.ConfirmedBadRules);
-		Assert.Contains(new Bisector<string>.RulePair("B", "D"), session.ConfirmedBadPairs);
-		Assert.Equal(new HashSet<string>(rules), session.RemainingSuspectRules);
+		Assert.Empty(session.ConfirmedBadItems);
+		Assert.Contains(new Bisector<string>.Pair("B", "D"), session.ConfirmedBadPairs);
+		Assert.Equal(new HashSet<string>(items), session.RemainingSuspectItems);
 	}
 
 	[Fact]
 	public void PairwiseStatusTracksCompletedAndRemainingTests()
 	{
-		var rules = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new Bisector<string>(rules);
+		var items = new HashSet<string> { "A", "B", "C", "D" };
+		var session = new Bisector<string>(items);
 
-		session.GetNextDisabledRules();
+		session.GetNextDisabledItems();
 		session.AcceptResult(false);
 
-		for (var i = 0; i < rules.Count; i++)
+		for (var i = 0; i < items.Count; i++)
 		{
-			session.GetNextDisabledRules();
+			session.GetNextDisabledItems();
 			session.AcceptResult(true);
 		}
 
-		var disabledRules = session.GetNextDisabledRules();
-		Assert.Equal(new HashSet<string> { "C", "D" }, disabledRules);
+		var disabledItems = session.GetNextDisabledItems();
+		Assert.Equal(new HashSet<string> { "C", "D" }, disabledItems);
 
 		session.AcceptResult(true);
 
@@ -205,17 +205,17 @@ public class BisectorTests
 	[Fact]
 	public void StatusTracksIterationsAndOutstandingExperiments()
 	{
-		var rules = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
-		var session = new Bisector<string>(rules);
+		var items = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
+		var session = new Bisector<string>(items);
 
 		var status = session.GetStatus();
 		Assert.Equal(0, status.Iteration);
 		Assert.False(status.HasOutstandingExperiment);
-		Assert.Equal(rules.Count, status.TotalRuleCount);
-		Assert.Equal(rules.Count, status.SuspectRuleCount);
+		Assert.Equal(items.Count, status.TotalItemCount);
+		Assert.Equal(items.Count, status.SuspectItemCount);
 
-		var disabledRules = session.GetNextDisabledRules();
-		Assert.Empty(disabledRules);
+		var disabledItems = session.GetNextDisabledItems();
+		Assert.Empty(disabledItems);
 
 		status = session.GetStatus();
 		Assert.True(status.HasOutstandingExperiment);
@@ -229,25 +229,49 @@ public class BisectorTests
 		Assert.Equal(Bisector<string>.BisectorPhase.Reduction, status.Phase);
 	}
 
+	[Fact]
+	public void ObserveItemAddsNewCandidateDuringSingleItemChecks()
+	{
+		var session = new Bisector<string>(new[] { "A", "B", "C", "D" });
+
+		session.GetNextDisabledItems();
+		session.AcceptResult(false);
+
+		session.ObserveItem("Z");
+
+		var seenZ = false;
+		while (!session.IsComplete)
+		{
+			var disabledItems = session.GetNextDisabledItems();
+			if (!disabledItems.Contains("Z"))
+				seenZ = true;
+
+			session.AcceptResult(true);
+		}
+
+		Assert.True(seenZ);
+		Assert.Contains("Z", session.RemainingSuspectItems);
+	}
+
 	private static void RunUntilComplete(Bisector<string> session, Func<IReadOnlySet<string>, bool> passEvaluator)
 	{
 		while (!session.IsComplete)
 		{
-			var disabledRules = session.GetNextDisabledRules();
-			var passed = passEvaluator(disabledRules);
+			var disabledItems = session.GetNextDisabledItems();
+			var passed = passEvaluator(disabledItems);
 			session.AcceptResult(passed);
 		}
 	}
 
-	private static bool IsFailingSingle(IReadOnlySet<string> disabledRules, string badRule)
+	private static bool IsFailingSingle(IReadOnlySet<string> disabledItems, string badItem)
 	{
-		return !disabledRules.Contains(badRule);
+		return !disabledItems.Contains(badItem);
 	}
 
-	private static HashSet<string> GetEnabledRules(HashSet<string> allRules, IReadOnlySet<string> disabledRules)
+	private static HashSet<string> GetEnabledItems(HashSet<string> allItems, IReadOnlySet<string> disabledItems)
 	{
-		var enabledRules = new HashSet<string>(allRules);
-		enabledRules.ExceptWith(disabledRules);
-		return enabledRules;
+		var enabledItems = new HashSet<string>(allItems);
+		enabledItems.ExceptWith(disabledItems);
+		return enabledItems;
 	}
 }
