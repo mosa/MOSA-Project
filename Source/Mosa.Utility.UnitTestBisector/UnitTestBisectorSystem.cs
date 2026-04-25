@@ -14,10 +14,12 @@ public sealed class UnitTestBisectorSystem
 {
 	private readonly Stopwatch Stopwatch = new();
 	private readonly MosaSettings MosaSettings = new();
+	private readonly object transformDiscoveryLock = new();
 	private List<UnitTestInfo> discoveredUnitTests = [];
 	private Type selectedStageType;
-	private HashSet<Type> discoveredTransformTypes = [];
-	private HashSet<Type> disabledTransformTypes = [];
+	private string selectedStageName;
+	private HashSet<string> discoveredTransformNames = [];
+	private HashSet<string> disabledTransformNames = [];
 
 	public int Start(string[] args)
 	{
@@ -31,7 +33,8 @@ public sealed class UnitTestBisectorSystem
 
 			OutputStatus("Resolving stage type...");
 			selectedStageType = ResolveStageType(MosaSettings.UnitTestBisectorStage);
-			OutputStatus($"Stage: {selectedStageType.FullName}");
+			selectedStageName = selectedStageType.Name;
+			OutputStatus($"Stage: {selectedStageType.FullName} ({selectedStageName})");
 
 			OutputStatus("Discovering Unit Tests...");
 			discoveredUnitTests = Discovery.DiscoverUnitTests(MosaSettings.UnitTestFilter);
@@ -52,13 +55,13 @@ public sealed class UnitTestBisectorSystem
 				return 1;
 			}
 
-			if (discoveredTransformTypes.Count == 0)
+			if (discoveredTransformNames.Count == 0)
 			{
 				OutputStatus("ERROR: No transforms were discovered for the selected stage.");
 				return 1;
 			}
 
-			OutputStatus($"Discovered Transforms: {discoveredTransformTypes.Count}");
+			OutputStatus($"Discovered Transforms: {discoveredTransformNames.Count}");
 
 			if (discoveryResult.Passed)
 			{
@@ -66,11 +69,11 @@ public sealed class UnitTestBisectorSystem
 				return 0;
 			}
 
-			var bisector = new Bisector<Type>(discoveredTransformTypes);
+			var bisector = new Bisector<string>(discoveredTransformNames);
 
 			while (!bisector.IsComplete)
 			{
-				disabledTransformTypes = [.. bisector.GetNextDisabledRules()];
+				disabledTransformNames = [.. bisector.GetNextDisabledRules()];
 				PrintIterationHeader(bisector.GetStatus());
 				PrintDisabledTransforms();
 
@@ -101,7 +104,10 @@ public sealed class UnitTestBisectorSystem
 
 	private IterationResult ExecuteIteration()
 	{
-		discoveredTransformTypes = [];
+		lock (transformDiscoveryLock)
+		{
+			discoveredTransformNames = [];
+		}
 
 		using var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus, CreateCompilerHooks);
 		if (unitTestEngine.IsAborted)
@@ -137,20 +143,23 @@ public sealed class UnitTestBisectorSystem
 		};
 	}
 
-	private void NotifyTransformRegistered(Type stageType, Type transformType)
+	private void NotifyTransformRegistered(string stageName, string transformName)
 	{
-		if (stageType != selectedStageType)
+		if (!string.Equals(stageName, selectedStageName, StringComparison.Ordinal))
 			return;
 
-		discoveredTransformTypes.Add(transformType);
+		lock (transformDiscoveryLock)
+		{
+			discoveredTransformNames.Add(transformName);
+		}
 	}
 
-	private bool IsTransformDisabled(Type stageType, Type transformType)
+	private bool IsTransformDisabled(string stageName, string transformName)
 	{
-		if (stageType != selectedStageType)
+		if (!string.Equals(stageName, selectedStageName, StringComparison.Ordinal))
 			return false;
 
-		return disabledTransformTypes.Contains(transformType);
+		return disabledTransformNames.Contains(transformName);
 	}
 
 	private Type ResolveStageType(string stageName)
@@ -198,24 +207,24 @@ public sealed class UnitTestBisectorSystem
 		return unitTests;
 	}
 
-	private void PrintIterationHeader(Bisector<Type>.BisectorStatus status)
+	private void PrintIterationHeader(Bisector<string>.BisectorStatus status)
 	{
 		OutputStatus($"Iteration: {status.Iteration + 1}");
 		OutputStatus($"Level: {status.Level}");
 		OutputStatus($"Phase: {status.Phase}");
-		OutputStatus($"Stage: {selectedStageType.FullName}");
+		OutputStatus($"Stage: {selectedStageType.FullName} ({selectedStageName})");
 	}
 
 	private void PrintDisabledTransforms()
 	{
-		OutputStatus($"Disabled Transforms: {disabledTransformTypes.Count}");
-		foreach (var transform in disabledTransformTypes.OrderBy(t => t.FullName))
+		OutputStatus($"Disabled Transforms: {disabledTransformNames.Count}");
+		foreach (var transform in disabledTransformNames.OrderBy(t => t))
 		{
-			OutputStatus($"  DISABLED: {transform.FullName}");
+			OutputStatus($"  DISABLED: {transform}");
 		}
 	}
 
-	private void PrintStatus(Bisector<Type>.BisectorStatus status)
+	private void PrintStatus(Bisector<string>.BisectorStatus status)
 	{
 		OutputStatus($"Status.Iteration: {status.Iteration}");
 		OutputStatus($"Status.TotalRules: {status.TotalRuleCount}");
@@ -226,25 +235,25 @@ public sealed class UnitTestBisectorSystem
 		OutputStatus($"Status.PairwiseRemaining: {status.PairwiseTestsRemaining}");
 	}
 
-	private void PrintFinalReport(Bisector<Type> bisector)
+	private void PrintFinalReport(Bisector<string> bisector)
 	{
-		OutputStatus($"Final Stage: {selectedStageType.FullName}");
+		OutputStatus($"Final Stage: {selectedStageType.FullName} ({selectedStageName})");
 		OutputStatus("Confirmed Bad Transforms:");
-		foreach (var transform in bisector.ConfirmedBadRules.OrderBy(t => t.FullName))
+		foreach (var transform in bisector.ConfirmedBadRules.OrderBy(t => t))
 		{
-			OutputStatus($"  {transform.FullName}");
+			OutputStatus($"  {transform}");
 		}
 
 		OutputStatus("Confirmed Bad Pairs:");
-		foreach (var pair in bisector.ConfirmedBadPairs.OrderBy(p => p.Rule1.FullName).ThenBy(p => p.Rule2.FullName))
+		foreach (var pair in bisector.ConfirmedBadPairs.OrderBy(p => p.Rule1).ThenBy(p => p.Rule2))
 		{
-			OutputStatus($"  {pair.Rule1.FullName} + {pair.Rule2.FullName}");
+			OutputStatus($"  {pair.Rule1} + {pair.Rule2}");
 		}
 
 		OutputStatus("Remaining Suspects:");
-		foreach (var transform in bisector.RemainingSuspectRules.OrderBy(t => t.FullName))
+		foreach (var transform in bisector.RemainingSuspectRules.OrderBy(t => t))
 		{
-			OutputStatus($"  {transform.FullName}");
+			OutputStatus($"  {transform}");
 		}
 	}
 

@@ -867,7 +867,9 @@ public partial class MosaSettings
 		Diagnostic = false;
 		EmitStatistics = false;
 
-		MaxThreads = Multithreading ? (int)(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 0;
+		UnitTestFailFast = false;
+
+		MaxThreads = Multithreading ? (int)Math.Ceiling(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 0;
 	}
 
 	public void NormalizeSettings()
