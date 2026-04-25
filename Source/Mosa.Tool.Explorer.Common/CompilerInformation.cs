@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
+using Mosa.Compiler.Framework;
 
 namespace Mosa.Tool.Explorer.Common;
 
@@ -86,8 +87,7 @@ public class CompilerInformation
 			return;
 		}
 
-		var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
-		var msg = $"{compilerEvent.ToText()}{part}";
+		var msg = CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message);
 
 		var timelog = $"{Stopwatch.Elapsed.TotalSeconds:00.00} | [{threadID:00}] {msg}";
 
@@ -96,7 +96,7 @@ public class CompilerInformation
 			UpdateLog("Error", msg);
 			UpdateLog("Compiler", timelog);
 		}
-		if (compilerEvent == CompilerEvent.Exception)
+		else if (compilerEvent == CompilerEvent.Exception)
 		{
 			UpdateLog("Exception", msg);
 			UpdateLog("Compiler", timelog);

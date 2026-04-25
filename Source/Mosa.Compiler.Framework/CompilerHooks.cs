@@ -58,4 +58,23 @@ public class CompilerHooks
 	public NotifyTransformRegisteredHandler NotifyTransformRegistered;
 
 	public IsTransformDisabledHandler IsTransformDisabled;
+
+	#region Standardization
+
+	public static string GetStandardNotifyEventStatus(CompilerEvent compilerEvent, string message)
+	{
+		var eventName = compilerEvent.ToText();
+		return string.IsNullOrWhiteSpace(message) ? eventName : $"{eventName}: {message}";
+	}
+
+	public static bool IsStandardFilteredNotifyEvent(CompilerEvent compilerEvent)
+		=> compilerEvent is CompilerEvent.MethodCompileEnd
+			or CompilerEvent.MethodCompileStart
+			or CompilerEvent.Counter
+			or CompilerEvent.SetupStageStart
+			or CompilerEvent.SetupStageEnd
+			or CompilerEvent.FinalizationStageStart
+			or CompilerEvent.FinalizationStageEnd;
+
+	#endregion Standardization
 }

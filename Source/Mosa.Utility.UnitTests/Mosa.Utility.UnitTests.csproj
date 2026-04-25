@@ -6,13 +6,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="..\Mosa.UnitTests\**\*.cs"
-				 Exclude="..\Mosa.UnitTests\bin\**\*;..\Mosa.UnitTests\obj\**\*"
-				 Link="Tests\%(RecursiveDir)%(Filename)%(Extension)" />
+		<Compile Include="..\Mosa.UnitTests\**\*.cs" Exclude="..\Mosa.UnitTests\bin\**\*;..\Mosa.UnitTests\obj\**\*" Link="Tests\%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.Platforms\Mosa.Compiler.Platforms.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
 		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />

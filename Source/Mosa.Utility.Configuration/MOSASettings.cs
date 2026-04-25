@@ -801,9 +801,6 @@ public partial class MosaSettings
 		CounterFile = null;
 		NasmFile = null;
 		InlinedFile = null;
-
-		MethodScanner = false;
-
 		SSA = true;
 		BasicOptimizations = true;
 		ValueNumbering = true;
