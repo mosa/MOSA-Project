@@ -4,24 +4,24 @@ using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit;
 
-public class IsolationSessionTests
+public class BisectorTests
 {
 	[Fact]
 	public void ConstructorRequiresAtLeastOneRule()
 	{
-		Assert.Throws<ArgumentException>(() => new IsolationSession<string>(Array.Empty<string>()));
+		Assert.Throws<ArgumentException>(() => new Bisector<string>(Array.Empty<string>()));
 	}
 
 	[Fact]
 	public void ConstructorRejectsNullRule()
 	{
-		Assert.Throws<ArgumentException>(() => new IsolationSession<string>(new[] { "A", null }));
+		Assert.Throws<ArgumentException>(() => new Bisector<string>(new[] { "A", null }));
 	}
 
 	[Fact]
 	public void DuplicateRulesAreIgnored()
 	{
-		var session = new IsolationSession<string>(new[] { "A", "B", "A", "B", "C" });
+		var session = new Bisector<string>(new[] { "A", "B", "A", "B", "C" });
 		var status = session.GetStatus();
 
 		Assert.Equal(3, status.TotalRuleCount);
@@ -31,7 +31,7 @@ public class IsolationSessionTests
 	[Fact]
 	public void GetNextDisabledRulesRequiresPreviousResultToBeAccepted()
 	{
-		var session = new IsolationSession<string>(new[] { "A", "B" });
+		var session = new Bisector<string>(new[] { "A", "B" });
 
 		session.GetNextDisabledRules();
 
@@ -41,7 +41,7 @@ public class IsolationSessionTests
 	[Fact]
 	public void AcceptResultRequiresOutstandingExperiment()
 	{
-		var session = new IsolationSession<string>(new[] { "A", "B" });
+		var session = new Bisector<string>(new[] { "A", "B" });
 
 		Assert.Throws<InvalidOperationException>(() => session.AcceptResult(true));
 	}
@@ -49,7 +49,7 @@ public class IsolationSessionTests
 	[Fact]
 	public void BaselinePassCompletesSession()
 	{
-		var session = new IsolationSession<string>(new[] { "A", "B", "C" });
+		var session = new Bisector<string>(new[] { "A", "B", "C" });
 
 		var disabledRules = session.GetNextDisabledRules();
 		Assert.Empty(disabledRules);
@@ -58,7 +58,7 @@ public class IsolationSessionTests
 
 		var status = session.GetStatus();
 		Assert.True(session.IsComplete);
-		Assert.Equal(IsolationSession<string>.RuleIsolationPhase.Complete, status.Phase);
+		Assert.Equal(Bisector<string>.BisectorPhase.Complete, status.Phase);
 		Assert.Equal(0, status.SuspectRuleCount);
 		Assert.Empty(session.ConfirmedBadRules);
 	}
@@ -66,7 +66,7 @@ public class IsolationSessionTests
 	[Fact]
 	public void GetNextDisabledRulesThrowsAfterCompletion()
 	{
-		var session = new IsolationSession<string>(new[] { "A", "B" });
+		var session = new Bisector<string>(new[] { "A", "B" });
 
 		session.GetNextDisabledRules();
 		session.AcceptResult(true);
@@ -78,7 +78,7 @@ public class IsolationSessionTests
 	public void SingleBadRuleIsConfirmed()
 	{
 		var rules = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
-		var session = new IsolationSession<string>(rules);
+		var session = new Bisector<string>(rules);
 
 		RunUntilComplete(session, disabledRules => !IsFailingSingle(disabledRules, "C"));
 
@@ -91,14 +91,14 @@ public class IsolationSessionTests
 	public void ThresholdSizedSuspectSetGoesStraightToSingleRuleChecks()
 	{
 		var rules = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new IsolationSession<string>(rules);
+		var session = new Bisector<string>(rules);
 
 		session.GetNextDisabledRules();
 		session.AcceptResult(false);
 
 		var status = session.GetStatus();
-		Assert.Equal(IsolationSession<string>.RuleIsolationPhase.SingleRuleChecks, status.Phase);
-		Assert.Equal(IsolationSession<string>.RuleIsolationLevel.Level1SingleRuleSet, status.Level);
+		Assert.Equal(Bisector<string>.BisectorPhase.SingleRuleChecks, status.Phase);
+		Assert.Equal(Bisector<string>.BisectorLevel.Level1SingleRuleSet, status.Level);
 
 		RunUntilComplete(session, disabledRules => !IsFailingSingle(disabledRules, "D"));
 
@@ -109,7 +109,7 @@ public class IsolationSessionTests
 	public void MultipleBadRulesAreConfirmedAcrossCycles()
 	{
 		var rules = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
-		var session = new IsolationSession<string>(rules);
+		var session = new Bisector<string>(rules);
 
 		RunUntilComplete(session, disabledRules =>
 		{
@@ -126,7 +126,7 @@ public class IsolationSessionTests
 	public void CustomComparerControlsRuleIdentity()
 	{
 		var rules = new[] { "alpha", "ALPHA", "beta", "gamma" };
-		var session = new IsolationSession<string>(rules, StringComparer.OrdinalIgnoreCase);
+		var session = new Bisector<string>(rules, StringComparer.OrdinalIgnoreCase);
 
 		RunUntilComplete(session, disabledRules => disabledRules.Contains("ALPHA"));
 
@@ -139,11 +139,11 @@ public class IsolationSessionTests
 	public void Level2StartsAutomaticallyAfterSingleRuleChecks()
 	{
 		var rules = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new IsolationSession<string>(rules);
+		var session = new Bisector<string>(rules);
 
 		var disabledRules = session.GetNextDisabledRules();
 		Assert.Empty(disabledRules);
-		Assert.Equal(IsolationSession<string>.RuleIsolationPhase.Baseline, session.GetStatus().Phase);
+		Assert.Equal(Bisector<string>.BisectorPhase.Baseline, session.GetStatus().Phase);
 
 		session.AcceptResult(false);
 
@@ -154,8 +154,8 @@ public class IsolationSessionTests
 		}
 
 		var status = session.GetStatus();
-		Assert.Equal(IsolationSession<string>.RuleIsolationLevel.Level2Pairwise, status.Level);
-		Assert.Equal(IsolationSession<string>.RuleIsolationPhase.PairwiseChecks, status.Phase);
+		Assert.Equal(Bisector<string>.BisectorLevel.Level2Pairwise, status.Level);
+		Assert.Equal(Bisector<string>.BisectorPhase.PairwiseChecks, status.Phase);
 		Assert.Equal(0, status.PairwiseTestsCompleted);
 		Assert.Equal(6, status.PairwiseTestsRemaining);
 	}
@@ -164,7 +164,7 @@ public class IsolationSessionTests
 	public void PairwiseInteractionIsDetected()
 	{
 		var rules = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new IsolationSession<string>(rules);
+		var session = new Bisector<string>(rules);
 
 		RunUntilComplete(session, disabledRules =>
 		{
@@ -173,7 +173,7 @@ public class IsolationSessionTests
 		});
 
 		Assert.Empty(session.ConfirmedBadRules);
-		Assert.Contains(new IsolationSession<string>.RulePair("B", "D"), session.ConfirmedBadPairs);
+		Assert.Contains(new Bisector<string>.RulePair("B", "D"), session.ConfirmedBadPairs);
 		Assert.Equal(new HashSet<string>(rules), session.RemainingSuspectRules);
 	}
 
@@ -181,7 +181,7 @@ public class IsolationSessionTests
 	public void PairwiseStatusTracksCompletedAndRemainingTests()
 	{
 		var rules = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new IsolationSession<string>(rules);
+		var session = new Bisector<string>(rules);
 
 		session.GetNextDisabledRules();
 		session.AcceptResult(false);
@@ -206,7 +206,7 @@ public class IsolationSessionTests
 	public void StatusTracksIterationsAndOutstandingExperiments()
 	{
 		var rules = new HashSet<string> { "A", "B", "C", "D", "E", "F" };
-		var session = new IsolationSession<string>(rules);
+		var session = new Bisector<string>(rules);
 
 		var status = session.GetStatus();
 		Assert.Equal(0, status.Iteration);
@@ -219,17 +219,17 @@ public class IsolationSessionTests
 
 		status = session.GetStatus();
 		Assert.True(status.HasOutstandingExperiment);
-		Assert.Equal(IsolationSession<string>.RuleIsolationPhase.Baseline, status.Phase);
+		Assert.Equal(Bisector<string>.BisectorPhase.Baseline, status.Phase);
 
 		session.AcceptResult(false);
 
 		status = session.GetStatus();
 		Assert.Equal(1, status.Iteration);
 		Assert.False(status.HasOutstandingExperiment);
-		Assert.Equal(IsolationSession<string>.RuleIsolationPhase.Reduction, status.Phase);
+		Assert.Equal(Bisector<string>.BisectorPhase.Reduction, status.Phase);
 	}
 
-	private static void RunUntilComplete(IsolationSession<string> session, Func<IReadOnlySet<string>, bool> passEvaluator)
+	private static void RunUntilComplete(Bisector<string> session, Func<IReadOnlySet<string>, bool> passEvaluator)
 	{
 		while (!session.IsComplete)
 		{

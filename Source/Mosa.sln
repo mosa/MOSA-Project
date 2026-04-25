@@ -262,6 +262,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Copilot", "Copilot", "{DEFE
 		..\.github\copilot-instructions.md = ..\.github\copilot-instructions.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.UnitTestBisector", "Mosa.Utility.UnitTestBisector\Mosa.Utility.UnitTestBisector.csproj", "{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1446,6 +1448,24 @@ Global
 		{E2459EE9-23AB-E361-ECB7-BAC9BD78CBCB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E2459EE9-23AB-E361-ECB7-BAC9BD78CBCB}.Release|x86.ActiveCfg = Release|Any CPU
 		{E2459EE9-23AB-E361-ECB7-BAC9BD78CBCB}.Release|x86.Build.0 = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|x86.Build.0 = Debug|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|Any CPU.ActiveCfg = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|Any CPU.Build.0 = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|Mixed Platforms.Build.0 = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|x86.ActiveCfg = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|x86.Build.0 = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1523,6 +1543,7 @@ Global
 		{5B6E6C85-E89B-4384-96F2-69B1F3524EA5} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
 		{E2459EE9-23AB-E361-ECB7-BAC9BD78CBCB} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{DEFE1CC8-D09A-43A3-BF44-6BB13DAC02B4} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}

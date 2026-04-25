@@ -128,6 +128,8 @@ public static class Name
 	public const string UnitTest_Connection_TimeOut = "UnitTest.Connection.TimeOut";
 	public const string UnitTest_Filter = "UnitTest.Filter";
 	public const string UnitTest_MaxErrors = "UnitTest.MaxErrors";
+	public const string UnitTest_Bisector_Stage = "UnitTest.Bisector.Stage";
+	public const string UnitTest_FailFast = "UnitTest.FailFast";
 
 	public const string Image_DiskBlocks = "Image.DiskBlocks";
 	public const string Image_VolumeLabel = "Image.VolumeLabel";

@@ -90,6 +90,8 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	protected void AddTranform(BaseTransform transform)
 	{
+		Compiler?.CompilerHooks.NotifyTransformRegistered?.Invoke(GetType(), transform.GetType());
+
 		var id = transform.Instruction == null ? 0 : transform.Instruction.ID;
 
 		if (transforms[id] == null)
@@ -235,6 +237,9 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		for (var i = 0; i < count; i++)
 		{
 			var transform = instructionTransforms[i];
+
+			if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(GetType(), transform.GetType()) == true)
+				continue;
 
 			var updated = Transform.ApplyTransform(context, transform);
 

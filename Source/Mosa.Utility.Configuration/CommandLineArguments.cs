@@ -193,6 +193,8 @@ public static class CommandLineArguments
 			// Unit Tests:
 			new Argument { Name = "-filter", Setting = Name.UnitTest_Filter, Value = null},
 			new Argument { Name = "-maxerrors", Setting = Name.UnitTest_MaxErrors},
+			new Argument { Name = "-fail-fast", Setting = Name.UnitTest_FailFast, Value = "true"},
+			new Argument { Name = "-bisect-stage", Setting = Name.UnitTest_Bisector_Stage},
 
 			// Optimization Levels:
 			new Argument { Name = "-o0", Setting = Name.Optimizations_Basic, Value = "false"},

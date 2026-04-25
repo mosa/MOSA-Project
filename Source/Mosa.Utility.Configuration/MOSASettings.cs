@@ -512,6 +512,18 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.UnitTest_Filter, value);
 	}
 
+	public string UnitTestBisectorStage
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Stage, null);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Stage, value);
+	}
+
+	public bool UnitTestFailFast
+	{
+		get => Settings.GetValue(Name.UnitTest_FailFast, false);
+		set => Settings.SetValue(Name.UnitTest_FailFast, value);
+	}
+
 	public string ExplorerFilter
 	{
 		get => Settings.GetValue(Name.Explorer_Filter, null);

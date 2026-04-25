@@ -2,17 +2,17 @@
 
 namespace Mosa.Compiler.Framework;
 
-public sealed class IsolationSession<TRule>
+public sealed class Bisector<TRule>
 {
     private const int SingleRuleCheckThreshold = 4;
 
-    public enum RuleIsolationLevel
+    public enum BisectorLevel
     {
         Level1SingleRuleSet,
         Level2Pairwise,
     }
 
-    public enum RuleIsolationPhase
+    public enum BisectorPhase
     {
         Baseline,
         Reduction,
@@ -21,7 +21,7 @@ public sealed class IsolationSession<TRule>
         Complete,
     }
 
-    public enum RuleIsolationResult
+    public enum BisectorResult
     {
         Pass,
         Fail,
@@ -29,9 +29,9 @@ public sealed class IsolationSession<TRule>
 
     public readonly record struct RulePair(TRule Rule1, TRule Rule2);
 
-    public sealed class RuleIsolationStatus
+    public sealed class BisectorStatus
     {
-        internal RuleIsolationStatus(int iteration, RuleIsolationLevel level, RuleIsolationPhase phase, int totalRuleCount, int suspectRuleCount, int confirmedBadRuleCount, int confirmedBadPairCount, bool hasOutstandingExperiment, int pairwiseTestsCompleted, int pairwiseTestsRemaining)
+        internal BisectorStatus(int iteration, BisectorLevel level, BisectorPhase phase, int totalRuleCount, int suspectRuleCount, int confirmedBadRuleCount, int confirmedBadPairCount, bool hasOutstandingExperiment, int pairwiseTestsCompleted, int pairwiseTestsRemaining)
         {
             Iteration = iteration;
             Level = level;
@@ -46,8 +46,8 @@ public sealed class IsolationSession<TRule>
         }
 
         public int Iteration { get; }
-        public RuleIsolationLevel Level { get; }
-        public RuleIsolationPhase Phase { get; }
+        public BisectorLevel Level { get; }
+        public BisectorPhase Phase { get; }
         public int TotalRuleCount { get; }
         public int SuspectRuleCount { get; }
         public int ConfirmedBadRuleCount { get; }
@@ -89,8 +89,8 @@ public sealed class IsolationSession<TRule>
     private readonly HashSet<TRule> unresolvedRules;
     private readonly List<RulePair> confirmedBadPairs = new List<RulePair>();
 
-    private RuleIsolationLevel currentLevel = RuleIsolationLevel.Level1SingleRuleSet;
-    private RuleIsolationPhase currentPhase = RuleIsolationPhase.Baseline;
+    private BisectorLevel currentLevel = BisectorLevel.Level1SingleRuleSet;
+    private BisectorPhase currentPhase = BisectorPhase.Baseline;
     private OutstandingExperiment outstandingExperiment;
     private List<TRule> currentSuspects = new List<TRule>();
     private List<TRule> reductionCandidates = new List<TRule>();
@@ -101,7 +101,7 @@ public sealed class IsolationSession<TRule>
     private bool foundBadRuleInSingleRuleChecks;
     private int iteration;
 
-    public IsolationSession(IEnumerable<TRule> rules, IEqualityComparer<TRule> comparer = null)
+    public Bisector(IEnumerable<TRule> rules, IEqualityComparer<TRule> comparer = null)
     {
         ArgumentNullException.ThrowIfNull(rules);
 
@@ -126,7 +126,7 @@ public sealed class IsolationSession<TRule>
         currentSuspects = new List<TRule>(allRules);
     }
 
-    public bool IsComplete => currentPhase == RuleIsolationPhase.Complete;
+    public bool IsComplete => currentPhase == BisectorPhase.Complete;
 
     public IReadOnlySet<TRule> ConfirmedBadRules => new HashSet<TRule>(confirmedBadRules, comparer);
 
@@ -146,10 +146,10 @@ public sealed class IsolationSession<TRule>
         {
             switch (currentPhase)
             {
-                case RuleIsolationPhase.Baseline:
+                case BisectorPhase.Baseline:
                     return CreateAndTrackExperiment(ExperimentKind.Baseline, CreateDisabledSet(), null, default, default);
 
-                case RuleIsolationPhase.Reduction:
+                case BisectorPhase.Reduction:
                     if (reductionCandidates.Count <= SingleRuleCheckThreshold)
                     {
                         BeginSingleRuleChecks(reductionCandidates);
@@ -163,7 +163,7 @@ public sealed class IsolationSession<TRule>
                     var enabledSubset = reductionCandidates.GetRange(0, midpoint);
                     return CreateAndTrackExperiment(ExperimentKind.Reduction, CreateReductionDisabledSet(enabledSubset), enabledSubset, default, default);
 
-                case RuleIsolationPhase.SingleRuleChecks:
+                case BisectorPhase.SingleRuleChecks:
                     while (singleRuleQueue.Count > 0)
                     {
                         var rule = singleRuleQueue.Dequeue();
@@ -176,7 +176,7 @@ public sealed class IsolationSession<TRule>
                     FinishSingleRuleChecks();
                     continue;
 
-                case RuleIsolationPhase.PairwiseChecks:
+                case BisectorPhase.PairwiseChecks:
                     while (pairwiseIndex < pairwiseQueue.Count)
                     {
                         var pair = pairwiseQueue[pairwiseIndex++];
@@ -186,10 +186,10 @@ public sealed class IsolationSession<TRule>
                         return CreateAndTrackExperiment(ExperimentKind.PairwiseCheck, CreatePairwiseDisabledSet(pair), null, default, pair);
                     }
 
-                    currentPhase = RuleIsolationPhase.Complete;
+                    currentPhase = BisectorPhase.Complete;
                     continue;
 
-                case RuleIsolationPhase.Complete:
+                case BisectorPhase.Complete:
                     throw new InvalidOperationException("The isolation session is complete.");
 
                 default:
@@ -200,10 +200,10 @@ public sealed class IsolationSession<TRule>
 
     public void AcceptResult(bool passed)
     {
-        AcceptResult(passed ? RuleIsolationResult.Pass : RuleIsolationResult.Fail);
+        AcceptResult(passed ? BisectorResult.Pass : BisectorResult.Fail);
     }
 
-    public void AcceptResult(RuleIsolationResult result)
+    public void AcceptResult(BisectorResult result)
     {
         if (outstandingExperiment == null)
             throw new InvalidOperationException("There is no outstanding experiment result to report.");
@@ -236,30 +236,30 @@ public sealed class IsolationSession<TRule>
         }
     }
 
-    public RuleIsolationStatus GetStatus()
+    public BisectorStatus GetStatus()
     {
         var pairwiseTestsRemaining = pairwiseQueue.Count - pairwiseTestsCompleted;
         if (pairwiseTestsRemaining < 0)
             pairwiseTestsRemaining = 0;
 
-        return new RuleIsolationStatus(iteration, currentLevel, currentPhase, allRules.Count, currentSuspects.Count, confirmedBadRules.Count, confirmedBadPairs.Count, outstandingExperiment != null, pairwiseTestsCompleted, pairwiseTestsRemaining);
+        return new BisectorStatus(iteration, currentLevel, currentPhase, allRules.Count, currentSuspects.Count, confirmedBadRules.Count, confirmedBadPairs.Count, outstandingExperiment != null, pairwiseTestsCompleted, pairwiseTestsRemaining);
     }
 
-    private void ProcessBaselineResult(RuleIsolationResult result)
+    private void ProcessBaselineResult(BisectorResult result)
     {
-        if (result == RuleIsolationResult.Pass)
+        if (result == BisectorResult.Pass)
         {
             currentSuspects.Clear();
-            currentPhase = RuleIsolationPhase.Complete;
+            currentPhase = BisectorPhase.Complete;
             return;
         }
 
         StartReductionCycle();
     }
 
-    private void ProcessReductionResult(OutstandingExperiment experiment, RuleIsolationResult result)
+    private void ProcessReductionResult(OutstandingExperiment experiment, BisectorResult result)
     {
-        if (result == RuleIsolationResult.Fail)
+        if (result == BisectorResult.Fail)
         {
             reductionCandidates = new List<TRule>(experiment.Subset);
         }
@@ -285,12 +285,12 @@ public sealed class IsolationSession<TRule>
             return;
         }
 
-        currentPhase = RuleIsolationPhase.Reduction;
+        currentPhase = BisectorPhase.Reduction;
     }
 
-    private void ProcessSingleRuleResult(OutstandingExperiment experiment, RuleIsolationResult result)
+    private void ProcessSingleRuleResult(OutstandingExperiment experiment, BisectorResult result)
     {
-        if (result == RuleIsolationResult.Fail)
+        if (result == BisectorResult.Fail)
         {
             if (confirmedBadRules.Add(experiment.Rule))
             {
@@ -305,31 +305,31 @@ public sealed class IsolationSession<TRule>
         }
     }
 
-    private void ProcessPairwiseResult(OutstandingExperiment experiment, RuleIsolationResult result)
+    private void ProcessPairwiseResult(OutstandingExperiment experiment, BisectorResult result)
     {
         pairwiseTestsCompleted++;
 
-        if (result == RuleIsolationResult.Fail)
+        if (result == BisectorResult.Fail)
         {
             confirmedBadPairs.Add(experiment.Pair);
         }
 
         if (pairwiseTestsCompleted >= pairwiseQueue.Count)
         {
-            currentPhase = RuleIsolationPhase.Complete;
+            currentPhase = BisectorPhase.Complete;
         }
     }
 
     private void StartReductionCycle()
     {
-        currentLevel = RuleIsolationLevel.Level1SingleRuleSet;
+        currentLevel = BisectorLevel.Level1SingleRuleSet;
         reductionCandidates = GetOrderedActiveRules();
         currentSuspects = new List<TRule>(reductionCandidates);
 
         if (reductionCandidates.Count == 0)
         {
             currentSuspects.Clear();
-            currentPhase = RuleIsolationPhase.Complete;
+            currentPhase = BisectorPhase.Complete;
             return;
         }
 
@@ -339,13 +339,13 @@ public sealed class IsolationSession<TRule>
             return;
         }
 
-        currentPhase = RuleIsolationPhase.Reduction;
+        currentPhase = BisectorPhase.Reduction;
     }
 
     private void BeginSingleRuleChecks(IEnumerable<TRule> prioritizedRules)
     {
-        currentLevel = RuleIsolationLevel.Level1SingleRuleSet;
-        currentPhase = RuleIsolationPhase.SingleRuleChecks;
+        currentLevel = BisectorLevel.Level1SingleRuleSet;
+        currentPhase = BisectorPhase.SingleRuleChecks;
         foundBadRuleInSingleRuleChecks = false;
         singleRuleQueue = new Queue<TRule>();
         currentSuspects = new List<TRule>();
@@ -370,13 +370,13 @@ public sealed class IsolationSession<TRule>
         if (foundBadRuleInSingleRuleChecks)
         {
             currentSuspects = GetOrderedActiveRules();
-            currentPhase = RuleIsolationPhase.Baseline;
+            currentPhase = BisectorPhase.Baseline;
             return;
         }
 
         if (currentSuspects.Count < 2)
         {
-            currentPhase = RuleIsolationPhase.Complete;
+            currentPhase = BisectorPhase.Complete;
             return;
         }
 
@@ -385,8 +385,8 @@ public sealed class IsolationSession<TRule>
 
     private void BeginPairwiseChecks()
     {
-        currentLevel = RuleIsolationLevel.Level2Pairwise;
-        currentPhase = RuleIsolationPhase.PairwiseChecks;
+        currentLevel = BisectorLevel.Level2Pairwise;
+        currentPhase = BisectorPhase.PairwiseChecks;
         pairwiseQueue = new List<RulePair>();
         pairwiseIndex = 0;
         pairwiseTestsCompleted = 0;
@@ -401,7 +401,7 @@ public sealed class IsolationSession<TRule>
         }
 
         if (pairwiseQueue.Count == 0)
-            currentPhase = RuleIsolationPhase.Complete;
+            currentPhase = BisectorPhase.Complete;
     }
 
     private HashSet<TRule> CreateAndTrackExperiment(ExperimentKind kind, HashSet<TRule> disabledRules, List<TRule> subset, TRule rule, RulePair pair)
