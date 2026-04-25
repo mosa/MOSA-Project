@@ -263,6 +263,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Copilot", "Copilot", "{DEFE
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.UnitTestBisector", "Mosa.Utility.UnitTestBisector\Mosa.Utility.UnitTestBisector.csproj", "{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Platforms", "Mosa.Compiler.Platforms\Mosa.Compiler.Platforms.csproj", "{4068DE55-411C-CC89-69D9-E142FE237B6E}"
 EndProject
 Global
@@ -1846,18 +1847,24 @@ Global
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|x64.Build.0 = Debug|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Debug|x86.Build.0 = Debug|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|Any CPU.ActiveCfg = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|Any CPU.Build.0 = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|Mixed Platforms.Build.0 = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|x64.ActiveCfg = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|x64.Build.0 = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|x86.ActiveCfg = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Description|x86.Build.0 = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|x64.Build.0 = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{A0DCC68F-E842-7FB2-ACFE-3940C5E389CF}.Release|x86.Build.0 = Release|Any CPU
 		{4068DE55-411C-CC89-69D9-E142FE237B6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
