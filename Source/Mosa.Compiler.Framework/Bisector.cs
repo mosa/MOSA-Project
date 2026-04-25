@@ -245,6 +245,43 @@ public sealed class Bisector<TRule>
         return new BisectorStatus(iteration, currentLevel, currentPhase, allRules.Count, currentSuspects.Count, confirmedBadRules.Count, confirmedBadPairs.Count, outstandingExperiment != null, pairwiseTestsCompleted, pairwiseTestsRemaining);
     }
 
+    public void ObserveRule(TRule rule)
+    {
+        if (rule is null)
+            throw new ArgumentNullException(nameof(rule));
+
+        if (ContainsRule(allRules, rule))
+            return;
+
+        allRules.Add(rule);
+        unresolvedRules.Add(rule);
+
+        if (currentPhase == BisectorPhase.Complete)
+            return;
+
+        if (!ContainsRule(currentSuspects, rule))
+            currentSuspects.Add(rule);
+
+        switch (currentPhase)
+        {
+            case BisectorPhase.Reduction:
+                if (!ContainsRule(reductionCandidates, rule))
+                    reductionCandidates.Add(rule);
+                break;
+
+            case BisectorPhase.SingleRuleChecks:
+                singleRuleQueue.Enqueue(rule);
+                break;
+
+            case BisectorPhase.PairwiseChecks:
+                for (var i = 0; i < currentSuspects.Count - 1; i++)
+                {
+                    pairwiseQueue.Add(new RulePair(currentSuspects[i], rule));
+                }
+                break;
+        }
+    }
+
     private void ProcessBaselineResult(BisectorResult result)
     {
         if (result == BisectorResult.Pass)
@@ -387,10 +424,18 @@ public sealed class Bisector<TRule>
     {
         currentLevel = BisectorLevel.Level2Pairwise;
         currentPhase = BisectorPhase.PairwiseChecks;
+        currentSuspects = currentSuspects.Where(unresolvedRules.Contains).ToList();
+        RebuildPairwiseQueueFromCurrentSuspects();
+
+        if (pairwiseQueue.Count == 0)
+            currentPhase = BisectorPhase.Complete;
+    }
+
+    private void RebuildPairwiseQueueFromCurrentSuspects()
+    {
         pairwiseQueue = new List<RulePair>();
         pairwiseIndex = 0;
         pairwiseTestsCompleted = 0;
-        currentSuspects = currentSuspects.Where(unresolvedRules.Contains).ToList();
 
         for (var i = 0; i < currentSuspects.Count; i++)
         {
@@ -399,9 +444,6 @@ public sealed class Bisector<TRule>
                 pairwiseQueue.Add(new RulePair(currentSuspects[i], currentSuspects[j]));
             }
         }
-
-        if (pairwiseQueue.Count == 0)
-            currentPhase = BisectorPhase.Complete;
     }
 
     private HashSet<TRule> CreateAndTrackExperiment(ExperimentKind kind, HashSet<TRule> disabledRules, List<TRule> subset, TRule rule, RulePair pair)
@@ -486,5 +528,16 @@ public sealed class Bisector<TRule>
         }
 
         return orderedRules;
+    }
+
+    private bool ContainsRule(IEnumerable<TRule> rules, TRule rule)
+    {
+        foreach (var item in rules)
+        {
+            if (comparer.Equals(item, rule))
+                return true;
+        }
+
+        return false;
     }
 }

@@ -15,7 +15,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 	private readonly List<BaseTransform>[] transforms = new List<BaseTransform>[MaximumInstructionID];
 	private readonly List<BaseBlockTransform> blockTransforms = new();
-	private bool transformsRegistered;
 
 	protected TraceLog Trace;
 	protected TraceLog SpecialTrace;
@@ -44,8 +43,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	{
 		TransformCountStage = $"{Name}.Transforms";
 		OptimizationCountStage = $"{Name}.Optimizations";
-
-		RegisteredTransforms();
 	}
 
 	protected override void Finish()
@@ -177,30 +174,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		return pass;
 	}
 
-	private void RegisteredTransforms()
-	{
-		if (transformsRegistered)
-			return;
-
-		transformsRegistered = true;
-
-		if (Compiler.CompilerHooks.NotifyTransformRegistered == null)
-			return;
-
-		var stageName = Name;
-
-		foreach (var list in transforms)
-		{
-			if (list == null)
-				continue;
-
-			foreach (var transform in list)
-			{
-				Compiler.CompilerHooks.NotifyTransformRegistered(stageName, transform.Name);
-			}
-		}
-	}
-
 	private bool InstructionTransformationPass()
 	{
 		if (!EnableTransformOptimizations)
@@ -262,6 +235,8 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		for (var i = 0; i < count; i++)
 		{
 			var transform = instructionTransforms[i];
+
+			Compiler.CompilerHooks.NotifyTransformObserved?.Invoke(Name, transform.Name);
 
 			if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
 				continue;

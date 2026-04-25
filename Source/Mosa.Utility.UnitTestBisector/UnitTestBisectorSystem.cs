@@ -18,8 +18,10 @@ public sealed class UnitTestBisectorSystem
 	private List<UnitTestInfo> discoveredUnitTests = [];
 	private Type selectedStageType;
 	private string selectedStageName;
-	private HashSet<string> discoveredTransformNames = [];
+	private HashSet<string> observedTransformNames = [];
 	private HashSet<string> disabledTransformNames = [];
+
+	private Bisector<string> bisector;
 
 	public int Start(string[] args)
 	{
@@ -55,13 +57,13 @@ public sealed class UnitTestBisectorSystem
 				return 1;
 			}
 
-			if (discoveredTransformNames.Count == 0)
+			if (observedTransformNames.Count == 0)
 			{
-				OutputStatus("ERROR: No transforms were discovered for the selected stage.");
+				OutputStatus("ERROR: No observed transforms were captured for the selected stage.");
 				return 1;
 			}
 
-			OutputStatus($"Discovered Transforms: {discoveredTransformNames.Count}");
+			OutputStatus($"Observed Transforms: {observedTransformNames.Count}");
 
 			if (discoveryResult.Passed)
 			{
@@ -69,7 +71,7 @@ public sealed class UnitTestBisectorSystem
 				return 0;
 			}
 
-			var bisector = new Bisector<string>(discoveredTransformNames);
+			bisector = new Bisector<string>(observedTransformNames);
 
 			while (!bisector.IsComplete)
 			{
@@ -104,11 +106,6 @@ public sealed class UnitTestBisectorSystem
 
 	private IterationResult ExecuteIteration()
 	{
-		lock (transformDiscoveryLock)
-		{
-			discoveredTransformNames = [];
-		}
-
 		using var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus, CreateCompilerHooks);
 		if (unitTestEngine.IsAborted)
 		{
@@ -138,19 +135,22 @@ public sealed class UnitTestBisectorSystem
 	{
 		return new CompilerHooks
 		{
-			NotifyTransformRegistered = NotifyTransformRegistered,
+			NotifyTransformObserved = NotifyTransformObserved,
 			IsTransformDisabled = IsTransformDisabled,
 		};
 	}
 
-	private void NotifyTransformRegistered(string stageName, string transformName)
+	private void NotifyTransformObserved(string stageName, string transformName)
 	{
 		if (!string.Equals(stageName, selectedStageName, StringComparison.Ordinal))
 			return;
 
 		lock (transformDiscoveryLock)
 		{
-			discoveredTransformNames.Add(transformName);
+			if (observedTransformNames.Add(transformName) && bisector != null)
+			{
+				bisector.ObserveRule(transformName);
+			}
 		}
 	}
 
