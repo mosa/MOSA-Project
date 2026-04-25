@@ -251,6 +251,9 @@ public sealed class MethodScheduler
 
 	private void AddInsideLock(MethodData methodData)
 	{
+		if (Compiler.IsStopped)
+			return;
+
 		if (!workingSet.Contains(methodData))
 		{
 			workingSet.Add(methodData);
@@ -283,6 +286,9 @@ public sealed class MethodScheduler
 
 	public MethodData Get()
 	{
+		if (Compiler.IsStopped)
+			return null;
+
 		MethodData methodData;
 		int queueSize;
 
@@ -291,7 +297,12 @@ public sealed class MethodScheduler
 		{
 			Compiler.LockMonitor.RecordLockWait(lockTimer, queue, "MethodScheduler.queue");
 
-			if (queue.TryDequeue(out methodData, out var priority))
+			if (Compiler.IsStopped)
+			{
+				queueSize = totalQueued;
+				methodData = null;
+			}
+			else if (queue.TryDequeue(out methodData, out var priority))
 			{
 				queueSet.Remove(methodData);
 				currentlyCompiling.Add(methodData);  // Track as being compiled
@@ -328,8 +339,12 @@ public sealed class MethodScheduler
 			if (deferredQueue.Remove(methodData))
 			{
 				Interlocked.Decrement(ref totalDeferred);
-				shouldRequeue = true;
-				AddInsideLock(methodData);
+
+				if (!Compiler.IsStopped)
+				{
+					shouldRequeue = true;
+					AddInsideLock(methodData);
+				}
 			}
 
 			queueSize = totalQueued;

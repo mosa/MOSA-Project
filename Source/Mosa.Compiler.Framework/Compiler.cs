@@ -614,7 +614,7 @@ public sealed class Compiler
 		PostTraceLog(exceptionLog);
 
 		HasError = true;
-		//Stop();
+		Stop();
 	}
 
 	public void Stop()

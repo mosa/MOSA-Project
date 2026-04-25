@@ -51,12 +51,6 @@ public sealed class UnitTestBisectorSystem
 			OutputStatus("Starting discovery iteration...");
 			var discoveryResult = ExecuteIteration();
 
-			if (!discoveryResult.CompileSucceeded)
-			{
-				OutputStatus("ERROR: Discovery compilation failed.");
-				return 1;
-			}
-
 			if (observedTransformNames.Count == 0)
 			{
 				OutputStatus("ERROR: No observed transforms were captured for the selected stage.");
@@ -81,12 +75,6 @@ public sealed class UnitTestBisectorSystem
 
 				var iterationResult = ExecuteIteration();
 
-				if (!iterationResult.CompileSucceeded)
-				{
-					OutputStatus("ERROR: Iteration compilation failed.");
-					return 1;
-				}
-
 				bisector.AcceptResult(iterationResult.Passed);
 				OutputStatus($"Iteration Result: {(iterationResult.Passed ? "PASS" : "FAIL")}");
 				PrintStatus(bisector.GetStatus());
@@ -106,29 +94,46 @@ public sealed class UnitTestBisectorSystem
 
 	private IterationResult ExecuteIteration()
 	{
-		using var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus, CreateCompilerHooks);
-		if (unitTestEngine.IsAborted)
+		using var assertCapture = new AssertCaptureScope();
+
+		try
 		{
-			return new IterationResult(false, false);
-		}
-
-		var unitTests = PrepareUnitTests(discoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
-
-		unitTestEngine.QueueUnitTests(unitTests);
-		unitTestEngine.WaitUntilComplete();
-		unitTestEngine.Terminate();
-
-		var passed = true;
-		foreach (var unitTest in unitTests)
-		{
-			if (unitTest.Status is UnitTestStatus.Failed or UnitTestStatus.FailedByCrash or UnitTestStatus.Pending)
+			using var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus, CreateCompilerHooks);
+			if (unitTestEngine.IsAborted)
 			{
-				passed = false;
-				break;
+				OutputStatus("Iteration compiler run aborted. Treating as FAIL.");
+				return new IterationResult(false);
 			}
-		}
 
-		return new IterationResult(true, passed);
+			var unitTests = PrepareUnitTests(discoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
+
+			unitTestEngine.QueueUnitTests(unitTests);
+			unitTestEngine.WaitUntilComplete();
+			unitTestEngine.Terminate();
+
+			var passed = true;
+			foreach (var unitTest in unitTests)
+			{
+				if (unitTest.Status is UnitTestStatus.Failed or UnitTestStatus.FailedByCrash or UnitTestStatus.Pending)
+				{
+					passed = false;
+					break;
+				}
+			}
+
+			return new IterationResult(passed);
+		}
+		catch (AssertFailureException ex)
+		{
+			OutputStatus($"Debug.Assert captured and treated as FAIL: {ex.Message}");
+			return new IterationResult(false);
+		}
+		catch (Exception ex)
+		{
+			OutputStatus($"Iteration exception treated as FAIL: {ex.Message}");
+			OutputStatus($"Iteration exception stack: {ex.StackTrace}");
+			return new IterationResult(false);
+		}
 	}
 
 	private CompilerHooks CreateCompilerHooks()
@@ -218,10 +223,10 @@ public sealed class UnitTestBisectorSystem
 	private void PrintDisabledTransforms()
 	{
 		OutputStatus($"Disabled Transforms: {disabledTransformNames.Count}");
-		foreach (var transform in disabledTransformNames.OrderBy(t => t))
-		{
-			OutputStatus($"  DISABLED: {transform}");
-		}
+		//foreach (var transform in disabledTransformNames.OrderBy(t => t))
+		//{
+		//	OutputStatus($"  DISABLED: {transform}");
+		//}
 	}
 
 	private void PrintStatus(Bisector<string>.BisectorStatus status)
@@ -262,5 +267,59 @@ public sealed class UnitTestBisectorSystem
 		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 
-	private readonly record struct IterationResult(bool CompileSucceeded, bool Passed);
+	private readonly record struct IterationResult(bool Passed);
+
+	private sealed class AssertCaptureScope : IDisposable
+	{
+		private readonly List<(DefaultTraceListener Listener, bool AssertUiEnabled)> defaultListeners = new();
+		private readonly TraceListener listener = new AssertExceptionTraceListener();
+
+		public AssertCaptureScope()
+		{
+			foreach (TraceListener traceListener in Trace.Listeners)
+			{
+				if (traceListener is DefaultTraceListener defaultTraceListener)
+				{
+					defaultListeners.Add((defaultTraceListener, defaultTraceListener.AssertUiEnabled));
+					defaultTraceListener.AssertUiEnabled = false;
+				}
+			}
+
+			Trace.Listeners.Add(listener);
+		}
+
+		public void Dispose()
+		{
+			Trace.Listeners.Remove(listener);
+
+			foreach (var (listener, assertUiEnabled) in defaultListeners)
+			{
+				listener.AssertUiEnabled = assertUiEnabled;
+			}
+		}
+	}
+
+	private sealed class AssertExceptionTraceListener : TraceListener
+	{
+		public override void Write(string message)
+		{
+		}
+
+		public override void WriteLine(string message)
+		{
+		}
+
+		public override void Fail(string message, string detailMessage)
+		{
+			throw new AssertFailureException(message, detailMessage);
+		}
+	}
+
+	private sealed class AssertFailureException : Exception
+	{
+		public AssertFailureException(string message, string detailMessage)
+			: base(string.IsNullOrWhiteSpace(detailMessage) ? message : $"{message} {detailMessage}")
+		{
+		}
+	}
 }
