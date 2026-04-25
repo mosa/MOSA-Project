@@ -42,7 +42,7 @@ public abstract class BaseRegisterAllocator
 
 	private readonly List<Node> SlotsToNodes = new(512);
 
-	protected readonly List<SlotIndex> KillSite = new();
+	protected readonly List<SlotIndex> KillSites = new();
 
 	protected readonly BaseMethodCompilerStage.CreateTraceHandler CreateTrace;
 
@@ -278,7 +278,6 @@ public abstract class BaseRegisterAllocator
 
 	protected int GetIndex(Operand operand)
 	{
-		//FUTURE: Make private by refactoring
 		return operand.IsPhysicalRegister ? operand.Register.Index : operand.Index + PhysicalRegisterCount - 1;
 	}
 
@@ -606,20 +605,24 @@ public abstract class BaseRegisterAllocator
 	private void ComputeGlobalLiveSets()
 	{
 		var changed = true;
+		var liveOut = new BitArray(RegisterCount);
+		var liveIn = new BitArray(RegisterCount);
+
 		while (changed)
 		{
 			changed = false;
 
 			foreach (var block in ExtendedBlocks)
 			{
-				var liveOut = new BitArray(RegisterCount);
+				liveOut.SetAll(false);
 
 				foreach (var next in block.BasicBlock.NextBlocks)
 				{
 					liveOut.Or(ExtendedBlocks[next.Sequence].LiveIn);
 				}
 
-				var liveIn = new BitArray(block.LiveOut);
+				liveIn.SetAll(false);
+				liveIn.Or(liveOut);
 
 				if (block.LiveKillNot != null)
 					liveIn.And(block.LiveKillNot);
@@ -628,17 +631,25 @@ public abstract class BaseRegisterAllocator
 
 				liveIn.Or(block.LiveGen);
 
-				// compare them for any changes
-				if (!changed)
+				var liveOutChanged = !block.LiveOut.AreSame(liveOut);
+				var liveInChanged = !block.LiveIn.AreSame(liveIn);
+
+				if (liveOutChanged)
 				{
-					if (!block.LiveOut.AreSame(liveOut) || !block.LiveIn.AreSame(liveIn))
-					{
-						changed = true;
-					}
+					block.LiveOut.SetAll(false);
+					block.LiveOut.Or(liveOut);
 				}
 
-				block.LiveOut = liveOut;
-				block.LiveIn = liveIn;
+				if (liveInChanged)
+				{
+					block.LiveIn.SetAll(false);
+					block.LiveIn.Or(liveIn);
+				}
+
+				if (!changed && (liveOutChanged || liveInChanged))
+				{
+					changed = true;
+				}
 			}
 		}
 	}
@@ -707,7 +718,7 @@ public abstract class BaseRegisterAllocator
 						}
 					}
 
-					KillSite.Add(slot);
+					KillSites.Add(slot);
 				}
 
 				foreach (var result in node.Results)
@@ -783,19 +794,35 @@ public abstract class BaseRegisterAllocator
 			}
 		}
 
-		KillSite.Sort();
+		KillSites.Sort();
 	}
 
 	protected SlotIndex FindKillAllSite(LiveInterval liveInterval)
 	{
-		// FUTURE: Optimization - KillAll is sorted!
-		foreach (var slot in KillSite)
+		if (KillSites.Count == 0)
+			return SlotIndex.Null;
+
+		var low = 0;
+		var high = KillSites.Count - 1;
+
+		while (low <= high)
 		{
-			if (liveInterval.Contains(slot))
-			{
-				return slot;
-			}
+			var mid = low + ((high - low) >> 1);
+			var slot = KillSites[mid];
+
+			if (slot < liveInterval.Start)
+				low = mid + 1;
+			else
+				high = mid - 1;
 		}
+
+		if (low < KillSites.Count)
+		{
+			var candidate = KillSites[low];
+			if (candidate <= liveInterval.End)
+				return candidate;
+		}
+
 		return SlotIndex.Null;
 	}
 
@@ -1380,16 +1407,11 @@ public abstract class BaseRegisterAllocator
 
 	private IEnumerable<Register> GetVirtualRegisters(BitArray array)
 	{
-		for (var i = 0; i < array.Count; i++)
+		for (var i = PhysicalRegisterCount; i < array.Count; i++)
 		{
 			if (array.Get(i))
 			{
-				var register = Registers[i];
-
-				if (register.IsVirtualRegister)
-				{
-					yield return register;
-				}
+				yield return Registers[i];
 			}
 		}
 	}
@@ -1527,6 +1549,19 @@ public abstract class BaseRegisterAllocator
 			if (register.LiveIntervals.Count <= 1)
 				continue;
 
+			var intervalsByStart = new Dictionary<SlotIndex, List<LiveInterval>>(register.LiveIntervals.Count);
+
+			foreach (var interval in register.LiveIntervals)
+			{
+				if (!intervalsByStart.TryGetValue(interval.Start, out var list))
+				{
+					list = new List<LiveInterval>(1);
+					intervalsByStart.Add(interval.Start, list);
+				}
+
+				list.Add(interval);
+			}
+
 			foreach (var currentInterval in register.LiveIntervals)
 			{
 				// No moves at block edges (these are done in the resolve move phase later)
@@ -1535,25 +1570,24 @@ public abstract class BaseRegisterAllocator
 
 				var currentInternalEndNext = currentInterval.End.Next;
 
-				// List is not sorted, so scan thru each one
-				foreach (var nextInterval in register.LiveIntervals)
-				{
-					if (currentInternalEndNext != nextInterval.Start)
-						continue;
+				if (!intervalsByStart.TryGetValue(currentInternalEndNext, out var nextIntervals))
+					continue;
 
+				foreach (var nextInterval in nextIntervals)
+				{
 					// same interval
 					if (currentInterval == nextInterval)
 						continue;
 
 					// next interval is stack - stores to stack are done elsewhere
 					if (nextInterval.AssignedPhysicalOperand == null)
-						break;
+						continue;
 
 					// check if source and destination operands of the move are the same
 					if (nextInterval.AssignedOperand == currentInterval.AssignedOperand
 						|| nextInterval.AssignedOperand.Register == currentInterval.AssignedOperand.Register)
 					{
-						break;
+						continue;
 					}
 
 					// don't load from slot if next live interval starts with a def before use

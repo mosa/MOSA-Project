@@ -175,6 +175,11 @@ public sealed class MethodScheduler
 		Add(method);
 	}
 
+	public void Schedule(List<MosaMethod> methods)
+	{
+		Add(methods);
+	}
+
 	public void Add(MosaMethod method)
 	{
 		var methodData = Compiler.GetMethodData(method);
@@ -199,6 +204,29 @@ public sealed class MethodScheduler
 	}
 
 	public void Add(HashSet<MosaMethod> methods)
+	{
+		int queueSize;
+
+		var lockTimer = Stopwatch.StartNew();
+		lock (queue)
+		{
+			Compiler.LockMonitor.RecordLockWait(lockTimer, queue, "MethodScheduler.queue");
+
+			foreach (var method in methods)
+			{
+				var methodData = Compiler.GetMethodData(method);
+
+				AddInsideLock(methodData);
+			}
+
+			queueSize = totalQueued;
+		}
+
+		UpdateQueueMetrics(queueSize);
+		SignalEnqueued();
+	}
+
+	public void Add(List<MosaMethod> methods)
 	{
 		int queueSize;
 
@@ -363,47 +391,36 @@ public sealed class MethodScheduler
 		var activeWorkers = pipelinePool?.ActiveWorkers ?? 0;
 		var maxWorkers = pipelinePool?.MaxWorkers ?? 0;
 		var utilizationPercent = maxWorkers > 0 ? (activeWorkers * 100.0 / maxWorkers) : 0;
-		var idleWorkers = maxWorkers - activeWorkers;
 
 		// Calculate CPU usage with equivalent core count
 		var cpuPercent = CalculateCpuUsage(currentTicks);
-		var equivalentCores = (cpuPercent * processorCount) / 100.0;
-
-		var deferredCount = totalDeferred;
 
 		Compiler.PostEvent(
 			CompilerEvent.Diagnostic,
-			$"[Queue] Size: {currentQueueSize} | Deferred: {deferredCount} | " +
-			$"Active: {activeWorkers}/{maxWorkers} ({utilizationPercent:F1}%) | Idle: {idleWorkers} | " +
-			$"Enqueue: {enqueueRate}/s | Dequeue: {dequeueRate}/s | " +
-			$"CPU: {cpuPercent:F1}% ({equivalentCores:F1}/{processorCount} cores)"
+			$"[Queue] Size: {currentQueueSize} | Deferred: {totalDeferred} | " +
+			$"Active: {activeWorkers}/{maxWorkers} ({utilizationPercent:F1}%) | " +
+			$"In: {enqueueRate}/s | Out: {dequeueRate}/s | " +
+			$"CPU: {cpuPercent:F1}%"
 		);
 	}
 
 	private double CalculateCpuUsage(long currentTicks)
 	{
-		try
+		currentProcess.Refresh();
+		var currentCpuTime = currentProcess.TotalProcessorTime;
+		var cpuTimeDelta = (currentCpuTime - lastCpuTime).TotalMilliseconds;
+
+		var ticksDelta = currentTicks - lastCpuCheckTicks;
+		var wallTimeDelta = (ticksDelta / (double)Stopwatch.Frequency) * 1000.0; // Convert to milliseconds
+
+		lastCpuTime = currentCpuTime;
+		lastCpuCheckTicks = currentTicks;
+
+		if (wallTimeDelta > 0 && wallTimeDelta < 60000) // Sanity check: < 60 seconds
 		{
-			currentProcess.Refresh();
-			var currentCpuTime = currentProcess.TotalProcessorTime;
-			var cpuTimeDelta = (currentCpuTime - lastCpuTime).TotalMilliseconds;
-
-			var ticksDelta = currentTicks - lastCpuCheckTicks;
-			var wallTimeDelta = (ticksDelta / (double)Stopwatch.Frequency) * 1000.0; // Convert to milliseconds
-
-			lastCpuTime = currentCpuTime;
-			lastCpuCheckTicks = currentTicks;
-
-			if (wallTimeDelta > 0 && wallTimeDelta < 60000) // Sanity check: < 60 seconds
-			{
-				// CPU percentage divided by cores to match Task Manager (0-100% scale)
-				var cpuPercent = (cpuTimeDelta / wallTimeDelta / processorCount) * 100.0;
-				return Math.Clamp(cpuPercent, 0.0, 100.0);
-			}
-		}
-		catch
-		{
-			// Ignore any errors in CPU calculation
+			// CPU percentage divided by cores to match Task Manager (0-100% scale)
+			var cpuPercent = (cpuTimeDelta / wallTimeDelta / processorCount) * 100.0;
+			return Math.Clamp(cpuPercent, 0.0, 100.0);
 		}
 
 		return 0.0;

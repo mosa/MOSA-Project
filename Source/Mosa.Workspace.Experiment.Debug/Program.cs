@@ -4,71 +4,111 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Compiler.Platforms;
 using Mosa.Utility.Configuration;
 
 namespace Mosa.Workspace.Experiment.Debug;
 
 internal static class Program
 {
+	private static MosaSettings MosaSettings = new();
+	private static Stopwatch Stopwatch = new();
+
 	private static void Main()
 	{
 		Compile();
 	}
 
+	private static void SetRequiredSettings()
+	{
+		MosaSettings.BaseAddress = 0x00500000;
+		MosaSettings.EmitBinary = true;
+		MosaSettings.PlugKernel = true;
+		MosaSettings.PlugKorlib = true;
+		MosaSettings.Emulator = "qemu";
+		MosaSettings.EmulatorMemory = 128;
+		MosaSettings.EmulatorCores = 1;
+		MosaSettings.Multithreading = true;
+		MosaSettings.MaxThreads = Environment.ProcessorCount;
+		MosaSettings.MethodScanner = true;
+		MosaSettings.Launcher = true;
+		MosaSettings.LauncherStart = false;
+		MosaSettings.LauncherExit = true;
+		MosaSettings.TraceLevel = 0;
+		MosaSettings.Diagnostic = true;
+
+		MosaSettings.AddSourceFile($"Mosa.UnitTests.BareMetal.{MosaSettings.Platform}.dll");
+		MosaSettings.AddSourceFile("Mosa.UnitTests.dll");
+
+		MosaSettings.EmulatorSerialPort = 11111;
+		MosaSettings.LauncherStart = false;
+		MosaSettings.Launcher = false;
+		MosaSettings.LauncherExit = false;
+		MosaSettings.ImageFolder = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest");
+		MosaSettings.AddSearchPath(AppContext.BaseDirectory);
+	}
+
+	public static void UpdateSettings()
+	{
+		MosaSettings.LoadAppLocations();
+		MosaSettings.SetDefaultSettings();
+		MosaSettings.NormalizeSettings();
+		MosaSettings.ResolveDefaults();
+		SetRequiredSettings();
+		MosaSettings.ResolveFileAndPathSettings();
+		MosaSettings.AddStandardPlugs();
+		MosaSettings.ExpandSearchPaths();
+	}
+
 	private static void Compile()
 	{
+		Stopwatch.Start();
+		OutputStatus("Initializing...");
+
 		RegisterPlatforms();
+		UpdateSettings();
 
-		var mosaSettings = new MosaSettings
-		{
-			BaseAddress = 0x00500000,
-			EmulatorSerialPort = 11111,
-			LauncherStart = false,
-			Launcher = false,
-			LauncherExit = false,
-			ImageFolder = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest")
-		};
-
-		//mosaSettings.AddSearchPath(AppContext.BaseDirectory);
-		//mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.UnitTests.BareMetal.x86.dll"));
-		//mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.dll"));
-		//mosaSettings.AddSourceFile(Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.x86.dll"));
-
-		var stopwatch = new Stopwatch();
-
-		var compiler = new MosaCompiler(mosaSettings, new CompilerHooks(), new ClrModuleLoader(), new ClrTypeResolver());
+		var compilerHook = CreateCompilerHook();
+		var compiler = new MosaCompiler(MosaSettings, compilerHook, new ClrModuleLoader(), new ClrTypeResolver());
 
 		compiler.Load();
 		compiler.Initialize();
 		compiler.Setup();
 
-		stopwatch.Start();
-
-		MeasureCompileTime(stopwatch, compiler, "Mosa.UnitTests.Basic.ArrayLayoutTests::C_4");
-
-		compiler.ScheduleAll();
-
-		var start = stopwatch.Elapsed.TotalSeconds;
-
-		Console.WriteLine("Threaded Execution Time:");
-
-		//compiler.ThreadedCompile();
-
-		//compiler.Execute();
-
-		Console.WriteLine($"Elapsed: {stopwatch.Elapsed.TotalSeconds - start:F2} secs");
-
-		Console.ReadKey();
+		RunSingleMethodPerformanceTest(compiler);
+		RunMultithreadedFuzzPerformanceTest(compiler);
 	}
 
-	private static void RegisterPlatforms()
+	private static void RunMultithreadedFuzzPerformanceTest(MosaCompiler compiler)
 	{
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
+		var start = Stopwatch.Elapsed.TotalSeconds;
+
+		const int targetCount = 100000;
+		var methods = GetFuzzyMethods(compiler.TypeSystem, targetCount);
+
+		OutputStatus($"Scheduling {methods.Count} fuzzy methods...");
+		compiler.Schedule(methods);
+
+		OutputStatus($"Compiling scheduled methods using {MosaSettings.MaxThreads} threads...");
+		compiler.Compile(true);
+
+		OutputStatus($"Total Elapsed: {Stopwatch.Elapsed.TotalSeconds - start:F2} secs");
 	}
 
-	private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, string methodName, int iterations = 10)
+	private static void RunSingleMethodPerformanceTest(MosaCompiler compiler)
+	{
+		var start = Stopwatch.Elapsed.TotalSeconds;
+
+		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod900");
+		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod901");
+		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod902");
+		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod903");
+		MeasureCompileTime(Stopwatch, compiler, "Mosa.UnitTests.Fuzzy.Fuzz0009::FuzzMethod904");
+
+		OutputStatus($"Elapsed: {Stopwatch.Elapsed.TotalSeconds - start:F2} secs");
+	}
+
+	private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, string methodName, int iterations = 100)
 	{
 		var method = GetMethod(methodName, compiler.TypeSystem);
 
@@ -77,7 +117,7 @@ internal static class Program
 
 	private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, MosaMethod method, int iterations)
 	{
-		Console.WriteLine($"Method: {method}");
+		OutputStatus($"Method: {method}");
 
 		double min = double.MaxValue;
 		double max = double.MinValue;
@@ -85,24 +125,62 @@ internal static class Program
 
 		for (int i = 0; i < iterations; i++)
 		{
-			var start = stopwatch.Elapsed.TotalMilliseconds;
+			var start = Stopwatch.Elapsed.TotalMilliseconds;
 
 			compiler.CompileSingleMethod(method);
 
-			var elapsed = stopwatch.Elapsed.TotalMilliseconds - start;
+			var elapsed = Stopwatch.Elapsed.TotalMilliseconds - start;
 
 			min = Math.Min(min, elapsed);
 			max = Math.Max(max, elapsed);
 			total += elapsed;
 
-			//Console.WriteLine($"Elapsed: {elapsed.ToString("F2")} ms");
+			//OutputStatus($"Elapsed: {elapsed.ToString("F2")} ms");
 		}
 
 		double avg = total / iterations;
 
-		Console.WriteLine($"Elapsed: {max:F2} ms (worst)");
-		Console.WriteLine($"Elapsed: {avg:F2} ms (average)");
-		Console.WriteLine($"Elapsed: {min:F2} ms (best)");
+		OutputStatus($"  Iterations: {iterations}");
+		OutputStatus($"  Elapsed: {max:F2} ms (worst)");
+		OutputStatus($"  Elapsed: {avg:F2} ms (average)");
+		OutputStatus($"  Elapsed: {min:F2} ms (best)");
+	}
+
+	private static CompilerHooks CreateCompilerHook()
+	{
+		var compilerHooks = new CompilerHooks
+		{
+			NotifyEvent = NotifyEvent,
+			NotifyProgress = NotifyProgress,
+			NotifyStatus = NotifyStatus,
+		};
+
+		return compilerHooks;
+	}
+
+	private static void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
+	{
+		if (CompilerHooks.IsStandardFilteredNotifyEvent(compilerEvent))
+			return;
+
+		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+			return;
+
+		OutputStatus(CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message));
+	}
+
+	private static void NotifyProgress(int totalMethods, int completedMethods)
+	{
+	}
+
+	private static void NotifyStatus(string status)
+	{
+		OutputStatus(status);
+	}
+
+	private static void RegisterPlatforms()
+	{
+		PlatformRegistrations.Register();
 	}
 
 	private static MosaMethod GetMethod(string partial, TypeSystem typeSystem)
@@ -117,5 +195,34 @@ internal static class Program
 		}
 
 		return null;
+	}
+
+	private static List<MosaMethod> GetFuzzyMethods(TypeSystem typeSystem, int limit)
+	{
+		var methods = new List<MosaMethod>(limit);
+
+		foreach (var type in typeSystem.AllTypes)
+		{
+			if (!type.FullName.Contains("Mosa.UnitTests.Fuzzy."))
+				continue;
+
+			foreach (var method in type.Methods)
+			{
+				if (!method.FullName.Contains("::FuzzMethod"))
+					continue;
+
+				methods.Add(method);
+
+				if (methods.Count >= limit)
+					return methods;
+			}
+		}
+
+		return methods;
+	}
+
+	private static void OutputStatus(string status)
+	{
+		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 }
