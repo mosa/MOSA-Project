@@ -67,22 +67,33 @@ public class SafePointStage : BaseMethodCompilerStage
 
 	private void InsertSafePointsAtBackedges(List<Loop> loops)
 	{
-		var visited = new HashSet<BasicBlock>();
+		var visited = new HashSet<(BasicBlock Backedge, BasicBlock Header)>();
 
 		foreach (var loop in loops)
 		{
 			foreach (var backedge in loop.Backedges)
 			{
-				if (!visited.Add(backedge))
+				if (!visited.Add((backedge, loop.Header)))
 					continue;
 
-				backedge.ContextBeforeBranch.InsertAfter().SetInstruction(IR.SafePoint);
-
-				SafePointsInsertedCount.Increment();
-
-				Trace?.Log($"SafePoint inserted at backedge: {backedge} -> {loop.Header}");
+				InsertSafePointAtBackedge(backedge, loop.Header);
 			}
 		}
+	}
+
+	private void InsertSafePointAtBackedge(BasicBlock backedge, BasicBlock header)
+	{
+		var context = CreateNewBlockContext(header.First.Label);
+
+		context.AppendInstruction(IR.SafePoint);
+		context.AppendInstruction(IR.Jmp, header);
+		context.Label = -1;
+
+		BasicBlocks.ReplaceBranchTargets(backedge, header, context.Block);
+
+		SafePointsInsertedCount.Increment();
+
+		Trace?.Log($"SafePoint inserted at backedge block: {backedge} -> {context.Block} -> {header}");
 	}
 
 	#endregion Insertion
