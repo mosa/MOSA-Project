@@ -398,7 +398,7 @@ public class MethodScanner
 
 		ScheduleRequiredMethods();
 
-		//ScheduleUnitTests();
+		ScheduleUnitTests();
 	}
 
 	private void ScheduleUnitTests()
