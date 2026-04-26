@@ -37,10 +37,10 @@ public sealed class UnitTestBisectorSystem
 
 			LoadForcedDisabledTransforms();
 
-			OutputStatus("Resolving stage type...");
+			OutputStatusBisector("Resolving stage type...");
 			selectedStageType = ResolveStageType(MosaSettings.UnitTestBisectorStage);
 			selectedStageName = selectedStageType.Name;
-			OutputStatus($"Stage: {selectedStageType.FullName} ({selectedStageName})");
+			OutputStatusBisector($"Stage: {selectedStageType.FullName} ({selectedStageName})");
 
 			OutputStatus("Discovering Unit Tests...");
 			discoveredUnitTests = Discovery.DiscoverUnitTests(MosaSettings.UnitTestFilter);
@@ -52,39 +52,39 @@ public sealed class UnitTestBisectorSystem
 				return 1;
 			}
 
-			OutputStatus("Starting discovery iteration...");
+			OutputStatusBisector("Starting discovery iteration...");
 			var discoveryResult = ExecuteIteration();
 
 			if (observedTransformNames.Count == 0)
 			{
-				OutputStatus("ERROR: No observed transforms were captured for the selected stage.");
+				OutputStatusBisector("ERROR: No observed transforms were captured for the selected stage.");
 				return 1;
 			}
 
-			OutputStatus($"Observed Transforms: {observedTransformNames.Count}");
-			OutputStatus($"Discovery Iteration: {(discoveryResult.Passed ? "PASS" : "FAIL")}");
+			OutputStatusBisector($"Observed Transforms: {observedTransformNames.Count}");
+			OutputStatusBisector($"Discovery Iteration: {(discoveryResult.Passed ? "PASS" : "FAIL")}");
 			ReportForcedDisabledNotObserved();
 
 			if (!discoveryResult.Passed)
 			{
-				OutputStatus("Running failure-inducing bisector...");
+				OutputStatusBisector("Running failure-inducing bisector...");
 				RunBisectorSession("Failure-Inducing", invertOutcome: false, discoveryResult);
 
 				if (!MosaSettings.UnitTestBisectorMasking)
 					return 0;
 
-				OutputStatus("Running masking bisector (items whose removal induces failure)...");
+				OutputStatusBisector("Running masking bisector (items whose removal induces failure)...");
 				RunBisectorSession("Masking", invertOutcome: true, discoveryResult);
 				return 0;
 			}
 
 			if (!MosaSettings.UnitTestBisectorMasking)
 			{
-				OutputStatus("Discovery passed and masking mode disabled. Nothing to bisect.");
+				OutputStatusBisector("Discovery passed and masking mode disabled. Nothing to bisect.");
 				return 0;
 			}
 
-			OutputStatus("Running masking bisector (items whose removal induces failure)...");
+			OutputStatusBisector("Running masking bisector (items whose removal induces failure)...");
 			RunBisectorSession("Masking", invertOutcome: true, discoveryResult);
 			return 0;
 		}
@@ -107,7 +107,7 @@ public sealed class UnitTestBisectorSystem
 		RebuildEffectiveDisabledSet();
 		var mappedBaseline = MapOutcome(discoveryResult.Passed, invertOutcome);
 		bisector.AcceptResult(mappedBaseline);
-		OutputStatus($"{sessionName} Baseline -> Actual: {(discoveryResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedBaseline ? "PASS" : "FAIL")}");
+		OutputStatusBisector($"{sessionName} Baseline -> Actual: {(discoveryResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedBaseline ? "PASS" : "FAIL")}");
 
 		while (!bisector.IsComplete)
 		{
@@ -120,11 +120,11 @@ public sealed class UnitTestBisectorSystem
 			var mappedResult = MapOutcome(iterationResult.Passed, invertOutcome);
 
 			bisector.AcceptResult(mappedResult);
-			OutputStatus($"Iteration Result -> Actual: {(iterationResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedResult ? "PASS" : "FAIL")}");
+			OutputStatusBisector($"Iteration Result -> Actual: {(iterationResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedResult ? "PASS" : "FAIL")}");
 			PrintStatus(bisector.GetStatus());
 		}
 
-		OutputStatus($"{sessionName} bisector complete.");
+		OutputStatusBisector($"{sessionName} bisector complete.");
 		PrintFinalReport(sessionName, bisector);
 	}
 
@@ -142,7 +142,7 @@ public sealed class UnitTestBisectorSystem
 			using var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus, CreateCompilerHooks);
 			if (unitTestEngine.IsAborted)
 			{
-				OutputStatus("Iteration compiler run aborted. Treating as FAIL.");
+				OutputStatusBisector("Iteration compiler run aborted. Treating as FAIL.");
 				return new IterationResult(false);
 			}
 
@@ -166,13 +166,13 @@ public sealed class UnitTestBisectorSystem
 		}
 		catch (AssertFailureException ex)
 		{
-			OutputStatus($"Debug.Assert captured and treated as FAIL: {ex.Message}");
+			OutputStatusBisector($"Debug.Assert captured and treated as FAIL: {ex.Message}");
 			return new IterationResult(false);
 		}
 		catch (Exception ex)
 		{
-			OutputStatus($"Iteration exception treated as FAIL: {ex.Message}");
-			OutputStatus($"Iteration exception stack: {ex.StackTrace}");
+			OutputStatusBisector($"Iteration exception treated as FAIL: {ex.Message}");
+			OutputStatusBisector($"Iteration exception stack: {ex.StackTrace}");
 			return new IterationResult(false);
 		}
 	}
@@ -232,8 +232,8 @@ public sealed class UnitTestBisectorSystem
 			forcedDisabledTransformNames.Add(text);
 		}
 
-		OutputStatus($"Forced Disabled Transforms File: {filename}");
-		OutputStatus($"Forced Disabled Transforms Loaded: {forcedDisabledTransformNames.Count}");
+		OutputStatusBisector($"Forced Disabled Transforms File: {filename}");
+		OutputStatusBisector($"Forced Disabled Transforms Loaded: {forcedDisabledTransformNames.Count}");
 	}
 
 	private void RebuildEffectiveDisabledSet()
@@ -253,10 +253,10 @@ public sealed class UnitTestBisectorSystem
 		if (notObserved.Count == 0)
 			return;
 
-		OutputStatus($"WARNING: {notObserved.Count} forced-disabled transforms were not observed in selected stage:");
+		OutputStatusBisector($"WARNING: {notObserved.Count} forced-disabled transforms were not observed in selected stage:");
 		foreach (var name in notObserved)
 		{
-			OutputStatus($"  {name}");
+			OutputStatusBisector($"  {name}");
 		}
 	}
 
@@ -307,62 +307,67 @@ public sealed class UnitTestBisectorSystem
 
 	private void PrintIterationHeader(string sessionName, Bisector<string>.BisectorStatus status)
 	{
-		OutputStatus($"{sessionName} Iteration: {status.Iteration + 1}");
-		OutputStatus($"Level: {status.Level}");
-		OutputStatus($"Phase: {status.Phase}");
-		OutputStatus($"Stage: {selectedStageType.FullName} ({selectedStageName})");
+		OutputStatusBisector($"{sessionName} Iteration: {status.Iteration + 1}");
+		OutputStatusBisector($"Level: {status.Level}");
+		OutputStatusBisector($"Phase: {status.Phase}");
+		OutputStatusBisector($"Stage: {selectedStageType.FullName} ({selectedStageName})");
 	}
 
 	private void PrintDisabledTransforms()
 	{
-		OutputStatus($"Forced Disabled: {forcedDisabledTransformNames.Count}");
-		OutputStatus($"Bisector Disabled: {bisectorDisabledTransformNames.Count}");
-		OutputStatus($"Effective Disabled: {effectiveDisabledTransformNames.Count}");
+		OutputStatusBisector($"Forced Disabled: {forcedDisabledTransformNames.Count}");
+		OutputStatusBisector($"Bisector Disabled: {bisectorDisabledTransformNames.Count}");
+		OutputStatusBisector($"Effective Disabled: {effectiveDisabledTransformNames.Count}");
 
-		//OutputStatus($"Transforms Disabled:");
+		//OutputStatusBisector($"Transforms Disabled:");
 		//foreach (var transform in bisectorDisabledTransformNames.OrderBy(t => t))
 		//{
-		//	OutputStatus($"  {transform}");
+		//	OutputStatusBisector($"  {transform}");
 		//}
 	}
 
 	private void PrintStatus(Bisector<string>.BisectorStatus status)
 	{
-		OutputStatus($"Status.Iteration: {status.Iteration}");
-		OutputStatus($"Status.TotalItems: {status.TotalItemCount}");
-		OutputStatus($"Status.Suspects: {status.SuspectItemCount}");
-		OutputStatus($"Status.BadItems: {status.ConfirmedBadItemCount}");
-		OutputStatus($"Status.BadPairs: {status.ConfirmedBadPairCount}");
-		OutputStatus($"Status.PairwiseCompleted: {status.PairwiseTestsCompleted}");
-		OutputStatus($"Status.PairwiseRemaining: {status.PairwiseTestsRemaining}");
+		OutputStatusBisector($"Status.Iteration: {status.Iteration}");
+		OutputStatusBisector($"Status.TotalItems: {status.TotalItemCount}");
+		OutputStatusBisector($"Status.Suspects: {status.SuspectItemCount}");
+		OutputStatusBisector($"Status.BadItems: {status.ConfirmedBadItemCount}");
+		OutputStatusBisector($"Status.BadPairs: {status.ConfirmedBadPairCount}");
+		OutputStatusBisector($"Status.PairwiseCompleted: {status.PairwiseTestsCompleted}");
+		OutputStatusBisector($"Status.PairwiseRemaining: {status.PairwiseTestsRemaining}");
 	}
 
 	private void PrintFinalReport(string sessionName, Bisector<string> sessionBisector)
 	{
-		OutputStatus($"{sessionName} Final Stage: {selectedStageType.FullName} ({selectedStageName})");
-		OutputStatus("Forced Disabled Items:");
+		OutputStatusBisector($"{sessionName} Final Stage: {selectedStageType.FullName} ({selectedStageName})");
+		OutputStatusBisector("Forced Disabled Items:");
 		foreach (var transform in forcedDisabledTransformNames.OrderBy(t => t))
 		{
-			OutputStatus($"  {transform}");
+			OutputStatusBisector($"  {transform}");
 		}
 
-		OutputStatus("Confirmed Bad Items:");
+		OutputStatusBisector("Confirmed Bad Items:");
 		foreach (var transform in sessionBisector.ConfirmedBadItems.OrderBy(t => t))
 		{
-			OutputStatus($"  {transform}");
+			OutputStatusBisector($"  {transform}");
 		}
 
-		OutputStatus("Confirmed Bad Pairs:");
+		OutputStatusBisector("Confirmed Bad Pairs:");
 		foreach (var pair in sessionBisector.ConfirmedBadPairs.OrderBy(p => p.Item1).ThenBy(p => p.Item2))
 		{
-			OutputStatus($"  {pair.Item1} + {pair.Item2}");
+			OutputStatusBisector($"  {pair.Item1} + {pair.Item2}");
 		}
 
-		OutputStatus("Remaining Suspects:");
+		OutputStatusBisector("Remaining Suspects:");
 		foreach (var transform in sessionBisector.RemainingSuspectItems.OrderBy(t => t))
 		{
-			OutputStatus($"  {transform}");
+			OutputStatusBisector($"  {transform}");
 		}
+	}
+
+	private void OutputStatusBisector(string status)
+	{
+		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | [Bisector] {status}");
 	}
 
 	private void OutputStatus(string status)
