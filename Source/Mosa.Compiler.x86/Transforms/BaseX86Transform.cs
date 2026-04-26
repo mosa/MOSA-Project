@@ -12,6 +12,19 @@ namespace Mosa.Compiler.x86.Transforms
 
 		#region Helpers
 
+		public static void MoveConstantToRegister(Transform transform, Context context, int index)
+		{
+			var operand = context.GetOperand(index);
+
+			if (!operand.IsConstant)
+				return;
+
+			var v1 = transform.VirtualRegisters.Allocate(operand);
+
+			context.InsertBefore().SetInstruction(X86.Mov32, v1, operand);
+			context.SetOperand(index, v1);
+		}
+
 		public static Operand MoveConstantToFloatRegister(Transform transform, Context context, Operand operand)
 		{
 			if (!operand.IsConstant)

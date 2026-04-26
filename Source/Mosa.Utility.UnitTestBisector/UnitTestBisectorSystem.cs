@@ -318,6 +318,12 @@ public sealed class UnitTestBisectorSystem
 		OutputStatus($"Forced Disabled: {forcedDisabledTransformNames.Count}");
 		OutputStatus($"Bisector Disabled: {bisectorDisabledTransformNames.Count}");
 		OutputStatus($"Effective Disabled: {effectiveDisabledTransformNames.Count}");
+
+		//OutputStatus($"Transforms Disabled:");
+		//foreach (var transform in bisectorDisabledTransformNames.OrderBy(t => t))
+		//{
+		//	OutputStatus($"  {transform}");
+		//}
 	}
 
 	private void PrintStatus(Bisector<string>.BisectorStatus status)

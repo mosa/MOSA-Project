@@ -3,7 +3,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
-using Microsoft.Win32;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
@@ -93,7 +92,7 @@ public partial class MainForm : Form
 
 	protected void CreateAppRegistryKey()
 	{
-		var software = Registry.CurrentUser.OpenSubKey(WindowsRegistry.Software, RegistryKeyPermissionCheck.ReadWriteSubTree);
+		var software = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(WindowsRegistry.Software, Microsoft.Win32.RegistryKeyPermissionCheck.ReadWriteSubTree);
 		software.CreateSubKey(WindowsRegistry.MosaApp);
 	}
 
@@ -542,9 +541,6 @@ public partial class MainForm : Form
 	private void UpdateDisabledTransformNames()
 	{
 		DisabledTransformNames.Clear();
-
-		if (tbDisabledTransforms == null)
-			return;
 
 		foreach (var line in tbDisabledTransforms.Lines)
 		{
