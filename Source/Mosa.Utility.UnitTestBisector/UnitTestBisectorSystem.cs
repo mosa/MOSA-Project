@@ -19,7 +19,9 @@ public sealed class UnitTestBisectorSystem
 	private Type selectedStageType;
 	private string selectedStageName;
 	private HashSet<string> observedTransformNames = [];
-	private HashSet<string> disabledTransformNames = [];
+	private HashSet<string> bisectorDisabledTransformNames = [];
+	private HashSet<string> effectiveDisabledTransformNames = [];
+	private HashSet<string> forcedDisabledTransformNames = [];
 
 	private Bisector<string> bisector;
 
@@ -32,6 +34,8 @@ public sealed class UnitTestBisectorSystem
 			MosaSettings.UnitTestFailFast = true;
 
 			Stopwatch.Start();
+
+			LoadForcedDisabledTransforms();
 
 			OutputStatus("Resolving stage type...");
 			selectedStageType = ResolveStageType(MosaSettings.UnitTestBisectorStage);
@@ -59,6 +63,7 @@ public sealed class UnitTestBisectorSystem
 
 			OutputStatus($"Observed Transforms: {observedTransformNames.Count}");
 			OutputStatus($"Discovery Iteration: {(discoveryResult.Passed ? "PASS" : "FAIL")}");
+			ReportForcedDisabledNotObserved();
 
 			if (!discoveryResult.Passed)
 			{
@@ -93,18 +98,21 @@ public sealed class UnitTestBisectorSystem
 
 	private void RunBisectorSession(string sessionName, bool invertOutcome, IterationResult discoveryResult)
 	{
-		disabledTransformNames = [];
-		bisector = new Bisector<string>(observedTransformNames);
+		bisectorDisabledTransformNames = [];
+		RebuildEffectiveDisabledSet();
+		bisector = new Bisector<string>(observedTransformNames.Where(name => !forcedDisabledTransformNames.Contains(name)));
 
 		// Consume the baseline using discovery outcome to avoid rerunning identical baseline iteration.
-		disabledTransformNames = [.. bisector.GetNextDisabledItems()];
+		bisectorDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
+		RebuildEffectiveDisabledSet();
 		var mappedBaseline = MapOutcome(discoveryResult.Passed, invertOutcome);
 		bisector.AcceptResult(mappedBaseline);
 		OutputStatus($"{sessionName} Baseline -> Actual: {(discoveryResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedBaseline ? "PASS" : "FAIL")}");
 
 		while (!bisector.IsComplete)
 		{
-			disabledTransformNames = [.. bisector.GetNextDisabledItems()];
+			bisectorDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
+			RebuildEffectiveDisabledSet();
 			PrintIterationHeader(sessionName, bisector.GetStatus());
 			PrintDisabledTransforms();
 
@@ -185,7 +193,7 @@ public sealed class UnitTestBisectorSystem
 
 		lock (transformDiscoveryLock)
 		{
-			if (observedTransformNames.Add(transformName) && bisector != null)
+			if (observedTransformNames.Add(transformName) && bisector != null && !forcedDisabledTransformNames.Contains(transformName))
 			{
 				bisector.ObserveItem(transformName);
 			}
@@ -197,7 +205,59 @@ public sealed class UnitTestBisectorSystem
 		if (!string.Equals(stageName, selectedStageName, StringComparison.Ordinal))
 			return false;
 
-		return disabledTransformNames.Contains(transformName);
+		return effectiveDisabledTransformNames.Contains(transformName);
+	}
+
+	private void LoadForcedDisabledTransforms()
+	{
+		forcedDisabledTransformNames = [];
+
+		var filename = MosaSettings.UnitTestBisectorDisabledTransformsFile;
+		if (string.IsNullOrWhiteSpace(filename))
+			return;
+
+		if (!File.Exists(filename))
+			throw new InvalidOperationException($"Disabled transforms file does not exist: {filename}");
+
+		foreach (var line in File.ReadLines(filename))
+		{
+			var text = line.Trim();
+
+			if (text.Length == 0)
+				continue;
+
+			if (text.StartsWith("#", StringComparison.Ordinal) || text.StartsWith("//", StringComparison.Ordinal))
+				continue;
+
+			forcedDisabledTransformNames.Add(text);
+		}
+
+		OutputStatus($"Forced Disabled Transforms File: {filename}");
+		OutputStatus($"Forced Disabled Transforms Loaded: {forcedDisabledTransformNames.Count}");
+	}
+
+	private void RebuildEffectiveDisabledSet()
+	{
+		effectiveDisabledTransformNames = [.. forcedDisabledTransformNames];
+
+		foreach (var transformName in bisectorDisabledTransformNames)
+			effectiveDisabledTransformNames.Add(transformName);
+	}
+
+	private void ReportForcedDisabledNotObserved()
+	{
+		if (forcedDisabledTransformNames.Count == 0)
+			return;
+
+		var notObserved = forcedDisabledTransformNames.Where(name => !observedTransformNames.Contains(name)).OrderBy(name => name).ToList();
+		if (notObserved.Count == 0)
+			return;
+
+		OutputStatus($"WARNING: {notObserved.Count} forced-disabled transforms were not observed in selected stage:");
+		foreach (var name in notObserved)
+		{
+			OutputStatus($"  {name}");
+		}
 	}
 
 	private Type ResolveStageType(string stageName)
@@ -255,7 +315,9 @@ public sealed class UnitTestBisectorSystem
 
 	private void PrintDisabledTransforms()
 	{
-		OutputStatus($"Disabled Transforms: {disabledTransformNames.Count}");
+		OutputStatus($"Forced Disabled: {forcedDisabledTransformNames.Count}");
+		OutputStatus($"Bisector Disabled: {bisectorDisabledTransformNames.Count}");
+		OutputStatus($"Effective Disabled: {effectiveDisabledTransformNames.Count}");
 	}
 
 	private void PrintStatus(Bisector<string>.BisectorStatus status)
@@ -272,6 +334,12 @@ public sealed class UnitTestBisectorSystem
 	private void PrintFinalReport(string sessionName, Bisector<string> sessionBisector)
 	{
 		OutputStatus($"{sessionName} Final Stage: {selectedStageType.FullName} ({selectedStageName})");
+		OutputStatus("Forced Disabled Items:");
+		foreach (var transform in forcedDisabledTransformNames.OrderBy(t => t))
+		{
+			OutputStatus($"  {transform}");
+		}
+
 		OutputStatus("Confirmed Bad Items:");
 		foreach (var transform in sessionBisector.ConfirmedBadItems.OrderBy(t => t))
 		{

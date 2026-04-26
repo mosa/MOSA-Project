@@ -524,6 +524,12 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.UnitTest_Bisector_Masking, value);
 	}
 
+	public string UnitTestBisectorDisabledTransformsFile
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_DisabledTransformsFile, null);
+		set => Settings.SetValue(Name.UnitTest_Bisector_DisabledTransformsFile, value);
+	}
+
 	public bool UnitTestFailFast
 	{
 		get => Settings.GetValue(Name.UnitTest_FailFast, false);
