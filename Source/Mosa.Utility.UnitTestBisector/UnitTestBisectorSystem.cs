@@ -58,30 +58,29 @@ public sealed class UnitTestBisectorSystem
 			}
 
 			OutputStatus($"Observed Transforms: {observedTransformNames.Count}");
+			OutputStatus($"Discovery Iteration: {(discoveryResult.Passed ? "PASS" : "FAIL")}");
 
-			if (discoveryResult.Passed)
+			if (!discoveryResult.Passed)
 			{
-				OutputStatus("All selected unit tests passed. Nothing to bisect.");
+				OutputStatus("Running failure-inducing bisector...");
+				RunBisectorSession("Failure-Inducing", invertOutcome: false, discoveryResult);
+
+				if (!MosaSettings.UnitTestBisectorMasking)
+					return 0;
+
+				OutputStatus("Running masking bisector (items whose removal induces failure)...");
+				RunBisectorSession("Masking", invertOutcome: true, discoveryResult);
 				return 0;
 			}
 
-			bisector = new Bisector<string>(observedTransformNames);
-
-			while (!bisector.IsComplete)
+			if (!MosaSettings.UnitTestBisectorMasking)
 			{
-				disabledTransformNames = [.. bisector.GetNextDisabledItems()];
-				PrintIterationHeader(bisector.GetStatus());
-				PrintDisabledTransforms();
-
-				var iterationResult = ExecuteIteration();
-
-				bisector.AcceptResult(iterationResult.Passed);
-				OutputStatus($"Iteration Result: {(iterationResult.Passed ? "PASS" : "FAIL")}");
-				PrintStatus(bisector.GetStatus());
+				OutputStatus("Discovery passed and masking mode disabled. Nothing to bisect.");
+				return 0;
 			}
 
-			OutputStatus("Bisector complete.");
-			PrintFinalReport(bisector);
+			OutputStatus("Running masking bisector (items whose removal induces failure)...");
+			RunBisectorSession("Masking", invertOutcome: true, discoveryResult);
 			return 0;
 		}
 		catch (Exception ex)
@@ -90,6 +89,40 @@ public sealed class UnitTestBisectorSystem
 			OutputStatus($"Exception: {ex.StackTrace}");
 			return 1;
 		}
+	}
+
+	private void RunBisectorSession(string sessionName, bool invertOutcome, IterationResult discoveryResult)
+	{
+		disabledTransformNames = [];
+		bisector = new Bisector<string>(observedTransformNames);
+
+		// Consume the baseline using discovery outcome to avoid rerunning identical baseline iteration.
+		disabledTransformNames = [.. bisector.GetNextDisabledItems()];
+		var mappedBaseline = MapOutcome(discoveryResult.Passed, invertOutcome);
+		bisector.AcceptResult(mappedBaseline);
+		OutputStatus($"{sessionName} Baseline -> Actual: {(discoveryResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedBaseline ? "PASS" : "FAIL")}");
+
+		while (!bisector.IsComplete)
+		{
+			disabledTransformNames = [.. bisector.GetNextDisabledItems()];
+			PrintIterationHeader(sessionName, bisector.GetStatus());
+			PrintDisabledTransforms();
+
+			var iterationResult = ExecuteIteration();
+			var mappedResult = MapOutcome(iterationResult.Passed, invertOutcome);
+
+			bisector.AcceptResult(mappedResult);
+			OutputStatus($"Iteration Result -> Actual: {(iterationResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedResult ? "PASS" : "FAIL")}");
+			PrintStatus(bisector.GetStatus());
+		}
+
+		OutputStatus($"{sessionName} bisector complete.");
+		PrintFinalReport(sessionName, bisector);
+	}
+
+	private static bool MapOutcome(bool passed, bool invertOutcome)
+	{
+		return invertOutcome ? !passed : passed;
 	}
 
 	private IterationResult ExecuteIteration()
@@ -212,9 +245,9 @@ public sealed class UnitTestBisectorSystem
 		return unitTests;
 	}
 
-	private void PrintIterationHeader(Bisector<string>.BisectorStatus status)
+	private void PrintIterationHeader(string sessionName, Bisector<string>.BisectorStatus status)
 	{
-		OutputStatus($"Iteration: {status.Iteration + 1}");
+		OutputStatus($"{sessionName} Iteration: {status.Iteration + 1}");
 		OutputStatus($"Level: {status.Level}");
 		OutputStatus($"Phase: {status.Phase}");
 		OutputStatus($"Stage: {selectedStageType.FullName} ({selectedStageName})");
@@ -223,10 +256,6 @@ public sealed class UnitTestBisectorSystem
 	private void PrintDisabledTransforms()
 	{
 		OutputStatus($"Disabled Transforms: {disabledTransformNames.Count}");
-		//foreach (var transform in disabledTransformNames.OrderBy(t => t))
-		//{
-		//	OutputStatus($"  DISABLED: {transform}");
-		//}
 	}
 
 	private void PrintStatus(Bisector<string>.BisectorStatus status)
@@ -240,23 +269,23 @@ public sealed class UnitTestBisectorSystem
 		OutputStatus($"Status.PairwiseRemaining: {status.PairwiseTestsRemaining}");
 	}
 
-	private void PrintFinalReport(Bisector<string> bisector)
+	private void PrintFinalReport(string sessionName, Bisector<string> sessionBisector)
 	{
-		OutputStatus($"Final Stage: {selectedStageType.FullName} ({selectedStageName})");
+		OutputStatus($"{sessionName} Final Stage: {selectedStageType.FullName} ({selectedStageName})");
 		OutputStatus("Confirmed Bad Items:");
-		foreach (var transform in bisector.ConfirmedBadItems.OrderBy(t => t))
+		foreach (var transform in sessionBisector.ConfirmedBadItems.OrderBy(t => t))
 		{
 			OutputStatus($"  {transform}");
 		}
 
 		OutputStatus("Confirmed Bad Pairs:");
-		foreach (var pair in bisector.ConfirmedBadPairs.OrderBy(p => p.Item1).ThenBy(p => p.Item2))
+		foreach (var pair in sessionBisector.ConfirmedBadPairs.OrderBy(p => p.Item1).ThenBy(p => p.Item2))
 		{
 			OutputStatus($"  {pair.Item1} + {pair.Item2}");
 		}
 
 		OutputStatus("Remaining Suspects:");
-		foreach (var transform in bisector.RemainingSuspectItems.OrderBy(t => t))
+		foreach (var transform in sessionBisector.RemainingSuspectItems.OrderBy(t => t))
 		{
 			OutputStatus($"  {transform}");
 		}

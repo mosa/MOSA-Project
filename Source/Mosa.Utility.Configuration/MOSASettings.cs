@@ -518,6 +518,12 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.UnitTest_Bisector_Stage, value);
 	}
 
+	public bool UnitTestBisectorMasking
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Masking, true);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Masking, value);
+	}
+
 	public bool UnitTestFailFast
 	{
 		get => Settings.GetValue(Name.UnitTest_FailFast, false);

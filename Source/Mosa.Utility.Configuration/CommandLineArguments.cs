@@ -195,6 +195,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-maxerrors", Setting = Name.UnitTest_MaxErrors},
 			new Argument { Name = "-fail-fast", Setting = Name.UnitTest_FailFast, Value = "true"},
 			new Argument { Name = "-bisect-stage", Setting = Name.UnitTest_Bisector_Stage},
+			new Argument { Name = "-bisect-masking", Setting = Name.UnitTest_Bisector_Masking, Value = "true"},
+			new Argument { Name = "-bisect-masking-off", Setting = Name.UnitTest_Bisector_Masking, Value = "false"},
 
 			// Optimization Levels:
 			new Argument { Name = "-o0", Setting = Name.Optimizations_Basic, Value = "false"},
