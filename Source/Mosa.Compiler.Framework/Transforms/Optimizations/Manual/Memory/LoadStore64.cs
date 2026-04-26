@@ -40,6 +40,6 @@ public sealed class LoadStore64 : BaseTransform
 	{
 		var previous = GetPreviousNodeUntil(context, IR.Store64, transform.Window, context.Operand1);
 
-		context.SetInstruction(IR.Move32, context.Result, previous.Operand3);
+		context.SetInstruction(IR.Move64, context.Result, previous.Operand3);
 	}
 }
