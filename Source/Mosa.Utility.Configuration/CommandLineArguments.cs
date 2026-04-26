@@ -85,7 +85,7 @@ public static class CommandLineArguments
 			// Compiler - Diagnostic:
 			new Argument { Name = "-diagnostic", Setting = Name.Compiler_Diagnostic, Value = "true"},
 			new Argument { Name = "-diag", Setting = Name.Compiler_Diagnostic, Value = "true"},
-			new Argument { Name = "-check", Setting = Name.Compiler_FullCheckMode, Value = "true"},
+			new Argument { Name = "-check", Setting = Name.Compiler_CheckMode, Value = "true"},
 			new Argument { Name = "-stats", Setting = Name.CompilerDebug_Statistics, Value = "true"},
 
 			new Argument { Name = "-interrupt-method", Setting = Name.X86_InterruptMethodName},

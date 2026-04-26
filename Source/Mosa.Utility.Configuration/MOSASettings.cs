@@ -656,7 +656,7 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Compiler_Diagnostic, value);
 	}
 
-	public bool EmitStatistics
+	public bool Statistics
 	{
 		get => Settings.GetValue(Name.CompilerDebug_Statistics, true);
 		set => Settings.SetValue(Name.CompilerDebug_Statistics, value);
@@ -690,10 +690,10 @@ public partial class MosaSettings
 		get => Settings.GetValueList(Name.Optimizations_Inline_Exclude);
 	}
 
-	public bool FullCheckMode
+	public bool CheckMode
 	{
-		get => Settings.GetValue(Name.Compiler_FullCheckMode, false);
-		set => Settings.SetValue(Name.Compiler_FullCheckMode, value);
+		get => Settings.GetValue(Name.Compiler_CheckMode, false);
+		set => Settings.SetValue(Name.Compiler_CheckMode, value);
 	}
 
 	public string BreakpointFile
@@ -877,7 +877,7 @@ public partial class MosaSettings
 
 		InitialStackLocation = 0;
 		Diagnostic = false;
-		EmitStatistics = false;
+		Statistics = false;
 
 		UnitTestFailFast = false;
 

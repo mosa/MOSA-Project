@@ -121,7 +121,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 		if (!MethodCompiler.HasCILStream)
 			return;
 
-		Trace = CreateTraceLog(5);
+		Trace = CreateTraceLog(9);
 
 		var prologueBlock = BasicBlocks.CreatePrologueBlock();
 		var startBlock = BasicBlocks.CreateStartBlock();
@@ -648,7 +648,7 @@ public sealed class CILDecoderStage : BaseMethodCompilerStage
 	{
 		prefixValues.Reset = true;
 
-		Trace?.Log($"   {label:X5}: {opcode}");
+		//Trace?.Log($"   {label:X5}: {opcode}");
 
 		switch (opcode)
 		{

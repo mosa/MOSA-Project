@@ -253,7 +253,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 				if (MethodCompiler.Statistics)
 					UpdateCounter(transform.Name, 1);
 
-				if (MosaSettings.FullCheckMode)
+				if (MosaSettings.CheckMode)
 					FullCheck(false);
 
 				return true;
@@ -276,7 +276,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 			if (updated)
 			{
-				if (MosaSettings.FullCheckMode)
+				if (MosaSettings.CheckMode)
 					FullCheck(false);
 
 				if (MethodCompiler.Statistics)

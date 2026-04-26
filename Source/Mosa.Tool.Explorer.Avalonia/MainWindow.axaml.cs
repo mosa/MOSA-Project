@@ -132,7 +132,7 @@ public partial class MainWindow : Window
 		MultiThreading.IsChecked = mosaSettings.Multithreading;
 		TreeFilter.Text = mosaSettings.ExplorerFilter;
 		CodeSizeReduction.IsChecked = mosaSettings.ReduceCodeSize;
-		FullCheckMode.IsChecked = mosaSettings.FullCheckMode;
+		FullCheckMode.IsChecked = mosaSettings.CheckMode;
 
 		Platform.SelectedIndex = mosaSettings.Platform.ToLowerInvariant() switch
 		{
@@ -1034,7 +1034,7 @@ public partial class MainWindow : Window
 		mosaSettings.InlineMethods = Inline.IsChecked;
 		mosaSettings.InlineExplicit = InlineExplicit.IsChecked;
 		mosaSettings.ReduceCodeSize = CodeSizeReduction.IsChecked;
-		mosaSettings.FullCheckMode = FullCheckMode.IsChecked;
+		mosaSettings.CheckMode = FullCheckMode.IsChecked;
 
 		mosaSettings.TraceLevel = 10;
 		//mosaSettings.InlineMaximum = 12;

@@ -90,7 +90,7 @@ Below are the command line arguments available:
     -test-filter,CompilerDebug.TestFilter,{value}
 
 	Compiler - Diagnostic:
-    -check,Compiler.FullCheckMode,true
+    -check,Compiler.CheckMode,true
 	-diagnostic,Compiler.Diagnostic,true
 	-diag,Compiler.Diagnostic,true
     -interrupt-method,X86.InterruptMethodName,{value}

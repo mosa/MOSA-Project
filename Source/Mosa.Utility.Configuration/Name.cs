@@ -47,7 +47,7 @@ public static class Name
 	public const string CompilerDebug_PreLinkHashFile = "CompilerDebug.PreLinkHashFile";
 	public const string CompilerDebug_Statistics = "CompilerDebug.Statistics";
 	public const string CompilerDebug_CounterFilter = "CompilerDebug.CounterFilter";
-	public const string Compiler_FullCheckMode = "Compiler.FullCheckMode";
+	public const string Compiler_CheckMode = "Compiler.CheckMode";
 	public const string Compiler_Diagnostic = "Compiler.Diagnostic";
 	public const string Debugger_BreakpointFile = "Debugger.BreakpointFile";
 	public const string Debugger_WatchFile = "Debugger.WatchFile";

@@ -76,7 +76,7 @@ Compiler Diagnostic Settings
    :header: "Settings", "Description"
    :widths: 50, 200
 
-	Compiler.FullCheckMode,"If true, causes the compiler to run internal validate checks (used to test the compiler)"
+	Compiler.CheckMode,"If true, causes the compiler to run internal validate checks (used to test the compiler)"
 	Compiler.Diagnostic,Emit debug/diagnostics information
 
 Debugger Settings

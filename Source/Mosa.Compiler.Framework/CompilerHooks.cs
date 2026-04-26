@@ -72,9 +72,7 @@ public class CompilerHooks
 			or CompilerEvent.MethodCompileStart
 			or CompilerEvent.Counter
 			or CompilerEvent.SetupStageStart
-			or CompilerEvent.SetupStageEnd
-			or CompilerEvent.FinalizationStageStart
-			or CompilerEvent.FinalizationStageEnd;
+			or CompilerEvent.FinalizationStageStart;
 
 	#endregion Standardization
 }

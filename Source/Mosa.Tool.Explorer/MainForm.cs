@@ -45,6 +45,7 @@ public partial class MainForm : Form
 	private readonly CompilerInformation CompilerInformation = new CompilerInformation();
 	private readonly BindingList<CounterEntry> MethodCounters = new BindingList<CounterEntry>();
 	private readonly MethodStore MethodStore = new MethodStore();
+	private readonly HashSet<string> DisabledTransformNames = new HashSet<string>(StringComparer.Ordinal);
 
 	private MosaSettings MosaSettings = new MosaSettings();
 
@@ -85,6 +86,7 @@ public partial class MainForm : Form
 		RegisterPlatforms();
 
 		CreateAppRegistryKey();
+		UpdateDisabledTransformNames();
 
 		Stopwatch.Restart();
 	}
@@ -475,6 +477,8 @@ public partial class MainForm : Form
 
 		Compiler.ScheduleAll();
 
+		UpdateDisabledTransformNames();
+
 		toolStrip1.Enabled = false;
 
 		ThreadPool.QueueUserWorkItem(state =>
@@ -515,9 +519,50 @@ public partial class MainForm : Form
 			NotifyMethodInstructionTrace = NotifyMethodInstructionTrace,
 			NotifyMethodTranformTrace = NotifyMethodTranformTrace,
 			GetMethodTraceLevel = GetMethodTraceLevel,
+			IsTransformDisabled = IsTransformDisabled,
 		};
 
 		return compilerHooks;
+	}
+
+	private bool IsTransformDisabled(string stageName, string transformName)
+	{
+		if (string.IsNullOrWhiteSpace(tbTransformStage.Text))
+			return false;
+
+		if (!tbTransformStage.Text.Contains(stageName))
+			return false;
+
+		if (DisabledTransformNames.Contains(transformName))
+			return true;
+
+		return false;
+	}
+
+	private void UpdateDisabledTransformNames()
+	{
+		DisabledTransformNames.Clear();
+
+		if (tbDisabledTransforms == null)
+			return;
+
+		foreach (var line in tbDisabledTransforms.Lines)
+		{
+			var text = line.Trim();
+
+			if (text.Length == 0)
+				continue;
+
+			if (text.StartsWith("#", StringComparison.Ordinal) || text.StartsWith("//", StringComparison.Ordinal))
+				continue;
+
+			DisabledTransformNames.Add(text);
+		}
+	}
+
+	private void DisabledTransformsTextBox_TextChanged(object sender, EventArgs e)
+	{
+		UpdateDisabledTransformNames();
 	}
 
 	private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -734,6 +779,8 @@ public partial class MainForm : Form
 			return;
 
 		CompilerInformation.Stopwatch.Reset();
+
+		UpdateDisabledTransformNames();
 
 		Compiler.CompileSingleMethod(method);
 	}
@@ -1102,7 +1149,8 @@ public partial class MainForm : Form
 		cbEnableMultithreading.Checked = MosaSettings.Multithreading;
 		tbFilter.Text = MosaSettings.ExplorerFilter; ;
 		cbEnableCodeSizeReduction.Checked = MosaSettings.ReduceCodeSize;
-		cbEnableFullCheckMode.Checked = MosaSettings.FullCheckMode;
+		cbEnableCheckMode.Checked = MosaSettings.CheckMode;
+		cbEnableStatistics.Checked = MosaSettings.Statistics;
 
 		cbPlatform.SelectedIndex = MosaSettings.Platform.ToLowerInvariant() switch
 		{
@@ -1226,8 +1274,8 @@ public partial class MainForm : Form
 		MosaSettings.InlineMethods = cbEnableInline.Checked;
 		MosaSettings.InlineExplicit = cbInlineExplicit.Checked;
 		MosaSettings.ReduceCodeSize = cbEnableCodeSizeReduction.Checked;
-		MosaSettings.FullCheckMode = cbEnableFullCheckMode.Checked;
-
+		MosaSettings.CheckMode = cbEnableCheckMode.Checked;
+		MosaSettings.Statistics = cbEnableStatistics.Checked;
 		MosaSettings.TraceLevel = 10;
 		//MosaSettings.InlineMaximum = 12;
 		//MosaSettings.InlineAggressiveMaximum = 24;

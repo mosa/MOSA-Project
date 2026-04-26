@@ -115,7 +115,7 @@ public sealed class Compiler
 
 	public bool Statistics { get; }
 
-	public bool FullCheckMode { get; set; }
+	public bool CheckMode { get; set; }
 
 	public uint ObjectHeaderSize { get; }
 
@@ -244,8 +244,8 @@ public sealed class Compiler
 		Architecture.UpdateSetting(MosaSettings);
 
 		TraceLevel = MosaSettings.TraceLevel;
-		Statistics = MosaSettings.EmitStatistics;
-		FullCheckMode = MosaSettings.FullCheckMode;
+		Statistics = MosaSettings.Statistics;
+		CheckMode = MosaSettings.CheckMode;
 
 		PostEvent(CompilerEvent.CompilerStart);
 
