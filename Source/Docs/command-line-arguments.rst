@@ -195,7 +195,14 @@ Below are the command line arguments available:
 
 	Unit Tests:
 	-filter,UnitTest.Filter,{value}
+	-fail-fast,UnitTest.FailFast,true
 	-maxerrors,UnitTest.MaxErrors,{value}
+
+	Bisect:
+	-bisect-stage,UnitTest.Bisector.Stage,{value}
+	-bisect-masking,UnitTest.Bisector.Masking,true
+	-bisect-masking-off,UnitTest.Bisector.Masking,false
+	-bisect-disabled-file,UnitTest.Bisector.DisabledTransformsFile,{value}
 
     Optimization Levels:
     -o0,Optimizations.Basic,false

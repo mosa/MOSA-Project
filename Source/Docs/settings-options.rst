@@ -268,6 +268,10 @@ Unit Test Settings
 	UnitTest.Connection.TimeOut,Maximum connection timeout in milliseconds before retrying
     UnitTest.Filter,Specifies the default unit test filter name when the unit tests are launched
     UnitTest.MaxErrors,Maximum number of errors before aborting the unit testing
+	UnitTest.FailFast,"If true, aborts unit test execution after the first failed unit test"
+	UnitTest.Bisector.Stage,Specifies the transform stage name (short or full type name) used by the unit test bisector
+	UnitTest.Bisector.Masking,"If true, enables masking analysis mode in the unit test bisector"
+	UnitTest.Bisector.DisabledTransformsFile,Path to a text file listing transform names to force-disable (one per line) during bisector runs
 
 Compiler X86 Settings
 ---------------------
