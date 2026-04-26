@@ -556,6 +556,9 @@ public partial class MainForm : Form
 			if (text.StartsWith("#", StringComparison.Ordinal) || text.StartsWith("//", StringComparison.Ordinal))
 				continue;
 
+			if (text.Contains('|'))
+				text = text.Split('|')[1].Trim();
+
 			DisabledTransformNames.Add(text);
 		}
 	}
