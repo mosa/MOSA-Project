@@ -271,6 +271,7 @@ Unit Test Settings
 	UnitTest.FailFast,"If true, aborts unit test execution after the first failed unit test"
 	UnitTest.Bisector.Stage,Specifies the transform stage name (short or full type name) used by the unit test bisector
 	UnitTest.Bisector.Masking,"If true, enables masking analysis mode in the unit test bisector"
+	UnitTest.Bisector.Pairwise,"If true, enables pairwise bisector analysis mode"
 	UnitTest.Bisector.DisabledTransformsFile,Path to a text file listing transform names to force-disable (one per line) during bisector runs
 
 Compiler X86 Settings
