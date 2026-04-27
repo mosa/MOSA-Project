@@ -90,7 +90,7 @@ Below are the command line arguments available:
     -test-filter,CompilerDebug.TestFilter,{value}
 
 	Compiler - Diagnostic:
-    -check,Compiler.FullCheckMode,true
+    -check,Compiler.CheckMode,true
 	-diagnostic,Compiler.Diagnostic,true
 	-diag,Compiler.Diagnostic,true
     -interrupt-method,X86.InterruptMethodName,{value}
@@ -195,7 +195,16 @@ Below are the command line arguments available:
 
 	Unit Tests:
 	-filter,UnitTest.Filter,{value}
+	-fail-fast,UnitTest.FailFast,true
 	-maxerrors,UnitTest.MaxErrors,{value}
+
+	Bisect:
+	-bisect-stage,UnitTest.Bisector.Stage,{value}
+	-bisect-masking,UnitTest.Bisector.Masking,true
+	-bisect-masking-off,UnitTest.Bisector.Masking,false
+	-bisect-pairwise,UnitTest.Bisector.Pairwise,true
+	-bisect-pairwise-off,UnitTest.Bisector.Pairwise,false
+	-bisect-disabled-file,UnitTest.Bisector.DisabledTransformsFile,{value}
 
     Optimization Levels:
     -o0,Optimizations.Basic,false
