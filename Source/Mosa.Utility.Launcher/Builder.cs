@@ -94,15 +94,22 @@ public class Builder : BaseLauncher
 		OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
 
 		var compiler = new MosaCompiler(MosaSettings, CompilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
-		compiler.Load();
-		compiler.Initialize();
-		compiler.Setup();
-		compiler.Compile();
+		try
+		{
+			compiler.Load();
+			compiler.Initialize();
+			compiler.Setup();
+			compiler.Compile();
 
-		Linker = compiler.Linker;
-		TypeSystem = compiler.TypeSystem;
+			Linker = compiler.Linker;
+			TypeSystem = compiler.TypeSystem;
 
-		return compiler.IsSuccess;
+			return compiler.IsSuccess;
+		}
+		finally
+		{
+			compiler.Dispose();
+		}
 	}
 
 	private void BuildImage()

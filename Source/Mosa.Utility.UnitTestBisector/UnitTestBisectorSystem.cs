@@ -129,6 +129,10 @@ public sealed class UnitTestBisectorSystem
 
 		OutputStatusBisector($"{sessionName} bisector complete.");
 		PrintFinalReport(sessionName, bisector);
+
+		// Clean up session resources
+		GC.Collect();
+		GC.WaitForPendingFinalizers();
 	}
 
 	private void PrintNewlyConfirmedBadItems(string sessionName, Bisector<string> sessionBisector, HashSet<string> reportedBadItems)
@@ -188,6 +192,12 @@ public sealed class UnitTestBisectorSystem
 			OutputStatusBisector($"Iteration exception treated as FAIL: {ex.Message}");
 			OutputStatusBisector($"Iteration exception stack: {ex.StackTrace}");
 			return new IterationResult(false);
+		}
+		finally
+		{
+			// Force garbage collection on failure path too
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 		}
 	}
 
@@ -312,7 +322,6 @@ public sealed class UnitTestBisectorSystem
 				UnitTestID = ++id,
 			};
 
-			unitTest.SerializedUnitTest = UnitTestSystem.SerializeUnitTestMessage(unitTest);
 			unitTests.Add(unitTest);
 		}
 

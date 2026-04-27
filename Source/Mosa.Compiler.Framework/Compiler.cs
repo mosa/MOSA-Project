@@ -770,4 +770,24 @@ public sealed class Compiler
 	}
 
 	#endregion Helper Methods
+
+	/// <summary>
+	/// Clears compiler resources to free memory, particularly large pipeline arrays.
+	/// </summary>
+	public void ClearResources()
+	{
+		// Clear method stage pipelines to allow GC to reclaim memory
+		for (int i = 0; i < MethodStagePipelines.Length; i++)
+		{
+			if (MethodStagePipelines[i] != null)
+			{
+				MethodStagePipelines[i].Clear();
+				MethodStagePipelines[i] = null;
+			}
+		}
+
+		// Clear thread timing arrays
+		ThreadCPUTicks = null;
+		ThreadWallTicks = null;
+	}
 }
