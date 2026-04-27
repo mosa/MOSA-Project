@@ -1360,22 +1360,27 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value2.AreLower5BitsKnown && shift != 0)
 		{
+			var shiftedMin = value1.MinValue << shift;
+			var shiftedMax = value1.MaxValue << shift;
+			var narrowMin = shiftedMin <= uint.MaxValue ? shiftedMin : 0;
+			var narrowMax = shiftedMax <= uint.MaxValue ? shiftedMax : uint.MaxValue;
+
 			result
-				.NarrowMin(value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0)
-				.NarrowMax(value1.MaxValue << shift < uint.MaxValue ? value1.MaxValue << shift : ulong.MaxValue)
+				.NarrowMin(narrowMin)
+				.NarrowMax(narrowMax)
 				.NarrowSetBits(value1.BitsSet << shift)
 				.NarrowClearBits(Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift))
 				.SetStable(value1, value2);
 		}
-		else if (value1.AreAnyBitsKnown && lowest >= 1)
-		{
-			var low = (ulong)(1 << lowest);
+		//else if (value1.AreAnyBitsKnown && lowest >= 1 && lowest <= 31)
+		//{
+		//	var low = 1ul << lowest;
 
-			result
-				.NarrowMin(low)
-				.NarrowClearBits(low - 1)
-				.SetStable(value1, value2);
-		}
+		//	result
+		//		.NarrowMin(low)
+		//		.NarrowClearBits(low - 1)
+		//		.SetStable(value1, value2);
+		//}
 		else
 		{
 			result.SetStable(value1, value2);
@@ -1406,9 +1411,14 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		}
 		else if (value2.AreLower6BitsKnown && shift != 0)
 		{
+			var shiftedMin = value1.MinValue << shift;
+			var shiftedMax = value1.MaxValue << shift;
+			var narrowMin = shiftedMin >= value1.MinValue ? shiftedMin : 0;
+			var narrowMax = shiftedMax >= value1.MaxValue ? shiftedMax : ulong.MaxValue;
+
 			result
-				.NarrowMin(value1.MinValue << shift > value1.MinValue ? value1.MinValue << shift : 0)
-				.NarrowMax(value1.MaxValue << shift > value1.MaxValue ? value1.MaxValue << shift : ulong.MaxValue)
+				.NarrowMin(narrowMin)
+				.NarrowMax(narrowMax)
 				.NarrowSetBits(value1.BitsSet << shift)
 				.NarrowClearBits((value1.BitsClear << shift) | ~(ulong.MaxValue << shift))
 				.SetStable(value1, value2);
