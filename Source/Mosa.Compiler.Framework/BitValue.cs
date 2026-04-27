@@ -149,7 +149,12 @@ public sealed class BitValue
 			value &= uint.MaxValue;
 
 		Debug.Assert(value >= MinValue && value <= MaxValue);
+		if (value < MinValue || value > MaxValue)
+			throw new ArgumentOutOfRangeException(nameof(value));
+
 		Debug.Assert((value & BitsClear) == 0);
+		if ((value & BitsClear) != 0)
+			throw new ArgumentException("The value contains bits known to be clear.", nameof(value));
 
 		if (IsFixed)
 			return this;
@@ -170,6 +175,8 @@ public sealed class BitValue
 			return this;
 
 		Debug.Assert(maxValue >= MinValue);
+		if (maxValue < MinValue)
+			throw new ArgumentOutOfRangeException(nameof(maxValue));
 
 		MaxValue = Math.Min(MaxValue, maxValue);
 
@@ -182,6 +189,8 @@ public sealed class BitValue
 			return this;
 
 		Debug.Assert(minValue <= MaxValue);
+		if (minValue > MaxValue)
+			throw new ArgumentOutOfRangeException(nameof(minValue));
 
 		MinValue = Math.Max(MinValue, minValue);
 
@@ -230,6 +239,8 @@ public sealed class BitValue
 		BitsSet |= bitsSet;
 
 		Debug.Assert((BitsSet & BitsClear) == 0);
+		if ((BitsSet & BitsClear) != 0)
+			throw new InvalidOperationException("BitValue has conflicting known set and clear bits.");
 
 		return Narrow();
 	}
@@ -247,6 +258,8 @@ public sealed class BitValue
 		BitsClear |= bitsClear;
 
 		Debug.Assert((BitsSet & BitsClear) == 0);
+		if ((BitsSet & BitsClear) != 0)
+			throw new InvalidOperationException("BitValue has conflicting known set and clear bits.");
 
 		return Narrow();
 	}
@@ -333,7 +346,12 @@ public sealed class BitValue
 			BitsSet = uint.MaxValue;
 
 		Debug.Assert(MinValue <= MaxValue);
+		if (MinValue > MaxValue)
+			throw new InvalidOperationException("BitValue has an invalid value range.");
+
 		Debug.Assert((BitsSet & BitsClear) == 0);
+		if ((BitsSet & BitsClear) != 0)
+			throw new InvalidOperationException("BitValue has conflicting known set and clear bits.");
 
 		return CheckStable();
 	}

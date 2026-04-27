@@ -6,7 +6,7 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Cmp32ToZero : BaseTransform
 {
-	public Cmp32ToZero() : base(X86.Cmp32, TransformType.Manual | TransformType.Optimization)
+	public Cmp32ToZero() : base(X86.Cmp32, TransformType.Manual | TransformType.Optimization, true)
 	{
 	}
 
@@ -29,7 +29,7 @@ public sealed class Cmp32ToZero : BaseTransform
 		if (previous.Instruction.IsMemoryRead)
 			return false;
 
-		if (!AreSame(context.Operand1, context.Result))
+		if (!AreSame(context.Operand1, previous.Result))
 			return false;
 
 		if (!previous.Instruction.IsZeroFlagModified)

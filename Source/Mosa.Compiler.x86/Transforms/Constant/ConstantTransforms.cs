@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.x86.Transforms.Constant;
 
 /// <summary>
-/// Tweak Transformation List
+/// Constant Transformation List
 /// </summary>
 public static class ConstantTransforms
 {
@@ -13,5 +13,6 @@ public static class ConstantTransforms
 	{
 		new Movsx16To32(),
 		new Movsx8To32(),
+		new Cmp32(),
 	};
 }
