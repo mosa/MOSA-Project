@@ -100,7 +100,8 @@ public sealed class UnitTestBisectorSystem
 	{
 		bisectorDisabledTransformNames = [];
 		RebuildEffectiveDisabledSet();
-		bisector = new Bisector<string>(observedTransformNames.Where(name => !forcedDisabledTransformNames.Contains(name)));
+		bisector = new Bisector<string>(observedTransformNames.Where(name => !forcedDisabledTransformNames.Contains(name)), enablePairwise: MosaSettings.UnitTestBisectorPairwise);
+		var reportedBadItems = new HashSet<string>(StringComparer.Ordinal);
 
 		// Consume the baseline using discovery outcome to avoid rerunning identical baseline iteration.
 		bisectorDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
@@ -108,6 +109,7 @@ public sealed class UnitTestBisectorSystem
 		var mappedBaseline = MapOutcome(discoveryResult.Passed, invertOutcome);
 		bisector.AcceptResult(mappedBaseline);
 		OutputStatusBisector($"{sessionName} Baseline -> Actual: {(discoveryResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedBaseline ? "PASS" : "FAIL")}");
+		PrintNewlyConfirmedBadItems(sessionName, bisector, reportedBadItems);
 
 		while (!bisector.IsComplete)
 		{
@@ -121,11 +123,23 @@ public sealed class UnitTestBisectorSystem
 
 			bisector.AcceptResult(mappedResult);
 			OutputStatusBisector($"Iteration Result -> Actual: {(iterationResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedResult ? "PASS" : "FAIL")}");
+			PrintNewlyConfirmedBadItems(sessionName, bisector, reportedBadItems);
 			PrintStatus(bisector.GetStatus());
 		}
 
 		OutputStatusBisector($"{sessionName} bisector complete.");
 		PrintFinalReport(sessionName, bisector);
+	}
+
+	private void PrintNewlyConfirmedBadItems(string sessionName, Bisector<string> sessionBisector, HashSet<string> reportedBadItems)
+	{
+		foreach (var transform in sessionBisector.ConfirmedBadItems.OrderBy(t => t))
+		{
+			if (reportedBadItems.Add(transform))
+			{
+				OutputStatusBisector($"{sessionName} Known Bad Item: {transform}");
+			}
+		}
 	}
 
 	private static bool MapOutcome(bool passed, bool invertOutcome)

@@ -202,6 +202,8 @@ Below are the command line arguments available:
 	-bisect-stage,UnitTest.Bisector.Stage,{value}
 	-bisect-masking,UnitTest.Bisector.Masking,true
 	-bisect-masking-off,UnitTest.Bisector.Masking,false
+	-bisect-pairwise,UnitTest.Bisector.Pairwise,true
+	-bisect-pairwise-off,UnitTest.Bisector.Pairwise,false
 	-bisect-disabled-file,UnitTest.Bisector.DisabledTransformsFile,{value}
 
     Optimization Levels:

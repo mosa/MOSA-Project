@@ -524,6 +524,12 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.UnitTest_Bisector_Masking, value);
 	}
 
+	public bool UnitTestBisectorPairwise
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Pairwise, false);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Pairwise, value);
+	}
+
 	public string UnitTestBisectorDisabledTransformsFile
 	{
 		get => Settings.GetValue(Name.UnitTest_Bisector_DisabledTransformsFile, null);

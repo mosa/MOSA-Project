@@ -197,6 +197,8 @@ public static class CommandLineArguments
 			new Argument { Name = "-bisect-stage", Setting = Name.UnitTest_Bisector_Stage},
 			new Argument { Name = "-bisect-masking", Setting = Name.UnitTest_Bisector_Masking, Value = "true"},
 			new Argument { Name = "-bisect-masking-off", Setting = Name.UnitTest_Bisector_Masking, Value = "false"},
+			new Argument { Name = "-bisect-pairwise", Setting = Name.UnitTest_Bisector_Pairwise, Value = "true"},
+			new Argument { Name = "-bisect-pairwise-off", Setting = Name.UnitTest_Bisector_Pairwise, Value = "false"},
 			new Argument { Name = "-bisect-disabled-file", Setting = Name.UnitTest_Bisector_DisabledTransformsFile},
 
 			// Optimization Levels:

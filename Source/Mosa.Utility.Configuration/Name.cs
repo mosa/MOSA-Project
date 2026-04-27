@@ -130,6 +130,7 @@ public static class Name
 	public const string UnitTest_MaxErrors = "UnitTest.MaxErrors";
 	public const string UnitTest_Bisector_Stage = "UnitTest.Bisector.Stage";
 	public const string UnitTest_Bisector_Masking = "UnitTest.Bisector.Masking";
+	public const string UnitTest_Bisector_Pairwise = "UnitTest.Bisector.Pairwise";
 	public const string UnitTest_Bisector_DisabledTransformsFile = "UnitTest.Bisector.DisabledTransformsFile";
 	public const string UnitTest_FailFast = "UnitTest.FailFast";
 
