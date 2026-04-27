@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework;
 public sealed class Bisector<TItem>
 {
 	private const int SingleItemCheckThreshold = 4;
+	private readonly bool enablePairwise;
 
 	public enum BisectorLevel
 	{
@@ -101,11 +102,12 @@ public sealed class Bisector<TItem>
 	private bool foundBadItemInSingleItemChecks;
 	private int iteration;
 
-	public Bisector(IEnumerable<TItem> items, IEqualityComparer<TItem> comparer = null)
+	public Bisector(IEnumerable<TItem> items, IEqualityComparer<TItem> comparer = null, bool enablePairwise = true)
 	{
 		ArgumentNullException.ThrowIfNull(items);
 
 		this.comparer = comparer ?? EqualityComparer<TItem>.Default;
+		this.enablePairwise = enablePairwise;
 		confirmedBadItems = new HashSet<TItem>(this.comparer);
 		unresolvedItems = new HashSet<TItem>(this.comparer);
 
@@ -411,7 +413,7 @@ public sealed class Bisector<TItem>
 			return;
 		}
 
-		if (currentSuspects.Count < 2)
+		if (currentSuspects.Count < 2 || !enablePairwise)
 		{
 			currentPhase = BisectorPhase.Complete;
 			return;
@@ -422,6 +424,12 @@ public sealed class Bisector<TItem>
 
 	private void BeginPairwiseChecks()
 	{
+		if (!enablePairwise)
+		{
+			currentPhase = BisectorPhase.Complete;
+			return;
+		}
+
 		currentLevel = BisectorLevel.Level2Pairwise;
 		currentPhase = BisectorPhase.PairwiseChecks;
 		currentSuspects = currentSuspects.Where(unresolvedItems.Contains).ToList();
