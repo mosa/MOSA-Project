@@ -47,7 +47,7 @@ public static class Name
 	public const string CompilerDebug_PreLinkHashFile = "CompilerDebug.PreLinkHashFile";
 	public const string CompilerDebug_Statistics = "CompilerDebug.Statistics";
 	public const string CompilerDebug_CounterFilter = "CompilerDebug.CounterFilter";
-	public const string Compiler_FullCheckMode = "Compiler.FullCheckMode";
+	public const string Compiler_CheckMode = "Compiler.CheckMode";
 	public const string Compiler_Diagnostic = "Compiler.Diagnostic";
 	public const string Debugger_BreakpointFile = "Debugger.BreakpointFile";
 	public const string Debugger_WatchFile = "Debugger.WatchFile";
@@ -128,6 +128,11 @@ public static class Name
 	public const string UnitTest_Connection_TimeOut = "UnitTest.Connection.TimeOut";
 	public const string UnitTest_Filter = "UnitTest.Filter";
 	public const string UnitTest_MaxErrors = "UnitTest.MaxErrors";
+	public const string UnitTest_Bisector_Stage = "UnitTest.Bisector.Stage";
+	public const string UnitTest_Bisector_Masking = "UnitTest.Bisector.Masking";
+	public const string UnitTest_Bisector_Pairwise = "UnitTest.Bisector.Pairwise";
+	public const string UnitTest_Bisector_DisabledTransformsFile = "UnitTest.Bisector.DisabledTransformsFile";
+	public const string UnitTest_FailFast = "UnitTest.FailFast";
 
 	public const string Image_DiskBlocks = "Image.DiskBlocks";
 	public const string Image_VolumeLabel = "Image.VolumeLabel";

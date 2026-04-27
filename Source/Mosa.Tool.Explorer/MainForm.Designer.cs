@@ -68,7 +68,8 @@
 			cbHideEmptyBlocks = new ToolStripMenuItem();
 			advanceToolStripMenuItem = new ToolStripMenuItem();
 			cbEnableMultithreading = new ToolStripMenuItem();
-			cbEnableFullCheckMode = new ToolStripMenuItem();
+			cbEnableCheckMode = new ToolStripMenuItem();
+			cbEnableStatistics = new ToolStripMenuItem();
 			cbEnableMethodScanner = new ToolStripMenuItem();
 			cbEnableDebugDiagnostic = new ToolStripMenuItem();
 			cbDumpAllMethodStages = new ToolStripMenuItem();
@@ -128,6 +129,11 @@
 			gridCompilerCounters = new DataGridView();
 			tabPage5 = new TabPage();
 			tbCompilerCounters = new RichTextBox();
+			tabPage3 = new TabPage();
+			label10 = new Label();
+			tbDisabledTransforms = new RichTextBox();
+			label9 = new Label();
+			tbTransformStage = new TextBox();
 			toolStrip1 = new ToolStrip();
 			cbPlatform = new ToolStripComboBox();
 			toolStripSeparator3 = new ToolStripSeparator();
@@ -165,6 +171,7 @@
 			tabPage4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)gridCompilerCounters).BeginInit();
 			tabPage5.SuspendLayout();
+			tabPage3.SuspendLayout();
 			toolStrip1.SuspendLayout();
 			SuspendLayout();
 			// 
@@ -459,7 +466,7 @@
 			// advanceToolStripMenuItem
 			// 
 			advanceToolStripMenuItem.CheckOnClick = true;
-			advanceToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbEnableMultithreading, cbEnableFullCheckMode, cbEnableMethodScanner, cbEnableDebugDiagnostic, cbDumpAllMethodStages });
+			advanceToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cbEnableMultithreading, cbEnableCheckMode, cbEnableStatistics, cbEnableMethodScanner, cbEnableDebugDiagnostic, cbDumpAllMethodStages });
 			advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
 			advanceToolStripMenuItem.Size = new Size(65, 20);
 			advanceToolStripMenuItem.Text = "Advance";
@@ -473,12 +480,22 @@
 			cbEnableMultithreading.Size = new Size(206, 22);
 			cbEnableMultithreading.Text = "Enable Multithreading";
 			// 
-			// cbEnableFullCheckMode
+			// cbEnableCheckMode
 			// 
-			cbEnableFullCheckMode.CheckOnClick = true;
-			cbEnableFullCheckMode.Name = "cbEnableFullCheckMode";
-			cbEnableFullCheckMode.Size = new Size(206, 22);
-			cbEnableFullCheckMode.Text = "Enable Full Check Mode";
+			cbEnableCheckMode.Checked = true;
+			cbEnableCheckMode.CheckOnClick = true;
+			cbEnableCheckMode.CheckState = CheckState.Checked;
+			cbEnableCheckMode.Name = "cbEnableCheckMode";
+			cbEnableCheckMode.Size = new Size(206, 22);
+			cbEnableCheckMode.Text = "Enable Check Mode";
+			// 
+			// cbEnableStatistics
+			// 
+			cbEnableStatistics.Checked = true;
+			cbEnableStatistics.CheckState = CheckState.Checked;
+			cbEnableStatistics.Name = "cbEnableStatistics";
+			cbEnableStatistics.Size = new Size(206, 22);
+			cbEnableStatistics.Text = "Enable Statistics";
 			// 
 			// cbEnableMethodScanner
 			// 
@@ -573,6 +590,7 @@
 			tabControl.Controls.Add(tabMethodCounters);
 			tabControl.Controls.Add(tabLogs);
 			tabControl.Controls.Add(tabCompilerCounters);
+			tabControl.Controls.Add(tabPage3);
 			tabControl.Font = new Font("Microsoft Sans Serif", 10F);
 			tabControl.Location = new Point(1, 3);
 			tabControl.Margin = new Padding(0);
@@ -1200,6 +1218,58 @@
 			tbCompilerCounters.Text = "";
 			tbCompilerCounters.WordWrap = false;
 			// 
+			// tabPage3
+			// 
+			tabPage3.Controls.Add(label10);
+			tabPage3.Controls.Add(tbDisabledTransforms);
+			tabPage3.Controls.Add(label9);
+			tabPage3.Controls.Add(tbTransformStage);
+			tabPage3.Location = new Point(4, 28);
+			tabPage3.Name = "tabPage3";
+			tabPage3.Padding = new Padding(3);
+			tabPage3.Size = new Size(683, 361);
+			tabPage3.TabIndex = 10;
+			tabPage3.Text = "Transforms";
+			tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// label10
+			// 
+			label10.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
+			label10.Location = new Point(6, 14);
+			label10.Margin = new Padding(5);
+			label10.Name = "label10";
+			label10.Size = new Size(167, 23);
+			label10.TabIndex = 44;
+			label10.Text = "Disabled Transforms:";
+			// 
+			// tbDisabledTransforms
+			// 
+			tbDisabledTransforms.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			tbDisabledTransforms.Location = new Point(0, 40);
+			tbDisabledTransforms.Margin = new Padding(4, 3, 4, 3);
+			tbDisabledTransforms.Name = "tbDisabledTransforms";
+			tbDisabledTransforms.Size = new Size(679, 318);
+			tbDisabledTransforms.TabIndex = 43;
+			tbDisabledTransforms.Text = "";
+			// 
+			// label9
+			// 
+			label9.Font = new Font("Microsoft Sans Serif", 10F);
+			label9.Location = new Point(391, 12);
+			label9.Margin = new Padding(5);
+			label9.Name = "label9";
+			label9.Size = new Size(58, 23);
+			label9.TabIndex = 42;
+			label9.Text = "Stage:";
+			// 
+			// tbTransformStage
+			// 
+			tbTransformStage.Location = new Point(457, 9);
+			tbTransformStage.Name = "tbTransformStage";
+			tbTransformStage.Size = new Size(218, 23);
+			tbTransformStage.TabIndex = 1;
+			tbTransformStage.Text = "OptimizationStage";
+			// 
 			// toolStrip1
 			// 
 			toolStrip1.ImageScalingSize = new Size(20, 20);
@@ -1320,6 +1390,8 @@
 			tabPage4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)gridCompilerCounters).EndInit();
 			tabPage5.ResumeLayout(false);
+			tabPage3.ResumeLayout(false);
+			tabPage3.PerformLayout();
 			toolStrip1.ResumeLayout(false);
 			toolStrip1.PerformLayout();
 			ResumeLayout(false);
@@ -1435,7 +1507,13 @@
 		private ToolStripMenuItem cbEnableCodeSizeReduction;
 		private ToolStripMenuItem cbEnableLoopRangeTracker;
 		private ToolStripMenuItem cbLineBetweenBlocks;
-		private ToolStripMenuItem cbEnableFullCheckMode;
+		private ToolStripMenuItem cbEnableCheckMode;
 		private ToolStripMenuItem cbHideEmptyBlocks;
+		private TabPage tabPage3;
+		private TextBox tbTransformStage;
+		private RichTextBox tbDisabledTransforms;
+		private Label label9;
+		private Label label10;
+		private ToolStripMenuItem cbEnableStatistics;
 	}
 }

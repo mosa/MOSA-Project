@@ -115,7 +115,7 @@ public sealed class Compiler
 
 	public bool Statistics { get; }
 
-	public bool FullCheckMode { get; set; }
+	public bool CheckMode { get; set; }
 
 	public uint ObjectHeaderSize { get; }
 
@@ -244,8 +244,8 @@ public sealed class Compiler
 		Architecture.UpdateSetting(MosaSettings);
 
 		TraceLevel = MosaSettings.TraceLevel;
-		Statistics = MosaSettings.EmitStatistics;
-		FullCheckMode = MosaSettings.FullCheckMode;
+		Statistics = MosaSettings.Statistics;
+		CheckMode = MosaSettings.CheckMode;
 
 		PostEvent(CompilerEvent.CompilerStart);
 
@@ -614,7 +614,7 @@ public sealed class Compiler
 		PostTraceLog(exceptionLog);
 
 		HasError = true;
-		//Stop();
+		Stop();
 	}
 
 	public void Stop()
@@ -770,4 +770,24 @@ public sealed class Compiler
 	}
 
 	#endregion Helper Methods
+
+	/// <summary>
+	/// Clears compiler resources to free memory, particularly large pipeline arrays.
+	/// </summary>
+	public void ClearResources()
+	{
+		// Clear method stage pipelines to allow GC to reclaim memory
+		for (int i = 0; i < MethodStagePipelines.Length; i++)
+		{
+			if (MethodStagePipelines[i] != null)
+			{
+				MethodStagePipelines[i].Clear();
+				MethodStagePipelines[i] = null;
+			}
+		}
+
+		// Clear thread timing arrays
+		ThreadCPUTicks = null;
+		ThreadWallTicks = null;
+	}
 }

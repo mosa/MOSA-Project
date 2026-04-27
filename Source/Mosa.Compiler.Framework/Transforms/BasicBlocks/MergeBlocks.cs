@@ -47,6 +47,9 @@ public class MergeBlocks : BaseBlockTransform
 					|| next.IsHandlerHeadBlock)
 					continue;
 
+				if (next.HasPhiInstruction())
+					continue;
+
 				trace?.Log($"Merge Blocking: {block} with: {next}");
 
 				transform.TraceBefore(this, block);

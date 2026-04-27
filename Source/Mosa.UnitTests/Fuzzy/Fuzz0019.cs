@@ -14,61 +14,94 @@ public static class Fuzz0019
 		int v7 = 85558290;
 		int v8 = 39374569;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v8 = (v7 < 15088582) ? (v4 % v8 << v1) : (v7 | v5 >> v8);
-				break;
-			case 1:
-				v8 = v6 << v2 >> v1;
-				break;
-			case 2:
-				v1 = v7 & v6 << v3;
-				break;
-			case 3:
-				v4 = (v3 > 63430061) ? (v5 % v1 >> v1) : (v7 & v4 ^ v8);
-				break;
-			case 4:
-				v6 = v7 - v8 & v6;
-				break;
-			default:
-				v1 = v8 % v2 | v1;
-				break;
-		}
-		
+		switch (v2 % 5)
 
-	if (v7 < 69648361)
-	{
-		v6 = (v8 < 76801773) ? (v1 % v7 << v6) : (v7 ^ v2 << v2);
-	}
-	else
-	{
-		v2 = (v1 > 39650352) ? (v4 | v1 & v3) : (v5 | v8 * v4);
-	}
+		{
+			case 0:
 
+				v8 = (v7 < 15088582) ? (v4 % v8 << v1) : (v7 | v5 >> v8);
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v8 = v6 ^ v2 >> v7;
-				break;
-			case 1:
-				v3 = (v2 > 72969886) ? (v3 >> v3 & v5) : (v6 | v5 | v1);
-				break;
-			case 2:
-				v5 = (v5 < 65803211) ? (v7 >> v2 >> v4) : (v6 & v2 - v4);
-				break;
-			case 3:
-				v8 = (v7 > 11606694) ? (v8 & v3 % v4) : (v3 + v1 / v4);
-				break;
-			case 4:
-				v4 = (v2 > 32320122) ? (v5 << v2 | v6) : (v1 * v6 - v4);
-				break;
-			default:
-				v2 = (v4 < 34408713) ? (v7 >> v1 % v6) : (v3 >> v4 << v8);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v8 = v6 << v2 >> v1;
+
+				break;
+
+			case 2:
+
+				v1 = v7 & v6 << v3;
+
+				break;
+
+			case 3:
+
+				v4 = (v3 > 63430061) ? (v5 % v1 >> v1) : (v7 & v4 ^ v8);
+
+				break;
+
+			case 4:
+
+				v6 = v7 - v8 & v6;
+
+				break;
+
+			default:
+
+				v1 = v8 % v2 | v1;
+
+				break;
+		}
+
+		if (v7 < 69648361)
+		{
+			v6 = (v8 < 76801773) ? (v1 % v7 << v6) : (v7 ^ v2 << v2);
+		}
+		else
+		{
+			v2 = (v1 > 39650352) ? (v4 | v1 & v3) : (v5 | v8 * v4);
+		}
+
+		switch (v6 % 5)
+
+		{
+			case 0:
+
+				v8 = v6 ^ v2 >> v7;
+
+				break;
+
+			case 1:
+
+				v3 = (v2 > 72969886) ? (v3 >> v3 & v5) : (v6 | v5 | v1);
+
+				break;
+
+			case 2:
+
+				v5 = (v5 < 65803211) ? (v7 >> v2 >> v4) : (v6 & v2 - v4);
+
+				break;
+
+			case 3:
+
+				v8 = (v7 > 11606694) ? (v8 & v3 % v4) : (v3 + v1 / v4);
+
+				break;
+
+			case 4:
+
+				v4 = (v2 > 32320122) ? (v5 << v2 | v6) : (v1 * v6 - v4);
+
+				break;
+
+			default:
+
+				v2 = (v4 < 34408713) ? (v7 >> v1 % v6) : (v3 >> v4 << v8);
+
+				break;
+		}
 
 		return (v1 < 76646550) ? (v5 & v8 - v7) : (v3 >> v7 << v5);
 	}
@@ -85,62 +118,95 @@ public static class Fuzz0019
 		int v7 = 32651732;
 		int v8 = 25429612;
 
-	if (v1 < 50800309)
-	{
-	int v9 = 96312121;
-		v9 = (v9 < 82564701) ? (v9 << v9 | v9) : (v9 << v9 & v9);
-	}
-	else
-	{
-		v4 = v7 << v5 + v2;
-	}
+		if (v1 < 50800309)
+		{
+			int v9 = 96312121;
+			v9 = (v9 < 82564701) ? (v9 << v9 | v9) : (v9 << v9 & v9);
+		}
+		else
+		{
+			v4 = v7 << v5 + v2;
+		}
 
+		switch (v2 % 5)
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v7 = (v6 > 47954968) ? (v5 & v3 >> v7) : (v7 << v8 | v4);
-				break;
-			case 1:
-				v4 = v5 >> v8 >> v1;
-				break;
-			case 2:
-				v7 = v4 | v5 + v8;
-				break;
-			case 3:
-				v4 = (v7 < 82090278) ? (v4 << v4 >> v5) : (v6 >> v7 | v4);
-				break;
-			case 4:
-				v3 = (v8 < 69622668) ? (v3 >> v5 >> v3) : (v5 / v8 >> v5);
-				break;
-			default:
-				v2 = v8 + v2 + v4;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v5 = (v7 > 97173983) ? (v5 + v3 >> v7) : (v7 - v2 | v5);
-				break;
-			case 1:
-				v4 = (v2 > 33887207) ? (v1 * v2 ^ v1) : (v3 % v6 ^ v4);
-				break;
-			case 2:
-				v5 = (v2 < 49225132) ? (v3 + v8 << v6) : (v1 | v8 >> v2);
-				break;
-			case 3:
-				v6 = (v3 < 49556941) ? (v7 - v2 >> v1) : (v4 * v6 >> v2);
-				break;
-			case 4:
-				v3 = v8 + v3 ^ v1;
-				break;
-			default:
-				v8 = v1 & v2 << v1;
-				break;
-		}
-		
+				v7 = (v6 > 47954968) ? (v5 & v3 >> v7) : (v7 << v8 | v4);
+
+				break;
+
+			case 1:
+
+				v4 = v5 >> v8 >> v1;
+
+				break;
+
+			case 2:
+
+				v7 = v4 | v5 + v8;
+
+				break;
+
+			case 3:
+
+				v4 = (v7 < 82090278) ? (v4 << v4 >> v5) : (v6 >> v7 | v4);
+
+				break;
+
+			case 4:
+
+				v3 = (v8 < 69622668) ? (v3 >> v5 >> v3) : (v5 / v8 >> v5);
+
+				break;
+
+			default:
+
+				v2 = v8 + v2 + v4;
+
+				break;
+		}
+
+		switch (v3 % 5)
+
+		{
+			case 0:
+
+				v5 = (v7 > 97173983) ? (v5 + v3 >> v7) : (v7 - v2 | v5);
+
+				break;
+
+			case 1:
+
+				v4 = (v2 > 33887207) ? (v1 * v2 ^ v1) : (v3 % v6 ^ v4);
+
+				break;
+
+			case 2:
+
+				v5 = (v2 < 49225132) ? (v3 + v8 << v6) : (v1 | v8 >> v2);
+
+				break;
+
+			case 3:
+
+				v6 = (v3 < 49556941) ? (v7 - v2 >> v1) : (v4 * v6 >> v2);
+
+				break;
+
+			case 4:
+
+				v3 = v8 + v3 ^ v1;
+
+				break;
+
+			default:
+
+				v8 = v1 & v2 << v1;
+
+				break;
+		}
 
 		return (v3 < 73371518) ? (v3 >> v4 << v6) : (v5 << v1 << v4);
 	}
@@ -157,49 +223,64 @@ public static class Fuzz0019
 		int v7 = 25158910;
 		int v8 = 66892620;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v4 = (v7 > 82914932) ? (v3 ^ v8 | v2) : (v1 - v2 + v7);
-				break;
-			case 1:
-				v2 = v4 | v4 ^ v2;
-				break;
-			case 2:
-				v3 = (v5 < 32652774) ? (v3 >> v1 >> v4) : (v6 << v7 << v5);
-				break;
-			case 3:
-				v5 = (v5 < 69686779) ? (v5 % v5 >> v4) : (v2 >> v7 ^ v8);
-				break;
-			case 4:
-				v3 = v3 % v2 >> v1;
-				break;
-			default:
-				v7 = v1 << v5 % v7;
-				break;
-		}
-		
+		switch (v2 % 5)
 
-	if (v4 > 22239378)
-	{
-	int v9 = 93569264;
-		v9 = v9 >> v9 | v9;
-	}
-	else
-	{
-		v8 = v4 + v1 * v1;
-	}
+		{
+			case 0:
 
+				v4 = (v7 > 82914932) ? (v3 ^ v8 | v2) : (v1 - v2 + v7);
 
-	if (v3 > 72056469)
-	{
-		v3 = (v6 > 1425344) ? (v2 ^ v2 - v8) : (v1 | v4 << v4);
-	}
-	else
-	{
-		v4 = (v4 < 79137132) ? (v8 >> v8 + v7) : (v8 ^ v7 - v7);
-	}
+				break;
 
+			case 1:
+
+				v2 = v4 | v4 ^ v2;
+
+				break;
+
+			case 2:
+
+				v3 = (v5 < 32652774) ? (v3 >> v1 >> v4) : (v6 << v7 << v5);
+
+				break;
+
+			case 3:
+
+				v5 = (v5 < 69686779) ? (v5 % v5 >> v4) : (v2 >> v7 ^ v8);
+
+				break;
+
+			case 4:
+
+				v3 = v3 % v2 >> v1;
+
+				break;
+
+			default:
+
+				v7 = v1 << v5 % v7;
+
+				break;
+		}
+
+		if (v4 > 22239378)
+		{
+			int v9 = 93569264;
+			v9 = v9 >> v9 | v9;
+		}
+		else
+		{
+			v8 = v4 + v1 * v1;
+		}
+
+		if (v3 > 72056469)
+		{
+			v3 = (v6 > 1425344) ? (v2 ^ v2 - v8) : (v1 | v4 << v4);
+		}
+		else
+		{
+			v4 = (v4 < 79137132) ? (v8 >> v8 + v7) : (v8 ^ v7 - v7);
+		}
 
 		return (v7 > 39907496) ? (v8 - v4 & v4) : (v6 << v2 << v7);
 	}
@@ -216,62 +297,95 @@ public static class Fuzz0019
 		int v7 = 11412221;
 		int v8 = 44612433;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v7 = (v3 < 89324989) ? (v4 - v2 % v8) : (v6 << v7 << v1);
-				break;
-			case 1:
-				v4 = (v5 < 29789786) ? (v6 ^ v7 << v6) : (v7 ^ v8 & v6);
-				break;
-			case 2:
-				v4 = (v8 > 54489770) ? (v1 & v8 >> v5) : (v6 - v2 / v3);
-				break;
-			case 3:
-				v4 = (v6 < 77174473) ? (v1 << v2 << v2) : (v6 | v7 ^ v3);
-				break;
-			case 4:
-				v3 = v1 * v1 << v7;
-				break;
-			default:
-				v2 = (v1 > 42688915) ? (v4 & v8 ^ v8) : (v4 >> v3 << v1);
-				break;
-		}
-		
+		switch (v7 % 5)
 
-	if (v7 < 87181841)
-	{
-		v8 = v3 >> v7 >> v5;
-	}
-	else
-	{
-	int v9 = 69948545;
-		v9 = (v9 > 65913799) ? (v9 >> v9 / v9) : (v9 ^ v9 * v9);
-	}
+		{
+			case 0:
 
+				v7 = (v3 < 89324989) ? (v4 - v2 % v8) : (v6 << v7 << v1);
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v1 = (v7 < 49405194) ? (v5 << v5 & v6) : (v1 % v2 >> v7);
-				break;
-			case 1:
-				v6 = v7 % v5 & v1;
-				break;
-			case 2:
-				v4 = v2 + v2 + v3;
-				break;
-			case 3:
-				v7 = (v4 < 34676944) ? (v1 % v8 >> v4) : (v7 << v4 << v3);
-				break;
-			case 4:
-				v8 = (v6 > 1070432) ? (v5 >> v7 / v6) : (v6 ^ v6 << v3);
-				break;
-			default:
-				v1 = (v2 < 79805447) ? (v5 | v3 - v5) : (v1 << v6 << v8);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v4 = (v5 < 29789786) ? (v6 ^ v7 << v6) : (v7 ^ v8 & v6);
+
+				break;
+
+			case 2:
+
+				v4 = (v8 > 54489770) ? (v1 & v8 >> v5) : (v6 - v2 / v3);
+
+				break;
+
+			case 3:
+
+				v4 = (v6 < 77174473) ? (v1 << v2 << v2) : (v6 | v7 ^ v3);
+
+				break;
+
+			case 4:
+
+				v3 = v1 * v1 << v7;
+
+				break;
+
+			default:
+
+				v2 = (v1 > 42688915) ? (v4 & v8 ^ v8) : (v4 >> v3 << v1);
+
+				break;
+		}
+
+		if (v7 < 87181841)
+		{
+			v8 = v3 >> v7 >> v5;
+		}
+		else
+		{
+			int v9 = 69948545;
+			v9 = (v9 > 65913799) ? (v9 >> v9 / v9) : (v9 ^ v9 * v9);
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v1 = (v7 < 49405194) ? (v5 << v5 & v6) : (v1 % v2 >> v7);
+
+				break;
+
+			case 1:
+
+				v6 = v7 % v5 & v1;
+
+				break;
+
+			case 2:
+
+				v4 = v2 + v2 + v3;
+
+				break;
+
+			case 3:
+
+				v7 = (v4 < 34676944) ? (v1 % v8 >> v4) : (v7 << v4 << v3);
+
+				break;
+
+			case 4:
+
+				v8 = (v6 > 1070432) ? (v5 >> v7 / v6) : (v6 ^ v6 << v3);
+
+				break;
+
+			default:
+
+				v1 = (v2 < 79805447) ? (v5 | v3 - v5) : (v1 << v6 << v8);
+
+				break;
+		}
 
 		return (v6 > 84553022) ? (v1 & v8 ^ v6) : (v3 ^ v8 << v2);
 	}
@@ -288,50 +402,65 @@ public static class Fuzz0019
 		int v7 = 26974325;
 		int v8 = 62311715;
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v8 = (v3 > 86607866) ? (v2 + v7 & v8) : (v1 & v8 * v4);
-				break;
-			case 1:
-				v2 = v5 << v2 << v3;
-				break;
-			case 2:
-				v5 = (v7 > 75293972) ? (v8 >> v6 * v8) : (v2 - v3 | v6);
-				break;
-			case 3:
-				v3 = (v4 > 42350997) ? (v2 ^ v8 ^ v2) : (v7 | v2 << v8);
-				break;
-			case 4:
-				v7 = v7 - v8 | v5;
-				break;
-			default:
-				v1 = v4 / v1 & v1;
-				break;
-		}
-		
+		switch (v5 % 5)
 
-	if (v7 > 4636315)
-	{
-	int v9 = 51189844;
-		v9 = v9 ^ v9 << v9;
-	}
-	else
-	{
-		v6 = (v8 < 24532016) ? (v4 >> v3 | v1) : (v2 - v4 | v6);
-	}
+		{
+			case 0:
 
+				v8 = (v3 > 86607866) ? (v2 + v7 & v8) : (v1 & v8 * v4);
 
-	if (v1 < 95578291)
-	{
-		v1 = (v4 < 24727079) ? (v6 | v1 ^ v3) : (v8 ^ v6 << v1);
-	}
-	else
-	{
-	int v10 = 84533564;
-		v10 = (v10 < 26209595) ? (v10 - v10 / v10) : (v10 << v10 / v10);
-	}
+				break;
 
+			case 1:
+
+				v2 = v5 << v2 << v3;
+
+				break;
+
+			case 2:
+
+				v5 = (v7 > 75293972) ? (v8 >> v6 * v8) : (v2 - v3 | v6);
+
+				break;
+
+			case 3:
+
+				v3 = (v4 > 42350997) ? (v2 ^ v8 ^ v2) : (v7 | v2 << v8);
+
+				break;
+
+			case 4:
+
+				v7 = v7 - v8 | v5;
+
+				break;
+
+			default:
+
+				v1 = v4 / v1 & v1;
+
+				break;
+		}
+
+		if (v7 > 4636315)
+		{
+			int v9 = 51189844;
+			v9 = v9 ^ v9 << v9;
+		}
+		else
+		{
+			v6 = (v8 < 24532016) ? (v4 >> v3 | v1) : (v2 - v4 | v6);
+		}
+
+		if (v1 < 95578291)
+		{
+			v1 = (v4 < 24727079) ? (v6 | v1 ^ v3) : (v8 ^ v6 << v1);
+		}
+		else
+		{
+			int v10 = 84533564;
+			v10 = (v10 < 26209595) ? (v10 - v10 / v10) : (v10 << v10 / v10);
+		}
 
 		return v3 ^ v5 & v6;
 	}
@@ -348,50 +477,65 @@ public static class Fuzz0019
 		int v7 = 28819844;
 		int v8 = 12321878;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v4 = (v7 > 32636677) ? (v6 & v8 & v8) : (v1 | v8 << v5);
-				break;
-			case 1:
-				v5 = v1 ^ v8 >> v3;
-				break;
-			case 2:
-				v2 = (v3 > 92633483) ? (v5 & v4 ^ v7) : (v7 | v6 | v5);
-				break;
-			case 3:
-				v1 = (v1 < 24086591) ? (v7 & v6 >> v3) : (v4 | v8 << v1);
-				break;
-			case 4:
-				v6 = v1 << v7 * v2;
-				break;
-			default:
-				v8 = (v2 > 29583815) ? (v6 % v5 >> v1) : (v4 << v1 % v3);
-				break;
-		}
-		
+		switch (v8 % 5)
 
-	if (v2 < 52683321)
-	{
-		v1 = v2 >> v3 >> v4;
-	}
-	else
-	{
-	int v9 = 950137;
-		v9 = (v9 > 74296393) ? (v9 - v9 + v9) : (v9 ^ v9 - v9);
-	}
+		{
+			case 0:
 
+				v4 = (v7 > 32636677) ? (v6 & v8 & v8) : (v1 | v8 << v5);
 
-	if (v1 > 3241233)
-	{
-		v5 = v1 >> v1 & v5;
-	}
-	else
-	{
-	int v10 = 12322963;
-		v10 = v10 * v10 / v10;
-	}
+				break;
 
+			case 1:
+
+				v5 = v1 ^ v8 >> v3;
+
+				break;
+
+			case 2:
+
+				v2 = (v3 > 92633483) ? (v5 & v4 ^ v7) : (v7 | v6 | v5);
+
+				break;
+
+			case 3:
+
+				v1 = (v1 < 24086591) ? (v7 & v6 >> v3) : (v4 | v8 << v1);
+
+				break;
+
+			case 4:
+
+				v6 = v1 << v7 * v2;
+
+				break;
+
+			default:
+
+				v8 = (v2 > 29583815) ? (v6 % v5 >> v1) : (v4 << v1 % v3);
+
+				break;
+		}
+
+		if (v2 < 52683321)
+		{
+			v1 = v2 >> v3 >> v4;
+		}
+		else
+		{
+			int v9 = 950137;
+			v9 = (v9 > 74296393) ? (v9 - v9 + v9) : (v9 ^ v9 - v9);
+		}
+
+		if (v1 > 3241233)
+		{
+			v5 = v1 >> v1 & v5;
+		}
+		else
+		{
+			int v10 = 12322963;
+			v10 = v10 * v10 / v10;
+		}
 
 		return (v1 < 89159427) ? (v3 & v5 << v8) : (v8 / v5 - v2);
 	}
@@ -408,61 +552,94 @@ public static class Fuzz0019
 		int v7 = 77303054;
 		int v8 = 13007356;
 
-	if (v4 < 9026001)
-	{
-		v5 = v4 / v7 - v1;
-	}
-	else
-	{
-		v5 = (v6 < 39654834) ? (v6 ^ v3 & v5) : (v5 % v4 & v4);
-	}
+		if (v4 < 9026001)
+		{
+			v5 = v4 / v7 - v1;
+		}
+		else
+		{
+			v5 = (v6 < 39654834) ? (v6 ^ v3 & v5) : (v5 % v4 & v4);
+		}
 
+		switch (v2 % 5)
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v7 = (v2 > 46875696) ? (v4 + v7 + v1) : (v2 & v6 + v1);
-				break;
-			case 1:
-				v5 = v2 | v5 >> v7;
-				break;
-			case 2:
-				v8 = (v3 > 18719553) ? (v4 << v7 | v7) : (v5 % v7 >> v5);
-				break;
-			case 3:
-				v4 = v6 << v2 ^ v7;
-				break;
-			case 4:
-				v1 = v8 % v8 | v3;
-				break;
-			default:
-				v3 = v8 & v6 & v6;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v5 = v8 | v6 & v4;
-				break;
-			case 1:
-				v5 = (v8 < 84603270) ? (v2 + v8 >> v2) : (v6 ^ v8 ^ v8);
-				break;
-			case 2:
-				v3 = v3 << v8 ^ v6;
-				break;
-			case 3:
-				v7 = v1 - v2 ^ v3;
-				break;
-			case 4:
-				v2 = (v7 > 94751085) ? (v4 >> v5 % v8) : (v7 << v4 >> v3);
-				break;
-			default:
-				v8 = v8 >> v5 >> v1;
-				break;
-		}
-		
+				v7 = (v2 > 46875696) ? (v4 + v7 + v1) : (v2 & v6 + v1);
+
+				break;
+
+			case 1:
+
+				v5 = v2 | v5 >> v7;
+
+				break;
+
+			case 2:
+
+				v8 = (v3 > 18719553) ? (v4 << v7 | v7) : (v5 % v7 >> v5);
+
+				break;
+
+			case 3:
+
+				v4 = v6 << v2 ^ v7;
+
+				break;
+
+			case 4:
+
+				v1 = v8 % v8 | v3;
+
+				break;
+
+			default:
+
+				v3 = v8 & v6 & v6;
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v5 = v8 | v6 & v4;
+
+				break;
+
+			case 1:
+
+				v5 = (v8 < 84603270) ? (v2 + v8 >> v2) : (v6 ^ v8 ^ v8);
+
+				break;
+
+			case 2:
+
+				v3 = v3 << v8 ^ v6;
+
+				break;
+
+			case 3:
+
+				v7 = v1 - v2 ^ v3;
+
+				break;
+
+			case 4:
+
+				v2 = (v7 > 94751085) ? (v4 >> v5 % v8) : (v7 << v4 >> v3);
+
+				break;
+
+			default:
+
+				v8 = v8 >> v5 >> v1;
+
+				break;
+		}
 
 		return (v1 < 84054935) ? (v7 ^ v2 - v5) : (v4 << v6 << v7);
 	}
@@ -479,37 +656,34 @@ public static class Fuzz0019
 		int v7 = 96341291;
 		int v8 = 90904302;
 
-	if (v7 > 98280074)
-	{
-	int v9 = 49467375;
-		v9 = (v9 < 49354344) ? (v9 / v9 | v9) : (v9 << v9 & v9);
-	}
-	else
-	{
-		v8 = (v1 < 31792797) ? (v8 << v8 & v5) : (v2 >> v1 - v3);
-	}
+		if (v7 > 98280074)
+		{
+			int v9 = 49467375;
+			v9 = (v9 < 49354344) ? (v9 / v9 | v9) : (v9 << v9 & v9);
+		}
+		else
+		{
+			v8 = (v1 < 31792797) ? (v8 << v8 & v5) : (v2 >> v1 - v3);
+		}
 
+		if (v7 > 20316269)
+		{
+			v6 = (v3 > 43191182) ? (v3 ^ v7 ^ v6) : (v1 << v3 & v1);
+		}
+		else
+		{
+			int v10 = 92105601;
+			v10 = v10 >> v10 ^ v10;
+		}
 
-	if (v7 > 20316269)
-	{
-		v6 = (v3 > 43191182) ? (v3 ^ v7 ^ v6) : (v1 << v3 & v1);
-	}
-	else
-	{
-	int v10 = 92105601;
-		v10 = v10 >> v10 ^ v10;
-	}
-
-
-	if (v5 > 56017133)
-	{
-		v7 = (v7 > 95395937) ? (v5 >> v1 / v7) : (v5 ^ v7 - v8);
-	}
-	else
-	{
-		v7 = (v7 > 24459228) ? (v5 & v7 >> v1) : (v7 >> v5 >> v8);
-	}
-
+		if (v5 > 56017133)
+		{
+			v7 = (v7 > 95395937) ? (v5 >> v1 / v7) : (v5 ^ v7 - v8);
+		}
+		else
+		{
+			v7 = (v7 > 24459228) ? (v5 & v7 >> v1) : (v7 >> v5 >> v8);
+		}
 
 		return v1 + v2 >> v1;
 	}
@@ -526,51 +700,66 @@ public static class Fuzz0019
 		int v7 = 88724406;
 		int v8 = 47805202;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v8 = (v7 < 94366998) ? (v8 | v3 + v5) : (v8 % v4 | v6);
-				break;
-			case 1:
-				v7 = v4 / v7 % v4;
-				break;
-			case 2:
-				v5 = (v7 < 35691182) ? (v8 << v1 | v4) : (v7 / v1 * v4);
-				break;
-			case 3:
-				v1 = v7 << v7 | v8;
-				break;
-			case 4:
-				v5 = (v1 > 41731361) ? (v6 % v7 | v2) : (v8 << v7 % v5);
-				break;
-			default:
-				v4 = (v4 < 84169572) ? (v5 & v7 / v3) : (v8 << v8 * v8);
-				break;
-		}
-		
+		switch (v7 % 5)
 
-	if (v7 > 61006472)
-	{
-	int v9 = 34187434;
-		v9 = (v9 > 50532619) ? (v9 >> v9 << v9) : (v9 >> v9 >> v9);
-	}
-	else
-	{
-		v6 = (v8 > 8308163) ? (v4 ^ v2 & v3) : (v1 - v6 >> v2);
-	}
+		{
+			case 0:
 
+				v8 = (v7 < 94366998) ? (v8 | v3 + v5) : (v8 % v4 | v6);
 
-	if (v5 < 38822858)
-	{
-	int v10 = 53805683;
-		v10 = v10 & v10 | v10;
-	}
-	else
-	{
-	int v11 = 40087952;
-		v11 = v11 >> v11 & v11;
-	}
+				break;
 
+			case 1:
+
+				v7 = v4 / v7 % v4;
+
+				break;
+
+			case 2:
+
+				v5 = (v7 < 35691182) ? (v8 << v1 | v4) : (v7 / v1 * v4);
+
+				break;
+
+			case 3:
+
+				v1 = v7 << v7 | v8;
+
+				break;
+
+			case 4:
+
+				v5 = (v1 > 41731361) ? (v6 % v7 | v2) : (v8 << v7 % v5);
+
+				break;
+
+			default:
+
+				v4 = (v4 < 84169572) ? (v5 & v7 / v3) : (v8 << v8 * v8);
+
+				break;
+		}
+
+		if (v7 > 61006472)
+		{
+			int v9 = 34187434;
+			v9 = (v9 > 50532619) ? (v9 >> v9 << v9) : (v9 >> v9 >> v9);
+		}
+		else
+		{
+			v6 = (v8 > 8308163) ? (v4 ^ v2 & v3) : (v1 - v6 >> v2);
+		}
+
+		if (v5 < 38822858)
+		{
+			int v10 = 53805683;
+			v10 = v10 & v10 | v10;
+		}
+		else
+		{
+			int v11 = 40087952;
+			v11 = v11 >> v11 & v11;
+		}
 
 		return (v1 > 31267911) ? (v4 | v4 | v1) : (v5 | v3 % v4);
 	}
@@ -587,61 +776,94 @@ public static class Fuzz0019
 		int v7 = 20854925;
 		int v8 = 5485139;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v4 = (v8 < 72362061) ? (v1 + v4 ^ v5) : (v4 >> v6 | v8);
-				break;
-			case 1:
-				v6 = v2 | v8 << v5;
-				break;
-			case 2:
-				v1 = v7 ^ v6 >> v5;
-				break;
-			case 3:
-				v6 = v6 << v1 * v7;
-				break;
-			case 4:
-				v4 = (v3 < 8164139) ? (v2 | v2 ^ v5) : (v3 & v8 * v2);
-				break;
-			default:
-				v8 = v8 >> v3 % v1;
-				break;
-		}
-		
+		switch (v7 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v6 = (v7 > 17279899) ? (v3 >> v1 >> v7) : (v4 - v8 << v6);
-				break;
-			case 1:
-				v3 = (v1 < 89204069) ? (v3 >> v3 << v7) : (v2 | v5 / v7);
-				break;
-			case 2:
-				v6 = v4 % v8 << v6;
-				break;
-			case 3:
-				v3 = (v7 > 23502362) ? (v8 % v2 << v6) : (v7 % v8 & v7);
-				break;
-			case 4:
-				v5 = v8 - v6 ^ v5;
-				break;
-			default:
-				v1 = (v6 > 1666816) ? (v8 << v8 << v1) : (v1 / v2 >> v3);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v5 < 31508922)
-	{
-		v8 = v2 | v1 + v3;
-	}
-	else
-	{
-		v8 = v1 / v2 % v2;
-	}
+				v4 = (v8 < 72362061) ? (v1 + v4 ^ v5) : (v4 >> v6 | v8);
 
+				break;
+
+			case 1:
+
+				v6 = v2 | v8 << v5;
+
+				break;
+
+			case 2:
+
+				v1 = v7 ^ v6 >> v5;
+
+				break;
+
+			case 3:
+
+				v6 = v6 << v1 * v7;
+
+				break;
+
+			case 4:
+
+				v4 = (v3 < 8164139) ? (v2 | v2 ^ v5) : (v3 & v8 * v2);
+
+				break;
+
+			default:
+
+				v8 = v8 >> v3 % v1;
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v6 = (v7 > 17279899) ? (v3 >> v1 >> v7) : (v4 - v8 << v6);
+
+				break;
+
+			case 1:
+
+				v3 = (v1 < 89204069) ? (v3 >> v3 << v7) : (v2 | v5 / v7);
+
+				break;
+
+			case 2:
+
+				v6 = v4 % v8 << v6;
+
+				break;
+
+			case 3:
+
+				v3 = (v7 > 23502362) ? (v8 % v2 << v6) : (v7 % v8 & v7);
+
+				break;
+
+			case 4:
+
+				v5 = v8 - v6 ^ v5;
+
+				break;
+
+			default:
+
+				v1 = (v6 > 1666816) ? (v8 << v8 << v1) : (v1 / v2 >> v3);
+
+				break;
+		}
+
+		if (v5 < 31508922)
+		{
+			v8 = v2 | v1 + v3;
+		}
+		else
+		{
+			v8 = v1 / v2 % v2;
+		}
 
 		return (v5 > 87832422) ? (v8 + v8 << v6) : (v3 - v5 - v2);
 	}
@@ -658,63 +880,96 @@ public static class Fuzz0019
 		int v7 = 16583916;
 		int v8 = 82292069;
 
-	if (v6 > 18197762)
-	{
-	int v9 = 36670932;
-		v9 = v9 | v9 >> v9;
-	}
-	else
-	{
-	int v10 = 23803665;
-		v10 = (v10 > 76065189) ? (v10 >> v10 >> v10) : (v10 >> v10 & v10);
-	}
+		if (v6 > 18197762)
+		{
+			int v9 = 36670932;
+			v9 = v9 | v9 >> v9;
+		}
+		else
+		{
+			int v10 = 23803665;
+			v10 = (v10 > 76065189) ? (v10 >> v10 >> v10) : (v10 >> v10 & v10);
+		}
 
+		switch (v7 % 5)
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v2 = (v6 > 94180330) ? (v5 & v4 % v1) : (v2 & v2 | v6);
-				break;
-			case 1:
-				v4 = (v4 > 43682025) ? (v2 >> v8 - v8) : (v7 >> v8 + v3);
-				break;
-			case 2:
-				v2 = (v5 > 19780843) ? (v7 >> v7 | v6) : (v8 % v8 * v7);
-				break;
-			case 3:
-				v6 = v4 / v7 - v7;
-				break;
-			case 4:
-				v1 = v5 % v1 ^ v3;
-				break;
-			default:
-				v1 = (v7 > 32084375) ? (v1 * v2 & v5) : (v8 + v3 % v8);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v7 = (v6 < 4713889) ? (v1 >> v4 * v3) : (v7 ^ v4 | v1);
-				break;
-			case 1:
-				v2 = (v2 < 18449509) ? (v1 >> v1 << v3) : (v7 | v1 * v7);
-				break;
-			case 2:
-				v1 = v1 >> v3 - v8;
-				break;
-			case 3:
-				v3 = v5 | v7 << v6;
-				break;
-			case 4:
-				v8 = (v1 > 3015374) ? (v5 << v8 % v6) : (v2 >> v7 % v4);
-				break;
-			default:
-				v8 = v1 & v4 | v1;
-				break;
-		}
-		
+				v2 = (v6 > 94180330) ? (v5 & v4 % v1) : (v2 & v2 | v6);
+
+				break;
+
+			case 1:
+
+				v4 = (v4 > 43682025) ? (v2 >> v8 - v8) : (v7 >> v8 + v3);
+
+				break;
+
+			case 2:
+
+				v2 = (v5 > 19780843) ? (v7 >> v7 | v6) : (v8 % v8 * v7);
+
+				break;
+
+			case 3:
+
+				v6 = v4 / v7 - v7;
+
+				break;
+
+			case 4:
+
+				v1 = v5 % v1 ^ v3;
+
+				break;
+
+			default:
+
+				v1 = (v7 > 32084375) ? (v1 * v2 & v5) : (v8 + v3 % v8);
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v7 = (v6 < 4713889) ? (v1 >> v4 * v3) : (v7 ^ v4 | v1);
+
+				break;
+
+			case 1:
+
+				v2 = (v2 < 18449509) ? (v1 >> v1 << v3) : (v7 | v1 * v7);
+
+				break;
+
+			case 2:
+
+				v1 = v1 >> v3 - v8;
+
+				break;
+
+			case 3:
+
+				v3 = v5 | v7 << v6;
+
+				break;
+
+			case 4:
+
+				v8 = (v1 > 3015374) ? (v5 << v8 % v6) : (v2 >> v7 % v4);
+
+				break;
+
+			default:
+
+				v8 = v1 & v4 | v1;
+
+				break;
+		}
 
 		return (v8 < 24113639) ? (v8 + v3 >> v3) : (v7 >> v7 >> v1);
 	}
@@ -731,51 +986,66 @@ public static class Fuzz0019
 		int v7 = 9286676;
 		int v8 = 68165605;
 
-	if (v3 > 26748093)
-	{
-	int v9 = 99664582;
-		v9 = (v9 < 5453141) ? (v9 ^ v9 * v9) : (v9 ^ v9 << v9);
-	}
-	else
-	{
-	int v10 = 64318614;
-		v10 = (v10 < 17213843) ? (v10 & v10 << v10) : (v10 & v10 << v10);
-	}
+		if (v3 > 26748093)
+		{
+			int v9 = 99664582;
+			v9 = (v9 < 5453141) ? (v9 ^ v9 * v9) : (v9 ^ v9 << v9);
+		}
+		else
+		{
+			int v10 = 64318614;
+			v10 = (v10 < 17213843) ? (v10 & v10 << v10) : (v10 & v10 << v10);
+		}
 
+		if (v8 < 81301431)
+		{
+			int v11 = 53616755;
+			v11 = (v11 > 4705291) ? (v11 >> v11 & v11) : (v11 + v11 | v11);
+		}
+		else
+		{
+			v8 = (v5 > 8355025) ? (v3 * v1 * v8) : (v5 % v3 << v4);
+		}
 
-	if (v8 < 81301431)
-	{
-	int v11 = 53616755;
-		v11 = (v11 > 4705291) ? (v11 >> v11 & v11) : (v11 + v11 | v11);
-	}
-	else
-	{
-		v8 = (v5 > 8355025) ? (v3 * v1 * v8) : (v5 % v3 << v4);
-	}
+		switch (v1 % 5)
 
+		{
+			case 0:
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v2 = (v7 < 31764649) ? (v5 << v3 | v2) : (v8 << v4 << v1);
-				break;
-			case 1:
-				v1 = (v6 < 91330395) ? (v5 << v3 + v6) : (v6 >> v7 >> v3);
-				break;
-			case 2:
-				v2 = v4 | v4 >> v5;
-				break;
-			case 3:
-				v4 = (v1 < 16679105) ? (v7 % v2 >> v7) : (v1 + v2 >> v8);
-				break;
-			case 4:
-				v4 = v4 / v6 * v6;
-				break;
-			default:
-				v6 = (v1 < 20308927) ? (v2 % v6 >> v1) : (v3 * v2 - v7);
-				break;
-		}
-		
+				v2 = (v7 < 31764649) ? (v5 << v3 | v2) : (v8 << v4 << v1);
+
+				break;
+
+			case 1:
+
+				v1 = (v6 < 91330395) ? (v5 << v3 + v6) : (v6 >> v7 >> v3);
+
+				break;
+
+			case 2:
+
+				v2 = v4 | v4 >> v5;
+
+				break;
+
+			case 3:
+
+				v4 = (v1 < 16679105) ? (v7 % v2 >> v7) : (v1 + v2 >> v8);
+
+				break;
+
+			case 4:
+
+				v4 = v4 / v6 * v6;
+
+				break;
+
+			default:
+
+				v6 = (v1 < 20308927) ? (v2 % v6 >> v1) : (v3 * v2 - v7);
+
+				break;
+		}
 
 		return (v8 > 93136637) ? (v7 & v1 ^ v5) : (v5 | v3 * v8);
 	}
@@ -792,37 +1062,34 @@ public static class Fuzz0019
 		int v7 = 68729139;
 		int v8 = 60556448;
 
-	if (v8 > 74307754)
-	{
-		v2 = v3 >> v2 - v4;
-	}
-	else
-	{
-		v3 = (v4 < 14719709) ? (v2 + v1 ^ v4) : (v1 & v6 >> v7);
-	}
+		if (v8 > 74307754)
+		{
+			v2 = v3 >> v2 - v4;
+		}
+		else
+		{
+			v3 = (v4 < 14719709) ? (v2 + v1 ^ v4) : (v1 & v6 >> v7);
+		}
 
+		if (v6 > 14258789)
+		{
+			int v9 = 56118458;
+			v9 = v9 | v9 - v9;
+		}
+		else
+		{
+			v8 = (v5 > 50846740) ? (v6 - v3 - v7) : (v4 << v3 << v6);
+		}
 
-	if (v6 > 14258789)
-	{
-	int v9 = 56118458;
-		v9 = v9 | v9 - v9;
-	}
-	else
-	{
-		v8 = (v5 > 50846740) ? (v6 - v3 - v7) : (v4 << v3 << v6);
-	}
-
-
-	if (v1 < 13652466)
-	{
-	int v10 = 62402951;
-		v10 = (v10 < 52362633) ? (v10 << v10 | v10) : (v10 / v10 ^ v10);
-	}
-	else
-	{
-		v8 = v8 & v1 * v1;
-	}
-
+		if (v1 < 13652466)
+		{
+			int v10 = 62402951;
+			v10 = (v10 < 52362633) ? (v10 << v10 | v10) : (v10 / v10 ^ v10);
+		}
+		else
+		{
+			v8 = v8 & v1 * v1;
+		}
 
 		return (v6 > 60883323) ? (v1 & v4 >> v5) : (v2 << v6 ^ v6);
 	}
@@ -839,74 +1106,125 @@ public static class Fuzz0019
 		int v7 = 70767282;
 		int v8 = 48922914;
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v3 = (v4 > 57215891) ? (v1 / v8 << v8) : (v2 - v2 << v1);
-				break;
-			case 1:
-				v2 = (v5 > 82309163) ? (v5 << v5 * v5) : (v5 ^ v4 | v6);
-				break;
-			case 2:
-				v2 = (v3 > 66009173) ? (v3 >> v5 + v6) : (v5 & v8 << v2);
-				break;
-			case 3:
-				v7 = (v6 > 78202061) ? (v7 & v2 | v8) : (v7 ^ v7 - v3);
-				break;
-			case 4:
-				v4 = (v5 > 83827226) ? (v2 / v4 * v6) : (v8 ^ v8 / v3);
-				break;
-			default:
-				v3 = v3 | v3 % v3;
-				break;
-		}
-		
+		switch (v6 % 5)
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v5 = (v7 > 24001098) ? (v2 * v8 / v2) : (v3 & v5 << v5);
-				break;
-			case 1:
-				v8 = (v5 > 2410881) ? (v4 % v1 / v6) : (v1 & v7 & v3);
-				break;
-			case 2:
-				v3 = v1 / v6 >> v2;
-				break;
-			case 3:
-				v3 = v1 / v8 % v8;
-				break;
-			case 4:
-				v7 = (v8 > 56193348) ? (v3 ^ v5 << v3) : (v7 ^ v3 / v5);
-				break;
-			default:
-				v2 = (v8 < 14772257) ? (v7 / v1 >> v2) : (v4 ^ v6 & v4);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v1 = (v6 < 32364300) ? (v6 - v4 / v7) : (v2 >> v8 << v1);
-				break;
-			case 1:
-				v7 = v2 << v3 / v7;
-				break;
-			case 2:
-				v4 = v8 | v6 ^ v7;
-				break;
-			case 3:
-				v6 = v6 << v4 % v5;
-				break;
-			case 4:
-				v5 = v2 * v3 >> v4;
-				break;
-			default:
-				v2 = (v2 > 93443010) ? (v7 + v4 - v7) : (v3 ^ v6 / v6);
-				break;
-		}
-		
+				v3 = (v4 > 57215891) ? (v1 / v8 << v8) : (v2 - v2 << v1);
+
+				break;
+
+			case 1:
+
+				v2 = (v5 > 82309163) ? (v5 << v5 * v5) : (v5 ^ v4 | v6);
+
+				break;
+
+			case 2:
+
+				v2 = (v3 > 66009173) ? (v3 >> v5 + v6) : (v5 & v8 << v2);
+
+				break;
+
+			case 3:
+
+				v7 = (v6 > 78202061) ? (v7 & v2 | v8) : (v7 ^ v7 - v3);
+
+				break;
+
+			case 4:
+
+				v4 = (v5 > 83827226) ? (v2 / v4 * v6) : (v8 ^ v8 / v3);
+
+				break;
+
+			default:
+
+				v3 = v3 | v3 % v3;
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v5 = (v7 > 24001098) ? (v2 * v8 / v2) : (v3 & v5 << v5);
+
+				break;
+
+			case 1:
+
+				v8 = (v5 > 2410881) ? (v4 % v1 / v6) : (v1 & v7 & v3);
+
+				break;
+
+			case 2:
+
+				v3 = v1 / v6 >> v2;
+
+				break;
+
+			case 3:
+
+				v3 = v1 / v8 % v8;
+
+				break;
+
+			case 4:
+
+				v7 = (v8 > 56193348) ? (v3 ^ v5 << v3) : (v7 ^ v3 / v5);
+
+				break;
+
+			default:
+
+				v2 = (v8 < 14772257) ? (v7 / v1 >> v2) : (v4 ^ v6 & v4);
+
+				break;
+		}
+
+		switch (v6 % 5)
+
+		{
+			case 0:
+
+				v1 = (v6 < 32364300) ? (v6 - v4 / v7) : (v2 >> v8 << v1);
+
+				break;
+
+			case 1:
+
+				v7 = v2 << v3 / v7;
+
+				break;
+
+			case 2:
+
+				v4 = v8 | v6 ^ v7;
+
+				break;
+
+			case 3:
+
+				v6 = v6 << v4 % v5;
+
+				break;
+
+			case 4:
+
+				v5 = v2 * v3 >> v4;
+
+				break;
+
+			default:
+
+				v2 = (v2 > 93443010) ? (v7 + v4 - v7) : (v3 ^ v6 / v6);
+
+				break;
+		}
 
 		return (v6 < 50075241) ? (v7 >> v1 | v1) : (v4 / v8 << v6);
 	}
@@ -923,50 +1241,65 @@ public static class Fuzz0019
 		int v7 = 17586328;
 		int v8 = 8991276;
 
-	if (v2 > 20219664)
-	{
-		v1 = v2 & v7 & v8;
-	}
-	else
-	{
-		v6 = v1 & v8 ^ v3;
-	}
+		if (v2 > 20219664)
+		{
+			v1 = v2 & v7 & v8;
+		}
+		else
+		{
+			v6 = v1 & v8 ^ v3;
+		}
 
+		switch (v3 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v4 = (v8 < 93829836) ? (v3 + v2 << v4) : (v1 << v7 & v3);
-				break;
-			case 1:
-				v5 = (v5 < 87308643) ? (v4 >> v6 >> v5) : (v8 << v2 * v3);
-				break;
-			case 2:
-				v8 = (v7 > 97596514) ? (v6 << v8 ^ v2) : (v2 + v5 << v4);
-				break;
-			case 3:
-				v6 = (v5 > 66056645) ? (v1 & v1 | v7) : (v1 * v7 >> v8);
-				break;
-			case 4:
-				v3 = v7 * v6 ^ v5;
-				break;
-			default:
-				v1 = (v4 < 95126917) ? (v1 | v5 ^ v5) : (v5 / v6 + v1);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v3 > 34901108)
-	{
-	int v9 = 74986779;
-		v9 = (v9 > 57553632) ? (v9 | v9 ^ v9) : (v9 >> v9 | v9);
-	}
-	else
-	{
-	int v10 = 62797028;
-		v10 = v10 >> v10 % v10;
-	}
+				v4 = (v8 < 93829836) ? (v3 + v2 << v4) : (v1 << v7 & v3);
 
+				break;
+
+			case 1:
+
+				v5 = (v5 < 87308643) ? (v4 >> v6 >> v5) : (v8 << v2 * v3);
+
+				break;
+
+			case 2:
+
+				v8 = (v7 > 97596514) ? (v6 << v8 ^ v2) : (v2 + v5 << v4);
+
+				break;
+
+			case 3:
+
+				v6 = (v5 > 66056645) ? (v1 & v1 | v7) : (v1 * v7 >> v8);
+
+				break;
+
+			case 4:
+
+				v3 = v7 * v6 ^ v5;
+
+				break;
+
+			default:
+
+				v1 = (v4 < 95126917) ? (v1 | v5 ^ v5) : (v5 / v6 + v1);
+
+				break;
+		}
+
+		if (v3 > 34901108)
+		{
+			int v9 = 74986779;
+			v9 = (v9 > 57553632) ? (v9 | v9 ^ v9) : (v9 >> v9 | v9);
+		}
+		else
+		{
+			int v10 = 62797028;
+			v10 = v10 >> v10 % v10;
+		}
 
 		return v4 & v4 + v6;
 	}
@@ -983,50 +1316,65 @@ public static class Fuzz0019
 		int v7 = 21748696;
 		int v8 = 77871000;
 
-	if (v6 < 90667201)
-	{
-	int v9 = 88434721;
-		v9 = (v9 < 70063594) ? (v9 & v9 % v9) : (v9 & v9 >> v9);
-	}
-	else
-	{
-		v7 = (v6 > 44994409) ? (v5 | v3 | v2) : (v2 << v4 - v4);
-	}
+		if (v6 < 90667201)
+		{
+			int v9 = 88434721;
+			v9 = (v9 < 70063594) ? (v9 & v9 % v9) : (v9 & v9 >> v9);
+		}
+		else
+		{
+			v7 = (v6 > 44994409) ? (v5 | v3 | v2) : (v2 << v4 - v4);
+		}
 
+		switch (v1 % 5)
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v6 = (v5 > 96363875) ? (v2 >> v8 / v6) : (v1 >> v4 & v5);
-				break;
-			case 1:
-				v6 = (v6 < 19342289) ? (v1 | v2 | v6) : (v1 % v7 ^ v6);
-				break;
-			case 2:
-				v3 = (v5 < 76819188) ? (v1 >> v3 - v3) : (v4 & v4 / v7);
-				break;
-			case 3:
-				v4 = v1 >> v6 << v4;
-				break;
-			case 4:
-				v5 = (v7 > 89191633) ? (v5 % v1 & v2) : (v7 / v5 ^ v6);
-				break;
-			default:
-				v1 = (v5 > 98060503) ? (v7 / v2 >> v7) : (v4 & v7 ^ v8);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v3 > 24811994)
-	{
-	int v10 = 15698645;
-		v10 = v10 >> v10 / v10;
-	}
-	else
-	{
-		v2 = (v2 > 75670686) ? (v5 - v6 | v1) : (v4 | v8 | v1);
-	}
+				v6 = (v5 > 96363875) ? (v2 >> v8 / v6) : (v1 >> v4 & v5);
 
+				break;
+
+			case 1:
+
+				v6 = (v6 < 19342289) ? (v1 | v2 | v6) : (v1 % v7 ^ v6);
+
+				break;
+
+			case 2:
+
+				v3 = (v5 < 76819188) ? (v1 >> v3 - v3) : (v4 & v4 / v7);
+
+				break;
+
+			case 3:
+
+				v4 = v1 >> v6 << v4;
+
+				break;
+
+			case 4:
+
+				v5 = (v7 > 89191633) ? (v5 % v1 & v2) : (v7 / v5 ^ v6);
+
+				break;
+
+			default:
+
+				v1 = (v5 > 98060503) ? (v7 / v2 >> v7) : (v4 & v7 ^ v8);
+
+				break;
+		}
+
+		if (v3 > 24811994)
+		{
+			int v10 = 15698645;
+			v10 = v10 >> v10 / v10;
+		}
+		else
+		{
+			v2 = (v2 > 75670686) ? (v5 - v6 | v1) : (v4 | v8 | v1);
+		}
 
 		return (v5 < 74181495) ? (v3 % v5 * v6) : (v4 % v7 >> v8);
 	}
@@ -1043,51 +1391,66 @@ public static class Fuzz0019
 		int v7 = 26178742;
 		int v8 = 77893268;
 
-	if (v7 < 47878318)
-	{
-	int v9 = 76906244;
-		v9 = (v9 < 45826204) ? (v9 | v9 & v9) : (v9 & v9 | v9);
-	}
-	else
-	{
-		v8 = (v8 < 16532133) ? (v3 | v7 * v1) : (v2 * v1 * v3);
-	}
+		if (v7 < 47878318)
+		{
+			int v9 = 76906244;
+			v9 = (v9 < 45826204) ? (v9 | v9 & v9) : (v9 & v9 | v9);
+		}
+		else
+		{
+			v8 = (v8 < 16532133) ? (v3 | v7 * v1) : (v2 * v1 * v3);
+		}
 
+		switch (v7 % 5)
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v6 = (v4 > 3308363) ? (v2 - v6 >> v3) : (v6 & v1 / v1);
-				break;
-			case 1:
-				v2 = v1 ^ v3 & v4;
-				break;
-			case 2:
-				v8 = (v7 < 36500193) ? (v6 + v5 | v4) : (v7 >> v3 >> v2);
-				break;
-			case 3:
-				v7 = v4 / v3 | v6;
-				break;
-			case 4:
-				v2 = (v5 < 37458589) ? (v2 << v2 >> v1) : (v2 << v5 ^ v2);
-				break;
-			default:
-				v7 = v5 & v5 ^ v6;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v1 < 77661025)
-	{
-	int v10 = 41698409;
-		v10 = (v10 < 68115764) ? (v10 ^ v10 + v10) : (v10 & v10 >> v10);
-	}
-	else
-	{
-	int v11 = 29505332;
-		v11 = (v11 < 16696314) ? (v11 | v11 - v11) : (v11 & v11 / v11);
-	}
+				v6 = (v4 > 3308363) ? (v2 - v6 >> v3) : (v6 & v1 / v1);
 
+				break;
+
+			case 1:
+
+				v2 = v1 ^ v3 & v4;
+
+				break;
+
+			case 2:
+
+				v8 = (v7 < 36500193) ? (v6 + v5 | v4) : (v7 >> v3 >> v2);
+
+				break;
+
+			case 3:
+
+				v7 = v4 / v3 | v6;
+
+				break;
+
+			case 4:
+
+				v2 = (v5 < 37458589) ? (v2 << v2 >> v1) : (v2 << v5 ^ v2);
+
+				break;
+
+			default:
+
+				v7 = v5 & v5 ^ v6;
+
+				break;
+		}
+
+		if (v1 < 77661025)
+		{
+			int v10 = 41698409;
+			v10 = (v10 < 68115764) ? (v10 ^ v10 + v10) : (v10 & v10 >> v10);
+		}
+		else
+		{
+			int v11 = 29505332;
+			v11 = (v11 < 16696314) ? (v11 | v11 - v11) : (v11 & v11 / v11);
+		}
 
 		return (v4 < 47997607) ? (v3 + v4 << v8) : (v7 % v3 ^ v1);
 	}
@@ -1104,74 +1467,125 @@ public static class Fuzz0019
 		int v7 = 33569081;
 		int v8 = 99299301;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v3 = v7 << v2 << v8;
-				break;
-			case 1:
-				v3 = (v4 > 58655490) ? (v4 | v7 - v6) : (v1 >> v6 & v4);
-				break;
-			case 2:
-				v7 = (v5 < 69118711) ? (v7 & v1 & v8) : (v4 | v5 / v3);
-				break;
-			case 3:
-				v8 = v3 | v6 >> v3;
-				break;
-			case 4:
-				v5 = (v6 < 85091364) ? (v5 >> v2 / v3) : (v5 / v8 / v2);
-				break;
-			default:
-				v7 = (v7 < 92310167) ? (v1 << v3 ^ v4) : (v4 / v3 >> v1);
-				break;
-		}
-		
+		switch (v2 % 5)
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v8 = v8 & v8 << v8;
-				break;
-			case 1:
-				v2 = v4 << v8 & v7;
-				break;
-			case 2:
-				v4 = v2 * v1 % v7;
-				break;
-			case 3:
-				v8 = v5 | v2 >> v4;
-				break;
-			case 4:
-				v3 = (v2 < 14184816) ? (v6 % v4 ^ v7) : (v8 & v7 >> v6);
-				break;
-			default:
-				v3 = v1 + v6 << v6;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v5 = (v8 < 21744782) ? (v3 << v6 + v8) : (v7 - v2 - v8);
-				break;
-			case 1:
-				v8 = (v3 > 19180212) ? (v6 >> v7 | v5) : (v1 ^ v2 | v3);
-				break;
-			case 2:
-				v1 = (v1 < 35962463) ? (v7 % v5 >> v1) : (v4 ^ v6 << v6);
-				break;
-			case 3:
-				v1 = v1 + v3 / v3;
-				break;
-			case 4:
-				v2 = v3 * v8 << v1;
-				break;
-			default:
-				v7 = (v6 < 45851574) ? (v8 / v2 & v1) : (v5 | v3 >> v7);
-				break;
-		}
-		
+				v3 = v7 << v2 << v8;
+
+				break;
+
+			case 1:
+
+				v3 = (v4 > 58655490) ? (v4 | v7 - v6) : (v1 >> v6 & v4);
+
+				break;
+
+			case 2:
+
+				v7 = (v5 < 69118711) ? (v7 & v1 & v8) : (v4 | v5 / v3);
+
+				break;
+
+			case 3:
+
+				v8 = v3 | v6 >> v3;
+
+				break;
+
+			case 4:
+
+				v5 = (v6 < 85091364) ? (v5 >> v2 / v3) : (v5 / v8 / v2);
+
+				break;
+
+			default:
+
+				v7 = (v7 < 92310167) ? (v1 << v3 ^ v4) : (v4 / v3 >> v1);
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v8 = v8 & v8 << v8;
+
+				break;
+
+			case 1:
+
+				v2 = v4 << v8 & v7;
+
+				break;
+
+			case 2:
+
+				v4 = v2 * v1 % v7;
+
+				break;
+
+			case 3:
+
+				v8 = v5 | v2 >> v4;
+
+				break;
+
+			case 4:
+
+				v3 = (v2 < 14184816) ? (v6 % v4 ^ v7) : (v8 & v7 >> v6);
+
+				break;
+
+			default:
+
+				v3 = v1 + v6 << v6;
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v5 = (v8 < 21744782) ? (v3 << v6 + v8) : (v7 - v2 - v8);
+
+				break;
+
+			case 1:
+
+				v8 = (v3 > 19180212) ? (v6 >> v7 | v5) : (v1 ^ v2 | v3);
+
+				break;
+
+			case 2:
+
+				v1 = (v1 < 35962463) ? (v7 % v5 >> v1) : (v4 ^ v6 << v6);
+
+				break;
+
+			case 3:
+
+				v1 = v1 + v3 / v3;
+
+				break;
+
+			case 4:
+
+				v2 = v3 * v8 << v1;
+
+				break;
+
+			default:
+
+				v7 = (v6 < 45851574) ? (v8 / v2 & v1) : (v5 | v3 >> v7);
+
+				break;
+		}
 
 		return (v7 > 75666938) ? (v8 / v4 << v2) : (v1 & v7 - v4);
 	}
@@ -1188,62 +1602,95 @@ public static class Fuzz0019
 		int v7 = 43329303;
 		int v8 = 30428720;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v6 = (v5 < 50972706) ? (v3 + v6 * v1) : (v1 << v6 * v8);
-				break;
-			case 1:
-				v3 = (v1 > 59769458) ? (v4 - v6 & v5) : (v1 % v4 - v4);
-				break;
-			case 2:
-				v8 = v1 & v5 >> v2;
-				break;
-			case 3:
-				v3 = (v7 > 46593810) ? (v6 >> v3 >> v8) : (v2 ^ v2 + v1);
-				break;
-			case 4:
-				v5 = (v1 > 61026505) ? (v4 ^ v4 << v3) : (v7 & v6 * v1);
-				break;
-			default:
-				v4 = (v3 > 31279208) ? (v6 - v4 % v8) : (v1 >> v1 & v8);
-				break;
-		}
-		
+		switch (v8 % 5)
 
-	if (v2 < 83774456)
-	{
-		v2 = v6 % v8 ^ v1;
-	}
-	else
-	{
-	int v9 = 75705792;
-		v9 = v9 + v9 % v9;
-	}
+		{
+			case 0:
 
+				v6 = (v5 < 50972706) ? (v3 + v6 * v1) : (v1 << v6 * v8);
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v2 = (v4 > 36343191) ? (v2 % v6 << v2) : (v5 | v8 >> v6);
-				break;
-			case 1:
-				v3 = (v6 < 56812871) ? (v2 % v3 % v7) : (v5 ^ v3 ^ v8);
-				break;
-			case 2:
-				v4 = (v6 > 52778489) ? (v8 & v4 / v6) : (v3 % v3 ^ v7);
-				break;
-			case 3:
-				v1 = v4 % v6 - v1;
-				break;
-			case 4:
-				v7 = v3 & v6 >> v5;
-				break;
-			default:
-				v2 = v4 ^ v7 >> v7;
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v3 = (v1 > 59769458) ? (v4 - v6 & v5) : (v1 % v4 - v4);
+
+				break;
+
+			case 2:
+
+				v8 = v1 & v5 >> v2;
+
+				break;
+
+			case 3:
+
+				v3 = (v7 > 46593810) ? (v6 >> v3 >> v8) : (v2 ^ v2 + v1);
+
+				break;
+
+			case 4:
+
+				v5 = (v1 > 61026505) ? (v4 ^ v4 << v3) : (v7 & v6 * v1);
+
+				break;
+
+			default:
+
+				v4 = (v3 > 31279208) ? (v6 - v4 % v8) : (v1 >> v1 & v8);
+
+				break;
+		}
+
+		if (v2 < 83774456)
+		{
+			v2 = v6 % v8 ^ v1;
+		}
+		else
+		{
+			int v9 = 75705792;
+			v9 = v9 + v9 % v9;
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v2 = (v4 > 36343191) ? (v2 % v6 << v2) : (v5 | v8 >> v6);
+
+				break;
+
+			case 1:
+
+				v3 = (v6 < 56812871) ? (v2 % v3 % v7) : (v5 ^ v3 ^ v8);
+
+				break;
+
+			case 2:
+
+				v4 = (v6 > 52778489) ? (v8 & v4 / v6) : (v3 % v3 ^ v7);
+
+				break;
+
+			case 3:
+
+				v1 = v4 % v6 - v1;
+
+				break;
+
+			case 4:
+
+				v7 = v3 & v6 >> v5;
+
+				break;
+
+			default:
+
+				v2 = v4 ^ v7 >> v7;
+
+				break;
+		}
 
 		return v8 | v6 << v3;
 	}
@@ -1260,62 +1707,95 @@ public static class Fuzz0019
 		int v7 = 68969436;
 		int v8 = 99804366;
 
-	if (v1 < 10884045)
-	{
-		v1 = (v1 > 15626375) ? (v3 << v2 | v8) : (v4 % v2 / v4);
-	}
-	else
-	{
-	int v9 = 71407637;
-		v9 = v9 ^ v9 * v9;
-	}
+		if (v1 < 10884045)
+		{
+			v1 = (v1 > 15626375) ? (v3 << v2 | v8) : (v4 % v2 / v4);
+		}
+		else
+		{
+			int v9 = 71407637;
+			v9 = v9 ^ v9 * v9;
+		}
 
+		switch (v3 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v2 = (v7 < 95203825) ? (v7 + v7 >> v7) : (v6 / v8 << v1);
-				break;
-			case 1:
-				v5 = (v4 > 94882783) ? (v7 - v1 >> v7) : (v4 & v5 / v6);
-				break;
-			case 2:
-				v8 = v8 / v7 ^ v8;
-				break;
-			case 3:
-				v8 = v8 >> v8 & v2;
-				break;
-			case 4:
-				v5 = (v4 > 81566501) ? (v5 - v1 | v4) : (v8 * v4 % v5);
-				break;
-			default:
-				v4 = (v4 < 31799320) ? (v7 << v2 & v7) : (v6 ^ v6 << v5);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v5 = (v4 > 24678294) ? (v7 << v2 % v1) : (v7 << v2 << v8);
-				break;
-			case 1:
-				v1 = (v5 > 30665233) ? (v5 << v1 - v2) : (v4 >> v5 / v1);
-				break;
-			case 2:
-				v7 = v1 ^ v4 | v4;
-				break;
-			case 3:
-				v4 = v5 % v2 % v8;
-				break;
-			case 4:
-				v8 = v8 >> v4 & v4;
-				break;
-			default:
-				v8 = v2 ^ v3 << v4;
-				break;
-		}
-		
+				v2 = (v7 < 95203825) ? (v7 + v7 >> v7) : (v6 / v8 << v1);
+
+				break;
+
+			case 1:
+
+				v5 = (v4 > 94882783) ? (v7 - v1 >> v7) : (v4 & v5 / v6);
+
+				break;
+
+			case 2:
+
+				v8 = v8 / v7 ^ v8;
+
+				break;
+
+			case 3:
+
+				v8 = v8 >> v8 & v2;
+
+				break;
+
+			case 4:
+
+				v5 = (v4 > 81566501) ? (v5 - v1 | v4) : (v8 * v4 % v5);
+
+				break;
+
+			default:
+
+				v4 = (v4 < 31799320) ? (v7 << v2 & v7) : (v6 ^ v6 << v5);
+
+				break;
+		}
+
+		switch (v7 % 5)
+
+		{
+			case 0:
+
+				v5 = (v4 > 24678294) ? (v7 << v2 % v1) : (v7 << v2 << v8);
+
+				break;
+
+			case 1:
+
+				v1 = (v5 > 30665233) ? (v5 << v1 - v2) : (v4 >> v5 / v1);
+
+				break;
+
+			case 2:
+
+				v7 = v1 ^ v4 | v4;
+
+				break;
+
+			case 3:
+
+				v4 = v5 % v2 % v8;
+
+				break;
+
+			case 4:
+
+				v8 = v8 >> v4 & v4;
+
+				break;
+
+			default:
+
+				v8 = v2 ^ v3 << v4;
+
+				break;
+		}
 
 		return (v1 > 71437687) ? (v5 % v3 & v5) : (v5 << v5 / v4);
 	}
@@ -1332,49 +1812,64 @@ public static class Fuzz0019
 		int v7 = 56848323;
 		int v8 = 94689896;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v1 = v4 >> v3 >> v6;
-				break;
-			case 1:
-				v5 = (v6 > 95367138) ? (v7 << v2 >> v1) : (v1 ^ v2 - v2);
-				break;
-			case 2:
-				v6 = v5 & v3 ^ v1;
-				break;
-			case 3:
-				v8 = (v8 > 22682227) ? (v8 * v5 - v4) : (v3 >> v4 | v4);
-				break;
-			case 4:
-				v6 = v2 * v6 << v4;
-				break;
-			default:
-				v8 = v3 - v7 << v4;
-				break;
-		}
-		
+		switch (v7 % 5)
 
-	if (v1 < 19306614)
-	{
-	int v9 = 16207386;
-		v9 = v9 % v9 >> v9;
-	}
-	else
-	{
-		v4 = v1 << v5 * v7;
-	}
+		{
+			case 0:
 
+				v1 = v4 >> v3 >> v6;
 
-	if (v5 < 34542470)
-	{
-		v1 = (v3 > 11910276) ? (v7 % v1 + v8) : (v8 * v4 * v8);
-	}
-	else
-	{
-		v6 = v8 | v5 + v3;
-	}
+				break;
 
+			case 1:
+
+				v5 = (v6 > 95367138) ? (v7 << v2 >> v1) : (v1 ^ v2 - v2);
+
+				break;
+
+			case 2:
+
+				v6 = v5 & v3 ^ v1;
+
+				break;
+
+			case 3:
+
+				v8 = (v8 > 22682227) ? (v8 * v5 - v4) : (v3 >> v4 | v4);
+
+				break;
+
+			case 4:
+
+				v6 = v2 * v6 << v4;
+
+				break;
+
+			default:
+
+				v8 = v3 - v7 << v4;
+
+				break;
+		}
+
+		if (v1 < 19306614)
+		{
+			int v9 = 16207386;
+			v9 = v9 % v9 >> v9;
+		}
+		else
+		{
+			v4 = v1 << v5 * v7;
+		}
+
+		if (v5 < 34542470)
+		{
+			v1 = (v3 > 11910276) ? (v7 % v1 + v8) : (v8 * v4 * v8);
+		}
+		else
+		{
+			v6 = v8 | v5 + v3;
+		}
 
 		return (v6 < 9695751) ? (v7 << v7 << v3) : (v3 ^ v5 << v7);
 	}
@@ -1391,49 +1886,64 @@ public static class Fuzz0019
 		int v7 = 97513062;
 		int v8 = 97518943;
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v7 = (v2 < 58504536) ? (v7 & v6 + v8) : (v6 / v1 >> v1);
-				break;
-			case 1:
-				v8 = v7 - v7 % v3;
-				break;
-			case 2:
-				v3 = v6 & v3 << v4;
-				break;
-			case 3:
-				v8 = (v2 < 69706078) ? (v1 << v7 >> v4) : (v7 | v8 ^ v3);
-				break;
-			case 4:
-				v1 = v6 >> v3 - v1;
-				break;
-			default:
-				v3 = (v7 > 96668836) ? (v4 << v1 << v5) : (v3 >> v5 | v7);
-				break;
-		}
-		
+		switch (v1 % 5)
 
-	if (v6 > 33323865)
-	{
-	int v9 = 22149150;
-		v9 = (v9 > 99463317) ? (v9 << v9 ^ v9) : (v9 + v9 - v9);
-	}
-	else
-	{
-		v8 = (v7 > 21521998) ? (v7 >> v8 >> v2) : (v3 % v7 | v7);
-	}
+		{
+			case 0:
 
+				v7 = (v2 < 58504536) ? (v7 & v6 + v8) : (v6 / v1 >> v1);
 
-	if (v1 < 21698721)
-	{
-		v7 = (v8 < 44367051) ? (v4 ^ v7 * v2) : (v4 >> v3 ^ v3);
-	}
-	else
-	{
-		v5 = (v8 > 94895063) ? (v1 | v1 & v5) : (v6 >> v1 + v6);
-	}
+				break;
 
+			case 1:
+
+				v8 = v7 - v7 % v3;
+
+				break;
+
+			case 2:
+
+				v3 = v6 & v3 << v4;
+
+				break;
+
+			case 3:
+
+				v8 = (v2 < 69706078) ? (v1 << v7 >> v4) : (v7 | v8 ^ v3);
+
+				break;
+
+			case 4:
+
+				v1 = v6 >> v3 - v1;
+
+				break;
+
+			default:
+
+				v3 = (v7 > 96668836) ? (v4 << v1 << v5) : (v3 >> v5 | v7);
+
+				break;
+		}
+
+		if (v6 > 33323865)
+		{
+			int v9 = 22149150;
+			v9 = (v9 > 99463317) ? (v9 << v9 ^ v9) : (v9 + v9 - v9);
+		}
+		else
+		{
+			v8 = (v7 > 21521998) ? (v7 >> v8 >> v2) : (v3 % v7 | v7);
+		}
+
+		if (v1 < 21698721)
+		{
+			v7 = (v8 < 44367051) ? (v4 ^ v7 * v2) : (v4 >> v3 ^ v3);
+		}
+		else
+		{
+			v5 = (v8 > 94895063) ? (v1 | v1 & v5) : (v6 >> v1 + v6);
+		}
 
 		return v5 - v3 << v6;
 	}
@@ -1450,49 +1960,64 @@ public static class Fuzz0019
 		int v7 = 98604656;
 		int v8 = 1636285;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v8 = v8 / v6 >> v4;
-				break;
-			case 1:
-				v7 = v5 | v4 >> v7;
-				break;
-			case 2:
-				v3 = (v6 > 35459963) ? (v5 % v6 << v5) : (v4 << v5 >> v8);
-				break;
-			case 3:
-				v8 = (v2 > 33333923) ? (v1 >> v1 << v3) : (v1 % v4 % v4);
-				break;
-			case 4:
-				v4 = v8 % v5 & v2;
-				break;
-			default:
-				v2 = (v7 < 22704930) ? (v2 - v8 << v8) : (v7 << v3 << v5);
-				break;
-		}
-		
+		switch (v2 % 5)
 
-	if (v8 > 85011628)
-	{
-		v3 = v3 - v2 >> v8;
-	}
-	else
-	{
-		v4 = v4 / v8 >> v4;
-	}
+		{
+			case 0:
 
+				v8 = v8 / v6 >> v4;
 
-	if (v5 > 99785038)
-	{
-		v4 = (v1 < 72814231) ? (v4 + v1 - v3) : (v3 << v3 / v6);
-	}
-	else
-	{
-	int v9 = 14337694;
-		v9 = (v9 < 29014005) ? (v9 >> v9 & v9) : (v9 | v9 | v9);
-	}
+				break;
 
+			case 1:
+
+				v7 = v5 | v4 >> v7;
+
+				break;
+
+			case 2:
+
+				v3 = (v6 > 35459963) ? (v5 % v6 << v5) : (v4 << v5 >> v8);
+
+				break;
+
+			case 3:
+
+				v8 = (v2 > 33333923) ? (v1 >> v1 << v3) : (v1 % v4 % v4);
+
+				break;
+
+			case 4:
+
+				v4 = v8 % v5 & v2;
+
+				break;
+
+			default:
+
+				v2 = (v7 < 22704930) ? (v2 - v8 << v8) : (v7 << v3 << v5);
+
+				break;
+		}
+
+		if (v8 > 85011628)
+		{
+			v3 = v3 - v2 >> v8;
+		}
+		else
+		{
+			v4 = v4 / v8 >> v4;
+		}
+
+		if (v5 > 99785038)
+		{
+			v4 = (v1 < 72814231) ? (v4 + v1 - v3) : (v3 << v3 / v6);
+		}
+		else
+		{
+			int v9 = 14337694;
+			v9 = (v9 < 29014005) ? (v9 >> v9 & v9) : (v9 | v9 | v9);
+		}
 
 		return (v2 > 16586588) ? (v4 & v8 >> v3) : (v8 - v1 - v2);
 	}
@@ -1509,50 +2034,65 @@ public static class Fuzz0019
 		int v7 = 24115462;
 		int v8 = 53907612;
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v6 = (v3 < 1869937) ? (v4 / v5 << v4) : (v8 & v2 + v1);
-				break;
-			case 1:
-				v3 = (v8 > 86267012) ? (v3 << v2 ^ v5) : (v6 - v2 & v1);
-				break;
-			case 2:
-				v8 = (v5 > 61995311) ? (v4 - v5 << v3) : (v2 / v5 << v7);
-				break;
-			case 3:
-				v2 = v2 % v7 ^ v6;
-				break;
-			case 4:
-				v2 = (v8 > 24497679) ? (v1 & v3 ^ v8) : (v7 ^ v2 >> v5);
-				break;
-			default:
-				v1 = v6 | v4 >> v3;
-				break;
-		}
-		
+		switch (v3 % 5)
 
-	if (v8 < 98528520)
-	{
-		v6 = (v8 > 84001979) ? (v8 << v2 | v6) : (v6 % v3 ^ v1);
-	}
-	else
-	{
-		v8 = (v2 < 42602885) ? (v2 | v2 ^ v2) : (v7 ^ v1 | v7);
-	}
+		{
+			case 0:
 
+				v6 = (v3 < 1869937) ? (v4 / v5 << v4) : (v8 & v2 + v1);
 
-	if (v1 > 40234511)
-	{
-	int v9 = 36357794;
-		v9 = v9 - v9 % v9;
-	}
-	else
-	{
-	int v10 = 43162209;
-		v10 = v10 << v10 ^ v10;
-	}
+				break;
 
+			case 1:
+
+				v3 = (v8 > 86267012) ? (v3 << v2 ^ v5) : (v6 - v2 & v1);
+
+				break;
+
+			case 2:
+
+				v8 = (v5 > 61995311) ? (v4 - v5 << v3) : (v2 / v5 << v7);
+
+				break;
+
+			case 3:
+
+				v2 = v2 % v7 ^ v6;
+
+				break;
+
+			case 4:
+
+				v2 = (v8 > 24497679) ? (v1 & v3 ^ v8) : (v7 ^ v2 >> v5);
+
+				break;
+
+			default:
+
+				v1 = v6 | v4 >> v3;
+
+				break;
+		}
+
+		if (v8 < 98528520)
+		{
+			v6 = (v8 > 84001979) ? (v8 << v2 | v6) : (v6 % v3 ^ v1);
+		}
+		else
+		{
+			v8 = (v2 < 42602885) ? (v2 | v2 ^ v2) : (v7 ^ v1 | v7);
+		}
+
+		if (v1 > 40234511)
+		{
+			int v9 = 36357794;
+			v9 = v9 - v9 % v9;
+		}
+		else
+		{
+			int v10 = 43162209;
+			v10 = v10 << v10 ^ v10;
+		}
 
 		return (v2 > 69063634) ? (v2 << v6 >> v7) : (v3 ^ v5 >> v6);
 	}
@@ -1569,50 +2109,65 @@ public static class Fuzz0019
 		int v7 = 67171517;
 		int v8 = 90390483;
 
-	if (v8 > 13879486)
-	{
-	int v9 = 21133185;
-		v9 = (v9 > 57883725) ? (v9 / v9 << v9) : (v9 + v9 << v9);
-	}
-	else
-	{
-		v6 = (v2 < 66678733) ? (v4 << v7 & v6) : (v7 ^ v1 >> v6);
-	}
+		if (v8 > 13879486)
+		{
+			int v9 = 21133185;
+			v9 = (v9 > 57883725) ? (v9 / v9 << v9) : (v9 + v9 << v9);
+		}
+		else
+		{
+			v6 = (v2 < 66678733) ? (v4 << v7 & v6) : (v7 ^ v1 >> v6);
+		}
 
+		switch (v1 % 5)
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v7 = v6 / v8 % v4;
-				break;
-			case 1:
-				v3 = v5 << v1 >> v7;
-				break;
-			case 2:
-				v5 = (v5 > 93954374) ? (v2 | v3 << v2) : (v4 >> v7 - v2);
-				break;
-			case 3:
-				v5 = (v7 > 30873479) ? (v5 << v7 >> v3) : (v3 - v1 >> v7);
-				break;
-			case 4:
-				v5 = v6 << v1 >> v4;
-				break;
-			default:
-				v3 = (v2 > 4751757) ? (v7 << v3 | v4) : (v3 ^ v8 ^ v4);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v7 < 68387789)
-	{
-		v5 = v3 | v6 & v7;
-	}
-	else
-	{
-	int v10 = 10578314;
-		v10 = (v10 < 22132246) ? (v10 >> v10 << v10) : (v10 << v10 ^ v10);
-	}
+				v7 = v6 / v8 % v4;
 
+				break;
+
+			case 1:
+
+				v3 = v5 << v1 >> v7;
+
+				break;
+
+			case 2:
+
+				v5 = (v5 > 93954374) ? (v2 | v3 << v2) : (v4 >> v7 - v2);
+
+				break;
+
+			case 3:
+
+				v5 = (v7 > 30873479) ? (v5 << v7 >> v3) : (v3 - v1 >> v7);
+
+				break;
+
+			case 4:
+
+				v5 = v6 << v1 >> v4;
+
+				break;
+
+			default:
+
+				v3 = (v2 > 4751757) ? (v7 << v3 | v4) : (v3 ^ v8 ^ v4);
+
+				break;
+		}
+
+		if (v7 < 68387789)
+		{
+			v5 = v3 | v6 & v7;
+		}
+		else
+		{
+			int v10 = 10578314;
+			v10 = (v10 < 22132246) ? (v10 >> v10 << v10) : (v10 << v10 ^ v10);
+		}
 
 		return v1 >> v1 >> v4;
 	}
@@ -1629,74 +2184,125 @@ public static class Fuzz0019
 		int v7 = 84246617;
 		int v8 = 52512170;
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v7 = (v1 > 42184761) ? (v7 & v6 - v4) : (v7 >> v6 | v1);
-				break;
-			case 1:
-				v7 = v6 >> v8 / v1;
-				break;
-			case 2:
-				v2 = v7 & v8 >> v6;
-				break;
-			case 3:
-				v2 = (v5 < 952202) ? (v8 << v1 & v3) : (v8 >> v3 << v7);
-				break;
-			case 4:
-				v1 = (v2 < 62166779) ? (v2 | v6 - v7) : (v5 ^ v6 & v1);
-				break;
-			default:
-				v5 = (v8 > 8198450) ? (v1 | v1 << v3) : (v2 + v8 & v6);
-				break;
-		}
-		
+		switch (v1 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v7 = (v7 > 53285501) ? (v1 ^ v7 + v6) : (v2 & v6 << v8);
-				break;
-			case 1:
-				v4 = (v4 > 74115598) ? (v4 * v4 >> v5) : (v1 >> v6 & v8);
-				break;
-			case 2:
-				v1 = (v1 > 11694637) ? (v6 % v1 >> v3) : (v6 / v3 - v3);
-				break;
-			case 3:
-				v1 = v8 + v1 >> v3;
-				break;
-			case 4:
-				v3 = v8 % v7 - v1;
-				break;
-			default:
-				v6 = (v6 > 74595667) ? (v8 >> v5 << v8) : (v2 ^ v3 | v7);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v7 = (v5 < 81590095) ? (v8 << v8 | v6) : (v2 << v1 % v2);
-				break;
-			case 1:
-				v4 = (v8 < 63237936) ? (v3 | v7 | v1) : (v2 >> v8 ^ v2);
-				break;
-			case 2:
-				v4 = (v6 > 42553716) ? (v5 & v8 ^ v2) : (v8 ^ v3 & v3);
-				break;
-			case 3:
-				v4 = (v7 > 1574011) ? (v4 & v4 + v6) : (v7 | v8 + v4);
-				break;
-			case 4:
-				v6 = (v4 < 87086981) ? (v2 >> v3 << v2) : (v8 << v2 * v1);
-				break;
-			default:
-				v5 = v2 + v1 | v1;
-				break;
-		}
-		
+				v7 = (v1 > 42184761) ? (v7 & v6 - v4) : (v7 >> v6 | v1);
+
+				break;
+
+			case 1:
+
+				v7 = v6 >> v8 / v1;
+
+				break;
+
+			case 2:
+
+				v2 = v7 & v8 >> v6;
+
+				break;
+
+			case 3:
+
+				v2 = (v5 < 952202) ? (v8 << v1 & v3) : (v8 >> v3 << v7);
+
+				break;
+
+			case 4:
+
+				v1 = (v2 < 62166779) ? (v2 | v6 - v7) : (v5 ^ v6 & v1);
+
+				break;
+
+			default:
+
+				v5 = (v8 > 8198450) ? (v1 | v1 << v3) : (v2 + v8 & v6);
+
+				break;
+		}
+
+		switch (v3 % 5)
+
+		{
+			case 0:
+
+				v7 = (v7 > 53285501) ? (v1 ^ v7 + v6) : (v2 & v6 << v8);
+
+				break;
+
+			case 1:
+
+				v4 = (v4 > 74115598) ? (v4 * v4 >> v5) : (v1 >> v6 & v8);
+
+				break;
+
+			case 2:
+
+				v1 = (v1 > 11694637) ? (v6 % v1 >> v3) : (v6 / v3 - v3);
+
+				break;
+
+			case 3:
+
+				v1 = v8 + v1 >> v3;
+
+				break;
+
+			case 4:
+
+				v3 = v8 % v7 - v1;
+
+				break;
+
+			default:
+
+				v6 = (v6 > 74595667) ? (v8 >> v5 << v8) : (v2 ^ v3 | v7);
+
+				break;
+		}
+
+		switch (v6 % 5)
+
+		{
+			case 0:
+
+				v7 = (v5 < 81590095) ? (v8 << v8 | v6) : (v2 << v1 % v2);
+
+				break;
+
+			case 1:
+
+				v4 = (v8 < 63237936) ? (v3 | v7 | v1) : (v2 >> v8 ^ v2);
+
+				break;
+
+			case 2:
+
+				v4 = (v6 > 42553716) ? (v5 & v8 ^ v2) : (v8 ^ v3 & v3);
+
+				break;
+
+			case 3:
+
+				v4 = (v7 > 1574011) ? (v4 & v4 + v6) : (v7 | v8 + v4);
+
+				break;
+
+			case 4:
+
+				v6 = (v4 < 87086981) ? (v2 >> v3 << v2) : (v8 << v2 * v1);
+
+				break;
+
+			default:
+
+				v5 = v2 + v1 | v1;
+
+				break;
+		}
 
 		return (v4 < 87785478) ? (v2 >> v4 & v1) : (v2 >> v5 + v5);
 	}
@@ -1713,74 +2319,125 @@ public static class Fuzz0019
 		int v7 = 52115849;
 		int v8 = 91020258;
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v6 = (v6 < 96895117) ? (v6 << v2 | v7) : (v2 * v3 | v2);
-				break;
-			case 1:
-				v4 = v7 - v7 >> v4;
-				break;
-			case 2:
-				v7 = (v1 < 38586066) ? (v6 << v3 + v7) : (v6 | v4 << v8);
-				break;
-			case 3:
-				v3 = (v4 < 76792307) ? (v3 & v6 & v3) : (v2 + v5 & v4);
-				break;
-			case 4:
-				v4 = (v7 > 82831988) ? (v7 | v4 & v3) : (v5 | v5 * v6);
-				break;
-			default:
-				v1 = (v6 < 54442449) ? (v2 | v6 << v1) : (v5 * v6 % v6);
-				break;
-		}
-		
+		switch (v6 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v5 = (v8 > 12189626) ? (v5 >> v7 * v2) : (v5 >> v4 * v6);
-				break;
-			case 1:
-				v5 = v8 << v8 - v4;
-				break;
-			case 2:
-				v8 = v7 >> v7 ^ v7;
-				break;
-			case 3:
-				v4 = (v2 > 79668073) ? (v7 << v7 << v7) : (v6 >> v2 - v3);
-				break;
-			case 4:
-				v5 = (v3 > 59684504) ? (v3 + v1 / v7) : (v1 << v2 / v1);
-				break;
-			default:
-				v1 = (v7 > 33058930) ? (v8 - v4 | v2) : (v5 * v4 ^ v2);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v7 = v4 << v8 ^ v6;
-				break;
-			case 1:
-				v6 = v7 & v7 & v2;
-				break;
-			case 2:
-				v7 = (v4 < 51338712) ? (v3 >> v8 / v1) : (v4 & v1 ^ v8);
-				break;
-			case 3:
-				v4 = v2 & v1 + v1;
-				break;
-			case 4:
-				v8 = v3 + v5 / v2;
-				break;
-			default:
-				v7 = (v2 < 91463214) ? (v8 << v2 & v2) : (v4 * v8 + v7);
-				break;
-		}
-		
+				v6 = (v6 < 96895117) ? (v6 << v2 | v7) : (v2 * v3 | v2);
+
+				break;
+
+			case 1:
+
+				v4 = v7 - v7 >> v4;
+
+				break;
+
+			case 2:
+
+				v7 = (v1 < 38586066) ? (v6 << v3 + v7) : (v6 | v4 << v8);
+
+				break;
+
+			case 3:
+
+				v3 = (v4 < 76792307) ? (v3 & v6 & v3) : (v2 + v5 & v4);
+
+				break;
+
+			case 4:
+
+				v4 = (v7 > 82831988) ? (v7 | v4 & v3) : (v5 | v5 * v6);
+
+				break;
+
+			default:
+
+				v1 = (v6 < 54442449) ? (v2 | v6 << v1) : (v5 * v6 % v6);
+
+				break;
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v5 = (v8 > 12189626) ? (v5 >> v7 * v2) : (v5 >> v4 * v6);
+
+				break;
+
+			case 1:
+
+				v5 = v8 << v8 - v4;
+
+				break;
+
+			case 2:
+
+				v8 = v7 >> v7 ^ v7;
+
+				break;
+
+			case 3:
+
+				v4 = (v2 > 79668073) ? (v7 << v7 << v7) : (v6 >> v2 - v3);
+
+				break;
+
+			case 4:
+
+				v5 = (v3 > 59684504) ? (v3 + v1 / v7) : (v1 << v2 / v1);
+
+				break;
+
+			default:
+
+				v1 = (v7 > 33058930) ? (v8 - v4 | v2) : (v5 * v4 ^ v2);
+
+				break;
+		}
+
+		switch (v7 % 5)
+
+		{
+			case 0:
+
+				v7 = v4 << v8 ^ v6;
+
+				break;
+
+			case 1:
+
+				v6 = v7 & v7 & v2;
+
+				break;
+
+			case 2:
+
+				v7 = (v4 < 51338712) ? (v3 >> v8 / v1) : (v4 & v1 ^ v8);
+
+				break;
+
+			case 3:
+
+				v4 = v2 & v1 + v1;
+
+				break;
+
+			case 4:
+
+				v8 = v3 + v5 / v2;
+
+				break;
+
+			default:
+
+				v7 = (v2 < 91463214) ? (v8 << v2 & v2) : (v4 * v8 + v7);
+
+				break;
+		}
 
 		return (v4 > 35758051) ? (v2 * v2 << v1) : (v7 % v3 ^ v1);
 	}
@@ -1797,74 +2454,125 @@ public static class Fuzz0019
 		int v7 = 15178738;
 		int v8 = 44583322;
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v5 = v3 & v1 << v4;
-				break;
-			case 1:
-				v2 = v5 + v5 + v8;
-				break;
-			case 2:
-				v1 = (v8 < 24021949) ? (v3 ^ v4 << v7) : (v4 + v1 % v4);
-				break;
-			case 3:
-				v7 = (v4 < 22604723) ? (v3 & v2 << v4) : (v5 & v5 ^ v6);
-				break;
-			case 4:
-				v8 = (v8 > 22115609) ? (v6 - v7 & v5) : (v1 << v6 / v3);
-				break;
-			default:
-				v2 = v3 ^ v8 << v4;
-				break;
-		}
-		
+		switch (v6 % 5)
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v3 = (v5 > 41447245) ? (v3 | v5 << v2) : (v5 & v5 % v4);
-				break;
-			case 1:
-				v4 = (v5 > 15677850) ? (v2 + v3 >> v5) : (v7 - v2 & v1);
-				break;
-			case 2:
-				v7 = (v7 < 76350824) ? (v4 - v8 ^ v2) : (v8 << v2 | v7);
-				break;
-			case 3:
-				v7 = (v1 > 88056324) ? (v5 - v1 << v1) : (v1 & v4 << v3);
-				break;
-			case 4:
-				v7 = v1 % v1 >> v5;
-				break;
-			default:
-				v8 = (v8 > 19251976) ? (v2 ^ v6 | v4) : (v4 >> v6 | v1);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v1 = (v2 < 76853261) ? (v5 % v3 / v3) : (v3 - v7 & v3);
-				break;
-			case 1:
-				v4 = v8 / v5 - v1;
-				break;
-			case 2:
-				v5 = v6 << v2 * v7;
-				break;
-			case 3:
-				v6 = (v1 > 91452202) ? (v7 % v6 / v6) : (v6 & v1 >> v5);
-				break;
-			case 4:
-				v3 = (v2 < 23367424) ? (v7 & v2 | v1) : (v8 * v2 ^ v4);
-				break;
-			default:
-				v7 = (v6 > 81557957) ? (v1 << v1 | v1) : (v7 >> v3 << v6);
-				break;
-		}
-		
+				v5 = v3 & v1 << v4;
+
+				break;
+
+			case 1:
+
+				v2 = v5 + v5 + v8;
+
+				break;
+
+			case 2:
+
+				v1 = (v8 < 24021949) ? (v3 ^ v4 << v7) : (v4 + v1 % v4);
+
+				break;
+
+			case 3:
+
+				v7 = (v4 < 22604723) ? (v3 & v2 << v4) : (v5 & v5 ^ v6);
+
+				break;
+
+			case 4:
+
+				v8 = (v8 > 22115609) ? (v6 - v7 & v5) : (v1 << v6 / v3);
+
+				break;
+
+			default:
+
+				v2 = v3 ^ v8 << v4;
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v3 = (v5 > 41447245) ? (v3 | v5 << v2) : (v5 & v5 % v4);
+
+				break;
+
+			case 1:
+
+				v4 = (v5 > 15677850) ? (v2 + v3 >> v5) : (v7 - v2 & v1);
+
+				break;
+
+			case 2:
+
+				v7 = (v7 < 76350824) ? (v4 - v8 ^ v2) : (v8 << v2 | v7);
+
+				break;
+
+			case 3:
+
+				v7 = (v1 > 88056324) ? (v5 - v1 << v1) : (v1 & v4 << v3);
+
+				break;
+
+			case 4:
+
+				v7 = v1 % v1 >> v5;
+
+				break;
+
+			default:
+
+				v8 = (v8 > 19251976) ? (v2 ^ v6 | v4) : (v4 >> v6 | v1);
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v1 = (v2 < 76853261) ? (v5 % v3 / v3) : (v3 - v7 & v3);
+
+				break;
+
+			case 1:
+
+				v4 = v8 / v5 - v1;
+
+				break;
+
+			case 2:
+
+				v5 = v6 << v2 * v7;
+
+				break;
+
+			case 3:
+
+				v6 = (v1 > 91452202) ? (v7 % v6 / v6) : (v6 & v1 >> v5);
+
+				break;
+
+			case 4:
+
+				v3 = (v2 < 23367424) ? (v7 & v2 | v1) : (v8 * v2 ^ v4);
+
+				break;
+
+			default:
+
+				v7 = (v6 > 81557957) ? (v1 << v1 | v1) : (v7 >> v3 << v6);
+
+				break;
+		}
 
 		return v5 + v4 >> v6;
 	}
@@ -1881,61 +2589,94 @@ public static class Fuzz0019
 		int v7 = 57335479;
 		int v8 = 15074393;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v7 = v4 >> v7 / v2;
-				break;
-			case 1:
-				v3 = v6 << v2 | v6;
-				break;
-			case 2:
-				v7 = (v8 < 7757488) ? (v7 * v5 >> v6) : (v1 * v4 << v3);
-				break;
-			case 3:
-				v2 = v4 & v6 << v4;
-				break;
-			case 4:
-				v1 = v7 >> v3 % v4;
-				break;
-			default:
-				v2 = (v8 > 94542859) ? (v4 << v1 & v4) : (v5 & v5 + v7);
-				break;
-		}
-		
+		switch (v7 % 5)
 
-	if (v3 > 95072384)
-	{
-		v2 = (v5 > 88640761) ? (v7 | v5 >> v3) : (v1 >> v1 % v1);
-	}
-	else
-	{
-		v2 = v1 & v3 * v6;
-	}
+		{
+			case 0:
 
+				v7 = v4 >> v7 / v2;
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v7 = v1 % v5 + v3;
-				break;
-			case 1:
-				v2 = v1 << v5 / v6;
-				break;
-			case 2:
-				v3 = v4 + v1 >> v3;
-				break;
-			case 3:
-				v8 = v7 ^ v1 ^ v7;
-				break;
-			case 4:
-				v8 = v6 >> v8 << v1;
-				break;
-			default:
-				v4 = (v3 > 84205041) ? (v4 * v2 & v5) : (v2 / v7 + v7);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v3 = v6 << v2 | v6;
+
+				break;
+
+			case 2:
+
+				v7 = (v8 < 7757488) ? (v7 * v5 >> v6) : (v1 * v4 << v3);
+
+				break;
+
+			case 3:
+
+				v2 = v4 & v6 << v4;
+
+				break;
+
+			case 4:
+
+				v1 = v7 >> v3 % v4;
+
+				break;
+
+			default:
+
+				v2 = (v8 > 94542859) ? (v4 << v1 & v4) : (v5 & v5 + v7);
+
+				break;
+		}
+
+		if (v3 > 95072384)
+		{
+			v2 = (v5 > 88640761) ? (v7 | v5 >> v3) : (v1 >> v1 % v1);
+		}
+		else
+		{
+			v2 = v1 & v3 * v6;
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v7 = v1 % v5 + v3;
+
+				break;
+
+			case 1:
+
+				v2 = v1 << v5 / v6;
+
+				break;
+
+			case 2:
+
+				v3 = v4 + v1 >> v3;
+
+				break;
+
+			case 3:
+
+				v8 = v7 ^ v1 ^ v7;
+
+				break;
+
+			case 4:
+
+				v8 = v6 >> v8 << v1;
+
+				break;
+
+			default:
+
+				v4 = (v3 > 84205041) ? (v4 * v2 & v5) : (v2 / v7 + v7);
+
+				break;
+		}
 
 		return v2 + v6 >> v7;
 	}
@@ -1952,49 +2693,64 @@ public static class Fuzz0019
 		int v7 = 15070627;
 		int v8 = 17152191;
 
-	if (v5 < 36267790)
-	{
-		v2 = (v4 < 14140276) ? (v6 >> v1 | v7) : (v1 + v6 % v4);
-	}
-	else
-	{
-		v7 = v7 % v7 >> v8;
-	}
+		if (v5 < 36267790)
+		{
+			v2 = (v4 < 14140276) ? (v6 >> v1 | v7) : (v1 + v6 % v4);
+		}
+		else
+		{
+			v7 = v7 % v7 >> v8;
+		}
 
+		switch (v6 % 5)
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v8 = (v1 > 51802380) ? (v6 - v3 - v7) : (v2 * v4 % v1);
-				break;
-			case 1:
-				v6 = v4 / v5 ^ v3;
-				break;
-			case 2:
-				v4 = (v1 > 11959533) ? (v3 * v4 >> v5) : (v3 << v2 >> v5);
-				break;
-			case 3:
-				v3 = v4 << v3 ^ v4;
-				break;
-			case 4:
-				v4 = v3 & v7 << v1;
-				break;
-			default:
-				v7 = (v2 < 720441) ? (v8 / v6 | v1) : (v2 * v2 % v7);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v3 < 77132121)
-	{
-		v3 = (v4 > 33959955) ? (v7 & v5 - v1) : (v3 % v2 >> v6);
-	}
-	else
-	{
-	int v9 = 86191155;
-		v9 = v9 << v9 % v9;
-	}
+				v8 = (v1 > 51802380) ? (v6 - v3 - v7) : (v2 * v4 % v1);
 
+				break;
+
+			case 1:
+
+				v6 = v4 / v5 ^ v3;
+
+				break;
+
+			case 2:
+
+				v4 = (v1 > 11959533) ? (v3 * v4 >> v5) : (v3 << v2 >> v5);
+
+				break;
+
+			case 3:
+
+				v3 = v4 << v3 ^ v4;
+
+				break;
+
+			case 4:
+
+				v4 = v3 & v7 << v1;
+
+				break;
+
+			default:
+
+				v7 = (v2 < 720441) ? (v8 / v6 | v1) : (v2 * v2 % v7);
+
+				break;
+		}
+
+		if (v3 < 77132121)
+		{
+			v3 = (v4 > 33959955) ? (v7 & v5 - v1) : (v3 % v2 >> v6);
+		}
+		else
+		{
+			int v9 = 86191155;
+			v9 = v9 << v9 % v9;
+		}
 
 		return v4 - v4 % v6;
 	}
@@ -2011,74 +2767,125 @@ public static class Fuzz0019
 		int v7 = 5825723;
 		int v8 = 49218568;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v1 = v4 << v7 % v3;
-				break;
-			case 1:
-				v6 = v3 & v5 << v6;
-				break;
-			case 2:
-				v7 = v2 * v8 ^ v2;
-				break;
-			case 3:
-				v5 = (v1 < 84648460) ? (v5 & v8 - v7) : (v3 >> v5 >> v2);
-				break;
-			case 4:
-				v5 = (v6 > 89856340) ? (v7 * v6 / v7) : (v5 << v5 & v6);
-				break;
-			default:
-				v3 = v5 & v4 >> v8;
-				break;
-		}
-		
+		switch (v2 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v7 = v6 | v1 << v2;
-				break;
-			case 1:
-				v7 = (v5 > 76866139) ? (v3 | v3 << v2) : (v6 & v1 | v8);
-				break;
-			case 2:
-				v1 = (v8 > 87914733) ? (v7 << v2 & v3) : (v6 >> v2 & v8);
-				break;
-			case 3:
-				v6 = (v8 < 75115420) ? (v4 >> v5 % v6) : (v3 << v6 | v3);
-				break;
-			case 4:
-				v3 = v4 >> v4 >> v1;
-				break;
-			default:
-				v4 = (v4 > 56270422) ? (v4 << v8 + v4) : (v3 % v5 & v7);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v6 = (v7 < 80322327) ? (v3 << v8 % v1) : (v4 & v7 % v8);
-				break;
-			case 1:
-				v1 = (v3 < 8176) ? (v1 & v4 >> v1) : (v5 << v5 + v2);
-				break;
-			case 2:
-				v4 = (v4 < 8783525) ? (v8 % v2 + v8) : (v8 >> v2 + v3);
-				break;
-			case 3:
-				v5 = (v8 > 67097685) ? (v4 / v7 / v7) : (v5 * v7 ^ v5);
-				break;
-			case 4:
-				v4 = (v4 > 98249790) ? (v4 << v6 | v4) : (v2 + v2 | v7);
-				break;
-			default:
-				v8 = v7 >> v3 % v2;
-				break;
-		}
-		
+				v1 = v4 << v7 % v3;
+
+				break;
+
+			case 1:
+
+				v6 = v3 & v5 << v6;
+
+				break;
+
+			case 2:
+
+				v7 = v2 * v8 ^ v2;
+
+				break;
+
+			case 3:
+
+				v5 = (v1 < 84648460) ? (v5 & v8 - v7) : (v3 >> v5 >> v2);
+
+				break;
+
+			case 4:
+
+				v5 = (v6 > 89856340) ? (v7 * v6 / v7) : (v5 << v5 & v6);
+
+				break;
+
+			default:
+
+				v3 = v5 & v4 >> v8;
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v7 = v6 | v1 << v2;
+
+				break;
+
+			case 1:
+
+				v7 = (v5 > 76866139) ? (v3 | v3 << v2) : (v6 & v1 | v8);
+
+				break;
+
+			case 2:
+
+				v1 = (v8 > 87914733) ? (v7 << v2 & v3) : (v6 >> v2 & v8);
+
+				break;
+
+			case 3:
+
+				v6 = (v8 < 75115420) ? (v4 >> v5 % v6) : (v3 << v6 | v3);
+
+				break;
+
+			case 4:
+
+				v3 = v4 >> v4 >> v1;
+
+				break;
+
+			default:
+
+				v4 = (v4 > 56270422) ? (v4 << v8 + v4) : (v3 % v5 & v7);
+
+				break;
+		}
+
+		switch (v7 % 5)
+
+		{
+			case 0:
+
+				v6 = (v7 < 80322327) ? (v3 << v8 % v1) : (v4 & v7 % v8);
+
+				break;
+
+			case 1:
+
+				v1 = (v3 < 8176) ? (v1 & v4 >> v1) : (v5 << v5 + v2);
+
+				break;
+
+			case 2:
+
+				v4 = (v4 < 8783525) ? (v8 % v2 + v8) : (v8 >> v2 + v3);
+
+				break;
+
+			case 3:
+
+				v5 = (v8 > 67097685) ? (v4 / v7 / v7) : (v5 * v7 ^ v5);
+
+				break;
+
+			case 4:
+
+				v4 = (v4 > 98249790) ? (v4 << v6 | v4) : (v2 + v2 | v7);
+
+				break;
+
+			default:
+
+				v8 = v7 >> v3 % v2;
+
+				break;
+		}
 
 		return (v4 > 25254694) ? (v4 >> v6 << v7) : (v7 * v4 & v5);
 	}
@@ -2095,50 +2902,65 @@ public static class Fuzz0019
 		int v7 = 72299225;
 		int v8 = 87092442;
 
-	if (v3 > 57737676)
-	{
-		v8 = v2 >> v8 << v3;
-	}
-	else
-	{
-	int v9 = 63123053;
-		v9 = (v9 < 45311271) ? (v9 * v9 ^ v9) : (v9 / v9 - v9);
-	}
+		if (v3 > 57737676)
+		{
+			v8 = v2 >> v8 << v3;
+		}
+		else
+		{
+			int v9 = 63123053;
+			v9 = (v9 < 45311271) ? (v9 * v9 ^ v9) : (v9 / v9 - v9);
+		}
 
+		if (v6 > 44880426)
+		{
+			v7 = v7 % v7 | v4;
+		}
+		else
+		{
+			int v10 = 14175544;
+			v10 = (v10 < 49354040) ? (v10 % v10 - v10) : (v10 * v10 << v10);
+		}
 
-	if (v6 > 44880426)
-	{
-		v7 = v7 % v7 | v4;
-	}
-	else
-	{
-	int v10 = 14175544;
-		v10 = (v10 < 49354040) ? (v10 % v10 - v10) : (v10 * v10 << v10);
-	}
+		switch (v2 % 5)
 
+		{
+			case 0:
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v7 = (v8 > 45480637) ? (v6 >> v7 + v2) : (v5 - v6 % v4);
-				break;
-			case 1:
-				v6 = (v2 < 67099202) ? (v4 ^ v8 - v4) : (v7 >> v1 & v3);
-				break;
-			case 2:
-				v8 = v3 << v1 >> v4;
-				break;
-			case 3:
-				v2 = (v2 > 30521102) ? (v5 << v8 << v1) : (v6 & v7 >> v2);
-				break;
-			case 4:
-				v1 = (v8 > 13924562) ? (v5 | v3 >> v2) : (v8 - v8 | v6);
-				break;
-			default:
-				v6 = v8 + v6 >> v6;
-				break;
-		}
-		
+				v7 = (v8 > 45480637) ? (v6 >> v7 + v2) : (v5 - v6 % v4);
+
+				break;
+
+			case 1:
+
+				v6 = (v2 < 67099202) ? (v4 ^ v8 - v4) : (v7 >> v1 & v3);
+
+				break;
+
+			case 2:
+
+				v8 = v3 << v1 >> v4;
+
+				break;
+
+			case 3:
+
+				v2 = (v2 > 30521102) ? (v5 << v8 << v1) : (v6 & v7 >> v2);
+
+				break;
+
+			case 4:
+
+				v1 = (v8 > 13924562) ? (v5 | v3 >> v2) : (v8 - v8 | v6);
+
+				break;
+
+			default:
+
+				v6 = v8 + v6 >> v6;
+
+				break;
+		}
 
 		return (v1 > 62773392) ? (v6 >> v4 >> v4) : (v4 - v7 ^ v2);
 	}
@@ -2155,51 +2977,66 @@ public static class Fuzz0019
 		int v7 = 16621989;
 		int v8 = 42787789;
 
-	if (v5 < 41036294)
-	{
-	int v9 = 86939387;
-		v9 = (v9 > 54532999) ? (v9 / v9 << v9) : (v9 * v9 << v9);
-	}
-	else
-	{
-	int v10 = 14070317;
-		v10 = v10 / v10 << v10;
-	}
+		if (v5 < 41036294)
+		{
+			int v9 = 86939387;
+			v9 = (v9 > 54532999) ? (v9 / v9 << v9) : (v9 * v9 << v9);
+		}
+		else
+		{
+			int v10 = 14070317;
+			v10 = v10 / v10 << v10;
+		}
 
+		if (v7 > 85671563)
+		{
+			int v11 = 5399779;
+			v11 = v11 & v11 + v11;
+		}
+		else
+		{
+			v7 = v7 / v8 * v3;
+		}
 
-	if (v7 > 85671563)
-	{
-	int v11 = 5399779;
-		v11 = v11 & v11 + v11;
-	}
-	else
-	{
-		v7 = v7 / v8 * v3;
-	}
+		switch (v6 % 5)
 
+		{
+			case 0:
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v8 = v3 << v5 >> v6;
-				break;
-			case 1:
-				v8 = (v1 > 79437482) ? (v2 * v3 >> v1) : (v2 + v5 >> v4);
-				break;
-			case 2:
-				v4 = v6 | v7 << v1;
-				break;
-			case 3:
-				v2 = v5 % v4 >> v6;
-				break;
-			case 4:
-				v7 = (v6 < 29692295) ? (v5 / v5 & v4) : (v7 / v5 & v6);
-				break;
-			default:
-				v6 = (v6 < 61395203) ? (v6 & v8 ^ v7) : (v4 ^ v4 << v3);
-				break;
-		}
-		
+				v8 = v3 << v5 >> v6;
+
+				break;
+
+			case 1:
+
+				v8 = (v1 > 79437482) ? (v2 * v3 >> v1) : (v2 + v5 >> v4);
+
+				break;
+
+			case 2:
+
+				v4 = v6 | v7 << v1;
+
+				break;
+
+			case 3:
+
+				v2 = v5 % v4 >> v6;
+
+				break;
+
+			case 4:
+
+				v7 = (v6 < 29692295) ? (v5 / v5 & v4) : (v7 / v5 & v6);
+
+				break;
+
+			default:
+
+				v6 = (v6 < 61395203) ? (v6 & v8 ^ v7) : (v4 ^ v4 << v3);
+
+				break;
+		}
 
 		return v7 | v2 | v3;
 	}
@@ -2216,62 +3053,95 @@ public static class Fuzz0019
 		int v7 = 29651339;
 		int v8 = 1190166;
 
-	if (v6 > 44996577)
-	{
-		v1 = (v5 < 28796444) ? (v3 << v8 >> v4) : (v1 >> v1 << v7);
-	}
-	else
-	{
-	int v9 = 4019828;
-		v9 = v9 / v9 << v9;
-	}
+		if (v6 > 44996577)
+		{
+			v1 = (v5 < 28796444) ? (v3 << v8 >> v4) : (v1 >> v1 << v7);
+		}
+		else
+		{
+			int v9 = 4019828;
+			v9 = v9 / v9 << v9;
+		}
 
+		switch (v6 % 5)
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v7 = (v6 > 92376330) ? (v4 ^ v8 ^ v4) : (v8 % v4 + v3);
-				break;
-			case 1:
-				v8 = (v4 > 46815206) ? (v3 | v4 - v8) : (v1 * v1 / v2);
-				break;
-			case 2:
-				v3 = (v7 < 12511233) ? (v3 + v5 >> v6) : (v7 / v4 >> v8);
-				break;
-			case 3:
-				v2 = (v1 < 91594764) ? (v1 / v1 | v5) : (v6 << v1 + v8);
-				break;
-			case 4:
-				v1 = (v8 > 50875234) ? (v1 << v8 >> v6) : (v8 % v2 << v1);
-				break;
-			default:
-				v6 = (v7 > 40107023) ? (v1 & v4 * v6) : (v3 | v8 >> v7);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v8 = v2 << v2 & v2;
-				break;
-			case 1:
-				v7 = v3 >> v2 + v7;
-				break;
-			case 2:
-				v1 = (v6 < 66614703) ? (v5 << v1 ^ v2) : (v7 / v1 | v5);
-				break;
-			case 3:
-				v3 = v6 * v4 >> v8;
-				break;
-			case 4:
-				v2 = (v1 > 61543346) ? (v6 - v7 << v8) : (v8 / v5 << v3);
-				break;
-			default:
-				v6 = (v6 < 45877288) ? (v6 | v1 ^ v2) : (v5 ^ v8 | v4);
-				break;
-		}
-		
+				v7 = (v6 > 92376330) ? (v4 ^ v8 ^ v4) : (v8 % v4 + v3);
+
+				break;
+
+			case 1:
+
+				v8 = (v4 > 46815206) ? (v3 | v4 - v8) : (v1 * v1 / v2);
+
+				break;
+
+			case 2:
+
+				v3 = (v7 < 12511233) ? (v3 + v5 >> v6) : (v7 / v4 >> v8);
+
+				break;
+
+			case 3:
+
+				v2 = (v1 < 91594764) ? (v1 / v1 | v5) : (v6 << v1 + v8);
+
+				break;
+
+			case 4:
+
+				v1 = (v8 > 50875234) ? (v1 << v8 >> v6) : (v8 % v2 << v1);
+
+				break;
+
+			default:
+
+				v6 = (v7 > 40107023) ? (v1 & v4 * v6) : (v3 | v8 >> v7);
+
+				break;
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v8 = v2 << v2 & v2;
+
+				break;
+
+			case 1:
+
+				v7 = v3 >> v2 + v7;
+
+				break;
+
+			case 2:
+
+				v1 = (v6 < 66614703) ? (v5 << v1 ^ v2) : (v7 / v1 | v5);
+
+				break;
+
+			case 3:
+
+				v3 = v6 * v4 >> v8;
+
+				break;
+
+			case 4:
+
+				v2 = (v1 > 61543346) ? (v6 - v7 << v8) : (v8 / v5 << v3);
+
+				break;
+
+			default:
+
+				v6 = (v6 < 45877288) ? (v6 | v1 ^ v2) : (v5 ^ v8 | v4);
+
+				break;
+		}
 
 		return (v4 < 2521370) ? (v1 ^ v1 / v8) : (v3 / v8 % v3);
 	}
@@ -2288,49 +3158,64 @@ public static class Fuzz0019
 		int v7 = 96381543;
 		int v8 = 57740994;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v3 = (v6 < 75102456) ? (v3 << v4 >> v3) : (v1 % v2 >> v3);
-				break;
-			case 1:
-				v7 = v1 >> v7 << v6;
-				break;
-			case 2:
-				v7 = v3 << v7 >> v4;
-				break;
-			case 3:
-				v6 = (v8 > 50570294) ? (v1 % v5 ^ v4) : (v3 & v4 + v8);
-				break;
-			case 4:
-				v3 = (v3 < 31086329) ? (v1 | v6 | v5) : (v2 + v2 << v2);
-				break;
-			default:
-				v5 = (v4 > 37005500) ? (v6 * v5 ^ v3) : (v1 - v7 ^ v1);
-				break;
-		}
-		
+		switch (v8 % 5)
 
-	if (v4 < 82433595)
-	{
-		v4 = v2 | v8 >> v7;
-	}
-	else
-	{
-		v8 = v4 >> v2 | v6;
-	}
+		{
+			case 0:
 
+				v3 = (v6 < 75102456) ? (v3 << v4 >> v3) : (v1 % v2 >> v3);
 
-	if (v3 > 39573362)
-	{
-		v6 = v5 << v6 ^ v3;
-	}
-	else
-	{
-	int v9 = 6518213;
-		v9 = (v9 < 46841384) ? (v9 / v9 ^ v9) : (v9 >> v9 * v9);
-	}
+				break;
 
+			case 1:
+
+				v7 = v1 >> v7 << v6;
+
+				break;
+
+			case 2:
+
+				v7 = v3 << v7 >> v4;
+
+				break;
+
+			case 3:
+
+				v6 = (v8 > 50570294) ? (v1 % v5 ^ v4) : (v3 & v4 + v8);
+
+				break;
+
+			case 4:
+
+				v3 = (v3 < 31086329) ? (v1 | v6 | v5) : (v2 + v2 << v2);
+
+				break;
+
+			default:
+
+				v5 = (v4 > 37005500) ? (v6 * v5 ^ v3) : (v1 - v7 ^ v1);
+
+				break;
+		}
+
+		if (v4 < 82433595)
+		{
+			v4 = v2 | v8 >> v7;
+		}
+		else
+		{
+			v8 = v4 >> v2 | v6;
+		}
+
+		if (v3 > 39573362)
+		{
+			v6 = v5 << v6 ^ v3;
+		}
+		else
+		{
+			int v9 = 6518213;
+			v9 = (v9 < 46841384) ? (v9 / v9 ^ v9) : (v9 >> v9 * v9);
+		}
 
 		return v8 >> v1 | v5;
 	}
@@ -2347,61 +3232,94 @@ public static class Fuzz0019
 		int v7 = 11035404;
 		int v8 = 30915707;
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v1 = v7 ^ v7 * v6;
-				break;
-			case 1:
-				v4 = v1 >> v1 & v1;
-				break;
-			case 2:
-				v4 = (v2 > 1877840) ? (v1 + v2 << v7) : (v7 | v8 % v4);
-				break;
-			case 3:
-				v2 = v7 >> v6 + v5;
-				break;
-			case 4:
-				v4 = v3 + v4 - v7;
-				break;
-			default:
-				v5 = v2 ^ v4 << v8;
-				break;
-		}
-		
+		switch (v4 % 5)
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v4 = (v2 > 20366038) ? (v4 >> v6 * v8) : (v5 << v5 ^ v1);
-				break;
-			case 1:
-				v2 = (v4 > 51846860) ? (v8 >> v7 % v7) : (v4 & v5 << v2);
-				break;
-			case 2:
-				v6 = v2 << v2 << v2;
-				break;
-			case 3:
-				v2 = v4 << v6 >> v5;
-				break;
-			case 4:
-				v1 = (v3 > 45211273) ? (v3 / v1 >> v2) : (v3 | v5 / v6);
-				break;
-			default:
-				v4 = v4 << v1 << v7;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v4 < 53303977)
-	{
-		v2 = v6 + v5 >> v2;
-	}
-	else
-	{
-		v8 = (v4 > 55023539) ? (v2 << v3 % v7) : (v8 & v5 | v6);
-	}
+				v1 = v7 ^ v7 * v6;
 
+				break;
+
+			case 1:
+
+				v4 = v1 >> v1 & v1;
+
+				break;
+
+			case 2:
+
+				v4 = (v2 > 1877840) ? (v1 + v2 << v7) : (v7 | v8 % v4);
+
+				break;
+
+			case 3:
+
+				v2 = v7 >> v6 + v5;
+
+				break;
+
+			case 4:
+
+				v4 = v3 + v4 - v7;
+
+				break;
+
+			default:
+
+				v5 = v2 ^ v4 << v8;
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v4 = (v2 > 20366038) ? (v4 >> v6 * v8) : (v5 << v5 ^ v1);
+
+				break;
+
+			case 1:
+
+				v2 = (v4 > 51846860) ? (v8 >> v7 % v7) : (v4 & v5 << v2);
+
+				break;
+
+			case 2:
+
+				v6 = v2 << v2 << v2;
+
+				break;
+
+			case 3:
+
+				v2 = v4 << v6 >> v5;
+
+				break;
+
+			case 4:
+
+				v1 = (v3 > 45211273) ? (v3 / v1 >> v2) : (v3 | v5 / v6);
+
+				break;
+
+			default:
+
+				v4 = v4 << v1 << v7;
+
+				break;
+		}
+
+		if (v4 < 53303977)
+		{
+			v2 = v6 + v5 >> v2;
+		}
+		else
+		{
+			v8 = (v4 > 55023539) ? (v2 << v3 % v7) : (v8 & v5 | v6);
+		}
 
 		return (v8 < 18827455) ? (v3 << v6 >> v3) : (v5 ^ v8 ^ v5);
 	}
@@ -2418,50 +3336,65 @@ public static class Fuzz0019
 		int v7 = 87746225;
 		int v8 = 54534425;
 
-	if (v3 < 88755470)
-	{
-		v1 = (v2 < 294422) ? (v8 << v2 + v3) : (v2 / v2 << v6);
-	}
-	else
-	{
-	int v9 = 35529018;
-		v9 = (v9 < 32605251) ? (v9 / v9 ^ v9) : (v9 * v9 << v9);
-	}
+		if (v3 < 88755470)
+		{
+			v1 = (v2 < 294422) ? (v8 << v2 + v3) : (v2 / v2 << v6);
+		}
+		else
+		{
+			int v9 = 35529018;
+			v9 = (v9 < 32605251) ? (v9 / v9 ^ v9) : (v9 * v9 << v9);
+		}
 
+		switch (v8 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v3 = v6 << v1 ^ v1;
-				break;
-			case 1:
-				v8 = v5 << v5 + v2;
-				break;
-			case 2:
-				v7 = (v7 > 49050142) ? (v1 >> v2 << v6) : (v8 >> v5 >> v4);
-				break;
-			case 3:
-				v4 = (v1 < 63913773) ? (v1 * v5 * v2) : (v2 >> v7 << v8);
-				break;
-			case 4:
-				v5 = (v2 < 57518854) ? (v3 / v3 + v7) : (v6 << v4 << v6);
-				break;
-			default:
-				v7 = (v5 > 18386016) ? (v8 >> v8 | v3) : (v8 + v2 | v7);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v1 < 7448467)
-	{
-	int v10 = 99859711;
-		v10 = v10 | v10 % v10;
-	}
-	else
-	{
-		v7 = v3 - v4 ^ v5;
-	}
+				v3 = v6 << v1 ^ v1;
 
+				break;
+
+			case 1:
+
+				v8 = v5 << v5 + v2;
+
+				break;
+
+			case 2:
+
+				v7 = (v7 > 49050142) ? (v1 >> v2 << v6) : (v8 >> v5 >> v4);
+
+				break;
+
+			case 3:
+
+				v4 = (v1 < 63913773) ? (v1 * v5 * v2) : (v2 >> v7 << v8);
+
+				break;
+
+			case 4:
+
+				v5 = (v2 < 57518854) ? (v3 / v3 + v7) : (v6 << v4 << v6);
+
+				break;
+
+			default:
+
+				v7 = (v5 > 18386016) ? (v8 >> v8 | v3) : (v8 + v2 | v7);
+
+				break;
+		}
+
+		if (v1 < 7448467)
+		{
+			int v10 = 99859711;
+			v10 = v10 | v10 % v10;
+		}
+		else
+		{
+			v7 = v3 - v4 ^ v5;
+		}
 
 		return (v5 < 53203965) ? (v7 / v3 >> v4) : (v6 | v3 << v7);
 	}
@@ -2478,61 +3411,94 @@ public static class Fuzz0019
 		int v7 = 20898926;
 		int v8 = 276507;
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v6 = (v2 < 96218647) ? (v2 & v2 >> v6) : (v5 << v1 - v5);
-				break;
-			case 1:
-				v4 = (v8 < 57153893) ? (v2 & v2 & v4) : (v8 ^ v4 >> v6);
-				break;
-			case 2:
-				v4 = (v2 > 40105411) ? (v7 + v4 / v7) : (v2 + v6 / v4);
-				break;
-			case 3:
-				v7 = (v8 > 22139926) ? (v7 >> v3 >> v6) : (v8 - v5 & v7);
-				break;
-			case 4:
-				v2 = (v2 > 2204924) ? (v8 / v6 / v1) : (v4 << v2 + v1);
-				break;
-			default:
-				v3 = (v4 > 69920764) ? (v6 << v7 % v1) : (v8 - v1 ^ v6);
-				break;
-		}
-		
+		switch (v6 % 5)
 
-	if (v3 < 25782377)
-	{
-		v3 = (v6 > 3967) ? (v2 | v1 << v1) : (v7 ^ v7 >> v4);
-	}
-	else
-	{
-		v6 = (v7 < 51323858) ? (v4 | v1 | v7) : (v8 & v2 - v5);
-	}
+		{
+			case 0:
 
+				v6 = (v2 < 96218647) ? (v2 & v2 >> v6) : (v5 << v1 - v5);
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v8 = v4 - v5 + v1;
-				break;
-			case 1:
-				v3 = (v7 < 77773338) ? (v4 ^ v2 / v2) : (v7 * v3 << v6);
-				break;
-			case 2:
-				v2 = v3 & v2 - v6;
-				break;
-			case 3:
-				v6 = (v1 < 37490485) ? (v8 | v7 | v1) : (v5 >> v3 ^ v2);
-				break;
-			case 4:
-				v4 = (v5 < 95693380) ? (v3 >> v8 ^ v2) : (v2 * v2 >> v5);
-				break;
-			default:
-				v3 = (v1 > 39188725) ? (v4 << v8 << v3) : (v2 - v5 << v3);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v4 = (v8 < 57153893) ? (v2 & v2 & v4) : (v8 ^ v4 >> v6);
+
+				break;
+
+			case 2:
+
+				v4 = (v2 > 40105411) ? (v7 + v4 / v7) : (v2 + v6 / v4);
+
+				break;
+
+			case 3:
+
+				v7 = (v8 > 22139926) ? (v7 >> v3 >> v6) : (v8 - v5 & v7);
+
+				break;
+
+			case 4:
+
+				v2 = (v2 > 2204924) ? (v8 / v6 / v1) : (v4 << v2 + v1);
+
+				break;
+
+			default:
+
+				v3 = (v4 > 69920764) ? (v6 << v7 % v1) : (v8 - v1 ^ v6);
+
+				break;
+		}
+
+		if (v3 < 25782377)
+		{
+			v3 = (v6 > 3967) ? (v2 | v1 << v1) : (v7 ^ v7 >> v4);
+		}
+		else
+		{
+			v6 = (v7 < 51323858) ? (v4 | v1 | v7) : (v8 & v2 - v5);
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v8 = v4 - v5 + v1;
+
+				break;
+
+			case 1:
+
+				v3 = (v7 < 77773338) ? (v4 ^ v2 / v2) : (v7 * v3 << v6);
+
+				break;
+
+			case 2:
+
+				v2 = v3 & v2 - v6;
+
+				break;
+
+			case 3:
+
+				v6 = (v1 < 37490485) ? (v8 | v7 | v1) : (v5 >> v3 ^ v2);
+
+				break;
+
+			case 4:
+
+				v4 = (v5 < 95693380) ? (v3 >> v8 ^ v2) : (v2 * v2 >> v5);
+
+				break;
+
+			default:
+
+				v3 = (v1 > 39188725) ? (v4 << v8 << v3) : (v2 - v5 << v3);
+
+				break;
+		}
 
 		return (v2 < 14454812) ? (v4 << v1 + v1) : (v5 / v5 << v8);
 	}
@@ -2549,62 +3515,95 @@ public static class Fuzz0019
 		int v7 = 86438696;
 		int v8 = 69967838;
 
-	if (v8 < 63077236)
-	{
-		v2 = v2 & v6 * v6;
-	}
-	else
-	{
-	int v9 = 93237843;
-		v9 = v9 / v9 >> v9;
-	}
+		if (v8 < 63077236)
+		{
+			v2 = v2 & v6 * v6;
+		}
+		else
+		{
+			int v9 = 93237843;
+			v9 = v9 / v9 >> v9;
+		}
 
+		switch (v7 % 5)
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v8 = v7 + v4 / v8;
-				break;
-			case 1:
-				v2 = v2 | v6 / v5;
-				break;
-			case 2:
-				v5 = (v5 < 49329184) ? (v2 ^ v7 + v6) : (v1 + v5 >> v1);
-				break;
-			case 3:
-				v3 = v3 - v2 << v7;
-				break;
-			case 4:
-				v6 = (v5 > 18006812) ? (v5 % v7 * v8) : (v8 << v1 | v3);
-				break;
-			default:
-				v6 = (v7 < 26728913) ? (v6 << v3 / v5) : (v3 >> v2 + v5);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v4 = (v5 < 10588580) ? (v2 ^ v8 | v5) : (v3 >> v7 - v4);
-				break;
-			case 1:
-				v8 = (v5 > 6011881) ? (v1 << v1 + v4) : (v4 >> v8 >> v6);
-				break;
-			case 2:
-				v5 = v1 ^ v2 >> v7;
-				break;
-			case 3:
-				v6 = v5 ^ v7 & v2;
-				break;
-			case 4:
-				v3 = v8 | v6 << v3;
-				break;
-			default:
-				v7 = (v4 > 33987764) ? (v4 | v5 + v7) : (v8 << v1 << v7);
-				break;
-		}
-		
+				v8 = v7 + v4 / v8;
+
+				break;
+
+			case 1:
+
+				v2 = v2 | v6 / v5;
+
+				break;
+
+			case 2:
+
+				v5 = (v5 < 49329184) ? (v2 ^ v7 + v6) : (v1 + v5 >> v1);
+
+				break;
+
+			case 3:
+
+				v3 = v3 - v2 << v7;
+
+				break;
+
+			case 4:
+
+				v6 = (v5 > 18006812) ? (v5 % v7 * v8) : (v8 << v1 | v3);
+
+				break;
+
+			default:
+
+				v6 = (v7 < 26728913) ? (v6 << v3 / v5) : (v3 >> v2 + v5);
+
+				break;
+		}
+
+		switch (v7 % 5)
+
+		{
+			case 0:
+
+				v4 = (v5 < 10588580) ? (v2 ^ v8 | v5) : (v3 >> v7 - v4);
+
+				break;
+
+			case 1:
+
+				v8 = (v5 > 6011881) ? (v1 << v1 + v4) : (v4 >> v8 >> v6);
+
+				break;
+
+			case 2:
+
+				v5 = v1 ^ v2 >> v7;
+
+				break;
+
+			case 3:
+
+				v6 = v5 ^ v7 & v2;
+
+				break;
+
+			case 4:
+
+				v3 = v8 | v6 << v3;
+
+				break;
+
+			default:
+
+				v7 = (v4 > 33987764) ? (v4 | v5 + v7) : (v8 << v1 << v7);
+
+				break;
+		}
 
 		return (v6 > 73280894) ? (v5 * v5 / v7) : (v2 - v7 - v5);
 	}
@@ -2621,63 +3620,96 @@ public static class Fuzz0019
 		int v7 = 54841150;
 		int v8 = 40597297;
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v7 = (v2 > 54784108) ? (v3 * v1 << v8) : (v2 << v3 >> v6);
-				break;
-			case 1:
-				v8 = v3 / v1 >> v2;
-				break;
-			case 2:
-				v2 = (v3 < 78416532) ? (v3 << v7 % v1) : (v6 ^ v5 << v4);
-				break;
-			case 3:
-				v6 = v5 << v4 | v2;
-				break;
-			case 4:
-				v5 = (v8 > 28423466) ? (v8 - v8 / v4) : (v3 << v4 & v8);
-				break;
-			default:
-				v1 = (v4 < 15599600) ? (v4 | v3 * v8) : (v3 >> v8 & v6);
-				break;
-		}
-		
+		switch (v1 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v5 = v1 << v4 << v2;
-				break;
-			case 1:
-				v5 = (v2 > 43102260) ? (v4 & v8 & v5) : (v4 ^ v8 - v6);
-				break;
-			case 2:
-				v2 = (v4 > 39328031) ? (v2 >> v4 - v1) : (v7 % v7 + v8);
-				break;
-			case 3:
-				v7 = v4 >> v2 & v4;
-				break;
-			case 4:
-				v6 = v1 << v5 - v4;
-				break;
-			default:
-				v5 = (v2 < 75902159) ? (v1 & v8 - v5) : (v7 >> v2 >> v8);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v8 > 30582575)
-	{
-	int v9 = 23595037;
-		v9 = v9 ^ v9 - v9;
-	}
-	else
-	{
-	int v10 = 53189143;
-		v10 = v10 | v10 | v10;
-	}
+				v7 = (v2 > 54784108) ? (v3 * v1 << v8) : (v2 << v3 >> v6);
 
+				break;
+
+			case 1:
+
+				v8 = v3 / v1 >> v2;
+
+				break;
+
+			case 2:
+
+				v2 = (v3 < 78416532) ? (v3 << v7 % v1) : (v6 ^ v5 << v4);
+
+				break;
+
+			case 3:
+
+				v6 = v5 << v4 | v2;
+
+				break;
+
+			case 4:
+
+				v5 = (v8 > 28423466) ? (v8 - v8 / v4) : (v3 << v4 & v8);
+
+				break;
+
+			default:
+
+				v1 = (v4 < 15599600) ? (v4 | v3 * v8) : (v3 >> v8 & v6);
+
+				break;
+		}
+
+		switch (v3 % 5)
+
+		{
+			case 0:
+
+				v5 = v1 << v4 << v2;
+
+				break;
+
+			case 1:
+
+				v5 = (v2 > 43102260) ? (v4 & v8 & v5) : (v4 ^ v8 - v6);
+
+				break;
+
+			case 2:
+
+				v2 = (v4 > 39328031) ? (v2 >> v4 - v1) : (v7 % v7 + v8);
+
+				break;
+
+			case 3:
+
+				v7 = v4 >> v2 & v4;
+
+				break;
+
+			case 4:
+
+				v6 = v1 << v5 - v4;
+
+				break;
+
+			default:
+
+				v5 = (v2 < 75902159) ? (v1 & v8 - v5) : (v7 >> v2 >> v8);
+
+				break;
+		}
+
+		if (v8 > 30582575)
+		{
+			int v9 = 23595037;
+			v9 = v9 ^ v9 - v9;
+		}
+		else
+		{
+			int v10 = 53189143;
+			v10 = v10 | v10 | v10;
+		}
 
 		return v6 >> v7 >> v6;
 	}
@@ -2694,50 +3726,65 @@ public static class Fuzz0019
 		int v7 = 99016575;
 		int v8 = 56645537;
 
-	if (v4 > 89660379)
-	{
-		v4 = v1 >> v4 << v1;
-	}
-	else
-	{
-	int v9 = 88877765;
-		v9 = (v9 > 96454482) ? (v9 - v9 >> v9) : (v9 ^ v9 / v9);
-	}
+		if (v4 > 89660379)
+		{
+			v4 = v1 >> v4 << v1;
+		}
+		else
+		{
+			int v9 = 88877765;
+			v9 = (v9 > 96454482) ? (v9 - v9 >> v9) : (v9 ^ v9 / v9);
+		}
 
+		switch (v5 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v7 = v2 + v7 << v8;
-				break;
-			case 1:
-				v6 = (v1 > 46579302) ? (v5 / v7 << v7) : (v1 >> v6 >> v7);
-				break;
-			case 2:
-				v2 = (v1 < 11811093) ? (v2 ^ v2 ^ v8) : (v5 & v6 << v5);
-				break;
-			case 3:
-				v1 = v6 & v5 ^ v1;
-				break;
-			case 4:
-				v1 = (v1 < 99004972) ? (v4 / v7 << v4) : (v5 >> v1 << v1);
-				break;
-			default:
-				v7 = (v1 < 92299894) ? (v2 % v4 * v1) : (v1 << v1 << v1);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v5 > 824598)
-	{
-		v3 = v7 << v1 ^ v7;
-	}
-	else
-	{
-	int v10 = 86867489;
-		v10 = v10 >> v10 >> v10;
-	}
+				v7 = v2 + v7 << v8;
 
+				break;
+
+			case 1:
+
+				v6 = (v1 > 46579302) ? (v5 / v7 << v7) : (v1 >> v6 >> v7);
+
+				break;
+
+			case 2:
+
+				v2 = (v1 < 11811093) ? (v2 ^ v2 ^ v8) : (v5 & v6 << v5);
+
+				break;
+
+			case 3:
+
+				v1 = v6 & v5 ^ v1;
+
+				break;
+
+			case 4:
+
+				v1 = (v1 < 99004972) ? (v4 / v7 << v4) : (v5 >> v1 << v1);
+
+				break;
+
+			default:
+
+				v7 = (v1 < 92299894) ? (v2 % v4 * v1) : (v1 << v1 << v1);
+
+				break;
+		}
+
+		if (v5 > 824598)
+		{
+			v3 = v7 << v1 ^ v7;
+		}
+		else
+		{
+			int v10 = 86867489;
+			v10 = v10 >> v10 >> v10;
+		}
 
 		return (v6 < 71624701) ? (v7 * v6 / v7) : (v7 + v6 * v1);
 	}
@@ -2754,52 +3801,67 @@ public static class Fuzz0019
 		int v7 = 21636100;
 		int v8 = 26386477;
 
-	if (v4 < 70657233)
-	{
-	int v9 = 49574942;
-		v9 = (v9 > 47994415) ? (v9 * v9 - v9) : (v9 | v9 | v9);
-	}
-	else
-	{
-	int v10 = 84835624;
-		v10 = v10 >> v10 & v10;
-	}
+		if (v4 < 70657233)
+		{
+			int v9 = 49574942;
+			v9 = (v9 > 47994415) ? (v9 * v9 - v9) : (v9 | v9 | v9);
+		}
+		else
+		{
+			int v10 = 84835624;
+			v10 = v10 >> v10 & v10;
+		}
 
+		switch (v8 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v2 = (v8 < 4052748) ? (v4 << v2 + v6) : (v4 * v1 & v3);
-				break;
-			case 1:
-				v8 = (v5 > 67455131) ? (v8 * v5 | v1) : (v3 | v1 << v7);
-				break;
-			case 2:
-				v4 = (v5 > 38389776) ? (v2 << v1 | v8) : (v2 >> v4 >> v3);
-				break;
-			case 3:
-				v7 = (v4 > 56430669) ? (v1 + v7 << v1) : (v6 & v4 & v5);
-				break;
-			case 4:
-				v3 = (v8 > 36064182) ? (v8 ^ v5 >> v2) : (v1 & v7 >> v4);
-				break;
-			default:
-				v1 = (v5 < 38426703) ? (v5 & v2 >> v6) : (v2 >> v3 / v1);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v2 > 81665532)
-	{
-	int v11 = 90496159;
-		v11 = (v11 > 5368539) ? (v11 ^ v11 ^ v11) : (v11 - v11 & v11);
-	}
-	else
-	{
-	int v12 = 27799221;
-		v12 = (v12 < 45342436) ? (v12 & v12 & v12) : (v12 - v12 % v12);
-	}
+				v2 = (v8 < 4052748) ? (v4 << v2 + v6) : (v4 * v1 & v3);
 
+				break;
+
+			case 1:
+
+				v8 = (v5 > 67455131) ? (v8 * v5 | v1) : (v3 | v1 << v7);
+
+				break;
+
+			case 2:
+
+				v4 = (v5 > 38389776) ? (v2 << v1 | v8) : (v2 >> v4 >> v3);
+
+				break;
+
+			case 3:
+
+				v7 = (v4 > 56430669) ? (v1 + v7 << v1) : (v6 & v4 & v5);
+
+				break;
+
+			case 4:
+
+				v3 = (v8 > 36064182) ? (v8 ^ v5 >> v2) : (v1 & v7 >> v4);
+
+				break;
+
+			default:
+
+				v1 = (v5 < 38426703) ? (v5 & v2 >> v6) : (v2 >> v3 / v1);
+
+				break;
+		}
+
+		if (v2 > 81665532)
+		{
+			int v11 = 90496159;
+			v11 = (v11 > 5368539) ? (v11 ^ v11 ^ v11) : (v11 - v11 & v11);
+		}
+		else
+		{
+			int v12 = 27799221;
+			v12 = (v12 < 45342436) ? (v12 & v12 & v12) : (v12 - v12 % v12);
+		}
 
 		return v2 % v3 * v8;
 	}
@@ -2816,74 +3878,125 @@ public static class Fuzz0019
 		int v7 = 9705631;
 		int v8 = 88065608;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v1 = (v2 < 51317376) ? (v5 << v6 & v3) : (v8 >> v5 * v4);
-				break;
-			case 1:
-				v5 = (v6 < 56346642) ? (v2 << v5 % v2) : (v6 ^ v8 + v8);
-				break;
-			case 2:
-				v2 = (v7 > 62019437) ? (v4 / v1 % v7) : (v7 & v6 ^ v3);
-				break;
-			case 3:
-				v7 = (v2 > 38084735) ? (v7 << v2 >> v7) : (v5 + v4 << v4);
-				break;
-			case 4:
-				v4 = v3 - v3 - v1;
-				break;
-			default:
-				v5 = (v3 > 42242254) ? (v5 ^ v4 >> v1) : (v3 % v5 << v4);
-				break;
-		}
-		
+		switch (v2 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v5 = (v2 > 42748530) ? (v5 & v1 % v3) : (v8 >> v6 >> v6);
-				break;
-			case 1:
-				v3 = (v4 < 11064102) ? (v2 - v6 & v6) : (v8 ^ v4 - v7);
-				break;
-			case 2:
-				v4 = v4 / v3 << v6;
-				break;
-			case 3:
-				v4 = (v7 < 73451304) ? (v2 % v3 << v4) : (v5 | v2 & v8);
-				break;
-			case 4:
-				v4 = (v8 < 73972752) ? (v4 & v5 << v1) : (v8 >> v1 / v4);
-				break;
-			default:
-				v5 = (v3 > 36468947) ? (v3 << v8 & v1) : (v5 & v7 << v3);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v7 = (v2 < 81346697) ? (v2 + v1 - v2) : (v3 >> v5 ^ v3);
-				break;
-			case 1:
-				v4 = v3 << v7 ^ v8;
-				break;
-			case 2:
-				v4 = (v4 < 32046361) ? (v2 / v8 << v1) : (v1 >> v7 & v2);
-				break;
-			case 3:
-				v5 = v5 << v7 / v7;
-				break;
-			case 4:
-				v7 = v4 >> v2 >> v1;
-				break;
-			default:
-				v7 = (v3 < 27198026) ? (v4 << v4 + v7) : (v8 & v2 >> v1);
-				break;
-		}
-		
+				v1 = (v2 < 51317376) ? (v5 << v6 & v3) : (v8 >> v5 * v4);
+
+				break;
+
+			case 1:
+
+				v5 = (v6 < 56346642) ? (v2 << v5 % v2) : (v6 ^ v8 + v8);
+
+				break;
+
+			case 2:
+
+				v2 = (v7 > 62019437) ? (v4 / v1 % v7) : (v7 & v6 ^ v3);
+
+				break;
+
+			case 3:
+
+				v7 = (v2 > 38084735) ? (v7 << v2 >> v7) : (v5 + v4 << v4);
+
+				break;
+
+			case 4:
+
+				v4 = v3 - v3 - v1;
+
+				break;
+
+			default:
+
+				v5 = (v3 > 42242254) ? (v5 ^ v4 >> v1) : (v3 % v5 << v4);
+
+				break;
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v5 = (v2 > 42748530) ? (v5 & v1 % v3) : (v8 >> v6 >> v6);
+
+				break;
+
+			case 1:
+
+				v3 = (v4 < 11064102) ? (v2 - v6 & v6) : (v8 ^ v4 - v7);
+
+				break;
+
+			case 2:
+
+				v4 = v4 / v3 << v6;
+
+				break;
+
+			case 3:
+
+				v4 = (v7 < 73451304) ? (v2 % v3 << v4) : (v5 | v2 & v8);
+
+				break;
+
+			case 4:
+
+				v4 = (v8 < 73972752) ? (v4 & v5 << v1) : (v8 >> v1 / v4);
+
+				break;
+
+			default:
+
+				v5 = (v3 > 36468947) ? (v3 << v8 & v1) : (v5 & v7 << v3);
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v7 = (v2 < 81346697) ? (v2 + v1 - v2) : (v3 >> v5 ^ v3);
+
+				break;
+
+			case 1:
+
+				v4 = v3 << v7 ^ v8;
+
+				break;
+
+			case 2:
+
+				v4 = (v4 < 32046361) ? (v2 / v8 << v1) : (v1 >> v7 & v2);
+
+				break;
+
+			case 3:
+
+				v5 = v5 << v7 / v7;
+
+				break;
+
+			case 4:
+
+				v7 = v4 >> v2 >> v1;
+
+				break;
+
+			default:
+
+				v7 = (v3 < 27198026) ? (v4 << v4 + v7) : (v8 & v2 >> v1);
+
+				break;
+		}
 
 		return v5 - v3 << v3;
 	}
@@ -2900,74 +4013,125 @@ public static class Fuzz0019
 		int v7 = 86262096;
 		int v8 = 51622800;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v1 = (v8 < 69258592) ? (v6 << v4 / v3) : (v4 << v4 * v6);
-				break;
-			case 1:
-				v3 = (v2 > 43984865) ? (v5 - v7 ^ v4) : (v7 + v8 * v3);
-				break;
-			case 2:
-				v7 = (v2 > 33393190) ? (v6 & v4 & v4) : (v2 << v4 >> v2);
-				break;
-			case 3:
-				v8 = (v7 < 37900962) ? (v6 << v3 & v4) : (v8 & v6 % v7);
-				break;
-			case 4:
-				v4 = (v6 < 52486743) ? (v3 ^ v5 << v7) : (v6 & v2 | v8);
-				break;
-			default:
-				v7 = (v8 < 89998194) ? (v2 | v5 >> v7) : (v2 << v3 / v3);
-				break;
-		}
-		
+		switch (v8 % 5)
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v7 = v2 >> v2 - v6;
-				break;
-			case 1:
-				v2 = (v6 < 48500135) ? (v1 * v6 | v4) : (v8 << v2 * v2);
-				break;
-			case 2:
-				v8 = v7 << v4 * v5;
-				break;
-			case 3:
-				v3 = v1 + v7 & v6;
-				break;
-			case 4:
-				v2 = v5 | v5 >> v7;
-				break;
-			default:
-				v5 = v1 - v5 & v1;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v1 = (v7 < 16025024) ? (v4 << v8 % v8) : (v7 >> v4 + v6);
-				break;
-			case 1:
-				v1 = (v3 < 49763387) ? (v7 - v1 ^ v8) : (v5 * v6 * v4);
-				break;
-			case 2:
-				v3 = (v3 < 93601044) ? (v2 % v6 - v7) : (v1 * v4 ^ v1);
-				break;
-			case 3:
-				v7 = (v5 < 92517185) ? (v2 | v6 >> v4) : (v4 >> v7 * v3);
-				break;
-			case 4:
-				v8 = (v7 < 44591025) ? (v1 >> v6 ^ v2) : (v7 >> v2 >> v8);
-				break;
-			default:
-				v4 = v4 ^ v5 % v5;
-				break;
-		}
-		
+				v1 = (v8 < 69258592) ? (v6 << v4 / v3) : (v4 << v4 * v6);
+
+				break;
+
+			case 1:
+
+				v3 = (v2 > 43984865) ? (v5 - v7 ^ v4) : (v7 + v8 * v3);
+
+				break;
+
+			case 2:
+
+				v7 = (v2 > 33393190) ? (v6 & v4 & v4) : (v2 << v4 >> v2);
+
+				break;
+
+			case 3:
+
+				v8 = (v7 < 37900962) ? (v6 << v3 & v4) : (v8 & v6 % v7);
+
+				break;
+
+			case 4:
+
+				v4 = (v6 < 52486743) ? (v3 ^ v5 << v7) : (v6 & v2 | v8);
+
+				break;
+
+			default:
+
+				v7 = (v8 < 89998194) ? (v2 | v5 >> v7) : (v2 << v3 / v3);
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v7 = v2 >> v2 - v6;
+
+				break;
+
+			case 1:
+
+				v2 = (v6 < 48500135) ? (v1 * v6 | v4) : (v8 << v2 * v2);
+
+				break;
+
+			case 2:
+
+				v8 = v7 << v4 * v5;
+
+				break;
+
+			case 3:
+
+				v3 = v1 + v7 & v6;
+
+				break;
+
+			case 4:
+
+				v2 = v5 | v5 >> v7;
+
+				break;
+
+			default:
+
+				v5 = v1 - v5 & v1;
+
+				break;
+		}
+
+		switch (v6 % 5)
+
+		{
+			case 0:
+
+				v1 = (v7 < 16025024) ? (v4 << v8 % v8) : (v7 >> v4 + v6);
+
+				break;
+
+			case 1:
+
+				v1 = (v3 < 49763387) ? (v7 - v1 ^ v8) : (v5 * v6 * v4);
+
+				break;
+
+			case 2:
+
+				v3 = (v3 < 93601044) ? (v2 % v6 - v7) : (v1 * v4 ^ v1);
+
+				break;
+
+			case 3:
+
+				v7 = (v5 < 92517185) ? (v2 | v6 >> v4) : (v4 >> v7 * v3);
+
+				break;
+
+			case 4:
+
+				v8 = (v7 < 44591025) ? (v1 >> v6 ^ v2) : (v7 >> v2 >> v8);
+
+				break;
+
+			default:
+
+				v4 = v4 ^ v5 % v5;
+
+				break;
+		}
 
 		return (v1 < 59836503) ? (v2 & v1 << v8) : (v7 ^ v4 + v1);
 	}
@@ -2984,48 +4148,63 @@ public static class Fuzz0019
 		int v7 = 87684670;
 		int v8 = 85909196;
 
-	if (v7 < 40437666)
-	{
-		v4 = (v7 > 76044903) ? (v1 << v3 ^ v6) : (v6 + v8 * v1);
-	}
-	else
-	{
-		v5 = (v8 < 89043526) ? (v3 * v6 >> v1) : (v2 + v5 * v5);
-	}
+		if (v7 < 40437666)
+		{
+			v4 = (v7 > 76044903) ? (v1 << v3 ^ v6) : (v6 + v8 * v1);
+		}
+		else
+		{
+			v5 = (v8 < 89043526) ? (v3 * v6 >> v1) : (v2 + v5 * v5);
+		}
 
+		if (v8 < 39896018)
+		{
+			v6 = v6 << v6 >> v5;
+		}
+		else
+		{
+			v8 = v8 << v6 | v5;
+		}
 
-	if (v8 < 39896018)
-	{
-		v6 = v6 << v6 >> v5;
-	}
-	else
-	{
-		v8 = v8 << v6 | v5;
-	}
+		switch (v7 % 5)
 
+		{
+			case 0:
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v8 = (v4 > 81303524) ? (v1 & v8 << v7) : (v7 / v2 << v2);
-				break;
-			case 1:
-				v3 = v3 | v2 * v3;
-				break;
-			case 2:
-				v7 = (v4 < 18553941) ? (v7 - v8 + v1) : (v5 << v5 | v8);
-				break;
-			case 3:
-				v2 = v4 * v6 ^ v3;
-				break;
-			case 4:
-				v5 = (v2 < 71512238) ? (v5 - v5 / v4) : (v5 * v6 << v4);
-				break;
-			default:
-				v8 = (v4 < 13515961) ? (v2 >> v5 >> v4) : (v8 >> v7 | v3);
-				break;
-		}
-		
+				v8 = (v4 > 81303524) ? (v1 & v8 << v7) : (v7 / v2 << v2);
+
+				break;
+
+			case 1:
+
+				v3 = v3 | v2 * v3;
+
+				break;
+
+			case 2:
+
+				v7 = (v4 < 18553941) ? (v7 - v8 + v1) : (v5 << v5 | v8);
+
+				break;
+
+			case 3:
+
+				v2 = v4 * v6 ^ v3;
+
+				break;
+
+			case 4:
+
+				v5 = (v2 < 71512238) ? (v5 - v5 / v4) : (v5 * v6 << v4);
+
+				break;
+
+			default:
+
+				v8 = (v4 < 13515961) ? (v2 >> v5 >> v4) : (v8 >> v7 | v3);
+
+				break;
+		}
 
 		return v5 + v6 | v8;
 	}
@@ -3042,52 +4221,67 @@ public static class Fuzz0019
 		int v7 = 86347787;
 		int v8 = 12953474;
 
-	if (v2 > 31435305)
-	{
-	int v9 = 20437580;
-		v9 = v9 << v9 / v9;
-	}
-	else
-	{
-	int v10 = 3253699;
-		v10 = v10 << v10 * v10;
-	}
+		if (v2 > 31435305)
+		{
+			int v9 = 20437580;
+			v9 = v9 << v9 / v9;
+		}
+		else
+		{
+			int v10 = 3253699;
+			v10 = v10 << v10 * v10;
+		}
 
+		switch (v7 % 5)
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v1 = v4 * v2 << v2;
-				break;
-			case 1:
-				v1 = (v1 > 74347204) ? (v4 ^ v5 ^ v3) : (v2 + v7 * v5);
-				break;
-			case 2:
-				v3 = v6 - v1 % v1;
-				break;
-			case 3:
-				v5 = v6 + v2 * v4;
-				break;
-			case 4:
-				v2 = (v1 < 40656029) ? (v3 & v6 % v8) : (v6 ^ v6 ^ v7);
-				break;
-			default:
-				v3 = (v5 > 12634914) ? (v7 / v8 * v8) : (v2 ^ v8 | v2);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v6 < 14797072)
-	{
-	int v11 = 77178800;
-		v11 = (v11 > 64278410) ? (v11 % v11 / v11) : (v11 & v11 ^ v11);
-	}
-	else
-	{
-	int v12 = 56229357;
-		v12 = (v12 > 83614002) ? (v12 | v12 | v12) : (v12 | v12 >> v12);
-	}
+				v1 = v4 * v2 << v2;
 
+				break;
+
+			case 1:
+
+				v1 = (v1 > 74347204) ? (v4 ^ v5 ^ v3) : (v2 + v7 * v5);
+
+				break;
+
+			case 2:
+
+				v3 = v6 - v1 % v1;
+
+				break;
+
+			case 3:
+
+				v5 = v6 + v2 * v4;
+
+				break;
+
+			case 4:
+
+				v2 = (v1 < 40656029) ? (v3 & v6 % v8) : (v6 ^ v6 ^ v7);
+
+				break;
+
+			default:
+
+				v3 = (v5 > 12634914) ? (v7 / v8 * v8) : (v2 ^ v8 | v2);
+
+				break;
+		}
+
+		if (v6 < 14797072)
+		{
+			int v11 = 77178800;
+			v11 = (v11 > 64278410) ? (v11 % v11 / v11) : (v11 & v11 ^ v11);
+		}
+		else
+		{
+			int v12 = 56229357;
+			v12 = (v12 > 83614002) ? (v12 | v12 | v12) : (v12 | v12 >> v12);
+		}
 
 		return v6 >> v4 * v2;
 	}
@@ -3104,74 +4298,125 @@ public static class Fuzz0019
 		int v7 = 21268452;
 		int v8 = 86751918;
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v7 = (v3 < 44102789) ? (v3 >> v1 * v6) : (v3 * v5 & v4);
-				break;
-			case 1:
-				v4 = (v8 > 1887994) ? (v4 & v6 >> v1) : (v3 >> v2 >> v7);
-				break;
-			case 2:
-				v7 = (v7 > 29976657) ? (v1 & v2 | v2) : (v8 ^ v4 & v1);
-				break;
-			case 3:
-				v6 = v3 + v7 - v8;
-				break;
-			case 4:
-				v1 = (v5 < 64639552) ? (v1 & v5 >> v3) : (v6 << v7 | v3);
-				break;
-			default:
-				v4 = (v1 > 56566150) ? (v8 | v6 << v6) : (v6 ^ v2 - v1);
-				break;
-		}
-		
+		switch (v6 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v2 = (v8 > 84320413) ? (v4 ^ v8 << v4) : (v3 >> v6 >> v4);
-				break;
-			case 1:
-				v7 = (v8 < 86078763) ? (v8 << v5 % v4) : (v2 << v6 ^ v7);
-				break;
-			case 2:
-				v8 = (v4 > 43121642) ? (v1 << v6 >> v8) : (v2 >> v5 << v2);
-				break;
-			case 3:
-				v2 = (v2 > 12285319) ? (v4 >> v5 | v4) : (v5 >> v5 | v4);
-				break;
-			case 4:
-				v4 = v8 - v3 >> v5;
-				break;
-			default:
-				v2 = v3 | v6 | v2;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v3 = (v1 > 45319984) ? (v2 >> v4 - v6) : (v1 ^ v3 | v1);
-				break;
-			case 1:
-				v8 = (v1 < 88295767) ? (v3 - v6 ^ v4) : (v5 << v5 + v7);
-				break;
-			case 2:
-				v7 = (v1 < 2429433) ? (v4 << v2 ^ v5) : (v5 / v4 & v1);
-				break;
-			case 3:
-				v1 = (v7 < 86303444) ? (v2 << v3 & v1) : (v7 << v2 >> v1);
-				break;
-			case 4:
-				v3 = (v4 < 7792268) ? (v1 >> v6 >> v4) : (v8 >> v6 & v4);
-				break;
-			default:
-				v6 = (v4 < 10312989) ? (v8 * v3 >> v3) : (v7 + v6 - v1);
-				break;
-		}
-		
+				v7 = (v3 < 44102789) ? (v3 >> v1 * v6) : (v3 * v5 & v4);
+
+				break;
+
+			case 1:
+
+				v4 = (v8 > 1887994) ? (v4 & v6 >> v1) : (v3 >> v2 >> v7);
+
+				break;
+
+			case 2:
+
+				v7 = (v7 > 29976657) ? (v1 & v2 | v2) : (v8 ^ v4 & v1);
+
+				break;
+
+			case 3:
+
+				v6 = v3 + v7 - v8;
+
+				break;
+
+			case 4:
+
+				v1 = (v5 < 64639552) ? (v1 & v5 >> v3) : (v6 << v7 | v3);
+
+				break;
+
+			default:
+
+				v4 = (v1 > 56566150) ? (v8 | v6 << v6) : (v6 ^ v2 - v1);
+
+				break;
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v2 = (v8 > 84320413) ? (v4 ^ v8 << v4) : (v3 >> v6 >> v4);
+
+				break;
+
+			case 1:
+
+				v7 = (v8 < 86078763) ? (v8 << v5 % v4) : (v2 << v6 ^ v7);
+
+				break;
+
+			case 2:
+
+				v8 = (v4 > 43121642) ? (v1 << v6 >> v8) : (v2 >> v5 << v2);
+
+				break;
+
+			case 3:
+
+				v2 = (v2 > 12285319) ? (v4 >> v5 | v4) : (v5 >> v5 | v4);
+
+				break;
+
+			case 4:
+
+				v4 = v8 - v3 >> v5;
+
+				break;
+
+			default:
+
+				v2 = v3 | v6 | v2;
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v3 = (v1 > 45319984) ? (v2 >> v4 - v6) : (v1 ^ v3 | v1);
+
+				break;
+
+			case 1:
+
+				v8 = (v1 < 88295767) ? (v3 - v6 ^ v4) : (v5 << v5 + v7);
+
+				break;
+
+			case 2:
+
+				v7 = (v1 < 2429433) ? (v4 << v2 ^ v5) : (v5 / v4 & v1);
+
+				break;
+
+			case 3:
+
+				v1 = (v7 < 86303444) ? (v2 << v3 & v1) : (v7 << v2 >> v1);
+
+				break;
+
+			case 4:
+
+				v3 = (v4 < 7792268) ? (v1 >> v6 >> v4) : (v8 >> v6 & v4);
+
+				break;
+
+			default:
+
+				v6 = (v4 < 10312989) ? (v8 * v3 >> v3) : (v7 + v6 - v1);
+
+				break;
+		}
 
 		return (v2 < 84071444) ? (v8 >> v7 << v7) : (v6 ^ v8 << v4);
 	}
@@ -3188,62 +4433,95 @@ public static class Fuzz0019
 		int v7 = 87886514;
 		int v8 = 2713103;
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v3 = v8 | v4 / v7;
-				break;
-			case 1:
-				v4 = v6 % v2 & v3;
-				break;
-			case 2:
-				v1 = (v5 < 6561686) ? (v1 >> v7 ^ v1) : (v8 - v1 << v1);
-				break;
-			case 3:
-				v5 = (v7 > 39505681) ? (v3 + v3 & v2) : (v6 + v2 % v1);
-				break;
-			case 4:
-				v6 = (v2 > 89281910) ? (v5 + v4 | v1) : (v6 * v8 << v2);
-				break;
-			default:
-				v1 = v6 / v1 >> v2;
-				break;
-		}
-		
+		switch (v1 % 5)
 
-	if (v1 > 13509083)
-	{
-	int v9 = 25066429;
-		v9 = (v9 > 44778017) ? (v9 ^ v9 / v9) : (v9 >> v9 >> v9);
-	}
-	else
-	{
-		v5 = v6 % v1 + v7;
-	}
+		{
+			case 0:
 
+				v3 = v8 | v4 / v7;
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v1 = (v2 < 89447123) ? (v8 * v3 / v1) : (v7 - v3 & v1);
-				break;
-			case 1:
-				v8 = (v5 < 26688494) ? (v8 << v3 << v4) : (v5 % v6 ^ v1);
-				break;
-			case 2:
-				v7 = v5 / v7 ^ v4;
-				break;
-			case 3:
-				v6 = (v8 > 46117172) ? (v4 >> v8 - v4) : (v5 | v4 << v8);
-				break;
-			case 4:
-				v6 = v1 << v7 ^ v3;
-				break;
-			default:
-				v7 = v4 ^ v5 >> v1;
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v4 = v6 % v2 & v3;
+
+				break;
+
+			case 2:
+
+				v1 = (v5 < 6561686) ? (v1 >> v7 ^ v1) : (v8 - v1 << v1);
+
+				break;
+
+			case 3:
+
+				v5 = (v7 > 39505681) ? (v3 + v3 & v2) : (v6 + v2 % v1);
+
+				break;
+
+			case 4:
+
+				v6 = (v2 > 89281910) ? (v5 + v4 | v1) : (v6 * v8 << v2);
+
+				break;
+
+			default:
+
+				v1 = v6 / v1 >> v2;
+
+				break;
+		}
+
+		if (v1 > 13509083)
+		{
+			int v9 = 25066429;
+			v9 = (v9 > 44778017) ? (v9 ^ v9 / v9) : (v9 >> v9 >> v9);
+		}
+		else
+		{
+			v5 = v6 % v1 + v7;
+		}
+
+		switch (v3 % 5)
+
+		{
+			case 0:
+
+				v1 = (v2 < 89447123) ? (v8 * v3 / v1) : (v7 - v3 & v1);
+
+				break;
+
+			case 1:
+
+				v8 = (v5 < 26688494) ? (v8 << v3 << v4) : (v5 % v6 ^ v1);
+
+				break;
+
+			case 2:
+
+				v7 = v5 / v7 ^ v4;
+
+				break;
+
+			case 3:
+
+				v6 = (v8 > 46117172) ? (v4 >> v8 - v4) : (v5 | v4 << v8);
+
+				break;
+
+			case 4:
+
+				v6 = v1 << v7 ^ v3;
+
+				break;
+
+			default:
+
+				v7 = v4 ^ v5 >> v1;
+
+				break;
+		}
 
 		return (v8 > 74577655) ? (v7 + v4 | v1) : (v4 * v4 >> v6);
 	}
@@ -3260,37 +4538,34 @@ public static class Fuzz0019
 		int v7 = 73354782;
 		int v8 = 43411543;
 
-	if (v1 < 97359278)
-	{
-	int v9 = 37599476;
-		v9 = (v9 < 57509178) ? (v9 + v9 << v9) : (v9 & v9 + v9);
-	}
-	else
-	{
-		v1 = (v2 < 60446207) ? (v3 << v7 * v4) : (v7 | v6 << v8);
-	}
+		if (v1 < 97359278)
+		{
+			int v9 = 37599476;
+			v9 = (v9 < 57509178) ? (v9 + v9 << v9) : (v9 & v9 + v9);
+		}
+		else
+		{
+			v1 = (v2 < 60446207) ? (v3 << v7 * v4) : (v7 | v6 << v8);
+		}
 
+		if (v6 > 7954666)
+		{
+			v8 = (v7 < 34260000) ? (v1 - v7 & v5) : (v1 >> v2 * v4);
+		}
+		else
+		{
+			v8 = v4 | v6 * v3;
+		}
 
-	if (v6 > 7954666)
-	{
-		v8 = (v7 < 34260000) ? (v1 - v7 & v5) : (v1 >> v2 * v4);
-	}
-	else
-	{
-		v8 = v4 | v6 * v3;
-	}
-
-
-	if (v6 < 46991118)
-	{
-	int v10 = 9024963;
-		v10 = v10 % v10 >> v10;
-	}
-	else
-	{
-		v2 = v7 * v1 / v8;
-	}
-
+		if (v6 < 46991118)
+		{
+			int v10 = 9024963;
+			v10 = v10 % v10 >> v10;
+		}
+		else
+		{
+			v2 = v7 * v1 / v8;
+		}
 
 		return (v7 > 21106106) ? (v4 % v7 | v4) : (v3 >> v3 - v2);
 	}
@@ -3307,49 +4582,64 @@ public static class Fuzz0019
 		int v7 = 6342181;
 		int v8 = 91771221;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v4 = v6 << v2 << v6;
-				break;
-			case 1:
-				v5 = v1 ^ v8 - v3;
-				break;
-			case 2:
-				v2 = v7 << v2 >> v2;
-				break;
-			case 3:
-				v7 = (v6 > 60582202) ? (v3 >> v7 % v7) : (v6 & v6 | v6);
-				break;
-			case 4:
-				v4 = v4 | v1 & v6;
-				break;
-			default:
-				v4 = (v2 > 17493420) ? (v3 - v7 / v6) : (v2 - v1 << v4);
-				break;
-		}
-		
+		switch (v2 % 5)
 
-	if (v2 < 60725839)
-	{
-	int v9 = 957736;
-		v9 = (v9 > 77316923) ? (v9 | v9 << v9) : (v9 | v9 << v9);
-	}
-	else
-	{
-		v7 = (v7 > 59614283) ? (v4 & v3 ^ v2) : (v7 - v6 | v7);
-	}
+		{
+			case 0:
 
+				v4 = v6 << v2 << v6;
 
-	if (v6 > 3228375)
-	{
-		v5 = (v4 > 94064523) ? (v8 | v5 << v2) : (v3 >> v4 ^ v6);
-	}
-	else
-	{
-		v3 = v4 << v8 - v7;
-	}
+				break;
 
+			case 1:
+
+				v5 = v1 ^ v8 - v3;
+
+				break;
+
+			case 2:
+
+				v2 = v7 << v2 >> v2;
+
+				break;
+
+			case 3:
+
+				v7 = (v6 > 60582202) ? (v3 >> v7 % v7) : (v6 & v6 | v6);
+
+				break;
+
+			case 4:
+
+				v4 = v4 | v1 & v6;
+
+				break;
+
+			default:
+
+				v4 = (v2 > 17493420) ? (v3 - v7 / v6) : (v2 - v1 << v4);
+
+				break;
+		}
+
+		if (v2 < 60725839)
+		{
+			int v9 = 957736;
+			v9 = (v9 > 77316923) ? (v9 | v9 << v9) : (v9 | v9 << v9);
+		}
+		else
+		{
+			v7 = (v7 > 59614283) ? (v4 & v3 ^ v2) : (v7 - v6 | v7);
+		}
+
+		if (v6 > 3228375)
+		{
+			v5 = (v4 > 94064523) ? (v8 | v5 << v2) : (v3 >> v4 ^ v6);
+		}
+		else
+		{
+			v3 = v4 << v8 - v7;
+		}
 
 		return v3 | v4 ^ v2;
 	}
@@ -3366,61 +4656,94 @@ public static class Fuzz0019
 		int v7 = 54738170;
 		int v8 = 22061249;
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v1 = v7 >> v3 << v5;
-				break;
-			case 1:
-				v5 = (v4 > 59668233) ? (v2 & v2 << v3) : (v7 >> v2 ^ v5);
-				break;
-			case 2:
-				v3 = (v6 > 24927974) ? (v4 << v1 << v4) : (v8 << v8 / v3);
-				break;
-			case 3:
-				v5 = v2 + v3 & v5;
-				break;
-			case 4:
-				v5 = (v2 < 94318002) ? (v5 & v6 >> v3) : (v5 - v5 & v6);
-				break;
-			default:
-				v1 = (v5 < 95909513) ? (v7 ^ v6 | v7) : (v5 + v1 ^ v8);
-				break;
-		}
-		
+		switch (v6 % 5)
 
-	if (v8 > 76835256)
-	{
-		v5 = v1 & v6 | v5;
-	}
-	else
-	{
-		v3 = (v6 < 42427835) ? (v5 ^ v3 | v3) : (v5 / v2 % v3);
-	}
+		{
+			case 0:
 
+				v1 = v7 >> v3 << v5;
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v8 = (v3 < 51133647) ? (v3 >> v5 << v7) : (v1 ^ v4 & v1);
-				break;
-			case 1:
-				v3 = v4 | v8 * v8;
-				break;
-			case 2:
-				v7 = (v1 > 3366816) ? (v5 / v7 % v3) : (v1 << v2 << v7);
-				break;
-			case 3:
-				v1 = (v1 > 8900329) ? (v2 & v7 & v1) : (v5 % v7 ^ v5);
-				break;
-			case 4:
-				v5 = (v3 > 54882874) ? (v7 ^ v2 % v1) : (v3 << v8 + v3);
-				break;
-			default:
-				v6 = v1 & v8 << v1;
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v5 = (v4 > 59668233) ? (v2 & v2 << v3) : (v7 >> v2 ^ v5);
+
+				break;
+
+			case 2:
+
+				v3 = (v6 > 24927974) ? (v4 << v1 << v4) : (v8 << v8 / v3);
+
+				break;
+
+			case 3:
+
+				v5 = v2 + v3 & v5;
+
+				break;
+
+			case 4:
+
+				v5 = (v2 < 94318002) ? (v5 & v6 >> v3) : (v5 - v5 & v6);
+
+				break;
+
+			default:
+
+				v1 = (v5 < 95909513) ? (v7 ^ v6 | v7) : (v5 + v1 ^ v8);
+
+				break;
+		}
+
+		if (v8 > 76835256)
+		{
+			v5 = v1 & v6 | v5;
+		}
+		else
+		{
+			v3 = (v6 < 42427835) ? (v5 ^ v3 | v3) : (v5 / v2 % v3);
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v8 = (v3 < 51133647) ? (v3 >> v5 << v7) : (v1 ^ v4 & v1);
+
+				break;
+
+			case 1:
+
+				v3 = v4 | v8 * v8;
+
+				break;
+
+			case 2:
+
+				v7 = (v1 > 3366816) ? (v5 / v7 % v3) : (v1 << v2 << v7);
+
+				break;
+
+			case 3:
+
+				v1 = (v1 > 8900329) ? (v2 & v7 & v1) : (v5 % v7 ^ v5);
+
+				break;
+
+			case 4:
+
+				v5 = (v3 > 54882874) ? (v7 ^ v2 % v1) : (v3 << v8 + v3);
+
+				break;
+
+			default:
+
+				v6 = v1 & v8 << v1;
+
+				break;
+		}
 
 		return (v5 < 30481891) ? (v1 * v8 - v2) : (v5 - v3 << v1);
 	}
@@ -3437,62 +4760,95 @@ public static class Fuzz0019
 		int v7 = 42104633;
 		int v8 = 32482744;
 
-	if (v2 > 83152202)
-	{
-	int v9 = 56927503;
-		v9 = (v9 < 10306556) ? (v9 & v9 / v9) : (v9 ^ v9 % v9);
-	}
-	else
-	{
-		v3 = v2 >> v4 >> v1;
-	}
+		if (v2 > 83152202)
+		{
+			int v9 = 56927503;
+			v9 = (v9 < 10306556) ? (v9 & v9 / v9) : (v9 ^ v9 % v9);
+		}
+		else
+		{
+			v3 = v2 >> v4 >> v1;
+		}
 
+		switch (v8 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v7 = (v4 > 36755617) ? (v4 % v1 ^ v1) : (v4 & v8 + v7);
-				break;
-			case 1:
-				v3 = v7 >> v7 % v1;
-				break;
-			case 2:
-				v5 = v3 << v1 % v6;
-				break;
-			case 3:
-				v4 = v8 - v7 * v4;
-				break;
-			case 4:
-				v3 = (v4 < 58668102) ? (v4 / v1 ^ v5) : (v8 - v7 % v4);
-				break;
-			default:
-				v8 = v8 >> v8 % v8;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v2 = (v5 > 43561677) ? (v5 >> v8 >> v8) : (v2 / v4 >> v8);
-				break;
-			case 1:
-				v3 = v1 << v8 % v8;
-				break;
-			case 2:
-				v6 = (v3 < 84240586) ? (v8 >> v7 + v1) : (v6 << v4 - v6);
-				break;
-			case 3:
-				v1 = v6 % v8 << v8;
-				break;
-			case 4:
-				v3 = (v1 > 88330860) ? (v2 + v2 ^ v7) : (v6 % v5 ^ v7);
-				break;
-			default:
-				v5 = v4 ^ v5 * v4;
-				break;
-		}
-		
+				v7 = (v4 > 36755617) ? (v4 % v1 ^ v1) : (v4 & v8 + v7);
+
+				break;
+
+			case 1:
+
+				v3 = v7 >> v7 % v1;
+
+				break;
+
+			case 2:
+
+				v5 = v3 << v1 % v6;
+
+				break;
+
+			case 3:
+
+				v4 = v8 - v7 * v4;
+
+				break;
+
+			case 4:
+
+				v3 = (v4 < 58668102) ? (v4 / v1 ^ v5) : (v8 - v7 % v4);
+
+				break;
+
+			default:
+
+				v8 = v8 >> v8 % v8;
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v2 = (v5 > 43561677) ? (v5 >> v8 >> v8) : (v2 / v4 >> v8);
+
+				break;
+
+			case 1:
+
+				v3 = v1 << v8 % v8;
+
+				break;
+
+			case 2:
+
+				v6 = (v3 < 84240586) ? (v8 >> v7 + v1) : (v6 << v4 - v6);
+
+				break;
+
+			case 3:
+
+				v1 = v6 % v8 << v8;
+
+				break;
+
+			case 4:
+
+				v3 = (v1 > 88330860) ? (v2 + v2 ^ v7) : (v6 % v5 ^ v7);
+
+				break;
+
+			default:
+
+				v5 = v4 ^ v5 * v4;
+
+				break;
+		}
 
 		return v8 + v1 & v5;
 	}
@@ -3509,51 +4865,66 @@ public static class Fuzz0019
 		int v7 = 73125551;
 		int v8 = 51316368;
 
-	if (v4 > 9081796)
-	{
-	int v9 = 60119678;
-		v9 = (v9 < 22982308) ? (v9 << v9 / v9) : (v9 * v9 ^ v9);
-	}
-	else
-	{
-		v5 = v4 * v1 | v3;
-	}
+		if (v4 > 9081796)
+		{
+			int v9 = 60119678;
+			v9 = (v9 < 22982308) ? (v9 << v9 / v9) : (v9 * v9 ^ v9);
+		}
+		else
+		{
+			v5 = v4 * v1 | v3;
+		}
 
+		switch (v5 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v1 = v7 << v6 | v2;
-				break;
-			case 1:
-				v3 = v6 + v6 & v6;
-				break;
-			case 2:
-				v7 = v3 & v1 >> v1;
-				break;
-			case 3:
-				v3 = v7 & v4 ^ v6;
-				break;
-			case 4:
-				v5 = (v3 < 76322406) ? (v8 >> v4 & v4) : (v2 - v4 << v8);
-				break;
-			default:
-				v8 = (v4 > 37859660) ? (v3 ^ v4 | v3) : (v4 / v2 << v1);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v6 > 76706005)
-	{
-	int v10 = 48483236;
-		v10 = (v10 > 45689970) ? (v10 - v10 % v10) : (v10 & v10 << v10);
-	}
-	else
-	{
-	int v11 = 78364638;
-		v11 = v11 & v11 % v11;
-	}
+				v1 = v7 << v6 | v2;
 
+				break;
+
+			case 1:
+
+				v3 = v6 + v6 & v6;
+
+				break;
+
+			case 2:
+
+				v7 = v3 & v1 >> v1;
+
+				break;
+
+			case 3:
+
+				v3 = v7 & v4 ^ v6;
+
+				break;
+
+			case 4:
+
+				v5 = (v3 < 76322406) ? (v8 >> v4 & v4) : (v2 - v4 << v8);
+
+				break;
+
+			default:
+
+				v8 = (v4 > 37859660) ? (v3 ^ v4 | v3) : (v4 / v2 << v1);
+
+				break;
+		}
+
+		if (v6 > 76706005)
+		{
+			int v10 = 48483236;
+			v10 = (v10 > 45689970) ? (v10 - v10 % v10) : (v10 & v10 << v10);
+		}
+		else
+		{
+			int v11 = 78364638;
+			v11 = v11 & v11 % v11;
+		}
 
 		return (v5 > 47236499) ? (v1 & v4 | v2) : (v2 ^ v4 + v3);
 	}
@@ -3570,62 +4941,95 @@ public static class Fuzz0019
 		int v7 = 64245316;
 		int v8 = 81861425;
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v4 = (v5 > 94867619) ? (v8 >> v4 >> v1) : (v4 & v8 - v8);
-				break;
-			case 1:
-				v1 = v8 >> v1 ^ v2;
-				break;
-			case 2:
-				v6 = v6 + v7 - v3;
-				break;
-			case 3:
-				v8 = v2 >> v6 + v8;
-				break;
-			case 4:
-				v1 = (v2 > 2933395) ? (v7 << v3 * v8) : (v8 - v3 >> v2);
-				break;
-			default:
-				v5 = v7 | v8 >> v3;
-				break;
-		}
-		
+		switch (v3 % 5)
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v3 = (v3 > 9669292) ? (v7 ^ v3 >> v1) : (v2 | v4 + v6);
-				break;
-			case 1:
-				v3 = (v6 > 81376284) ? (v6 & v2 | v4) : (v4 - v4 >> v8);
-				break;
-			case 2:
-				v4 = (v3 < 3769284) ? (v6 % v5 - v4) : (v1 & v5 * v5);
-				break;
-			case 3:
-				v2 = v8 >> v3 * v4;
-				break;
-			case 4:
-				v3 = (v4 < 55524244) ? (v1 >> v1 << v6) : (v5 << v3 >> v8);
-				break;
-			default:
-				v7 = v8 >> v4 & v4;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v3 > 29356044)
-	{
-		v4 = v6 & v1 >> v5;
-	}
-	else
-	{
-	int v9 = 21305904;
-		v9 = (v9 < 82032821) ? (v9 | v9 / v9) : (v9 >> v9 | v9);
-	}
+				v4 = (v5 > 94867619) ? (v8 >> v4 >> v1) : (v4 & v8 - v8);
 
+				break;
+
+			case 1:
+
+				v1 = v8 >> v1 ^ v2;
+
+				break;
+
+			case 2:
+
+				v6 = v6 + v7 - v3;
+
+				break;
+
+			case 3:
+
+				v8 = v2 >> v6 + v8;
+
+				break;
+
+			case 4:
+
+				v1 = (v2 > 2933395) ? (v7 << v3 * v8) : (v8 - v3 >> v2);
+
+				break;
+
+			default:
+
+				v5 = v7 | v8 >> v3;
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v3 = (v3 > 9669292) ? (v7 ^ v3 >> v1) : (v2 | v4 + v6);
+
+				break;
+
+			case 1:
+
+				v3 = (v6 > 81376284) ? (v6 & v2 | v4) : (v4 - v4 >> v8);
+
+				break;
+
+			case 2:
+
+				v4 = (v3 < 3769284) ? (v6 % v5 - v4) : (v1 & v5 * v5);
+
+				break;
+
+			case 3:
+
+				v2 = v8 >> v3 * v4;
+
+				break;
+
+			case 4:
+
+				v3 = (v4 < 55524244) ? (v1 >> v1 << v6) : (v5 << v3 >> v8);
+
+				break;
+
+			default:
+
+				v7 = v8 >> v4 & v4;
+
+				break;
+		}
+
+		if (v3 > 29356044)
+		{
+			v4 = v6 & v1 >> v5;
+		}
+		else
+		{
+			int v9 = 21305904;
+			v9 = (v9 < 82032821) ? (v9 | v9 / v9) : (v9 >> v9 | v9);
+		}
 
 		return v8 & v4 & v1;
 	}
@@ -3642,51 +5046,66 @@ public static class Fuzz0019
 		int v7 = 9510479;
 		int v8 = 8352781;
 
-	if (v5 > 23680686)
-	{
-	int v9 = 26801597;
-		v9 = (v9 > 79081471) ? (v9 & v9 / v9) : (v9 * v9 | v9);
-	}
-	else
-	{
-	int v10 = 31237122;
-		v10 = (v10 > 43791048) ? (v10 & v10 | v10) : (v10 * v10 | v10);
-	}
+		if (v5 > 23680686)
+		{
+			int v9 = 26801597;
+			v9 = (v9 > 79081471) ? (v9 & v9 / v9) : (v9 * v9 | v9);
+		}
+		else
+		{
+			int v10 = 31237122;
+			v10 = (v10 > 43791048) ? (v10 & v10 | v10) : (v10 * v10 | v10);
+		}
 
+		if (v4 > 29956172)
+		{
+			v8 = v1 & v1 | v4;
+		}
+		else
+		{
+			int v11 = 66924538;
+			v11 = (v11 > 47204018) ? (v11 % v11 | v11) : (v11 | v11 | v11);
+		}
 
-	if (v4 > 29956172)
-	{
-		v8 = v1 & v1 | v4;
-	}
-	else
-	{
-	int v11 = 66924538;
-		v11 = (v11 > 47204018) ? (v11 % v11 | v11) : (v11 | v11 | v11);
-	}
+		switch (v7 % 5)
 
+		{
+			case 0:
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v3 = v7 & v8 + v2;
-				break;
-			case 1:
-				v8 = (v1 < 99577220) ? (v1 >> v7 / v7) : (v5 + v1 | v1);
-				break;
-			case 2:
-				v1 = (v2 > 39596629) ? (v2 % v3 * v1) : (v8 ^ v4 - v6);
-				break;
-			case 3:
-				v6 = (v4 > 60083807) ? (v4 >> v8 >> v3) : (v7 ^ v2 >> v2);
-				break;
-			case 4:
-				v3 = (v2 < 15399816) ? (v7 ^ v2 >> v3) : (v5 << v7 % v4);
-				break;
-			default:
-				v6 = (v5 < 63471253) ? (v7 | v7 / v8) : (v1 | v1 >> v4);
-				break;
-		}
-		
+				v3 = v7 & v8 + v2;
+
+				break;
+
+			case 1:
+
+				v8 = (v1 < 99577220) ? (v1 >> v7 / v7) : (v5 + v1 | v1);
+
+				break;
+
+			case 2:
+
+				v1 = (v2 > 39596629) ? (v2 % v3 * v1) : (v8 ^ v4 - v6);
+
+				break;
+
+			case 3:
+
+				v6 = (v4 > 60083807) ? (v4 >> v8 >> v3) : (v7 ^ v2 >> v2);
+
+				break;
+
+			case 4:
+
+				v3 = (v2 < 15399816) ? (v7 ^ v2 >> v3) : (v5 << v7 % v4);
+
+				break;
+
+			default:
+
+				v6 = (v5 < 63471253) ? (v7 | v7 / v8) : (v1 | v1 >> v4);
+
+				break;
+		}
 
 		return (v7 > 65464934) ? (v6 << v6 | v2) : (v8 ^ v5 - v8);
 	}
@@ -3703,50 +5122,65 @@ public static class Fuzz0019
 		int v7 = 50599644;
 		int v8 = 50536376;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v6 = (v8 > 52704272) ? (v7 - v3 | v3) : (v3 - v3 % v3);
-				break;
-			case 1:
-				v4 = v4 ^ v8 | v3;
-				break;
-			case 2:
-				v8 = (v1 < 27958342) ? (v2 ^ v6 ^ v6) : (v8 << v4 / v2);
-				break;
-			case 3:
-				v2 = v2 ^ v3 | v5;
-				break;
-			case 4:
-				v4 = (v7 < 89208892) ? (v3 ^ v6 - v6) : (v7 - v8 | v4);
-				break;
-			default:
-				v1 = v3 << v3 % v4;
-				break;
-		}
-		
+		switch (v2 % 5)
 
-	if (v7 > 97647893)
-	{
-	int v9 = 68162916;
-		v9 = v9 ^ v9 | v9;
-	}
-	else
-	{
-		v6 = (v2 < 78030128) ? (v6 >> v7 >> v1) : (v3 << v3 >> v3);
-	}
+		{
+			case 0:
 
+				v6 = (v8 > 52704272) ? (v7 - v3 | v3) : (v3 - v3 % v3);
 
-	if (v1 > 61652967)
-	{
-	int v10 = 38098838;
-		v10 = v10 >> v10 >> v10;
-	}
-	else
-	{
-		v2 = (v7 > 79136543) ? (v2 >> v7 + v2) : (v7 << v1 >> v6);
-	}
+				break;
 
+			case 1:
+
+				v4 = v4 ^ v8 | v3;
+
+				break;
+
+			case 2:
+
+				v8 = (v1 < 27958342) ? (v2 ^ v6 ^ v6) : (v8 << v4 / v2);
+
+				break;
+
+			case 3:
+
+				v2 = v2 ^ v3 | v5;
+
+				break;
+
+			case 4:
+
+				v4 = (v7 < 89208892) ? (v3 ^ v6 - v6) : (v7 - v8 | v4);
+
+				break;
+
+			default:
+
+				v1 = v3 << v3 % v4;
+
+				break;
+		}
+
+		if (v7 > 97647893)
+		{
+			int v9 = 68162916;
+			v9 = v9 ^ v9 | v9;
+		}
+		else
+		{
+			v6 = (v2 < 78030128) ? (v6 >> v7 >> v1) : (v3 << v3 >> v3);
+		}
+
+		if (v1 > 61652967)
+		{
+			int v10 = 38098838;
+			v10 = v10 >> v10 >> v10;
+		}
+		else
+		{
+			v2 = (v7 > 79136543) ? (v2 >> v7 + v2) : (v7 << v1 >> v6);
+		}
 
 		return v3 / v4 - v7;
 	}
@@ -3763,51 +5197,66 @@ public static class Fuzz0019
 		int v7 = 63361170;
 		int v8 = 41769040;
 
-	if (v1 < 1441555)
-	{
-	int v9 = 82073766;
-		v9 = (v9 > 53841193) ? (v9 ^ v9 | v9) : (v9 - v9 | v9);
-	}
-	else
-	{
-		v1 = (v5 < 53457669) ? (v1 & v7 | v6) : (v4 | v1 >> v7);
-	}
+		if (v1 < 1441555)
+		{
+			int v9 = 82073766;
+			v9 = (v9 > 53841193) ? (v9 ^ v9 | v9) : (v9 - v9 | v9);
+		}
+		else
+		{
+			v1 = (v5 < 53457669) ? (v1 & v7 | v6) : (v4 | v1 >> v7);
+		}
 
+		if (v7 < 55980087)
+		{
+			int v10 = 28630280;
+			v10 = v10 << v10 / v10;
+		}
+		else
+		{
+			int v11 = 12591241;
+			v11 = v11 & v11 ^ v11;
+		}
 
-	if (v7 < 55980087)
-	{
-	int v10 = 28630280;
-		v10 = v10 << v10 / v10;
-	}
-	else
-	{
-	int v11 = 12591241;
-		v11 = v11 & v11 ^ v11;
-	}
+		switch (v5 % 5)
 
+		{
+			case 0:
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v6 = v6 ^ v1 >> v1;
-				break;
-			case 1:
-				v7 = (v3 < 65778516) ? (v2 << v6 / v7) : (v3 % v6 >> v8);
-				break;
-			case 2:
-				v3 = (v3 > 83953381) ? (v7 / v5 - v1) : (v3 >> v7 ^ v2);
-				break;
-			case 3:
-				v6 = v2 * v1 / v2;
-				break;
-			case 4:
-				v3 = (v6 < 43585417) ? (v6 ^ v1 + v8) : (v6 % v7 * v7);
-				break;
-			default:
-				v4 = (v1 < 81342982) ? (v7 / v6 / v7) : (v8 - v3 * v5);
-				break;
-		}
-		
+				v6 = v6 ^ v1 >> v1;
+
+				break;
+
+			case 1:
+
+				v7 = (v3 < 65778516) ? (v2 << v6 / v7) : (v3 % v6 >> v8);
+
+				break;
+
+			case 2:
+
+				v3 = (v3 > 83953381) ? (v7 / v5 - v1) : (v3 >> v7 ^ v2);
+
+				break;
+
+			case 3:
+
+				v6 = v2 * v1 / v2;
+
+				break;
+
+			case 4:
+
+				v3 = (v6 < 43585417) ? (v6 ^ v1 + v8) : (v6 % v7 * v7);
+
+				break;
+
+			default:
+
+				v4 = (v1 < 81342982) ? (v7 / v6 / v7) : (v8 - v3 * v5);
+
+				break;
+		}
 
 		return (v7 < 25046024) ? (v2 >> v5 ^ v5) : (v2 ^ v6 >> v2);
 	}
@@ -3824,62 +5273,95 @@ public static class Fuzz0019
 		int v7 = 99918271;
 		int v8 = 65361917;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v8 = (v7 > 90413224) ? (v7 / v4 * v7) : (v8 - v4 % v4);
-				break;
-			case 1:
-				v4 = v1 ^ v5 % v2;
-				break;
-			case 2:
-				v5 = (v6 < 55363204) ? (v2 << v6 | v6) : (v5 - v3 | v8);
-				break;
-			case 3:
-				v3 = v6 & v8 / v7;
-				break;
-			case 4:
-				v3 = v2 | v5 >> v6;
-				break;
-			default:
-				v4 = (v5 > 74840929) ? (v3 << v3 % v5) : (v2 ^ v6 + v1);
-				break;
-		}
-		
+		switch (v2 % 5)
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v3 = v5 >> v3 << v6;
-				break;
-			case 1:
-				v7 = (v4 > 38080319) ? (v1 << v1 + v8) : (v3 % v4 / v4);
-				break;
-			case 2:
-				v5 = v8 << v1 & v3;
-				break;
-			case 3:
-				v3 = v4 << v7 ^ v3;
-				break;
-			case 4:
-				v1 = (v2 < 13212995) ? (v5 << v5 << v3) : (v1 + v4 ^ v6);
-				break;
-			default:
-				v3 = v5 & v3 >> v3;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v3 > 31205631)
-	{
-		v6 = (v3 < 37211613) ? (v4 + v4 & v8) : (v1 << v5 >> v8);
-	}
-	else
-	{
-	int v9 = 45831001;
-		v9 = (v9 > 38552967) ? (v9 & v9 | v9) : (v9 & v9 & v9);
-	}
+				v8 = (v7 > 90413224) ? (v7 / v4 * v7) : (v8 - v4 % v4);
 
+				break;
+
+			case 1:
+
+				v4 = v1 ^ v5 % v2;
+
+				break;
+
+			case 2:
+
+				v5 = (v6 < 55363204) ? (v2 << v6 | v6) : (v5 - v3 | v8);
+
+				break;
+
+			case 3:
+
+				v3 = v6 & v8 / v7;
+
+				break;
+
+			case 4:
+
+				v3 = v2 | v5 >> v6;
+
+				break;
+
+			default:
+
+				v4 = (v5 > 74840929) ? (v3 << v3 % v5) : (v2 ^ v6 + v1);
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v3 = v5 >> v3 << v6;
+
+				break;
+
+			case 1:
+
+				v7 = (v4 > 38080319) ? (v1 << v1 + v8) : (v3 % v4 / v4);
+
+				break;
+
+			case 2:
+
+				v5 = v8 << v1 & v3;
+
+				break;
+
+			case 3:
+
+				v3 = v4 << v7 ^ v3;
+
+				break;
+
+			case 4:
+
+				v1 = (v2 < 13212995) ? (v5 << v5 << v3) : (v1 + v4 ^ v6);
+
+				break;
+
+			default:
+
+				v3 = v5 & v3 >> v3;
+
+				break;
+		}
+
+		if (v3 > 31205631)
+		{
+			v6 = (v3 < 37211613) ? (v4 + v4 & v8) : (v1 << v5 >> v8);
+		}
+		else
+		{
+			int v9 = 45831001;
+			v9 = (v9 > 38552967) ? (v9 & v9 | v9) : (v9 & v9 & v9);
+		}
 
 		return v6 << v4 | v1;
 	}
@@ -3896,38 +5378,35 @@ public static class Fuzz0019
 		int v7 = 767946;
 		int v8 = 66666619;
 
-	if (v5 > 73127230)
-	{
-		v4 = v3 >> v4 ^ v8;
-	}
-	else
-	{
-		v5 = (v6 > 99158437) ? (v4 << v5 << v8) : (v2 & v5 ^ v7);
-	}
+		if (v5 > 73127230)
+		{
+			v4 = v3 >> v4 ^ v8;
+		}
+		else
+		{
+			v5 = (v6 > 99158437) ? (v4 << v5 << v8) : (v2 & v5 ^ v7);
+		}
 
+		if (v5 < 4092002)
+		{
+			int v9 = 94626952;
+			v9 = v9 >> v9 + v9;
+		}
+		else
+		{
+			v8 = v6 * v6 | v3;
+		}
 
-	if (v5 < 4092002)
-	{
-	int v9 = 94626952;
-		v9 = v9 >> v9 + v9;
-	}
-	else
-	{
-		v8 = v6 * v6 | v3;
-	}
-
-
-	if (v4 < 52950334)
-	{
-	int v10 = 56999402;
-		v10 = (v10 > 8769451) ? (v10 - v10 << v10) : (v10 & v10 | v10);
-	}
-	else
-	{
-	int v11 = 22401200;
-		v11 = (v11 < 1811092) ? (v11 << v11 >> v11) : (v11 & v11 + v11);
-	}
-
+		if (v4 < 52950334)
+		{
+			int v10 = 56999402;
+			v10 = (v10 > 8769451) ? (v10 - v10 << v10) : (v10 & v10 | v10);
+		}
+		else
+		{
+			int v11 = 22401200;
+			v11 = (v11 < 1811092) ? (v11 << v11 >> v11) : (v11 & v11 + v11);
+		}
 
 		return (v7 > 62083400) ? (v6 - v6 >> v2) : (v3 / v3 << v3);
 	}
@@ -3944,74 +5423,125 @@ public static class Fuzz0019
 		int v7 = 56483661;
 		int v8 = 58164150;
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v8 = (v2 > 51046865) ? (v2 << v5 << v6) : (v7 & v4 % v6);
-				break;
-			case 1:
-				v4 = (v6 < 43233587) ? (v7 & v8 ^ v2) : (v4 | v1 | v8);
-				break;
-			case 2:
-				v4 = (v2 > 83365920) ? (v1 ^ v1 - v4) : (v6 & v5 | v1);
-				break;
-			case 3:
-				v5 = (v6 < 95451668) ? (v7 >> v4 << v1) : (v5 << v4 * v2);
-				break;
-			case 4:
-				v1 = v6 & v8 << v3;
-				break;
-			default:
-				v1 = (v4 < 1807308) ? (v8 & v6 * v2) : (v5 >> v4 >> v4);
-				break;
-		}
-		
+		switch (v5 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v3 = (v8 < 66188311) ? (v8 ^ v5 >> v4) : (v6 >> v6 | v6);
-				break;
-			case 1:
-				v5 = v7 - v3 + v2;
-				break;
-			case 2:
-				v7 = (v1 < 76543697) ? (v1 >> v8 - v6) : (v3 << v5 - v1);
-				break;
-			case 3:
-				v1 = v5 | v6 >> v7;
-				break;
-			case 4:
-				v3 = v1 - v5 >> v7;
-				break;
-			default:
-				v6 = v6 % v4 >> v6;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v7 = (v5 < 37030837) ? (v4 & v3 * v3) : (v2 ^ v3 * v1);
-				break;
-			case 1:
-				v3 = v1 << v7 >> v5;
-				break;
-			case 2:
-				v1 = (v2 > 19651357) ? (v5 + v2 + v3) : (v1 * v2 + v2);
-				break;
-			case 3:
-				v6 = (v6 < 77593920) ? (v5 >> v5 << v7) : (v7 >> v8 * v5);
-				break;
-			case 4:
-				v6 = v1 << v7 << v5;
-				break;
-			default:
-				v8 = (v6 < 52631864) ? (v2 >> v4 << v1) : (v2 | v2 % v5);
-				break;
-		}
-		
+				v8 = (v2 > 51046865) ? (v2 << v5 << v6) : (v7 & v4 % v6);
+
+				break;
+
+			case 1:
+
+				v4 = (v6 < 43233587) ? (v7 & v8 ^ v2) : (v4 | v1 | v8);
+
+				break;
+
+			case 2:
+
+				v4 = (v2 > 83365920) ? (v1 ^ v1 - v4) : (v6 & v5 | v1);
+
+				break;
+
+			case 3:
+
+				v5 = (v6 < 95451668) ? (v7 >> v4 << v1) : (v5 << v4 * v2);
+
+				break;
+
+			case 4:
+
+				v1 = v6 & v8 << v3;
+
+				break;
+
+			default:
+
+				v1 = (v4 < 1807308) ? (v8 & v6 * v2) : (v5 >> v4 >> v4);
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v3 = (v8 < 66188311) ? (v8 ^ v5 >> v4) : (v6 >> v6 | v6);
+
+				break;
+
+			case 1:
+
+				v5 = v7 - v3 + v2;
+
+				break;
+
+			case 2:
+
+				v7 = (v1 < 76543697) ? (v1 >> v8 - v6) : (v3 << v5 - v1);
+
+				break;
+
+			case 3:
+
+				v1 = v5 | v6 >> v7;
+
+				break;
+
+			case 4:
+
+				v3 = v1 - v5 >> v7;
+
+				break;
+
+			default:
+
+				v6 = v6 % v4 >> v6;
+
+				break;
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v7 = (v5 < 37030837) ? (v4 & v3 * v3) : (v2 ^ v3 * v1);
+
+				break;
+
+			case 1:
+
+				v3 = v1 << v7 >> v5;
+
+				break;
+
+			case 2:
+
+				v1 = (v2 > 19651357) ? (v5 + v2 + v3) : (v1 * v2 + v2);
+
+				break;
+
+			case 3:
+
+				v6 = (v6 < 77593920) ? (v5 >> v5 << v7) : (v7 >> v8 * v5);
+
+				break;
+
+			case 4:
+
+				v6 = v1 << v7 << v5;
+
+				break;
+
+			default:
+
+				v8 = (v6 < 52631864) ? (v2 >> v4 << v1) : (v2 | v2 % v5);
+
+				break;
+		}
 
 		return (v8 > 82135457) ? (v3 << v4 >> v6) : (v2 | v2 ^ v5);
 	}
@@ -4028,61 +5558,94 @@ public static class Fuzz0019
 		int v7 = 53214445;
 		int v8 = 64183105;
 
-	if (v2 < 18001752)
-	{
-		v5 = (v4 > 61302781) ? (v5 / v8 & v4) : (v1 >> v7 - v5);
-	}
-	else
-	{
-		v5 = v4 >> v7 & v8;
-	}
+		if (v2 < 18001752)
+		{
+			v5 = (v4 > 61302781) ? (v5 / v8 & v4) : (v1 >> v7 - v5);
+		}
+		else
+		{
+			v5 = v4 >> v7 & v8;
+		}
 
+		switch (v4 % 5)
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v2 = (v2 < 33566164) ? (v4 * v8 - v5) : (v1 >> v8 / v5);
-				break;
-			case 1:
-				v1 = (v7 > 23193065) ? (v2 ^ v2 % v8) : (v1 & v2 >> v4);
-				break;
-			case 2:
-				v6 = (v8 > 70326133) ? (v1 % v6 - v4) : (v4 << v3 ^ v6);
-				break;
-			case 3:
-				v1 = v2 - v2 | v3;
-				break;
-			case 4:
-				v1 = (v5 < 23714354) ? (v5 & v3 >> v6) : (v4 | v3 | v7);
-				break;
-			default:
-				v2 = (v6 > 31772845) ? (v8 << v5 & v8) : (v5 & v6 | v2);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v3 = v4 + v8 - v4;
-				break;
-			case 1:
-				v5 = (v5 < 81641674) ? (v4 * v3 >> v1) : (v6 / v8 * v6);
-				break;
-			case 2:
-				v6 = (v3 < 70419096) ? (v3 >> v8 * v6) : (v1 * v2 << v4);
-				break;
-			case 3:
-				v3 = v1 * v7 ^ v5;
-				break;
-			case 4:
-				v8 = (v1 < 45822849) ? (v6 << v6 % v6) : (v5 << v6 & v4);
-				break;
-			default:
-				v7 = (v2 < 53547119) ? (v8 + v1 / v5) : (v3 ^ v1 >> v1);
-				break;
-		}
-		
+				v2 = (v2 < 33566164) ? (v4 * v8 - v5) : (v1 >> v8 / v5);
+
+				break;
+
+			case 1:
+
+				v1 = (v7 > 23193065) ? (v2 ^ v2 % v8) : (v1 & v2 >> v4);
+
+				break;
+
+			case 2:
+
+				v6 = (v8 > 70326133) ? (v1 % v6 - v4) : (v4 << v3 ^ v6);
+
+				break;
+
+			case 3:
+
+				v1 = v2 - v2 | v3;
+
+				break;
+
+			case 4:
+
+				v1 = (v5 < 23714354) ? (v5 & v3 >> v6) : (v4 | v3 | v7);
+
+				break;
+
+			default:
+
+				v2 = (v6 > 31772845) ? (v8 << v5 & v8) : (v5 & v6 | v2);
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v3 = v4 + v8 - v4;
+
+				break;
+
+			case 1:
+
+				v5 = (v5 < 81641674) ? (v4 * v3 >> v1) : (v6 / v8 * v6);
+
+				break;
+
+			case 2:
+
+				v6 = (v3 < 70419096) ? (v3 >> v8 * v6) : (v1 * v2 << v4);
+
+				break;
+
+			case 3:
+
+				v3 = v1 * v7 ^ v5;
+
+				break;
+
+			case 4:
+
+				v8 = (v1 < 45822849) ? (v6 << v6 % v6) : (v5 << v6 & v4);
+
+				break;
+
+			default:
+
+				v7 = (v2 < 53547119) ? (v8 + v1 / v5) : (v3 ^ v1 >> v1);
+
+				break;
+		}
 
 		return v3 ^ v7 | v8;
 	}
@@ -4099,62 +5662,95 @@ public static class Fuzz0019
 		int v7 = 57295074;
 		int v8 = 28877776;
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v4 = (v8 < 63742489) ? (v7 % v4 << v6) : (v4 - v8 ^ v2);
-				break;
-			case 1:
-				v6 = (v4 < 61092663) ? (v8 | v8 - v5) : (v7 & v8 ^ v7);
-				break;
-			case 2:
-				v4 = (v7 < 71793541) ? (v5 | v7 >> v5) : (v7 | v4 >> v3);
-				break;
-			case 3:
-				v1 = (v1 > 45863329) ? (v2 * v1 - v6) : (v2 & v1 >> v3);
-				break;
-			case 4:
-				v3 = v1 | v7 >> v1;
-				break;
-			default:
-				v3 = v7 << v1 << v6;
-				break;
-		}
-		
+		switch (v4 % 5)
 
-	if (v1 < 11579509)
-	{
-	int v9 = 22988612;
-		v9 = (v9 > 68962457) ? (v9 >> v9 + v9) : (v9 ^ v9 - v9);
-	}
-	else
-	{
-		v2 = v1 << v4 - v6;
-	}
+		{
+			case 0:
 
+				v4 = (v8 < 63742489) ? (v7 % v4 << v6) : (v4 - v8 ^ v2);
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v8 = (v5 < 23961831) ? (v2 - v4 + v7) : (v7 ^ v4 >> v4);
-				break;
-			case 1:
-				v3 = (v6 < 83636603) ? (v2 * v8 ^ v1) : (v8 + v3 + v4);
-				break;
-			case 2:
-				v8 = (v2 < 28500313) ? (v5 << v4 & v2) : (v8 * v3 | v2);
-				break;
-			case 3:
-				v6 = (v8 > 46612077) ? (v3 | v6 >> v3) : (v7 & v5 ^ v3);
-				break;
-			case 4:
-				v1 = v8 * v2 >> v8;
-				break;
-			default:
-				v1 = v8 & v8 ^ v2;
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v6 = (v4 < 61092663) ? (v8 | v8 - v5) : (v7 & v8 ^ v7);
+
+				break;
+
+			case 2:
+
+				v4 = (v7 < 71793541) ? (v5 | v7 >> v5) : (v7 | v4 >> v3);
+
+				break;
+
+			case 3:
+
+				v1 = (v1 > 45863329) ? (v2 * v1 - v6) : (v2 & v1 >> v3);
+
+				break;
+
+			case 4:
+
+				v3 = v1 | v7 >> v1;
+
+				break;
+
+			default:
+
+				v3 = v7 << v1 << v6;
+
+				break;
+		}
+
+		if (v1 < 11579509)
+		{
+			int v9 = 22988612;
+			v9 = (v9 > 68962457) ? (v9 >> v9 + v9) : (v9 ^ v9 - v9);
+		}
+		else
+		{
+			v2 = v1 << v4 - v6;
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v8 = (v5 < 23961831) ? (v2 - v4 + v7) : (v7 ^ v4 >> v4);
+
+				break;
+
+			case 1:
+
+				v3 = (v6 < 83636603) ? (v2 * v8 ^ v1) : (v8 + v3 + v4);
+
+				break;
+
+			case 2:
+
+				v8 = (v2 < 28500313) ? (v5 << v4 & v2) : (v8 * v3 | v2);
+
+				break;
+
+			case 3:
+
+				v6 = (v8 > 46612077) ? (v3 | v6 >> v3) : (v7 & v5 ^ v3);
+
+				break;
+
+			case 4:
+
+				v1 = v8 * v2 >> v8;
+
+				break;
+
+			default:
+
+				v1 = v8 & v8 ^ v2;
+
+				break;
+		}
 
 		return (v1 > 2515776) ? (v8 * v3 & v8) : (v2 >> v1 ^ v6);
 	}
@@ -4171,62 +5767,95 @@ public static class Fuzz0019
 		int v7 = 67642902;
 		int v8 = 26313162;
 
-	if (v5 < 19713419)
-	{
-	int v9 = 62682698;
-		v9 = v9 >> v9 % v9;
-	}
-	else
-	{
-		v7 = (v2 > 92578761) ? (v3 >> v8 << v3) : (v4 << v5 >> v7);
-	}
+		if (v5 < 19713419)
+		{
+			int v9 = 62682698;
+			v9 = v9 >> v9 % v9;
+		}
+		else
+		{
+			v7 = (v2 > 92578761) ? (v3 >> v8 << v3) : (v4 << v5 >> v7);
+		}
 
+		switch (v6 % 5)
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v6 = (v4 > 76961244) ? (v7 >> v3 + v3) : (v3 & v8 << v1);
-				break;
-			case 1:
-				v7 = v6 + v2 << v2;
-				break;
-			case 2:
-				v8 = v4 % v3 % v4;
-				break;
-			case 3:
-				v1 = v5 & v6 << v4;
-				break;
-			case 4:
-				v3 = v5 & v1 % v2;
-				break;
-			default:
-				v1 = (v2 > 41050082) ? (v8 << v1 << v2) : (v3 ^ v6 ^ v3);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v1 = v4 & v1 << v3;
-				break;
-			case 1:
-				v7 = v2 << v1 & v8;
-				break;
-			case 2:
-				v6 = (v8 > 17952283) ? (v5 % v4 >> v8) : (v2 << v5 & v4);
-				break;
-			case 3:
-				v3 = v3 | v8 >> v1;
-				break;
-			case 4:
-				v6 = (v6 < 53461002) ? (v7 % v5 * v2) : (v3 | v3 - v2);
-				break;
-			default:
-				v7 = (v6 > 61897484) ? (v2 + v8 - v6) : (v6 / v6 << v1);
-				break;
-		}
-		
+				v6 = (v4 > 76961244) ? (v7 >> v3 + v3) : (v3 & v8 << v1);
+
+				break;
+
+			case 1:
+
+				v7 = v6 + v2 << v2;
+
+				break;
+
+			case 2:
+
+				v8 = v4 % v3 % v4;
+
+				break;
+
+			case 3:
+
+				v1 = v5 & v6 << v4;
+
+				break;
+
+			case 4:
+
+				v3 = v5 & v1 % v2;
+
+				break;
+
+			default:
+
+				v1 = (v2 > 41050082) ? (v8 << v1 << v2) : (v3 ^ v6 ^ v3);
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v1 = v4 & v1 << v3;
+
+				break;
+
+			case 1:
+
+				v7 = v2 << v1 & v8;
+
+				break;
+
+			case 2:
+
+				v6 = (v8 > 17952283) ? (v5 % v4 >> v8) : (v2 << v5 & v4);
+
+				break;
+
+			case 3:
+
+				v3 = v3 | v8 >> v1;
+
+				break;
+
+			case 4:
+
+				v6 = (v6 < 53461002) ? (v7 % v5 * v2) : (v3 | v3 - v2);
+
+				break;
+
+			default:
+
+				v7 = (v6 > 61897484) ? (v2 + v8 - v6) : (v6 / v6 << v1);
+
+				break;
+		}
 
 		return v3 << v5 + v7;
 	}
@@ -4243,61 +5872,94 @@ public static class Fuzz0019
 		int v7 = 8678683;
 		int v8 = 69774237;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v2 = v5 >> v7 >> v4;
-				break;
-			case 1:
-				v8 = (v7 > 39617524) ? (v3 & v4 << v3) : (v5 >> v7 >> v6);
-				break;
-			case 2:
-				v5 = (v2 < 21473598) ? (v4 ^ v1 & v8) : (v7 >> v5 & v7);
-				break;
-			case 3:
-				v2 = (v7 > 2462450) ? (v1 & v3 >> v6) : (v5 % v8 - v3);
-				break;
-			case 4:
-				v1 = (v4 > 41530246) ? (v3 / v6 % v2) : (v6 - v7 >> v7);
-				break;
-			default:
-				v1 = v6 - v5 ^ v4;
-				break;
-		}
-		
+		switch (v7 % 5)
 
-	if (v8 < 84460809)
-	{
-		v5 = (v3 > 73727098) ? (v2 / v4 & v6) : (v5 / v3 | v3);
-	}
-	else
-	{
-		v7 = (v4 > 28035296) ? (v1 << v2 + v7) : (v6 * v2 - v4);
-	}
+		{
+			case 0:
 
+				v2 = v5 >> v7 >> v4;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v6 = (v3 < 61874053) ? (v8 >> v8 & v3) : (v7 & v6 << v2);
-				break;
-			case 1:
-				v3 = (v1 > 77576199) ? (v4 - v7 << v2) : (v8 % v8 & v4);
-				break;
-			case 2:
-				v6 = v8 ^ v7 - v5;
-				break;
-			case 3:
-				v2 = v1 << v8 & v1;
-				break;
-			case 4:
-				v2 = (v7 < 29385131) ? (v8 % v6 * v6) : (v2 - v8 + v6);
-				break;
-			default:
-				v1 = v7 % v4 - v6;
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v8 = (v7 > 39617524) ? (v3 & v4 << v3) : (v5 >> v7 >> v6);
+
+				break;
+
+			case 2:
+
+				v5 = (v2 < 21473598) ? (v4 ^ v1 & v8) : (v7 >> v5 & v7);
+
+				break;
+
+			case 3:
+
+				v2 = (v7 > 2462450) ? (v1 & v3 >> v6) : (v5 % v8 - v3);
+
+				break;
+
+			case 4:
+
+				v1 = (v4 > 41530246) ? (v3 / v6 % v2) : (v6 - v7 >> v7);
+
+				break;
+
+			default:
+
+				v1 = v6 - v5 ^ v4;
+
+				break;
+		}
+
+		if (v8 < 84460809)
+		{
+			v5 = (v3 > 73727098) ? (v2 / v4 & v6) : (v5 / v3 | v3);
+		}
+		else
+		{
+			v7 = (v4 > 28035296) ? (v1 << v2 + v7) : (v6 * v2 - v4);
+		}
+
+		switch (v7 % 5)
+
+		{
+			case 0:
+
+				v6 = (v3 < 61874053) ? (v8 >> v8 & v3) : (v7 & v6 << v2);
+
+				break;
+
+			case 1:
+
+				v3 = (v1 > 77576199) ? (v4 - v7 << v2) : (v8 % v8 & v4);
+
+				break;
+
+			case 2:
+
+				v6 = v8 ^ v7 - v5;
+
+				break;
+
+			case 3:
+
+				v2 = v1 << v8 & v1;
+
+				break;
+
+			case 4:
+
+				v2 = (v7 < 29385131) ? (v8 % v6 * v6) : (v2 - v8 + v6);
+
+				break;
+
+			default:
+
+				v1 = v7 % v4 - v6;
+
+				break;
+		}
 
 		return (v2 > 4795571) ? (v6 ^ v2 | v6) : (v5 % v6 + v2);
 	}
@@ -4314,50 +5976,65 @@ public static class Fuzz0019
 		int v7 = 63229448;
 		int v8 = 3105754;
 
-	if (v5 > 91001621)
-	{
-		v4 = (v5 < 22180082) ? (v8 >> v2 / v3) : (v4 << v8 - v8);
-	}
-	else
-	{
-		v2 = (v4 > 29092382) ? (v7 % v5 | v2) : (v4 % v2 | v8);
-	}
+		if (v5 > 91001621)
+		{
+			v4 = (v5 < 22180082) ? (v8 >> v2 / v3) : (v4 << v8 - v8);
+		}
+		else
+		{
+			v2 = (v4 > 29092382) ? (v7 % v5 | v2) : (v4 % v2 | v8);
+		}
 
+		switch (v5 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v7 = v6 / v6 >> v1;
-				break;
-			case 1:
-				v4 = v7 << v6 & v3;
-				break;
-			case 2:
-				v3 = (v5 > 27292559) ? (v1 << v8 << v4) : (v8 ^ v2 | v4);
-				break;
-			case 3:
-				v1 = v3 % v6 >> v2;
-				break;
-			case 4:
-				v7 = v1 ^ v1 ^ v7;
-				break;
-			default:
-				v4 = (v1 > 58647898) ? (v7 << v5 / v4) : (v7 + v8 << v3);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v2 > 98690443)
-	{
-	int v9 = 52488148;
-		v9 = v9 ^ v9 << v9;
-	}
-	else
-	{
-	int v10 = 73229662;
-		v10 = v10 - v10 ^ v10;
-	}
+				v7 = v6 / v6 >> v1;
 
+				break;
+
+			case 1:
+
+				v4 = v7 << v6 & v3;
+
+				break;
+
+			case 2:
+
+				v3 = (v5 > 27292559) ? (v1 << v8 << v4) : (v8 ^ v2 | v4);
+
+				break;
+
+			case 3:
+
+				v1 = v3 % v6 >> v2;
+
+				break;
+
+			case 4:
+
+				v7 = v1 ^ v1 ^ v7;
+
+				break;
+
+			default:
+
+				v4 = (v1 > 58647898) ? (v7 << v5 / v4) : (v7 + v8 << v3);
+
+				break;
+		}
+
+		if (v2 > 98690443)
+		{
+			int v9 = 52488148;
+			v9 = v9 ^ v9 << v9;
+		}
+		else
+		{
+			int v10 = 73229662;
+			v10 = v10 - v10 ^ v10;
+		}
 
 		return v7 - v8 | v7;
 	}
@@ -4374,62 +6051,95 @@ public static class Fuzz0019
 		int v7 = 11114213;
 		int v8 = 14837127;
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v5 = (v8 > 77939684) ? (v2 << v1 & v3) : (v5 << v2 + v3);
-				break;
-			case 1:
-				v1 = (v4 > 41119724) ? (v1 ^ v5 << v3) : (v3 | v8 & v6);
-				break;
-			case 2:
-				v7 = (v7 < 3710278) ? (v4 << v7 >> v8) : (v4 | v5 + v6);
-				break;
-			case 3:
-				v6 = (v5 < 67889125) ? (v6 | v4 / v8) : (v6 << v5 * v2);
-				break;
-			case 4:
-				v7 = (v5 < 16116466) ? (v1 % v5 * v4) : (v2 << v3 % v6);
-				break;
-			default:
-				v2 = (v4 < 35074987) ? (v4 >> v4 & v4) : (v5 ^ v1 >> v7);
-				break;
-		}
-		
+		switch (v5 % 5)
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v8 = (v5 > 31736303) ? (v3 % v8 * v5) : (v1 & v4 ^ v8);
-				break;
-			case 1:
-				v7 = v6 % v5 - v1;
-				break;
-			case 2:
-				v3 = (v3 > 34789594) ? (v8 & v3 >> v4) : (v3 | v7 & v2);
-				break;
-			case 3:
-				v1 = (v5 > 15770804) ? (v4 >> v6 >> v7) : (v3 >> v7 + v7);
-				break;
-			case 4:
-				v3 = (v4 > 45267432) ? (v6 ^ v2 >> v8) : (v2 | v2 / v7);
-				break;
-			default:
-				v6 = (v6 > 6989377) ? (v6 - v6 ^ v2) : (v8 - v2 ^ v8);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v4 > 61865752)
-	{
-		v8 = v5 >> v8 ^ v3;
-	}
-	else
-	{
-	int v9 = 83368174;
-		v9 = v9 << v9 | v9;
-	}
+				v5 = (v8 > 77939684) ? (v2 << v1 & v3) : (v5 << v2 + v3);
 
+				break;
+
+			case 1:
+
+				v1 = (v4 > 41119724) ? (v1 ^ v5 << v3) : (v3 | v8 & v6);
+
+				break;
+
+			case 2:
+
+				v7 = (v7 < 3710278) ? (v4 << v7 >> v8) : (v4 | v5 + v6);
+
+				break;
+
+			case 3:
+
+				v6 = (v5 < 67889125) ? (v6 | v4 / v8) : (v6 << v5 * v2);
+
+				break;
+
+			case 4:
+
+				v7 = (v5 < 16116466) ? (v1 % v5 * v4) : (v2 << v3 % v6);
+
+				break;
+
+			default:
+
+				v2 = (v4 < 35074987) ? (v4 >> v4 & v4) : (v5 ^ v1 >> v7);
+
+				break;
+		}
+
+		switch (v7 % 5)
+
+		{
+			case 0:
+
+				v8 = (v5 > 31736303) ? (v3 % v8 * v5) : (v1 & v4 ^ v8);
+
+				break;
+
+			case 1:
+
+				v7 = v6 % v5 - v1;
+
+				break;
+
+			case 2:
+
+				v3 = (v3 > 34789594) ? (v8 & v3 >> v4) : (v3 | v7 & v2);
+
+				break;
+
+			case 3:
+
+				v1 = (v5 > 15770804) ? (v4 >> v6 >> v7) : (v3 >> v7 + v7);
+
+				break;
+
+			case 4:
+
+				v3 = (v4 > 45267432) ? (v6 ^ v2 >> v8) : (v2 | v2 / v7);
+
+				break;
+
+			default:
+
+				v6 = (v6 > 6989377) ? (v6 - v6 ^ v2) : (v8 - v2 ^ v8);
+
+				break;
+		}
+
+		if (v4 > 61865752)
+		{
+			v8 = v5 >> v8 ^ v3;
+		}
+		else
+		{
+			int v9 = 83368174;
+			v9 = v9 << v9 | v9;
+		}
 
 		return v3 * v5 - v5;
 	}
@@ -4446,74 +6156,125 @@ public static class Fuzz0019
 		int v7 = 43688646;
 		int v8 = 72534163;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v5 = (v6 < 89949662) ? (v8 | v2 ^ v5) : (v5 | v4 >> v6);
-				break;
-			case 1:
-				v3 = (v1 > 48560162) ? (v7 & v7 << v7) : (v5 ^ v2 << v4);
-				break;
-			case 2:
-				v7 = v5 ^ v8 & v8;
-				break;
-			case 3:
-				v4 = (v6 > 3983575) ? (v2 & v8 << v4) : (v7 & v7 + v4);
-				break;
-			case 4:
-				v5 = (v6 < 70589998) ? (v4 >> v5 / v3) : (v8 + v4 & v7);
-				break;
-			default:
-				v2 = v2 >> v3 / v8;
-				break;
-		}
-		
+		switch (v7 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v1 = v2 ^ v2 >> v5;
-				break;
-			case 1:
-				v3 = v5 * v4 << v2;
-				break;
-			case 2:
-				v2 = (v5 < 53775289) ? (v4 % v1 ^ v3) : (v6 & v8 << v3);
-				break;
-			case 3:
-				v3 = (v2 < 55358) ? (v6 << v3 ^ v8) : (v2 & v2 / v6);
-				break;
-			case 4:
-				v1 = (v7 < 74725562) ? (v6 << v7 / v7) : (v2 / v5 / v3);
-				break;
-			default:
-				v5 = v4 | v7 << v3;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v4 = v8 << v2 & v2;
-				break;
-			case 1:
-				v7 = v1 >> v2 & v6;
-				break;
-			case 2:
-				v2 = v8 & v8 ^ v6;
-				break;
-			case 3:
-				v5 = (v3 > 54607806) ? (v3 % v7 >> v6) : (v5 + v2 - v4);
-				break;
-			case 4:
-				v4 = (v2 < 93452117) ? (v3 % v7 | v4) : (v7 * v4 | v4);
-				break;
-			default:
-				v5 = v7 & v1 >> v5;
-				break;
-		}
-		
+				v5 = (v6 < 89949662) ? (v8 | v2 ^ v5) : (v5 | v4 >> v6);
+
+				break;
+
+			case 1:
+
+				v3 = (v1 > 48560162) ? (v7 & v7 << v7) : (v5 ^ v2 << v4);
+
+				break;
+
+			case 2:
+
+				v7 = v5 ^ v8 & v8;
+
+				break;
+
+			case 3:
+
+				v4 = (v6 > 3983575) ? (v2 & v8 << v4) : (v7 & v7 + v4);
+
+				break;
+
+			case 4:
+
+				v5 = (v6 < 70589998) ? (v4 >> v5 / v3) : (v8 + v4 & v7);
+
+				break;
+
+			default:
+
+				v2 = v2 >> v3 / v8;
+
+				break;
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v1 = v2 ^ v2 >> v5;
+
+				break;
+
+			case 1:
+
+				v3 = v5 * v4 << v2;
+
+				break;
+
+			case 2:
+
+				v2 = (v5 < 53775289) ? (v4 % v1 ^ v3) : (v6 & v8 << v3);
+
+				break;
+
+			case 3:
+
+				v3 = (v2 < 55358) ? (v6 << v3 ^ v8) : (v2 & v2 / v6);
+
+				break;
+
+			case 4:
+
+				v1 = (v7 < 74725562) ? (v6 << v7 / v7) : (v2 / v5 / v3);
+
+				break;
+
+			default:
+
+				v5 = v4 | v7 << v3;
+
+				break;
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v4 = v8 << v2 & v2;
+
+				break;
+
+			case 1:
+
+				v7 = v1 >> v2 & v6;
+
+				break;
+
+			case 2:
+
+				v2 = v8 & v8 ^ v6;
+
+				break;
+
+			case 3:
+
+				v5 = (v3 > 54607806) ? (v3 % v7 >> v6) : (v5 + v2 - v4);
+
+				break;
+
+			case 4:
+
+				v4 = (v2 < 93452117) ? (v3 % v7 | v4) : (v7 * v4 | v4);
+
+				break;
+
+			default:
+
+				v5 = v7 & v1 >> v5;
+
+				break;
+		}
 
 		return (v5 < 53660452) ? (v1 << v1 % v6) : (v2 >> v6 % v4);
 	}
@@ -4530,49 +6291,64 @@ public static class Fuzz0019
 		int v7 = 82947120;
 		int v8 = 51402293;
 
-	if (v6 < 92662944)
-	{
-		v4 = (v5 < 46222907) ? (v1 % v2 | v1) : (v7 >> v2 - v6);
-	}
-	else
-	{
-		v7 = v4 + v4 >> v3;
-	}
+		if (v6 < 92662944)
+		{
+			v4 = (v5 < 46222907) ? (v1 % v2 | v1) : (v7 >> v2 - v6);
+		}
+		else
+		{
+			v7 = v4 + v4 >> v3;
+		}
 
+		if (v1 < 85797387)
+		{
+			v7 = (v7 > 96106181) ? (v6 ^ v3 - v4) : (v8 ^ v5 & v2);
+		}
+		else
+		{
+			int v9 = 7812836;
+			v9 = (v9 > 86367836) ? (v9 & v9 | v9) : (v9 | v9 & v9);
+		}
 
-	if (v1 < 85797387)
-	{
-		v7 = (v7 > 96106181) ? (v6 ^ v3 - v4) : (v8 ^ v5 & v2);
-	}
-	else
-	{
-	int v9 = 7812836;
-		v9 = (v9 > 86367836) ? (v9 & v9 | v9) : (v9 | v9 & v9);
-	}
+		switch (v2 % 5)
 
+		{
+			case 0:
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v4 = v2 << v3 << v1;
-				break;
-			case 1:
-				v3 = (v5 > 34770601) ? (v1 / v5 * v8) : (v4 >> v5 % v3);
-				break;
-			case 2:
-				v3 = (v1 > 62634989) ? (v2 + v6 & v8) : (v2 & v2 & v2);
-				break;
-			case 3:
-				v8 = (v8 > 46637852) ? (v7 << v4 << v3) : (v8 >> v6 >> v1);
-				break;
-			case 4:
-				v7 = (v5 > 33644759) ? (v1 << v6 << v8) : (v1 * v7 ^ v6);
-				break;
-			default:
-				v2 = (v4 < 73285888) ? (v7 % v4 & v8) : (v6 >> v6 + v1);
-				break;
-		}
-		
+				v4 = v2 << v3 << v1;
+
+				break;
+
+			case 1:
+
+				v3 = (v5 > 34770601) ? (v1 / v5 * v8) : (v4 >> v5 % v3);
+
+				break;
+
+			case 2:
+
+				v3 = (v1 > 62634989) ? (v2 + v6 & v8) : (v2 & v2 & v2);
+
+				break;
+
+			case 3:
+
+				v8 = (v8 > 46637852) ? (v7 << v4 << v3) : (v8 >> v6 >> v1);
+
+				break;
+
+			case 4:
+
+				v7 = (v5 > 33644759) ? (v1 << v6 << v8) : (v1 * v7 ^ v6);
+
+				break;
+
+			default:
+
+				v2 = (v4 < 73285888) ? (v7 % v4 & v8) : (v6 >> v6 + v1);
+
+				break;
+		}
 
 		return v7 % v7 | v7;
 	}
@@ -4589,50 +6365,65 @@ public static class Fuzz0019
 		int v7 = 60384131;
 		int v8 = 15840359;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v3 = (v7 < 99623322) ? (v6 ^ v4 | v7) : (v4 & v8 - v5);
-				break;
-			case 1:
-				v6 = v1 | v1 | v8;
-				break;
-			case 2:
-				v1 = (v7 < 62686901) ? (v6 & v8 - v2) : (v7 - v4 << v2);
-				break;
-			case 3:
-				v1 = (v1 > 87729569) ? (v5 << v7 << v8) : (v1 >> v7 | v7);
-				break;
-			case 4:
-				v4 = (v5 > 87356971) ? (v4 / v6 >> v1) : (v8 | v7 * v8);
-				break;
-			default:
-				v5 = (v7 > 23420817) ? (v8 >> v5 ^ v6) : (v7 | v6 | v2);
-				break;
-		}
-		
+		switch (v8 % 5)
 
-	if (v5 > 83225004)
-	{
-	int v9 = 3151270;
-		v9 = (v9 < 79347562) ? (v9 ^ v9 ^ v9) : (v9 * v9 ^ v9);
-	}
-	else
-	{
-		v4 = v5 >> v7 & v4;
-	}
+		{
+			case 0:
 
+				v3 = (v7 < 99623322) ? (v6 ^ v4 | v7) : (v4 & v8 - v5);
 
-	if (v8 > 10414975)
-	{
-	int v10 = 12075538;
-		v10 = (v10 > 51250342) ? (v10 / v10 % v10) : (v10 % v10 << v10);
-	}
-	else
-	{
-		v3 = (v6 > 63731854) ? (v3 & v7 % v3) : (v4 >> v6 >> v6);
-	}
+				break;
 
+			case 1:
+
+				v6 = v1 | v1 | v8;
+
+				break;
+
+			case 2:
+
+				v1 = (v7 < 62686901) ? (v6 & v8 - v2) : (v7 - v4 << v2);
+
+				break;
+
+			case 3:
+
+				v1 = (v1 > 87729569) ? (v5 << v7 << v8) : (v1 >> v7 | v7);
+
+				break;
+
+			case 4:
+
+				v4 = (v5 > 87356971) ? (v4 / v6 >> v1) : (v8 | v7 * v8);
+
+				break;
+
+			default:
+
+				v5 = (v7 > 23420817) ? (v8 >> v5 ^ v6) : (v7 | v6 | v2);
+
+				break;
+		}
+
+		if (v5 > 83225004)
+		{
+			int v9 = 3151270;
+			v9 = (v9 < 79347562) ? (v9 ^ v9 ^ v9) : (v9 * v9 ^ v9);
+		}
+		else
+		{
+			v4 = v5 >> v7 & v4;
+		}
+
+		if (v8 > 10414975)
+		{
+			int v10 = 12075538;
+			v10 = (v10 > 51250342) ? (v10 / v10 % v10) : (v10 % v10 << v10);
+		}
+		else
+		{
+			v3 = (v6 > 63731854) ? (v3 & v7 % v3) : (v4 >> v6 >> v6);
+		}
 
 		return v6 << v3 / v1;
 	}
@@ -4649,51 +6440,66 @@ public static class Fuzz0019
 		int v7 = 65519181;
 		int v8 = 75987172;
 
-	if (v8 < 15847073)
-	{
-	int v9 = 46387363;
-		v9 = v9 / v9 % v9;
-	}
-	else
-	{
-		v6 = (v6 > 8595620) ? (v8 + v8 / v7) : (v1 >> v2 * v3);
-	}
+		if (v8 < 15847073)
+		{
+			int v9 = 46387363;
+			v9 = v9 / v9 % v9;
+		}
+		else
+		{
+			v6 = (v6 > 8595620) ? (v8 + v8 / v7) : (v1 >> v2 * v3);
+		}
 
+		switch (v5 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v4 = v3 | v4 | v3;
-				break;
-			case 1:
-				v7 = (v4 < 31946917) ? (v3 | v6 << v4) : (v1 / v2 << v1);
-				break;
-			case 2:
-				v2 = v1 + v8 << v3;
-				break;
-			case 3:
-				v6 = (v5 < 10473839) ? (v6 % v8 * v6) : (v7 & v2 + v5);
-				break;
-			case 4:
-				v8 = v5 << v8 << v4;
-				break;
-			default:
-				v3 = (v4 < 20548042) ? (v6 - v5 >> v4) : (v8 | v6 >> v5);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v2 < 87668326)
-	{
-	int v10 = 65302304;
-		v10 = (v10 > 27187256) ? (v10 ^ v10 & v10) : (v10 ^ v10 / v10);
-	}
-	else
-	{
-	int v11 = 58334534;
-		v11 = (v11 > 44441960) ? (v11 * v11 << v11) : (v11 << v11 + v11);
-	}
+				v4 = v3 | v4 | v3;
 
+				break;
+
+			case 1:
+
+				v7 = (v4 < 31946917) ? (v3 | v6 << v4) : (v1 / v2 << v1);
+
+				break;
+
+			case 2:
+
+				v2 = v1 + v8 << v3;
+
+				break;
+
+			case 3:
+
+				v6 = (v5 < 10473839) ? (v6 % v8 * v6) : (v7 & v2 + v5);
+
+				break;
+
+			case 4:
+
+				v8 = v5 << v8 << v4;
+
+				break;
+
+			default:
+
+				v3 = (v4 < 20548042) ? (v6 - v5 >> v4) : (v8 | v6 >> v5);
+
+				break;
+		}
+
+		if (v2 < 87668326)
+		{
+			int v10 = 65302304;
+			v10 = (v10 > 27187256) ? (v10 ^ v10 & v10) : (v10 ^ v10 / v10);
+		}
+		else
+		{
+			int v11 = 58334534;
+			v11 = (v11 > 44441960) ? (v11 * v11 << v11) : (v11 << v11 + v11);
+		}
 
 		return (v5 > 2908755) ? (v3 ^ v7 | v3) : (v6 - v2 >> v5);
 	}
@@ -4710,62 +6516,95 @@ public static class Fuzz0019
 		int v7 = 59104771;
 		int v8 = 3813568;
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v8 = (v2 < 8001039) ? (v3 ^ v5 & v8) : (v7 % v2 * v8);
-				break;
-			case 1:
-				v7 = v6 % v2 + v4;
-				break;
-			case 2:
-				v1 = v5 | v2 >> v3;
-				break;
-			case 3:
-				v6 = v8 << v8 / v2;
-				break;
-			case 4:
-				v7 = v6 << v1 >> v7;
-				break;
-			default:
-				v7 = (v5 > 62228722) ? (v5 ^ v8 | v5) : (v4 >> v5 * v5);
-				break;
-		}
-		
+		switch (v4 % 5)
 
-	if (v4 < 43295495)
-	{
-		v1 = (v1 < 33085801) ? (v4 | v4 >> v3) : (v1 - v4 | v1);
-	}
-	else
-	{
-	int v9 = 53172783;
-		v9 = v9 % v9 + v9;
-	}
+		{
+			case 0:
 
+				v8 = (v2 < 8001039) ? (v3 ^ v5 & v8) : (v7 % v2 * v8);
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v6 = (v7 < 8328556) ? (v6 >> v6 ^ v1) : (v2 - v7 * v8);
-				break;
-			case 1:
-				v1 = v6 / v5 + v7;
-				break;
-			case 2:
-				v3 = v2 / v3 % v1;
-				break;
-			case 3:
-				v4 = v5 & v3 & v6;
-				break;
-			case 4:
-				v5 = v8 << v3 / v8;
-				break;
-			default:
-				v5 = (v4 > 32656700) ? (v3 | v8 ^ v4) : (v8 >> v1 >> v2);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v7 = v6 % v2 + v4;
+
+				break;
+
+			case 2:
+
+				v1 = v5 | v2 >> v3;
+
+				break;
+
+			case 3:
+
+				v6 = v8 << v8 / v2;
+
+				break;
+
+			case 4:
+
+				v7 = v6 << v1 >> v7;
+
+				break;
+
+			default:
+
+				v7 = (v5 > 62228722) ? (v5 ^ v8 | v5) : (v4 >> v5 * v5);
+
+				break;
+		}
+
+		if (v4 < 43295495)
+		{
+			v1 = (v1 < 33085801) ? (v4 | v4 >> v3) : (v1 - v4 | v1);
+		}
+		else
+		{
+			int v9 = 53172783;
+			v9 = v9 % v9 + v9;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v6 = (v7 < 8328556) ? (v6 >> v6 ^ v1) : (v2 - v7 * v8);
+
+				break;
+
+			case 1:
+
+				v1 = v6 / v5 + v7;
+
+				break;
+
+			case 2:
+
+				v3 = v2 / v3 % v1;
+
+				break;
+
+			case 3:
+
+				v4 = v5 & v3 & v6;
+
+				break;
+
+			case 4:
+
+				v5 = v8 << v3 / v8;
+
+				break;
+
+			default:
+
+				v5 = (v4 > 32656700) ? (v3 | v8 ^ v4) : (v8 >> v1 >> v2);
+
+				break;
+		}
 
 		return v2 | v5 - v2;
 	}
@@ -4782,74 +6621,125 @@ public static class Fuzz0019
 		int v7 = 36876910;
 		int v8 = 48541172;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v7 = (v7 > 78084216) ? (v1 + v4 >> v4) : (v2 + v7 << v5);
-				break;
-			case 1:
-				v4 = (v3 > 64019625) ? (v8 << v2 << v6) : (v2 + v8 - v3);
-				break;
-			case 2:
-				v5 = v7 << v8 & v5;
-				break;
-			case 3:
-				v5 = (v2 > 52601007) ? (v4 / v2 ^ v6) : (v8 - v5 | v7);
-				break;
-			case 4:
-				v8 = (v6 > 90778778) ? (v5 >> v7 ^ v8) : (v8 + v5 >> v8);
-				break;
-			default:
-				v8 = (v1 > 65400981) ? (v5 << v7 & v5) : (v6 + v1 << v5);
-				break;
-		}
-		
+		switch (v2 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v6 = (v5 < 76661745) ? (v1 >> v6 << v3) : (v4 << v5 << v3);
-				break;
-			case 1:
-				v7 = (v3 > 81503734) ? (v5 >> v5 ^ v7) : (v1 | v5 % v8);
-				break;
-			case 2:
-				v8 = (v8 > 28677934) ? (v4 + v7 >> v4) : (v6 << v3 >> v6);
-				break;
-			case 3:
-				v3 = v7 & v5 << v5;
-				break;
-			case 4:
-				v3 = (v7 > 47413808) ? (v7 >> v6 / v4) : (v7 << v8 >> v4);
-				break;
-			default:
-				v5 = v7 << v5 >> v6;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v8 = v7 * v8 >> v7;
-				break;
-			case 1:
-				v8 = v8 << v8 + v4;
-				break;
-			case 2:
-				v4 = v7 >> v8 ^ v5;
-				break;
-			case 3:
-				v7 = v2 - v1 % v6;
-				break;
-			case 4:
-				v1 = v1 << v2 ^ v2;
-				break;
-			default:
-				v8 = v7 ^ v5 >> v4;
-				break;
-		}
-		
+				v7 = (v7 > 78084216) ? (v1 + v4 >> v4) : (v2 + v7 << v5);
+
+				break;
+
+			case 1:
+
+				v4 = (v3 > 64019625) ? (v8 << v2 << v6) : (v2 + v8 - v3);
+
+				break;
+
+			case 2:
+
+				v5 = v7 << v8 & v5;
+
+				break;
+
+			case 3:
+
+				v5 = (v2 > 52601007) ? (v4 / v2 ^ v6) : (v8 - v5 | v7);
+
+				break;
+
+			case 4:
+
+				v8 = (v6 > 90778778) ? (v5 >> v7 ^ v8) : (v8 + v5 >> v8);
+
+				break;
+
+			default:
+
+				v8 = (v1 > 65400981) ? (v5 << v7 & v5) : (v6 + v1 << v5);
+
+				break;
+		}
+
+		switch (v3 % 5)
+
+		{
+			case 0:
+
+				v6 = (v5 < 76661745) ? (v1 >> v6 << v3) : (v4 << v5 << v3);
+
+				break;
+
+			case 1:
+
+				v7 = (v3 > 81503734) ? (v5 >> v5 ^ v7) : (v1 | v5 % v8);
+
+				break;
+
+			case 2:
+
+				v8 = (v8 > 28677934) ? (v4 + v7 >> v4) : (v6 << v3 >> v6);
+
+				break;
+
+			case 3:
+
+				v3 = v7 & v5 << v5;
+
+				break;
+
+			case 4:
+
+				v3 = (v7 > 47413808) ? (v7 >> v6 / v4) : (v7 << v8 >> v4);
+
+				break;
+
+			default:
+
+				v5 = v7 << v5 >> v6;
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v8 = v7 * v8 >> v7;
+
+				break;
+
+			case 1:
+
+				v8 = v8 << v8 + v4;
+
+				break;
+
+			case 2:
+
+				v4 = v7 >> v8 ^ v5;
+
+				break;
+
+			case 3:
+
+				v7 = v2 - v1 % v6;
+
+				break;
+
+			case 4:
+
+				v1 = v1 << v2 ^ v2;
+
+				break;
+
+			default:
+
+				v8 = v7 ^ v5 >> v4;
+
+				break;
+		}
 
 		return (v3 > 5506310) ? (v8 % v8 ^ v4) : (v3 ^ v2 ^ v6);
 	}
@@ -4866,74 +6756,125 @@ public static class Fuzz0019
 		int v7 = 80695281;
 		int v8 = 739769;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v4 = v6 | v8 ^ v8;
-				break;
-			case 1:
-				v5 = (v2 > 80673921) ? (v2 >> v2 * v4) : (v8 % v1 - v4);
-				break;
-			case 2:
-				v8 = (v1 < 83184006) ? (v6 & v6 >> v5) : (v4 | v4 | v3);
-				break;
-			case 3:
-				v8 = (v4 > 36400233) ? (v3 * v8 & v4) : (v8 - v3 | v8);
-				break;
-			case 4:
-				v5 = (v4 < 43944125) ? (v7 / v3 & v5) : (v7 << v4 << v2);
-				break;
-			default:
-				v3 = (v1 < 22508899) ? (v7 | v5 * v2) : (v6 | v4 ^ v5);
-				break;
-		}
-		
+		switch (v8 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v5 = (v6 < 86894528) ? (v4 | v6 >> v8) : (v5 + v2 >> v3);
-				break;
-			case 1:
-				v4 = v8 ^ v2 << v2;
-				break;
-			case 2:
-				v7 = v4 & v8 + v1;
-				break;
-			case 3:
-				v6 = (v7 < 55000841) ? (v7 << v4 - v4) : (v6 + v7 & v8);
-				break;
-			case 4:
-				v5 = (v7 < 44346094) ? (v8 / v5 >> v3) : (v8 >> v2 & v8);
-				break;
-			default:
-				v1 = (v4 < 8026715) ? (v5 >> v4 ^ v8) : (v2 + v1 / v4);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v4 = (v4 < 17323669) ? (v2 * v6 / v1) : (v5 & v1 / v3);
-				break;
-			case 1:
-				v4 = (v3 > 97525515) ? (v6 % v3 * v4) : (v4 << v7 << v8);
-				break;
-			case 2:
-				v2 = (v2 > 29784933) ? (v7 << v3 ^ v4) : (v6 | v1 ^ v7);
-				break;
-			case 3:
-				v5 = v8 | v3 | v8;
-				break;
-			case 4:
-				v1 = (v1 > 69139822) ? (v3 * v3 % v1) : (v3 + v1 + v7);
-				break;
-			default:
-				v4 = v7 & v6 ^ v2;
-				break;
-		}
-		
+				v4 = v6 | v8 ^ v8;
+
+				break;
+
+			case 1:
+
+				v5 = (v2 > 80673921) ? (v2 >> v2 * v4) : (v8 % v1 - v4);
+
+				break;
+
+			case 2:
+
+				v8 = (v1 < 83184006) ? (v6 & v6 >> v5) : (v4 | v4 | v3);
+
+				break;
+
+			case 3:
+
+				v8 = (v4 > 36400233) ? (v3 * v8 & v4) : (v8 - v3 | v8);
+
+				break;
+
+			case 4:
+
+				v5 = (v4 < 43944125) ? (v7 / v3 & v5) : (v7 << v4 << v2);
+
+				break;
+
+			default:
+
+				v3 = (v1 < 22508899) ? (v7 | v5 * v2) : (v6 | v4 ^ v5);
+
+				break;
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v5 = (v6 < 86894528) ? (v4 | v6 >> v8) : (v5 + v2 >> v3);
+
+				break;
+
+			case 1:
+
+				v4 = v8 ^ v2 << v2;
+
+				break;
+
+			case 2:
+
+				v7 = v4 & v8 + v1;
+
+				break;
+
+			case 3:
+
+				v6 = (v7 < 55000841) ? (v7 << v4 - v4) : (v6 + v7 & v8);
+
+				break;
+
+			case 4:
+
+				v5 = (v7 < 44346094) ? (v8 / v5 >> v3) : (v8 >> v2 & v8);
+
+				break;
+
+			default:
+
+				v1 = (v4 < 8026715) ? (v5 >> v4 ^ v8) : (v2 + v1 / v4);
+
+				break;
+		}
+
+		switch (v6 % 5)
+
+		{
+			case 0:
+
+				v4 = (v4 < 17323669) ? (v2 * v6 / v1) : (v5 & v1 / v3);
+
+				break;
+
+			case 1:
+
+				v4 = (v3 > 97525515) ? (v6 % v3 * v4) : (v4 << v7 << v8);
+
+				break;
+
+			case 2:
+
+				v2 = (v2 > 29784933) ? (v7 << v3 ^ v4) : (v6 | v1 ^ v7);
+
+				break;
+
+			case 3:
+
+				v5 = v8 | v3 | v8;
+
+				break;
+
+			case 4:
+
+				v1 = (v1 > 69139822) ? (v3 * v3 % v1) : (v3 + v1 + v7);
+
+				break;
+
+			default:
+
+				v4 = v7 & v6 ^ v2;
+
+				break;
+		}
 
 		return v3 & v3 | v3;
 	}
@@ -4950,61 +6891,94 @@ public static class Fuzz0019
 		int v7 = 29163974;
 		int v8 = 69727507;
 
-	if (v5 > 81459807)
-	{
-		v8 = v5 | v3 & v4;
-	}
-	else
-	{
-		v3 = (v8 < 46361446) ? (v4 ^ v1 & v5) : (v6 << v4 * v4);
-	}
+		if (v5 > 81459807)
+		{
+			v8 = v5 | v3 & v4;
+		}
+		else
+		{
+			v3 = (v8 < 46361446) ? (v4 ^ v1 & v5) : (v6 << v4 * v4);
+		}
 
+		switch (v8 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v8 = (v7 < 39522910) ? (v2 / v3 * v7) : (v3 & v2 >> v3);
-				break;
-			case 1:
-				v5 = v4 >> v1 + v7;
-				break;
-			case 2:
-				v4 = (v2 < 44387663) ? (v2 & v5 + v1) : (v4 >> v3 & v4);
-				break;
-			case 3:
-				v7 = v6 - v4 >> v6;
-				break;
-			case 4:
-				v5 = (v8 < 19642105) ? (v5 << v3 / v8) : (v2 << v5 << v6);
-				break;
-			default:
-				v3 = (v6 > 48720863) ? (v8 >> v1 | v3) : (v1 ^ v8 << v6);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v4 = v6 >> v5 << v2;
-				break;
-			case 1:
-				v1 = v3 | v5 & v4;
-				break;
-			case 2:
-				v7 = (v6 > 89504852) ? (v4 << v7 & v5) : (v4 % v6 ^ v1);
-				break;
-			case 3:
-				v4 = (v2 > 72786941) ? (v1 << v1 | v3) : (v6 * v4 + v6);
-				break;
-			case 4:
-				v4 = v6 - v3 << v6;
-				break;
-			default:
-				v3 = (v7 > 86145177) ? (v4 | v5 << v3) : (v2 >> v6 * v8);
-				break;
-		}
-		
+				v8 = (v7 < 39522910) ? (v2 / v3 * v7) : (v3 & v2 >> v3);
+
+				break;
+
+			case 1:
+
+				v5 = v4 >> v1 + v7;
+
+				break;
+
+			case 2:
+
+				v4 = (v2 < 44387663) ? (v2 & v5 + v1) : (v4 >> v3 & v4);
+
+				break;
+
+			case 3:
+
+				v7 = v6 - v4 >> v6;
+
+				break;
+
+			case 4:
+
+				v5 = (v8 < 19642105) ? (v5 << v3 / v8) : (v2 << v5 << v6);
+
+				break;
+
+			default:
+
+				v3 = (v6 > 48720863) ? (v8 >> v1 | v3) : (v1 ^ v8 << v6);
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v4 = v6 >> v5 << v2;
+
+				break;
+
+			case 1:
+
+				v1 = v3 | v5 & v4;
+
+				break;
+
+			case 2:
+
+				v7 = (v6 > 89504852) ? (v4 << v7 & v5) : (v4 % v6 ^ v1);
+
+				break;
+
+			case 3:
+
+				v4 = (v2 > 72786941) ? (v1 << v1 | v3) : (v6 * v4 + v6);
+
+				break;
+
+			case 4:
+
+				v4 = v6 - v3 << v6;
+
+				break;
+
+			default:
+
+				v3 = (v7 > 86145177) ? (v4 | v5 << v3) : (v2 >> v6 * v8);
+
+				break;
+		}
 
 		return v3 >> v8 + v7;
 	}
@@ -5021,63 +6995,96 @@ public static class Fuzz0019
 		int v7 = 9228801;
 		int v8 = 33889331;
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v7 = v2 - v8 * v6;
-				break;
-			case 1:
-				v8 = v1 % v1 | v2;
-				break;
-			case 2:
-				v6 = (v6 < 8233437) ? (v6 << v6 << v7) : (v6 * v8 | v3);
-				break;
-			case 3:
-				v6 = (v3 < 70485527) ? (v5 / v4 & v7) : (v3 ^ v2 >> v7);
-				break;
-			case 4:
-				v2 = v3 % v7 / v8;
-				break;
-			default:
-				v8 = (v4 > 10638467) ? (v3 & v6 >> v1) : (v2 >> v1 * v7);
-				break;
-		}
-		
+		switch (v6 % 5)
 
-	if (v8 > 16095687)
-	{
-	int v9 = 55484736;
-		v9 = (v9 > 66656640) ? (v9 << v9 >> v9) : (v9 << v9 * v9);
-	}
-	else
-	{
-	int v10 = 83847847;
-		v10 = (v10 > 78150533) ? (v10 ^ v10 & v10) : (v10 & v10 | v10);
-	}
+		{
+			case 0:
 
+				v7 = v2 - v8 * v6;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v8 = (v2 < 36513215) ? (v7 & v8 ^ v7) : (v7 << v2 >> v6);
-				break;
-			case 1:
-				v1 = (v4 > 8812506) ? (v2 << v3 & v8) : (v3 << v2 << v2);
-				break;
-			case 2:
-				v8 = (v6 < 54993031) ? (v5 & v2 & v4) : (v7 ^ v3 << v4);
-				break;
-			case 3:
-				v7 = v7 | v4 - v2;
-				break;
-			case 4:
-				v1 = (v3 < 9441641) ? (v7 & v3 & v1) : (v8 ^ v6 + v7);
-				break;
-			default:
-				v7 = (v7 < 90967810) ? (v4 ^ v4 / v2) : (v4 >> v7 / v3);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v8 = v1 % v1 | v2;
+
+				break;
+
+			case 2:
+
+				v6 = (v6 < 8233437) ? (v6 << v6 << v7) : (v6 * v8 | v3);
+
+				break;
+
+			case 3:
+
+				v6 = (v3 < 70485527) ? (v5 / v4 & v7) : (v3 ^ v2 >> v7);
+
+				break;
+
+			case 4:
+
+				v2 = v3 % v7 / v8;
+
+				break;
+
+			default:
+
+				v8 = (v4 > 10638467) ? (v3 & v6 >> v1) : (v2 >> v1 * v7);
+
+				break;
+		}
+
+		if (v8 > 16095687)
+		{
+			int v9 = 55484736;
+			v9 = (v9 > 66656640) ? (v9 << v9 >> v9) : (v9 << v9 * v9);
+		}
+		else
+		{
+			int v10 = 83847847;
+			v10 = (v10 > 78150533) ? (v10 ^ v10 & v10) : (v10 & v10 | v10);
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v8 = (v2 < 36513215) ? (v7 & v8 ^ v7) : (v7 << v2 >> v6);
+
+				break;
+
+			case 1:
+
+				v1 = (v4 > 8812506) ? (v2 << v3 & v8) : (v3 << v2 << v2);
+
+				break;
+
+			case 2:
+
+				v8 = (v6 < 54993031) ? (v5 & v2 & v4) : (v7 ^ v3 << v4);
+
+				break;
+
+			case 3:
+
+				v7 = v7 | v4 - v2;
+
+				break;
+
+			case 4:
+
+				v1 = (v3 < 9441641) ? (v7 & v3 & v1) : (v8 ^ v6 + v7);
+
+				break;
+
+			default:
+
+				v7 = (v7 < 90967810) ? (v4 ^ v4 / v2) : (v4 >> v7 / v3);
+
+				break;
+		}
 
 		return v2 | v5 | v2;
 	}
@@ -5094,74 +7101,125 @@ public static class Fuzz0019
 		int v7 = 2092693;
 		int v8 = 79457461;
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v3 = (v5 < 8046155) ? (v7 >> v5 >> v2) : (v5 % v2 | v7);
-				break;
-			case 1:
-				v1 = v1 - v6 << v8;
-				break;
-			case 2:
-				v2 = (v4 > 70989705) ? (v6 ^ v6 * v3) : (v4 ^ v6 - v7);
-				break;
-			case 3:
-				v3 = (v6 < 34599484) ? (v1 << v7 + v2) : (v6 | v6 & v6);
-				break;
-			case 4:
-				v5 = (v5 < 45701862) ? (v3 | v4 / v8) : (v1 | v6 >> v6);
-				break;
-			default:
-				v8 = (v5 > 20899384) ? (v4 ^ v4 * v3) : (v3 - v3 << v4);
-				break;
-		}
-		
+		switch (v1 % 5)
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v3 = (v1 > 78828029) ? (v3 / v7 ^ v5) : (v1 << v5 / v2);
-				break;
-			case 1:
-				v1 = (v5 < 12850418) ? (v3 >> v4 << v3) : (v6 >> v8 ^ v5);
-				break;
-			case 2:
-				v5 = v4 * v3 * v3;
-				break;
-			case 3:
-				v8 = (v7 < 79683653) ? (v7 >> v7 % v2) : (v4 << v4 ^ v5);
-				break;
-			case 4:
-				v6 = (v6 > 24168403) ? (v7 ^ v2 ^ v2) : (v3 % v2 & v4);
-				break;
-			default:
-				v3 = (v4 > 31540577) ? (v6 & v8 << v5) : (v5 ^ v8 % v6);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v7 = (v2 > 94999206) ? (v6 / v6 + v3) : (v8 | v3 % v7);
-				break;
-			case 1:
-				v2 = (v5 > 4142909) ? (v1 - v6 ^ v3) : (v8 - v5 + v7);
-				break;
-			case 2:
-				v4 = (v6 > 25478204) ? (v3 >> v5 & v5) : (v5 % v7 & v5);
-				break;
-			case 3:
-				v3 = v7 % v3 / v6;
-				break;
-			case 4:
-				v7 = v8 * v1 % v3;
-				break;
-			default:
-				v4 = (v8 < 80727264) ? (v4 * v6 >> v7) : (v3 | v1 >> v3);
-				break;
-		}
-		
+				v3 = (v5 < 8046155) ? (v7 >> v5 >> v2) : (v5 % v2 | v7);
+
+				break;
+
+			case 1:
+
+				v1 = v1 - v6 << v8;
+
+				break;
+
+			case 2:
+
+				v2 = (v4 > 70989705) ? (v6 ^ v6 * v3) : (v4 ^ v6 - v7);
+
+				break;
+
+			case 3:
+
+				v3 = (v6 < 34599484) ? (v1 << v7 + v2) : (v6 | v6 & v6);
+
+				break;
+
+			case 4:
+
+				v5 = (v5 < 45701862) ? (v3 | v4 / v8) : (v1 | v6 >> v6);
+
+				break;
+
+			default:
+
+				v8 = (v5 > 20899384) ? (v4 ^ v4 * v3) : (v3 - v3 << v4);
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v3 = (v1 > 78828029) ? (v3 / v7 ^ v5) : (v1 << v5 / v2);
+
+				break;
+
+			case 1:
+
+				v1 = (v5 < 12850418) ? (v3 >> v4 << v3) : (v6 >> v8 ^ v5);
+
+				break;
+
+			case 2:
+
+				v5 = v4 * v3 * v3;
+
+				break;
+
+			case 3:
+
+				v8 = (v7 < 79683653) ? (v7 >> v7 % v2) : (v4 << v4 ^ v5);
+
+				break;
+
+			case 4:
+
+				v6 = (v6 > 24168403) ? (v7 ^ v2 ^ v2) : (v3 % v2 & v4);
+
+				break;
+
+			default:
+
+				v3 = (v4 > 31540577) ? (v6 & v8 << v5) : (v5 ^ v8 % v6);
+
+				break;
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v7 = (v2 > 94999206) ? (v6 / v6 + v3) : (v8 | v3 % v7);
+
+				break;
+
+			case 1:
+
+				v2 = (v5 > 4142909) ? (v1 - v6 ^ v3) : (v8 - v5 + v7);
+
+				break;
+
+			case 2:
+
+				v4 = (v6 > 25478204) ? (v3 >> v5 & v5) : (v5 % v7 & v5);
+
+				break;
+
+			case 3:
+
+				v3 = v7 % v3 / v6;
+
+				break;
+
+			case 4:
+
+				v7 = v8 * v1 % v3;
+
+				break;
+
+			default:
+
+				v4 = (v8 < 80727264) ? (v4 * v6 >> v7) : (v3 | v1 >> v3);
+
+				break;
+		}
 
 		return v6 >> v2 * v4;
 	}
@@ -5178,63 +7236,96 @@ public static class Fuzz0019
 		int v7 = 69218193;
 		int v8 = 15011820;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v2 = (v5 > 44729919) ? (v2 * v5 * v6) : (v1 >> v2 << v6);
-				break;
-			case 1:
-				v8 = (v1 < 8628528) ? (v5 << v5 >> v3) : (v6 >> v6 << v8);
-				break;
-			case 2:
-				v8 = (v7 > 44032573) ? (v5 << v1 >> v3) : (v6 - v5 << v3);
-				break;
-			case 3:
-				v8 = v5 << v2 - v6;
-				break;
-			case 4:
-				v6 = v4 >> v8 | v8;
-				break;
-			default:
-				v2 = (v6 > 89555934) ? (v8 ^ v1 / v7) : (v3 % v6 ^ v2);
-				break;
-		}
-		
+		switch (v7 % 5)
 
-	if (v8 > 25728703)
-	{
-	int v9 = 31598933;
-		v9 = (v9 > 47902635) ? (v9 << v9 >> v9) : (v9 % v9 | v9);
-	}
-	else
-	{
-	int v10 = 71551194;
-		v10 = (v10 > 36506753) ? (v10 >> v10 & v10) : (v10 << v10 >> v10);
-	}
+		{
+			case 0:
 
+				v2 = (v5 > 44729919) ? (v2 * v5 * v6) : (v1 >> v2 << v6);
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v3 = (v5 < 66389260) ? (v4 + v3 | v7) : (v3 ^ v7 >> v4);
-				break;
-			case 1:
-				v3 = v2 - v1 - v2;
-				break;
-			case 2:
-				v2 = (v6 < 43601842) ? (v2 & v1 / v1) : (v2 / v1 * v6);
-				break;
-			case 3:
-				v8 = (v3 > 69286147) ? (v8 >> v5 - v3) : (v3 >> v4 >> v7);
-				break;
-			case 4:
-				v4 = v8 ^ v5 - v6;
-				break;
-			default:
-				v4 = (v1 > 46384976) ? (v3 + v8 * v5) : (v4 << v8 & v8);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v8 = (v1 < 8628528) ? (v5 << v5 >> v3) : (v6 >> v6 << v8);
+
+				break;
+
+			case 2:
+
+				v8 = (v7 > 44032573) ? (v5 << v1 >> v3) : (v6 - v5 << v3);
+
+				break;
+
+			case 3:
+
+				v8 = v5 << v2 - v6;
+
+				break;
+
+			case 4:
+
+				v6 = v4 >> v8 | v8;
+
+				break;
+
+			default:
+
+				v2 = (v6 > 89555934) ? (v8 ^ v1 / v7) : (v3 % v6 ^ v2);
+
+				break;
+		}
+
+		if (v8 > 25728703)
+		{
+			int v9 = 31598933;
+			v9 = (v9 > 47902635) ? (v9 << v9 >> v9) : (v9 % v9 | v9);
+		}
+		else
+		{
+			int v10 = 71551194;
+			v10 = (v10 > 36506753) ? (v10 >> v10 & v10) : (v10 << v10 >> v10);
+		}
+
+		switch (v1 % 5)
+
+		{
+			case 0:
+
+				v3 = (v5 < 66389260) ? (v4 + v3 | v7) : (v3 ^ v7 >> v4);
+
+				break;
+
+			case 1:
+
+				v3 = v2 - v1 - v2;
+
+				break;
+
+			case 2:
+
+				v2 = (v6 < 43601842) ? (v2 & v1 / v1) : (v2 / v1 * v6);
+
+				break;
+
+			case 3:
+
+				v8 = (v3 > 69286147) ? (v8 >> v5 - v3) : (v3 >> v4 >> v7);
+
+				break;
+
+			case 4:
+
+				v4 = v8 ^ v5 - v6;
+
+				break;
+
+			default:
+
+				v4 = (v1 > 46384976) ? (v3 + v8 * v5) : (v4 << v8 & v8);
+
+				break;
+		}
 
 		return (v3 < 79825946) ? (v5 + v4 ^ v3) : (v1 ^ v7 - v1);
 	}
@@ -5251,62 +7342,95 @@ public static class Fuzz0019
 		int v7 = 49358236;
 		int v8 = 92989451;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v3 = v8 >> v8 << v4;
-				break;
-			case 1:
-				v6 = (v1 > 83852310) ? (v4 ^ v2 >> v8) : (v1 ^ v4 >> v8);
-				break;
-			case 2:
-				v2 = (v2 < 73141178) ? (v5 >> v6 >> v4) : (v8 >> v6 << v5);
-				break;
-			case 3:
-				v1 = v5 >> v1 << v7;
-				break;
-			case 4:
-				v8 = (v7 > 42880880) ? (v4 | v4 - v1) : (v2 << v7 + v5);
-				break;
-			default:
-				v8 = (v5 > 6996961) ? (v4 / v7 - v6) : (v7 ^ v6 / v6);
-				break;
-		}
-		
+		switch (v7 % 5)
 
-	if (v1 > 6286651)
-	{
-	int v9 = 18705428;
-		v9 = v9 << v9 / v9;
-	}
-	else
-	{
-		v8 = (v4 > 19562024) ? (v2 << v1 >> v6) : (v5 >> v4 % v6);
-	}
+		{
+			case 0:
 
+				v3 = v8 >> v8 << v4;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v3 = v3 & v3 ^ v2;
-				break;
-			case 1:
-				v4 = (v7 > 34445670) ? (v5 << v5 >> v7) : (v6 * v4 | v4);
-				break;
-			case 2:
-				v3 = v8 << v8 * v4;
-				break;
-			case 3:
-				v7 = v4 % v6 ^ v8;
-				break;
-			case 4:
-				v2 = (v8 > 26685863) ? (v5 & v2 + v8) : (v7 % v7 >> v3);
-				break;
-			default:
-				v3 = (v4 < 65469150) ? (v6 ^ v6 << v5) : (v5 >> v8 * v3);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v6 = (v1 > 83852310) ? (v4 ^ v2 >> v8) : (v1 ^ v4 >> v8);
+
+				break;
+
+			case 2:
+
+				v2 = (v2 < 73141178) ? (v5 >> v6 >> v4) : (v8 >> v6 << v5);
+
+				break;
+
+			case 3:
+
+				v1 = v5 >> v1 << v7;
+
+				break;
+
+			case 4:
+
+				v8 = (v7 > 42880880) ? (v4 | v4 - v1) : (v2 << v7 + v5);
+
+				break;
+
+			default:
+
+				v8 = (v5 > 6996961) ? (v4 / v7 - v6) : (v7 ^ v6 / v6);
+
+				break;
+		}
+
+		if (v1 > 6286651)
+		{
+			int v9 = 18705428;
+			v9 = v9 << v9 / v9;
+		}
+		else
+		{
+			v8 = (v4 > 19562024) ? (v2 << v1 >> v6) : (v5 >> v4 % v6);
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v3 = v3 & v3 ^ v2;
+
+				break;
+
+			case 1:
+
+				v4 = (v7 > 34445670) ? (v5 << v5 >> v7) : (v6 * v4 | v4);
+
+				break;
+
+			case 2:
+
+				v3 = v8 << v8 * v4;
+
+				break;
+
+			case 3:
+
+				v7 = v4 % v6 ^ v8;
+
+				break;
+
+			case 4:
+
+				v2 = (v8 > 26685863) ? (v5 & v2 + v8) : (v7 % v7 >> v3);
+
+				break;
+
+			default:
+
+				v3 = (v4 < 65469150) ? (v6 ^ v6 << v5) : (v5 >> v8 * v3);
+
+				break;
+		}
 
 		return v4 << v2 - v3;
 	}
@@ -5323,61 +7447,94 @@ public static class Fuzz0019
 		int v7 = 74383367;
 		int v8 = 11452714;
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v8 = (v7 < 89367561) ? (v2 % v1 ^ v2) : (v7 >> v1 << v7);
-				break;
-			case 1:
-				v4 = v8 >> v1 ^ v7;
-				break;
-			case 2:
-				v2 = v1 << v1 - v7;
-				break;
-			case 3:
-				v7 = v8 | v3 ^ v1;
-				break;
-			case 4:
-				v8 = v3 ^ v6 + v1;
-				break;
-			default:
-				v5 = (v4 > 32464941) ? (v4 + v2 | v3) : (v1 >> v4 ^ v4);
-				break;
-		}
-		
+		switch (v6 % 5)
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v7 = v1 | v4 << v7;
-				break;
-			case 1:
-				v2 = v1 ^ v2 >> v7;
-				break;
-			case 2:
-				v2 = (v7 > 4863883) ? (v1 + v3 << v3) : (v2 & v5 | v4);
-				break;
-			case 3:
-				v6 = v5 * v1 % v4;
-				break;
-			case 4:
-				v7 = v4 >> v6 - v1;
-				break;
-			default:
-				v2 = v4 / v2 % v3;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v1 < 31403182)
-	{
-		v1 = v3 >> v7 - v3;
-	}
-	else
-	{
-		v6 = (v3 < 98673959) ? (v2 << v8 / v4) : (v2 << v1 | v5);
-	}
+				v8 = (v7 < 89367561) ? (v2 % v1 ^ v2) : (v7 >> v1 << v7);
 
+				break;
+
+			case 1:
+
+				v4 = v8 >> v1 ^ v7;
+
+				break;
+
+			case 2:
+
+				v2 = v1 << v1 - v7;
+
+				break;
+
+			case 3:
+
+				v7 = v8 | v3 ^ v1;
+
+				break;
+
+			case 4:
+
+				v8 = v3 ^ v6 + v1;
+
+				break;
+
+			default:
+
+				v5 = (v4 > 32464941) ? (v4 + v2 | v3) : (v1 >> v4 ^ v4);
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v7 = v1 | v4 << v7;
+
+				break;
+
+			case 1:
+
+				v2 = v1 ^ v2 >> v7;
+
+				break;
+
+			case 2:
+
+				v2 = (v7 > 4863883) ? (v1 + v3 << v3) : (v2 & v5 | v4);
+
+				break;
+
+			case 3:
+
+				v6 = v5 * v1 % v4;
+
+				break;
+
+			case 4:
+
+				v7 = v4 >> v6 - v1;
+
+				break;
+
+			default:
+
+				v2 = v4 / v2 % v3;
+
+				break;
+		}
+
+		if (v1 < 31403182)
+		{
+			v1 = v3 >> v7 - v3;
+		}
+		else
+		{
+			v6 = (v3 < 98673959) ? (v2 << v8 / v4) : (v2 << v1 | v5);
+		}
 
 		return v7 >> v8 % v2;
 	}
@@ -5394,62 +7551,95 @@ public static class Fuzz0019
 		int v7 = 97951285;
 		int v8 = 99421884;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v5 = (v8 < 28559841) ? (v5 | v3 << v5) : (v1 | v8 ^ v2);
-				break;
-			case 1:
-				v7 = v2 & v7 | v8;
-				break;
-			case 2:
-				v4 = (v6 < 86258134) ? (v4 | v2 | v7) : (v4 >> v7 & v5);
-				break;
-			case 3:
-				v2 = (v7 < 72023993) ? (v5 + v6 % v8) : (v2 << v8 | v1);
-				break;
-			case 4:
-				v8 = (v8 > 86925402) ? (v2 + v2 - v4) : (v7 >> v1 ^ v4);
-				break;
-			default:
-				v8 = (v2 > 58121770) ? (v1 | v2 % v3) : (v1 << v7 + v3);
-				break;
-		}
-		
+		switch (v7 % 5)
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v6 = (v7 > 97417930) ? (v5 << v5 | v6) : (v6 + v8 + v2);
-				break;
-			case 1:
-				v1 = (v2 < 70306618) ? (v8 * v1 >> v1) : (v5 * v5 | v7);
-				break;
-			case 2:
-				v3 = (v2 > 25003172) ? (v4 & v7 - v3) : (v3 ^ v2 ^ v3);
-				break;
-			case 3:
-				v3 = v2 - v6 & v7;
-				break;
-			case 4:
-				v3 = v3 / v3 << v4;
-				break;
-			default:
-				v3 = (v6 < 62519790) ? (v4 ^ v5 & v4) : (v5 + v3 ^ v2);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v7 > 67320531)
-	{
-		v6 = (v8 < 3086813) ? (v5 / v4 / v1) : (v8 | v1 / v8);
-	}
-	else
-	{
-	int v9 = 93292027;
-		v9 = v9 >> v9 | v9;
-	}
+				v5 = (v8 < 28559841) ? (v5 | v3 << v5) : (v1 | v8 ^ v2);
 
+				break;
+
+			case 1:
+
+				v7 = v2 & v7 | v8;
+
+				break;
+
+			case 2:
+
+				v4 = (v6 < 86258134) ? (v4 | v2 | v7) : (v4 >> v7 & v5);
+
+				break;
+
+			case 3:
+
+				v2 = (v7 < 72023993) ? (v5 + v6 % v8) : (v2 << v8 | v1);
+
+				break;
+
+			case 4:
+
+				v8 = (v8 > 86925402) ? (v2 + v2 - v4) : (v7 >> v1 ^ v4);
+
+				break;
+
+			default:
+
+				v8 = (v2 > 58121770) ? (v1 | v2 % v3) : (v1 << v7 + v3);
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v6 = (v7 > 97417930) ? (v5 << v5 | v6) : (v6 + v8 + v2);
+
+				break;
+
+			case 1:
+
+				v1 = (v2 < 70306618) ? (v8 * v1 >> v1) : (v5 * v5 | v7);
+
+				break;
+
+			case 2:
+
+				v3 = (v2 > 25003172) ? (v4 & v7 - v3) : (v3 ^ v2 ^ v3);
+
+				break;
+
+			case 3:
+
+				v3 = v2 - v6 & v7;
+
+				break;
+
+			case 4:
+
+				v3 = v3 / v3 << v4;
+
+				break;
+
+			default:
+
+				v3 = (v6 < 62519790) ? (v4 ^ v5 & v4) : (v5 + v3 ^ v2);
+
+				break;
+		}
+
+		if (v7 > 67320531)
+		{
+			v6 = (v8 < 3086813) ? (v5 / v4 / v1) : (v8 | v1 / v8);
+		}
+		else
+		{
+			int v9 = 93292027;
+			v9 = v9 >> v9 | v9;
+		}
 
 		return (v3 < 60277623) ? (v4 << v3 - v7) : (v8 % v3 * v1);
 	}
@@ -5466,51 +7656,66 @@ public static class Fuzz0019
 		int v7 = 78877150;
 		int v8 = 92294008;
 
-	if (v5 > 72475948)
-	{
-	int v9 = 27378792;
-		v9 = v9 | v9 << v9;
-	}
-	else
-	{
-	int v10 = 1935368;
-		v10 = v10 >> v10 | v10;
-	}
+		if (v5 > 72475948)
+		{
+			int v9 = 27378792;
+			v9 = v9 | v9 << v9;
+		}
+		else
+		{
+			int v10 = 1935368;
+			v10 = v10 >> v10 | v10;
+		}
 
+		switch (v7 % 5)
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v7 = (v8 > 54908388) ? (v7 ^ v7 & v4) : (v4 ^ v6 + v3);
-				break;
-			case 1:
-				v6 = (v8 > 44827357) ? (v7 >> v1 ^ v2) : (v2 ^ v6 % v2);
-				break;
-			case 2:
-				v4 = (v7 < 74458621) ? (v1 << v7 % v3) : (v2 >> v4 << v6);
-				break;
-			case 3:
-				v4 = (v4 > 45767008) ? (v2 - v5 << v8) : (v3 ^ v5 | v2);
-				break;
-			case 4:
-				v2 = v8 >> v2 | v6;
-				break;
-			default:
-				v3 = v3 << v5 * v6;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v6 > 94866393)
-	{
-		v5 = (v8 < 10824425) ? (v8 - v6 & v3) : (v5 ^ v2 ^ v7);
-	}
-	else
-	{
-	int v11 = 900517;
-		v11 = v11 ^ v11 - v11;
-	}
+				v7 = (v8 > 54908388) ? (v7 ^ v7 & v4) : (v4 ^ v6 + v3);
 
+				break;
+
+			case 1:
+
+				v6 = (v8 > 44827357) ? (v7 >> v1 ^ v2) : (v2 ^ v6 % v2);
+
+				break;
+
+			case 2:
+
+				v4 = (v7 < 74458621) ? (v1 << v7 % v3) : (v2 >> v4 << v6);
+
+				break;
+
+			case 3:
+
+				v4 = (v4 > 45767008) ? (v2 - v5 << v8) : (v3 ^ v5 | v2);
+
+				break;
+
+			case 4:
+
+				v2 = v8 >> v2 | v6;
+
+				break;
+
+			default:
+
+				v3 = v3 << v5 * v6;
+
+				break;
+		}
+
+		if (v6 > 94866393)
+		{
+			v5 = (v8 < 10824425) ? (v8 - v6 & v3) : (v5 ^ v2 ^ v7);
+		}
+		else
+		{
+			int v11 = 900517;
+			v11 = v11 ^ v11 - v11;
+		}
 
 		return (v2 < 49033930) ? (v2 % v7 & v2) : (v5 & v5 / v1);
 	}
@@ -5527,49 +7732,64 @@ public static class Fuzz0019
 		int v7 = 80204172;
 		int v8 = 5802693;
 
-	if (v6 < 24391249)
-	{
-		v8 = v3 / v1 * v3;
-	}
-	else
-	{
-		v4 = (v8 > 8076609) ? (v6 << v2 % v5) : (v5 ^ v1 << v5);
-	}
+		if (v6 < 24391249)
+		{
+			v8 = v3 / v1 * v3;
+		}
+		else
+		{
+			v4 = (v8 > 8076609) ? (v6 << v2 % v5) : (v5 ^ v1 << v5);
+		}
 
+		switch (v3 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v5 = v4 >> v3 << v1;
-				break;
-			case 1:
-				v6 = v5 ^ v8 << v1;
-				break;
-			case 2:
-				v5 = (v1 < 83122374) ? (v3 << v7 + v3) : (v6 - v5 | v1);
-				break;
-			case 3:
-				v1 = (v2 > 88524944) ? (v8 & v1 / v5) : (v7 | v2 * v8);
-				break;
-			case 4:
-				v5 = (v8 < 78951665) ? (v3 / v4 * v7) : (v7 | v8 | v4);
-				break;
-			default:
-				v2 = (v8 < 41146237) ? (v1 + v2 >> v4) : (v6 ^ v2 - v7);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v7 < 99235018)
-	{
-	int v9 = 94422331;
-		v9 = (v9 < 41909485) ? (v9 / v9 >> v9) : (v9 / v9 + v9);
-	}
-	else
-	{
-		v4 = v4 << v1 & v7;
-	}
+				v5 = v4 >> v3 << v1;
 
+				break;
+
+			case 1:
+
+				v6 = v5 ^ v8 << v1;
+
+				break;
+
+			case 2:
+
+				v5 = (v1 < 83122374) ? (v3 << v7 + v3) : (v6 - v5 | v1);
+
+				break;
+
+			case 3:
+
+				v1 = (v2 > 88524944) ? (v8 & v1 / v5) : (v7 | v2 * v8);
+
+				break;
+
+			case 4:
+
+				v5 = (v8 < 78951665) ? (v3 / v4 * v7) : (v7 | v8 | v4);
+
+				break;
+
+			default:
+
+				v2 = (v8 < 41146237) ? (v1 + v2 >> v4) : (v6 ^ v2 - v7);
+
+				break;
+		}
+
+		if (v7 < 99235018)
+		{
+			int v9 = 94422331;
+			v9 = (v9 < 41909485) ? (v9 / v9 >> v9) : (v9 / v9 + v9);
+		}
+		else
+		{
+			v4 = v4 << v1 & v7;
+		}
 
 		return (v1 > 46441121) ? (v4 >> v4 * v5) : (v8 ^ v2 >> v4);
 	}
@@ -5586,50 +7806,65 @@ public static class Fuzz0019
 		int v7 = 44656861;
 		int v8 = 1987088;
 
-	if (v6 > 3104350)
-	{
-		v1 = v2 * v8 ^ v2;
-	}
-	else
-	{
-		v7 = v1 - v1 ^ v2;
-	}
+		if (v6 > 3104350)
+		{
+			v1 = v2 * v8 ^ v2;
+		}
+		else
+		{
+			v7 = v1 - v1 ^ v2;
+		}
 
+		switch (v3 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v1 = (v5 < 61118347) ? (v8 >> v8 << v8) : (v7 << v6 + v3);
-				break;
-			case 1:
-				v1 = (v1 < 3696453) ? (v4 ^ v1 << v5) : (v6 & v3 & v7);
-				break;
-			case 2:
-				v1 = (v8 > 21298825) ? (v8 << v8 << v6) : (v3 % v3 ^ v7);
-				break;
-			case 3:
-				v5 = (v1 < 38867644) ? (v2 * v1 >> v2) : (v8 % v1 % v1);
-				break;
-			case 4:
-				v6 = (v5 > 94071332) ? (v4 + v6 << v2) : (v7 / v4 + v1);
-				break;
-			default:
-				v8 = v1 & v6 >> v5;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v2 < 23593031)
-	{
-	int v9 = 93431219;
-		v9 = (v9 < 52125557) ? (v9 << v9 - v9) : (v9 % v9 ^ v9);
-	}
-	else
-	{
-	int v10 = 17234232;
-		v10 = v10 >> v10 << v10;
-	}
+				v1 = (v5 < 61118347) ? (v8 >> v8 << v8) : (v7 << v6 + v3);
 
+				break;
+
+			case 1:
+
+				v1 = (v1 < 3696453) ? (v4 ^ v1 << v5) : (v6 & v3 & v7);
+
+				break;
+
+			case 2:
+
+				v1 = (v8 > 21298825) ? (v8 << v8 << v6) : (v3 % v3 ^ v7);
+
+				break;
+
+			case 3:
+
+				v5 = (v1 < 38867644) ? (v2 * v1 >> v2) : (v8 % v1 % v1);
+
+				break;
+
+			case 4:
+
+				v6 = (v5 > 94071332) ? (v4 + v6 << v2) : (v7 / v4 + v1);
+
+				break;
+
+			default:
+
+				v8 = v1 & v6 >> v5;
+
+				break;
+		}
+
+		if (v2 < 23593031)
+		{
+			int v9 = 93431219;
+			v9 = (v9 < 52125557) ? (v9 << v9 - v9) : (v9 % v9 ^ v9);
+		}
+		else
+		{
+			int v10 = 17234232;
+			v10 = v10 >> v10 << v10;
+		}
 
 		return (v5 < 51613263) ? (v8 | v1 + v8) : (v8 << v3 & v3);
 	}
@@ -5646,61 +7881,94 @@ public static class Fuzz0019
 		int v7 = 84323978;
 		int v8 = 46637518;
 
-	if (v1 < 94341353)
-	{
-		v2 = v1 << v3 ^ v7;
-	}
-	else
-	{
-		v5 = v6 & v6 << v6;
-	}
+		if (v1 < 94341353)
+		{
+			v2 = v1 << v3 ^ v7;
+		}
+		else
+		{
+			v5 = v6 & v6 << v6;
+		}
 
+		switch (v5 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v4 = v7 % v4 << v6;
-				break;
-			case 1:
-				v3 = (v6 > 31119275) ? (v6 ^ v5 / v4) : (v6 / v7 | v4);
-				break;
-			case 2:
-				v1 = (v2 > 7502079) ? (v2 - v6 << v4) : (v8 >> v4 * v1);
-				break;
-			case 3:
-				v3 = v5 >> v5 % v4;
-				break;
-			case 4:
-				v8 = (v3 < 84954351) ? (v2 + v1 << v2) : (v3 >> v7 & v5);
-				break;
-			default:
-				v2 = (v3 < 76260459) ? (v4 % v4 >> v2) : (v7 ^ v5 << v6);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v7 = (v4 > 65579579) ? (v7 | v8 | v4) : (v6 >> v3 % v5);
-				break;
-			case 1:
-				v3 = (v2 > 66710448) ? (v2 | v5 % v2) : (v7 & v7 - v2);
-				break;
-			case 2:
-				v2 = (v4 > 21858033) ? (v6 - v8 + v2) : (v4 & v8 & v4);
-				break;
-			case 3:
-				v3 = (v2 > 50325379) ? (v4 % v6 / v4) : (v1 >> v5 | v5);
-				break;
-			case 4:
-				v5 = v5 ^ v3 / v1;
-				break;
-			default:
-				v3 = v6 % v7 | v5;
-				break;
-		}
-		
+				v4 = v7 % v4 << v6;
+
+				break;
+
+			case 1:
+
+				v3 = (v6 > 31119275) ? (v6 ^ v5 / v4) : (v6 / v7 | v4);
+
+				break;
+
+			case 2:
+
+				v1 = (v2 > 7502079) ? (v2 - v6 << v4) : (v8 >> v4 * v1);
+
+				break;
+
+			case 3:
+
+				v3 = v5 >> v5 % v4;
+
+				break;
+
+			case 4:
+
+				v8 = (v3 < 84954351) ? (v2 + v1 << v2) : (v3 >> v7 & v5);
+
+				break;
+
+			default:
+
+				v2 = (v3 < 76260459) ? (v4 % v4 >> v2) : (v7 ^ v5 << v6);
+
+				break;
+		}
+
+		switch (v7 % 5)
+
+		{
+			case 0:
+
+				v7 = (v4 > 65579579) ? (v7 | v8 | v4) : (v6 >> v3 % v5);
+
+				break;
+
+			case 1:
+
+				v3 = (v2 > 66710448) ? (v2 | v5 % v2) : (v7 & v7 - v2);
+
+				break;
+
+			case 2:
+
+				v2 = (v4 > 21858033) ? (v6 - v8 + v2) : (v4 & v8 & v4);
+
+				break;
+
+			case 3:
+
+				v3 = (v2 > 50325379) ? (v4 % v6 / v4) : (v1 >> v5 | v5);
+
+				break;
+
+			case 4:
+
+				v5 = v5 ^ v3 / v1;
+
+				break;
+
+			default:
+
+				v3 = v6 % v7 | v5;
+
+				break;
+		}
 
 		return (v2 < 21667957) ? (v7 | v5 + v1) : (v5 % v2 + v5);
 	}
@@ -5717,74 +7985,125 @@ public static class Fuzz0019
 		int v7 = 37434788;
 		int v8 = 83323752;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v2 = (v2 < 44399508) ? (v6 + v1 >> v6) : (v7 % v1 | v4);
-				break;
-			case 1:
-				v2 = (v5 < 44617967) ? (v4 | v5 ^ v2) : (v4 / v7 | v7);
-				break;
-			case 2:
-				v2 = v6 << v5 >> v8;
-				break;
-			case 3:
-				v4 = v8 % v5 & v5;
-				break;
-			case 4:
-				v3 = (v2 > 95547070) ? (v7 >> v8 >> v2) : (v1 | v5 >> v4);
-				break;
-			default:
-				v2 = (v7 > 23027477) ? (v4 >> v3 | v3) : (v8 & v4 * v2);
-				break;
-		}
-		
+		switch (v2 % 5)
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v8 = (v2 < 29475222) ? (v2 % v2 << v6) : (v6 >> v2 * v1);
-				break;
-			case 1:
-				v6 = v8 >> v8 / v2;
-				break;
-			case 2:
-				v6 = (v8 > 63247875) ? (v7 | v1 - v7) : (v7 << v6 >> v3);
-				break;
-			case 3:
-				v4 = v3 >> v8 * v3;
-				break;
-			case 4:
-				v4 = (v5 > 65240159) ? (v4 >> v6 << v3) : (v2 - v5 ^ v3);
-				break;
-			default:
-				v4 = (v4 < 34029974) ? (v2 >> v2 + v8) : (v2 ^ v6 ^ v2);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v4 = v1 & v4 & v4;
-				break;
-			case 1:
-				v3 = (v5 > 9807275) ? (v1 - v2 & v1) : (v8 >> v6 << v3);
-				break;
-			case 2:
-				v4 = v7 << v5 & v5;
-				break;
-			case 3:
-				v4 = (v7 < 25155393) ? (v3 / v1 << v3) : (v2 + v3 - v7);
-				break;
-			case 4:
-				v8 = (v4 > 857447) ? (v7 >> v7 / v4) : (v6 << v3 / v1);
-				break;
-			default:
-				v4 = v7 % v6 & v4;
-				break;
-		}
-		
+				v2 = (v2 < 44399508) ? (v6 + v1 >> v6) : (v7 % v1 | v4);
+
+				break;
+
+			case 1:
+
+				v2 = (v5 < 44617967) ? (v4 | v5 ^ v2) : (v4 / v7 | v7);
+
+				break;
+
+			case 2:
+
+				v2 = v6 << v5 >> v8;
+
+				break;
+
+			case 3:
+
+				v4 = v8 % v5 & v5;
+
+				break;
+
+			case 4:
+
+				v3 = (v2 > 95547070) ? (v7 >> v8 >> v2) : (v1 | v5 >> v4);
+
+				break;
+
+			default:
+
+				v2 = (v7 > 23027477) ? (v4 >> v3 | v3) : (v8 & v4 * v2);
+
+				break;
+		}
+
+		switch (v7 % 5)
+
+		{
+			case 0:
+
+				v8 = (v2 < 29475222) ? (v2 % v2 << v6) : (v6 >> v2 * v1);
+
+				break;
+
+			case 1:
+
+				v6 = v8 >> v8 / v2;
+
+				break;
+
+			case 2:
+
+				v6 = (v8 > 63247875) ? (v7 | v1 - v7) : (v7 << v6 >> v3);
+
+				break;
+
+			case 3:
+
+				v4 = v3 >> v8 * v3;
+
+				break;
+
+			case 4:
+
+				v4 = (v5 > 65240159) ? (v4 >> v6 << v3) : (v2 - v5 ^ v3);
+
+				break;
+
+			default:
+
+				v4 = (v4 < 34029974) ? (v2 >> v2 + v8) : (v2 ^ v6 ^ v2);
+
+				break;
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v4 = v1 & v4 & v4;
+
+				break;
+
+			case 1:
+
+				v3 = (v5 > 9807275) ? (v1 - v2 & v1) : (v8 >> v6 << v3);
+
+				break;
+
+			case 2:
+
+				v4 = v7 << v5 & v5;
+
+				break;
+
+			case 3:
+
+				v4 = (v7 < 25155393) ? (v3 / v1 << v3) : (v2 + v3 - v7);
+
+				break;
+
+			case 4:
+
+				v8 = (v4 > 857447) ? (v7 >> v7 / v4) : (v6 << v3 / v1);
+
+				break;
+
+			default:
+
+				v4 = v7 % v6 & v4;
+
+				break;
+		}
 
 		return (v3 < 27502576) ? (v3 * v4 + v3) : (v1 + v1 ^ v6);
 	}
@@ -5801,38 +8120,35 @@ public static class Fuzz0019
 		int v7 = 35599704;
 		int v8 = 75251397;
 
-	if (v5 < 2039836)
-	{
-		v6 = (v8 > 2392996) ? (v5 + v1 >> v3) : (v7 << v3 & v1);
-	}
-	else
-	{
-		v1 = (v4 < 34376075) ? (v3 & v6 << v2) : (v2 & v8 << v2);
-	}
+		if (v5 < 2039836)
+		{
+			v6 = (v8 > 2392996) ? (v5 + v1 >> v3) : (v7 << v3 & v1);
+		}
+		else
+		{
+			v1 = (v4 < 34376075) ? (v3 & v6 << v2) : (v2 & v8 << v2);
+		}
 
+		if (v6 > 54973598)
+		{
+			int v9 = 56186082;
+			v9 = (v9 < 90987431) ? (v9 | v9 - v9) : (v9 ^ v9 | v9);
+		}
+		else
+		{
+			int v10 = 57536402;
+			v10 = (v10 < 94416214) ? (v10 | v10 >> v10) : (v10 << v10 << v10);
+		}
 
-	if (v6 > 54973598)
-	{
-	int v9 = 56186082;
-		v9 = (v9 < 90987431) ? (v9 | v9 - v9) : (v9 ^ v9 | v9);
-	}
-	else
-	{
-	int v10 = 57536402;
-		v10 = (v10 < 94416214) ? (v10 | v10 >> v10) : (v10 << v10 << v10);
-	}
-
-
-	if (v3 > 54730592)
-	{
-	int v11 = 23381065;
-		v11 = v11 + v11 - v11;
-	}
-	else
-	{
-		v5 = (v5 > 20047402) ? (v6 / v7 | v5) : (v7 >> v3 | v7);
-	}
-
+		if (v3 > 54730592)
+		{
+			int v11 = 23381065;
+			v11 = v11 + v11 - v11;
+		}
+		else
+		{
+			v5 = (v5 > 20047402) ? (v6 / v7 | v5) : (v7 >> v3 | v7);
+		}
 
 		return (v1 < 97212989) ? (v8 << v5 % v3) : (v7 + v4 | v1);
 	}
@@ -5849,74 +8165,125 @@ public static class Fuzz0019
 		int v7 = 34350996;
 		int v8 = 786113;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v6 = (v4 > 14778770) ? (v3 ^ v8 >> v1) : (v4 & v6 - v8);
-				break;
-			case 1:
-				v7 = (v3 > 47126613) ? (v5 / v8 | v3) : (v2 % v4 >> v2);
-				break;
-			case 2:
-				v6 = (v4 < 93391055) ? (v1 * v2 + v4) : (v3 << v5 & v1);
-				break;
-			case 3:
-				v6 = (v4 > 33881831) ? (v8 | v2 + v7) : (v3 >> v7 << v7);
-				break;
-			case 4:
-				v6 = v2 | v1 << v1;
-				break;
-			default:
-				v1 = (v5 > 15637533) ? (v8 & v6 + v3) : (v1 & v4 | v7);
-				break;
-		}
-		
+		switch (v7 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v6 = (v7 > 72760434) ? (v7 >> v5 / v1) : (v5 + v2 + v4);
-				break;
-			case 1:
-				v8 = (v8 > 37120071) ? (v7 ^ v5 % v7) : (v5 - v1 >> v8);
-				break;
-			case 2:
-				v2 = (v2 < 27184527) ? (v1 / v3 + v7) : (v4 % v5 % v1);
-				break;
-			case 3:
-				v1 = v4 + v4 & v3;
-				break;
-			case 4:
-				v4 = v6 << v1 >> v5;
-				break;
-			default:
-				v4 = (v5 > 65500356) ? (v7 ^ v7 - v5) : (v6 << v7 & v3);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v4 = (v3 > 26137909) ? (v6 ^ v4 * v5) : (v5 / v3 >> v6);
-				break;
-			case 1:
-				v5 = (v7 < 59522741) ? (v4 << v8 / v1) : (v3 >> v7 >> v5);
-				break;
-			case 2:
-				v8 = (v5 < 4128260) ? (v1 % v8 << v5) : (v8 >> v4 << v7);
-				break;
-			case 3:
-				v7 = (v5 < 36839807) ? (v1 * v5 * v1) : (v4 * v7 + v4);
-				break;
-			case 4:
-				v8 = (v8 > 28734766) ? (v1 | v1 / v2) : (v1 >> v6 << v7);
-				break;
-			default:
-				v6 = (v8 > 9671488) ? (v5 >> v5 * v1) : (v3 * v6 ^ v6);
-				break;
-		}
-		
+				v6 = (v4 > 14778770) ? (v3 ^ v8 >> v1) : (v4 & v6 - v8);
+
+				break;
+
+			case 1:
+
+				v7 = (v3 > 47126613) ? (v5 / v8 | v3) : (v2 % v4 >> v2);
+
+				break;
+
+			case 2:
+
+				v6 = (v4 < 93391055) ? (v1 * v2 + v4) : (v3 << v5 & v1);
+
+				break;
+
+			case 3:
+
+				v6 = (v4 > 33881831) ? (v8 | v2 + v7) : (v3 >> v7 << v7);
+
+				break;
+
+			case 4:
+
+				v6 = v2 | v1 << v1;
+
+				break;
+
+			default:
+
+				v1 = (v5 > 15637533) ? (v8 & v6 + v3) : (v1 & v4 | v7);
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v6 = (v7 > 72760434) ? (v7 >> v5 / v1) : (v5 + v2 + v4);
+
+				break;
+
+			case 1:
+
+				v8 = (v8 > 37120071) ? (v7 ^ v5 % v7) : (v5 - v1 >> v8);
+
+				break;
+
+			case 2:
+
+				v2 = (v2 < 27184527) ? (v1 / v3 + v7) : (v4 % v5 % v1);
+
+				break;
+
+			case 3:
+
+				v1 = v4 + v4 & v3;
+
+				break;
+
+			case 4:
+
+				v4 = v6 << v1 >> v5;
+
+				break;
+
+			default:
+
+				v4 = (v5 > 65500356) ? (v7 ^ v7 - v5) : (v6 << v7 & v3);
+
+				break;
+		}
+
+		switch (v8 % 5)
+
+		{
+			case 0:
+
+				v4 = (v3 > 26137909) ? (v6 ^ v4 * v5) : (v5 / v3 >> v6);
+
+				break;
+
+			case 1:
+
+				v5 = (v7 < 59522741) ? (v4 << v8 / v1) : (v3 >> v7 >> v5);
+
+				break;
+
+			case 2:
+
+				v8 = (v5 < 4128260) ? (v1 % v8 << v5) : (v8 >> v4 << v7);
+
+				break;
+
+			case 3:
+
+				v7 = (v5 < 36839807) ? (v1 * v5 * v1) : (v4 * v7 + v4);
+
+				break;
+
+			case 4:
+
+				v8 = (v8 > 28734766) ? (v1 | v1 / v2) : (v1 >> v6 << v7);
+
+				break;
+
+			default:
+
+				v6 = (v8 > 9671488) ? (v5 >> v5 * v1) : (v3 * v6 ^ v6);
+
+				break;
+		}
 
 		return (v4 > 20595669) ? (v7 << v8 >> v8) : (v8 - v6 >> v2);
 	}
@@ -5933,49 +8300,64 @@ public static class Fuzz0019
 		int v7 = 40522133;
 		int v8 = 95567895;
 
-	if (v8 < 96764465)
-	{
-	int v9 = 96703286;
-		v9 = v9 % v9 | v9;
-	}
-	else
-	{
-		v2 = (v3 > 2550569) ? (v3 | v4 | v4) : (v1 / v1 >> v1);
-	}
+		if (v8 < 96764465)
+		{
+			int v9 = 96703286;
+			v9 = v9 % v9 | v9;
+		}
+		else
+		{
+			v2 = (v3 > 2550569) ? (v3 | v4 | v4) : (v1 / v1 >> v1);
+		}
 
+		switch (v2 % 5)
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v2 = (v1 < 52118350) ? (v3 & v8 >> v5) : (v7 << v1 - v8);
-				break;
-			case 1:
-				v7 = v6 >> v3 ^ v1;
-				break;
-			case 2:
-				v3 = (v2 > 31280061) ? (v2 << v3 & v4) : (v4 >> v5 % v3);
-				break;
-			case 3:
-				v1 = (v5 < 54843675) ? (v6 << v3 ^ v4) : (v5 ^ v4 % v6);
-				break;
-			case 4:
-				v3 = v6 << v3 << v8;
-				break;
-			default:
-				v4 = (v5 < 84114744) ? (v6 * v6 | v1) : (v7 & v5 * v4);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v7 > 79529258)
-	{
-		v4 = v3 >> v7 >> v4;
-	}
-	else
-	{
-		v6 = (v6 > 17711475) ? (v2 + v1 * v7) : (v3 >> v5 | v6);
-	}
+				v2 = (v1 < 52118350) ? (v3 & v8 >> v5) : (v7 << v1 - v8);
 
+				break;
+
+			case 1:
+
+				v7 = v6 >> v3 ^ v1;
+
+				break;
+
+			case 2:
+
+				v3 = (v2 > 31280061) ? (v2 << v3 & v4) : (v4 >> v5 % v3);
+
+				break;
+
+			case 3:
+
+				v1 = (v5 < 54843675) ? (v6 << v3 ^ v4) : (v5 ^ v4 % v6);
+
+				break;
+
+			case 4:
+
+				v3 = v6 << v3 << v8;
+
+				break;
+
+			default:
+
+				v4 = (v5 < 84114744) ? (v6 * v6 | v1) : (v7 & v5 * v4);
+
+				break;
+		}
+
+		if (v7 > 79529258)
+		{
+			v4 = v3 >> v7 >> v4;
+		}
+		else
+		{
+			v6 = (v6 > 17711475) ? (v2 + v1 * v7) : (v3 >> v5 | v6);
+		}
 
 		return v6 | v5 << v4;
 	}
@@ -5992,61 +8374,94 @@ public static class Fuzz0019
 		int v7 = 4802086;
 		int v8 = 74740095;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v8 = v2 << v8 & v1;
-				break;
-			case 1:
-				v2 = v4 * v7 + v3;
-				break;
-			case 2:
-				v3 = v2 / v1 << v2;
-				break;
-			case 3:
-				v6 = (v4 < 29302640) ? (v1 + v6 % v3) : (v6 | v1 << v7);
-				break;
-			case 4:
-				v4 = (v6 < 64795384) ? (v4 << v3 << v2) : (v6 << v3 << v4);
-				break;
-			default:
-				v2 = (v3 < 23966739) ? (v6 % v6 << v5) : (v8 << v1 << v3);
-				break;
-		}
-		
+		switch (v8 % 5)
 
-	if (v3 < 75311599)
-	{
-		v2 = v8 >> v5 - v5;
-	}
-	else
-	{
-		v6 = (v5 < 28267709) ? (v5 % v4 - v1) : (v8 ^ v8 << v6);
-	}
+		{
+			case 0:
 
+				v8 = v2 << v8 & v1;
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v4 = (v8 < 3742985) ? (v1 >> v4 | v5) : (v8 << v8 << v3);
-				break;
-			case 1:
-				v6 = (v1 < 31870989) ? (v4 | v5 - v3) : (v7 ^ v5 / v7);
-				break;
-			case 2:
-				v7 = (v1 < 94578672) ? (v7 | v4 >> v2) : (v4 | v1 % v1);
-				break;
-			case 3:
-				v6 = (v3 < 86044153) ? (v1 >> v8 ^ v7) : (v6 << v8 / v1);
-				break;
-			case 4:
-				v5 = (v6 > 22597429) ? (v8 - v7 >> v2) : (v1 << v6 >> v4);
-				break;
-			default:
-				v4 = (v2 < 55608787) ? (v1 + v2 >> v6) : (v5 % v7 | v5);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v2 = v4 * v7 + v3;
+
+				break;
+
+			case 2:
+
+				v3 = v2 / v1 << v2;
+
+				break;
+
+			case 3:
+
+				v6 = (v4 < 29302640) ? (v1 + v6 % v3) : (v6 | v1 << v7);
+
+				break;
+
+			case 4:
+
+				v4 = (v6 < 64795384) ? (v4 << v3 << v2) : (v6 << v3 << v4);
+
+				break;
+
+			default:
+
+				v2 = (v3 < 23966739) ? (v6 % v6 << v5) : (v8 << v1 << v3);
+
+				break;
+		}
+
+		if (v3 < 75311599)
+		{
+			v2 = v8 >> v5 - v5;
+		}
+		else
+		{
+			v6 = (v5 < 28267709) ? (v5 % v4 - v1) : (v8 ^ v8 << v6);
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v4 = (v8 < 3742985) ? (v1 >> v4 | v5) : (v8 << v8 << v3);
+
+				break;
+
+			case 1:
+
+				v6 = (v1 < 31870989) ? (v4 | v5 - v3) : (v7 ^ v5 / v7);
+
+				break;
+
+			case 2:
+
+				v7 = (v1 < 94578672) ? (v7 | v4 >> v2) : (v4 | v1 % v1);
+
+				break;
+
+			case 3:
+
+				v6 = (v3 < 86044153) ? (v1 >> v8 ^ v7) : (v6 << v8 / v1);
+
+				break;
+
+			case 4:
+
+				v5 = (v6 > 22597429) ? (v8 - v7 >> v2) : (v1 << v6 >> v4);
+
+				break;
+
+			default:
+
+				v4 = (v2 < 55608787) ? (v1 + v2 >> v6) : (v5 % v7 | v5);
+
+				break;
+		}
 
 		return v2 & v5 - v8;
 	}
@@ -6063,74 +8478,125 @@ public static class Fuzz0019
 		int v7 = 94775499;
 		int v8 = 4918992;
 
-		switch (v1 % 5)
-		{
-			case 0:
-				v4 = (v3 > 24232863) ? (v3 >> v3 | v2) : (v3 << v2 << v5);
-				break;
-			case 1:
-				v8 = (v4 < 87115920) ? (v1 << v8 ^ v8) : (v5 ^ v5 & v6);
-				break;
-			case 2:
-				v3 = v5 - v4 | v3;
-				break;
-			case 3:
-				v5 = (v2 > 86946770) ? (v6 / v8 >> v3) : (v8 << v2 << v4);
-				break;
-			case 4:
-				v8 = v8 & v3 << v1;
-				break;
-			default:
-				v6 = (v6 < 92375573) ? (v5 ^ v6 >> v5) : (v2 >> v7 << v6);
-				break;
-		}
-		
+		switch (v1 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v5 = (v5 < 72384955) ? (v6 << v7 | v4) : (v4 % v3 ^ v8);
-				break;
-			case 1:
-				v5 = (v4 > 95573745) ? (v3 % v3 - v5) : (v7 * v7 >> v3);
-				break;
-			case 2:
-				v2 = v6 % v7 >> v1;
-				break;
-			case 3:
-				v4 = (v2 < 74795509) ? (v3 * v3 ^ v4) : (v4 | v2 & v1);
-				break;
-			case 4:
-				v8 = (v6 < 99549008) ? (v2 / v2 * v8) : (v6 - v8 & v4);
-				break;
-			default:
-				v5 = v7 & v3 - v1;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v4 = (v7 < 76940090) ? (v1 | v7 % v2) : (v1 >> v4 / v1);
-				break;
-			case 1:
-				v5 = (v3 < 18393279) ? (v8 ^ v8 - v2) : (v7 & v6 ^ v6);
-				break;
-			case 2:
-				v5 = v2 / v6 * v8;
-				break;
-			case 3:
-				v2 = (v7 > 29501477) ? (v4 ^ v5 << v3) : (v7 / v7 ^ v7);
-				break;
-			case 4:
-				v2 = v3 + v3 >> v2;
-				break;
-			default:
-				v8 = (v1 < 31308680) ? (v5 % v3 / v1) : (v6 / v3 >> v6);
-				break;
-		}
-		
+				v4 = (v3 > 24232863) ? (v3 >> v3 | v2) : (v3 << v2 << v5);
+
+				break;
+
+			case 1:
+
+				v8 = (v4 < 87115920) ? (v1 << v8 ^ v8) : (v5 ^ v5 & v6);
+
+				break;
+
+			case 2:
+
+				v3 = v5 - v4 | v3;
+
+				break;
+
+			case 3:
+
+				v5 = (v2 > 86946770) ? (v6 / v8 >> v3) : (v8 << v2 << v4);
+
+				break;
+
+			case 4:
+
+				v8 = v8 & v3 << v1;
+
+				break;
+
+			default:
+
+				v6 = (v6 < 92375573) ? (v5 ^ v6 >> v5) : (v2 >> v7 << v6);
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v5 = (v5 < 72384955) ? (v6 << v7 | v4) : (v4 % v3 ^ v8);
+
+				break;
+
+			case 1:
+
+				v5 = (v4 > 95573745) ? (v3 % v3 - v5) : (v7 * v7 >> v3);
+
+				break;
+
+			case 2:
+
+				v2 = v6 % v7 >> v1;
+
+				break;
+
+			case 3:
+
+				v4 = (v2 < 74795509) ? (v3 * v3 ^ v4) : (v4 | v2 & v1);
+
+				break;
+
+			case 4:
+
+				v8 = (v6 < 99549008) ? (v2 / v2 * v8) : (v6 - v8 & v4);
+
+				break;
+
+			default:
+
+				v5 = v7 & v3 - v1;
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v4 = (v7 < 76940090) ? (v1 | v7 % v2) : (v1 >> v4 / v1);
+
+				break;
+
+			case 1:
+
+				v5 = (v3 < 18393279) ? (v8 ^ v8 - v2) : (v7 & v6 ^ v6);
+
+				break;
+
+			case 2:
+
+				v5 = v2 / v6 * v8;
+
+				break;
+
+			case 3:
+
+				v2 = (v7 > 29501477) ? (v4 ^ v5 << v3) : (v7 / v7 ^ v7);
+
+				break;
+
+			case 4:
+
+				v2 = v3 + v3 >> v2;
+
+				break;
+
+			default:
+
+				v8 = (v1 < 31308680) ? (v5 % v3 / v1) : (v6 / v3 >> v6);
+
+				break;
+		}
 
 		return (v8 < 33611099) ? (v2 << v1 | v4) : (v1 ^ v8 << v1);
 	}
@@ -6147,49 +8613,64 @@ public static class Fuzz0019
 		int v7 = 88921368;
 		int v8 = 14576236;
 
-	if (v1 > 45483875)
-	{
-		v1 = (v6 < 12071616) ? (v3 % v3 % v2) : (v4 << v2 - v3);
-	}
-	else
-	{
-		v2 = v2 / v2 << v2;
-	}
+		if (v1 > 45483875)
+		{
+			v1 = (v6 < 12071616) ? (v3 % v3 % v2) : (v4 << v2 - v3);
+		}
+		else
+		{
+			v2 = v2 / v2 << v2;
+		}
 
+		switch (v6 % 5)
 
-		switch (v6 % 5)
-		{
-			case 0:
-				v6 = (v5 < 26550079) ? (v4 << v6 >> v1) : (v5 + v1 & v7);
-				break;
-			case 1:
-				v8 = (v1 > 9415944) ? (v2 << v2 | v6) : (v4 & v6 % v8);
-				break;
-			case 2:
-				v6 = v6 / v5 & v8;
-				break;
-			case 3:
-				v8 = v2 ^ v4 - v7;
-				break;
-			case 4:
-				v4 = (v3 < 72730671) ? (v5 - v4 ^ v5) : (v3 << v7 << v5);
-				break;
-			default:
-				v1 = (v3 > 30845783) ? (v7 >> v4 % v3) : (v8 >> v5 & v4);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v7 < 72447977)
-	{
-	int v9 = 80844875;
-		v9 = (v9 < 69721577) ? (v9 / v9 ^ v9) : (v9 - v9 | v9);
-	}
-	else
-	{
-		v5 = (v1 < 34190237) ? (v8 ^ v8 % v4) : (v3 % v6 & v5);
-	}
+				v6 = (v5 < 26550079) ? (v4 << v6 >> v1) : (v5 + v1 & v7);
 
+				break;
+
+			case 1:
+
+				v8 = (v1 > 9415944) ? (v2 << v2 | v6) : (v4 & v6 % v8);
+
+				break;
+
+			case 2:
+
+				v6 = v6 / v5 & v8;
+
+				break;
+
+			case 3:
+
+				v8 = v2 ^ v4 - v7;
+
+				break;
+
+			case 4:
+
+				v4 = (v3 < 72730671) ? (v5 - v4 ^ v5) : (v3 << v7 << v5);
+
+				break;
+
+			default:
+
+				v1 = (v3 > 30845783) ? (v7 >> v4 % v3) : (v8 >> v5 & v4);
+
+				break;
+		}
+
+		if (v7 < 72447977)
+		{
+			int v9 = 80844875;
+			v9 = (v9 < 69721577) ? (v9 / v9 ^ v9) : (v9 - v9 | v9);
+		}
+		else
+		{
+			v5 = (v1 < 34190237) ? (v8 ^ v8 % v4) : (v3 % v6 & v5);
+		}
 
 		return v4 ^ v1 ^ v7;
 	}
@@ -6206,62 +8687,95 @@ public static class Fuzz0019
 		int v7 = 17347803;
 		int v8 = 72254860;
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v1 = v2 >> v3 << v1;
-				break;
-			case 1:
-				v3 = v2 >> v2 | v8;
-				break;
-			case 2:
-				v6 = (v5 > 64326790) ? (v6 % v7 >> v3) : (v3 & v1 & v1);
-				break;
-			case 3:
-				v7 = (v6 < 81870768) ? (v5 / v4 >> v7) : (v2 << v4 << v2);
-				break;
-			case 4:
-				v4 = v5 << v7 & v5;
-				break;
-			default:
-				v2 = (v8 < 12341777) ? (v5 - v8 << v5) : (v8 & v2 << v4);
-				break;
-		}
-		
+		switch (v8 % 5)
 
-	if (v5 > 40716419)
-	{
-		v6 = v7 >> v8 % v5;
-	}
-	else
-	{
-	int v9 = 53573124;
-		v9 = (v9 < 19954221) ? (v9 - v9 & v9) : (v9 >> v9 >> v9);
-	}
+		{
+			case 0:
 
+				v1 = v2 >> v3 << v1;
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v2 = (v7 > 38877989) ? (v3 >> v2 | v4) : (v8 >> v4 & v4);
-				break;
-			case 1:
-				v3 = (v1 < 90684392) ? (v6 / v6 ^ v7) : (v1 & v7 - v6);
-				break;
-			case 2:
-				v2 = (v6 > 97309078) ? (v2 / v5 - v2) : (v8 >> v4 >> v6);
-				break;
-			case 3:
-				v8 = (v4 < 23832331) ? (v8 / v6 >> v6) : (v3 % v8 ^ v4);
-				break;
-			case 4:
-				v5 = v7 >> v6 * v6;
-				break;
-			default:
-				v4 = (v8 > 262708) ? (v8 >> v5 % v4) : (v2 << v6 ^ v5);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v3 = v2 >> v2 | v8;
+
+				break;
+
+			case 2:
+
+				v6 = (v5 > 64326790) ? (v6 % v7 >> v3) : (v3 & v1 & v1);
+
+				break;
+
+			case 3:
+
+				v7 = (v6 < 81870768) ? (v5 / v4 >> v7) : (v2 << v4 << v2);
+
+				break;
+
+			case 4:
+
+				v4 = v5 << v7 & v5;
+
+				break;
+
+			default:
+
+				v2 = (v8 < 12341777) ? (v5 - v8 << v5) : (v8 & v2 << v4);
+
+				break;
+		}
+
+		if (v5 > 40716419)
+		{
+			v6 = v7 >> v8 % v5;
+		}
+		else
+		{
+			int v9 = 53573124;
+			v9 = (v9 < 19954221) ? (v9 - v9 & v9) : (v9 >> v9 >> v9);
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v2 = (v7 > 38877989) ? (v3 >> v2 | v4) : (v8 >> v4 & v4);
+
+				break;
+
+			case 1:
+
+				v3 = (v1 < 90684392) ? (v6 / v6 ^ v7) : (v1 & v7 - v6);
+
+				break;
+
+			case 2:
+
+				v2 = (v6 > 97309078) ? (v2 / v5 - v2) : (v8 >> v4 >> v6);
+
+				break;
+
+			case 3:
+
+				v8 = (v4 < 23832331) ? (v8 / v6 >> v6) : (v3 % v8 ^ v4);
+
+				break;
+
+			case 4:
+
+				v5 = v7 >> v6 * v6;
+
+				break;
+
+			default:
+
+				v4 = (v8 > 262708) ? (v8 >> v5 % v4) : (v2 << v6 ^ v5);
+
+				break;
+		}
 
 		return (v6 < 28181432) ? (v8 << v8 ^ v5) : (v4 >> v8 >> v5);
 	}
@@ -6278,61 +8792,94 @@ public static class Fuzz0019
 		int v7 = 81370831;
 		int v8 = 2999599;
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v5 = v5 | v2 << v1;
-				break;
-			case 1:
-				v2 = (v1 > 40333071) ? (v1 << v1 % v8) : (v3 ^ v3 << v2);
-				break;
-			case 2:
-				v3 = (v3 < 94957372) ? (v6 | v2 >> v3) : (v8 ^ v2 >> v8);
-				break;
-			case 3:
-				v2 = (v3 > 65456798) ? (v4 << v4 * v5) : (v8 ^ v2 & v3);
-				break;
-			case 4:
-				v8 = (v1 < 67957381) ? (v7 ^ v8 << v4) : (v6 >> v2 >> v5);
-				break;
-			default:
-				v1 = (v1 > 48706075) ? (v6 - v1 + v7) : (v3 & v7 >> v7);
-				break;
-		}
-		
+		switch (v2 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v1 = (v3 > 79259102) ? (v6 & v8 * v8) : (v4 | v6 | v8);
-				break;
-			case 1:
-				v5 = (v1 > 52876927) ? (v5 | v2 ^ v7) : (v5 | v1 | v4);
-				break;
-			case 2:
-				v2 = (v6 < 99225081) ? (v1 & v5 >> v7) : (v6 << v4 | v7);
-				break;
-			case 3:
-				v6 = (v2 > 14256813) ? (v6 ^ v1 | v8) : (v4 << v4 << v4);
-				break;
-			case 4:
-				v1 = (v5 < 86455600) ? (v8 & v1 << v7) : (v2 | v6 & v8);
-				break;
-			default:
-				v4 = (v7 > 39501052) ? (v5 | v5 % v1) : (v2 | v8 << v8);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v6 > 67589182)
-	{
-		v3 = (v7 < 53402535) ? (v6 >> v6 << v1) : (v8 >> v2 & v7);
-	}
-	else
-	{
-		v8 = (v5 > 7758511) ? (v4 | v1 | v1) : (v7 + v5 | v7);
-	}
+				v5 = v5 | v2 << v1;
 
+				break;
+
+			case 1:
+
+				v2 = (v1 > 40333071) ? (v1 << v1 % v8) : (v3 ^ v3 << v2);
+
+				break;
+
+			case 2:
+
+				v3 = (v3 < 94957372) ? (v6 | v2 >> v3) : (v8 ^ v2 >> v8);
+
+				break;
+
+			case 3:
+
+				v2 = (v3 > 65456798) ? (v4 << v4 * v5) : (v8 ^ v2 & v3);
+
+				break;
+
+			case 4:
+
+				v8 = (v1 < 67957381) ? (v7 ^ v8 << v4) : (v6 >> v2 >> v5);
+
+				break;
+
+			default:
+
+				v1 = (v1 > 48706075) ? (v6 - v1 + v7) : (v3 & v7 >> v7);
+
+				break;
+		}
+
+		switch (v3 % 5)
+
+		{
+			case 0:
+
+				v1 = (v3 > 79259102) ? (v6 & v8 * v8) : (v4 | v6 | v8);
+
+				break;
+
+			case 1:
+
+				v5 = (v1 > 52876927) ? (v5 | v2 ^ v7) : (v5 | v1 | v4);
+
+				break;
+
+			case 2:
+
+				v2 = (v6 < 99225081) ? (v1 & v5 >> v7) : (v6 << v4 | v7);
+
+				break;
+
+			case 3:
+
+				v6 = (v2 > 14256813) ? (v6 ^ v1 | v8) : (v4 << v4 << v4);
+
+				break;
+
+			case 4:
+
+				v1 = (v5 < 86455600) ? (v8 & v1 << v7) : (v2 | v6 & v8);
+
+				break;
+
+			default:
+
+				v4 = (v7 > 39501052) ? (v5 | v5 % v1) : (v2 | v8 << v8);
+
+				break;
+		}
+
+		if (v6 > 67589182)
+		{
+			v3 = (v7 < 53402535) ? (v6 >> v6 << v1) : (v8 >> v2 & v7);
+		}
+		else
+		{
+			v8 = (v5 > 7758511) ? (v4 | v1 | v1) : (v7 + v5 | v7);
+		}
 
 		return v2 ^ v4 & v5;
 	}
@@ -6349,74 +8896,125 @@ public static class Fuzz0019
 		int v7 = 41482498;
 		int v8 = 61706535;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v5 = v4 >> v3 << v5;
-				break;
-			case 1:
-				v6 = (v7 > 99235547) ? (v2 % v7 | v3) : (v3 % v7 - v2);
-				break;
-			case 2:
-				v6 = (v1 > 49118389) ? (v1 / v6 ^ v8) : (v1 >> v2 ^ v5);
-				break;
-			case 3:
-				v3 = (v4 > 55870693) ? (v7 + v7 ^ v4) : (v5 * v2 | v2);
-				break;
-			case 4:
-				v7 = (v4 < 62679944) ? (v6 >> v8 >> v1) : (v6 + v1 & v1);
-				break;
-			default:
-				v7 = (v4 < 13423684) ? (v3 % v4 | v4) : (v5 | v7 << v4);
-				break;
-		}
-		
+		switch (v7 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v2 = (v4 < 70236267) ? (v6 * v8 / v8) : (v2 * v7 / v3);
-				break;
-			case 1:
-				v1 = (v6 > 16202138) ? (v3 & v7 / v8) : (v8 * v2 + v3);
-				break;
-			case 2:
-				v1 = (v1 > 43952899) ? (v7 ^ v5 - v7) : (v5 << v6 / v5);
-				break;
-			case 3:
-				v6 = (v1 < 30842895) ? (v1 & v2 / v6) : (v7 ^ v8 * v4);
-				break;
-			case 4:
-				v8 = v2 | v6 / v2;
-				break;
-			default:
-				v8 = (v7 > 89840961) ? (v7 >> v6 >> v3) : (v6 * v4 / v8);
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v4 % 5)
-		{
-			case 0:
-				v7 = (v3 < 19892830) ? (v7 * v1 ^ v4) : (v8 ^ v8 * v1);
-				break;
-			case 1:
-				v6 = v4 << v6 >> v6;
-				break;
-			case 2:
-				v1 = (v5 < 9692393) ? (v3 >> v4 & v5) : (v4 << v6 & v1);
-				break;
-			case 3:
-				v1 = v4 / v3 / v5;
-				break;
-			case 4:
-				v3 = (v1 > 38138965) ? (v3 << v2 >> v1) : (v6 << v2 >> v2);
-				break;
-			default:
-				v4 = v5 + v7 ^ v2;
-				break;
-		}
-		
+				v5 = v4 >> v3 << v5;
+
+				break;
+
+			case 1:
+
+				v6 = (v7 > 99235547) ? (v2 % v7 | v3) : (v3 % v7 - v2);
+
+				break;
+
+			case 2:
+
+				v6 = (v1 > 49118389) ? (v1 / v6 ^ v8) : (v1 >> v2 ^ v5);
+
+				break;
+
+			case 3:
+
+				v3 = (v4 > 55870693) ? (v7 + v7 ^ v4) : (v5 * v2 | v2);
+
+				break;
+
+			case 4:
+
+				v7 = (v4 < 62679944) ? (v6 >> v8 >> v1) : (v6 + v1 & v1);
+
+				break;
+
+			default:
+
+				v7 = (v4 < 13423684) ? (v3 % v4 | v4) : (v5 | v7 << v4);
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v2 = (v4 < 70236267) ? (v6 * v8 / v8) : (v2 * v7 / v3);
+
+				break;
+
+			case 1:
+
+				v1 = (v6 > 16202138) ? (v3 & v7 / v8) : (v8 * v2 + v3);
+
+				break;
+
+			case 2:
+
+				v1 = (v1 > 43952899) ? (v7 ^ v5 - v7) : (v5 << v6 / v5);
+
+				break;
+
+			case 3:
+
+				v6 = (v1 < 30842895) ? (v1 & v2 / v6) : (v7 ^ v8 * v4);
+
+				break;
+
+			case 4:
+
+				v8 = v2 | v6 / v2;
+
+				break;
+
+			default:
+
+				v8 = (v7 > 89840961) ? (v7 >> v6 >> v3) : (v6 * v4 / v8);
+
+				break;
+		}
+
+		switch (v4 % 5)
+
+		{
+			case 0:
+
+				v7 = (v3 < 19892830) ? (v7 * v1 ^ v4) : (v8 ^ v8 * v1);
+
+				break;
+
+			case 1:
+
+				v6 = v4 << v6 >> v6;
+
+				break;
+
+			case 2:
+
+				v1 = (v5 < 9692393) ? (v3 >> v4 & v5) : (v4 << v6 & v1);
+
+				break;
+
+			case 3:
+
+				v1 = v4 / v3 / v5;
+
+				break;
+
+			case 4:
+
+				v3 = (v1 > 38138965) ? (v3 << v2 >> v1) : (v6 << v2 >> v2);
+
+				break;
+
+			default:
+
+				v4 = v5 + v7 ^ v2;
+
+				break;
+		}
 
 		return (v1 < 66859087) ? (v6 << v1 >> v1) : (v2 | v3 >> v6);
 	}
@@ -6433,50 +9031,65 @@ public static class Fuzz0019
 		int v7 = 16777215;
 		int v8 = 50632032;
 
-	if (v3 < 95313767)
-	{
-		v1 = (v7 > 61610743) ? (v7 & v7 + v3) : (v3 & v3 << v8);
-	}
-	else
-	{
-		v7 = (v4 < 15046549) ? (v6 * v6 >> v4) : (v5 ^ v1 << v4);
-	}
+		if (v3 < 95313767)
+		{
+			v1 = (v7 > 61610743) ? (v7 & v7 + v3) : (v3 & v3 << v8);
+		}
+		else
+		{
+			v7 = (v4 < 15046549) ? (v6 * v6 >> v4) : (v5 ^ v1 << v4);
+		}
 
+		switch (v3 % 5)
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v4 = (v6 < 12003303) ? (v6 * v2 ^ v5) : (v7 % v7 - v7);
-				break;
-			case 1:
-				v5 = (v4 > 51328015) ? (v4 | v7 * v1) : (v4 + v8 | v4);
-				break;
-			case 2:
-				v8 = v7 & v2 - v1;
-				break;
-			case 3:
-				v7 = (v7 > 19433954) ? (v3 + v7 ^ v3) : (v3 | v1 | v2);
-				break;
-			case 4:
-				v8 = (v8 < 46117159) ? (v4 * v4 << v8) : (v7 | v8 << v7);
-				break;
-			default:
-				v6 = v2 ^ v7 + v3;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v1 < 25664590)
-	{
-	int v9 = 91176845;
-		v9 = v9 << v9 & v9;
-	}
-	else
-	{
-	int v10 = 38682991;
-		v10 = v10 << v10 << v10;
-	}
+				v4 = (v6 < 12003303) ? (v6 * v2 ^ v5) : (v7 % v7 - v7);
 
+				break;
+
+			case 1:
+
+				v5 = (v4 > 51328015) ? (v4 | v7 * v1) : (v4 + v8 | v4);
+
+				break;
+
+			case 2:
+
+				v8 = v7 & v2 - v1;
+
+				break;
+
+			case 3:
+
+				v7 = (v7 > 19433954) ? (v3 + v7 ^ v3) : (v3 | v1 | v2);
+
+				break;
+
+			case 4:
+
+				v8 = (v8 < 46117159) ? (v4 * v4 << v8) : (v7 | v8 << v7);
+
+				break;
+
+			default:
+
+				v6 = v2 ^ v7 + v3;
+
+				break;
+		}
+
+		if (v1 < 25664590)
+		{
+			int v9 = 91176845;
+			v9 = v9 << v9 & v9;
+		}
+		else
+		{
+			int v10 = 38682991;
+			v10 = v10 << v10 << v10;
+		}
 
 		return (v3 < 82289195) ? (v4 ^ v4 - v3) : (v5 + v1 & v8);
 	}
@@ -6493,61 +9106,94 @@ public static class Fuzz0019
 		int v7 = 2649486;
 		int v8 = 7151954;
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v2 = (v4 > 96904483) ? (v2 % v4 % v4) : (v6 << v7 >> v2);
-				break;
-			case 1:
-				v4 = (v6 > 49056568) ? (v8 % v4 >> v1) : (v7 | v4 >> v3);
-				break;
-			case 2:
-				v3 = v4 ^ v7 % v1;
-				break;
-			case 3:
-				v6 = (v8 > 36039369) ? (v3 ^ v3 | v3) : (v3 | v1 << v8);
-				break;
-			case 4:
-				v6 = v4 * v6 | v5;
-				break;
-			default:
-				v1 = v7 >> v1 | v4;
-				break;
-		}
-		
+		switch (v5 % 5)
 
-	if (v1 > 23024584)
-	{
-		v3 = v1 >> v8 << v4;
-	}
-	else
-	{
-		v8 = v7 & v1 ^ v5;
-	}
+		{
+			case 0:
 
+				v2 = (v4 > 96904483) ? (v2 % v4 % v4) : (v6 << v7 >> v2);
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v4 = v6 | v7 * v4;
-				break;
-			case 1:
-				v7 = v5 ^ v3 << v5;
-				break;
-			case 2:
-				v2 = (v6 < 12994932) ? (v4 / v1 << v1) : (v4 * v6 % v3);
-				break;
-			case 3:
-				v7 = (v5 < 75776378) ? (v3 << v7 | v7) : (v3 << v6 ^ v6);
-				break;
-			case 4:
-				v7 = (v2 > 37519661) ? (v6 >> v6 << v4) : (v1 | v3 >> v2);
-				break;
-			default:
-				v8 = (v7 < 9257652) ? (v1 ^ v4 << v7) : (v2 / v2 << v7);
-				break;
-		}
-		
+				break;
+
+			case 1:
+
+				v4 = (v6 > 49056568) ? (v8 % v4 >> v1) : (v7 | v4 >> v3);
+
+				break;
+
+			case 2:
+
+				v3 = v4 ^ v7 % v1;
+
+				break;
+
+			case 3:
+
+				v6 = (v8 > 36039369) ? (v3 ^ v3 | v3) : (v3 | v1 << v8);
+
+				break;
+
+			case 4:
+
+				v6 = v4 * v6 | v5;
+
+				break;
+
+			default:
+
+				v1 = v7 >> v1 | v4;
+
+				break;
+		}
+
+		if (v1 > 23024584)
+		{
+			v3 = v1 >> v8 << v4;
+		}
+		else
+		{
+			v8 = v7 & v1 ^ v5;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v4 = v6 | v7 * v4;
+
+				break;
+
+			case 1:
+
+				v7 = v5 ^ v3 << v5;
+
+				break;
+
+			case 2:
+
+				v2 = (v6 < 12994932) ? (v4 / v1 << v1) : (v4 * v6 % v3);
+
+				break;
+
+			case 3:
+
+				v7 = (v5 < 75776378) ? (v3 << v7 | v7) : (v3 << v6 ^ v6);
+
+				break;
+
+			case 4:
+
+				v7 = (v2 > 37519661) ? (v6 >> v6 << v4) : (v1 | v3 >> v2);
+
+				break;
+
+			default:
+
+				v8 = (v7 < 9257652) ? (v1 ^ v4 << v7) : (v2 / v2 << v7);
+
+				break;
+		}
 
 		return (v4 < 82689401) ? (v3 | v1 >> v1) : (v6 & v5 * v8);
 	}
@@ -6564,62 +9210,95 @@ public static class Fuzz0019
 		int v7 = 48746139;
 		int v8 = 42337226;
 
-		switch (v3 % 5)
-		{
-			case 0:
-				v7 = (v3 > 62451222) ? (v2 | v2 * v8) : (v4 & v5 ^ v3);
-				break;
-			case 1:
-				v4 = v4 & v3 * v2;
-				break;
-			case 2:
-				v8 = (v8 < 5201825) ? (v2 * v2 / v6) : (v2 * v1 ^ v8);
-				break;
-			case 3:
-				v3 = (v8 > 41148067) ? (v4 << v6 >> v2) : (v7 ^ v3 >> v4);
-				break;
-			case 4:
-				v3 = (v5 > 24178507) ? (v6 % v1 >> v7) : (v1 >> v5 / v2);
-				break;
-			default:
-				v5 = (v8 < 827375) ? (v2 - v2 >> v7) : (v4 >> v6 ^ v8);
-				break;
-		}
-		
+		switch (v3 % 5)
 
-		switch (v5 % 5)
-		{
-			case 0:
-				v8 = (v6 > 56565373) ? (v8 + v2 + v3) : (v2 | v5 >> v3);
-				break;
-			case 1:
-				v3 = (v2 < 3027785) ? (v1 ^ v5 * v8) : (v5 << v8 ^ v7);
-				break;
-			case 2:
-				v3 = v4 * v3 + v2;
-				break;
-			case 3:
-				v4 = v5 >> v6 >> v1;
-				break;
-			case 4:
-				v4 = (v2 > 20937592) ? (v3 >> v8 | v5) : (v1 * v3 | v3);
-				break;
-			default:
-				v7 = (v8 > 77190951) ? (v2 + v7 << v2) : (v7 * v7 >> v7);
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v2 < 74776539)
-	{
-	int v9 = 98365261;
-		v9 = (v9 > 24393555) ? (v9 << v9 >> v9) : (v9 << v9 >> v9);
-	}
-	else
-	{
-		v6 = (v3 < 416476) ? (v3 + v4 - v6) : (v1 * v5 >> v7);
-	}
+				v7 = (v3 > 62451222) ? (v2 | v2 * v8) : (v4 & v5 ^ v3);
 
+				break;
+
+			case 1:
+
+				v4 = v4 & v3 * v2;
+
+				break;
+
+			case 2:
+
+				v8 = (v8 < 5201825) ? (v2 * v2 / v6) : (v2 * v1 ^ v8);
+
+				break;
+
+			case 3:
+
+				v3 = (v8 > 41148067) ? (v4 << v6 >> v2) : (v7 ^ v3 >> v4);
+
+				break;
+
+			case 4:
+
+				v3 = (v5 > 24178507) ? (v6 % v1 >> v7) : (v1 >> v5 / v2);
+
+				break;
+
+			default:
+
+				v5 = (v8 < 827375) ? (v2 - v2 >> v7) : (v4 >> v6 ^ v8);
+
+				break;
+		}
+
+		switch (v5 % 5)
+
+		{
+			case 0:
+
+				v8 = (v6 > 56565373) ? (v8 + v2 + v3) : (v2 | v5 >> v3);
+
+				break;
+
+			case 1:
+
+				v3 = (v2 < 3027785) ? (v1 ^ v5 * v8) : (v5 << v8 ^ v7);
+
+				break;
+
+			case 2:
+
+				v3 = v4 * v3 + v2;
+
+				break;
+
+			case 3:
+
+				v4 = v5 >> v6 >> v1;
+
+				break;
+
+			case 4:
+
+				v4 = (v2 > 20937592) ? (v3 >> v8 | v5) : (v1 * v3 | v3);
+
+				break;
+
+			default:
+
+				v7 = (v8 > 77190951) ? (v2 + v7 << v2) : (v7 * v7 >> v7);
+
+				break;
+		}
+
+		if (v2 < 74776539)
+		{
+			int v9 = 98365261;
+			v9 = (v9 > 24393555) ? (v9 << v9 >> v9) : (v9 << v9 >> v9);
+		}
+		else
+		{
+			v6 = (v3 < 416476) ? (v3 + v4 - v6) : (v1 * v5 >> v7);
+		}
 
 		return (v6 > 68938632) ? (v5 << v6 << v8) : (v7 | v1 << v4);
 	}
@@ -6636,62 +9315,95 @@ public static class Fuzz0019
 		int v7 = 70384550;
 		int v8 = 77295920;
 
-		switch (v7 % 5)
-		{
-			case 0:
-				v6 = (v1 > 17024056) ? (v1 / v3 ^ v8) : (v4 + v5 ^ v7);
-				break;
-			case 1:
-				v5 = (v4 > 5229619) ? (v1 / v8 * v8) : (v7 ^ v3 << v7);
-				break;
-			case 2:
-				v6 = v6 >> v2 - v8;
-				break;
-			case 3:
-				v1 = (v7 < 52094538) ? (v8 & v7 ^ v5) : (v3 >> v6 % v5);
-				break;
-			case 4:
-				v7 = v5 & v5 & v6;
-				break;
-			default:
-				v3 = v6 << v8 ^ v7;
-				break;
-		}
-		
+		switch (v7 % 5)
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v3 = (v3 < 45992828) ? (v1 << v1 + v1) : (v8 & v1 ^ v2);
-				break;
-			case 1:
-				v5 = v8 * v1 >> v8;
-				break;
-			case 2:
-				v8 = v6 % v1 & v1;
-				break;
-			case 3:
-				v2 = (v3 < 29551560) ? (v5 | v1 * v8) : (v2 + v1 | v3);
-				break;
-			case 4:
-				v6 = v3 - v1 >> v1;
-				break;
-			default:
-				v4 = v7 << v8 ^ v8;
-				break;
-		}
-		
+		{
+			case 0:
 
-	if (v4 > 92562869)
-	{
-	int v9 = 56029688;
-		v9 = (v9 < 29246177) ? (v9 >> v9 % v9) : (v9 / v9 | v9);
-	}
-	else
-	{
-		v6 = v7 >> v8 * v2;
-	}
+				v6 = (v1 > 17024056) ? (v1 / v3 ^ v8) : (v4 + v5 ^ v7);
 
+				break;
+
+			case 1:
+
+				v5 = (v4 > 5229619) ? (v1 / v8 * v8) : (v7 ^ v3 << v7);
+
+				break;
+
+			case 2:
+
+				v6 = v6 >> v2 - v8;
+
+				break;
+
+			case 3:
+
+				v1 = (v7 < 52094538) ? (v8 & v7 ^ v5) : (v3 >> v6 % v5);
+
+				break;
+
+			case 4:
+
+				v7 = v5 & v5 & v6;
+
+				break;
+
+			default:
+
+				v3 = v6 << v8 ^ v7;
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v3 = (v3 < 45992828) ? (v1 << v1 + v1) : (v8 & v1 ^ v2);
+
+				break;
+
+			case 1:
+
+				v5 = v8 * v1 >> v8;
+
+				break;
+
+			case 2:
+
+				v8 = v6 % v1 & v1;
+
+				break;
+
+			case 3:
+
+				v2 = (v3 < 29551560) ? (v5 | v1 * v8) : (v2 + v1 | v3);
+
+				break;
+
+			case 4:
+
+				v6 = v3 - v1 >> v1;
+
+				break;
+
+			default:
+
+				v4 = v7 << v8 ^ v8;
+
+				break;
+		}
+
+		if (v4 > 92562869)
+		{
+			int v9 = 56029688;
+			v9 = (v9 < 29246177) ? (v9 >> v9 % v9) : (v9 / v9 | v9);
+		}
+		else
+		{
+			v6 = v7 >> v8 * v2;
+		}
 
 		return v8 << v7 >> v6;
 	}
@@ -6708,39 +9420,36 @@ public static class Fuzz0019
 		int v7 = 15019267;
 		int v8 = 85224742;
 
-	if (v7 < 5426441)
-	{
-		v2 = (v4 < 96895952) ? (v8 - v3 * v4) : (v5 - v1 ^ v6);
-	}
-	else
-	{
-	int v9 = 43279590;
-		v9 = v9 & v9 ^ v9;
-	}
+		if (v7 < 5426441)
+		{
+			v2 = (v4 < 96895952) ? (v8 - v3 * v4) : (v5 - v1 ^ v6);
+		}
+		else
+		{
+			int v9 = 43279590;
+			v9 = v9 & v9 ^ v9;
+		}
 
+		if (v5 < 53660876)
+		{
+			int v10 = 65051595;
+			v10 = (v10 > 24762530) ? (v10 >> v10 << v10) : (v10 / v10 >> v10);
+		}
+		else
+		{
+			int v11 = 80144422;
+			v11 = (v11 < 48451392) ? (v11 ^ v11 + v11) : (v11 | v11 >> v11);
+		}
 
-	if (v5 < 53660876)
-	{
-	int v10 = 65051595;
-		v10 = (v10 > 24762530) ? (v10 >> v10 << v10) : (v10 / v10 >> v10);
-	}
-	else
-	{
-	int v11 = 80144422;
-		v11 = (v11 < 48451392) ? (v11 ^ v11 + v11) : (v11 | v11 >> v11);
-	}
-
-
-	if (v7 < 25701006)
-	{
-	int v12 = 24493361;
-		v12 = (v12 > 15359977) ? (v12 >> v12 & v12) : (v12 + v12 - v12);
-	}
-	else
-	{
-		v7 = (v2 > 43990799) ? (v5 >> v1 % v1) : (v1 >> v1 & v8);
-	}
-
+		if (v7 < 25701006)
+		{
+			int v12 = 24493361;
+			v12 = (v12 > 15359977) ? (v12 >> v12 & v12) : (v12 + v12 - v12);
+		}
+		else
+		{
+			v7 = (v2 > 43990799) ? (v5 >> v1 % v1) : (v1 >> v1 & v8);
+		}
 
 		return v7 << v5 + v7;
 	}
@@ -6757,65 +9466,96 @@ public static class Fuzz0019
 		int v7 = 57667794;
 		int v8 = 12375136;
 
-	if (v7 > 42306430)
-	{
-	int v9 = 74569298;
-		v9 = v9 / v9 & v9;
-	}
-	else
-	{
-		v4 = v8 | v2 >> v6;
-	}
+		if (v7 > 42306430)
+		{
+			int v9 = 74569298;
+			v9 = v9 / v9 & v9;
+		}
+		else
+		{
+			v4 = v8 | v2 >> v6;
+		}
 
+		switch (v8 % 5)
 
-		switch (v8 % 5)
-		{
-			case 0:
-				v2 = v5 >> v7 - v8;
-				break;
-			case 1:
-				v7 = (v5 > 50488957) ? (v5 | v4 | v7) : (v2 % v2 | v4);
-				break;
-			case 2:
-				v1 = (v2 > 34518209) ? (v5 * v8 % v3) : (v4 * v3 * v4);
-				break;
-			case 3:
-				v3 = v5 << v8 << v6;
-				break;
-			case 4:
-				v8 = (v4 < 15724169) ? (v8 | v1 * v1) : (v7 / v7 << v4);
-				break;
-			default:
-				v4 = v7 << v3 >> v4;
-				break;
-		}
-		
+		{
+			case 0:
 
-		switch (v2 % 5)
-		{
-			case 0:
-				v8 = v8 >> v5 << v6;
-				break;
-			case 1:
-				v5 = v8 | v2 / v5;
-				break;
-			case 2:
-				v5 = v8 ^ v7 << v8;
-				break;
-			case 3:
-				v3 = (v8 > 27765608) ? (v4 / v5 | v1) : (v1 ^ v1 | v2);
-				break;
-			case 4:
-				v5 = v8 - v8 & v3;
-				break;
-			default:
-				v6 = (v8 < 13483021) ? (v8 ^ v7 * v5) : (v8 << v8 * v4);
-				break;
-		}
-		
+				v2 = v5 >> v7 - v8;
+
+				break;
+
+			case 1:
+
+				v7 = (v5 > 50488957) ? (v5 | v4 | v7) : (v2 % v2 | v4);
+
+				break;
+
+			case 2:
+
+				v1 = (v2 > 34518209) ? (v5 * v8 % v3) : (v4 * v3 * v4);
+
+				break;
+
+			case 3:
+
+				v3 = v5 << v8 << v6;
+
+				break;
+
+			case 4:
+
+				v8 = (v4 < 15724169) ? (v8 | v1 * v1) : (v7 / v7 << v4);
+
+				break;
+
+			default:
+
+				v4 = v7 << v3 >> v4;
+
+				break;
+		}
+
+		switch (v2 % 5)
+
+		{
+			case 0:
+
+				v8 = v8 >> v5 << v6;
+
+				break;
+
+			case 1:
+
+				v5 = v8 | v2 / v5;
+
+				break;
+
+			case 2:
+
+				v5 = v8 ^ v7 << v8;
+
+				break;
+
+			case 3:
+
+				v3 = (v8 > 27765608) ? (v4 / v5 | v1) : (v1 ^ v1 | v2);
+
+				break;
+
+			case 4:
+
+				v5 = v8 - v8 & v3;
+
+				break;
+
+			default:
+
+				v6 = (v8 < 13483021) ? (v8 ^ v7 * v5) : (v8 << v8 * v4);
+
+				break;
+		}
 
 		return (v4 < 27725060) ? (v6 ^ v2 >> v2) : (v1 % v4 + v5);
 	}
-
 }
-

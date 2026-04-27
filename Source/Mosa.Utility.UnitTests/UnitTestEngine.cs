@@ -47,6 +47,7 @@ public class UnitTestEngine : IDisposable
 	protected Process Process;
 
 	private readonly OutputStatusDelegate OutputStatus;
+	private readonly Func<CompilerHooks> CompilerHooksFactory;
 
 	private MosaSettings MosaSettings = new();
 
@@ -71,9 +72,10 @@ public class UnitTestEngine : IDisposable
 
 	#endregion Private Data Members
 
-	public UnitTestEngine(MosaSettings mosaSettings, OutputStatusDelegate outputStatus)
+	public UnitTestEngine(MosaSettings mosaSettings, OutputStatusDelegate outputStatus, Func<CompilerHooks> compilerHooksFactory = null)
 	{
 		OutputStatus = outputStatus;
+		CompilerHooksFactory = compilerHooksFactory;
 
 		MosaSettings.LoadAppLocations();
 		MosaSettings.SetDefaultSettings();
@@ -268,12 +270,11 @@ public class UnitTestEngine : IDisposable
 
 	private CompilerHooks CreateCompilerHook()
 	{
-		var compilerHooks = new CompilerHooks
-		{
-			NotifyEvent = NotifyEvent,
-			NotifyProgress = NotifyProgress,
-			NotifyStatus = NotifyStatus,
-		};
+		var compilerHooks = CompilerHooksFactory?.Invoke() ?? new CompilerHooks();
+
+		compilerHooks.NotifyEvent ??= NotifyEvent;
+		compilerHooks.NotifyProgress ??= NotifyProgress;
+		compilerHooks.NotifyStatus ??= NotifyStatus;
 
 		return compilerHooks;
 	}
@@ -600,6 +601,17 @@ public class UnitTestEngine : IDisposable
 				OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(unittest)}");
 
 				Errors++;
+
+				if (MosaSettings.UnitTestFailFast)
+				{
+					Queue.Clear();
+					foreach (var active in Active.Values)
+					{
+						active.Status = UnitTestStatus.Skipped;
+					}
+					Active.Clear();
+				}
+
 				CheckAbort();
 			}
 		}

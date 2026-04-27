@@ -512,6 +512,36 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.UnitTest_Filter, value);
 	}
 
+	public string UnitTestBisectorStage
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Stage, null);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Stage, value);
+	}
+
+	public bool UnitTestBisectorMasking
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Masking, true);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Masking, value);
+	}
+
+	public bool UnitTestBisectorPairwise
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Pairwise, false);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Pairwise, value);
+	}
+
+	public string UnitTestBisectorDisabledTransformsFile
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_DisabledTransformsFile, null);
+		set => Settings.SetValue(Name.UnitTest_Bisector_DisabledTransformsFile, value);
+	}
+
+	public bool UnitTestFailFast
+	{
+		get => Settings.GetValue(Name.UnitTest_FailFast, false);
+		set => Settings.SetValue(Name.UnitTest_FailFast, value);
+	}
+
 	public string ExplorerFilter
 	{
 		get => Settings.GetValue(Name.Explorer_Filter, null);
@@ -632,7 +662,7 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.Compiler_Diagnostic, value);
 	}
 
-	public bool EmitStatistics
+	public bool Statistics
 	{
 		get => Settings.GetValue(Name.CompilerDebug_Statistics, true);
 		set => Settings.SetValue(Name.CompilerDebug_Statistics, value);
@@ -666,10 +696,10 @@ public partial class MosaSettings
 		get => Settings.GetValueList(Name.Optimizations_Inline_Exclude);
 	}
 
-	public bool FullCheckMode
+	public bool CheckMode
 	{
-		get => Settings.GetValue(Name.Compiler_FullCheckMode, false);
-		set => Settings.SetValue(Name.Compiler_FullCheckMode, value);
+		get => Settings.GetValue(Name.Compiler_CheckMode, false);
+		set => Settings.SetValue(Name.Compiler_CheckMode, value);
 	}
 
 	public string BreakpointFile
@@ -853,9 +883,11 @@ public partial class MosaSettings
 
 		InitialStackLocation = 0;
 		Diagnostic = false;
-		EmitStatistics = false;
+		Statistics = false;
 
-		MaxThreads = Multithreading ? (int)(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 0;
+		UnitTestFailFast = false;
+
+		MaxThreads = Multithreading ? (int)Math.Ceiling(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 0;
 	}
 
 	public void NormalizeSettings()

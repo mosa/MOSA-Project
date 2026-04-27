@@ -91,8 +91,21 @@ internal sealed class PipelinePool : IAsyncDisposable
 
 			while (!ct.IsCancellationRequested)
 			{
+				if (Compiler.IsStopped)
+				{
+					TryCompleteIfDone();
+					break;
+				}
+
 				// capacity first: get a free slot
 				int slot = await freeSlots.Reader.ReadAsync(ct).ConfigureAwait(false);
+
+				if (Compiler.IsStopped)
+				{
+					freeSlots.Writer.TryWrite(slot);
+					TryCompleteIfDone();
+					break;
+				}
 
 				// only now pop (preserves your prioritization property)
 				var methodData = MethodScheduler.Get();
@@ -151,6 +164,15 @@ internal sealed class PipelinePool : IAsyncDisposable
 
 	private void TryCompleteIfDone()
 	{
+		// If stopped, complete once no workers are active.
+		if (Compiler.IsStopped)
+		{
+			if (Volatile.Read(ref active) == 0)
+				completed.TrySetResult();
+
+			return;
+		}
+
 		// This is the termination condition: queue empty AND no active workers.
 		if (Volatile.Read(ref active) != 0)
 			return;

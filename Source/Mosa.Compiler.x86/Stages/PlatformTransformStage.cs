@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.Transforms.LowerTo32;
 using Mosa.Compiler.x86.Transforms.AddressMode;
+using Mosa.Compiler.x86.Transforms.Constant;
 using Mosa.Compiler.x86.Transforms.FixedRegisters;
 using Mosa.Compiler.x86.Transforms.Optimizations.Manual.Special;
 using Mosa.Compiler.x86.Transforms.Stack;
@@ -24,6 +25,7 @@ public sealed class PlatformTransformStage : Framework.Stages.BaseTransformStage
 		AddTranforms(FixedRegistersTransforms.List);
 		AddTranforms(StackTransforms.List);
 		AddTranforms(AddressModeTransforms.List);
+		AddTranforms(ConstantTransforms.List);
 
 		AddTranform(new Mov32Unless());
 		AddTranform(new Mov32Coalescing());

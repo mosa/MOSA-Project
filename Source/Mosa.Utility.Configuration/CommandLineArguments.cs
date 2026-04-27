@@ -85,7 +85,7 @@ public static class CommandLineArguments
 			// Compiler - Diagnostic:
 			new Argument { Name = "-diagnostic", Setting = Name.Compiler_Diagnostic, Value = "true"},
 			new Argument { Name = "-diag", Setting = Name.Compiler_Diagnostic, Value = "true"},
-			new Argument { Name = "-check", Setting = Name.Compiler_FullCheckMode, Value = "true"},
+			new Argument { Name = "-check", Setting = Name.Compiler_CheckMode, Value = "true"},
 			new Argument { Name = "-stats", Setting = Name.CompilerDebug_Statistics, Value = "true"},
 
 			new Argument { Name = "-interrupt-method", Setting = Name.X86_InterruptMethodName},
@@ -193,6 +193,13 @@ public static class CommandLineArguments
 			// Unit Tests:
 			new Argument { Name = "-filter", Setting = Name.UnitTest_Filter, Value = null},
 			new Argument { Name = "-maxerrors", Setting = Name.UnitTest_MaxErrors},
+			new Argument { Name = "-fail-fast", Setting = Name.UnitTest_FailFast, Value = "true"},
+			new Argument { Name = "-bisect-stage", Setting = Name.UnitTest_Bisector_Stage},
+			new Argument { Name = "-bisect-masking", Setting = Name.UnitTest_Bisector_Masking, Value = "true"},
+			new Argument { Name = "-bisect-masking-off", Setting = Name.UnitTest_Bisector_Masking, Value = "false"},
+			new Argument { Name = "-bisect-pairwise", Setting = Name.UnitTest_Bisector_Pairwise, Value = "true"},
+			new Argument { Name = "-bisect-pairwise-off", Setting = Name.UnitTest_Bisector_Pairwise, Value = "false"},
+			new Argument { Name = "-bisect-disabled-file", Setting = Name.UnitTest_Bisector_DisabledTransformsFile},
 
 			// Optimization Levels:
 			new Argument { Name = "-o0", Setting = Name.Optimizations_Basic, Value = "false"},

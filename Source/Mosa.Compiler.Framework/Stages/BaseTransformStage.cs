@@ -236,6 +236,11 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		{
 			var transform = instructionTransforms[i];
 
+			Compiler.CompilerHooks.NotifyTransformObserved?.Invoke(Name, transform.Name);
+
+			if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
+				continue;
+
 			var updated = Transform.ApplyTransform(context, transform);
 
 			if (updated)
@@ -248,7 +253,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 				if (MethodCompiler.Statistics)
 					UpdateCounter(transform.Name, 1);
 
-				if (MosaSettings.FullCheckMode)
+				if (MosaSettings.CheckMode)
 					FullCheck(false);
 
 				return true;
@@ -271,7 +276,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 			if (updated)
 			{
-				if (MosaSettings.FullCheckMode)
+				if (MosaSettings.CheckMode)
 					FullCheck(false);
 
 				if (MethodCompiler.Statistics)

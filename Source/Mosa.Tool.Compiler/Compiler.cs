@@ -76,9 +76,9 @@ public class Compiler
 			Debug.AutoFlush = true;
 
 			OutputStatus($"Input file(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SourceFiles.ToArray()))}");
-			OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SearchPaths.ToArray()))}");
+			//OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SearchPaths.ToArray()))}");
 			OutputStatus($"Output file: {compiler.MosaSettings.OutputFile}");
-			OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
+			OutputStatus($"Available Cores: {Environment.ProcessorCount}");
 			OutputStatus($"Max Threads: {compiler.MosaSettings.MaxThreads}");
 			OutputStatus($"Platform: {compiler.MosaSettings.Platform}");
 

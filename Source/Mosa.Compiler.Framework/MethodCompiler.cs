@@ -422,7 +422,7 @@ public sealed class MethodCompiler
 
 				CreateInstructionTrace(stage);
 
-				if (Compiler.FullCheckMode)
+				if (Compiler.CheckMode)
 					stage.FullCheck(true);
 
 				stage.CleanUp();

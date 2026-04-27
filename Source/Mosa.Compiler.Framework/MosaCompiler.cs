@@ -178,4 +178,10 @@ public sealed class MosaCompiler
 		// Thread Safe
 		Compiler.CompileMethod(method);
 	}
+
+	public void Dispose()
+	{
+		Compiler?.ClearResources();
+		Compiler = null;
+	}
 }
