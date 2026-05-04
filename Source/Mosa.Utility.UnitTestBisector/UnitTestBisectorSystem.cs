@@ -3,8 +3,6 @@
 using System.Diagnostics;
 using System.Text.Json;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.UnitTests;
 
@@ -601,7 +599,7 @@ public sealed partial class UnitTestBisectorSystem
 				return new IterationResult(false);
 			}
 
-			var unitTests = PrepareUnitTests(discoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
+			var unitTests = unitTestEngine.PrepareUnitTests(discoveredUnitTests);
 
 			unitTestEngine.QueueUnitTests(unitTests);
 			unitTestEngine.WaitUntilComplete();
@@ -683,23 +681,6 @@ public sealed partial class UnitTestBisectorSystem
 
 		foreach (var transformName in bisectorDisabledTransformNames)
 			effectiveDisabledTransformNames.Add(transformName);
-	}
-
-	private List<UnitTest> PrepareUnitTests(List<UnitTestInfo> tests, TypeSystem typeSystem, MosaLinker linker)
-	{
-		var unitTests = new List<UnitTest>(tests.Count);
-		var id = 0;
-
-		foreach (var unitTestInfo in tests)
-		{
-			var linkerMethodInfo = Linker.GetMethodInfo(typeSystem, linker, unitTestInfo);
-			var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo);
-			unitTest.SerializedUnitTest = UnitTestSystem.SerializeUnitTestMessage(unitTest);
-			unitTest.UnitTestID = ++id;
-			unitTests.Add(unitTest);
-		}
-
-		return unitTests;
 	}
 
 	private void PrintDisabledTransforms()

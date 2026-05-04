@@ -225,6 +225,38 @@ public class UnitTestEngine : IDisposable
 		DebugServerEngine.Send(messages);
 	}
 
+	public List<UnitTest> PrepareUnitTests(List<UnitTestInfo> discoveredUnitTests)
+	{
+		var unitTests = new List<UnitTest>(discoveredUnitTests.Count);
+
+		var id = 0;
+
+		foreach (var unitTestInfo in discoveredUnitTests)
+		{
+			LinkerMethodInfo linkerMethodInfo;
+
+			try
+			{
+				linkerMethodInfo = UnitTests.Linker.GetMethodInfo(TypeSystem, Linker, unitTestInfo);
+			}
+			catch (Exception)
+			{
+				OutputStatus($"ERROR: Unable to resolve method: {unitTestInfo.FullMethodName}");
+
+				throw;
+			}
+
+			var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo);
+
+			unitTest.SerializedUnitTest = UnitTestSerializer.SerializeUnitTestMessage(unitTest);
+			unitTest.UnitTestID = ++id;
+
+			unitTests.Add(unitTest);
+		}
+
+		return unitTests;
+	}
+
 	public void QueueUnitTests(List<UnitTest> unitTests)
 	{
 		lock (Queue)
@@ -568,7 +600,7 @@ public class UnitTestEngine : IDisposable
 					foreach (var entry in Active)
 					{
 						entry.Value.Status = UnitTestStatus.FailedByCrash;
-						OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(entry.Value)}");
+						OutputStatus($"ERROR: {UnitTestSerializer.FormatUnitTestResult(entry.Value)}");
 					}
 				}
 				else
@@ -633,7 +665,7 @@ public class UnitTestEngine : IDisposable
 				}
 			}
 
-			UnitTestSystem.ParseResultData(unittest, data);
+			UnitTestSerializer.ParseResultData(unittest, data);
 
 			if (Equals(unittest.Expected, unittest.Result))
 			{
@@ -643,7 +675,7 @@ public class UnitTestEngine : IDisposable
 			{
 				unittest.Status = UnitTestStatus.Failed;
 
-				OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(unittest)}");
+				OutputStatus($"ERROR: {UnitTestSerializer.FormatUnitTestResult(unittest)}");
 
 				Errors++;
 
