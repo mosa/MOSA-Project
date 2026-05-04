@@ -18,7 +18,7 @@ public partial class MosaSettings
 		public const int ConnectionTimeOut = 15000; // in milliseconds
 		public const int TimeOut = 5000; // in milliseconds
 
-		public const int MaxAttempts = 20;
+		public const int MaxAttempts = 4;
 		public const int Port = 11110;
 
 		public const int EmulatorMaxRuntime = 20; // in seconds

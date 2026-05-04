@@ -21,8 +21,6 @@ public sealed partial class UnitTestBisectorSystem
 	private string lastCompilationFailure;
 	private string unitTestFilter;
 
-	private List<UnitTestInfo> discoveredUnitTests = [];
-	private bool observeFilterOnly;
 	private HashSet<string> observedTransformNames = [];
 	private Dictionary<string, int> observedTransformCounts = new(StringComparer.Ordinal);
 	private HashSet<string> bisectorDisabledTransformNames = [];
@@ -66,11 +64,8 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"State File: {stateFile}");
 
 			OutputStatus("Discovering Unit Tests...");
-			discoveredUnitTests = Discovery.DiscoverUnitTests(unitTestFilter);
-			observeFilterOnly = !string.IsNullOrWhiteSpace(unitTestFilter) && discoveredUnitTests.Count != 0;
+			var discoveredUnitTests = UnitTestRunner.Discover(unitTestFilter);
 			OutputStatus($"Found Tests: {discoveredUnitTests.Count} in {stopwatch.ElapsedMilliseconds / 1000.0:F1} secs");
-			if (observeFilterOnly)
-				OutputStatusBisector($"Observed Methods In Scope: {discoveredUnitTests.Count}");
 
 			if (discoveredUnitTests.Count == 0)
 			{
@@ -83,7 +78,7 @@ public sealed partial class UnitTestBisectorSystem
 				var bisectorState = LoadOrCreateState(stateFile, plan);
 				EnsureStateCompatibility(bisectorState, plan, OrderKind.Unspecified);
 				OutputStatusBisector($"Saved Iteration: {bisectorState.IterationNumber}");
-				return ExecuteBisectorPlan(plan, stateFile, bisectorState);
+				return ExecuteBisectorPlan(plan, stateFile, bisectorState, discoveredUnitTests);
 			}
 
 			var state = LoadOrCreateState(stateFile, plan);
@@ -98,7 +93,7 @@ public sealed partial class UnitTestBisectorSystem
 				bisectorDisabledTransformNames = [];
 				RebuildEffectiveDisabledSet();
 
-				var discoveryResult = ExecuteIteration(state.IterationNumber);
+				var discoveryResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 				OutputStatusBisector($"Discovery Iteration: {(discoveryResult.Passed ? "PASS" : "FAIL")}");
 
 				var observed = observedTransformNames
@@ -145,8 +140,8 @@ public sealed partial class UnitTestBisectorSystem
 			}
 
 			return plan == PlanKind.RandomCombo
-				? ExecuteRandomComboPlan(stateFile, state)
-				: ExecuteDeterministicPlan(stateFile, state, plan);
+				? ExecuteRandomComboPlan(stateFile, state, discoveredUnitTests)
+				: ExecuteDeterministicPlan(stateFile, state, plan, discoveredUnitTests);
 		}
 		catch (Exception ex)
 		{
@@ -161,7 +156,7 @@ public sealed partial class UnitTestBisectorSystem
 		return plan is PlanKind.FailureInducing or PlanKind.Masking;
 	}
 
-	private int ExecuteBisectorPlan(PlanKind plan, string stateFile, BisectorState state)
+	private int ExecuteBisectorPlan(PlanKind plan, string stateFile, BisectorState state, List<UnitTestInfo> discoveredUnitTests)
 	{
 		if (!IsBisectorPlan(plan))
 			throw new InvalidOperationException($"Plan '{plan}' is not a bisector plan.");
@@ -188,7 +183,7 @@ public sealed partial class UnitTestBisectorSystem
 			bisectorDisabledTransformNames = [];
 			RebuildEffectiveDisabledSet();
 
-			var discoveryResult = ExecuteIteration(state.IterationNumber);
+			var discoveryResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.BaselineCompleted = true;
 			state.BaselinePassed = discoveryResult.Passed;
 			UpdateCounters(state, discoveryResult.Passed);
@@ -240,7 +235,7 @@ public sealed partial class UnitTestBisectorSystem
 
 		if (plan == PlanKind.FailureInducing)
 		{
-			state.Results = RunBisectorSession(stateFile, state, "Failure-Inducing", invertOutcome: false, discoveryResultForSession);
+			state.Results = RunBisectorSession(stateFile, state, "Failure-Inducing", invertOutcome: false, discoveryResultForSession, discoveredUnitTests);
 			state.NextIndex = state.Results.Count;
 			state.Completed = !hasCompilationFailure;
 			SaveState(stateFile, state);
@@ -251,7 +246,7 @@ public sealed partial class UnitTestBisectorSystem
 		if (!discoveryResultForSession.Passed)
 		{
 			OutputStatusBisector("Masking baseline is FAIL. Falling back to failure-inducing bisector to narrow failing transforms.");
-			state.Results = RunBisectorSession(stateFile, state, "Failure-Inducing", invertOutcome: false, discoveryResultForSession);
+			state.Results = RunBisectorSession(stateFile, state, "Failure-Inducing", invertOutcome: false, discoveryResultForSession, discoveredUnitTests);
 			state.NextIndex = state.Results.Count;
 			state.Completed = !hasCompilationFailure;
 			SaveState(stateFile, state);
@@ -262,7 +257,7 @@ public sealed partial class UnitTestBisectorSystem
 		OutputStatusBisector("Running masking pre-check (all transforms disabled)...");
 		bisectorDisabledTransformNames = [.. state.ObservedTransforms];
 		RebuildEffectiveDisabledSet();
-		var maskingPreCheckResult = ExecuteIteration(state.IterationNumber);
+		var maskingPreCheckResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 		bisectorDisabledTransformNames = [];
 		RebuildEffectiveDisabledSet();
 
@@ -284,7 +279,7 @@ public sealed partial class UnitTestBisectorSystem
 			return 0;
 		}
 
-		state.Results = RunBisectorSession(stateFile, state, "Masking", invertOutcome: true, discoveryResultForSession);
+		state.Results = RunBisectorSession(stateFile, state, "Masking", invertOutcome: true, discoveryResultForSession, discoveredUnitTests);
 		state.NextIndex = state.Results.Count;
 		state.Completed = !hasCompilationFailure;
 		SaveState(stateFile, state);
@@ -292,7 +287,7 @@ public sealed partial class UnitTestBisectorSystem
 		return hasCompilationFailure ? 1 : 0;
 	}
 
-	private List<PlanResult> RunBisectorSession(string stateFile, BisectorState state, string sessionName, bool invertOutcome, IterationResult discoveryResult)
+	private List<PlanResult> RunBisectorSession(string stateFile, BisectorState state, string sessionName, bool invertOutcome, IterationResult discoveryResult, List<UnitTestInfo> discoveredUnitTests)
 	{
 		var sessionResults = new List<PlanResult>();
 		bisectorDisabledTransformNames = [];
@@ -326,7 +321,7 @@ public sealed partial class UnitTestBisectorSystem
 			PrintIterationHeader(sessionName, status);
 			PrintDisabledTransforms();
 
-			var iterationResult = ExecuteIteration(state.IterationNumber);
+			var iterationResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			var mappedResult = MapOutcome(iterationResult.Passed, invertOutcome);
 
 			sessionResults.Add(new PlanResult
@@ -583,7 +578,7 @@ public sealed partial class UnitTestBisectorSystem
 		return disabled;
 	}
 
-	private IterationResult ExecuteIteration(int iterationNumber)
+	private IterationResult ExecuteIteration(int iterationNumber, List<UnitTestInfo> discoveredUnitTests)
 	{
 		using var assertCapture = new AssertCaptureScope();
 		OutputIterationExecutionStatus("Before", iterationNumber);
@@ -599,10 +594,7 @@ public sealed partial class UnitTestBisectorSystem
 				return new IterationResult(false);
 			}
 
-			var unitTests = unitTestEngine.PrepareUnitTests(discoveredUnitTests);
-
-			unitTestEngine.QueueUnitTests(unitTests);
-			unitTestEngine.WaitUntilComplete();
+			var unitTests = UnitTestRunner.Run(unitTestEngine, discoveredUnitTests);
 			unitTestEngine.Terminate();
 
 			var passed = true;
@@ -652,9 +644,7 @@ public sealed partial class UnitTestBisectorSystem
 		if (!string.Equals(stageName, mosaSettings.BisectorStage, StringComparison.Ordinal))
 			return;
 
-		// When bisector is active, observe all transforms regardless of filter
-		// The filter is only for limiting which tests run, not which transforms are observed during bisection
-		if (bisector == null && observeFilterOnly && !methodFullName.Contains(unitTestFilter, StringComparison.Ordinal))
+		if (bisector == null && unitTestFilter != null && !methodFullName.Contains(unitTestFilter, StringComparison.Ordinal))
 			return;
 
 		lock (transformDiscoveryLock)
@@ -832,7 +822,7 @@ public sealed partial class UnitTestBisectorSystem
 		return disabled;
 	}
 
-	private int ExecuteDeterministicPlan(string stateFile, BisectorState state, PlanKind plan)
+	private int ExecuteDeterministicPlan(string stateFile, BisectorState state, PlanKind plan, List<UnitTestInfo> discoveredUnitTests)
 	{
 		if (!state.BaselineCompleted)
 		{
@@ -844,7 +834,7 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
 			PrintDisabledTransforms();
 
-			var baselineResult = ExecuteIteration(state.IterationNumber);
+			var baselineResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.BaselineCompleted = true;
 			state.BaselinePassed = baselineResult.Passed;
 			UpdateCounters(state, baselineResult.Passed);
@@ -882,7 +872,7 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Transform: {transform}");
 			PrintDisabledTransforms();
 
-			var iterationResult = ExecuteIteration(state.IterationNumber);
+			var iterationResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.Results.Add(new PlanResult
 			{
 				Transform = transform,
@@ -925,7 +915,7 @@ public sealed partial class UnitTestBisectorSystem
 		return 0;
 	}
 
-	private int ExecuteRandomComboPlan(string stateFile, BisectorState state)
+	private int ExecuteRandomComboPlan(string stateFile, BisectorState state, List<UnitTestInfo> discoveredUnitTests)
 	{
 		if (!state.BaselineCompleted)
 		{
@@ -937,7 +927,7 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
 			PrintDisabledTransforms();
 
-			var baselineResult = ExecuteIteration(state.IterationNumber);
+			var baselineResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.BaselineCompleted = true;
 			state.BaselinePassed = baselineResult.Passed;
 			UpdateCounters(state, baselineResult.Passed);
@@ -975,7 +965,7 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
 			PrintDisabledTransforms();
 
-			var iterationResult = ExecuteIteration(state.IterationNumber);
+			var iterationResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.Results.Add(new PlanResult
 			{
 				Transform = $"random-{iterationNumber}",

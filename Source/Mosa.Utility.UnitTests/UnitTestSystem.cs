@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using System.Reflection;
 using Mosa.Utility.Configuration;
 
 namespace Mosa.Utility.UnitTests;
@@ -12,13 +11,8 @@ public class UnitTestSystem
 
 	private readonly Stopwatch Stopwatch = new();
 	private readonly MosaSettings MosaSettings = new();
-	private List<UnitTestInfo> DiscoveredUnitTests = [];
-	private List<UnitTest> UnitTests = [];
 
 	#endregion Data
-
-	public static Type CombinationType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Combinations");
-	public static Type SeriesType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Series2");
 
 	public int Start(string[] args)
 	{
@@ -29,9 +23,9 @@ public class UnitTestSystem
 
 			OutputStatus("Discovering Unit Tests...");
 
-			DiscoveredUnitTests = Discovery.DiscoverUnitTests(MosaSettings.UnitTestFilter);
+			var discoveredUnitTests = UnitTestRunner.Discover(MosaSettings.UnitTestFilter);
 
-			OutputStatus($"Found Tests: {DiscoveredUnitTests.Count} in {Stopwatch.ElapsedMilliseconds / 1000.0:F2} secs");
+			OutputStatus($"Found Tests: {discoveredUnitTests.Count} in {Stopwatch.ElapsedMilliseconds / 1000.0:F2} secs");
 			OutputStatus("Starting Unit Test Engine...");
 
 			var unitTestEngine = new UnitTestEngine(MosaSettings, OutputStatus);
@@ -42,12 +36,9 @@ public class UnitTestSystem
 				return 1;
 			}
 
-			UnitTests = unitTestEngine.PrepareUnitTests(DiscoveredUnitTests);
-
 			var executeStart = Stopwatch.ElapsedMilliseconds;
 
-			unitTestEngine.QueueUnitTests(UnitTests);
-			unitTestEngine.WaitUntilComplete();
+			var unitTests = UnitTestRunner.Run(unitTestEngine, discoveredUnitTests);
 
 			var elapse = Stopwatch.ElapsedMilliseconds;
 
@@ -61,7 +52,7 @@ public class UnitTestSystem
 			var skipped = 0;
 			var incomplete = 0;
 
-			foreach (var unitTest in UnitTests)
+			foreach (var unitTest in unitTests)
 			{
 				switch (unitTest.Status)
 				{
