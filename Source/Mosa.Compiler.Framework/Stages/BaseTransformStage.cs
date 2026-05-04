@@ -236,7 +236,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		{
 			var transform = instructionTransforms[i];
 
-			Compiler.CompilerHooks.NotifyTransformObserved?.Invoke(Name, transform.Name);
+			Compiler.CompilerHooks.NotifyTransformObserved?.Invoke(Name, transform.Name, MethodCompiler.Method.FullName);
 
 			if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
 				continue;

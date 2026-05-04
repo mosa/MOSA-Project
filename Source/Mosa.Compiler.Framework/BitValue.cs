@@ -138,6 +138,17 @@ public sealed class BitValue
 
 	#region Public Methods
 
+	public bool IsSame(BitValue other)
+	{
+		if (other == null)
+			return false;
+
+		return BitsClear == other.BitsClear
+			&& BitsSet == other.BitsSet
+			&& MaxValue == other.MaxValue
+			&& MinValue == other.MinValue;
+	}
+
 	public BitValue SetValue(BitValue value)
 	{
 		return Narrow(value).SetStable();

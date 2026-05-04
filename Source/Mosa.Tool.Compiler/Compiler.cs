@@ -78,8 +78,8 @@ public class Compiler
 			OutputStatus($"Input file(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SourceFiles.ToArray()))}");
 			//OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(compiler.MosaSettings.SearchPaths.ToArray()))}");
 			OutputStatus($"Output file: {compiler.MosaSettings.OutputFile}");
-			OutputStatus($"Available Cores: {Environment.ProcessorCount}");
-			OutputStatus($"Max Threads: {compiler.MosaSettings.MaxThreads}");
+			OutputStatus($"Available Cores: {Environment.ProcessorCount} | Max Threads: {compiler.MosaSettings.MaxThreads}");
+			ReportProcessAffinity();
 			OutputStatus($"Platform: {compiler.MosaSettings.Platform}");
 
 			compiler.Load();
@@ -122,7 +122,7 @@ public class Compiler
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (CompilerHooks.IsStandardFilteredNotifyEvent(compilerEvent))
+		if (!CompilerHooks.IsStandardNotifyEvent(compilerEvent))
 			return;
 
 		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
@@ -134,6 +134,48 @@ public class Compiler
 	private void OutputStatus(string status)
 	{
 		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
+	}
+
+	private void ReportProcessAffinity()
+	{
+		OutputStatus($"Process ID: {Environment.ProcessId}");
+
+		if (!OperatingSystem.IsWindows())
+		{
+			OutputStatus("Process affinity check is currently only reported on Windows.");
+			return;
+		}
+
+		try
+		{
+			using var process = Process.GetCurrentProcess();
+
+			var affinity = (ulong)process.ProcessorAffinity.ToInt64();
+			var logicalCores = Environment.ProcessorCount;
+			OutputStatus($"Process Affinity Mask: 0x{affinity:X}");
+
+			if (logicalCores > 63)
+			{
+				OutputStatus("Affinity check is limited when more than 63 logical cores are available.");
+				return;
+			}
+
+			var expectedMask = (1UL << logicalCores) - 1;
+			OutputStatus($"Expected Full Mask: 0x{expectedMask:X}");
+
+			if (affinity != expectedMask)
+			{
+				OutputStatus("WARNING: Process affinity appears restricted.");
+			}
+			else
+			{
+				OutputStatus("Process affinity appears unrestricted.");
+			}
+		}
+		catch (Exception ex)
+		{
+			OutputStatus($"Process affinity check unavailable: {ex.Message}");
+		}
 	}
 
 	#endregion Private Methods

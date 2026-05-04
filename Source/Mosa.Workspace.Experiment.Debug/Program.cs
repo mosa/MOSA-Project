@@ -160,7 +160,7 @@ internal static class Program
 
 	private static void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (CompilerHooks.IsStandardFilteredNotifyEvent(compilerEvent))
+		if (!CompilerHooks.IsStandardNotifyEvent(compilerEvent))
 			return;
 
 		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)

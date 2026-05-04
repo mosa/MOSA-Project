@@ -17,9 +17,19 @@ public partial class MosaSettings
 		public const int MaxErrors = 20;
 		public const int ConnectionTimeOut = 15000; // in milliseconds
 		public const int TimeOut = 5000; // in milliseconds
+
 		public const int MaxAttempts = 20;
 		public const int Port = 11110;
+
 		public const int EmulatorMaxRuntime = 20; // in seconds
+		public const string BisectorStateFile = "bisector-state.json";
+		public const string BisectorPlan = "disable-one";
+		public const string BisectorOrder = "original";
+		public const int BisectorIterations = 20;
+		public const int BisectorRandomSeed = 0;
+		public const int BisectorMaxRestarts = 5;
+
+		public const string BisectorStage = "OptimizationStage";
 
 		public const int X86StackLocation = 0x30000;
 		public const int X64StackLocation = 0x30000;
@@ -175,6 +185,12 @@ public partial class MosaSettings
 	{
 		get => Settings.GetValue(Name.AppLocation_GDB, null);
 		set => Settings.SetValue(Name.AppLocation_GDB, value);
+	}
+
+	public string BisectorApp
+	{
+		get => Settings.GetValue(Name.AppLocation_UnitTestBisector, null);
+		set => Settings.SetValue(Name.AppLocation_UnitTestBisector, value);
 	}
 
 	public string GDBHost
@@ -512,28 +528,82 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.UnitTest_Filter, value);
 	}
 
-	public string UnitTestBisectorStage
+	public string BisectorStage
 	{
-		get => Settings.GetValue(Name.UnitTest_Bisector_Stage, null);
+		get => Settings.GetValue(Name.UnitTest_Bisector_Stage, Constant.BisectorStage);
 		set => Settings.SetValue(Name.UnitTest_Bisector_Stage, value);
 	}
 
-	public bool UnitTestBisectorMasking
+	public bool BisectorMasking
 	{
 		get => Settings.GetValue(Name.UnitTest_Bisector_Masking, true);
 		set => Settings.SetValue(Name.UnitTest_Bisector_Masking, value);
 	}
 
-	public bool UnitTestBisectorPairwise
+	public bool BisectorPairwise
 	{
 		get => Settings.GetValue(Name.UnitTest_Bisector_Pairwise, false);
 		set => Settings.SetValue(Name.UnitTest_Bisector_Pairwise, value);
 	}
 
-	public string UnitTestBisectorDisabledTransformsFile
+	public string BisectorDisabledTransformsFile
 	{
 		get => Settings.GetValue(Name.UnitTest_Bisector_DisabledTransformsFile, null);
 		set => Settings.SetValue(Name.UnitTest_Bisector_DisabledTransformsFile, value);
+	}
+
+	public string BisectorStateFile
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_StateFile, Constant.BisectorStateFile);
+		set => Settings.SetValue(Name.UnitTest_Bisector_StateFile, value);
+	}
+
+	public string BisectorPlan
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Plan, Constant.BisectorPlan);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Plan, value);
+	}
+
+	public bool BisectorResetState
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_ResetState, false);
+		set => Settings.SetValue(Name.UnitTest_Bisector_ResetState, value);
+	}
+
+	public string BisectorOrder
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Order, Constant.BisectorOrder);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Order, value);
+	}
+
+	public int BisectorIterations
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Iterations, Constant.BisectorIterations);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Iterations, value);
+	}
+
+	public int BisectorRandomSeed
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_RandomSeed, Constant.BisectorRandomSeed);
+		set => Settings.SetValue(Name.UnitTest_Bisector_RandomSeed, value);
+	}
+
+	public bool BisectorWorkerIteration
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_WorkerIteration, false);
+		set => Settings.SetValue(Name.UnitTest_Bisector_WorkerIteration, value);
+	}
+
+	public string BisectorWorkingDirectory
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Supervisor_WorkingDirectory, null);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Supervisor_WorkingDirectory, value);
+	}
+
+	public int BisectorMaxRestarts
+	{
+		get => Settings.GetValue(Name.UnitTest_Bisector_Supervisor_MaxRestarts, Constant.BisectorMaxRestarts);
+		set => Settings.SetValue(Name.UnitTest_Bisector_Supervisor_MaxRestarts, value);
 	}
 
 	public bool UnitTestFailFast
@@ -790,7 +860,7 @@ public partial class MosaSettings
 
 	public void LoadAppLocations()
 	{
-		AppLocationsSettings.GetAppLocations(this);
+		AppLocations.GetAppLocations(this);
 	}
 
 	public void LoadArguments(string[] args)
@@ -832,12 +902,7 @@ public partial class MosaSettings
 		PlatformOptimizations = true;
 		InlineMethods = true;
 		InlineExplicit = true;
-		InlineMaximum = Constant.Optimizations_Inline_Maximum;
-		InlineAggressiveMaximum = Constant.Optimizations_Inline_AggressiveMaximum;
-		OptimizationScanWindow = Constant.Optimizations_ScanWindow;
-		ReduceCodeSize = false;
-
-		Emulator = "Qemu";
+		Emulator = "qemu";
 		EmulatorDisplay = false;
 		EmulatorCores = 1;
 
@@ -886,6 +951,7 @@ public partial class MosaSettings
 		Statistics = false;
 
 		UnitTestFailFast = false;
+		BisectorPairwise = false;
 
 		MaxThreads = Multithreading ? (int)Math.Ceiling(Environment.ProcessorCount * Constant.MultithreadingProcessorMultiplier) : 0;
 	}

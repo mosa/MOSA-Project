@@ -31,6 +31,7 @@ Application Location Settings
 	AppLocation.QemuEDK2ARM32, Location of the QEMU ARM32 UEFI firmware
 	AppLocation.QemuEDK2ARM64, Location of the QEMU ARM64 UEFI firmware
 	AppLocation.VirtualBox, Location of the VirtualBox application
+	AppLocation.UnitTestBisector, Location of the unit test bisector application used by the bisector supervisor
 
 Compiler Settings
 -----------------
@@ -68,7 +69,7 @@ Compiler Debug Settings
     CompilerDebug.PreLinkHashFile,File name to emit a list of all methods with their hash value prior to linking
     CompilerDebug.Statistics,"If true, enables statistics gathering"
 	CompilerDebug.CounterFilter,Filters the global counters within the global counters file
-	
+
 Compiler Diagnostic Settings
 ----------------------------
 
@@ -273,6 +274,13 @@ Unit Test Settings
 	UnitTest.Bisector.Masking,"If true, enables masking analysis mode in the unit test bisector"
 	UnitTest.Bisector.Pairwise,"If true, enables pairwise bisector analysis mode"
 	UnitTest.Bisector.DisabledTransformsFile,Path to a text file listing transform names to force-disable (one per line) during bisector runs
+	UnitTest.Bisector.StateFile,Path to the bisector state file used to resume interrupted runs
+	UnitTest.Bisector.Plan,"Bisector plan: disable-one, enable-one, random-combo, failure-inducing, or masking"
+	UnitTest.Bisector.Order,"Iteration order for bisector plans: original, count, or random"
+	UnitTest.Bisector.Iterations,Number of random-combo iterations to execute per run
+	UnitTest.Bisector.RandomSeed,Optional random seed for deterministic random ordering/combinations (0 = auto)
+	UnitTest.Bisector.ResetState,"If true, deletes existing state before starting"
+	UnitTest.Bisector.WorkerIteration,"If true, executes only one bisector iteration per process run"
 
 Compiler X86 Settings
 ---------------------

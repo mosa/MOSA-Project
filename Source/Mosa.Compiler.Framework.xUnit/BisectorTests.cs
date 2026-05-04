@@ -139,7 +139,7 @@ public class BisectorTests
 	public void Level2StartsAutomaticallyAfterSingleItemChecks()
 	{
 		var items = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new Bisector<string>(items);
+		var session = new Bisector<string>(items, enablePairwise: true);
 
 		var disabledItems = session.GetNextDisabledItems();
 		Assert.Empty(disabledItems);
@@ -164,7 +164,7 @@ public class BisectorTests
 	public void PairwiseInteractionIsDetected()
 	{
 		var items = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new Bisector<string>(items);
+		var session = new Bisector<string>(items, enablePairwise: true);
 
 		RunUntilComplete(session, disabledItems =>
 		{
@@ -181,7 +181,7 @@ public class BisectorTests
 	public void PairwiseStatusTracksCompletedAndRemainingTests()
 	{
 		var items = new HashSet<string> { "A", "B", "C", "D" };
-		var session = new Bisector<string>(items);
+		var session = new Bisector<string>(items, enablePairwise: true);
 
 		session.GetNextDisabledItems();
 		session.AcceptResult(false);

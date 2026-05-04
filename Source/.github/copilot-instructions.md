@@ -229,6 +229,7 @@ When adding new files to existing projects:
 5. If adding a new compiler transform, inherit from `BaseTransform` and register it in the appropriate stage.
 6. If adding new unit tests (xUnit), add them to `Mosa.Compiler.Common.xUnit` or `Mosa.Compiler.Framework.xUnit`.
 7. If adding new bare-metal test cases, add them to `Mosa.UnitTests` following the existing pattern with `[MosaUnitTest]` attributes.
+8. If adding a new setting to `MosaSettings` or `CommandLineArguments`, also add the corresponding entry to `Docs/command-line-arguments.rst`.
 
 ---
 
