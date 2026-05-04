@@ -31,17 +31,10 @@ public sealed partial class UnitTestBisectorSystem
 		Random = 3,
 	}
 
-	private const int WorkerContinueExitCode = 2;
-	private const int BaselineIterationNumber = 0;
-	private const string ExitKindUnknown = "Unknown";
-	private const string ExitKindContinue = "Continue";
-	private const string ExitKindCompleted = "Completed";
-	private const string ExitKindFailure = "Failure";
-
 	private readonly Stopwatch stopwatch = new();
 	private readonly MosaSettings mosaSettings = new();
-	private readonly object transformDiscoveryLock = new();
 	private readonly JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };
+	private readonly object transformDiscoveryLock = new();
 
 	private bool hasCompilationFailure;
 	private string lastCompilationFailure;
@@ -83,7 +76,7 @@ public sealed partial class UnitTestBisectorSystem
 			LoadForcedDisabledTransforms();
 
 			if (string.IsNullOrWhiteSpace(mosaSettings.BisectorStage))
-				throw new InvalidOperationException("A stage type name is required. Use -bisect-stage.");
+				throw new InvalidOperationException($"A stage type name is required. Use {Constant.OptionBisectStage}.");
 
 			OutputStatusBisector($"Stage: {mosaSettings.BisectorStage}");
 
@@ -139,7 +132,7 @@ public sealed partial class UnitTestBisectorSystem
 				{
 					OutputStatusBisector("No transforms observed for selected stage/plan/options. Nothing to bisect; marking session complete.");
 					state.Completed = true;
-					SetLastExit(state, ExitKindCompleted, 0);
+					SetLastExit(state, Constant.ExitKindCompleted, 0);
 					SaveState(stateFile, state);
 					WriteFailureReviewFile(stateFile, plan, state);
 					return 0;
@@ -155,7 +148,7 @@ public sealed partial class UnitTestBisectorSystem
 				state.ObservedTransformCounts = filteredCounts;
 				state.RandomSeed = ResolveRandomSeed(state.RandomSeed);
 				state.ObservedTransforms = BuildIterationSequence(observed, filteredCounts, order, state.RandomSeed);
-				state.IterationNumber = BaselineIterationNumber;
+				state.IterationNumber = Constant.BaselineIterationNumber;
 				SaveState(stateFile, state);
 
 				OutputStatusBisector($"Discovered transforms for plan: {state.ObservedTransforms.Count}");
@@ -242,7 +235,7 @@ public sealed partial class UnitTestBisectorSystem
 			{
 				OutputStatusBisector("No transforms observed for selected stage/plan/options. Nothing to bisect; marking session complete.");
 				state.Completed = true;
-				SetLastExit(state, ExitKindCompleted, 0);
+				SetLastExit(state, Constant.ExitKindCompleted, 0);
 				SaveState(stateFile, state);
 				WriteFailureReviewFile(stateFile, plan, state);
 				return 0;
@@ -259,7 +252,7 @@ public sealed partial class UnitTestBisectorSystem
 
 			state.Results = [];
 			state.NextIndex = 0;
-			state.IterationNumber = BaselineIterationNumber;
+			state.IterationNumber = Constant.BaselineIterationNumber;
 
 			SaveState(stateFile, state);
 		}
@@ -343,7 +336,7 @@ public sealed partial class UnitTestBisectorSystem
 			Passed = discoveryResult.Passed,
 			DisabledTransforms = effectiveDisabledTransformNames.OrderBy(x => x).ToList(),
 		});
-		state.IterationNumber = BaselineIterationNumber;
+		state.IterationNumber = Constant.BaselineIterationNumber;
 		state.Results = [.. sessionResults];
 		state.NextIndex = state.Results.Count;
 		SaveState(stateFile, state);
@@ -533,8 +526,8 @@ public sealed partial class UnitTestBisectorSystem
 				StageName = mosaSettings.BisectorStage,
 				UnitTestFilter = unitTestFilter,
 				DisabledTransformsFile = mosaSettings.BisectorDisabledTransformsFile,
-				IterationNumber = BaselineIterationNumber,
-				LastExitKind = ExitKindUnknown,
+				IterationNumber = Constant.BaselineIterationNumber,
+				LastExitKind = Constant.ExitKindUnknown,
 				LastExitCode = 0,
 			};
 		}
@@ -548,7 +541,7 @@ public sealed partial class UnitTestBisectorSystem
 		state.Results ??= [];
 		state.ObservedTransforms ??= [];
 		if (string.IsNullOrWhiteSpace(state.LastExitKind))
-			state.LastExitKind = ExitKindUnknown;
+			state.LastExitKind = Constant.ExitKindUnknown;
 
 		if (state.NextIndex < 0)
 			state.NextIndex = 0;
@@ -559,8 +552,8 @@ public sealed partial class UnitTestBisectorSystem
 		if (state.Results.Count > state.NextIndex)
 			state.Results = state.Results.Take(state.NextIndex).ToList();
 
-		if (state.IterationNumber < BaselineIterationNumber)
-			state.IterationNumber = BaselineIterationNumber;
+		if (state.IterationNumber < Constant.BaselineIterationNumber)
+			state.IterationNumber = Constant.BaselineIterationNumber;
 
 		state.IterationNumber = Math.Max(state.IterationNumber, state.NextIndex);
 		RecalculateCounters(state);
@@ -580,8 +573,8 @@ public sealed partial class UnitTestBisectorSystem
 		if (!string.IsNullOrEmpty(directory))
 			Directory.CreateDirectory(directory);
 
-		if (state.IterationNumber < BaselineIterationNumber)
-			state.IterationNumber = BaselineIterationNumber;
+		if (state.IterationNumber < Constant.BaselineIterationNumber)
+			state.IterationNumber = Constant.BaselineIterationNumber;
 
 		RecalculateCounters(state);
 
@@ -592,22 +585,22 @@ public sealed partial class UnitTestBisectorSystem
 	private void EnsureStateCompatibility(BisectorState state, PlanKind plan, OrderKind order)
 	{
 		if (!string.Equals(state.StageName, mosaSettings.BisectorStage, StringComparison.Ordinal))
-			throw new InvalidOperationException("State file stage does not match current -bisect-stage.");
+			throw new InvalidOperationException($"State file stage does not match current {Constant.OptionBisectStage}.");
 
 		if (state.Plan != plan)
-			throw new InvalidOperationException("State file plan does not match current -plan.");
+			throw new InvalidOperationException($"State file plan does not match current {Constant.OptionBisectPlan}.");
 
 		if (!string.Equals(state.UnitTestFilter, unitTestFilter, StringComparison.Ordinal))
-			throw new InvalidOperationException("State file UnitTest filter does not match current -filter.");
+			throw new InvalidOperationException($"State file UnitTest filter does not match current {Constant.OptionFilter}.");
 
 		if (!string.Equals(state.DisabledTransformsFile, mosaSettings.BisectorDisabledTransformsFile, StringComparison.Ordinal))
-			throw new InvalidOperationException("State file disabled transforms file does not match current -bisect-disabled-file.");
+			throw new InvalidOperationException($"State file disabled transforms file does not match current {Constant.OptionBisectDisabledFile}.");
 
 		if (state.Order == OrderKind.Unspecified)
 			state.Order = order;
 
 		if (state.Order != order)
-			throw new InvalidOperationException("State file order does not match current -bisect-order.");
+			throw new InvalidOperationException($"State file order does not match current {Constant.OptionBisectOrder}.");
 	}
 
 	private HashSet<string> BuildDisabledSetForBaseline(PlanKind plan, List<string> transforms)
@@ -949,7 +942,7 @@ public sealed partial class UnitTestBisectorSystem
 		{
 			bisectorDisabledTransformNames = BuildDisabledSetForBaseline(plan, state.ObservedTransforms);
 			RebuildEffectiveDisabledSet();
-			state.IterationNumber = BaselineIterationNumber;
+			state.IterationNumber = Constant.BaselineIterationNumber;
 
 			OutputStatusBisector("Running baseline iteration...");
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
@@ -966,7 +959,7 @@ public sealed partial class UnitTestBisectorSystem
 
 			if (hasCompilationFailure)
 			{
-				SetLastExit(state, ExitKindFailure, 1);
+				SetLastExit(state, Constant.ExitKindFailure, 1);
 				SaveState(stateFile, state);
 				WriteFailureReviewFile(stateFile, plan, state);
 				return 1;
@@ -1014,21 +1007,21 @@ public sealed partial class UnitTestBisectorSystem
 
 			if (hasCompilationFailure)
 			{
-				SetLastExit(state, ExitKindFailure, 1);
+				SetLastExit(state, Constant.ExitKindFailure, 1);
 				SaveState(stateFile, state);
 				return 1;
 			}
 
 			if (mosaSettings.BisectorWorkerIteration && state.NextIndex < state.ObservedTransforms.Count)
 			{
-				SetLastExit(state, ExitKindContinue, WorkerContinueExitCode);
+				SetLastExit(state, Constant.ExitKindContinue, Constant.WorkerContinueExitCode);
 				SaveState(stateFile, state);
-				return WorkerContinueExitCode;
+				return Constant.WorkerContinueExitCode;
 			}
 		}
 
 		state.Completed = true;
-		SetLastExit(state, ExitKindCompleted, 0);
+		SetLastExit(state, Constant.ExitKindCompleted, 0);
 		SaveState(stateFile, state);
 		WriteFailureReviewFile(stateFile, plan, state);
 
@@ -1042,7 +1035,7 @@ public sealed partial class UnitTestBisectorSystem
 		{
 			bisectorDisabledTransformNames = [];
 			RebuildEffectiveDisabledSet();
-			state.IterationNumber = BaselineIterationNumber;
+			state.IterationNumber = Constant.BaselineIterationNumber;
 
 			OutputStatusBisector("Running baseline iteration...");
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
@@ -1058,7 +1051,7 @@ public sealed partial class UnitTestBisectorSystem
 
 			if (hasCompilationFailure)
 			{
-				SetLastExit(state, ExitKindFailure, 1);
+				SetLastExit(state, Constant.ExitKindFailure, 1);
 				SaveState(stateFile, state);
 				WriteFailureReviewFile(stateFile, PlanKind.RandomCombo, state);
 				return 1;
@@ -1066,9 +1059,9 @@ public sealed partial class UnitTestBisectorSystem
 
 			if (mosaSettings.BisectorWorkerIteration)
 			{
-				SetLastExit(state, ExitKindContinue, WorkerContinueExitCode);
+				SetLastExit(state, Constant.ExitKindContinue, Constant.WorkerContinueExitCode);
 				SaveState(stateFile, state);
-				return WorkerContinueExitCode;
+				return Constant.WorkerContinueExitCode;
 			}
 		}
 
@@ -1104,7 +1097,7 @@ public sealed partial class UnitTestBisectorSystem
 
 			if (hasCompilationFailure)
 			{
-				SetLastExit(state, ExitKindFailure, 1);
+				SetLastExit(state, Constant.ExitKindFailure, 1);
 				SaveState(stateFile, state);
 				return 1;
 			}
@@ -1112,12 +1105,12 @@ public sealed partial class UnitTestBisectorSystem
 
 		if (mosaSettings.BisectorWorkerIteration)
 		{
-			SetLastExit(state, ExitKindContinue, WorkerContinueExitCode);
+			SetLastExit(state, Constant.ExitKindContinue, Constant.WorkerContinueExitCode);
 			SaveState(stateFile, state);
-			return WorkerContinueExitCode;
+			return Constant.WorkerContinueExitCode;
 		}
 
-		SetLastExit(state, ExitKindCompleted, 0);
+		SetLastExit(state, Constant.ExitKindCompleted, 0);
 		SaveState(stateFile, state);
 		return 0;
 	}

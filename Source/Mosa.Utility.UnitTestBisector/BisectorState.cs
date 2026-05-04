@@ -38,7 +38,7 @@ public sealed partial class UnitTestBisectorSystem
 
 		public bool Completed { get; set; }
 
-		public string LastExitKind { get; set; } = ExitKindUnknown;
+		public string LastExitKind { get; set; } = Constant.ExitKindUnknown;
 
 		public int LastExitCode { get; set; }
 	}
