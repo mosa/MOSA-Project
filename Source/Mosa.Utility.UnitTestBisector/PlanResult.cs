@@ -2,14 +2,11 @@
 
 namespace Mosa.Utility.UnitTestBisector;
 
-public sealed partial class UnitTestBisectorSystem
+internal sealed class PlanResult
 {
-	private sealed class PlanResult
-	{
-		public string Transform { get; set; }
+	public string Transform { get; set; }
 
-		public bool Passed { get; set; }
+	public bool Passed { get; set; }
 
-		public List<string> DisabledTransforms { get; set; } = [];
-	}
+	public List<string> DisabledTransforms { get; set; } = [];
 }

@@ -2,42 +2,39 @@
 
 namespace Mosa.Utility.UnitTestBisector;
 
-public sealed partial class UnitTestBisectorSystem
+internal sealed class BisectorState
 {
-	private sealed class BisectorState
-	{
-		public string StageName { get; set; }
+	public string StageName { get; set; }
 
-		public PlanKind Plan { get; set; }
+	public PlanKind Plan { get; set; }
 
-		public string UnitTestFilter { get; set; }
+	public string UnitTestFilter { get; set; }
 
-		public List<string> ObservedTransforms { get; set; } = [];
+	public List<string> ObservedTransforms { get; set; } = [];
 
-		public Dictionary<string, int> ObservedTransformCounts { get; set; } = new(StringComparer.Ordinal);
+	public Dictionary<string, int> ObservedTransformCounts { get; set; } = new(StringComparer.Ordinal);
 
-		public bool BaselineCompleted { get; set; }
+	public bool BaselineCompleted { get; set; }
 
-		public bool BaselinePassed { get; set; }
+	public bool BaselinePassed { get; set; }
 
-		public int NextIndex { get; set; }
+	public int NextIndex { get; set; }
 
-		public int IterationNumber { get; set; }
+	public int IterationNumber { get; set; }
 
-		public int PassCount { get; set; }
+	public int PassCount { get; set; }
 
-		public int TotalIterationCount { get; set; }
+	public int TotalIterationCount { get; set; }
 
-		public OrderKind Order { get; set; }
+	public OrderKind Order { get; set; }
 
-		public int RandomSeed { get; set; }
+	public int RandomSeed { get; set; }
 
-		public List<PlanResult> Results { get; set; } = [];
+	public List<PlanResult> Results { get; set; } = [];
 
-		public bool Completed { get; set; }
+	public bool Completed { get; set; }
 
-		public string LastExitKind { get; set; } = Constant.ExitKindUnknown;
+	public string LastExitKind { get; set; } = Constant.ExitKindUnknown;
 
-		public int LastExitCode { get; set; }
-	}
+	public int LastExitCode { get; set; }
 }

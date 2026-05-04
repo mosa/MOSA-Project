@@ -4,21 +4,18 @@ using System.Diagnostics;
 
 namespace Mosa.Utility.UnitTestBisector;
 
-public sealed partial class UnitTestBisectorSystem
+internal sealed class AssertExceptionTraceListener : TraceListener
 {
-	private sealed class AssertExceptionTraceListener : TraceListener
+	public override void Write(string message)
 	{
-		public override void Write(string message)
-		{
-		}
+	}
 
-		public override void WriteLine(string message)
-		{
-		}
+	public override void WriteLine(string message)
+	{
+	}
 
-		public override void Fail(string message, string detailMessage)
-		{
-			throw new AssertFailureException(message, detailMessage);
-		}
+	public override void Fail(string message, string detailMessage)
+	{
+		throw new AssertFailureException(message, detailMessage);
 	}
 }

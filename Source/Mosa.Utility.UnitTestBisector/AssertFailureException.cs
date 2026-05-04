@@ -2,13 +2,10 @@
 
 namespace Mosa.Utility.UnitTestBisector;
 
-public sealed partial class UnitTestBisectorSystem
+internal sealed class AssertFailureException : Exception
 {
-	private sealed class AssertFailureException : Exception
+	public AssertFailureException(string message, string detailMessage)
+		: base(string.IsNullOrWhiteSpace(detailMessage) ? message : $"{message} {detailMessage}")
 	{
-		public AssertFailureException(string message, string detailMessage)
-			: base(string.IsNullOrWhiteSpace(detailMessage) ? message : $"{message} {detailMessage}")
-		{
-		}
 	}
 }

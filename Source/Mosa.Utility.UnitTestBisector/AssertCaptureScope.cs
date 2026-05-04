@@ -4,35 +4,32 @@ using System.Diagnostics;
 
 namespace Mosa.Utility.UnitTestBisector;
 
-public sealed partial class UnitTestBisectorSystem
+internal sealed class AssertCaptureScope : IDisposable
 {
-	private sealed class AssertCaptureScope : IDisposable
+	private readonly List<(DefaultTraceListener Listener, bool AssertUiEnabled)> defaultListeners = new();
+	private readonly TraceListener listener = new AssertExceptionTraceListener();
+
+	public AssertCaptureScope()
 	{
-		private readonly List<(DefaultTraceListener Listener, bool AssertUiEnabled)> defaultListeners = new();
-		private readonly TraceListener listener = new AssertExceptionTraceListener();
-
-		public AssertCaptureScope()
+		foreach (TraceListener traceListener in Trace.Listeners)
 		{
-			foreach (TraceListener traceListener in Trace.Listeners)
+			if (traceListener is DefaultTraceListener defaultTraceListener)
 			{
-				if (traceListener is DefaultTraceListener defaultTraceListener)
-				{
-					defaultListeners.Add((defaultTraceListener, defaultTraceListener.AssertUiEnabled));
-					defaultTraceListener.AssertUiEnabled = false;
-				}
+				defaultListeners.Add((defaultTraceListener, defaultTraceListener.AssertUiEnabled));
+				defaultTraceListener.AssertUiEnabled = false;
 			}
-
-			Trace.Listeners.Add(listener);
 		}
 
-		public void Dispose()
-		{
-			Trace.Listeners.Remove(listener);
+		Trace.Listeners.Add(listener);
+	}
 
-			foreach (var (listener, assertUiEnabled) in defaultListeners)
-			{
-				listener.AssertUiEnabled = assertUiEnabled;
-			}
+	public void Dispose()
+	{
+		Trace.Listeners.Remove(listener);
+
+		foreach (var (listener, assertUiEnabled) in defaultListeners)
+		{
+			listener.AssertUiEnabled = assertUiEnabled;
 		}
 	}
 }

@@ -14,23 +14,6 @@ public sealed partial class UnitTestBisectorSystem
 {
 	private readonly record struct IterationResult(bool Passed);
 
-	private enum PlanKind
-	{
-		DisableOne,
-		EnableOne,
-		RandomCombo,
-		FailureInducing,
-		Masking,
-	}
-
-	private enum OrderKind
-	{
-		Unspecified = 0,
-		Original = 1,
-		CountAscending = 2,
-		Random = 3,
-	}
-
 	private readonly Stopwatch stopwatch = new();
 	private readonly MosaSettings mosaSettings = new();
 	private readonly JsonSerializerOptions jsonSerializerOptions = new() { WriteIndented = true };

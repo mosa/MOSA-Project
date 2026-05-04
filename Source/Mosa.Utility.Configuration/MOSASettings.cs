@@ -546,12 +546,6 @@ public partial class MosaSettings
 		set => Settings.SetValue(Name.UnitTest_Bisector_Pairwise, value);
 	}
 
-	public string BisectorDisabledTransformsFile
-	{
-		get => Settings.GetValue(Name.UnitTest_Bisector_DisabledTransformsFile, null);
-		set => Settings.SetValue(Name.UnitTest_Bisector_DisabledTransformsFile, value);
-	}
-
 	public string BisectorStateFile
 	{
 		get => Settings.GetValue(Name.UnitTest_Bisector_StateFile, Constant.BisectorStateFile);
