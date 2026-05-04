@@ -14,6 +14,5 @@ internal static class Constant
     public const string OptionBisectStage = "-bisect-stage";
     public const string OptionBisectPlan = "-bisect-plan";
     public const string OptionBisectOrder = "-bisect-order";
-    public const string OptionBisectDisabledFile = "-bisect-disabled-file";
     public const string OptionFilter = "-filter";
 }

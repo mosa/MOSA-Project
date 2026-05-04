@@ -177,30 +177,17 @@ internal sealed class ProcessSupervisor
 
 	private static bool IsSupervisorOption(string arg, out bool takesValue)
 	{
-		takesValue = true;
-
-		if (string.Equals(arg, OptionBisectWorkerIteration, StringComparison.OrdinalIgnoreCase))
+		takesValue = arg switch
 		{
-			takesValue = false;
-			return true;
-		}
+			var option when string.Equals(option, OptionBisectWorkerIteration, StringComparison.OrdinalIgnoreCase) => false,
+			var option when string.Equals(option, OptionBisectReset, StringComparison.OrdinalIgnoreCase) => false,
+			var option when string.Equals(option, OptionBisectWorkingDir, StringComparison.OrdinalIgnoreCase) => true,
+			var option when string.Equals(option, OptionBisectMaxRestarts, StringComparison.OrdinalIgnoreCase) => true,
+			var option when string.Equals(option, OptionBisectState, StringComparison.OrdinalIgnoreCase) => true,
+			_ => false,
+		};
 
-		if (string.Equals(arg, OptionBisectWorkingDir, StringComparison.OrdinalIgnoreCase))
-			return true;
-
-		if (string.Equals(arg, OptionBisectMaxRestarts, StringComparison.OrdinalIgnoreCase))
-			return true;
-
-		if (string.Equals(arg, OptionBisectState, StringComparison.OrdinalIgnoreCase))
-			return true;
-
-		if (string.Equals(arg, OptionBisectReset, StringComparison.OrdinalIgnoreCase))
-		{
-			takesValue = false;
-			return true;
-		}
-
-		return false;
+		return takesValue || string.Equals(arg, OptionBisectWorkerIteration, StringComparison.OrdinalIgnoreCase) || string.Equals(arg, OptionBisectReset, StringComparison.OrdinalIgnoreCase);
 	}
 
 	private static string QuoteIfNeeded(string arg)

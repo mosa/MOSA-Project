@@ -46,7 +46,6 @@ public sealed partial class UnitTestBisectorSystem
 	private Dictionary<string, int> observedTransformCounts = new(StringComparer.Ordinal);
 	private HashSet<string> bisectorDisabledTransformNames = [];
 	private HashSet<string> effectiveDisabledTransformNames = [];
-	private HashSet<string> forcedDisabledTransformNames = [];
 	private Bisector<string> bisector;
 
 	public int Start(string[] args)
@@ -72,8 +71,6 @@ public sealed partial class UnitTestBisectorSystem
 				File.Delete(stateFile);
 				OutputStatusBisector($"Deleted state file: {stateFile}");
 			}
-
-			LoadForcedDisabledTransforms();
 
 			if (string.IsNullOrWhiteSpace(mosaSettings.BisectorStage))
 				throw new InvalidOperationException($"A stage type name is required. Use {Constant.OptionBisectStage}.");
@@ -102,13 +99,13 @@ public sealed partial class UnitTestBisectorSystem
 
 			if (isBisectorPlan)
 			{
-				var bisectorState = LoadOrCreateState(stateFile, plan, out _);
+				var bisectorState = LoadOrCreateState(stateFile, plan);
 				EnsureStateCompatibility(bisectorState, plan, OrderKind.Unspecified);
 				OutputStatusBisector($"Saved Iteration: {bisectorState.IterationNumber}");
 				return ExecuteBisectorPlan(plan, stateFile, bisectorState);
 			}
 
-			var state = LoadOrCreateState(stateFile, plan, out var stateFileUsed);
+			var state = LoadOrCreateState(stateFile, plan);
 			EnsureStateCompatibility(state, plan, order);
 
 			OutputStatusBisector($"Saved Iteration: {state.IterationNumber}");
@@ -124,7 +121,6 @@ public sealed partial class UnitTestBisectorSystem
 				OutputStatusBisector($"Discovery Iteration: {(discoveryResult.Passed ? "PASS" : "FAIL")}");
 
 				var observed = observedTransformNames
-					.Where(name => !forcedDisabledTransformNames.Contains(name))
 					.OrderBy(name => name)
 					.ToList();
 
@@ -152,7 +148,6 @@ public sealed partial class UnitTestBisectorSystem
 				SaveState(stateFile, state);
 
 				OutputStatusBisector($"Discovered transforms for plan: {state.ObservedTransforms.Count}");
-				ReportForcedDisabledNotObserved();
 			}
 			else
 			{
@@ -227,7 +222,6 @@ public sealed partial class UnitTestBisectorSystem
 			}
 
 			var observed = observedTransformNames
-				.Where(name => !forcedDisabledTransformNames.Contains(name))
 				.OrderBy(name => name)
 				.ToList();
 
@@ -242,7 +236,6 @@ public sealed partial class UnitTestBisectorSystem
 			}
 
 			OutputStatusBisector($"Observed Transforms: {observed.Count}");
-			ReportForcedDisabledNotObserved();
 
 			state.ObservedTransforms = observed;
 			state.ObservedTransformCounts = observed.ToDictionary(
@@ -323,7 +316,7 @@ public sealed partial class UnitTestBisectorSystem
 		var sessionResults = new List<PlanResult>();
 		bisectorDisabledTransformNames = [];
 		RebuildEffectiveDisabledSet();
-		bisector = new Bisector<string>(observedTransformNames.Where(name => !forcedDisabledTransformNames.Contains(name)), enablePairwise: mosaSettings.BisectorPairwise);
+		bisector = new Bisector<string>(observedTransformNames, enablePairwise: mosaSettings.BisectorPairwise);
 		var reportedBadItems = new HashSet<string>(StringComparer.Ordinal);
 
 		bisectorDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
@@ -453,12 +446,6 @@ public sealed partial class UnitTestBisectorSystem
 	private void PrintFinalReport(string sessionName, Bisector<string> sessionBisector)
 	{
 		OutputStatusBisector($"{sessionName} Final Stage: {mosaSettings.BisectorStage}");
-		OutputStatusBisector("Forced Disabled Items:");
-		foreach (var transform in forcedDisabledTransformNames.OrderBy(t => t))
-		{
-			OutputStatusBisector($"  {transform}");
-		}
-
 		OutputStatusBisector("Confirmed Bad Items:");
 		foreach (var transform in sessionBisector.ConfirmedBadItems.OrderBy(t => t))
 		{
@@ -515,24 +502,21 @@ public sealed partial class UnitTestBisectorSystem
 		return stateFile;
 	}
 
-	private BisectorState LoadOrCreateState(string stateFile, PlanKind plan, out bool stateFileUsed)
+	private BisectorState LoadOrCreateState(string stateFile, PlanKind plan)
 	{
 		if (!File.Exists(stateFile))
 		{
-			stateFileUsed = false;
 			return new BisectorState
 			{
 				Plan = plan,
 				StageName = mosaSettings.BisectorStage,
 				UnitTestFilter = unitTestFilter,
-				DisabledTransformsFile = mosaSettings.BisectorDisabledTransformsFile,
 				IterationNumber = Constant.BaselineIterationNumber,
 				LastExitKind = Constant.ExitKindUnknown,
 				LastExitCode = 0,
 			};
 		}
 
-		stateFileUsed = true;
 		var content = File.ReadAllText(stateFile);
 		var state = JsonSerializer.Deserialize<BisectorState>(content);
 		if (state == null)
@@ -592,9 +576,6 @@ public sealed partial class UnitTestBisectorSystem
 
 		if (!string.Equals(state.UnitTestFilter, unitTestFilter, StringComparison.Ordinal))
 			throw new InvalidOperationException($"State file UnitTest filter does not match current {Constant.OptionFilter}.");
-
-		if (!string.Equals(state.DisabledTransformsFile, mosaSettings.BisectorDisabledTransformsFile, StringComparison.Ordinal))
-			throw new InvalidOperationException($"State file disabled transforms file does not match current {Constant.OptionBisectDisabledFile}.");
 
 		if (state.Order == OrderKind.Unspecified)
 			state.Order = order;
@@ -700,7 +681,7 @@ public sealed partial class UnitTestBisectorSystem
 			var observed = observedTransformNames.Add(transformName);
 			observedTransformCounts[transformName] = observedTransformCounts.TryGetValue(transformName, out var count) ? count + 1 : 1;
 
-			if (observed && bisector != null && !forcedDisabledTransformNames.Contains(transformName))
+			if (observed && bisector != null)
 				bisector.ObserveItem(transformName);
 		}
 	}
@@ -713,56 +694,12 @@ public sealed partial class UnitTestBisectorSystem
 		return effectiveDisabledTransformNames.Contains(transformName);
 	}
 
-	private void LoadForcedDisabledTransforms()
-	{
-		forcedDisabledTransformNames = [];
-
-		var filename = mosaSettings.BisectorDisabledTransformsFile;
-		if (string.IsNullOrWhiteSpace(filename))
-			return;
-
-		if (!File.Exists(filename))
-			throw new InvalidOperationException($"Disabled transforms file does not exist: {filename}");
-
-		foreach (var line in File.ReadLines(filename))
-		{
-			var text = line.Trim();
-
-			if (text.Length == 0)
-				continue;
-
-			if (text.StartsWith("#", StringComparison.Ordinal) || text.StartsWith("//", StringComparison.Ordinal))
-				continue;
-
-			forcedDisabledTransformNames.Add(text);
-		}
-
-		OutputStatusBisector($"Forced Disabled Transforms File: {filename}");
-		OutputStatusBisector($"Forced Disabled Transforms Loaded: {forcedDisabledTransformNames.Count}");
-	}
-
 	private void RebuildEffectiveDisabledSet()
 	{
-		effectiveDisabledTransformNames = [.. forcedDisabledTransformNames];
+		effectiveDisabledTransformNames = [.. bisectorDisabledTransformNames];
 
 		foreach (var transformName in bisectorDisabledTransformNames)
 			effectiveDisabledTransformNames.Add(transformName);
-	}
-
-	private void ReportForcedDisabledNotObserved()
-	{
-		if (forcedDisabledTransformNames.Count == 0)
-			return;
-
-		var notObserved = forcedDisabledTransformNames.Where(name => !observedTransformNames.Contains(name)).OrderBy(name => name).ToList();
-		if (notObserved.Count == 0)
-			return;
-
-		OutputStatusBisector($"WARNING: {notObserved.Count} forced-disabled transforms were not observed in selected stage:");
-		foreach (var name in notObserved)
-		{
-			OutputStatusBisector($"  {name}");
-		}
 	}
 
 	private List<UnitTest> PrepareUnitTests(List<UnitTestInfo> tests, TypeSystem typeSystem, MosaLinker linker)
@@ -773,12 +710,9 @@ public sealed partial class UnitTestBisectorSystem
 		foreach (var unitTestInfo in tests)
 		{
 			var linkerMethodInfo = Linker.GetMethodInfo(typeSystem, linker, unitTestInfo);
-			var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo)
-			{
-				SerializedUnitTest = UnitTestSystem.SerializeUnitTestMessage(new UnitTest(unitTestInfo, linkerMethodInfo)),
-				UnitTestID = ++id,
-			};
-
+			var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo);
+			unitTest.SerializedUnitTest = UnitTestSystem.SerializeUnitTestMessage(unitTest);
+			unitTest.UnitTestID = ++id;
 			unitTests.Add(unitTest);
 		}
 
@@ -787,9 +721,7 @@ public sealed partial class UnitTestBisectorSystem
 
 	private void PrintDisabledTransforms()
 	{
-		OutputStatusBisector($"Forced Disabled: {forcedDisabledTransformNames.Count}");
-		OutputStatusBisector($"Session Disabled: {bisectorDisabledTransformNames.Count}");
-		OutputStatusBisector($"Effective Disabled: {effectiveDisabledTransformNames.Count}");
+		OutputStatusBisector($"Disabled: {effectiveDisabledTransformNames.Count}");
 	}
 
 	private void PrintFinalReport(PlanKind plan, BisectorState state)

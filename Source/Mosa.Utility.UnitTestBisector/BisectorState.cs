@@ -12,8 +12,6 @@ public sealed partial class UnitTestBisectorSystem
 
 		public string UnitTestFilter { get; set; }
 
-		public string DisabledTransformsFile { get; set; }
-
 		public List<string> ObservedTransforms { get; set; } = [];
 
 		public Dictionary<string, int> ObservedTransformCounts { get; set; } = new(StringComparer.Ordinal);
