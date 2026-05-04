@@ -11,6 +11,12 @@ internal sealed class ProcessSupervisor
 	private const int RestartDelayMs = 1000;
 	private const int WorkerContinueExitCode = 2;
 
+	private const string OptionBisectWorkerIteration = "-bisect-worker-iteration";
+	private const string OptionBisectState = "-bisect-state";
+	private const string OptionBisectWorkingDir = "-bisect-working-dir";
+	private const string OptionBisectMaxRestarts = "-bisect-max-restarts";
+	private const string OptionBisectReset = "-bisect-reset";
+
 	private readonly struct StateSnapshot(bool found, bool completed, int iterationNumber, int totalIterationCount, int passCount, int nextIndex, string lastExitKind, int lastExitCode)
 	{
 		public bool Found { get; } = found;
@@ -161,9 +167,9 @@ internal sealed class ProcessSupervisor
 		}
 
 		if (settings.BisectorWorkerIteration)
-			forwarded.Add("-bisect-worker-iteration");
+			forwarded.Add(OptionBisectWorkerIteration);
 
-		forwarded.Add("-bisect-state-file");
+		forwarded.Add(OptionBisectState);
 		forwarded.Add(QuoteIfNeeded(stateFile));
 
 		return string.Join(" ", forwarded);
@@ -173,22 +179,22 @@ internal sealed class ProcessSupervisor
 	{
 		takesValue = true;
 
-		if (string.Equals(arg, "-bisect-worker-iteration", StringComparison.OrdinalIgnoreCase))
+		if (string.Equals(arg, OptionBisectWorkerIteration, StringComparison.OrdinalIgnoreCase))
 		{
 			takesValue = false;
 			return true;
 		}
 
-		if (string.Equals(arg, "-bisect-working-dir", StringComparison.OrdinalIgnoreCase))
+		if (string.Equals(arg, OptionBisectWorkingDir, StringComparison.OrdinalIgnoreCase))
 			return true;
 
-		if (string.Equals(arg, "-bisect-max-restarts", StringComparison.OrdinalIgnoreCase))
+		if (string.Equals(arg, OptionBisectMaxRestarts, StringComparison.OrdinalIgnoreCase))
 			return true;
 
-		if (string.Equals(arg, "-bisect-state-file", StringComparison.OrdinalIgnoreCase))
+		if (string.Equals(arg, OptionBisectState, StringComparison.OrdinalIgnoreCase))
 			return true;
 
-		if (string.Equals(arg, "-bisect-reset-state", StringComparison.OrdinalIgnoreCase))
+		if (string.Equals(arg, OptionBisectReset, StringComparison.OrdinalIgnoreCase))
 		{
 			takesValue = false;
 			return true;
@@ -226,7 +232,7 @@ internal sealed class ProcessSupervisor
 	{
 		var value = settings.BisectorMaxRestarts;
 		if (value < 0)
-			throw new InvalidOperationException("Invalid value for -bisect-max-restarts. Minimum is 0.");
+			throw new InvalidOperationException($"Invalid value for {OptionBisectMaxRestarts}. Minimum is 0.");
 
 		return value;
 	}

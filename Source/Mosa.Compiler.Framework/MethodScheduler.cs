@@ -412,7 +412,7 @@ public sealed class MethodScheduler
 
 		Compiler.PostEvent(
 			CompilerEvent.Diagnostic,
-			$"[Queue] Size: {currentQueueSize} | Deferred: {totalDeferred} | " +
+			$"[Compile Queue] Size: {currentQueueSize} | Deferred: {totalDeferred} | " +
 			$"Active: {activeWorkers}/{maxWorkers} ({utilizationPercent:F1}%) | " +
 			$"In: {enqueueRate}/s | Out: {dequeueRate}/s | " +
 			$"CPU: {cpuPercent:F1}%"

@@ -10,7 +10,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
 using Mosa.Utility.BootImage;
 using Mosa.Utility.Configuration;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Mosa.Utility.Launcher;
 

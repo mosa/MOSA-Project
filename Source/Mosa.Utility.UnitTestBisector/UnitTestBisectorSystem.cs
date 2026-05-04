@@ -60,6 +60,8 @@ public sealed partial class UnitTestBisectorSystem
 	{
 		try
 		{
+			OutputStatusBisector($"Bisector started");
+
 			mosaSettings.LoadArguments(args);
 			mosaSettings.UnitTestFailFast = true;
 			unitTestFilter = mosaSettings.UnitTestFilter;
@@ -485,45 +487,34 @@ public sealed partial class UnitTestBisectorSystem
 
 	private static PlanKind ParsePlan(string plan)
 	{
-		if (string.Equals(plan, "enable-one", StringComparison.OrdinalIgnoreCase))
-			return PlanKind.EnableOne;
-
-		if (string.Equals(plan, "disable-one", StringComparison.OrdinalIgnoreCase))
+		return plan.ToLowerInvariant() switch
 		{
-			return PlanKind.DisableOne;
-		}
-
-		if (string.Equals(plan, "random-combo", StringComparison.OrdinalIgnoreCase))
-			return PlanKind.RandomCombo;
-
-		if (string.Equals(plan, "failure-inducing", StringComparison.OrdinalIgnoreCase))
-			return PlanKind.FailureInducing;
-
-		if (string.Equals(plan, "masking", StringComparison.OrdinalIgnoreCase))
-			return PlanKind.Masking;
-
-		throw new InvalidOperationException($"Unknown plan '{plan}'. Valid values: disable-one, enable-one, random-combo, failure-inducing, masking.");
+			"enable-one" => PlanKind.EnableOne,
+			"disable-one" => PlanKind.DisableOne,
+			"random-combo" => PlanKind.RandomCombo,
+			"failure-inducing" => PlanKind.FailureInducing,
+			"masking" => PlanKind.Masking,
+			_ => throw new InvalidOperationException($"Unknown plan '{plan}'. Valid values: disable-one, enable-one, random-combo, failure-inducing, masking."),
+		};
 	}
 
 	private static OrderKind ParseOrder(string order)
 	{
-		if (string.IsNullOrWhiteSpace(order) || string.Equals(order, "original", StringComparison.OrdinalIgnoreCase))
+		if (string.IsNullOrWhiteSpace(order))
 			return OrderKind.Original;
 
-		if (string.Equals(order, "count", StringComparison.OrdinalIgnoreCase) || string.Equals(order, "count-ascending", StringComparison.OrdinalIgnoreCase))
-			return OrderKind.CountAscending;
-
-		if (string.Equals(order, "random", StringComparison.OrdinalIgnoreCase))
-			return OrderKind.Random;
-
-		throw new InvalidOperationException($"Invalid order value '{order}'. Valid values: original, count, random.");
+		return order.ToLowerInvariant() switch
+		{
+			"original" => OrderKind.Original,
+			"count" or "count-ascending" => OrderKind.CountAscending,
+			"random" => OrderKind.Random,
+			_ => throw new InvalidOperationException($"Invalid order value '{order}'. Valid values: original, count, random."),
+		};
 	}
 
 	private string GetFullStateFilePath()
 	{
 		var stateFile = mosaSettings.BisectorStateFile;
-		if (string.IsNullOrWhiteSpace(stateFile))
-			stateFile = "unit-test-bisector-state.json";
 
 		if (!Path.IsPathRooted(stateFile))
 			stateFile = Path.GetFullPath(stateFile);
@@ -689,8 +680,7 @@ public sealed partial class UnitTestBisectorSystem
 
 	private void OutputIterationExecutionStatus(string phase, int iterationNumber)
 	{
-		var totalTransforms = Math.Max(observedTransformNames.Count, observedTransformCounts.Count);
-		OutputStatusBisector($"{phase} Unit Tests | Iteration: {iterationNumber} | Transforms: {totalTransforms} | Disabled: {effectiveDisabledTransformNames.Count}");
+		OutputStatusBisector($"{phase} Unit Tests | Iteration: {iterationNumber} | Transforms: {observedTransformNames.Count} | Disabled: {effectiveDisabledTransformNames.Count}");
 	}
 
 	private CompilerHooks CreateCompilerHooks()
@@ -744,14 +734,6 @@ public sealed partial class UnitTestBisectorSystem
 		foreach (var line in File.ReadLines(filename))
 		{
 			var text = line.Trim();
-
-#if DEBUG
-			if (text.Equals("dump", StringComparison.OrdinalIgnoreCase))
-			{
-				var dummy = forcedDisabledTransformNames.Count;
-				continue;
-			}
-#endif
 
 			if (text.Length == 0)
 				continue;
@@ -824,9 +806,8 @@ public sealed partial class UnitTestBisectorSystem
 		OutputStatusBisector($"Baseline: {(state.BaselinePassed ? "PASS" : "FAIL")}");
 		OutputStatusBisector($"Iterations: {state.TotalIterationCount}");
 
-		var failed = state.TotalIterationCount - state.PassCount;
 		OutputStatusBisector($"Passed Iterations: {state.PassCount}");
-		OutputStatusBisector($"Failed Iterations: {failed}");
+		OutputStatusBisector($"Failed Iterations: {state.TotalIterationCount - state.PassCount}");
 
 		OutputStatusBisector("Failed Transforms:");
 		foreach (var result in state.Results.Where(r => !r.Passed).OrderBy(r => r.Transform))

@@ -201,7 +201,7 @@ public static class CommandLineArguments
 			new Argument { Name = "-bisect-pairwise", Setting = Name.UnitTest_Bisector_Pairwise, Value = "true"},
 			new Argument { Name = "-bisect-pairwise-off", Setting = Name.UnitTest_Bisector_Pairwise, Value = "false"},
 			new Argument { Name = "-bisect-disabled-file", Setting = Name.UnitTest_Bisector_DisabledTransformsFile},
-			new Argument { Name = "-bisect-state-file", Setting = Name.UnitTest_Bisector_StateFile},
+			new Argument { Name = "-bisect-state", Setting = Name.UnitTest_Bisector_StateFile},
 			new Argument { Name = "-bisect-plan", Setting = Name.UnitTest_Bisector_Plan},
 			new Argument { Name = "-bisect-order", Setting = Name.UnitTest_Bisector_Order},
 			new Argument { Name = "-bisect-iterations", Setting = Name.UnitTest_Bisector_Iterations},
