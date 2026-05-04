@@ -217,7 +217,7 @@ public sealed class Compiler
 		pipeline.InsertBefore<CodeGenerationStage>(
 		[
 			new DeadBlockStage(),
-			//new SafePointStage(),
+			new SafePointStage(),
 			new AdvancedBlockOrderingStage(),
 			new JumpOptimizationStage()
 		]);
@@ -225,7 +225,7 @@ public sealed class Compiler
 		pipeline.InsertAfterLast<CodeGenerationStage>(
 		[
 			new ProtectedRegionLayoutStage(),
-			//new SafePointLayoutStage(),
+			new SafePointLayoutStage(),
 		]);
 	}
 
