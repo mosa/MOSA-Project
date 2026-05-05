@@ -23,7 +23,6 @@ public sealed partial class UnitTestBisectorSystem
 
 	private HashSet<string> observedTransformNames = [];
 	private Dictionary<string, int> observedTransformCounts = new(StringComparer.Ordinal);
-	private HashSet<string> bisectorDisabledTransformNames = [];
 	private HashSet<string> effectiveDisabledTransformNames = [];
 	private Bisector<string> bisector;
 
@@ -102,8 +101,7 @@ public sealed partial class UnitTestBisectorSystem
 			{
 				OutputStatusBisector("Running transform discovery iteration...");
 				observedTransformCounts.Clear();
-				bisectorDisabledTransformNames = [];
-				RebuildEffectiveDisabledSet();
+				effectiveDisabledTransformNames = [];
 
 				var discoveryResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 				OutputStatusBisector($"Discovery Iteration: {(discoveryResult.Passed ? "PASS" : "FAIL")}");
@@ -169,7 +167,6 @@ public sealed partial class UnitTestBisectorSystem
 		lastCompilationFailure = null;
 		observedTransformNames = [];
 		observedTransformCounts.Clear();
-		bisectorDisabledTransformNames = [];
 		effectiveDisabledTransformNames = [];
 		bisector = null;
 	}
@@ -202,8 +199,7 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector("Running transform discovery iteration...");
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
 			observedTransformCounts.Clear();
-			bisectorDisabledTransformNames = [];
-			RebuildEffectiveDisabledSet();
+			effectiveDisabledTransformNames = [];
 
 			var discoveryResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.BaselineCompleted = true;
@@ -281,11 +277,9 @@ public sealed partial class UnitTestBisectorSystem
 			if (!state.MaskingPreCheckCompleted)
 			{
 				OutputStatusBisector("Running masking pre-check (all transforms disabled)...");
-				bisectorDisabledTransformNames = [.. state.ObservedTransforms];
-				RebuildEffectiveDisabledSet();
+				effectiveDisabledTransformNames = [.. state.ObservedTransforms];
 				var preCheckResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
-				bisectorDisabledTransformNames = [];
-				RebuildEffectiveDisabledSet();
+				effectiveDisabledTransformNames = [];
 
 				if (hasCompilationFailure)
 				{
@@ -352,8 +346,7 @@ public sealed partial class UnitTestBisectorSystem
 	private int RunBisectorSessionIteration(string stateFile, BisectorState state, string sessionName, bool invertOutcome, IterationResult discoveryResult, List<UnitTestInfo> discoveredUnitTests)
 	{
 		// Reconstruct bisector by replaying prior results
-		bisectorDisabledTransformNames = [];
-		RebuildEffectiveDisabledSet();
+		effectiveDisabledTransformNames = [];
 		bisector = new Bisector<string>(observedTransformNames, enablePairwise: mosaSettings.BisectorPairwise);
 		var reportedBadItems = new HashSet<string>(StringComparer.Ordinal);
 
@@ -364,7 +357,7 @@ public sealed partial class UnitTestBisectorSystem
 		OutputStatusBisector($"{sessionName} Baseline -> Actual: {(discoveryResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedBaseline ? "PASS" : "FAIL")}");
 
 		// Replay prior session results to restore bisector state
-		for (var i = 1; i < state.Results.Count; i++)
+		for (var i = 0; i < state.Results.Count; i++)
 		{
 			bisector.GetNextDisabledItems();
 			bisector.AcceptResult(MapOutcome(state.Results[i].Passed, invertOutcome));
@@ -384,8 +377,7 @@ public sealed partial class UnitTestBisectorSystem
 		}
 
 		// Run one iteration
-		bisectorDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
-		RebuildEffectiveDisabledSet();
+		effectiveDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
 		var status = bisector.GetStatus();
 		state.IterationNumber = status.Iteration + 1;
 		PrintIterationHeader(sessionName, status);
@@ -748,11 +740,6 @@ public sealed partial class UnitTestBisectorSystem
 		return effectiveDisabledTransformNames.Contains(transformName);
 	}
 
-	private void RebuildEffectiveDisabledSet()
-	{
-		effectiveDisabledTransformNames = [.. bisectorDisabledTransformNames];
-	}
-
 	private void PrintDisabledTransforms()
 	{
 		OutputStatusBisector($"Disabled: {effectiveDisabledTransformNames.Count}");
@@ -906,8 +893,7 @@ public sealed partial class UnitTestBisectorSystem
 	{
 		if (!state.BaselineCompleted)
 		{
-			bisectorDisabledTransformNames = BuildDisabledSetForBaseline(plan, state.ObservedTransforms);
-			RebuildEffectiveDisabledSet();
+			effectiveDisabledTransformNames = BuildDisabledSetForBaseline(plan, state.ObservedTransforms);
 			state.IterationNumber = Constant.BaselineIterationNumber;
 
 			OutputStatusBisector("Running baseline iteration...");
@@ -943,8 +929,7 @@ public sealed partial class UnitTestBisectorSystem
 			var transform = state.ObservedTransforms[state.NextIndex];
 			var iterationNumber = state.NextIndex + 1;
 			state.IterationNumber = iterationNumber;
-			bisectorDisabledTransformNames = BuildDisabledSetForTransform(plan, state.ObservedTransforms, transform);
-			RebuildEffectiveDisabledSet();
+			effectiveDisabledTransformNames = BuildDisabledSetForTransform(plan, state.ObservedTransforms, transform);
 			var disabledSnapshot = effectiveDisabledTransformNames.OrderBy(x => x).ToList();
 
 			OutputStatusBisector($"Iteration {iterationNumber}/{state.ObservedTransforms.Count}");
@@ -999,8 +984,7 @@ public sealed partial class UnitTestBisectorSystem
 	{
 		if (!state.BaselineCompleted)
 		{
-			bisectorDisabledTransformNames = [];
-			RebuildEffectiveDisabledSet();
+			effectiveDisabledTransformNames = [];
 			state.IterationNumber = Constant.BaselineIterationNumber;
 
 			OutputStatusBisector("Running baseline iteration...");
@@ -1037,8 +1021,7 @@ public sealed partial class UnitTestBisectorSystem
 		{
 			var iterationNumber = state.NextIndex + 1;
 			state.IterationNumber = iterationNumber;
-			bisectorDisabledTransformNames = BuildRandomDisabledSet(state.ObservedTransforms, state.RandomSeed, state.NextIndex);
-			RebuildEffectiveDisabledSet();
+			effectiveDisabledTransformNames = BuildRandomDisabledSet(state.ObservedTransforms, state.RandomSeed, state.NextIndex);
 			var disabledSnapshot = effectiveDisabledTransformNames.OrderBy(x => x).ToList();
 
 			OutputStatusBisector($"Random Iteration {iterationNumber}");
