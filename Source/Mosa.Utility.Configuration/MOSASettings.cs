@@ -894,11 +894,16 @@ public partial class MosaSettings
 		LongExpansion = true;
 		TwoPassOptimization = true;
 		PlatformOptimizations = true;
+		ReduceCodeSize = false;
 		InlineMethods = true;
 		InlineExplicit = true;
 		Emulator = "qemu";
 		EmulatorDisplay = false;
 		EmulatorCores = 1;
+
+		InlineMaximum = Constant.Optimizations_Inline_Maximum;
+		InlineAggressiveMaximum = Constant.Optimizations_Inline_AggressiveMaximum;
+		OptimizationScanWindow = Constant.Optimizations_ScanWindow;
 
 		EmulatorSerial = "TCPServer";
 		EmulatorSerialHost = "127.0.0.1";
