@@ -28,15 +28,11 @@ public static class BitTrackerOperations
 		{
 			result.Narrow(value1).SetStable(value1);
 		}
-		else if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue)
-			|| value1.MaxValue > uint.MaxValue
-			|| value2.MaxValue > uint.MaxValue)
+		else if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
 		{
 			result.SetStable(value1, value2);
 		}
-		else if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MinValue, (uint)value2.MinValue)
-			|| value1.MaxValue > uint.MaxValue
-			|| value2.MaxValue > uint.MaxValue)
+		else if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MinValue, (uint)value2.MinValue))
 		{
 			result.SetStable(value1, value2);
 		}
@@ -573,13 +569,11 @@ public static class BitTrackerOperations
 			&& !IntegerTwiddling.HasSignBitSet((int)value2.MinValue)
 			&& !IntegerTwiddling.IsMultiplySignedOverflow((int)value1.MaxValue, (int)value2.MaxValue))
 		{
-			var max = Math.Max(value1.MaxValue, value2.MaxValue);
-			var min = Math.Min(value1.MinValue, value2.MinValue);
-			var uppermax = max * max;
+			var uppermax = value1.MaxValue * value2.MaxValue;
 
 			result
-				.NarrowMin((uint)(min * min))
-				.NarrowMax((uint)(max * max))
+				.NarrowMin(value1.MinValue * value2.MinValue)
+				.NarrowMax(uppermax)
 				.NarrowClearBits(Upper32BitsSet | BitTwiddling.GetBitsOver((uint)uppermax))
 				.SetStable(value1, value2);
 		}
@@ -618,11 +612,11 @@ public static class BitTrackerOperations
 				&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MaxValue, (long)value2.MaxValue)
 				&& !IntegerTwiddling.IsMultiplySignedOverflow((long)value1.MinValue, (long)value2.MinValue))
 		{
-			var max = Math.Max(value1.MaxValue, value2.MaxValue);
-			var min = Math.Min(value1.MinValue, value2.MinValue);
-			var uppermax = max * max;
+			var uppermax = value1.MaxValue * value2.MaxValue;
 
 			result
+				.NarrowMin(value1.MinValue * value2.MinValue)
+				.NarrowMax(uppermax)
 				.NarrowClearBits(BitTwiddling.GetBitsOver(uppermax))
 				.SetStable(value1, value2);
 		}
@@ -657,7 +651,7 @@ public static class BitTrackerOperations
 		else if (IntegerTwiddling.IsMultiplyUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
 		{
 			result
-				.NarrowClearBits(Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue))
+				.NarrowClearBits(Upper32BitsSet)
 				.SetStable(value1, value2);
 		}
 		else
@@ -713,7 +707,7 @@ public static class BitTrackerOperations
 		{
 			return;
 		}
-		else if (value2.IsZero) // !value2.IsNotZero
+		else if (value2.IsZero) // value2 range is [0,0]; bit tracking may not have narrowed it yet
 		{
 			return;
 		}
@@ -1122,7 +1116,7 @@ public static class BitTrackerOperations
 	{
 		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 		{
-			result.SetValue(value2.MaxValue << 32 | (value1.MaxValue & uint.MaxValue));
+			result.SetValue((ulong)value2.BitsSet32 << 32 | value1.BitsSet32);
 		}
 		else
 		{

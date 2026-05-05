@@ -2600,3 +2600,234 @@ public partial class BitTrackerOperationsXor32Tests
 		Assert.Equal(0xFFu, result.BitsKnown & 0xFFu);
 	}
 }
+
+// ─── Add32: edge cases ────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsAdd32EdgeCaseTests
+{
+	[Fact]
+	public void Add32_MaxValuePlusOne_OverflowNotNarrowed()
+	{
+		// uint.MaxValue + 1 wraps → result cannot be narrowed
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, uint.MaxValue);
+		var value2 = new BitValue(true, 1u);
+
+		BitTrackerOperations.Add32(result, value1, value2);
+
+		// Exact value wraps to 0 since both known
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void Add32_BothRangeBounded_NarrowsMinMax()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(10).NarrowMax(20);
+		var value2 = new BitValue(true).NarrowMin(5).NarrowMax(15);
+
+		BitTrackerOperations.Add32(result, value1, value2);
+
+		Assert.Equal(15u, result.MinValue);
+		Assert.Equal(35u, result.MaxValue);
+	}
+
+	[Fact]
+	public void Add32_MaxRangeOverflows_NotNarrowed()
+	{
+		// Max of range addition overflows 32 bits → can't narrow
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin((ulong)(uint.MaxValue - 5)).NarrowMax(uint.MaxValue);
+		var value2 = new BitValue(true).NarrowMin(10).NarrowMax(20);
+
+		BitTrackerOperations.Add32(result, value1, value2);
+
+		// Overflow: MaxValue should remain uint.MaxValue
+		Assert.Equal(uint.MaxValue, result.MaxValue);
+	}
+}
+
+// ─── MulUnsigned32: overflow case ────────────────────────────────────────────
+
+public class BitTrackerOperationsMulUnsigned32OverflowTests
+{
+	[Fact]
+	public void MulUnsigned32_Overflow_OnlyUpperBitsClear()
+	{
+		// 0x10000 * 0x10000 = 0x100000000 which overflows 32 bits
+		// Only the upper 32 bits of the result must be asserted clear; lower 32 are unknown
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMax(0x10000);
+		var value2 = new BitValue(true).NarrowMax(0x10000);
+
+		BitTrackerOperations.MulUnsigned32(result, value1, value2);
+
+		// Upper 32 bits must be clear (it's a 32-bit operation)
+		Assert.Equal(0UL, result.BitsSet & ~(ulong)uint.MaxValue);
+	}
+
+	[Fact]
+	public void MulUnsigned32_NoOverflow_NarrowsRange()
+	{
+		// 3 * 4 = 12; no overflow, range and bits should be narrowed
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(2).NarrowMax(3);
+		var value2 = new BitValue(true).NarrowMin(4).NarrowMax(5);
+
+		BitTrackerOperations.MulUnsigned32(result, value1, value2);
+
+		Assert.Equal(8u, result.MinValue);   // 2*4
+		Assert.Equal(15u, result.MaxValue);  // 3*5
+	}
+}
+
+// ─── MulSigned32: range narrowing ────────────────────────────────────────────
+
+public class BitTrackerOperationsMulSigned32RangeTests
+{
+	[Fact]
+	public void MulSigned32_BothPositiveRange_CorrectMinMax()
+	{
+		// value1 in [2,10], value2 in [3,5] → result in [2*3=6, 10*5=50]
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(2).NarrowMax(10);
+		var value2 = new BitValue(true).NarrowMin(3).NarrowMax(5);
+
+		BitTrackerOperations.MulSigned32(result, value1, value2);
+
+		Assert.Equal(6u, result.MinValue);
+		Assert.Equal(50u, result.MaxValue);
+	}
+
+	[Fact]
+	public void MulSigned32_NoOverflow_MaxBitsCleared()
+	{
+		// max product = 50 → bits above 50 must be clear
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(2).NarrowMax(10);
+		var value2 = new BitValue(true).NarrowMin(3).NarrowMax(5);
+
+		BitTrackerOperations.MulSigned32(result, value1, value2);
+
+		// 50 = 0b110010 → bits 6 and higher must be cleared
+		Assert.Equal(0UL, result.BitsSet & ~63UL);
+	}
+}
+
+// ─── MulSigned64: range narrowing ────────────────────────────────────────────
+
+public class BitTrackerOperationsMulSigned64RangeTests
+{
+	[Fact]
+	public void MulSigned64_BothPositiveRange_CorrectMinMax()
+	{
+		// value1 in [2,10], value2 in [3,5] → result in [6, 50]
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(2).NarrowMax(10);
+		var value2 = new BitValue(false).NarrowMin(3).NarrowMax(5);
+
+		BitTrackerOperations.MulSigned64(result, value1, value2);
+
+		Assert.Equal(6UL, result.MinValue);
+		Assert.Equal(50UL, result.MaxValue);
+	}
+
+	[Fact]
+	public void MulSigned64_NoOverflow_MaxBitsCleared()
+	{
+		// max product = 50 → bits above 50 must be clear
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(2).NarrowMax(10);
+		var value2 = new BitValue(false).NarrowMin(3).NarrowMax(5);
+
+		BitTrackerOperations.MulSigned64(result, value1, value2);
+
+		Assert.Equal(0UL, result.BitsSet & ~63UL);
+	}
+}
+
+// ─── To64: 64-bit operands with only lower 32 bits known ─────────────────────
+
+public class BitTrackerOperationsTo64EdgeCaseTests
+{
+	[Fact]
+	public void To64_64BitOperands_UsesBitsSet32NotMaxValue()
+	{
+		// value1: 64-bit, AreLower32BitsKnown=true, BitsSet32=5 but MaxValue could be wider
+		// value2: 64-bit, AreLower32BitsKnown=true, BitsSet32=3 but MaxValue could be wider
+		// The known-path result must use BitsSet32, not MaxValue.
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 5UL); // all bits known; BitsSet=5, MaxValue=5
+		var value2 = new BitValue(false, 3UL); // all bits known; BitsSet=3, MaxValue=3
+
+		BitTrackerOperations.To64(result, value1, value2);
+
+		// Expected: (3UL << 32) | 5UL = 0x0000000300000005UL
+		Assert.Equal(0x0000000300000005UL, result.BitsSet);
+		Assert.True(result.IsStable);
+	}
+
+	[Fact]
+	public void To64_MaxUInt32Parts_NoTruncation()
+	{
+		// Verify boundary: value1 = uint.MaxValue, value2 = uint.MaxValue
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, uint.MaxValue);
+		var value2 = new BitValue(true, uint.MaxValue);
+
+		BitTrackerOperations.To64(result, value1, value2);
+
+		// Expected: (uint.MaxValue << 32) | uint.MaxValue = ulong.MaxValue
+		Assert.Equal(ulong.MaxValue, result.BitsSet);
+		Assert.True(result.IsStable);
+	}
+
+	[Fact]
+	public void To64_ZeroAndZero_ResultIsZero()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.To64(result, value1, value2);
+
+		Assert.Equal(0UL, result.BitsSet);
+		Assert.True(result.IsStable);
+	}
+}
+
+// ─── Add32: range-narrowing regression ───────────────────────────────────────
+// Previously had dead conditions: value1/2.MaxValue > uint.MaxValue (always false for 32-bit).
+// These tests verify the carry/non-carry branching is still correct after cleanup.
+
+public class BitTrackerOperationsAdd32CarryRegressionTests
+{
+	[Fact]
+	public void Add32_MinRangeOverflows_NotNarrowed()
+	{
+		// MinValue addition also overflows 32 bits → range spans wrap-around, can't narrow
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(uint.MaxValue - 2).NarrowMax(uint.MaxValue);
+		var value2 = new BitValue(true).NarrowMin(5).NarrowMax(10);
+
+		BitTrackerOperations.Add32(result, value1, value2);
+
+		// Both min and max additions overflow → MaxValue must remain uint.MaxValue
+		Assert.Equal(uint.MaxValue, result.MaxValue);
+	}
+
+	[Fact]
+	public void Add32_MaxCarryMinNoCarry_MaxNotNarrowed()
+	{
+		// Max addition overflows but min addition does not → stable but not narrowed
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(10).NarrowMax(uint.MaxValue);
+		var value2 = new BitValue(true).NarrowMin(1).NarrowMax(5);
+
+		BitTrackerOperations.Add32(result, value1, value2);
+
+		// Max overflows → cannot narrow MaxValue
+		Assert.Equal(uint.MaxValue, result.MaxValue);
+	}
+}
