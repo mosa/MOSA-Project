@@ -46,8 +46,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(IR.AddCarryIn64, AddCarryIn64);
 		Register(IR.AddCarryOut32, Result2NarrowToBoolean);
 		Register(IR.AddCarryOut64, Result2NarrowToBoolean);
-		Register(IR.AddOverflowOut32, Result2NarrowToBoolean);
-		Register(IR.AddOverflowOut64, Result2NarrowToBoolean);
+		Register(IR.AddOverflowOut32, AddOverflowOut32);
+		Register(IR.AddOverflowOut64, AddOverflowOut64);
 		Register(IR.And32, And32);
 		Register(IR.And64, And64);
 		Register(IR.ArithShiftRight32, ArithShiftRight32);
