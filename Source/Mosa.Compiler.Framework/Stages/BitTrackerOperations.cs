@@ -1127,8 +1127,8 @@ public static class BitTrackerOperations
 		else
 		{
 			result
-				.NarrowSetBits(value1.BitsSet32 | (signed ? Upper56BitsSet : 0))
-				.NarrowClearBits(value1.BitsClear32 | (signed ? 0 : Upper56BitsSet))
+				.NarrowSetBits(value1.BitsSet32 | (signed ? Upper32BitsSet : 0))
+				.NarrowClearBits(value1.BitsClear32 | (signed ? 0 : Upper32BitsSet))
 				.SetStable(value1);
 		}
 	}

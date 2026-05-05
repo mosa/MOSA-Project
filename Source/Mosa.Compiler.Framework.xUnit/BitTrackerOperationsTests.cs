@@ -765,6 +765,316 @@ public class BitTrackerOperationsSignExtendTests
 
 		Assert.True(result.AreLower32BitsKnown);
 	}
+
+	[Fact]
+	public void SignExtend32x64_AllBitsKnown_Positive()
+	{
+		// 0x7FFFFFFF — sign bit clear, all lower 32 known → upper 32 must be zero
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0x7FFFFFFFu);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0x000000007FFFFFFFul, result.BitsSet);
+		Assert.Equal(0xFFFFFFFF80000000ul, result.BitsClear);
+	}
+
+	[Fact]
+	public void SignExtend32x64_AllBitsKnown_NegativeMinInt()
+	{
+		// 0x80000000 — sign bit set, all lower 32 known → upper 32 must be all set
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0x80000000u);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0xFFFFFFFF80000000ul, result.BitsSet);
+		Assert.Equal(0x000000007FFFFFFFul, result.BitsClear);
+	}
+
+	[Fact]
+	public void SignExtend32x64_AllBitsKnown_Zero()
+	{
+		// 0x00000000 — all lower bits clear → result must be 0
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0u);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0ul, result.BitsSet);
+	}
+
+	[Fact]
+	public void SignExtend32x64_AllBitsKnown_AllOnesNegative()
+	{
+		// 0xFFFFFFFF — all bits set including sign bit → result must be 0xFFFFFFFFFFFFFFFF
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0xFFFFFFFFu);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0xFFFFFFFFFFFFFFFFul, result.BitsSet);
+		Assert.Equal(0ul, result.BitsClear);
+	}
+
+	[Fact]
+	public void SignExtend32x64_SignBitKnownSet_LowerPartiallyKnown()
+	{
+		// Sign bit known set, only some lower bits known → upper 32 must be all set
+		var result = new BitValue(false);
+		var value1 = new BitValue(false); // 64-bit container for a 32-bit value
+		value1.NarrowSetBits(0x80000005u);    // sign bit + bits 0 and 2 set
+		value1.NarrowClearBits(0x7FFFFFF0u);  // upper nibble of lower 32 clear
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		// Upper 32 bits must all be set (sign-extended)
+		Assert.Equal(0xFFFFFFFF00000000ul, result.BitsSet & 0xFFFFFFFF00000000ul);
+	}
+
+	[Fact]
+	public void SignExtend32x64_SignBitKnownClear_LowerPartiallyKnown()
+	{
+		// Sign bit known clear, some lower bits known → upper 32 must be all clear
+		var result = new BitValue(false);
+		var value1 = new BitValue(false);
+		value1.NarrowClearBits(0x80000000u);  // sign bit known clear
+		value1.NarrowSetBits(0x00000003u);    // bits 0 and 1 set
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		// Upper 32 bits must be known clear
+		Assert.Equal(0xFFFFFFFF00000000ul, result.BitsClear & 0xFFFFFFFF00000000ul);
+		// Known set bits in lower 32 must be propagated
+		Assert.True((result.BitsSet & 0x3ul) == 0x3ul);
+	}
+
+	[Fact]
+	public void SignExtend32x64_SignBitUnknown_UpperBitsUnknown()
+	{
+		// Sign bit unknown → upper 32 bits must remain unknown
+		var result = new BitValue(false);
+		var value1 = new BitValue(false);
+		// Set some bits below bit 31 known, but bit 31 unknown
+		value1.NarrowSetBits(0x00000001u);
+		value1.NarrowClearBits(0x00000002u);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		// Upper 32 bits should be neither fully set nor fully clear
+		Assert.NotEqual(0xFFFFFFFF00000000ul, result.BitsSet & 0xFFFFFFFF00000000ul);
+		Assert.NotEqual(0xFFFFFFFF00000000ul, result.BitsClear & 0xFFFFFFFF00000000ul);
+		// Known lower bits must still be propagated
+		Assert.True((result.BitsSet & 0x1ul) == 0x1ul);
+		Assert.True((result.BitsClear & 0x2ul) == 0x2ul);
+	}
+
+	[Fact]
+	public void SignExtend32x64_FullyUnknown_NoUpperBitsSet()
+	{
+		// Completely unknown input → no upper bits should be known set or clear
+		var result = new BitValue(false);
+		var value1 = new BitValue(false);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		Assert.Equal(0ul, result.BitsSet & 0xFFFFFFFF00000000ul);
+		Assert.Equal(0ul, result.BitsClear & 0xFFFFFFFF00000000ul);
+	}
+
+	[Fact]
+	public void SignExtend32x64_AllBitsKnown_MaxPositiveInt32()
+	{
+		// 0x7FFFFFFF is the largest positive int32 → result 0x000000007FFFFFFF
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0x7FFFFFFFu);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		Assert.Equal(0x000000007FFFFFFFul, result.BitsSet);
+		Assert.True(result.IsStable);
+	}
+
+	[Fact]
+	public void SignExtend32x64_AllBitsKnown_One()
+	{
+		// 0x00000001 → result 0x0000000000000001
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 1u);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(1ul, result.BitsSet);
+	}
+
+	[Fact]
+	public void SignExtend32x64_StableInputPropagated()
+	{
+		// A stable, fully known input should yield a stable result
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0x12345678u);
+
+		BitTrackerOperations.SignExtend32x64(result, value1);
+
+		Assert.True(result.IsStable);
+	}
+
+	[Fact]
+	public void SignExtend8x64_AllBitsKnown_Positive()
+	{
+		// 0x7F — sign bit clear, all lower 8 known → upper 56 must be zero
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0x7Fu);
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0x000000000000007Ful, result.BitsSet);
+		Assert.Equal(0xFFFFFFFFFFFFFF80ul, result.BitsClear);
+	}
+
+	[Fact]
+	public void SignExtend8x64_AllBitsKnown_Negative()
+	{
+		// 0x80 — sign bit set, all lower 8 known → upper 56 must be all set
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0x80u);
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0xFFFFFFFFFFFFFF80ul, result.BitsSet);
+		Assert.Equal(0x000000000000007Ful, result.BitsClear);
+	}
+
+	[Fact]
+	public void SignExtend8x64_AllBitsKnown_Zero()
+	{
+		// 0x00 — all bits clear → result must be 0
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0u);
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0ul, result.BitsSet);
+	}
+
+	[Fact]
+	public void SignExtend8x64_AllBitsKnown_AllOnesNegative()
+	{
+		// 0xFF — all 8 bits set including sign bit → result must be 0xFFFFFFFFFFFFFFFF
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0xFFu);
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0xFFFFFFFFFFFFFFFFul, result.BitsSet);
+		Assert.Equal(0ul, result.BitsClear);
+	}
+
+	[Fact]
+	public void SignExtend8x64_AllBitsKnown_One()
+	{
+		// 0x01 → result 0x0000000000000001
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 1u);
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(1ul, result.BitsSet);
+	}
+
+	[Fact]
+	public void SignExtend8x64_SignBitKnownSet_LowerPartiallyKnown()
+	{
+		// Sign bit (bit 7) known set, only some lower bits known → upper 56 must be all set
+		var result = new BitValue(false);
+		var value1 = new BitValue(false);
+		value1.NarrowSetBits(0x85u);   // bit 7 + bits 0 and 2 set
+		value1.NarrowClearBits(0x70u); // bits 4-6 clear
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.Equal(0xFFFFFFFFFFFFFF00ul, result.BitsSet & 0xFFFFFFFFFFFFFF00ul);
+	}
+
+	[Fact]
+	public void SignExtend8x64_SignBitKnownClear_LowerPartiallyKnown()
+	{
+		// Sign bit (bit 7) known clear, some lower bits known → upper 56 must be all clear
+		var result = new BitValue(false);
+		var value1 = new BitValue(false);
+		value1.NarrowClearBits(0x80u); // sign bit known clear
+		value1.NarrowSetBits(0x03u);   // bits 0 and 1 set
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.Equal(0xFFFFFFFFFFFFFF00ul, result.BitsClear & 0xFFFFFFFFFFFFFF00ul);
+		Assert.True((result.BitsSet & 0x3ul) == 0x3ul);
+	}
+
+	[Fact]
+	public void SignExtend8x64_SignBitUnknown_UpperBitsUnknown()
+	{
+		// Sign bit (bit 7) unknown → upper 56 bits must remain unknown
+		var result = new BitValue(false);
+		var value1 = new BitValue(false);
+		value1.NarrowSetBits(0x01u);  // bit 0 known set
+		value1.NarrowClearBits(0x02u); // bit 1 known clear
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.NotEqual(0xFFFFFFFFFFFFFF00ul, result.BitsSet & 0xFFFFFFFFFFFFFF00ul);
+		Assert.NotEqual(0xFFFFFFFFFFFFFF00ul, result.BitsClear & 0xFFFFFFFFFFFFFF00ul);
+		Assert.True((result.BitsSet & 0x1ul) == 0x1ul);
+		Assert.True((result.BitsClear & 0x2ul) == 0x2ul);
+	}
+
+	[Fact]
+	public void SignExtend8x64_FullyUnknown_NoUpperBitsSet()
+	{
+		// Completely unknown input → no upper bits should be known set or clear
+		var result = new BitValue(false);
+		var value1 = new BitValue(false);
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.Equal(0ul, result.BitsSet & 0xFFFFFFFFFFFFFF00ul);
+		Assert.Equal(0ul, result.BitsClear & 0xFFFFFFFFFFFFFF00ul);
+	}
+
+	[Fact]
+	public void SignExtend8x64_AllBitsKnown_MaxPositiveByte()
+	{
+		// 0x7F is the largest positive signed byte → result 0x000000000000007F
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0x7Fu);
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.Equal(0x000000000000007Ful, result.BitsSet);
+		Assert.True(result.IsStable);
+	}
+
+	[Fact]
+	public void SignExtend8x64_StableInputPropagated()
+	{
+		// A stable, fully known input should yield a stable result
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0x42u);
+
+		BitTrackerOperations.SignExtend8x64(result, value1);
+
+		Assert.True(result.IsStable);
+	}
 }
 
 public partial class BitTrackerOperationsRemUnsignedTests
