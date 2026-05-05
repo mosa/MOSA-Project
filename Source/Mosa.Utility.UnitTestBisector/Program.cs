@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
+using Mosa.Compiler.Platforms;
 
 namespace Mosa.Utility.UnitTestBisector;
 
@@ -18,8 +18,6 @@ internal static class Program
 
 	private static void RegisterPlatforms()
 	{
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
+		PlatformRegistrations.Register();
 	}
 }

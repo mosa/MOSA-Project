@@ -78,7 +78,19 @@ public sealed partial class UnitTestBisectorSystem
 				var bisectorState = LoadOrCreateState(stateFile, plan);
 				EnsureStateCompatibility(bisectorState, plan, OrderKind.Unspecified);
 				OutputStatusBisector($"Saved Iteration: {bisectorState.IterationNumber}");
-				return ExecuteBisectorPlan(plan, stateFile, bisectorState, discoveredUnitTests);
+
+				if (mosaSettings.BisectorWorkerIteration)
+					return ExecuteBisectorPlan(plan, stateFile, bisectorState, discoveredUnitTests);
+
+				// Run all iterations in-process when not running under the supervisor
+				while (true)
+				{
+					ResetIterationState();
+					bisectorState = LoadOrCreateState(stateFile, plan);
+					var result = ExecuteBisectorPlan(plan, stateFile, bisectorState, discoveredUnitTests);
+					if (result != Constant.WorkerContinueExitCode)
+						return result;
+				}
 			}
 
 			var state = LoadOrCreateState(stateFile, plan);
@@ -151,6 +163,17 @@ public sealed partial class UnitTestBisectorSystem
 		}
 	}
 
+	private void ResetIterationState()
+	{
+		hasCompilationFailure = false;
+		lastCompilationFailure = null;
+		observedTransformNames = [];
+		observedTransformCounts.Clear();
+		bisectorDisabledTransformNames = [];
+		effectiveDisabledTransformNames = [];
+		bisector = null;
+	}
+
 	private static bool IsBisectorPlan(PlanKind plan)
 	{
 		return plan is PlanKind.FailureInducing or PlanKind.Masking;
@@ -170,11 +193,10 @@ public sealed partial class UnitTestBisectorSystem
 		if (state.ObservedTransforms.Count != 0)
 		{
 			foreach (var transform in state.ObservedTransforms)
-			{
 				observedTransformNames.Add(transform);
-			}
 		}
 
+		// Phase 1: discovery / baseline
 		if (!state.BaselineCompleted || state.ObservedTransforms.Count == 0)
 		{
 			OutputStatusBisector("Running transform discovery iteration...");
@@ -221,134 +243,195 @@ public sealed partial class UnitTestBisectorSystem
 
 			state.Results = [];
 			state.NextIndex = 0;
-			state.IterationNumber = Constant.BaselineIterationNumber;
+			state.BisectorSessionStarted = false;
+			state.MaskingPreCheckCompleted = false;
 
+			SaveState(stateFile, state);
+
+			// Let the supervisor restart us for the next phase
+			SetLastExit(state, Constant.ExitKindContinue, Constant.WorkerContinueExitCode);
+			SaveState(stateFile, state);
+			return Constant.WorkerContinueExitCode;
+		}
+
+		state.ObservedTransformCounts ??= new Dictionary<string, int>(StringComparer.Ordinal);
+		OutputStatusBisector($"Loaded transforms from state: {state.ObservedTransforms.Count}");
+
+		var baselineResult = new IterationResult(state.BaselinePassed);
+
+		// Phase 2: determine session name and invert flag
+		string sessionName;
+		bool invertOutcome;
+
+		if (plan == PlanKind.FailureInducing)
+		{
+			sessionName = "Failure-Inducing";
+			invertOutcome = false;
+		}
+		else if (!baselineResult.Passed)
+		{
+			// Masking requires a passing baseline; fall back to failure-inducing
+			OutputStatusBisector("Masking baseline is FAIL. Falling back to failure-inducing bisector to narrow failing transforms.");
+			sessionName = "Failure-Inducing";
+			invertOutcome = false;
+		}
+		else
+		{
+			// Phase 2a: masking pre-check (run once, then continue)
+			if (!state.MaskingPreCheckCompleted)
+			{
+				OutputStatusBisector("Running masking pre-check (all transforms disabled)...");
+				bisectorDisabledTransformNames = [.. state.ObservedTransforms];
+				RebuildEffectiveDisabledSet();
+				var preCheckResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
+				bisectorDisabledTransformNames = [];
+				RebuildEffectiveDisabledSet();
+
+				if (hasCompilationFailure)
+				{
+					SaveState(stateFile, state);
+					WriteFailureReviewFile(stateFile, plan, state);
+					return 1;
+				}
+
+				state.MaskingPreCheckCompleted = true;
+				state.MaskingPreCheckPassed = preCheckResult.Passed;
+				OutputStatusBisector($"Masking Pre-Check -> Actual: {(preCheckResult.Passed ? "PASS" : "FAIL")}");
+
+				if (preCheckResult.Passed)
+				{
+					state.Completed = true;
+					SetLastExit(state, Constant.ExitKindCompleted, 0);
+					SaveState(stateFile, state);
+					WriteFailureReviewFile(stateFile, plan, state);
+					OutputStatusBisector("Masking pre-check passed (all-disabled still passes). No masking transforms identified.");
+					return 0;
+				}
+
+				SaveState(stateFile, state);
+
+				// Let the supervisor restart for the masking session
+				SetLastExit(state, Constant.ExitKindContinue, Constant.WorkerContinueExitCode);
+				SaveState(stateFile, state);
+				return Constant.WorkerContinueExitCode;
+			}
+
+			if (state.MaskingPreCheckPassed)
+			{
+				// Was already resolved in a previous run
+				state.Completed = true;
+				SetLastExit(state, Constant.ExitKindCompleted, 0);
+				SaveState(stateFile, state);
+				WriteFailureReviewFile(stateFile, plan, state);
+				return 0;
+			}
+
+			sessionName = "Masking";
+			invertOutcome = true;
+		}
+
+		// Persist session name/invert for resume correctness
+		if (!state.BisectorSessionStarted)
+		{
+			state.BisectorSessionName = sessionName;
+			state.BisectorSessionInvertOutcome = invertOutcome;
+			state.BisectorSessionStarted = true;
+			state.Results = [];
+			state.NextIndex = 0;
 			SaveState(stateFile, state);
 		}
 		else
 		{
-			state.ObservedTransformCounts ??= new Dictionary<string, int>(StringComparer.Ordinal);
-			OutputStatusBisector($"Loaded transforms from state: {state.ObservedTransforms.Count}");
+			sessionName = state.BisectorSessionName ?? sessionName;
+			invertOutcome = state.BisectorSessionInvertOutcome;
 		}
 
-		var discoveryResultForSession = new IterationResult(state.BaselinePassed);
-
-		if (plan == PlanKind.FailureInducing)
-		{
-			state.Results = RunBisectorSession(stateFile, state, "Failure-Inducing", invertOutcome: false, discoveryResultForSession, discoveredUnitTests);
-			state.NextIndex = state.Results.Count;
-			state.Completed = !hasCompilationFailure;
-			SaveState(stateFile, state);
-			WriteFailureReviewFile(stateFile, plan, state);
-			return hasCompilationFailure ? 1 : 0;
-		}
-
-		if (!discoveryResultForSession.Passed)
-		{
-			OutputStatusBisector("Masking baseline is FAIL. Falling back to failure-inducing bisector to narrow failing transforms.");
-			state.Results = RunBisectorSession(stateFile, state, "Failure-Inducing", invertOutcome: false, discoveryResultForSession, discoveredUnitTests);
-			state.NextIndex = state.Results.Count;
-			state.Completed = !hasCompilationFailure;
-			SaveState(stateFile, state);
-			WriteFailureReviewFile(stateFile, plan, state);
-			return hasCompilationFailure ? 1 : 0;
-		}
-
-		OutputStatusBisector("Running masking pre-check (all transforms disabled)...");
-		bisectorDisabledTransformNames = [.. state.ObservedTransforms];
-		RebuildEffectiveDisabledSet();
-		var maskingPreCheckResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
-		bisectorDisabledTransformNames = [];
-		RebuildEffectiveDisabledSet();
-
-		if (hasCompilationFailure)
-		{
-			SaveState(stateFile, state);
-			WriteFailureReviewFile(stateFile, plan, state);
-			return 1;
-		}
-
-		OutputStatusBisector($"Masking Pre-Check -> Actual: {(maskingPreCheckResult.Passed ? "PASS" : "FAIL")}");
-
-		if (maskingPreCheckResult.Passed)
-		{
-			state.Completed = true;
-			SaveState(stateFile, state);
-			WriteFailureReviewFile(stateFile, plan, state);
-			OutputStatusBisector("Masking pre-check passed (all-disabled still passes). No masking transforms identified.");
-			return 0;
-		}
-
-		state.Results = RunBisectorSession(stateFile, state, "Masking", invertOutcome: true, discoveryResultForSession, discoveredUnitTests);
-		state.NextIndex = state.Results.Count;
-		state.Completed = !hasCompilationFailure;
-		SaveState(stateFile, state);
-		WriteFailureReviewFile(stateFile, plan, state);
-		return hasCompilationFailure ? 1 : 0;
+		return RunBisectorSessionIteration(stateFile, state, sessionName, invertOutcome, baselineResult, discoveredUnitTests);
 	}
 
-	private List<PlanResult> RunBisectorSession(string stateFile, BisectorState state, string sessionName, bool invertOutcome, IterationResult discoveryResult, List<UnitTestInfo> discoveredUnitTests)
+	private int RunBisectorSessionIteration(string stateFile, BisectorState state, string sessionName, bool invertOutcome, IterationResult discoveryResult, List<UnitTestInfo> discoveredUnitTests)
 	{
-		var sessionResults = new List<PlanResult>();
+		// Reconstruct bisector by replaying prior results
 		bisectorDisabledTransformNames = [];
 		RebuildEffectiveDisabledSet();
 		bisector = new Bisector<string>(observedTransformNames, enablePairwise: mosaSettings.BisectorPairwise);
 		var reportedBadItems = new HashSet<string>(StringComparer.Ordinal);
 
-		bisectorDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
-		RebuildEffectiveDisabledSet();
+		// Feed bisector the baseline (discovery result)
+		bisector.GetNextDisabledItems();
 		var mappedBaseline = MapOutcome(discoveryResult.Passed, invertOutcome);
 		bisector.AcceptResult(mappedBaseline);
-		sessionResults.Add(new PlanResult
-		{
-			Transform = "baseline",
-			Passed = discoveryResult.Passed,
-			DisabledTransforms = effectiveDisabledTransformNames.OrderBy(x => x).ToList(),
-		});
-		state.IterationNumber = Constant.BaselineIterationNumber;
-		state.Results = [.. sessionResults];
-		state.NextIndex = state.Results.Count;
-		SaveState(stateFile, state);
 		OutputStatusBisector($"{sessionName} Baseline -> Actual: {(discoveryResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedBaseline ? "PASS" : "FAIL")}");
-		PrintNewlyConfirmedBadItems(sessionName, bisector, reportedBadItems);
 
-		while (!bisector.IsComplete)
+		// Replay prior session results to restore bisector state
+		for (var i = 1; i < state.Results.Count; i++)
 		{
-			bisectorDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
-			RebuildEffectiveDisabledSet();
-			var status = bisector.GetStatus();
-			state.IterationNumber = status.Iteration + 1;
-			PrintIterationHeader(sessionName, status);
-			PrintDisabledTransforms();
-
-			var iterationResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
-			var mappedResult = MapOutcome(iterationResult.Passed, invertOutcome);
-
-			sessionResults.Add(new PlanResult
-			{
-				Transform = $"iter-{status.Iteration + 1}-{status.Level}-{status.Phase}",
-				Passed = iterationResult.Passed,
-				DisabledTransforms = effectiveDisabledTransformNames.OrderBy(x => x).ToList(),
-			});
-
-			state.Results = [.. sessionResults];
-			state.NextIndex = state.Results.Count;
-			SaveState(stateFile, state);
-			WriteFailureReviewFile(stateFile, state.Plan, state);
-
-			bisector.AcceptResult(mappedResult);
-			OutputStatusBisector($"Iteration Result -> Actual: {(iterationResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedResult ? "PASS" : "FAIL")}");
-			PrintNewlyConfirmedBadItems(sessionName, bisector, reportedBadItems);
-			PrintStatus(bisector.GetStatus());
-
-			if (hasCompilationFailure)
-				return sessionResults;
+			bisector.GetNextDisabledItems();
+			bisector.AcceptResult(MapOutcome(state.Results[i].Passed, invertOutcome));
 		}
 
-		OutputStatusBisector($"{sessionName} bisector complete.");
-		PrintFinalReport(sessionName, bisector);
+		PrintNewlyConfirmedBadItems(sessionName, bisector, reportedBadItems);
 
-		return sessionResults;
+		if (bisector.IsComplete)
+		{
+			OutputStatusBisector($"{sessionName} bisector complete.");
+			PrintFinalReport(sessionName, bisector);
+			state.Completed = true;
+			SetLastExit(state, Constant.ExitKindCompleted, 0);
+			SaveState(stateFile, state);
+			WriteFailureReviewFile(stateFile, state.Plan, state);
+			return 0;
+		}
+
+		// Run one iteration
+		bisectorDisabledTransformNames = [.. bisector.GetNextDisabledItems()];
+		RebuildEffectiveDisabledSet();
+		var status = bisector.GetStatus();
+		state.IterationNumber = status.Iteration + 1;
+		PrintIterationHeader(sessionName, status);
+		PrintDisabledTransforms();
+
+		var iterationResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
+		var mappedResult = MapOutcome(iterationResult.Passed, invertOutcome);
+
+		state.Results.Add(new PlanResult
+		{
+			Transform = $"iter-{status.Iteration + 1}-{status.Level}-{status.Phase}",
+			Passed = iterationResult.Passed,
+			DisabledTransforms = effectiveDisabledTransformNames.OrderBy(x => x).ToList(),
+		});
+		state.NextIndex = state.Results.Count;
+		SaveState(stateFile, state);
+		WriteFailureReviewFile(stateFile, state.Plan, state);
+
+		bisector.AcceptResult(mappedResult);
+		OutputStatusBisector($"Iteration Result -> Actual: {(iterationResult.Passed ? "PASS" : "FAIL")}, Mapped: {(mappedResult ? "PASS" : "FAIL")}");
+		PrintNewlyConfirmedBadItems(sessionName, bisector, reportedBadItems);
+		PrintStatus(bisector.GetStatus());
+
+		if (hasCompilationFailure)
+		{
+			SetLastExit(state, Constant.ExitKindFailure, 1);
+			SaveState(stateFile, state);
+			WriteFailureReviewFile(stateFile, state.Plan, state);
+			return 1;
+		}
+
+		if (bisector.IsComplete)
+		{
+			OutputStatusBisector($"{sessionName} bisector complete.");
+			PrintFinalReport(sessionName, bisector);
+			state.Completed = true;
+			SetLastExit(state, Constant.ExitKindCompleted, 0);
+			SaveState(stateFile, state);
+			WriteFailureReviewFile(stateFile, state.Plan, state);
+			return 0;
+		}
+
+		// More iterations remain; signal the supervisor to restart
+		SetLastExit(state, Constant.ExitKindContinue, Constant.WorkerContinueExitCode);
+		SaveState(stateFile, state);
+		return Constant.WorkerContinueExitCode;
 	}
 
 	private void PrintIterationHeader(string sessionName, Bisector<string>.BisectorStatus status)
@@ -668,9 +751,6 @@ public sealed partial class UnitTestBisectorSystem
 	private void RebuildEffectiveDisabledSet()
 	{
 		effectiveDisabledTransformNames = [.. bisectorDisabledTransformNames];
-
-		foreach (var transformName in bisectorDisabledTransformNames)
-			effectiveDisabledTransformNames.Add(transformName);
 	}
 
 	private void PrintDisabledTransforms()

@@ -37,4 +37,14 @@ internal sealed class BisectorState
 	public string LastExitKind { get; set; } = Constant.ExitKindUnknown;
 
 	public int LastExitCode { get; set; }
+
+	public bool BisectorSessionStarted { get; set; }
+
+	public bool BisectorSessionInvertOutcome { get; set; }
+
+	public string BisectorSessionName { get; set; }
+
+	public bool MaskingPreCheckCompleted { get; set; }
+
+	public bool MaskingPreCheckPassed { get; set; }
 }
