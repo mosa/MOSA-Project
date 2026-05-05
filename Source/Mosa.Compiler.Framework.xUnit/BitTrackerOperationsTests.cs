@@ -1513,8 +1513,6 @@ public class BitTrackerOperationsAdd64RegressionTests
 	}
 }
 
-// ─── Regression: Fix 2 – And32 used BitsSet32 not (BitsSet & ulong.MaxValue) ─
-
 public class BitTrackerOperationsAnd32RegressionTests
 {
 	[Fact]
@@ -1545,8 +1543,6 @@ public class BitTrackerOperationsAnd32RegressionTests
 	}
 }
 
-// ─── Regression: Fix 3 – ShiftRight64 SetStable was missing value2 ───────────
-
 public class BitTrackerOperationsShiftRight64RegressionTests
 {
 	[Fact]
@@ -1576,8 +1572,6 @@ public class BitTrackerOperationsShiftRight64RegressionTests
 		Assert.Equal(0xFFUL, result.BitsSet & 0xFFUL);
 	}
 }
-
-// ─── Regression: Fix 4 – RemUnsigned GetBitsOver used BitsSet instead of MaxValue ─
 
 public class BitTrackerOperationsRemUnsignedBoundsRegressionTests
 {
@@ -1624,8 +1618,6 @@ public class BitTrackerOperationsRemUnsignedBoundsRegressionTests
 	}
 }
 
-// ─── Regression: Fix 5 – RemUnsigned64 consolidated divide-by-zero guard ─────
-
 public class BitTrackerOperationsRemUnsigned64GuardRegressionTests
 {
 	[Fact]
@@ -1644,8 +1636,6 @@ public class BitTrackerOperationsRemUnsigned64GuardRegressionTests
 		Assert.False(result.IsStable);
 	}
 }
-
-// ─── AddCarryIn ───────────────────────────────────────────────────────────────
 
 public class BitTrackerOperationsAddCarryIn32Tests
 {
@@ -1750,8 +1740,6 @@ public class BitTrackerOperationsAddCarryIn64Tests
 	}
 }
 
-// ─── SubCarryIn ───────────────────────────────────────────────────────────────
-
 public class BitTrackerOperationsSubCarryIn32Tests
 {
 	[Fact]
@@ -1826,8 +1814,6 @@ public class BitTrackerOperationsSubCarryIn64Tests
 		Assert.Equal(value1.BitsSet, result.BitsSet);
 	}
 }
-
-// ─── MulSigned ────────────────────────────────────────────────────────────────
 
 public class BitTrackerOperationsMulSigned32Tests
 {
@@ -1963,8 +1949,6 @@ public class BitTrackerOperationsMulSigned64Tests
 	}
 }
 
-// ─── RemSigned ────────────────────────────────────────────────────────────────
-
 public class BitTrackerOperationsRemSigned32Tests
 {
 	[Fact]
@@ -2058,8 +2042,6 @@ public class BitTrackerOperationsRemSigned64Tests
 		Assert.False(result.IsStable);
 	}
 }
-
-// ─── DivSigned ────────────────────────────────────────────────────────────────
 
 public class BitTrackerOperationsDivSigned32Tests
 {
@@ -2155,8 +2137,6 @@ public class BitTrackerOperationsDivSigned64Tests
 	}
 }
 
-// ─── DivUnsigned additional ───────────────────────────────────────────────────
-
 public class BitTrackerOperationsDivUnsignedAdditionalTests
 {
 	[Fact]
@@ -2211,8 +2191,6 @@ public class BitTrackerOperationsDivUnsignedAdditionalTests
 		Assert.Equal(50UL, result.MaxValue);
 	}
 }
-
-// ─── Compare ──────────────────────────────────────────────────────────────────
 
 public class BitTrackerOperationsCompareTests
 {
@@ -2283,8 +2261,6 @@ public class BitTrackerOperationsCompareTests
 	}
 }
 
-// ─── LoadParam ZeroExtend ─────────────────────────────────────────────────────
-
 public class BitTrackerOperationsLoadParamZeroExtendTests
 {
 	[Fact]
@@ -2332,8 +2308,6 @@ public class BitTrackerOperationsLoadParamZeroExtendTests
 		Assert.Equal(~(ulong)ushort.MaxValue, result.BitsClear);
 	}
 }
-
-// ─── Load ZeroExtend ──────────────────────────────────────────────────────────
 
 public class BitTrackerOperationsLoadZeroExtendTests
 {
@@ -2383,8 +2357,6 @@ public class BitTrackerOperationsLoadZeroExtendTests
 	}
 }
 
-// ─── ZeroExtend16x64 ──────────────────────────────────────────────────────────
-
 public class BitTrackerOperationsZeroExtend16x64Tests
 {
 	[Fact]
@@ -2423,8 +2395,6 @@ public class BitTrackerOperationsZeroExtend16x64Tests
 		Assert.Equal(~(ulong)ushort.MaxValue, result.BitsClear & ~(ulong)ushort.MaxValue);
 	}
 }
-
-// ─── IfThenElse additional ────────────────────────────────────────────────────
 
 public class BitTrackerOperationsIfThenElseAdditionalTests
 {
@@ -2499,8 +2469,6 @@ public class BitTrackerOperationsIfThenElseAdditionalTests
 	}
 }
 
-// ─── Result2NarrowToBoolean ───────────────────────────────────────────────────
-
 public class BitTrackerOperationsResult2NarrowToBooleanTests
 {
 	[Fact]
@@ -2528,8 +2496,6 @@ public class BitTrackerOperationsResult2NarrowToBooleanTests
 		Assert.Equal(1u, result.MaxValue);
 	}
 }
-
-// ─── To64 additional ─────────────────────────────────────────────────────────
 
 public class BitTrackerOperationsTo64AdditionalTests
 {
@@ -2571,8 +2537,6 @@ public class BitTrackerOperationsTo64AdditionalTests
 	}
 }
 
-// ─── Xor32 additional ────────────────────────────────────────────────────────
-
 public partial class BitTrackerOperationsXor32Tests
 {
 	[Fact]
@@ -2600,8 +2564,6 @@ public partial class BitTrackerOperationsXor32Tests
 		Assert.Equal(0xFFu, result.BitsKnown & 0xFFu);
 	}
 }
-
-// ─── Add32: edge cases ────────────────────────────────────────────────────────
 
 public class BitTrackerOperationsAdd32EdgeCaseTests
 {
@@ -2648,8 +2610,6 @@ public class BitTrackerOperationsAdd32EdgeCaseTests
 	}
 }
 
-// ─── MulUnsigned32: overflow case ────────────────────────────────────────────
-
 public class BitTrackerOperationsMulUnsigned32OverflowTests
 {
 	[Fact]
@@ -2682,8 +2642,6 @@ public class BitTrackerOperationsMulUnsigned32OverflowTests
 	}
 }
 
-// ─── MulSigned32: range narrowing ────────────────────────────────────────────
-
 public class BitTrackerOperationsMulSigned32RangeTests
 {
 	[Fact]
@@ -2715,8 +2673,6 @@ public class BitTrackerOperationsMulSigned32RangeTests
 	}
 }
 
-// ─── MulSigned64: range narrowing ────────────────────────────────────────────
-
 public class BitTrackerOperationsMulSigned64RangeTests
 {
 	[Fact]
@@ -2746,8 +2702,6 @@ public class BitTrackerOperationsMulSigned64RangeTests
 		Assert.Equal(0UL, result.BitsSet & ~63UL);
 	}
 }
-
-// ─── To64: 64-bit operands with only lower 32 bits known ─────────────────────
 
 public class BitTrackerOperationsTo64EdgeCaseTests
 {
@@ -2796,10 +2750,6 @@ public class BitTrackerOperationsTo64EdgeCaseTests
 		Assert.True(result.IsStable);
 	}
 }
-
-// ─── Add32: range-narrowing regression ───────────────────────────────────────
-// Previously had dead conditions: value1/2.MaxValue > uint.MaxValue (always false for 32-bit).
-// These tests verify the carry/non-carry branching is still correct after cleanup.
 
 public class BitTrackerOperationsAdd32CarryRegressionTests
 {
