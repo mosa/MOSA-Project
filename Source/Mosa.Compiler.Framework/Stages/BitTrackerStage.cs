@@ -108,8 +108,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(IR.Sub64, Sub64);
 		Register(IR.SubCarryIn32, SubCarryIn32);
 		Register(IR.SubCarryIn64, SubCarryIn64);
-		Register(IR.SubCarryOut32, SubCarryOut32);
-		Register(IR.SubCarryOut64, SubCarryOut64);
+		Register(IR.SubCarryOut32, Result2NarrowToBoolean);
+		Register(IR.SubCarryOut64, Result2NarrowToBoolean);
 		Register(IR.SubOverflowOut32, SubOverflowOut32);
 		Register(IR.SubOverflowOut64, SubOverflowOut64);
 		Register(IR.To64, To64);
