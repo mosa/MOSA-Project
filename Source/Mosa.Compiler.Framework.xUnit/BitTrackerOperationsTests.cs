@@ -3327,11 +3327,11 @@ public class BitTracker_SubOverflowOut32Tests
 	[Fact]
 	public void SubOverflowOut32_BothKnown_PositiveOverflow()
 	{
-		// IsSubSignedOverflow checks a+b overflow: int.MaxValue + 1 overflows positive
+		// int.MaxValue - (-1) = MaxValue + 1, overflows positive
 		var result = new BitValue(true);
 		var result2 = new BitValue(true);
 		var value1 = new BitValue(true, (uint)int.MaxValue);
-		var value2 = new BitValue(true, 1u);
+		var value2 = new BitValue(true, unchecked((uint)-1));
 
 		BitTrackerOperations.SubOverflowOut32(result, result2, value1, value2);
 
@@ -3342,11 +3342,11 @@ public class BitTracker_SubOverflowOut32Tests
 	[Fact]
 	public void SubOverflowOut32_BothKnown_NegativeOverflow()
 	{
-		// IsSubSignedOverflow checks a+b overflow: int.MinValue + (-5) underflows negative
+		// int.MinValue - 1 = MinValue - 1, underflows negative
 		var result = new BitValue(true);
 		var result2 = new BitValue(true);
 		var value1 = new BitValue(true, unchecked((uint)int.MinValue));
-		var value2 = new BitValue(true, unchecked((uint)-5));
+		var value2 = new BitValue(true, 1u);
 
 		BitTrackerOperations.SubOverflowOut32(result, result2, value1, value2);
 
@@ -3419,11 +3419,11 @@ public class BitTracker_SubOverflowOut64Tests
 	[Fact]
 	public void SubOverflowOut64_BothKnown_PositiveOverflow()
 	{
-		// IsSubSignedOverflow checks a+b overflow: long.MaxValue + 1 overflows positive
+		// long.MaxValue - (-1) = MaxValue + 1, overflows positive
 		var result = new BitValue(false);
 		var result2 = new BitValue(false);
 		var value1 = new BitValue(false, (ulong)long.MaxValue);
-		var value2 = new BitValue(false, 1UL);
+		var value2 = new BitValue(false, unchecked((ulong)-1L));
 
 		BitTrackerOperations.SubOverflowOut64(result, result2, value1, value2);
 
@@ -3448,11 +3448,11 @@ public class BitTracker_SubOverflowOut64Tests
 	[Fact]
 	public void SubOverflowOut64_BothKnown_NegativeOverflow()
 	{
-		// IsSubSignedOverflow checks a+b overflow: long.MinValue + (-5) underflows negative
+		// long.MinValue - 1 = MinValue - 1, underflows negative
 		var result = new BitValue(false);
 		var result2 = new BitValue(false);
 		var value1 = new BitValue(false, unchecked((ulong)long.MinValue));
-		var value2 = new BitValue(false, unchecked((ulong)-5L));
+		var value2 = new BitValue(false, 1UL);
 
 		BitTrackerOperations.SubOverflowOut64(result, result2, value1, value2);
 
