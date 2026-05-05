@@ -46,8 +46,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(IR.AddCarryIn64, AddCarryIn64);
 		Register(IR.AddCarryOut32, AddCarryOut32);
 		Register(IR.AddCarryOut64, AddCarryOut64);
-		Register(IR.AddOverflowOut32, Result2NarrowToBoolean);
-		Register(IR.AddOverflowOut64, Result2NarrowToBoolean);
+		Register(IR.AddOverflowOut32, AddOverflowOut32);
+		Register(IR.AddOverflowOut64, AddOverflowOut64);
 		Register(IR.And32, And32);
 		Register(IR.And64, And64);
 		Register(IR.ArithShiftRight32, ArithShiftRight32);
@@ -112,10 +112,10 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(IR.Sub64, Sub64);
 		Register(IR.SubCarryIn32, SubCarryIn32);
 		Register(IR.SubCarryIn64, SubCarryIn64);
-		Register(IR.SubCarryOut32, Result2NarrowToBoolean);
-		Register(IR.SubCarryOut64, Result2NarrowToBoolean);
-		Register(IR.SubOverflowOut32, Result2NarrowToBoolean);
-		Register(IR.SubOverflowOut64, Result2NarrowToBoolean);
+		Register(IR.SubCarryOut32, SubCarryOut32);
+		Register(IR.SubCarryOut64, SubCarryOut64);
+		Register(IR.SubOverflowOut32, SubOverflowOut32);
+		Register(IR.SubOverflowOut64, SubOverflowOut64);
 		Register(IR.To64, To64);
 		Register(IR.Truncate64x32, Truncate64x32);
 		Register(IR.Xor32, Xor32);
@@ -420,6 +420,36 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private static void AddCarryOut64(Node node)
 	{
 		BitTrackerOperations.AddCarryOut64(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
+	}
+
+	private static void AddOverflowOut32(Node node)
+	{
+		BitTrackerOperations.AddOverflowOut32(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
+	}
+
+	private static void AddOverflowOut64(Node node)
+	{
+		BitTrackerOperations.AddOverflowOut64(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
+	}
+
+	private static void SubCarryOut32(Node node)
+	{
+		BitTrackerOperations.SubCarryOut32(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
+	}
+
+	private static void SubCarryOut64(Node node)
+	{
+		BitTrackerOperations.SubCarryOut64(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
+	}
+
+	private static void SubOverflowOut32(Node node)
+	{
+		BitTrackerOperations.SubOverflowOut32(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
+	}
+
+	private static void SubOverflowOut64(Node node)
+	{
+		BitTrackerOperations.SubOverflowOut64(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
 	}
 
 	private static void Sub32(Node node)

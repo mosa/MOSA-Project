@@ -2760,3 +2760,717 @@ public class BitTracker_Result2NarrowToBooleanTests
 		Assert.True(result.IsStable);
 	}
 }
+
+public class BitTracker_AddCarryOut32Tests
+{
+	[Fact]
+	public void AddCarryOut32_BothKnown_NoCarry()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 10u);
+		var value2 = new BitValue(true, 20u);
+
+		BitTrackerOperations.AddCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(30u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryOut32_BothKnown_WithCarry()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, uint.MaxValue);
+		var value2 = new BitValue(true, 1u);
+
+		BitTrackerOperations.AddCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+		Assert.Equal(1u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryOut32_MaxRangeNoOverflow_CarryIsZero()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(0).NarrowMax(100);
+		var value2 = new BitValue(true).NarrowMin(0).NarrowMax(100);
+
+		BitTrackerOperations.AddCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryOut32_MinRangeAlwaysOverflows_CarryIsOne()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin((ulong)(uint.MaxValue - 2)).NarrowMax(uint.MaxValue);
+		var value2 = new BitValue(true).NarrowMin(10).NarrowMax(20);
+
+		BitTrackerOperations.AddCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryOut32_Uncertain_CarryIsBoolean()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(0).NarrowMax(uint.MaxValue);
+		var value2 = new BitValue(true).NarrowMin(0).NarrowMax(uint.MaxValue);
+
+		BitTrackerOperations.AddCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.MaxValue);
+		Assert.Equal(0u, result2.MinValue);
+	}
+
+	[Fact]
+	public void AddCarryOut32_FirstOperandZero_ResultNarrowsToSecond()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 99u);
+
+		BitTrackerOperations.AddCarryOut32(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void AddCarryOut32_SecondOperandZero_ResultNarrowsToFirst()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 77u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.AddCarryOut32(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void AddCarryOut32_NoOverflow_NarrowsMinMax()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(10).NarrowMax(20);
+		var value2 = new BitValue(true).NarrowMin(5).NarrowMax(15);
+
+		BitTrackerOperations.AddCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(15u, result.MinValue);
+		Assert.Equal(35u, result.MaxValue);
+	}
+}
+
+public class BitTracker_AddCarryOut64Tests
+{
+	[Fact]
+	public void AddCarryOut64_BothKnown_NoCarry()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 1000UL);
+		var value2 = new BitValue(false, 2000UL);
+
+		BitTrackerOperations.AddCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(3000UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryOut64_BothKnown_WithCarry()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, ulong.MaxValue);
+		var value2 = new BitValue(false, 1UL);
+
+		BitTrackerOperations.AddCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(0UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(1UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryOut64_MaxRangeNoOverflow_CarryIsZero()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(0).NarrowMax(100);
+		var value2 = new BitValue(false).NarrowMin(0).NarrowMax(100);
+
+		BitTrackerOperations.AddCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(0UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryOut64_MinRangeAlwaysOverflows_CarryIsOne()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(ulong.MaxValue - 2).NarrowMax(ulong.MaxValue);
+		var value2 = new BitValue(false).NarrowMin(10).NarrowMax(20);
+
+		BitTrackerOperations.AddCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(1UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryOut64_FirstOperandZero_ResultNarrowsToSecond()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 0UL);
+		var value2 = new BitValue(false, 9999UL);
+
+		BitTrackerOperations.AddCarryOut64(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void AddCarryOut64_NoOverflow_NarrowsMinMax()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(10).NarrowMax(20);
+		var value2 = new BitValue(false).NarrowMin(5).NarrowMax(15);
+
+		BitTrackerOperations.AddCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(15UL, result.MinValue);
+		Assert.Equal(35UL, result.MaxValue);
+	}
+}
+
+public class BitTracker_AddOverflowOut32Tests
+{
+	[Fact]
+	public void AddOverflowOut32_BothKnown_NoOverflow()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 10u);
+		var value2 = new BitValue(true, 20u);
+
+		BitTrackerOperations.AddOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(30u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddOverflowOut32_BothKnown_PositiveOverflow()
+	{
+		// int.MaxValue + 1 overflows signed
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, (uint)int.MaxValue);
+		var value2 = new BitValue(true, 1u);
+
+		BitTrackerOperations.AddOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddOverflowOut32_BothKnown_NegativeOverflow()
+	{
+		// int.MinValue + (-1) overflows signed
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, unchecked((uint)int.MinValue));
+		var value2 = new BitValue(true, unchecked((uint)-1));
+
+		BitTrackerOperations.AddOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddOverflowOut32_SmallPositiveValues_OverflowIsZero()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(0).NarrowMax(100);
+		var value2 = new BitValue(true).NarrowMin(0).NarrowMax(100);
+
+		BitTrackerOperations.AddOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddOverflowOut32_Uncertain_OverflowIsBoolean()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin((ulong)(uint.MaxValue / 2)).NarrowMax(uint.MaxValue);
+		var value2 = new BitValue(true).NarrowMin((ulong)(uint.MaxValue / 2)).NarrowMax(uint.MaxValue);
+
+		BitTrackerOperations.AddOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.MaxValue);
+		Assert.Equal(0u, result2.MinValue);
+	}
+
+	[Fact]
+	public void AddOverflowOut32_FirstOperandZero_ResultNarrowsToSecond()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 55u);
+
+		BitTrackerOperations.AddOverflowOut32(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+}
+
+public class BitTracker_AddOverflowOut64Tests
+{
+	[Fact]
+	public void AddOverflowOut64_BothKnown_NoOverflow()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 500UL);
+		var value2 = new BitValue(false, 300UL);
+
+		BitTrackerOperations.AddOverflowOut64(result, result2, value1, value2);
+
+		Assert.Equal(800UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void AddOverflowOut64_BothKnown_PositiveOverflow()
+	{
+		// long.MaxValue + 1 overflows signed
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, (ulong)long.MaxValue);
+		var value2 = new BitValue(false, 1UL);
+
+		BitTrackerOperations.AddOverflowOut64(result, result2, value1, value2);
+
+		Assert.Equal(1UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void AddOverflowOut64_SmallValues_OverflowIsZero()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(0).NarrowMax(1000);
+		var value2 = new BitValue(false).NarrowMin(0).NarrowMax(1000);
+
+		BitTrackerOperations.AddOverflowOut64(result, result2, value1, value2);
+
+		Assert.Equal(0UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void AddOverflowOut64_FirstOperandZero_ResultNarrowsToSecond()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 0UL);
+		var value2 = new BitValue(false, 12345UL);
+
+		BitTrackerOperations.AddOverflowOut64(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+}
+
+public class BitTracker_SubCarryOut32Tests
+{
+	[Fact]
+	public void SubCarryOut32_BothKnown_NoBorrow()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 100u);
+		var value2 = new BitValue(true, 30u);
+
+		BitTrackerOperations.SubCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(70u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryOut32_BothKnown_WithBorrow()
+	{
+		// 5 - 10 borrows (5 < 10)
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 5u);
+		var value2 = new BitValue(true, 10u);
+
+		BitTrackerOperations.SubCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryOut32_MinAlwaysGreaterOrEqual_BorrowIsZero()
+	{
+		// value1 always >= value2 so borrow is impossible
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(200).NarrowMax(300);
+		var value2 = new BitValue(true).NarrowMin(0).NarrowMax(100);
+
+		BitTrackerOperations.SubCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryOut32_MaxAlwaysLess_BorrowIsOne()
+	{
+		// value1 always < value2 so borrow always occurs
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(0).NarrowMax(10);
+		var value2 = new BitValue(true).NarrowMin(100).NarrowMax(200);
+
+		BitTrackerOperations.SubCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryOut32_Uncertain_BorrowIsBoolean()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(0).NarrowMax(uint.MaxValue);
+		var value2 = new BitValue(true).NarrowMin(0).NarrowMax(uint.MaxValue);
+
+		BitTrackerOperations.SubCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.MaxValue);
+		Assert.Equal(0u, result2.MinValue);
+	}
+
+	[Fact]
+	public void SubCarryOut32_SubtrahendZero_ResultNarrowsToFirst()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 456u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.SubCarryOut32(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void SubCarryOut32_EqualKnownValues_NoBorrow()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 50u);
+		var value2 = new BitValue(true, 50u);
+
+		BitTrackerOperations.SubCarryOut32(result, result2, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+}
+
+public class BitTracker_SubCarryOut64Tests
+{
+	[Fact]
+	public void SubCarryOut64_BothKnown_NoBorrow()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 5000UL);
+		var value2 = new BitValue(false, 1000UL);
+
+		BitTrackerOperations.SubCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(4000UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryOut64_BothKnown_WithBorrow()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 5UL);
+		var value2 = new BitValue(false, 10UL);
+
+		BitTrackerOperations.SubCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(1UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryOut64_MinAlwaysGreaterOrEqual_BorrowIsZero()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(1000).NarrowMax(2000);
+		var value2 = new BitValue(false).NarrowMin(0).NarrowMax(500);
+
+		BitTrackerOperations.SubCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(0UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryOut64_MaxAlwaysLess_BorrowIsOne()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(0).NarrowMax(10);
+		var value2 = new BitValue(false).NarrowMin(100).NarrowMax(200);
+
+		BitTrackerOperations.SubCarryOut64(result, result2, value1, value2);
+
+		Assert.Equal(1UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryOut64_SubtrahendZero_ResultNarrowsToFirst()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 8000UL);
+		var value2 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.SubCarryOut64(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+}
+
+public class BitTracker_SubOverflowOut32Tests
+{
+	[Fact]
+	public void SubOverflowOut32_BothKnown_NoOverflow()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 100u);
+		var value2 = new BitValue(true, 30u);
+
+		BitTrackerOperations.SubOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(70u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubOverflowOut32_BothKnown_PositiveOverflow()
+	{
+		// IsSubSignedOverflow checks a+b overflow: int.MaxValue + 1 overflows positive
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, (uint)int.MaxValue);
+		var value2 = new BitValue(true, 1u);
+
+		BitTrackerOperations.SubOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubOverflowOut32_BothKnown_NegativeOverflow()
+	{
+		// IsSubSignedOverflow checks a+b overflow: int.MinValue + (-5) underflows negative
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, unchecked((uint)int.MinValue));
+		var value2 = new BitValue(true, unchecked((uint)-5));
+
+		BitTrackerOperations.SubOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(1u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubOverflowOut32_SmallPositiveValues_OverflowIsZero()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMin(50).NarrowMax(100);
+		var value2 = new BitValue(true).NarrowMin(0).NarrowMax(10);
+
+		BitTrackerOperations.SubOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubOverflowOut32_SubtrahendZero_ResultNarrowsToFirst()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 999u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.SubOverflowOut32(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void SubOverflowOut32_EqualKnownValues_NoOverflow()
+	{
+		var result = new BitValue(true);
+		var result2 = new BitValue(true);
+		var value1 = new BitValue(true, 42u);
+		var value2 = new BitValue(true, 42u);
+
+		BitTrackerOperations.SubOverflowOut32(result, result2, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.Equal(0u, result2.BitsSet32);
+		Assert.True(result2.AreLower32BitsKnown);
+	}
+}
+
+public class BitTracker_SubOverflowOut64Tests
+{
+	[Fact]
+	public void SubOverflowOut64_BothKnown_NoOverflow()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 5000UL);
+		var value2 = new BitValue(false, 1000UL);
+
+		BitTrackerOperations.SubOverflowOut64(result, result2, value1, value2);
+
+		Assert.Equal(4000UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubOverflowOut64_BothKnown_PositiveOverflow()
+	{
+		// IsSubSignedOverflow checks a+b overflow: long.MaxValue + 1 overflows positive
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, (ulong)long.MaxValue);
+		var value2 = new BitValue(false, 1UL);
+
+		BitTrackerOperations.SubOverflowOut64(result, result2, value1, value2);
+
+		Assert.Equal(1UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubOverflowOut64_SmallValues_OverflowIsZero()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(100).NarrowMax(200);
+		var value2 = new BitValue(false).NarrowMin(0).NarrowMax(50);
+
+		BitTrackerOperations.SubOverflowOut64(result, result2, value1, value2);
+
+		Assert.Equal(0UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubOverflowOut64_BothKnown_NegativeOverflow()
+	{
+		// IsSubSignedOverflow checks a+b overflow: long.MinValue + (-5) underflows negative
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, unchecked((ulong)long.MinValue));
+		var value2 = new BitValue(false, unchecked((ulong)-5L));
+
+		BitTrackerOperations.SubOverflowOut64(result, result2, value1, value2);
+
+		Assert.Equal(1UL, result2.BitsSet);
+		Assert.True(result2.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubOverflowOut64_SubtrahendZero_ResultNarrowsToFirst()
+	{
+		var result = new BitValue(false);
+		var result2 = new BitValue(false);
+		var value1 = new BitValue(false, 77777UL);
+		var value2 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.SubOverflowOut64(result, result2, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+}
