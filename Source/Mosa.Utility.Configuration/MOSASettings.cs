@@ -29,7 +29,7 @@ public partial class MosaSettings
 		public const int BisectorRandomSeed = 0;
 		public const int BisectorMaxRestarts = 5;
 
-		public const string BisectorStage = "OptimizationStage";
+		public const string BisectorStage = null;
 
 		public const int X86StackLocation = 0x30000;
 		public const int X64StackLocation = 0x30000;

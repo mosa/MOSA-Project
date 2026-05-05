@@ -50,10 +50,8 @@ public sealed partial class UnitTestBisectorSystem
 				OutputStatusBisector($"Deleted state file: {stateFile}");
 			}
 
-			if (string.IsNullOrWhiteSpace(mosaSettings.BisectorStage))
-				throw new InvalidOperationException($"A stage type name is required. Use {Constant.OptionBisectStage}.");
-
-			OutputStatusBisector($"Stage: {mosaSettings.BisectorStage}");
+			var stageDisplay = string.IsNullOrEmpty(mosaSettings.BisectorStage) ? "All" : mosaSettings.BisectorStage;
+			OutputStatusBisector($"Stage: {stageDisplay}");
 
 			OutputStatusBisector($"Plan: {plan}");
 			if (!isBisectorPlan)
@@ -431,7 +429,7 @@ public sealed partial class UnitTestBisectorSystem
 		OutputStatusBisector($"{sessionName} Iteration: {status.Iteration + 1}");
 		OutputStatusBisector($"Level: {status.Level}");
 		OutputStatusBisector($"Phase: {status.Phase}");
-		OutputStatusBisector($"Stage: {mosaSettings.BisectorStage}");
+		OutputStatusBisector($"Stage: {(string.IsNullOrEmpty(mosaSettings.BisectorStage) ? "All" : mosaSettings.BisectorStage)}");
 	}
 
 	private static bool MapOutcome(bool passed, bool invertOutcome)
@@ -496,7 +494,7 @@ public sealed partial class UnitTestBisectorSystem
 
 	private void PrintFinalReport(string sessionName, Bisector<string> sessionBisector)
 	{
-		OutputStatusBisector($"{sessionName} Final Stage: {mosaSettings.BisectorStage}");
+		OutputStatusBisector($"{sessionName} Final Stage: {(string.IsNullOrEmpty(mosaSettings.BisectorStage) ? "All" : mosaSettings.BisectorStage)}");
 		OutputStatusBisector("Confirmed Bad Items:");
 		foreach (var transform in sessionBisector.ConfirmedBadItems.OrderBy(t => t))
 		{
@@ -716,7 +714,7 @@ public sealed partial class UnitTestBisectorSystem
 
 	private void NotifyTransformObserved(string stageName, string transformName, string methodFullName)
 	{
-		if (!string.Equals(stageName, mosaSettings.BisectorStage, StringComparison.Ordinal))
+		if (!string.IsNullOrEmpty(mosaSettings.BisectorStage) && !string.Equals(stageName, mosaSettings.BisectorStage, StringComparison.Ordinal))
 			return;
 
 		if (bisector == null && unitTestFilter != null && !methodFullName.Contains(unitTestFilter, StringComparison.Ordinal))
@@ -734,7 +732,7 @@ public sealed partial class UnitTestBisectorSystem
 
 	private bool IsTransformDisabled(string stageName, string transformName)
 	{
-		if (!string.Equals(stageName, mosaSettings.BisectorStage, StringComparison.Ordinal))
+		if (!string.IsNullOrEmpty(mosaSettings.BisectorStage) && !string.Equals(stageName, mosaSettings.BisectorStage, StringComparison.Ordinal))
 			return false;
 
 		return effectiveDisabledTransformNames.Contains(transformName);
@@ -748,7 +746,7 @@ public sealed partial class UnitTestBisectorSystem
 	private void PrintFinalReport(PlanKind plan, BisectorState state)
 	{
 		OutputStatusBisector($"Plan complete: {plan}");
-		OutputStatusBisector($"Final Stage: {mosaSettings.BisectorStage}");
+		OutputStatusBisector($"Final Stage: {(string.IsNullOrEmpty(mosaSettings.BisectorStage) ? "All" : mosaSettings.BisectorStage)}");
 		OutputStatusBisector($"Baseline: {(state.BaselinePassed ? "PASS" : "FAIL")}");
 		OutputStatusBisector($"Iterations: {state.TotalIterationCount}");
 
@@ -798,7 +796,7 @@ public sealed partial class UnitTestBisectorSystem
 		var lines = new List<string>
 		{
 			$"Unit Test Bisector Failure Review",
-			$"Stage: {mosaSettings.BisectorStage}",
+			$"Stage: {(string.IsNullOrEmpty(mosaSettings.BisectorStage) ? "All" : mosaSettings.BisectorStage)}",
 			$"Plan: {plan}",
 			$"State File: {stateFile}",
 			$"Baseline: {(state.BaselinePassed ? "PASS" : "FAIL")}",
