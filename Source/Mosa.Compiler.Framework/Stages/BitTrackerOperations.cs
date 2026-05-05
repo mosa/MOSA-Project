@@ -71,16 +71,12 @@ public static class BitTrackerOperations
 		{
 			result.SetStable(value1, value2);
 		}
-		else if (!IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
+		else
 		{
 			result
 				.NarrowMin(value1.MinValue + value2.MinValue)
 				.NarrowMax(value1.MaxValue + value2.MaxValue)
 				.SetStable(value1, value2);
-		}
-		else
-		{
-			result.SetStable(value1, value2);
 		}
 	}
 
@@ -383,11 +379,11 @@ public static class BitTrackerOperations
 
 	public static void And32(BitValue result, BitValue value1, BitValue value2)
 	{
-		if (value1.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == 0)
+		if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 		{
 			result.SetValue(0);
 		}
-		else if (value2.AreLower32BitsKnown && (value2.BitsSet & ulong.MaxValue) == 0)
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 		{
 			result.SetValue(0);
 		}
@@ -746,23 +742,14 @@ public static class BitTrackerOperations
 			result
 				.NarrowMin(0)
 				.NarrowMax(value2.MaxValue - 1)
-				//.NarrowMax(value2.BitsSet - 1)
-				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet - 1))
+				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.MaxValue - 1))
 				.SetStable(value1, value2);
 		}
 	}
 
 	public static void RemUnsigned64(BitValue result, BitValue value1, BitValue value2)
 	{
-		if (value2.AreAll64BitsKnown && value2.BitsSet == 0) // divide by zero
-		{
-			return;
-		}
-		else if (value2.IsZero) // divide by zero
-		{
-			return;
-		}
-		else if (value2.MaxValue == 0) // divide by zero
+		if (value2.IsZero || value2.MaxValue == 0) // divide by zero
 		{
 			return;
 		}
@@ -779,8 +766,7 @@ public static class BitTrackerOperations
 			result
 				.NarrowMin(0)
 				.NarrowMax(value2.MaxValue - 1)
-				//.NarrowMax(value2.BitsSet - 1)
-				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet - 1))
+				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.MaxValue - 1))
 				.SetStable(value1, value2);
 		}
 		else if (value2.MinValue > value1.MaxValue)
@@ -792,8 +778,7 @@ public static class BitTrackerOperations
 			result
 				.NarrowMin(0)
 				.NarrowMax(value2.MaxValue - 1)
-				//.NarrowMax(value2.BitsSet - 1)
-				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.BitsSet - 1))
+				.NarrowClearBits(BitTwiddling.GetBitsOver(value2.MaxValue - 1))
 				.SetStable(value1, value2);
 		}
 	}
@@ -993,7 +978,7 @@ public static class BitTrackerOperations
 				.NarrowMax(value1.MaxValue >> shift)
 				.NarrowSetBits(value1.BitsSet >> shift)
 				.NarrowClearBits(value1.BitsClear >> shift | ~(ulong.MaxValue >> shift))
-				.SetStable(value1);
+				.SetStable(value1, value2);
 		}
 		else if (value1.AreUpper32BitsKnown && value1.BitsSet >> 32 == 0)
 		{

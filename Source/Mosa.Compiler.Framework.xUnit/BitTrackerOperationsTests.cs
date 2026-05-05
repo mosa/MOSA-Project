@@ -1479,3 +1479,1124 @@ public partial class BitTrackerOperationsRemUnsignedTests
 		Assert.False(result.IsStable);
 	}
 }
+
+// ─── Regression: Fix 1 – Add64 dead-else removed ─────────────────────────────
+
+public class BitTrackerOperationsAdd64RegressionTests
+{
+	[Fact]
+	public void Add64_NoCarry_NarrowsMinMax()
+	{
+		// Both values have bounded ranges that don't overflow; result should be narrowed.
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(10).NarrowMax(20);
+		var value2 = new BitValue(false).NarrowMin(5).NarrowMax(15);
+
+		BitTrackerOperations.Add64(result, value1, value2);
+
+		Assert.Equal(15UL, result.MinValue);
+		Assert.Equal(35UL, result.MaxValue);
+	}
+
+	[Fact]
+	public void Add64_CarryOnMax_DoesNotNarrow()
+	{
+		// MaxValue addition overflows — result must remain unconstrained.
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMin(ulong.MaxValue - 5).NarrowMax(ulong.MaxValue);
+		var value2 = new BitValue(false).NarrowMin(10).NarrowMax(20);
+
+		BitTrackerOperations.Add64(result, value1, value2);
+
+		// Cannot narrow min/max when carry is possible — max must remain at ulong.MaxValue
+		Assert.Equal(ulong.MaxValue, result.MaxValue);
+	}
+}
+
+// ─── Regression: Fix 2 – And32 used BitsSet32 not (BitsSet & ulong.MaxValue) ─
+
+public class BitTrackerOperationsAnd32RegressionTests
+{
+	[Fact]
+	public void And32_Value1Lower32Zero_ReturnsZero()
+	{
+		// lower 32 bits are known zero — result must be zero regardless of upper bits.
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 0xABCDu);
+
+		BitTrackerOperations.And32(result, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void And32_Value2Lower32Zero_ReturnsZero()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 0x1234u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.And32(result, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+}
+
+// ─── Regression: Fix 3 – ShiftRight64 SetStable was missing value2 ───────────
+
+public class BitTrackerOperationsShiftRight64RegressionTests
+{
+	[Fact]
+	public void ShiftRight64_KnownShift_PartialValue_IsStable()
+	{
+		// value1 partially known, shift known → result bits should be propagated correctly.
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowSetBits(0xFF00UL).NarrowClearBits(0x00FFUL);
+		var value2 = new BitValue(false, 8UL);
+
+		BitTrackerOperations.ShiftRight64(result, value1, value2);
+
+		// FF00 >> 8 = FF — lower byte must be known set
+		Assert.Equal(0xFFUL, result.BitsSet & 0xFFUL);
+	}
+
+	[Fact]
+	public void ShiftRight64_KnownShift_CorrectBitPropagation()
+	{
+		// Shift 0xFF00 right by 8 → 0xFF known set in lower byte
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowSetBits(0xFF00UL).NarrowClearBits(0xFFFFFFFFFFFF00FFUL);
+		var value2 = new BitValue(false, 8UL);
+
+		BitTrackerOperations.ShiftRight64(result, value1, value2);
+
+		Assert.Equal(0xFFUL, result.BitsSet & 0xFFUL);
+	}
+}
+
+// ─── Regression: Fix 4 – RemUnsigned GetBitsOver used BitsSet instead of MaxValue ─
+
+public class BitTrackerOperationsRemUnsignedBoundsRegressionTests
+{
+	[Fact]
+	public void RemUnsigned32_KnownDivisor_MaxValueBoundCorrect()
+	{
+		// divisor = 10 (known), so result max must be 9
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMax(100);
+		var value2 = new BitValue(true, 10u);
+
+		BitTrackerOperations.RemUnsigned32(result, value1, value2);
+
+		Assert.Equal(0u, result.MinValue);
+		Assert.Equal(9u, result.MaxValue);
+	}
+
+	[Fact]
+	public void RemUnsigned64_KnownDivisor_MaxValueBoundCorrect()
+	{
+		// divisor = 7 (known), so result max must be 6
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMax(100);
+		var value2 = new BitValue(false, 7UL);
+
+		BitTrackerOperations.RemUnsigned64(result, value1, value2);
+
+		Assert.Equal(0UL, result.MinValue);
+		Assert.Equal(6UL, result.MaxValue);
+	}
+
+	[Fact]
+	public void RemUnsigned64_UnknownDivisor_MaxValueBoundCorrect()
+	{
+		// divisor range [3, 8], so result max must be 7 (MaxValue - 1)
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMax(200);
+		var value2 = new BitValue(false).NarrowMin(3).NarrowMax(8);
+
+		BitTrackerOperations.RemUnsigned64(result, value1, value2);
+
+		Assert.Equal(0UL, result.MinValue);
+		Assert.Equal(7UL, result.MaxValue);
+	}
+}
+
+// ─── Regression: Fix 5 – RemUnsigned64 consolidated divide-by-zero guard ─────
+
+public class BitTrackerOperationsRemUnsigned64GuardRegressionTests
+{
+	[Fact]
+	public void RemUnsigned64_IsZero_DoesNotChangeResult()
+	{
+		// value2 is known zero via IsZero path
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 99UL);
+		var value2 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.RemUnsigned64(result, value1, value2);
+
+		// Early return — result must remain the default (all bits unknown, not stable)
+		Assert.Equal(0UL, result.MinValue);
+		Assert.Equal(ulong.MaxValue, result.MaxValue);
+		Assert.False(result.IsStable);
+	}
+}
+
+// ─── AddCarryIn ───────────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsAddCarryIn32Tests
+{
+	[Fact]
+	public void AddCarryIn32_AllKnown()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 10u);
+		var value2 = new BitValue(true, 20u);
+		var value3 = new BitValue(true, 1u);
+
+		BitTrackerOperations.AddCarryIn32(result, value1, value2, value3);
+
+		Assert.Equal(31u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryIn32_Value1AndCarryZero_NarrowsToValue2()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 42u);
+		var value3 = new BitValue(true, 0u);
+
+		BitTrackerOperations.AddCarryIn32(result, value1, value2, value3);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void AddCarryIn32_Value2AndCarryZero_NarrowsToValue1()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 99u);
+		var value2 = new BitValue(true, 0u);
+		var value3 = new BitValue(true, 0u);
+
+		BitTrackerOperations.AddCarryIn32(result, value1, value2, value3);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void AddCarryIn32_Partial_IsStable()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true);
+		var value2 = new BitValue(true);
+		var value3 = new BitValue(true);
+
+		BitTrackerOperations.AddCarryIn32(result, value1, value2, value3);
+
+		Assert.False(result.IsStable);
+	}
+}
+
+public class BitTrackerOperationsAddCarryIn64Tests
+{
+	[Fact]
+	public void AddCarryIn64_AllKnown()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 100UL);
+		var value2 = new BitValue(false, 200UL);
+		var value3 = new BitValue(false, 1UL);
+
+		BitTrackerOperations.AddCarryIn64(result, value1, value2, value3);
+
+		Assert.Equal(301UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void AddCarryIn64_Value1AndCarryZero_NarrowsToValue2()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0UL);
+		var value2 = new BitValue(false, 500UL);
+		var value3 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.AddCarryIn64(result, value1, value2, value3);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void AddCarryIn64_Value2AndCarryZero_NarrowsToValue1()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 777UL);
+		var value2 = new BitValue(false, 0UL);
+		var value3 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.AddCarryIn64(result, value1, value2, value3);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+}
+
+// ─── SubCarryIn ───────────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsSubCarryIn32Tests
+{
+	[Fact]
+	public void SubCarryIn32_AllKnown()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 100u);
+		var value2 = new BitValue(true, 30u);
+		var value3 = new BitValue(true, 5u);
+
+		BitTrackerOperations.SubCarryIn32(result, value1, value2, value3);
+
+		Assert.Equal(65u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryIn32_BorrowAndSubtrahendZero_NarrowsToValue1()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 77u);
+		var value2 = new BitValue(true, 0u);
+		var value3 = new BitValue(true, 0u);
+
+		BitTrackerOperations.SubCarryIn32(result, value1, value2, value3);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void SubCarryIn32_Partial_NotStable()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true);
+		var value2 = new BitValue(true);
+		var value3 = new BitValue(true);
+
+		BitTrackerOperations.SubCarryIn32(result, value1, value2, value3);
+
+		Assert.False(result.IsStable);
+	}
+}
+
+public class BitTrackerOperationsSubCarryIn64Tests
+{
+	[Fact]
+	public void SubCarryIn64_AllKnown()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 1000UL);
+		var value2 = new BitValue(false, 400UL);
+		var value3 = new BitValue(false, 100UL);
+
+		BitTrackerOperations.SubCarryIn64(result, value1, value2, value3);
+
+		Assert.Equal(500UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void SubCarryIn64_BorrowAndSubtrahendZero_NarrowsToValue1()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 321UL);
+		var value2 = new BitValue(false, 0UL);
+		var value3 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.SubCarryIn64(result, value1, value2, value3);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+}
+
+// ─── MulSigned ────────────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsMulSigned32Tests
+{
+	[Fact]
+	public void MulSigned32_BothKnownPositive()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 6u);
+		var value2 = new BitValue(true, 7u);
+
+		BitTrackerOperations.MulSigned32(result, value1, value2);
+
+		Assert.Equal(42u, result.BitsSet32);
+	}
+
+	[Fact]
+	public void MulSigned32_FirstIsZero()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 123u);
+
+		BitTrackerOperations.MulSigned32(result, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void MulSigned32_SecondIsZero()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 456u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.MulSigned32(result, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void MulSigned32_FirstIsOne_NarrowsToSecond()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 1u);
+		var value2 = new BitValue(true, 99u);
+
+		BitTrackerOperations.MulSigned32(result, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void MulSigned32_SecondIsOne_NarrowsToFirst()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 55u);
+		var value2 = new BitValue(true, 1u);
+
+		BitTrackerOperations.MulSigned32(result, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void MulSigned32_BothKnownNegativeResult()
+	{
+		// (int)-3 * (int)2 = -6
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, unchecked((uint)-3));
+		var value2 = new BitValue(true, 2u);
+
+		BitTrackerOperations.MulSigned32(result, value1, value2);
+
+		Assert.Equal(unchecked((uint)((int)unchecked((uint)-3) * 2)), result.BitsSet32);
+	}
+}
+
+public class BitTrackerOperationsMulSigned64Tests
+{
+	[Fact]
+	public void MulSigned64_BothKnownPositive()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 11UL);
+		var value2 = new BitValue(false, 11UL);
+
+		BitTrackerOperations.MulSigned64(result, value1, value2);
+
+		Assert.Equal(121UL, result.BitsSet);
+	}
+
+	[Fact]
+	public void MulSigned64_FirstIsZero()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0UL);
+		var value2 = new BitValue(false, 9999UL);
+
+		BitTrackerOperations.MulSigned64(result, value1, value2);
+
+		Assert.Equal(0UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void MulSigned64_FirstIsOne_NarrowsToSecond()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 1UL);
+		var value2 = new BitValue(false, 42UL);
+
+		BitTrackerOperations.MulSigned64(result, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void MulSigned64_SecondIsOne_NarrowsToFirst()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 7UL);
+		var value2 = new BitValue(false, 1UL);
+
+		BitTrackerOperations.MulSigned64(result, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+}
+
+// ─── RemSigned ────────────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsRemSigned32Tests
+{
+	[Fact]
+	public void RemSigned32_BothPositiveKnown()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 17u);
+		var value2 = new BitValue(true, 5u);
+
+		BitTrackerOperations.RemSigned32(result, value1, value2);
+
+		Assert.Equal(2u, result.BitsSet32);
+	}
+
+	[Fact]
+	public void RemSigned32_DividendZero_ResultZero()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 7u);
+
+		BitTrackerOperations.RemSigned32(result, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void RemSigned32_DivisorZero_DoesNotChangeResult()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 50u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.RemSigned32(result, value1, value2);
+
+		Assert.False(result.IsStable);
+	}
+
+	[Fact]
+	public void RemSigned32_BothKnownNegativeDividend()
+	{
+		// -17 % 5 = -2 in C# signed semantics
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, unchecked((uint)-17));
+		var value2 = new BitValue(true, 5u);
+
+		BitTrackerOperations.RemSigned32(result, value1, value2);
+
+		var expected = unchecked((uint)(int)((long)(int)unchecked((uint)-17) % (long)(int)5u));
+		Assert.Equal(expected, result.BitsSet32);
+	}
+}
+
+public class BitTrackerOperationsRemSigned64Tests
+{
+	[Fact]
+	public void RemSigned64_BothPositiveKnown()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 100UL);
+		var value2 = new BitValue(false, 30UL);
+
+		BitTrackerOperations.RemSigned64(result, value1, value2);
+
+		Assert.Equal(10UL, result.BitsSet);
+	}
+
+	[Fact]
+	public void RemSigned64_DividendZero_ResultZero()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0UL);
+		var value2 = new BitValue(false, 9UL);
+
+		BitTrackerOperations.RemSigned64(result, value1, value2);
+
+		Assert.Equal(0UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void RemSigned64_DivisorZero_DoesNotChangeResult()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 99UL);
+		var value2 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.RemSigned64(result, value1, value2);
+
+		Assert.False(result.IsStable);
+	}
+}
+
+// ─── DivSigned ────────────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsDivSigned32Tests
+{
+	[Fact]
+	public void DivSigned32_BothPositiveKnown()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 40u);
+		var value2 = new BitValue(true, 8u);
+
+		BitTrackerOperations.DivSigned32(result, value1, value2);
+
+		Assert.Equal(5u, result.BitsSet32);
+	}
+
+	[Fact]
+	public void DivSigned32_DividendZero_ResultZero()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 4u);
+
+		BitTrackerOperations.DivSigned32(result, value1, value2);
+
+		Assert.Equal(0u, result.BitsSet32);
+		Assert.True(result.AreLower32BitsKnown);
+	}
+
+	[Fact]
+	public void DivSigned32_DivisorZero_DoesNotChangeResult()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 100u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.DivSigned32(result, value1, value2);
+
+		Assert.False(result.IsStable);
+	}
+
+	[Fact]
+	public void DivSigned32_BothKnownNegativeDivisor()
+	{
+		// 40 / -8 = -5 in signed
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 40u);
+		var value2 = new BitValue(true, unchecked((uint)-8));
+
+		BitTrackerOperations.DivSigned32(result, value1, value2);
+
+		var expected = unchecked((uint)(int)((long)(int)40 / (long)(int)unchecked((uint)-8)));
+		Assert.Equal(expected, result.BitsSet32);
+	}
+}
+
+public class BitTrackerOperationsDivSigned64Tests
+{
+	[Fact]
+	public void DivSigned64_BothPositiveKnown()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 500UL);
+		var value2 = new BitValue(false, 25UL);
+
+		BitTrackerOperations.DivSigned64(result, value1, value2);
+
+		Assert.Equal(20UL, result.BitsSet);
+	}
+
+	[Fact]
+	public void DivSigned64_DividendZero_ResultZero()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 0UL);
+		var value2 = new BitValue(false, 10UL);
+
+		BitTrackerOperations.DivSigned64(result, value1, value2);
+
+		Assert.Equal(0UL, result.BitsSet);
+		Assert.True(result.AreAll64BitsKnown);
+	}
+
+	[Fact]
+	public void DivSigned64_DivisorZero_DoesNotChangeResult()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 100UL);
+		var value2 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.DivSigned64(result, value1, value2);
+
+		Assert.False(result.IsStable);
+	}
+}
+
+// ─── DivUnsigned additional ───────────────────────────────────────────────────
+
+public class BitTrackerOperationsDivUnsignedAdditionalTests
+{
+	[Fact]
+	public void DivUnsigned32_DivisorZero_DoesNotChangeResult()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 50u);
+		var value2 = new BitValue(true, 0u);
+
+		BitTrackerOperations.DivUnsigned32(result, value1, value2);
+
+		Assert.False(result.IsStable);
+	}
+
+	[Fact]
+	public void DivUnsigned32_PartialKnowledge_NarrowsRange()
+	{
+		// dividend [0..100], divisor [5..10] → quotient in [0..20]
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowMax(100);
+		var value2 = new BitValue(true).NarrowMin(5).NarrowMax(10);
+
+		BitTrackerOperations.DivUnsigned32(result, value1, value2);
+
+		Assert.Equal(0u, result.MinValue);
+		Assert.Equal(20u, result.MaxValue);
+	}
+
+	[Fact]
+	public void DivUnsigned64_DivisorZero_DoesNotChangeResult()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(false, 50UL);
+		var value2 = new BitValue(false, 0UL);
+
+		BitTrackerOperations.DivUnsigned64(result, value1, value2);
+
+		Assert.False(result.IsStable);
+	}
+
+	[Fact]
+	public void DivUnsigned64_PartialKnowledge_NarrowsRange()
+	{
+		// dividend [0..200], divisor [4..8] → quotient in [0..50]
+		var result = new BitValue(false);
+		var value1 = new BitValue(false).NarrowMax(200);
+		var value2 = new BitValue(false).NarrowMin(4).NarrowMax(8);
+
+		BitTrackerOperations.DivUnsigned64(result, value1, value2);
+
+		Assert.Equal(0UL, result.MinValue);
+		Assert.Equal(50UL, result.MaxValue);
+	}
+}
+
+// ─── Compare ──────────────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsCompareTests
+{
+	[Fact]
+	public void Compare_Equal_BothKnownSameValue_ReturnsTrue()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 42u);
+		var value2 = new BitValue(true, 42u);
+
+		BitTrackerOperations.Compare(result, value1, value2, ConditionCode.Equal);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(1UL, result.BitsSet);
+	}
+
+	[Fact]
+	public void Compare_Equal_BothKnownDifferentValue_ReturnsFalse()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 1u);
+		var value2 = new BitValue(true, 2u);
+
+		BitTrackerOperations.Compare(result, value1, value2, ConditionCode.Equal);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0UL, result.BitsSet);
+	}
+
+	[Fact]
+	public void Compare_NotEqual_BothKnownDifferent_ReturnsTrue()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 10u);
+		var value2 = new BitValue(true, 20u);
+
+		BitTrackerOperations.Compare(result, value1, value2, ConditionCode.NotEqual);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(1UL, result.BitsSet);
+	}
+
+	[Fact]
+	public void Compare_UnsignedGreaterThan_BothKnown_ReturnsTrue()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true, 10u);
+		var value2 = new BitValue(true, 5u);
+
+		BitTrackerOperations.Compare(result, value1, value2, ConditionCode.UnsignedGreater);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(1UL, result.BitsSet);
+	}
+
+	[Fact]
+	public void Compare_Unknown_NarrowsToBoolean()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true);
+		var value2 = new BitValue(true);
+
+		BitTrackerOperations.Compare(result, value1, value2, ConditionCode.Equal);
+
+		// Must narrow to boolean — max value 1, min value 0
+		Assert.Equal(0u, result.MinValue);
+		Assert.Equal(1u, result.MaxValue);
+	}
+}
+
+// ─── LoadParam ZeroExtend ─────────────────────────────────────────────────────
+
+public class BitTrackerOperationsLoadParamZeroExtendTests
+{
+	[Fact]
+	public void LoadParamZeroExtend8x32_NarrowsToByteRange()
+	{
+		var result = new BitValue(true);
+		BitTrackerOperations.LoadParamZeroExtend8x32(result);
+		Assert.Equal((ulong)byte.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)byte.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void LoadParamZeroExtend16x32_NarrowsToUShortRange()
+	{
+		var result = new BitValue(true);
+		BitTrackerOperations.LoadParamZeroExtend16x32(result);
+		Assert.Equal((ulong)ushort.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)ushort.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void LoadParamZeroExtend32x64_NarrowsToUIntRange()
+	{
+		var result = new BitValue(false);
+		BitTrackerOperations.LoadParamZeroExtend32x64(result);
+		Assert.Equal((ulong)uint.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)uint.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void LoadParamZeroExtend8x64_NarrowsToByteRange()
+	{
+		var result = new BitValue(false);
+		BitTrackerOperations.LoadParamZeroExtend8x64(result);
+		Assert.Equal((ulong)byte.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)byte.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void LoadParamZeroExtend16x64_NarrowsToUShortRange()
+	{
+		var result = new BitValue(false);
+		BitTrackerOperations.LoadParamZeroExtend16x64(result);
+		Assert.Equal((ulong)ushort.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)ushort.MaxValue, result.BitsClear);
+	}
+}
+
+// ─── Load ZeroExtend ──────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsLoadZeroExtendTests
+{
+	[Fact]
+	public void LoadZeroExtend8x32_NarrowsToByteRange()
+	{
+		var result = new BitValue(true);
+		BitTrackerOperations.LoadZeroExtend8x32(result);
+		Assert.Equal((ulong)byte.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)byte.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void LoadZeroExtend16x32_NarrowsToUShortRange()
+	{
+		var result = new BitValue(true);
+		BitTrackerOperations.LoadZeroExtend16x32(result);
+		Assert.Equal((ulong)ushort.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)ushort.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void LoadZeroExtend32x64_NarrowsToUIntRange()
+	{
+		var result = new BitValue(false);
+		BitTrackerOperations.LoadZeroExtend32x64(result);
+		Assert.Equal((ulong)uint.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)uint.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void LoadZeroExtend8x64_NarrowsToByteRange()
+	{
+		var result = new BitValue(false);
+		BitTrackerOperations.LoadZeroExtend8x64(result);
+		Assert.Equal((ulong)byte.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)byte.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void LoadZeroExtend16x64_NarrowsToUShortRange()
+	{
+		var result = new BitValue(false);
+		BitTrackerOperations.LoadZeroExtend16x64(result);
+		Assert.Equal((ulong)ushort.MaxValue, result.MaxValue);
+		Assert.Equal(~(ulong)ushort.MaxValue, result.BitsClear);
+	}
+}
+
+// ─── ZeroExtend16x64 ──────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsZeroExtend16x64Tests
+{
+	[Fact]
+	public void ZeroExtend16x64_AllBitsKnown()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0xABCDu);
+
+		BitTrackerOperations.ZeroExtend16x64(result, value1);
+
+		Assert.Equal(0xABCDUL, result.BitsSet);
+		Assert.True(result.AreLower16BitsKnown);
+	}
+
+	[Fact]
+	public void ZeroExtend16x64_MaxUShort()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, (uint)ushort.MaxValue);
+
+		BitTrackerOperations.ZeroExtend16x64(result, value1);
+
+		Assert.Equal((ulong)ushort.MaxValue, result.BitsSet);
+		Assert.Equal(~(ulong)ushort.MaxValue, result.BitsClear);
+	}
+
+	[Fact]
+	public void ZeroExtend16x64_Partial_NarrowsUpperBits()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(true).NarrowMax(1000);
+
+		BitTrackerOperations.ZeroExtend16x64(result, value1);
+
+		Assert.True(result.MaxValue <= ushort.MaxValue);
+		Assert.Equal(~(ulong)ushort.MaxValue, result.BitsClear & ~(ulong)ushort.MaxValue);
+	}
+}
+
+// ─── IfThenElse additional ────────────────────────────────────────────────────
+
+public class BitTrackerOperationsIfThenElseAdditionalTests
+{
+	[Fact]
+	public void IfThenElse32_ConditionNonZero_NarrowsToValue1()
+	{
+		var result = new BitValue(true);
+		var condition = new BitValue(true, 1u);
+		var value1 = new BitValue(true, 42u);
+		var value2 = new BitValue(true, 99u);
+
+		BitTrackerOperations.IfThenElse32(result, condition, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void IfThenElse32_ConditionZero_NarrowsToValue2()
+	{
+		var result = new BitValue(true);
+		var condition = new BitValue(true, 0u);
+		var value1 = new BitValue(true, 42u);
+		var value2 = new BitValue(true, 99u);
+
+		BitTrackerOperations.IfThenElse32(result, condition, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void IfThenElse64_ConditionNonZero_NarrowsToValue1()
+	{
+		var result = new BitValue(false);
+		var condition = new BitValue(false, 1UL);
+		var value1 = new BitValue(false, 777UL);
+		var value2 = new BitValue(false, 888UL);
+
+		BitTrackerOperations.IfThenElse64(result, condition, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value1.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void IfThenElse64_ConditionZero_NarrowsToValue2()
+	{
+		var result = new BitValue(false);
+		var condition = new BitValue(false, 0UL);
+		var value1 = new BitValue(false, 777UL);
+		var value2 = new BitValue(false, 888UL);
+
+		BitTrackerOperations.IfThenElse64(result, condition, value1, value2);
+
+		Assert.True(result.IsStable);
+		Assert.Equal(value2.BitsSet, result.BitsSet);
+	}
+
+	[Fact]
+	public void IfThenElse32_ConditionUnknown_EncompassesBothValues()
+	{
+		var result = new BitValue(true);
+		var condition = new BitValue(true);
+		var value1 = new BitValue(true, 10u);
+		var value2 = new BitValue(true, 20u);
+
+		BitTrackerOperations.IfThenElse32(result, condition, value1, value2);
+
+		Assert.Equal(10u, result.MinValue);
+		Assert.Equal(20u, result.MaxValue);
+	}
+}
+
+// ─── Result2NarrowToBoolean ───────────────────────────────────────────────────
+
+public class BitTrackerOperationsResult2NarrowToBooleanTests
+{
+	[Fact]
+	public void Result2NarrowToBoolean_NarrowsToBoolRange()
+	{
+		var result = new BitValue(true);
+		result.NarrowMax(1000); // give it a wide range first
+
+		BitTrackerOperations.Result2NarrowToBoolean(result);
+
+		Assert.Equal(0u, result.MinValue);
+		Assert.Equal(1u, result.MaxValue);
+		Assert.True(result.IsStable);
+	}
+
+	[Fact]
+	public void Result2NarrowToBoolean_AlreadyBoolean_RemainsBoolean()
+	{
+		var result = new BitValue(true);
+		result.NarrowMax(1);
+
+		BitTrackerOperations.Result2NarrowToBoolean(result);
+
+		Assert.Equal(0u, result.MinValue);
+		Assert.Equal(1u, result.MaxValue);
+	}
+}
+
+// ─── To64 additional ─────────────────────────────────────────────────────────
+
+public class BitTrackerOperationsTo64AdditionalTests
+{
+	[Fact]
+	public void To64_Low32Zero_High32Known()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0u);
+		var value2 = new BitValue(true, 0xABCDu);
+
+		BitTrackerOperations.To64(result, value1, value2);
+
+		Assert.Equal(0xABCD00000000UL, result.BitsSet);
+		Assert.True(result.IsStable);
+	}
+
+	[Fact]
+	public void To64_BothNonZero_Combines()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(true, 0x00000001u);
+		var value2 = new BitValue(true, 0x00000002u);
+
+		BitTrackerOperations.To64(result, value1, value2);
+
+		Assert.Equal(0x0000000200000001UL, result.BitsSet);
+	}
+
+	[Fact]
+	public void To64_Partial_NarrowsMinMaxBits()
+	{
+		var result = new BitValue(false);
+		var value1 = new BitValue(true).NarrowMin(0).NarrowMax(0xFF);
+		var value2 = new BitValue(true).NarrowMin(0).NarrowMax(0xF);
+
+		BitTrackerOperations.To64(result, value1, value2);
+
+		Assert.Equal(0x0F000000FFUL, result.MaxValue);
+	}
+}
+
+// ─── Xor32 additional ────────────────────────────────────────────────────────
+
+public partial class BitTrackerOperationsXor32Tests
+{
+	[Fact]
+	public void Xor32_SameOperand_IsZero()
+	{
+		var result = new BitValue(true);
+		var value = new BitValue(true).NarrowSetBits(0xABCDu);
+
+		BitTrackerOperations.Xor32(result, value, value);
+
+		Assert.True(result.AreAll64BitsKnown);
+		Assert.Equal(0u, result.BitsSet32);
+	}
+
+	[Fact]
+	public void Xor32_PartialKnownBits_TracksKnownIntersection()
+	{
+		var result = new BitValue(true);
+		var value1 = new BitValue(true).NarrowSetBits(0xF0u).NarrowClearBits(0x0Fu);
+		var value2 = new BitValue(true).NarrowSetBits(0xAAu).NarrowClearBits(0x55u);
+
+		BitTrackerOperations.Xor32(result, value1, value2);
+
+		Assert.Equal((0xF0u ^ 0xAAu) & 0xFFu, result.BitsSet & 0xFFu);
+		Assert.Equal(0xFFu, result.BitsKnown & 0xFFu);
+	}
+}
