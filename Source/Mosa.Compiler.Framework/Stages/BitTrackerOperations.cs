@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -151,6 +150,7 @@ public static class BitTrackerOperations
 		{
 			result.Narrow(value1).SetStable(value1);
 		}
+		else
 		{
 			result.SetStable(value1, value2);
 		}
