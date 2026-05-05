@@ -201,6 +201,10 @@ Key namespaces/classes:
 - `Mosa.Compiler.Framework.Context` – represents a position in the instruction stream
 - `Mosa.Compiler.MosaTypeSystem` – MOSA's type system (wraps `dnlib`)
 - `Mosa.Compiler.Framework.IR` – IR instruction definitions
+- `Mosa.Compiler.Framework.Stages.BitTrackerStage` – per-method stage that propagates value range and known-bit information; see **BitTracker Stage** section below
+- `Mosa.Compiler.Framework.Stages.BitTrackerOperations` – stateless, node-free operation logic for BitTrackerStage; unit-tested in `Mosa.Compiler.Framework.xUnit/BitTrackerOperationsTests.cs`
+- `Mosa.Compiler.Framework.BitValue` – the value/bit-range lattice type used throughout the BitTracker subsystem
+- `Mosa.Compiler.Common.IntegerTwiddling` – carry/overflow predicate helpers used by BitTrackerOperations
 
 Optimization levels (set via `-oN`):
 - `-o0` = no optimizations
@@ -229,6 +233,151 @@ When adding new files to existing projects:
 5. If adding a new compiler transform, inherit from `BaseTransform` and register it in the appropriate stage.
 6. If adding new unit tests (xUnit), add them to `Mosa.Compiler.Common.xUnit` or `Mosa.Compiler.Framework.xUnit`.
 7. If adding new bare-metal test cases, add them to `Mosa.UnitTests` following the existing pattern with `[MosaUnitTest]` attributes.
+8. If adding a new setting to `MosaSettings` or `CommandLineArguments`, also add the corresponding entry to `Docs/command-line-arguments.rst`.
+
+---
+
+## BitTracker Stage
+
+`BitTrackerStage` (`Mosa.Compiler.Framework/Stages/BitTrackerStage.cs`) is a per-method optimization stage that propagates **value range and known-bit information** through the instruction stream. This extra knowledge enables downstream constant folding, branch elimination, and instruction simplification.
+
+### Architecture
+
+The stage is split across two files:
+
+| File | Role |
+|---|---|
+| `BitTrackerStage.cs` | Stage driver: iterates virtual registers, calls per-instruction visitors, folds constants, eliminates dead branches |
+| `BitTrackerOperations.cs` | Pure static operation logic: takes `BitValue` operands directly — no `Node` dependency — making it fully unit-testable in isolation |
+
+The stage runs iteratively (up to 10 passes) until all virtual registers are `IsStable`, to handle SSA phi-nodes and other circular dependencies.
+
+### `BitValue` — the information lattice
+
+`BitValue` (`Mosa.Compiler.Framework/BitValue.cs`) tracks what is known about a virtual register's value at compile time. All mutations are monotone — they can only **narrow** the range, never widen it.
+
+Key properties:
+
+| Property | Type | Meaning |
+|---|---|---|
+| `BitsSet` / `BitsSet32` | `ulong` / `uint` | Bits that are definitely 1 |
+| `BitsClear` / `BitsClear32` | `ulong` / `uint` | Bits that are definitely 0 |
+| `BitsKnown` | `ulong` | `BitsSet \| BitsClear` — union of all known bits |
+| `MinValue` / `MaxValue` | `ulong` | Inclusive unsigned value range |
+| `Is32Bit` / `Is64Bit` | `bool` | Whether this is a 32-bit or 64-bit register |
+| `IsResolved` | `bool` | True when `MinValue == MaxValue` or all bits are known |
+| `IsStable` | `bool` | True when no further narrowing is expected |
+| `AreLower32BitsKnown` | `bool` | All 32 low bits known |
+| `AreAll64BitsKnown` | `bool` | All 64 bits known |
+| `IsZero` / `IsOne` / `IsZeroOrOne` | `bool` | Convenience predicates |
+
+Key mutation methods (all return `this` for fluent chaining):
+
+```csharp
+result.SetValue(ulong value)          // Set exact known constant
+result.SetValue(bool value)           // Set 0 or 1
+result.NarrowMin(ulong min)           // Raise the lower bound
+result.NarrowMax(ulong max)           // Lower the upper bound
+result.NarrowSetBits(ulong bits)      // Intersect known-set bits
+result.NarrowClearBits(ulong bits)    // Intersect known-clear bits
+result.NarrowToBoolean()              // Constrain to {0, 1}: MaxValue=1, BitsClear=~1ul
+result.Narrow(BitValue other)         // Apply all narrowing from another BitValue
+result.SetStable()                    // Mark as stable (unconditionally)
+result.SetStable(BitValue a)          // Mark stable only if `a` is stable
+result.SetStable(BitValue a, b)       // Mark stable only if both are stable
+result.SetStable(BitValue a, b, c)    // Mark stable only if all three are stable
+```
+
+Constructors:
+```csharp
+new BitValue(bool is32Bit)              // Unresolved, unstable
+new BitValue(bool is32Bit, ulong value) // Fully known constant, stable
+```
+
+### `IntegerTwiddling` — overflow/carry predicates
+
+`IntegerTwiddling` (`Mosa.Compiler.Common/IntegerTwiddling.cs`) provides all carry/overflow detection used by `BitTrackerOperations`.
+
+| Method | Semantics |
+|---|---|
+| `IsAddUnsignedCarry(uint a, uint b)` | `a + b` overflows 32-bit unsigned |
+| `IsAddUnsignedCarry(ulong a, ulong b)` | `a + b` overflows 64-bit unsigned |
+| `IsAddUnsignedCarry(uint a, uint b, bool carry)` | `a + b + carry` overflows 32-bit unsigned |
+| `IsAddSignedOverflow(int a, int b)` | `a + b` overflows 32-bit signed |
+| `IsAddSignedOverflow(long a, long b)` | `a + b` overflows 64-bit signed |
+| `IsSubUnsignedCarry(uint a, uint b)` | `b > a` (borrow: unsigned subtraction underflows) |
+| `IsSubUnsignedCarry(ulong a, ulong b)` | `b > a` (borrow: 64-bit) |
+| `IsSubSignedOverflow(int a, int b)` | **`a + b` signed overflow** — note: despite the name, this checks signed overflow for the equivalent addition `a + b`, consistent with how x86/x64 OF is computed for SUB. Use it for `SubOverflowOut` instructions. |
+| `IsSubSignedOverflow(long a, long b)` | Same, 64-bit |
+
+> **Important gotcha**: `IsSubSignedOverflow(a, b)` does **not** test whether `a - b` overflows in the intuitive sense. It tests whether `a + b` overflows signed, which matches the hardware overflow flag for subtraction. So `IsSubSignedOverflow(int.MinValue, -1)` returns `true` (int.MinValue + (-1) underflows), while `IsSubSignedOverflow(int.MaxValue, -1)` returns `false`.
+
+### Dual-result instructions
+
+Instructions with two result operands (`result` = value, `result2` = flag) use a dedicated `BitTrackerOperations` method with signature:
+
+```csharp
+public static void XxxOut32(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+```
+
+The handler in `BitTrackerStage` passes both result `BitValue`s:
+
+```csharp
+private static void AddCarryOut32(Node node)
+{
+    BitTrackerOperations.AddCarryOut32(node.Result.BitValue, node.Result2.BitValue,
+        node.Operand1.BitValue, node.Operand2.BitValue);
+}
+```
+
+The flag (`result2`) is modelled at three levels of precision:
+1. **Both operands fully known** → compute exact flag value with `result2.SetValue(bool)`
+2. **Range analysis proves flag impossible** → `result2.SetValue(0)`
+3. **Range analysis proves flag certain** → `result2.SetValue(1)`
+4. **Uncertain** → `result2.NarrowToBoolean().SetStable(value1, value2)`
+
+Currently registered dual-result instructions and their flag semantics:
+
+| Instruction | `result2` flag | Detection method |
+|---|---|---|
+| `AddCarryOut32/64` | Unsigned carry from addition | `IsAddUnsignedCarry` |
+| `AddOverflowOut32/64` | Signed overflow from addition | `IsAddSignedOverflow` |
+| `SubCarryOut32/64` | Unsigned borrow from subtraction (`op2 > op1`) | `IsSubUnsignedCarry` |
+| `SubOverflowOut32/64` | Signed overflow (via `IsSubSignedOverflow`, which checks `a+b` signed overflow) | `IsSubSignedOverflow` |
+
+### Adding a new `BitTrackerOperations` entry
+
+1. Add a `public static void` method to `BitTrackerOperations.cs`. Single-result instructions receive `(BitValue result, BitValue value1, ...)`. Dual-result instructions receive `(BitValue result, BitValue result2, BitValue value1, ...)`.
+2. Add a private static dispatch method in `BitTrackerStage.cs` that unpacks the `Node` and calls the operation.
+3. Register the dispatch method in `BitTrackerStage.Initialize()` with `Register(IR.InstructionName, MethodName)`.
+4. Add a corresponding xUnit test class to `Mosa.Compiler.Framework.xUnit/BitTrackerOperationsTests.cs`. Each class is named `BitTracker_<InstructionName>Tests`. Cover: both operands fully known (no-flag case and flag case), zero/identity operands, range provably no-flag, range always-flag, uncertain range, min/max narrowing.
+
+### Standard operation pattern
+
+```csharp
+public static void Add32(BitValue result, BitValue value1, BitValue value2)
+{
+    if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+    {
+        result.SetValue(value1.BitsSet32 + value2.BitsSet32);  // exact constant
+    }
+    else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+    {
+        result.Narrow(value2).SetStable(value2);               // identity: 0 + x = x
+    }
+    else if (!IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
+    {
+        result                                                  // range: no overflow possible
+            .NarrowMin(value1.MinValue + value2.MinValue)
+            .NarrowMax(value1.MaxValue + value2.MaxValue)
+            .SetStable(value1, value2);
+    }
+    else
+    {
+        result.SetStable(value1, value2);                      // unknown, just mark stable
+    }
+}
+```
 
 ---
 
