@@ -441,16 +441,8 @@ public sealed partial class UnitTestBisectorSystem
 	{
 		if (IsBisectorPlan(state.Plan))
 		{
-			if (state.Results.Count == 0)
-			{
-				state.TotalIterationCount = state.BaselineCompleted ? 1 : 0;
-				state.PassCount = state.BaselineCompleted && state.BaselinePassed ? 1 : 0;
-			}
-			else
-			{
-				state.TotalIterationCount = state.Results.Count;
-				state.PassCount = state.Results.Count(r => r.Passed);
-			}
+			state.TotalIterationCount = state.Results.Count + (state.BaselineCompleted ? 1 : 0);
+			state.PassCount = state.Results.Count(r => r.Passed) + (state.BaselineCompleted && state.BaselinePassed ? 1 : 0);
 		}
 		else
 		{

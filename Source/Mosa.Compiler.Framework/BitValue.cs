@@ -146,7 +146,8 @@ public sealed class BitValue
 		return BitsClear == other.BitsClear
 			&& BitsSet == other.BitsSet
 			&& MaxValue == other.MaxValue
-			&& MinValue == other.MinValue;
+			&& MinValue == other.MinValue
+			&& Is32Bit == other.Is32Bit;
 	}
 
 	public BitValue SetValue(BitValue value)
