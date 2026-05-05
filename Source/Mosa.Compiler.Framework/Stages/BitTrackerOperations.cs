@@ -1386,4 +1386,320 @@ public static class BitTrackerOperations
 	{
 		result2.NarrowToBoolean().SetStable();
 	}
+
+	public static void AddCarryOut32(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+	{
+		// Update result1 (the sum) using the same logic as Add32
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result.SetValue(value1.BitsSet32 + value2.BitsSet32);
+		}
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else if (!IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
+		{
+			result
+				.NarrowMin(value1.MinValue + value2.MinValue)
+				.NarrowMax(value1.MaxValue + value2.MaxValue)
+				.SetStable(value1, value2);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+
+		// Update result2 (the carry flag)
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result2.SetValue(IntegerTwiddling.IsAddUnsignedCarry(value1.BitsSet32, value2.BitsSet32));
+		}
+		else if (!IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
+		{
+			result2.SetValue(0);
+		}
+		else if (IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MinValue, (uint)value2.MinValue))
+		{
+			result2.SetValue(1);
+		}
+		else
+		{
+			result2.NarrowToBoolean().SetStable(value1, value2);
+		}
+	}
+
+	public static void AddCarryOut64(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+	{
+		// Update result1 (the sum) using the same logic as Add64
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result.SetValue(value1.BitsSet + value2.BitsSet);
+		}
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else if (!IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
+		{
+			result
+				.NarrowMin(value1.MinValue + value2.MinValue)
+				.NarrowMax(value1.MaxValue + value2.MaxValue)
+				.SetStable(value1, value2);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+
+		// Update result2 (the carry flag)
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result2.SetValue(IntegerTwiddling.IsAddUnsignedCarry(value1.BitsSet, value2.BitsSet));
+		}
+		else if (!IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
+		{
+			result2.SetValue(0);
+		}
+		else if (IntegerTwiddling.IsAddUnsignedCarry(value1.MinValue, value2.MinValue))
+		{
+			result2.SetValue(1);
+		}
+		else
+		{
+			result2.NarrowToBoolean().SetStable(value1, value2);
+		}
+	}
+
+	public static void AddOverflowOut32(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+	{
+		// Update result1 (the sum) — same logic as Add32
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result.SetValue(value1.BitsSet32 + value2.BitsSet32);
+		}
+		else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else if (!IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
+		{
+			result
+				.NarrowMin(value1.MinValue + value2.MinValue)
+				.NarrowMax(value1.MaxValue + value2.MaxValue)
+				.SetStable(value1, value2);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+
+		// Update result2 (the signed overflow flag)
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result2.SetValue(IntegerTwiddling.IsAddSignedOverflow((int)value1.BitsSet32, (int)value2.BitsSet32));
+		}
+		else if (!IntegerTwiddling.IsAddSignedOverflow((int)(uint)value1.MaxValue, (int)(uint)value2.MaxValue)
+			&& !IntegerTwiddling.IsAddSignedOverflow((int)(uint)value1.MinValue, (int)(uint)value2.MinValue))
+		{
+			result2.SetValue(0);
+		}
+		else
+		{
+			result2.NarrowToBoolean().SetStable(value1, value2);
+		}
+	}
+
+	public static void AddOverflowOut64(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+	{
+		// Update result1 (the sum) — same logic as Add64
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result.SetValue(value1.BitsSet + value2.BitsSet);
+		}
+		else if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+		{
+			result.Narrow(value2).SetStable(value2);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else if (!IntegerTwiddling.IsAddUnsignedCarry(value1.MaxValue, value2.MaxValue))
+		{
+			result
+				.NarrowMin(value1.MinValue + value2.MinValue)
+				.NarrowMax(value1.MaxValue + value2.MaxValue)
+				.SetStable(value1, value2);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+
+		// Update result2 (the signed overflow flag)
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result2.SetValue(IntegerTwiddling.IsAddSignedOverflow((long)value1.BitsSet, (long)value2.BitsSet));
+		}
+		else if (!IntegerTwiddling.IsAddSignedOverflow((long)value1.MaxValue, (long)value2.MaxValue)
+			&& !IntegerTwiddling.IsAddSignedOverflow((long)value1.MinValue, (long)value2.MinValue))
+		{
+			result2.SetValue(0);
+		}
+		else
+		{
+			result2.NarrowToBoolean().SetStable(value1, value2);
+		}
+	}
+
+	public static void SubCarryOut32(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+	{
+		// Update result1 (the difference) — same logic as Sub32
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result.SetValue(value1.BitsSet32 - value2.BitsSet32);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+
+		// Update result2 (the borrow/carry flag): set when op2 > op1 unsigned
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result2.SetValue(IntegerTwiddling.IsSubUnsignedCarry(value1.BitsSet32, value2.BitsSet32));
+		}
+		else if (!IntegerTwiddling.IsSubUnsignedCarry((uint)value1.MinValue, (uint)value2.MaxValue))
+		{
+			// Even in the worst case (min1 vs max2), no borrow is possible
+			result2.SetValue(0);
+		}
+		else if (IntegerTwiddling.IsSubUnsignedCarry((uint)value1.MaxValue, (uint)value2.MinValue))
+		{
+			// Even in the best case (max1 vs min2), borrow always occurs
+			result2.SetValue(1);
+		}
+		else
+		{
+			result2.NarrowToBoolean().SetStable(value1, value2);
+		}
+	}
+
+	public static void SubCarryOut64(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+	{
+		// Update result1 (the difference) — same logic as Sub64
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result.SetValue(value1.BitsSet - value2.BitsSet);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+
+		// Update result2 (the borrow/carry flag): set when op2 > op1 unsigned
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result2.SetValue(IntegerTwiddling.IsSubUnsignedCarry(value1.BitsSet, value2.BitsSet));
+		}
+		else if (!IntegerTwiddling.IsSubUnsignedCarry(value1.MinValue, value2.MaxValue))
+		{
+			// Even in the worst case (min1 vs max2), no borrow is possible
+			result2.SetValue(0);
+		}
+		else if (IntegerTwiddling.IsSubUnsignedCarry(value1.MaxValue, value2.MinValue))
+		{
+			// Even in the best case (max1 vs min2), borrow always occurs
+			result2.SetValue(1);
+		}
+		else
+		{
+			result2.NarrowToBoolean().SetStable(value1, value2);
+		}
+	}
+
+	public static void SubOverflowOut32(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+	{
+		// Update result1 (the difference) — same logic as Sub32
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result.SetValue(value1.BitsSet32 - value2.BitsSet32);
+		}
+		else if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+
+		// Update result2 (the signed overflow flag)
+		if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+		{
+			result2.SetValue(IntegerTwiddling.IsSubSignedOverflow((int)value1.BitsSet32, (int)value2.BitsSet32));
+		}
+		else if (!IntegerTwiddling.IsSubSignedOverflow((int)(uint)value1.MaxValue, (int)(uint)value2.MinValue)
+			&& !IntegerTwiddling.IsSubSignedOverflow((int)(uint)value1.MinValue, (int)(uint)value2.MaxValue))
+		{
+			result2.SetValue(0);
+		}
+		else
+		{
+			result2.NarrowToBoolean().SetStable(value1, value2);
+		}
+	}
+
+	public static void SubOverflowOut64(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+	{
+		// Update result1 (the difference) — same logic as Sub64
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result.SetValue(value1.BitsSet - value2.BitsSet);
+		}
+		else if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+		{
+			result.Narrow(value1).SetStable(value1);
+		}
+		else
+		{
+			result.SetStable(value1, value2);
+		}
+
+		// Update result2 (the signed overflow flag)
+		if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+		{
+			result2.SetValue(IntegerTwiddling.IsSubSignedOverflow((long)value1.BitsSet, (long)value2.BitsSet));
+		}
+		else if (!IntegerTwiddling.IsSubSignedOverflow((long)value1.MaxValue, (long)value2.MinValue)
+			&& !IntegerTwiddling.IsSubSignedOverflow((long)value1.MinValue, (long)value2.MaxValue))
+		{
+			result2.SetValue(0);
+		}
+		else
+		{
+			result2.NarrowToBoolean().SetStable(value1, value2);
+		}
+	}
 }

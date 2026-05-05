@@ -2690,4 +2690,73 @@ public class BitTracker_Result2NarrowToBooleanTests
 		Assert.Equal(0u, result.MinValue);
 		Assert.Equal(1u, result.MaxValue);
 	}
+
+	[Fact]
+	public void Result2NarrowToBoolean_UpperBitsAreKnownClear()
+	{
+		// After narrowing to boolean, all bits except bit 0 must be known clear
+		var result = new BitValue(true);
+
+		BitTrackerOperations.Result2NarrowToBoolean(result);
+
+		// bits 63..1 are known clear; bit 0 is unknown (value may be 0 or 1)
+		Assert.Equal(~1ul, result.BitsClear & ~1ul);
+		Assert.Equal(0ul, result.BitsSet & ~1ul);
+	}
+
+	[Fact]
+	public void Result2NarrowToBoolean_Bit0Unknown_WhenInputUnconstrained()
+	{
+		// When the input carries no prior bit knowledge, bit 0 should remain unknown
+		var result = new BitValue(true);
+
+		BitTrackerOperations.Result2NarrowToBoolean(result);
+
+		Assert.Equal(0ul, result.BitsSet & 1ul);   // bit 0 not known-set
+		Assert.Equal(0ul, result.BitsClear & 1ul);  // bit 0 not known-clear
+	}
+
+	[Fact]
+	public void Result2NarrowToBoolean_KnownTrue_RangeCollapsesToOne()
+	{
+		// When the result is already known to be 1, narrowing collapses the range to [1,1]
+		// and marks all upper bits clear; bit 0 is not separately marked known-set in BitsSet
+		// because the range [MinValue==MaxValue==1] already encodes the resolved true value
+		var result = new BitValue(true);
+		result.NarrowMin(1); // force value to 1
+
+		BitTrackerOperations.Result2NarrowToBoolean(result);
+
+		Assert.Equal(1u, result.MinValue);
+		Assert.Equal(1u, result.MaxValue);
+		Assert.True(result.IsResolved);
+		Assert.Equal(0ul, result.BitsSet & 1ul);    // bit 0 not independently marked known-set
+		Assert.Equal(0ul, result.BitsClear & 1ul);  // bit 0 not known-clear
+		Assert.Equal(~1ul, result.BitsClear & ~1ul); // all upper bits known-clear
+	}
+
+	[Fact]
+	public void Result2NarrowToBoolean_KnownFalse_Bit0KnownClear()
+	{
+		// When the result is already known to be 0 (MaxValue == 0), bit 0 must be known-clear
+		var result = new BitValue(true);
+		result.NarrowMax(0); // force value to 0
+
+		BitTrackerOperations.Result2NarrowToBoolean(result);
+
+		Assert.Equal(0u, result.MinValue);
+		Assert.Equal(0u, result.MaxValue);
+		Assert.Equal(0ul, result.BitsSet & 1ul);    // bit 0 not known-set
+		Assert.Equal(1ul, result.BitsClear & 1ul);  // bit 0 known-clear
+	}
+
+	[Fact]
+	public void Result2NarrowToBoolean_IsStable()
+	{
+		var result = new BitValue(true);
+
+		BitTrackerOperations.Result2NarrowToBoolean(result);
+
+		Assert.True(result.IsStable);
+	}
 }

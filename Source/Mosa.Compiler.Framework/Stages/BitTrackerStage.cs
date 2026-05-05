@@ -44,8 +44,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 		Register(IR.Add64, Add64);
 		Register(IR.AddCarryIn32, AddCarryIn32);
 		Register(IR.AddCarryIn64, AddCarryIn64);
-		Register(IR.AddCarryOut32, Result2NarrowToBoolean);
-		Register(IR.AddCarryOut64, Result2NarrowToBoolean);
+		Register(IR.AddCarryOut32, AddCarryOut32);
+		Register(IR.AddCarryOut64, AddCarryOut64);
 		Register(IR.AddOverflowOut32, Result2NarrowToBoolean);
 		Register(IR.AddOverflowOut64, Result2NarrowToBoolean);
 		Register(IR.And32, And32);
@@ -410,6 +410,16 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private static void AddCarryIn64(Node node)
 	{
 		BitTrackerOperations.AddCarryIn64(node.Result.BitValue, node.Operand1.BitValue, node.Operand2.BitValue, node.Operand3.BitValue);
+	}
+
+	private static void AddCarryOut32(Node node)
+	{
+		BitTrackerOperations.AddCarryOut32(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
+	}
+
+	private static void AddCarryOut64(Node node)
+	{
+		BitTrackerOperations.AddCarryOut64(node.Result.BitValue, node.Result2.BitValue, node.Operand1.BitValue, node.Operand2.BitValue);
 	}
 
 	private static void Sub32(Node node)
