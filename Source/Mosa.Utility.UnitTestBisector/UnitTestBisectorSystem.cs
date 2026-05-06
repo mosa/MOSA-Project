@@ -456,10 +456,7 @@ public sealed partial class UnitTestBisectorSystem
 
 	private void PrintIterationHeader(string sessionName, Bisector<string>.BisectorStatus status)
 	{
-		OutputStatusBisector($"{sessionName} Iteration: {status.Iteration + 1}");
-		OutputStatusBisector($"Level: {status.Level}");
-		OutputStatusBisector($"Phase: {status.Phase}");
-		OutputStatusBisector($"Stage: {(string.IsNullOrEmpty(mosaSettings.BisectorStage) ? "All" : mosaSettings.BisectorStage)}");
+		OutputStatusBisector($"{sessionName} Iteration: {status.Iteration + 1} | Level: {status.Level} | Phase: {status.Phase} | Stage: {(string.IsNullOrEmpty(mosaSettings.BisectorStage) ? "All" : mosaSettings.BisectorStage)}");
 	}
 
 	private static bool MapOutcome(bool passed, bool invertOutcome)
