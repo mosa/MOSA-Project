@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Common;
 
-namespace Mosa.Compiler.Framework.Stages;
+namespace Mosa.Compiler.Framework.Analysis;
 
 /// <summary>
 /// Bit Tracker Operations - Contains all bit tracking operation logic for updating BitValues.

@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Framework.Analysis;
 using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit;
