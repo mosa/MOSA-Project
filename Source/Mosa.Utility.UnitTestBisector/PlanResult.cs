@@ -9,4 +9,6 @@ internal sealed class PlanResult
 	public bool Passed { get; set; }
 
 	public List<string> DisabledTransforms { get; set; } = [];
+
+	public List<string> NewlyObservedTransforms { get; set; } = [];
 }
