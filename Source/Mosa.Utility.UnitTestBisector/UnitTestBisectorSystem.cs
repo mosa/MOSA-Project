@@ -51,13 +51,10 @@ public sealed partial class UnitTestBisectorSystem
 			}
 
 			var stageDisplay = string.IsNullOrEmpty(mosaSettings.BisectorStage) ? "All" : mosaSettings.BisectorStage;
-			OutputStatusBisector($"Stage: {stageDisplay}");
 
+			OutputStatusBisector($"Stage: {stageDisplay}");
 			OutputStatusBisector($"Plan: {plan}");
-			if (!isBisectorPlan)
-			{
-				OutputStatusBisector($"Order: {order}");
-			}
+			OutputStatusBisector($"Order: {order}");
 			OutputStatusBisector($"State File: {stateFile}");
 
 			OutputStatus("Discovering Unit Tests...");
@@ -74,7 +71,6 @@ public sealed partial class UnitTestBisectorSystem
 			{
 				var bisectorState = LoadOrCreateState(stateFile, plan);
 				EnsureStateCompatibility(bisectorState, plan, OrderKind.Unspecified);
-				//OutputStatusBisector($"Saved Iteration: {bisectorState.IterationNumber}");
 
 				if (mosaSettings.BisectorWorkerIteration)
 					return ExecuteBisectorPlan(plan, stateFile, bisectorState, discoveredUnitTests);
@@ -92,8 +88,6 @@ public sealed partial class UnitTestBisectorSystem
 
 			var state = LoadOrCreateState(stateFile, plan);
 			EnsureStateCompatibility(state, plan, order);
-
-			//OutputStatusBisector($"Saved Iteration: {state.IterationNumber}");
 
 			if (state.ObservedTransforms.Count == 0)
 			{
@@ -196,7 +190,6 @@ public sealed partial class UnitTestBisectorSystem
 		if (!state.BaselineCompleted || state.ObservedTransforms.Count == 0)
 		{
 			OutputStatusBisector("Running transform discovery iteration...");
-			//OutputStatusBisector($"Iteration: {state.IterationNumber}");
 			observedTransformCounts.Clear();
 			effectiveDisabledTransformNames = [];
 
@@ -390,7 +383,6 @@ public sealed partial class UnitTestBisectorSystem
 		var status = bisector.GetStatus();
 		state.IterationNumber = status.Iteration + 1;
 		PrintIterationHeader(sessionName, status);
-		PrintDisabledTransforms();
 
 		var iterationResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 		var mappedResult = MapOutcome(iterationResult.Passed, invertOutcome);
@@ -466,16 +458,8 @@ public sealed partial class UnitTestBisectorSystem
 
 	private static void RecalculateCounters(BisectorState state)
 	{
-		if (IsBisectorPlan(state.Plan))
-		{
-			state.TotalIterationCount = state.Results.Count + (state.BaselineCompleted ? 1 : 0);
-			state.PassCount = state.Results.Count(r => r.Passed) + (state.BaselineCompleted && state.BaselinePassed ? 1 : 0);
-		}
-		else
-		{
-			state.TotalIterationCount = state.Results.Count + (state.BaselineCompleted ? 1 : 0);
-			state.PassCount = state.Results.Count(r => r.Passed) + (state.BaselineCompleted && state.BaselinePassed ? 1 : 0);
-		}
+		state.TotalIterationCount = state.Results.Count + (state.BaselineCompleted ? 1 : 0);
+		state.PassCount = state.Results.Count(r => r.Passed) + (state.BaselineCompleted && state.BaselinePassed ? 1 : 0);
 	}
 
 	private static void UpdateCounters(BisectorState state, bool passed)
@@ -747,11 +731,6 @@ public sealed partial class UnitTestBisectorSystem
 		return effectiveDisabledTransformNames.Contains(transformName);
 	}
 
-	private void PrintDisabledTransforms()
-	{
-		OutputStatusBisector($"Disabled: {effectiveDisabledTransformNames.Count}");
-	}
-
 	private void PrintFinalReport(PlanKind plan, BisectorState state)
 	{
 		OutputStatusBisector($"Plan complete: {plan}");
@@ -769,16 +748,6 @@ public sealed partial class UnitTestBisectorSystem
 		}
 
 		PrintPassAndIterationCounts(state);
-	}
-
-	private void OutputStatusBisector(string status)
-	{
-		Console.WriteLine($"{stopwatch.Elapsed.TotalSeconds:00.00} | [Bisector] {status}");
-	}
-
-	private void OutputStatus(string status)
-	{
-		Console.WriteLine($"{stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 
 	private void CaptureCompilationFailure(string failure)
@@ -905,7 +874,6 @@ public sealed partial class UnitTestBisectorSystem
 
 			OutputStatusBisector("Running baseline iteration...");
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
-			PrintDisabledTransforms();
 
 			var baselineResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.BaselineCompleted = true;
@@ -943,7 +911,6 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Iteration {iterationNumber}/{state.ObservedTransforms.Count}");
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
 			OutputStatusBisector($"Transform: {transform}");
-			PrintDisabledTransforms();
 
 			var iterationResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.Results.Add(new PlanResult
@@ -998,7 +965,6 @@ public sealed partial class UnitTestBisectorSystem
 
 			OutputStatusBisector("Running baseline iteration...");
 			OutputStatusBisector($"Iteration: {state.IterationNumber}");
-			PrintDisabledTransforms();
 
 			var baselineResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.BaselineCompleted = true;
@@ -1035,8 +1001,6 @@ public sealed partial class UnitTestBisectorSystem
 			var disabledSnapshot = effectiveDisabledTransformNames.OrderBy(x => x).ToList();
 
 			OutputStatusBisector($"Random Iteration {iterationNumber}");
-			//OutputStatusBisector($"Iteration: {state.IterationNumber}");
-			PrintDisabledTransforms();
 
 			var iterationResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 			state.Results.Add(new PlanResult
@@ -1073,5 +1037,15 @@ public sealed partial class UnitTestBisectorSystem
 		SetLastExit(state, Constant.ExitKindCompleted, 0);
 		SaveState(stateFile, state);
 		return 0;
+	}
+
+	private void OutputStatusBisector(string status)
+	{
+		Console.WriteLine($"{stopwatch.Elapsed.TotalSeconds:00.00} | [Bisector] {status}");
+	}
+
+	private void OutputStatus(string status)
+	{
+		Console.WriteLine($"{stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 }

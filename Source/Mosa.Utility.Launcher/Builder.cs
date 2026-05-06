@@ -86,7 +86,6 @@ public class Builder : BaseLauncher
 
 	private bool Compile()
 	{
-		//OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
 		OutputStatus($"Output file: {MosaSettings.OutputFile}");
 		OutputStatus($"Available Cores: {Environment.ProcessorCount} | Max Threads: {MosaSettings.MaxThreads}");
 		OutputStatus($"Platform: {MosaSettings.Platform}");
