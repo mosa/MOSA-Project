@@ -24,6 +24,8 @@ internal sealed class BisectorState
 
 	public int PassCount { get; set; }
 
+	public int FailureCount { get; set; }
+
 	public int TotalIterationCount { get; set; }
 
 	public OrderKind Order { get; set; }
