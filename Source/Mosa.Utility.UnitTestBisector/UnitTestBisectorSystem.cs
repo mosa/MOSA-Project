@@ -18,6 +18,7 @@ public sealed partial class UnitTestBisectorSystem
 	private readonly object transformDiscoveryLock = new();
 
 	private bool hasCompilationFailure;
+	private bool hasRestartsExceeded;
 	private string lastCompilationFailure;
 	private string unitTestFilter;
 
@@ -38,7 +39,8 @@ public sealed partial class UnitTestBisectorSystem
 			mosaSettings.UnitTestFailFast = true;
 			unitTestFilter = mosaSettings.UnitTestFilter;
 			hasCompilationFailure = false;
-			lastCompilationFailure = null;
+				hasRestartsExceeded = false;
+				lastCompilationFailure = null;
 
 			stopwatch.Start();
 
@@ -159,6 +161,7 @@ public sealed partial class UnitTestBisectorSystem
 	private void ResetIterationState()
 	{
 		hasCompilationFailure = false;
+		hasRestartsExceeded = false;
 		lastCompilationFailure = null;
 		observedTransformNames = [];
 		observedTransformCounts.Clear();
@@ -201,7 +204,7 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Discovery Iteration: {(discoveryResult.Passed ? "PASS" : "FAIL")}");
 			OutputIterationStatus(state.IterationNumber, state);
 
-			if (hasCompilationFailure)
+			if (hasCompilationFailure || hasRestartsExceeded)
 			{
 				SaveState(stateFile, state);
 				WriteFailureReviewFile(stateFile, plan, state);
@@ -222,7 +225,7 @@ public sealed partial class UnitTestBisectorSystem
 				return 0;
 			}
 
-			OutputStatusBisector($"Observed Transforms: {observed.Count}");
+					OutputStatusBisector($"Observed Transforms: {observed.Count}");
 
 			state.ObservedTransforms = observed;
 			state.ObservedTransformCounts = observed.ToDictionary(
@@ -274,7 +277,7 @@ public sealed partial class UnitTestBisectorSystem
 				var preCheckResult = ExecuteIteration(state.IterationNumber, discoveredUnitTests);
 				effectiveDisabledTransformNames = [];
 
-				if (hasCompilationFailure)
+				if (hasCompilationFailure || hasRestartsExceeded)
 				{
 					SaveState(stateFile, state);
 					WriteFailureReviewFile(stateFile, plan, state);
@@ -421,7 +424,7 @@ public sealed partial class UnitTestBisectorSystem
 		OutputNewlyConfirmedBadItems(sessionName, bisector, reportedBadItems);
 		OutputBisectorStatus(bisector.GetStatus());
 
-		if (hasCompilationFailure)
+		if (hasCompilationFailure || hasRestartsExceeded)
 		{
 			SetLastExit(state, Constant.ExitKindFailure, 1);
 			SaveState(stateFile, state);
@@ -465,7 +468,7 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Baseline Result: {(baselineResult.Passed ? "PASS" : "FAIL")}");
 			OutputIterationStatus(state.IterationNumber, state);
 
-			if (hasCompilationFailure)
+			if (hasCompilationFailure || hasRestartsExceeded)
 			{
 				SetLastExit(state, Constant.ExitKindFailure, 1);
 				SaveState(stateFile, state);
@@ -476,7 +479,7 @@ public sealed partial class UnitTestBisectorSystem
 		else
 		{
 			OutputStatusBisector($"Resuming after baseline. Baseline Result: {(state.BaselinePassed ? "PASS" : "FAIL")}");
-			OutputStatusBisector($"Iteration: {state.IterationNumber}");
+				OutputStatusBisector($"Iteration: {state.IterationNumber}");
 			OutputIterationStatus(state.IterationNumber, state);
 		}
 
@@ -509,10 +512,11 @@ public sealed partial class UnitTestBisectorSystem
 				OutputStatusBisector($"Failure state captured for review: transform={transform}, disabled={disabledSnapshot.Count}");
 			OutputIterationStatus(state.IterationNumber, state);
 
-			if (hasCompilationFailure)
+			if (hasCompilationFailure || hasRestartsExceeded)
 			{
 				SetLastExit(state, Constant.ExitKindFailure, 1);
 				SaveState(stateFile, state);
+				WriteFailureReviewFile(stateFile, plan, state);
 				return 1;
 			}
 
@@ -552,7 +556,7 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Baseline Result: {(baselineResult.Passed ? "PASS" : "FAIL")}");
 			OutputIterationStatus(state.IterationNumber, state);
 
-			if (hasCompilationFailure)
+			if (hasCompilationFailure || hasRestartsExceeded)
 			{
 				SetLastExit(state, Constant.ExitKindFailure, 1);
 				SaveState(stateFile, state);
@@ -563,7 +567,7 @@ public sealed partial class UnitTestBisectorSystem
 			if (mosaSettings.BisectorWorkerIteration)
 			{
 				SetLastExit(state, Constant.ExitKindContinue, Constant.WorkerContinueExitCode);
-				SaveState(stateFile, state);
+					SaveState(stateFile, state);
 				return Constant.WorkerContinueExitCode;
 			}
 		}
@@ -595,13 +599,14 @@ public sealed partial class UnitTestBisectorSystem
 			OutputStatusBisector($"Iteration Result: {(iterationResult.Passed ? "PASS" : "FAIL")}");
 			OutputIterationStatus(state.IterationNumber, state);
 
-			if (hasCompilationFailure)
-			{
-				SetLastExit(state, Constant.ExitKindFailure, 1);
-				SaveState(stateFile, state);
-				return 1;
+			if (hasCompilationFailure || hasRestartsExceeded)
+				{
+					SetLastExit(state, Constant.ExitKindFailure, 1);
+					SaveState(stateFile, state);
+					WriteFailureReviewFile(stateFile, PlanKind.RandomCombo, state);
+					return 1;
+				}
 			}
-		}
 
 		if (mosaSettings.BisectorWorkerIteration)
 		{
@@ -629,12 +634,29 @@ public sealed partial class UnitTestBisectorSystem
 			using var unitTestEngine = new UnitTestEngine(mosaSettings, OutputStatus, CreateCompilerHooks);
 			if (unitTestEngine.IsAborted)
 			{
-				CaptureCompilationFailure(unitTestEngine.CompilationFailure);
-				OutputStatusBisector("Iteration compiler run aborted. Treating as FAIL.");
+				if (!string.IsNullOrWhiteSpace(unitTestEngine.CompilationFailure))
+				{
+					CaptureCompilationFailure(unitTestEngine.CompilationFailure);
+					OutputStatusBisector("Iteration compiler run aborted. Treating as FAIL.");
+				}
+				else
+				{
+					hasRestartsExceeded = true;
+					OutputStatusBisector("Iteration aborted: unit test system restarts exceeded. Treating as FAIL.");
+				}
 				return new IterationResult(false);
 			}
 
 			var unitTests = UnitTestRunner.Run(unitTestEngine, discoveredUnitTests);
+
+			if (unitTestEngine.IsAborted)
+			{
+				hasRestartsExceeded = true;
+				OutputStatusBisector("Iteration aborted during run: unit test system restarts exceeded. Treating as FAIL.");
+				unitTestEngine.Terminate();
+				return new IterationResult(false);
+			}
+
 			unitTestEngine.Terminate();
 
 			var passed = true;
@@ -956,8 +978,10 @@ public sealed partial class UnitTestBisectorSystem
 				$"Total Iterations: {state.TotalIterationCount}",
 				$"Total Passes: {state.PassCount}",
 				$"Total Failures: {state.FailureCount}",
-				string.Empty,
-			};
+					$"Compilation Failure: {(hasCompilationFailure ? "YES" : "No")}",
+					$"Restarts Exceeded: {(hasRestartsExceeded ? "YES" : "No")}",
+					string.Empty,
+				};
 
 		var failedResults = state.Results.Where(r => !r.Passed).OrderBy(r => r.Transform).ToList();
 		lines.Add($"Failed Iterations: {failedResults.Count}");
