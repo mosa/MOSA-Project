@@ -35,6 +35,8 @@ public sealed class Compiler
 	private long[] ThreadCPUTicks;
 	private long[] ThreadWallTicks;
 
+	private PipelinePool pipelinePool;
+
 	#endregion Data Members
 
 	#region Properties
@@ -514,8 +516,10 @@ public sealed class Compiler
 		{
 			var pool = new PipelinePool(MethodScheduler, this, maxThreads);
 
-			// Connect the pool to the scheduler for profiling
-			MethodScheduler.SetPipelinePool(pool);
+				// Connect the pool to the scheduler for profiling
+				MethodScheduler.SetPipelinePool(pool);
+
+				pipelinePool = pool;
 
 			// subscribe scheduler -> pool signal
 			var schedulerSubscription = MethodScheduler.Subscribe(pool.NotifyWorkAdded);
@@ -525,7 +529,9 @@ public sealed class Compiler
 
 			schedulerSubscription.Dispose();
 
-			pool.DisposeAsync().AsTask().GetAwaiter().GetResult();
+				pool.DisposeAsync().AsTask().GetAwaiter().GetResult();
+
+				pipelinePool = null;
 		}
 		else
 		{
@@ -621,6 +627,7 @@ public sealed class Compiler
 	{
 		IsStopped = true;
 		HasError = true;
+		pipelinePool?.NotifyStop();
 		PostEvent(CompilerEvent.Stopped);
 	}
 
