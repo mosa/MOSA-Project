@@ -429,6 +429,9 @@ public static class CommandLineArguments
 			new Argument { Name = "-oSize", Setting = Name.Optimizations_BitTracker, Value = "true"},
 			new Argument { Name = "-oSize", Setting = Name.Optimizations_LoopRangeTracker, Value = "false"},
 			new Argument { Name = "-oSize", Setting = Name.Optimizations_TwoPass, Value = "true"},
+			new Argument { Name = "-oSize", Setting = Name.Optimizations_Inline_Maximum, Value = "3"},
+			new Argument { Name = "-oSize", Setting = Name.Optimizations_ScanWindow, Value = "50"},
+			new Argument { Name = "-oSize", Setting = Name.Optimizations_ReduceCodeSize, Value = "true"},
 
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_Basic, Value = "true"},
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_SSA, Value = "true"},
@@ -443,6 +446,9 @@ public static class CommandLineArguments
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_BitTracker, Value = "false"},
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_LoopRangeTracker, Value = "false"},
 			new Argument { Name = "-oFast", Setting = Name.Optimizations_TwoPass, Value = "false"},
+			new Argument { Name = "-oFast", Setting = Name.Optimizations_Inline_Maximum, Value = "0"},
+			new Argument { Name = "-oFast", Setting = Name.Optimizations_ScanWindow, Value = "5"},
+			new Argument { Name = "-oFast", Setting = Name.Optimizations_ReduceCodeSize, Value = "false"},
 		};
 
 		return map;

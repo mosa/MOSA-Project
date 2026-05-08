@@ -281,6 +281,15 @@ public sealed class Bisector<TItem>
 		{
 			reductionCandidates = new List<TItem>(experiment.Subset);
 			reductionCandidatesSet = new HashSet<TItem>(reductionCandidates, comparer);
+
+			// Re-incorporate items observed after the experiment began.
+			// They were not part of the disabled set when the experiment was created,
+			// so they have not been tested and must remain as candidates.
+			foreach (var item in GetOrderedActiveItems())
+			{
+				if (!experiment.DisabledItems.Contains(item) && reductionCandidatesSet.Add(item))
+					reductionCandidates.Add(item);
+			}
 		}
 		else
 		{
