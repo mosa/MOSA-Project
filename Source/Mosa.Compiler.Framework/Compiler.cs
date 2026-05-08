@@ -173,10 +173,12 @@ public sealed class Compiler
 			mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineStage() : null,
 
 			mosaSettings.BasicOptimizations ? new OptimizationStage(false) : null,
+
+			mosaSettings.SSA ? new DeadBlockStage() : null,
 			mosaSettings.SSA ? new EdgeSplitStage() : null,
 			mosaSettings.SSA ? new EnterSSAStage() : null,
-			mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(false) : null,
 
+			mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(false) : null,
 			mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
 			mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
 			mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
@@ -204,7 +206,6 @@ public sealed class Compiler
 			new CallStage(),
 			new CompoundStage(),
 			new PlatformIntrinsicStage(),
-
 			new PlatformEdgeSplitStage(),
 			new VirtualRegisterReindexStage(),
 			new GreedyRegisterAllocatorStage(),
@@ -219,9 +220,9 @@ public sealed class Compiler
 		pipeline.InsertBefore<CodeGenerationStage>(
 		[
 			new DeadBlockStage(),
-			new SafePointStage(),
 			new AdvancedBlockOrderingStage(),
-			new JumpOptimizationStage()
+			new JumpOptimizationStage(),
+			new SafePointStage(),
 		]);
 
 		pipeline.InsertAfterLast<CodeGenerationStage>(

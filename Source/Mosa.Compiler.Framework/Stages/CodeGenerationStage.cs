@@ -20,8 +20,6 @@ public sealed class CodeGenerationStage : BaseMethodCompilerStage
 	/// </summary>
 	private MemoryStream codeStream;
 
-	//protected Stream codeStream;
-
 	#endregion Data Members
 
 	#region Properties

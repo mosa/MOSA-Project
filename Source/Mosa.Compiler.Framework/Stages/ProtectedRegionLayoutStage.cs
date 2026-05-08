@@ -12,6 +12,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 	#region Data Members
 
 	private PatchType NativePatchType;
+	public bool EmitBinary { get; set; }
 
 	#endregion Data Members
 
@@ -23,6 +24,11 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 			NativePatchType = PatchType.I64;
 	}
 
+	protected override void Setup()
+	{
+		EmitBinary = MosaSettings.EmitBinary;
+	}
+
 	protected override void Run()
 	{
 		if (!MethodCompiler.HasCILStream)
@@ -32,6 +38,9 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 			return;
 
 		if (!HasProtectedRegions)
+			return;
+
+		if (!EmitBinary)
 			return;
 
 		ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);

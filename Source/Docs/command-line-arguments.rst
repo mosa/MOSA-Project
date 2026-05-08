@@ -199,7 +199,7 @@ Below are the command line arguments available:
 
 	Bisect:
 	-bisect,UnitTest.Bisector.Plan,disable-one
-	-bisect-stage,UnitTest.Bisector.Stage,{value} (default: OptimizationStage)
+	-bisect-stage,UnitTest.Bisector.Stage,{value}
 	-bisect-masking,UnitTest.Bisector.Masking,true
 	-bisect-masking-off,UnitTest.Bisector.Masking,false
 	-bisect-pairwise,UnitTest.Bisector.Pairwise,true

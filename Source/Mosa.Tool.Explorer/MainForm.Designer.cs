@@ -492,6 +492,7 @@
 			// cbEnableStatistics
 			// 
 			cbEnableStatistics.Checked = true;
+			cbEnableStatistics.CheckOnClick = true;
 			cbEnableStatistics.CheckState = CheckState.Checked;
 			cbEnableStatistics.Name = "cbEnableStatistics";
 			cbEnableStatistics.Size = new Size(206, 22);
@@ -513,6 +514,7 @@
 			// 
 			// cbDumpAllMethodStages
 			// 
+			cbDumpAllMethodStages.CheckOnClick = true;
 			cbDumpAllMethodStages.Name = "cbDumpAllMethodStages";
 			cbDumpAllMethodStages.Size = new Size(206, 22);
 			cbDumpAllMethodStages.Text = "Dump All Method Stages";
@@ -1268,7 +1270,6 @@
 			tbTransformStage.Name = "tbTransformStage";
 			tbTransformStage.Size = new Size(218, 23);
 			tbTransformStage.TabIndex = 1;
-			tbTransformStage.Text = "OptimizationStage";
 			// 
 			// toolStrip1
 			// 
