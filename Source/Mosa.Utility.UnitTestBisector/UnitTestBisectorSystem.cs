@@ -39,8 +39,8 @@ public sealed partial class UnitTestBisectorSystem
 			mosaSettings.UnitTestFailFast = true;
 			unitTestFilter = mosaSettings.UnitTestFilter;
 			hasCompilationFailure = false;
-				hasRestartsExceeded = false;
-				lastCompilationFailure = null;
+			hasRestartsExceeded = false;
+			lastCompilationFailure = null;
 
 			stopwatch.Start();
 
@@ -225,7 +225,7 @@ public sealed partial class UnitTestBisectorSystem
 				return 0;
 			}
 
-					OutputStatusBisector($"Observed Transforms: {observed.Count}");
+			OutputStatusBisector($"Observed Transforms: {observed.Count}");
 
 			state.ObservedTransforms = observed;
 			state.ObservedTransformCounts = observed.ToDictionary(
@@ -479,7 +479,7 @@ public sealed partial class UnitTestBisectorSystem
 		else
 		{
 			OutputStatusBisector($"Resuming after baseline. Baseline Result: {(state.BaselinePassed ? "PASS" : "FAIL")}");
-				OutputStatusBisector($"Iteration: {state.IterationNumber}");
+			OutputStatusBisector($"Iteration: {state.IterationNumber}");
 			OutputIterationStatus(state.IterationNumber, state);
 		}
 
@@ -567,7 +567,7 @@ public sealed partial class UnitTestBisectorSystem
 			if (mosaSettings.BisectorWorkerIteration)
 			{
 				SetLastExit(state, Constant.ExitKindContinue, Constant.WorkerContinueExitCode);
-					SaveState(stateFile, state);
+				SaveState(stateFile, state);
 				return Constant.WorkerContinueExitCode;
 			}
 		}
@@ -600,13 +600,13 @@ public sealed partial class UnitTestBisectorSystem
 			OutputIterationStatus(state.IterationNumber, state);
 
 			if (hasCompilationFailure || hasRestartsExceeded)
-				{
-					SetLastExit(state, Constant.ExitKindFailure, 1);
-					SaveState(stateFile, state);
-					WriteFailureReviewFile(stateFile, PlanKind.RandomCombo, state);
-					return 1;
-				}
+			{
+				SetLastExit(state, Constant.ExitKindFailure, 1);
+				SaveState(stateFile, state);
+				WriteFailureReviewFile(stateFile, PlanKind.RandomCombo, state);
+				return 1;
 			}
+		}
 
 		if (mosaSettings.BisectorWorkerIteration)
 		{

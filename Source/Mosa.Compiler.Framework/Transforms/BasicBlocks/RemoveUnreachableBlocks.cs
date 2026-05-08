@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections;
 using Mosa.Compiler.Framework.Common;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Mosa.Compiler.Framework.Transforms.BasicBlocks;
 

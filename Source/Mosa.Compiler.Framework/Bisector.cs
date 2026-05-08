@@ -245,9 +245,9 @@ public sealed class Bisector<TItem>
 		switch (currentPhase)
 		{
 			case BisectorPhase.Reduction:
-					if (reductionCandidatesSet.Add(item))
-						reductionCandidates.Add(item);
-					break;
+				if (reductionCandidatesSet.Add(item))
+					reductionCandidates.Add(item);
+				break;
 
 			case BisectorPhase.SingleItemChecks:
 				singleItemQueue.Enqueue(item);
@@ -383,11 +383,11 @@ public sealed class Bisector<TItem>
 				continue;
 
 			if (queued.Add(item))
-				{
-					currentSuspects.Add(item);
-					currentSuspectsSet.Add(item);
-					singleItemQueue.Enqueue(item);
-				}
+			{
+				currentSuspects.Add(item);
+				currentSuspectsSet.Add(item);
+				singleItemQueue.Enqueue(item);
+			}
 		}
 	}
 

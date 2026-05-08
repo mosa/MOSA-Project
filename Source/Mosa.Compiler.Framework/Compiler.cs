@@ -516,10 +516,10 @@ public sealed class Compiler
 		{
 			var pool = new PipelinePool(MethodScheduler, this, maxThreads);
 
-				// Connect the pool to the scheduler for profiling
-				MethodScheduler.SetPipelinePool(pool);
+			// Connect the pool to the scheduler for profiling
+			MethodScheduler.SetPipelinePool(pool);
 
-				pipelinePool = pool;
+			pipelinePool = pool;
 
 			// subscribe scheduler -> pool signal
 			var schedulerSubscription = MethodScheduler.Subscribe(pool.NotifyWorkAdded);
@@ -529,9 +529,9 @@ public sealed class Compiler
 
 			schedulerSubscription.Dispose();
 
-				pool.DisposeAsync().AsTask().GetAwaiter().GetResult();
+			pool.DisposeAsync().AsTask().GetAwaiter().GetResult();
 
-				pipelinePool = null;
+			pipelinePool = null;
 		}
 		else
 		{

@@ -80,6 +80,8 @@ internal sealed class PipelinePool : IAsyncDisposable
 
 	public void NotifyWorkAdded() => workSignal.Writer.TryWrite(true);
 
+	public void NotifyStop() => workSignal.Writer.TryWrite(true);
+
 	private async Task DispatcherLoop()
 	{
 		var ct = cts.Token;
