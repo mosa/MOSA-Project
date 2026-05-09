@@ -106,6 +106,13 @@ internal sealed class ProcessSupervisor
 				return 0;
 			}
 
+			if (after.Found && string.Equals(after.LastExitKind, "Failure", StringComparison.Ordinal))
+			{
+				OutputStatus($"abnormal-exit-code: {exitCode}");
+				OutputStatus("State indicates a terminal failure (non-retriable). Exiting supervisor.");
+				return exitCode;
+			}
+
 			var verifiedExitCode = !after.Found || after.LastExitCode == 0 || after.LastExitCode == exitCode;
 			if (verifiedExitCode)
 			{

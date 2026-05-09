@@ -6,6 +6,5 @@ internal enum OrderKind
 {
 	Unspecified = 0,
 	Original = 1,
-	CountAscending = 2,
-	Random = 3,
+	Random = 2,
 }

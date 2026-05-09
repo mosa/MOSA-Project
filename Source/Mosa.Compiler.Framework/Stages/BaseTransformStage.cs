@@ -45,6 +45,18 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	{
 		TransformCountStage = $"{Name}.Transforms";
 		OptimizationCountStage = $"{Name}.Optimizations";
+
+		foreach (var list in transforms)
+		{
+			if (list == null)
+				continue;
+
+			foreach (var transform in list)
+				Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, transform.Name);
+		}
+
+		foreach (var transform in blockTransforms)
+			Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, transform.Name);
 	}
 
 	protected override void Finish()
@@ -240,8 +252,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 			if (EnableTransformHooks)
 			{
-				Compiler.CompilerHooks.NotifyTransformObserved?.Invoke(Name, transform.Name, MethodCompiler.Method.FullName);
-
 				if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
 					continue;
 			}
@@ -276,8 +286,6 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		{
 			if (EnableTransformHooks)
 			{
-				Compiler.CompilerHooks.NotifyTransformObserved?.Invoke(Name, transform.Name, MethodCompiler.Method.FullName);
-
 				if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
 					continue;
 			}

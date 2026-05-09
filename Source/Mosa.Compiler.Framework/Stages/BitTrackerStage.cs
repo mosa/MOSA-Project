@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
+using System.Xml.Linq;
 using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages;
@@ -126,6 +127,8 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 	private void Register(BaseInstruction instruction, NodeVisitationDelegate method)
 	{
 		visitation[instruction.ID] = method;
+
+		Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, instruction.Name);
 	}
 
 	protected override void Run()
@@ -241,8 +244,6 @@ public sealed class BitTrackerStage : BaseMethodCompilerStage
 
 		if (method == null)
 			return;
-
-		Compiler.CompilerHooks.NotifyTransformObserved?.Invoke(Name, node.Instruction.Name, MethodCompiler.Method.FullName);
 
 		if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, node.Instruction.Name) == true)
 			return;

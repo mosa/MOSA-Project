@@ -229,30 +229,6 @@ public class BisectorTests
 		Assert.Equal(Bisector<string>.BisectorPhase.Reduction, status.Phase);
 	}
 
-	[Fact]
-	public void ObserveItemAddsNewCandidateDuringSingleItemChecks()
-	{
-		var session = new Bisector<string>(new[] { "A", "B", "C", "D" });
-
-		session.GetNextDisabledItems();
-		session.AcceptResult(false);
-
-		session.ObserveItem("Z");
-
-		var seenZ = false;
-		while (!session.IsComplete)
-		{
-			var disabledItems = session.GetNextDisabledItems();
-			if (!disabledItems.Contains("Z"))
-				seenZ = true;
-
-			session.AcceptResult(true);
-		}
-
-		Assert.True(seenZ);
-		Assert.Contains("Z", session.RemainingSuspectItems);
-	}
-
 	private static void RunUntilComplete(Bisector<string> session, Func<IReadOnlySet<string>, bool> passEvaluator)
 	{
 		while (!session.IsComplete)

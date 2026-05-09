@@ -10,9 +10,7 @@ internal sealed class BisectorState
 
 	public string UnitTestFilter { get; set; }
 
-	public List<string> ObservedTransforms { get; set; } = [];
-
-	public Dictionary<string, int> ObservedTransformCounts { get; set; } = new(StringComparer.Ordinal);
+	public List<string> Transforms { get; set; } = [];
 
 	public bool BaselineCompleted { get; set; }
 
