@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Compare64x64GreaterOrEqualThanMax : BaseTransform
 {
-	public Compare64x64GreaterOrEqualThanMax() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly Compare64x64GreaterOrEqualThanMax Instance = new();
+
+	private Compare64x64GreaterOrEqualThanMax() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 
@@ -36,7 +38,9 @@ public sealed class Compare64x64GreaterOrEqualThanMax : BaseTransform
 
 public sealed class Compare64x64GreaterOrEqualThanMax_v1 : BaseTransform
 {
-	public Compare64x64GreaterOrEqualThanMax_v1() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly Compare64x64GreaterOrEqualThanMax_v1 Instance = new();
+
+	private Compare64x64GreaterOrEqualThanMax_v1() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

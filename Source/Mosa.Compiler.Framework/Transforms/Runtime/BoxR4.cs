@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class BoxR4 : BaseRuntimeTransform
 {
-	public BoxR4() : base(IR.BoxR4, TransformType.Manual | TransformType.Transform)
+	public static readonly BoxR4 Instance = new();
+
+	private BoxR4() : base(IR.BoxR4, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

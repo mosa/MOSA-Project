@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Compare64x64RemUnsigned : BaseTransform
 {
-	public Compare64x64RemUnsigned() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Compare64x64RemUnsigned Instance = new();
+
+	private Compare64x64RemUnsigned() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -42,15 +44,20 @@ public sealed class Compare64x64RemUnsigned : BaseTransform
 
 		var t1 = context.Operand1.Definitions[0].Operand1;
 
+		var v1 = transform.VirtualRegisters.Allocate64();
+
 		var e1 = Operand.Constant64_1;
 
-		context.SetInstruction(IR.And64, result, t1, e1);
+		context.SetInstruction(IR.Not64, v1, t1);
+		context.AppendInstruction(IR.And64, result, v1, e1);
 	}
 }
 
 public sealed class Compare64x64RemUnsigned_v1 : BaseTransform
 {
-	public Compare64x64RemUnsigned_v1() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Compare64x64RemUnsigned_v1 Instance = new();
+
+	private Compare64x64RemUnsigned_v1() : base(IR.Compare64x64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -86,8 +93,11 @@ public sealed class Compare64x64RemUnsigned_v1 : BaseTransform
 
 		var t1 = context.Operand2.Definitions[0].Operand1;
 
+		var v1 = transform.VirtualRegisters.Allocate64();
+
 		var e1 = Operand.Constant64_1;
 
-		context.SetInstruction(IR.And64, result, t1, e1);
+		context.SetInstruction(IR.Not64, v1, t1);
+		context.AppendInstruction(IR.And64, result, v1, e1);
 	}
 }

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class MulCarryOut32ByOne : BaseTransform
 {
-	public MulCarryOut32ByOne() : base(IR.MulCarryOut32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly MulCarryOut32ByOne Instance = new();
+
+	private MulCarryOut32ByOne() : base(IR.MulCarryOut32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

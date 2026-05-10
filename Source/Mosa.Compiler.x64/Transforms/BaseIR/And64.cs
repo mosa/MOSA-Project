@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// </summary>
 public sealed class And64 : BaseIRTransform
 {
-	public And64() : base(IR.And64, TransformType.Manual | TransformType.Transform)
+	public static readonly And64 Instance = new();
+
+	private And64() : base(IR.And64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class Or64 : BaseIRTransform
 {
-	public Or64() : base(IR.Or64, TransformType.Manual | TransformType.Transform)
+	public static readonly Or64 Instance = new();
+
+	private Or64() : base(IR.Or64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

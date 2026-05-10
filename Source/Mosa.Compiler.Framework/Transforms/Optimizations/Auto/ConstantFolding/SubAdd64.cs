@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class SubAdd64 : BaseTransform
 {
-	public SubAdd64() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly SubAdd64 Instance = new();
+
+	private SubAdd64() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -49,7 +51,9 @@ public sealed class SubAdd64 : BaseTransform
 
 public sealed class SubAdd64_v1 : BaseTransform
 {
-	public SubAdd64_v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly SubAdd64_v1 Instance = new();
+
+	private SubAdd64_v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 

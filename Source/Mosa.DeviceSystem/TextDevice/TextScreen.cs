@@ -76,7 +76,7 @@ public class TextScreen
 	{
 		var length = 0;
 
-		for (;;)
+		for (; ; )
 		{
 			var key = keyboard.GetKeyPressed();
 			if (key == null)

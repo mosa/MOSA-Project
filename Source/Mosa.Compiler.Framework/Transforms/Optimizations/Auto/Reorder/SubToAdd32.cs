@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Reorder;
 
 public sealed class SubToAdd32 : BaseTransform
 {
-	public SubToAdd32() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public static readonly SubToAdd32 Instance = new();
+
+	private SubToAdd32() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

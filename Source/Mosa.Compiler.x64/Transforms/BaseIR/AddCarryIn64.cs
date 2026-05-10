@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// </summary>
 public sealed class AddCarryIn64 : BaseIRTransform
 {
-	public AddCarryIn64() : base(IR.AddCarryIn64, TransformType.Manual | TransformType.Transform)
+	public static readonly AddCarryIn64 Instance = new();
+
+	private AddCarryIn64() : base(IR.AddCarryIn64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

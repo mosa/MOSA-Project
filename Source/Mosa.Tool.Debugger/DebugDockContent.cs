@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.ComponentModel;
 using Mosa.Tool.Debugger.DebugData;
 using Mosa.Tool.Debugger.GDB;
 using WeifenLuo.WinFormsUI.Docking;
-using System.ComponentModel;
 
 namespace Mosa.Tool.Debugger;
 

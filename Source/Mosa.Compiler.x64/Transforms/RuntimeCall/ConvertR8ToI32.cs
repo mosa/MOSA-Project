@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.RuntimeCall;
 /// ConvertR8ToI32
 public sealed class ConvertR8ToI32 : BaseTransform
 {
-	public ConvertR8ToI32() : base(IR.ConvertR8ToI32, TransformType.Manual | TransformType.Transform, -100)
+	public static readonly ConvertR8ToI32 Instance = new();
+
+	private ConvertR8ToI32() : base(IR.ConvertR8ToI32, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
 

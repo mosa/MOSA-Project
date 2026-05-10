@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// </summary>
 public sealed class LoadParamSignExtend16x64Double : BaseTransform
 {
-	public LoadParamSignExtend16x64Double() : base(IR.SignExtend16x64, TransformType.Manual | TransformType.Optimization, 85)
+	public static readonly LoadParamSignExtend16x64Double Instance = new();
+
+	private LoadParamSignExtend16x64Double() : base(IR.SignExtend16x64, TransformType.Manual | TransformType.Optimization, 85)
 	{
 	}
 

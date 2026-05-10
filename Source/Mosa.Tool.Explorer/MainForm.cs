@@ -3,7 +3,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
-using Microsoft.Win32;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
@@ -11,11 +10,11 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Stages.Diagnostic;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Compiler.Platforms;
 using Mosa.Tool.Explorer.Common;
 using Mosa.Tool.Explorer.Common.CompilerStage;
 using Mosa.Tool.Explorer.Common.Stages;
 using Mosa.Utility.Configuration;
-
 using static Mosa.Utility.Configuration.MosaSettings;
 
 namespace Mosa.Tool.Explorer;
@@ -45,6 +44,7 @@ public partial class MainForm : Form
 	private readonly CompilerInformation CompilerInformation = new CompilerInformation();
 	private readonly BindingList<CounterEntry> MethodCounters = new BindingList<CounterEntry>();
 	private readonly MethodStore MethodStore = new MethodStore();
+	private readonly HashSet<string> DisabledTransformNames = new HashSet<string>(StringComparer.Ordinal);
 
 	private MosaSettings MosaSettings = new MosaSettings();
 
@@ -85,13 +85,14 @@ public partial class MainForm : Form
 		RegisterPlatforms();
 
 		CreateAppRegistryKey();
+		UpdateDisabledTransformNames();
 
 		Stopwatch.Restart();
 	}
 
 	protected void CreateAppRegistryKey()
 	{
-		var software = Registry.CurrentUser.OpenSubKey(WindowsRegistry.Software, RegistryKeyPermissionCheck.ReadWriteSubTree);
+		var software = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(WindowsRegistry.Software, Microsoft.Win32.RegistryKeyPermissionCheck.ReadWriteSubTree);
 		software.CreateSubKey(WindowsRegistry.MosaApp);
 	}
 
@@ -337,10 +338,7 @@ public partial class MainForm : Form
 
 	private static void RegisterPlatforms()
 	{
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
-		//PlatformRegistry.Add(new Compiler.ARM64.Architecture());
+		PlatformRegistrations.Register();
 	}
 
 	private void btnFirst_Click(object sender, EventArgs e)
@@ -478,6 +476,8 @@ public partial class MainForm : Form
 
 		Compiler.ScheduleAll();
 
+		UpdateDisabledTransformNames();
+
 		toolStrip1.Enabled = false;
 
 		ThreadPool.QueueUserWorkItem(state =>
@@ -518,9 +518,46 @@ public partial class MainForm : Form
 			NotifyMethodInstructionTrace = NotifyMethodInstructionTrace,
 			NotifyMethodTranformTrace = NotifyMethodTranformTrace,
 			GetMethodTraceLevel = GetMethodTraceLevel,
+			IsTransformDisabled = IsTransformDisabled,
 		};
 
 		return compilerHooks;
+	}
+
+	private bool IsTransformDisabled(string stageName, string transformName)
+	{
+		var filter = tbTransformStage.Text;
+
+		if (!string.IsNullOrEmpty(filter) && !string.Equals(stageName, filter, StringComparison.Ordinal))
+			return false;
+
+		return DisabledTransformNames.Contains(transformName);
+	}
+
+	private void UpdateDisabledTransformNames()
+	{
+		DisabledTransformNames.Clear();
+
+		foreach (var line in tbDisabledTransforms.Lines)
+		{
+			var text = line.Trim();
+
+			if (text.Length == 0)
+				continue;
+
+			if (text.StartsWith("#", StringComparison.Ordinal) || text.StartsWith("//", StringComparison.Ordinal))
+				continue;
+
+			if (text.Contains('|'))
+				text = text.Split('|')[1].Trim();
+
+			DisabledTransformNames.Add(text);
+		}
+	}
+
+	private void DisabledTransformsTextBox_TextChanged(object sender, EventArgs e)
+	{
+		UpdateDisabledTransformNames();
 	}
 
 	private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -738,14 +775,19 @@ public partial class MainForm : Form
 
 		CompilerInformation.Stopwatch.Reset();
 
+		UpdateDisabledTransformNames();
+
 		Compiler.CompileSingleMethod(method);
 	}
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
+		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+			return;
+
 		if (compilerEvent != CompilerEvent.Counter)
 		{
-			var status = $"{compilerEvent.ToText()}{(string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}")}";
+			var status = CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message);
 
 			lock (_statusLock)
 			{
@@ -1102,7 +1144,8 @@ public partial class MainForm : Form
 		cbEnableMultithreading.Checked = MosaSettings.Multithreading;
 		tbFilter.Text = MosaSettings.ExplorerFilter; ;
 		cbEnableCodeSizeReduction.Checked = MosaSettings.ReduceCodeSize;
-		cbEnableFullCheckMode.Checked = MosaSettings.FullCheckMode;
+		cbEnableCheckMode.Checked = MosaSettings.CheckMode;
+		cbEnableStatistics.Checked = MosaSettings.Statistics;
 
 		cbPlatform.SelectedIndex = MosaSettings.Platform.ToLowerInvariant() switch
 		{
@@ -1226,8 +1269,8 @@ public partial class MainForm : Form
 		MosaSettings.InlineMethods = cbEnableInline.Checked;
 		MosaSettings.InlineExplicit = cbInlineExplicit.Checked;
 		MosaSettings.ReduceCodeSize = cbEnableCodeSizeReduction.Checked;
-		MosaSettings.FullCheckMode = cbEnableFullCheckMode.Checked;
-
+		MosaSettings.CheckMode = cbEnableCheckMode.Checked;
+		MosaSettings.Statistics = cbEnableStatistics.Checked;
 		MosaSettings.TraceLevel = 10;
 		//MosaSettings.InlineMaximum = 12;
 		//MosaSettings.InlineAggressiveMaximum = 24;

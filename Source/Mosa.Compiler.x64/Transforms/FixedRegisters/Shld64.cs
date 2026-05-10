@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Shld64 : BaseTransform
 {
-	public Shld64() : base(X64.Shld64, TransformType.Manual | TransformType.Transform)
+	public static readonly Shld64 Instance = new();
+
+	private Shld64() : base(X64.Shld64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

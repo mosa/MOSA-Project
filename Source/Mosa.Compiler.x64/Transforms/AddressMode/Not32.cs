@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Not32 : BaseAddressModeTransform
 {
-	public Not32() : base(X64.Not32, TransformType.Manual | TransformType.Transform)
+	public static readonly Not32 Instance = new();
+
+	private Not32() : base(X64.Not32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class PhiR8Update : BasePhiTransform
 {
-	public PhiR8Update() : base(IR.PhiR8, TransformType.Manual | TransformType.Optimization)
+	public static readonly PhiR8Update Instance = new();
+
+	private PhiR8Update() : base(IR.PhiR8, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

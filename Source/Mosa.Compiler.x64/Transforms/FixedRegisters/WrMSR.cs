@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class WrMSR : BaseTransform
 {
-	public WrMSR() : base(X64.WrMSR, TransformType.Manual | TransformType.Transform)
+	public static readonly WrMSR Instance = new();
+
+	private WrMSR() : base(X64.WrMSR, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

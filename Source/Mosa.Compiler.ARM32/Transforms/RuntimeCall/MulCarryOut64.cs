@@ -10,7 +10,9 @@ namespace Mosa.Compiler.ARM32.Transforms.RuntimeCall;
 /// </summary>
 public sealed class MulCarryOut64 : BaseTransform
 {
-	public MulCarryOut64() : base(IR.MulCarryOut64, TransformType.Manual | TransformType.Transform, -100)
+	public static readonly MulCarryOut64 Instance = new();
+
+	private MulCarryOut64() : base(IR.MulCarryOut64, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
 

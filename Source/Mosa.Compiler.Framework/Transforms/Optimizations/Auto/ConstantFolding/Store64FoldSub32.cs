@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Store64FoldSub32 : BaseTransform
 {
-	public Store64FoldSub32() : base(IR.Store64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Store64FoldSub32 Instance = new();
+
+	private Store64FoldSub32() : base(IR.Store64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class SubCarryIn64Outside1 : BaseTransform
 {
-	public SubCarryIn64Outside1() : base(IR.SubCarryIn64, TransformType.Auto | TransformType.Optimization)
+	public static readonly SubCarryIn64Outside1 Instance = new();
+
+	private SubCarryIn64Outside1() : base(IR.SubCarryIn64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

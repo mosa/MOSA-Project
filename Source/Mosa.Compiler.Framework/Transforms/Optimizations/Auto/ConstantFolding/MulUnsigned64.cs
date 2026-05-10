@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class MulUnsigned64 : BaseTransform
 {
-	public MulUnsigned64() : base(IR.MulUnsigned64, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly MulUnsigned64 Instance = new();
+
+	private MulUnsigned64() : base(IR.MulUnsigned64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

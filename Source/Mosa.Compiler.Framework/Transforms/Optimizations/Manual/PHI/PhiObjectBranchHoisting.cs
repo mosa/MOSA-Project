@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class PhiObjectBranchHoisting : BasePhiTransform
 {
-	public PhiObjectBranchHoisting() : base(IR.PhiObject, TransformType.Manual | TransformType.Optimization)
+	public static readonly PhiObjectBranchHoisting Instance = new();
+
+	private PhiObjectBranchHoisting() : base(IR.PhiObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

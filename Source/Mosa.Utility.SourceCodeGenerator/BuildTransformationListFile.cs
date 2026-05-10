@@ -52,7 +52,7 @@ public class BuildTransformationListFile : BuildBaseTemplate
 				//var newname = name.Substring(pos + 1);
 
 				//Lines.AppendLine($"\t\tnew {newname}(),");
-				Lines.AppendLine($"\t\tnew {shortname}(),");
+				Lines.AppendLine($"\t\t{shortname}.Instance,");
 			}
 		}
 

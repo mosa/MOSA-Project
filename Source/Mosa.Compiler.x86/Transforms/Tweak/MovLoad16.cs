@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// </summary>
 public sealed class MovLoad16 : BaseTransform
 {
-	public MovLoad16() : base(X86.MovLoad16, TransformType.Manual | TransformType.Transform)
+	public static readonly MovLoad16 Instance = new();
+
+	private MovLoad16() : base(X86.MovLoad16, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

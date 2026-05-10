@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// </summary>
 public sealed class Movsx8To32 : BaseTransform
 {
-	public Movsx8To32() : base(X86.Movsx8To32, TransformType.Manual | TransformType.Transform)
+	public static readonly Movsx8To32 Instance = new();
+
+	private Movsx8To32() : base(X86.Movsx8To32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

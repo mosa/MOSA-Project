@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Phi64 : BaseLowerTo32Transform
 {
-	public Phi64() : base(IR.Phi64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Phi64 Instance = new();
+
+	private Phi64() : base(IR.Phi64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

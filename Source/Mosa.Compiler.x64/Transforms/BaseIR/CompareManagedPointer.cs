@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// </summary>
 public sealed class CompareManagedPointer : BaseIRTransform
 {
-	public CompareManagedPointer() : base(IR.CompareManagedPointer, TransformType.Manual | TransformType.Transform)
+	public static readonly CompareManagedPointer Instance = new();
+
+	private CompareManagedPointer() : base(IR.CompareManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

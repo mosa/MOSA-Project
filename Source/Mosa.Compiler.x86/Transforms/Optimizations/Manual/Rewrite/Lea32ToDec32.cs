@@ -6,7 +6,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Lea32ToDec32 : BaseTransform
 {
-	public Lea32ToDec32() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Lea32ToDec32 Instance = new();
+
+	private Lea32ToDec32() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// </summary>
 public sealed class DivR8 : BaseIRTransform
 {
-	public DivR8() : base(IR.DivR8, TransformType.Manual | TransformType.Transform)
+	public static readonly DivR8 Instance = new();
+
+	private DivR8() : base(IR.DivR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

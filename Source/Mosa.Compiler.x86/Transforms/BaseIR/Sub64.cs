@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// </summary>
 public sealed class Sub64 : BaseIRTransform
 {
-	public Sub64() : base(IR.Sub64, TransformType.Manual | TransformType.Transform)
+	public static readonly Sub64 Instance = new();
+
+	private Sub64() : base(IR.Sub64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

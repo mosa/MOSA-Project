@@ -9,7 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StrengthReduct
 /// </summary>
 public sealed class DivUnsignedMagicNumber32 : BaseTransform
 {
-	public DivUnsignedMagicNumber32() : base(IR.DivUnsigned32, TransformType.Manual | TransformType.Optimization, 100)
+	public static readonly DivUnsignedMagicNumber32 Instance = new();
+
+	private DivUnsignedMagicNumber32() : base(IR.DivUnsigned32, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
 

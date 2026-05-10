@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// </summary>
 public sealed class Nop : BaseTransform
 {
-	public Nop() : base(X64.Nop, TransformType.Manual | TransformType.Transform)
+	public static readonly Nop Instance = new();
+
+	private Nop() : base(X64.Nop, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

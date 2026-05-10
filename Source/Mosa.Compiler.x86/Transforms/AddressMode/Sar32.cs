@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// </summary>
 public sealed class Sar32 : BaseAddressModeTransform
 {
-	public Sar32() : base(X86.Sar32, TransformType.Manual | TransformType.Transform)
+	public static readonly Sar32 Instance = new();
+
+	private Sar32() : base(X86.Sar32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

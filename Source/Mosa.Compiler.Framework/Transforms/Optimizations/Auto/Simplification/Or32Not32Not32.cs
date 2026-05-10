@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Or32Not32Not32 : BaseTransform
 {
-	public Or32Not32Not32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Not32Not32 Instance = new();
+
+	private Or32Not32Not32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

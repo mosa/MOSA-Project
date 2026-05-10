@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Sar64 : BaseTransform
 {
-	public Sar64() : base(X64.Sar64, TransformType.Manual | TransformType.Transform)
+	public static readonly Sar64 Instance = new();
+
+	private Sar64() : base(X64.Sar64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

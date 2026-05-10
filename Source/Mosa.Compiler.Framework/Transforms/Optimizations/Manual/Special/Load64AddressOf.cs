@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 
 public sealed class Load64AddressOf : BaseTransform
 {
-	public Load64AddressOf() : base(IR.Load64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Load64AddressOf Instance = new();
+
+	private Load64AddressOf() : base(IR.Load64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

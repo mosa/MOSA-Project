@@ -166,18 +166,8 @@ public sealed class LiveRange
 		if (UseCount == 0 || at < FirstUse || at > LastUse)
 			return false;
 
-		for (var i = FirstUseIndex; i <= LastUseIndex; i++)
-		{
-			var use = Register.UsePositions[i];
-
-			if (at == use)
-				return true;
-
-			if (use > at)   // list is sorted, so fast out
-				return false;
-		}
-
-		return false;
+		var index = FindFirstGreaterThanOrEqual(Register.UsePositions, FirstUseIndex, LastUseIndex, at);
+		return index >= 0 && Register.UsePositions[index] == at;
 	}
 
 	public bool ContainsDefAt(SlotIndex at)
@@ -188,18 +178,8 @@ public sealed class LiveRange
 		if (DefCount == 0 || at < FirstDef || at > LastDef)
 			return false;
 
-		for (var i = FirstDefIndex; i <= LastDefIndex; i++)
-		{
-			var def = Register.DefPositions[i];
-
-			if (at == def)
-				return true;
-
-			if (def > at)   // list is sorted, so fast out
-				return false;
-		}
-
-		return false;
+		var index = FindFirstGreaterThanOrEqual(Register.DefPositions, FirstDefIndex, LastDefIndex, at);
+		return index >= 0 && Register.DefPositions[index] == at;
 	}
 
 	public SlotIndex GetNextUse(SlotIndex at)
@@ -207,15 +187,8 @@ public sealed class LiveRange
 		if (UseCount == 0 || at < Start || at > LastUse) // || at > End
 			return SlotIndex.Null;
 
-		for (var i = FirstUseIndex; i <= LastUseIndex; i++)
-		{
-			var use = Register.UsePositions[i];
-
-			if (use > at)
-				return use;
-		}
-
-		return SlotIndex.Null;
+		var index = FindFirstGreaterThan(Register.UsePositions, FirstUseIndex, LastUseIndex, at);
+		return index >= 0 ? Register.UsePositions[index] : SlotIndex.Null;
 	}
 
 	public SlotIndex GetNextDef(SlotIndex at)
@@ -223,15 +196,8 @@ public sealed class LiveRange
 		if (DefCount == 0 || at < Start || at > LastDef) // || at > End
 			return SlotIndex.Null;
 
-		for (var i = FirstDefIndex; i <= LastDefIndex; i++)
-		{
-			var def = Register.DefPositions[i];
-
-			if (def > at)
-				return def;
-		}
-
-		return SlotIndex.Null;
+		var index = FindFirstGreaterThan(Register.DefPositions, FirstDefIndex, LastDefIndex, at);
+		return index >= 0 ? Register.DefPositions[index] : SlotIndex.Null;
 	}
 
 	public SlotIndex GetPreviousUse(SlotIndex at)
@@ -239,15 +205,8 @@ public sealed class LiveRange
 		if (UseCount == 0 || at < Start || at < FirstUse) // || at > End
 			return SlotIndex.Null;
 
-		for (var i = LastUseIndex; i >= FirstUseIndex; i--)
-		{
-			var use = Register.UsePositions[i];
-
-			if (use < at)
-				return use;
-		}
-
-		return SlotIndex.Null;
+		var index = FindLastLessThan(Register.UsePositions, FirstUseIndex, LastUseIndex, at);
+		return index >= 0 ? Register.UsePositions[index] : SlotIndex.Null;
 	}
 
 	public SlotIndex GetPreviousDef(SlotIndex at)
@@ -255,15 +214,65 @@ public sealed class LiveRange
 		if (DefCount == 0 || at < Start || at < FirstDef)  // || at > End
 			return SlotIndex.Null;
 
-		for (var i = LastDefIndex; i >= FirstDefIndex; i--)
-		{
-			var def = Register.DefPositions[i];
+		var index = FindLastLessThan(Register.DefPositions, FirstDefIndex, LastDefIndex, at);
+		return index >= 0 ? Register.DefPositions[index] : SlotIndex.Null;
+	}
 
-			if (def < at)
-				return def;
+	private static int FindLastLessThan(List<SlotIndex> positions, int firstIndex, int lastIndex, SlotIndex at)
+	{
+		var low = firstIndex;
+		var high = lastIndex;
+
+		while (low <= high)
+		{
+			var mid = low + ((high - low) >> 1);
+			var value = positions[mid];
+
+			if (value < at)
+				low = mid + 1;
+			else
+				high = mid - 1;
 		}
 
-		return SlotIndex.Null;
+		return high >= firstIndex ? high : -1;
+	}
+
+	private static int FindFirstGreaterThanOrEqual(List<SlotIndex> positions, int firstIndex, int lastIndex, SlotIndex at)
+	{
+		var low = firstIndex;
+		var high = lastIndex;
+
+		while (low <= high)
+		{
+			var mid = low + ((high - low) >> 1);
+			var value = positions[mid];
+
+			if (value < at)
+				low = mid + 1;
+			else
+				high = mid - 1;
+		}
+
+		return low <= lastIndex ? low : -1;
+	}
+
+	private static int FindFirstGreaterThan(List<SlotIndex> positions, int firstIndex, int lastIndex, SlotIndex at)
+	{
+		var low = firstIndex;
+		var high = lastIndex;
+
+		while (low <= high)
+		{
+			var mid = low + ((high - low) >> 1);
+			var value = positions[mid];
+
+			if (value <= at)
+				low = mid + 1;
+			else
+				high = mid - 1;
+		}
+
+		return low <= lastIndex ? low : -1;
 	}
 
 	public bool CanSplitAt(SlotIndex at)

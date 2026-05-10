@@ -10,7 +10,9 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class ExceptionEnd : BaseExceptionTransform
 {
-	public ExceptionEnd() : base(IR.ExceptionEnd, TransformType.Manual | TransformType.Transform)
+	public static readonly ExceptionEnd Instance = new();
+
+	private ExceptionEnd() : base(IR.ExceptionEnd, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

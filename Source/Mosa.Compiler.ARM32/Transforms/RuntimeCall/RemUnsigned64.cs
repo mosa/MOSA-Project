@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.RuntimeCall;
 /// </summary>
 public sealed class RemUnsigned64 : BaseTransform
 {
-	public RemUnsigned64() : base(IR.RemUnsigned64, TransformType.Manual | TransformType.Transform)
+	public static readonly RemUnsigned64 Instance = new();
+
+	private RemUnsigned64() : base(IR.RemUnsigned64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

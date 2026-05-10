@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class AddCarryOut32CarryNotUsed : BaseTransform
 {
-	public AddCarryOut32CarryNotUsed() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization)
+	public static readonly AddCarryOut32CarryNotUsed Instance = new();
+
+	private AddCarryOut32CarryNotUsed() : base(IR.AddCarryOut32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

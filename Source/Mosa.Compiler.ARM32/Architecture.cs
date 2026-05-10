@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.ARM32.CompilerStages;
 using Mosa.Compiler.ARM32.Stages;

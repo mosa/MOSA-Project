@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Useless;
 
 public sealed class ZeroExtend8x32Double : BaseTransform
 {
-	public ZeroExtend8x32Double() : base(IR.ZeroExtend8x32, TransformType.Auto | TransformType.Optimization, 85)
+	public static readonly ZeroExtend8x32Double Instance = new();
+
+	private ZeroExtend8x32Double() : base(IR.ZeroExtend8x32, TransformType.Auto | TransformType.Optimization, 85)
 	{
 	}
 

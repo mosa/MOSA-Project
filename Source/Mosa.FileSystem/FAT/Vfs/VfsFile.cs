@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.IO;
 using Mosa.FileSystem.FAT.Vfs;

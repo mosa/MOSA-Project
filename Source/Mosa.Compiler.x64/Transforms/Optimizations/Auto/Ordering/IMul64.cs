@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class IMul64 : BaseTransform
 {
-	public IMul64() : base(X64.IMul64, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly IMul64 Instance = new();
+
+	private IMul64() : base(X64.IMul64, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

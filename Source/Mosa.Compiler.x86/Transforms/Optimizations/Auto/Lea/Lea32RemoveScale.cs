@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Lea;
 
 public sealed class Lea32RemoveScale : BaseTransform
 {
-	public Lea32RemoveScale() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Lea32RemoveScale Instance = new();
+
+	private Lea32RemoveScale() : base(X86.Lea32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

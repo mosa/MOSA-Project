@@ -159,6 +159,18 @@ public static class ComplexTests
 	}
 
 	[MosaUnitTest(Series = "U4")]
+	public static bool OptimizationTest22b(uint a)
+	{
+		return a % 2 == 1;
+	}
+
+	[MosaUnitTest(Series = "U4")]
+	public static bool OptimizationTest22c(uint a)
+	{
+		return a % 2 == 2;
+	}
+
+	[MosaUnitTest(Series = "U4")]
 	public static bool OptimizationTest23(uint a)
 	{
 		return a + 10 > a;

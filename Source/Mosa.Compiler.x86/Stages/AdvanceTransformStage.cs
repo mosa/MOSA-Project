@@ -15,6 +15,6 @@ public sealed class AdvanceTransformStage : Framework.Stages.BaseTransformStage
 	public AdvanceTransformStage()
 		: base()
 	{
-		AddTranform(new Deadcode());
+		AddTranform(Deadcode.Instance);
 	}
 }

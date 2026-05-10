@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleStore64 : BaseTransform
 {
-	public DoubleStore64() : base(IR.Store64, TransformType.Manual | TransformType.Optimization)
+	public static readonly DoubleStore64 Instance = new();
+
+	private DoubleStore64() : base(IR.Store64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

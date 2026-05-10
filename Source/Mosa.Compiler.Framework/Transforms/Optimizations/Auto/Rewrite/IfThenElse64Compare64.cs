@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 
 public sealed class IfThenElse64Compare64 : BaseTransform
 {
-	public IfThenElse64Compare64() : base(IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
+	public static readonly IfThenElse64Compare64 Instance = new();
+
+	private IfThenElse64Compare64() : base(IR.IfThenElse64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

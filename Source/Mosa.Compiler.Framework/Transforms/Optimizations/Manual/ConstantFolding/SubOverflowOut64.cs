@@ -9,7 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class SubOverflowOut64 : BaseTransform
 {
-	public SubOverflowOut64() : base(IR.SubOverflowOut64, TransformType.Manual | TransformType.Optimization, 100)
+	public static readonly SubOverflowOut64 Instance = new();
+
+	private SubOverflowOut64() : base(IR.SubOverflowOut64, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
 

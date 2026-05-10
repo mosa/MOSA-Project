@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Sub32ByZero : BaseTransform
 {
-	public Sub32ByZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub32ByZero Instance = new();
+
+	private Sub32ByZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

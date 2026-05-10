@@ -1,7 +1,7 @@
 mkdir %temp%\MOSA
 del /Q %temp%\MOSA\qemu-installer.exe
 
-curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20251224.exe --output %temp%\MOSA\qemu-installer.exe
+curl https://qemu.weilnetz.de/w64/qemu-w64-setup-20260416.exe --output %temp%\MOSA\qemu-installer.exe
 
 del /S /Q qemu
 7zip\7z.exe x -wqemu -oqemu -x!*.nsis -y %temp%\MOSA\qemu-installer.exe

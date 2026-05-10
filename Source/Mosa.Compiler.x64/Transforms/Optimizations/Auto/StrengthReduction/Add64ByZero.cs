@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Add64ByZero : BaseTransform
 {
-	public Add64ByZero() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add64ByZero Instance = new();
+
+	private Add64ByZero() : base(X64.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

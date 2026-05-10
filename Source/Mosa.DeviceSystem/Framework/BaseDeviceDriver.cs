@@ -28,7 +28,8 @@ public abstract class BaseDeviceDriver
 
 	public virtual void Start() => Device.Status = DeviceStatus.Error;
 
-	public virtual void Stop() { }
+	public virtual void Stop()
+	{ }
 
 	public virtual bool OnInterrupt() => false;
 }

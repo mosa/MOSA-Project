@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Compare32x32Combine32x32 : BaseTransform
 {
-	public Compare32x32Combine32x32() : base(IR.Compare32x32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Compare32x32Combine32x32 Instance = new();
+
+	private Compare32x32Combine32x32() : base(IR.Compare32x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

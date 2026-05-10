@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class RemR8 : BaseTransform
 {
-	public RemR8() : base(IR.RemR8, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly RemR8 Instance = new();
+
+	private RemR8() : base(IR.RemR8, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

@@ -25,6 +25,7 @@ public static class Name
 	public const string AppLocation_QemuEDK2ARM32 = "AppLocation.QemuEDK2ARM32";
 	public const string AppLocation_QemuEDK2ARM64 = "AppLocation.QemuEDK2ARM64";
 	public const string AppLocation_VirtualBox = "AppLocation.VirtualBox";
+	public const string AppLocation_UnitTestBisector = "AppLocation.UnitTestBisector";
 
 	public const string Compiler_BaseAddress = "Compiler.BaseAddress";
 	public const string Compiler_InitialStackAddress = "Compiler.InitialStackAddress";
@@ -47,7 +48,7 @@ public static class Name
 	public const string CompilerDebug_PreLinkHashFile = "CompilerDebug.PreLinkHashFile";
 	public const string CompilerDebug_Statistics = "CompilerDebug.Statistics";
 	public const string CompilerDebug_CounterFilter = "CompilerDebug.CounterFilter";
-	public const string Compiler_FullCheckMode = "Compiler.FullCheckMode";
+	public const string Compiler_CheckMode = "Compiler.CheckMode";
 	public const string Compiler_Diagnostic = "Compiler.Diagnostic";
 	public const string Debugger_BreakpointFile = "Debugger.BreakpointFile";
 	public const string Debugger_WatchFile = "Debugger.WatchFile";
@@ -128,6 +129,20 @@ public static class Name
 	public const string UnitTest_Connection_TimeOut = "UnitTest.Connection.TimeOut";
 	public const string UnitTest_Filter = "UnitTest.Filter";
 	public const string UnitTest_MaxErrors = "UnitTest.MaxErrors";
+	public const string UnitTest_Bisector_Stage = "UnitTest.Bisector.Stage";
+	public const string UnitTest_Bisector_Masking = "UnitTest.Bisector.Masking";
+	public const string UnitTest_Bisector_Pairwise = "UnitTest.Bisector.Pairwise";
+	public const string UnitTest_Bisector_DisabledTransformsFile = "UnitTest.Bisector.DisabledTransformsFile";
+	public const string UnitTest_Bisector_StateFile = "UnitTest.Bisector.StateFile";
+	public const string UnitTest_Bisector_Plan = "UnitTest.Bisector.Plan";
+	public const string UnitTest_Bisector_ResetState = "UnitTest.Bisector.ResetState";
+	public const string UnitTest_Bisector_Order = "UnitTest.Bisector.Order";
+	public const string UnitTest_Bisector_Iterations = "UnitTest.Bisector.Iterations";
+	public const string UnitTest_Bisector_RandomSeed = "UnitTest.Bisector.RandomSeed";
+	public const string UnitTest_Bisector_WorkerIteration = "UnitTest.Bisector.WorkerIteration";
+	public const string UnitTest_Bisector_Supervisor_WorkingDirectory = "UnitTest.Bisector.Supervisor.WorkingDirectory";
+	public const string UnitTest_Bisector_Supervisor_MaxRestarts = "UnitTest.Bisector.Supervisor.MaxRestarts";
+	public const string UnitTest_FailFast = "UnitTest.FailFast";
 
 	public const string Image_DiskBlocks = "Image.DiskBlocks";
 	public const string Image_VolumeLabel = "Image.VolumeLabel";

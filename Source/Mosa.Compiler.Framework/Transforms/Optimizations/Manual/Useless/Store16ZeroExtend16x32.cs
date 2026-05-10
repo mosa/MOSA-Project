@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// </summary>
 public sealed class Store16ZeroExtend16x32 : BaseTransform
 {
-	public Store16ZeroExtend16x32() : base(IR.Store16, TransformType.Manual | TransformType.Optimization, 85)
+	public static readonly Store16ZeroExtend16x32 Instance = new();
+
+	private Store16ZeroExtend16x32() : base(IR.Store16, TransformType.Manual | TransformType.Optimization, 85)
 	{
 	}
 

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class ShiftLeft32 : BaseTransform
 {
-	public ShiftLeft32() : base(IR.ShiftLeft32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly ShiftLeft32 Instance = new();
+
+	private ShiftLeft32() : base(IR.ShiftLeft32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

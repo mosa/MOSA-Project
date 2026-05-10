@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// </summary>
 public sealed class LoadParamZeroExtend8x32Double : BaseTransform
 {
-	public LoadParamZeroExtend8x32Double() : base(IR.ZeroExtend8x32, TransformType.Manual | TransformType.Optimization, 85)
+	public static readonly LoadParamZeroExtend8x32Double Instance = new();
+
+	private LoadParamZeroExtend8x32Double() : base(IR.ZeroExtend8x32, TransformType.Manual | TransformType.Optimization, 85)
 	{
 	}
 

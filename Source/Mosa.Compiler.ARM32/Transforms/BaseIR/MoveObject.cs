@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class MoveObject : BaseIRTransform
 {
-	public MoveObject() : base(IR.MoveObject, TransformType.Manual | TransformType.Transform)
+	public static readonly MoveObject Instance = new();
+
+	private MoveObject() : base(IR.MoveObject, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

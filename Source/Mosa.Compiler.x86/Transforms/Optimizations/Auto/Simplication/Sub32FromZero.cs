@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Simplication;
 
 public sealed class Sub32FromZero : BaseTransform
 {
-	public Sub32FromZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub32FromZero Instance = new();
+
+	private Sub32FromZero() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

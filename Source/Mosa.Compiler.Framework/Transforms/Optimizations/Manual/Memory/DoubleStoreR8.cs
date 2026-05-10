@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleStoreR8 : BaseTransform
 {
-	public DoubleStoreR8() : base(IR.StoreR8, TransformType.Manual | TransformType.Optimization)
+	public static readonly DoubleStoreR8 Instance = new();
+
+	private DoubleStoreR8() : base(IR.StoreR8, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

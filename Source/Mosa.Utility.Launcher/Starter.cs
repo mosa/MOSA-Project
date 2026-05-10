@@ -22,7 +22,7 @@ public class Starter : BaseLauncher
 	private readonly object lockObject = new object();
 
 	public Starter(MosaSettings mosaSettings, CompilerHooks compilerHooks)
-		: base(mosaSettings, compilerHooks) {}
+		: base(mosaSettings, compilerHooks) { }
 
 	public Starter(MosaSettings mosaSettings, CompilerHooks compilerHooks, MosaLinker linker)
 		: base(mosaSettings, compilerHooks) => Linker = linker;
@@ -244,33 +244,33 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.Platform.ToLowerInvariant())
 		{
 			case "x86":
-			{
-				qemuApp = MosaSettings.QemuX86App;
-				qemuUefi = MosaSettings.QemuEdk2X86;
-				sb.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
-				break;
-			}
+				{
+					qemuApp = MosaSettings.QemuX86App;
+					qemuUefi = MosaSettings.QemuEdk2X86;
+					sb.Append(" -cpu qemu32,+sse4.1,abm,bmi1,bmi2,popcnt");
+					break;
+				}
 			case "x64":
-			{
-				qemuApp = MosaSettings.QemuX64App;
-				qemuUefi = MosaSettings.QemuEdk2X64;
-				sb.Append(" -cpu qemu64,+sse4.1,abm,bmi1,bmi2,popcnt");
-				break;
-			}
+				{
+					qemuApp = MosaSettings.QemuX64App;
+					qemuUefi = MosaSettings.QemuEdk2X64;
+					sb.Append(" -cpu qemu64,+sse4.1,abm,bmi1,bmi2,popcnt");
+					break;
+				}
 			case "arm32":
-			{
-				qemuApp = MosaSettings.QemuARM32App;
-				qemuUefi = MosaSettings.QemuEdk2ARM32;
-				sb.Append(" -cpu arm1176");
-				break;
-			}
+				{
+					qemuApp = MosaSettings.QemuARM32App;
+					qemuUefi = MosaSettings.QemuEdk2ARM32;
+					sb.Append(" -cpu arm1176");
+					break;
+				}
 			case "arm64":
-			{
-				qemuApp = MosaSettings.QemuARM64App;
-				qemuUefi = MosaSettings.QemuEdk2ARM64;
-				sb.Append(" -cpu cortex-a7");
-				break;
-			}
+				{
+					qemuApp = MosaSettings.QemuARM64App;
+					qemuUefi = MosaSettings.QemuEdk2ARM64;
+					sb.Append(" -cpu cortex-a7");
+					break;
+				}
 			default: throw new CompilerException($"Unknown platform: {MosaSettings.Platform}");
 		}
 
@@ -295,35 +295,35 @@ public class Starter : BaseLauncher
 		switch (serial)
 		{
 			case "pipe":
-			{
-				sb.Append(" -serial pipe:\"");
-				sb.Append(MosaSettings.EmulatorSerialPipe);
-				sb.Append('"');
-				break;
-			}
+				{
+					sb.Append(" -serial pipe:\"");
+					sb.Append(MosaSettings.EmulatorSerialPipe);
+					sb.Append('"');
+					break;
+				}
 			case "tcpserver":
-			{
-				sb.Append(" -serial tcp:");
-				sb.Append(MosaSettings.EmulatorSerialHost);
-				sb.Append(':');
-				sb.Append(MosaSettings.EmulatorSerialPort);
-				sb.Append(",server,nowait");
-				break;
-			}
+				{
+					sb.Append(" -serial tcp:");
+					sb.Append(MosaSettings.EmulatorSerialHost);
+					sb.Append(':');
+					sb.Append(MosaSettings.EmulatorSerialPort);
+					sb.Append(",server,nowait");
+					break;
+				}
 			case "tcpclient":
-			{
-				sb.Append(" -serial tcp:");
-				sb.Append(MosaSettings.EmulatorSerialHost);
-				sb.Append(':');
-				sb.Append(MosaSettings.EmulatorSerialPort);
-				sb.Append(",client,nowait");
-				break;
-			}
+				{
+					sb.Append(" -serial tcp:");
+					sb.Append(MosaSettings.EmulatorSerialHost);
+					sb.Append(':');
+					sb.Append(MosaSettings.EmulatorSerialPort);
+					sb.Append(",client,nowait");
+					break;
+				}
 			default:
-			{
-				sb.Append(" -serial null");
-				break;
-			}
+				{
+					sb.Append(" -serial null");
+					break;
+				}
 		}
 
 		if (MosaSettings.EmulatorGDB)
@@ -335,37 +335,37 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.ImageFormat)
 		{
 			case "bin":
-			{
-				sb.Append(" -kernel \"");
-				sb.Append(MosaSettings.ImageFile);
-				sb.Append('"');
-				break;
-			}
+				{
+					sb.Append(" -kernel \"");
+					sb.Append(MosaSettings.ImageFile);
+					sb.Append('"');
+					break;
+				}
 			default:
-			{
-				sb.Append(" -drive format=raw,file=\"");
-				sb.Append(MosaSettings.ImageFile);
-				sb.Append('"');
-				break;
-			}
+				{
+					sb.Append(" -drive format=raw,file=\"");
+					sb.Append(MosaSettings.ImageFile);
+					sb.Append('"');
+					break;
+				}
 		}
 
 		switch (MosaSettings.ImageFirmware)
 		{
 			case "bios":
-			{
-				sb.Append(" -L \"");
-				sb.Append(MosaSettings.QemuBIOS);
-				sb.Append('"');
-				break;
-			}
+				{
+					sb.Append(" -L \"");
+					sb.Append(MosaSettings.QemuBIOS);
+					sb.Append('"');
+					break;
+				}
 			case "uefi":
-			{
-				sb.Append(" -drive if=pflash,format=raw,readonly=on,file=\"");
-				sb.Append(qemuUefi);
-				sb.Append('"');
-				break;
-			}
+				{
+					sb.Append(" -drive if=pflash,format=raw,readonly=on,file=\"");
+					sb.Append(qemuUefi);
+					sb.Append('"');
+					break;
+				}
 		}
 
 		return CreateApplicationProcess(qemuApp, sb.ToString());
@@ -415,28 +415,28 @@ public class Starter : BaseLauncher
 		switch (MosaSettings.EmulatorSerial)
 		{
 			case "pipe":
-			{
-				sb.Append("com1: enabled=1, mode=pipe-server, dev=\"\\\\.\\pipe\\");
-				sb.Append(MosaSettings.EmulatorSerialPipe);
-				sb.AppendLine("\"");
-				break;
-			}
+				{
+					sb.Append("com1: enabled=1, mode=pipe-server, dev=\"\\\\.\\pipe\\");
+					sb.Append(MosaSettings.EmulatorSerialPipe);
+					sb.AppendLine("\"");
+					break;
+				}
 			case "tcpserver":
-			{
-				sb.Append("com1: enabled=1, mode=socket-server, dev=");
-				sb.Append(MosaSettings.EmulatorSerialHost);
-				sb.Append(':');
-				sb.AppendLine(MosaSettings.EmulatorSerialPort.ToString());
-				break;
-			}
+				{
+					sb.Append("com1: enabled=1, mode=socket-server, dev=");
+					sb.Append(MosaSettings.EmulatorSerialHost);
+					sb.Append(':');
+					sb.AppendLine(MosaSettings.EmulatorSerialPort.ToString());
+					break;
+				}
 			case "tcpclient":
-			{
-				sb.Append("com1: enabled=1, mode=socket-client, dev=");
-				sb.Append(MosaSettings.EmulatorSerialHost);
-				sb.Append(':');
-				sb.AppendLine(MosaSettings.EmulatorSerialPort.ToString());
-				break;
-			}
+				{
+					sb.Append("com1: enabled=1, mode=socket-client, dev=");
+					sb.Append(MosaSettings.EmulatorSerialHost);
+					sb.Append(':');
+					sb.AppendLine(MosaSettings.EmulatorSerialPort.ToString());
+					break;
+				}
 		}
 
 		if (MosaSettings.EmulatorGDB)

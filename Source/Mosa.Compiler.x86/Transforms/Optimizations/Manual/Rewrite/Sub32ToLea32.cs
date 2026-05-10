@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 
@@ -11,7 +11,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Sub32ToLea32 : BaseTransform
 {
-	public Sub32ToLea32() : base(X86.Sub32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Sub32ToLea32 Instance = new();
+
+	private Sub32ToLea32() : base(X86.Sub32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

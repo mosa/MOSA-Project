@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class Flow : BaseExceptionTransform
 {
-	public Flow() : base(IR.Flow, TransformType.Manual | TransformType.Transform)
+	public static readonly Flow Instance = new();
+
+	private Flow() : base(IR.Flow, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

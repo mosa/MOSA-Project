@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class MulUnsigned64 : BaseLowerTo32Transform
 {
-	public MulUnsigned64() : base(IR.MulUnsigned64, TransformType.Manual | TransformType.Optimization)
+	public static readonly MulUnsigned64 Instance = new();
+
+	private MulUnsigned64() : base(IR.MulUnsigned64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

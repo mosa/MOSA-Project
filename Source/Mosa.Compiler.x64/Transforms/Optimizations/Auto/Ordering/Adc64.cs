@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Adc64 : BaseTransform
 {
-	public Adc64() : base(X64.Adc64, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly Adc64 Instance = new();
+
+	private Adc64() : base(X64.Adc64, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

@@ -12,6 +12,8 @@ namespace Mosa.Compiler.Framework.Stages;
 /// </summary>
 public class OptimizationStage : BaseTransformStage
 {
+	protected override bool AllowTransformHooks => true;
+
 	private readonly CodeMotionManager CodeMotion = new();
 	private readonly ExceptionHandlerOperandManager ExceptionHandlerOperands = new();
 

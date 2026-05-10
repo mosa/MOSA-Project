@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// </summary>
 public sealed class Movsd : BaseTransform
 {
-	public Movsd() : base(X86.Movsd, TransformType.Manual | TransformType.Optimization)
+	public static readonly Movsd Instance = new();
+
+	private Movsd() : base(X86.Movsd, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

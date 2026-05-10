@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class MulOverflowOut32ByOne : BaseTransform
 {
-	public MulOverflowOut32ByOne() : base(IR.MulOverflowOut32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly MulOverflowOut32ByOne Instance = new();
+
+	private MulOverflowOut32ByOne() : base(IR.MulOverflowOut32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

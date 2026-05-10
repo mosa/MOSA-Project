@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification;
 
 public sealed class IfThenElse64Same : BaseTransform
 {
-	public IfThenElse64Same() : base(IR.IfThenElse64, TransformType.Manual | TransformType.Optimization)
+	public static readonly IfThenElse64Same Instance = new();
+
+	private IfThenElse64Same() : base(IR.IfThenElse64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class RemUnsigned32 : BaseTransform
 {
-	public RemUnsigned32() : base(IR.RemUnsigned32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly RemUnsigned32 Instance = new();
+
+	private RemUnsigned32() : base(IR.RemUnsigned32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

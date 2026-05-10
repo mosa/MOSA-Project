@@ -35,6 +35,8 @@ public sealed class Compiler
 	private long[] ThreadCPUTicks;
 	private long[] ThreadWallTicks;
 
+	private PipelinePool pipelinePool;
+
 	#endregion Data Members
 
 	#region Properties
@@ -115,7 +117,7 @@ public sealed class Compiler
 
 	public bool Statistics { get; }
 
-	public bool FullCheckMode { get; set; }
+	public bool CheckMode { get; set; }
 
 	public uint ObjectHeaderSize { get; }
 
@@ -171,10 +173,12 @@ public sealed class Compiler
 			mosaSettings.InlineMethods || mosaSettings.InlineExplicit ? new InlineStage() : null,
 
 			mosaSettings.BasicOptimizations ? new OptimizationStage(false) : null,
+
+			mosaSettings.SSA ? new DeadBlockStage() : null,
 			mosaSettings.SSA ? new EdgeSplitStage() : null,
 			mosaSettings.SSA ? new EnterSSAStage() : null,
-			mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(false) : null,
 
+			mosaSettings.BasicOptimizations && mosaSettings.SSA ? new OptimizationStage(false) : null,
 			mosaSettings.ValueNumbering && mosaSettings.SSA ? new ValueNumberingStage() : null,
 			mosaSettings.LoopInvariantCodeMotion && mosaSettings.SSA ? new LoopInvariantCodeMotionStage() : null,
 			mosaSettings.SparseConditionalConstantPropagation && mosaSettings.SSA ? new SparseConditionalConstantPropagationStage() : null,
@@ -202,7 +206,6 @@ public sealed class Compiler
 			new CallStage(),
 			new CompoundStage(),
 			new PlatformIntrinsicStage(),
-
 			new PlatformEdgeSplitStage(),
 			new VirtualRegisterReindexStage(),
 			new GreedyRegisterAllocatorStage(),
@@ -217,14 +220,15 @@ public sealed class Compiler
 		pipeline.InsertBefore<CodeGenerationStage>(
 		[
 			new DeadBlockStage(),
-			new SafePointStage(),
 			new AdvancedBlockOrderingStage(),
-			new JumpOptimizationStage()
+			new JumpOptimizationStage(),
+			new SafePointStage(),
 		]);
 
 		pipeline.InsertAfterLast<CodeGenerationStage>(
 		[
 			new ProtectedRegionLayoutStage(),
+			new SafePointLayoutStage(),
 		]);
 	}
 
@@ -243,8 +247,8 @@ public sealed class Compiler
 		Architecture.UpdateSetting(MosaSettings);
 
 		TraceLevel = MosaSettings.TraceLevel;
-		Statistics = MosaSettings.EmitStatistics;
-		FullCheckMode = MosaSettings.FullCheckMode;
+		Statistics = MosaSettings.Statistics;
+		CheckMode = MosaSettings.CheckMode;
 
 		PostEvent(CompilerEvent.CompilerStart);
 
@@ -516,6 +520,8 @@ public sealed class Compiler
 			// Connect the pool to the scheduler for profiling
 			MethodScheduler.SetPipelinePool(pool);
 
+			pipelinePool = pool;
+
 			// subscribe scheduler -> pool signal
 			var schedulerSubscription = MethodScheduler.Subscribe(pool.NotifyWorkAdded);
 
@@ -525,6 +531,8 @@ public sealed class Compiler
 			schedulerSubscription.Dispose();
 
 			pool.DisposeAsync().AsTask().GetAwaiter().GetResult();
+
+			pipelinePool = null;
 		}
 		else
 		{
@@ -613,13 +621,14 @@ public sealed class Compiler
 		PostTraceLog(exceptionLog);
 
 		HasError = true;
-		//Stop();
+		Stop();
 	}
 
 	public void Stop()
 	{
 		IsStopped = true;
 		HasError = true;
+		pipelinePool?.NotifyStop();
 		PostEvent(CompilerEvent.Stopped);
 	}
 
@@ -769,4 +778,24 @@ public sealed class Compiler
 	}
 
 	#endregion Helper Methods
+
+	/// <summary>
+	/// Clears compiler resources to free memory, particularly large pipeline arrays.
+	/// </summary>
+	public void ClearResources()
+	{
+		// Clear method stage pipelines to allow GC to reclaim memory
+		for (int i = 0; i < MethodStagePipelines.Length; i++)
+		{
+			if (MethodStagePipelines[i] != null)
+			{
+				MethodStagePipelines[i].Clear();
+				MethodStagePipelines[i] = null;
+			}
+		}
+
+		// Clear thread timing arrays
+		ThreadCPUTicks = null;
+		ThreadWallTicks = null;
+	}
 }

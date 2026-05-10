@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Not32 : BaseTransform
 {
-	public Not32() : base(IR.Not32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly Not32 Instance = new();
+
+	private Not32() : base(IR.Not32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

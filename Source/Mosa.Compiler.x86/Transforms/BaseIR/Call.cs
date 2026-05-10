@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// </summary>
 public sealed class Call : BaseIRTransform
 {
-	public Call() : base(IR.Call, TransformType.Manual | TransformType.Transform)
+	public static readonly Call Instance = new();
+
+	private Call() : base(IR.Call, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

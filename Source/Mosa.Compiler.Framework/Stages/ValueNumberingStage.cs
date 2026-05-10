@@ -20,7 +20,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 	private Dictionary<Operand, Operand> MapToValueNumber;
 	private BlockBitSet Processed;
 
-	private TraceLog log;
+	private TraceLog Trace;
 
 	private ParameterReadOnlyAnalysis ParameterAnalysis;
 
@@ -65,7 +65,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 		Transform.TraceInstructions();
 
-		log = CreateTraceLog("Log", 5);
+		Trace = CreateTraceLog("Log", 5);
 
 		MapToValueNumber = new Dictionary<Operand, Operand>(MethodCompiler.VirtualRegisters.Count);
 		Expressions = new Dictionary<int, List<Expression>>();
@@ -90,7 +90,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 		ReversePostOrder = null;
 		ParameterAnalysis = null;
 
-		log = null;
+		Trace = null;
 	}
 
 	private void DetermineReadOnlyParameters()
@@ -154,7 +154,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private void ValueNumber(BasicBlock block, out List<BasicBlock> nextblocks, out List<Expression> newExpressions)
 	{
-		log?.Log($"Processing Block: {block}");
+		Trace?.Log($"Processing Block: {block}");
 
 		//Debug.Assert(!Processed.Get(block.Sequence));
 
@@ -234,7 +234,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			{
 				var w = GetValueNumber(match.ValueNumber);
 
-				log?.Log($"Found Expression Match: {node}");
+				Trace?.Log($"Found Expression Match: {node}");
 
 				SetValueNumber(node.Result, w);
 
@@ -251,7 +251,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 				continue;
 			}
 
-			log?.Log($"No Expression Found: {node}");
+			Trace?.Log($"No Expression Found: {node}");
 
 			var newExpression = new Expression
 			{
@@ -492,7 +492,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 	private void SetValueNumber(Operand operand, Operand valueNumber)
 	{
-		log?.Log($"Set: {operand} => {valueNumber}");
+		Trace?.Log($"Set: {operand} => {valueNumber}");
 
 		MapToValueNumber[operand] = valueNumber;
 	}
@@ -548,7 +548,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 		list.Add(expression);
 
-		log?.Log($"Added Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}");
+		Trace?.Log($"Added Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}");
 	}
 
 	private void RemoveExpressionFromHashTable(Expression expression)
@@ -557,7 +557,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 
 		list.Remove(expression);
 
-		log?.Log($"Removed Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
+		Trace?.Log($"Removed Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
 	}
 
 	private void UpdateNodeWithValueNumbers(Node node)
@@ -582,7 +582,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 						node.SetOperand(i, valueNumber);
 						Transform.TraceAfter(node);
 
-						log?.Log($"UPDATED: {node}");
+						Trace?.Log($"UPDATED: {node}");
 					}
 				}
 				else
@@ -668,7 +668,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			var w = GetValueNumber(node.Operand1);
 			SetValueNumber(node.Result, w);
 
-			log?.Log($"Removed Unless PHI: {node}");
+			Trace?.Log($"Removed Unless PHI: {node}");
 
 			Transform.TraceBefore(node, "UselessPhiElimination");
 			node.SetNop();
@@ -686,7 +686,7 @@ public sealed class ValueNumberingStage : BaseMethodCompilerStage
 			var w = GetValueNumber(redundant);
 			SetValueNumber(node.Result, w);
 
-			log?.Log($"Removed Redundant PHI: {node}");
+			Trace?.Log($"Removed Redundant PHI: {node}");
 
 			Transform.TraceBefore(node, "RedundantPhiElimination");
 			node.SetNop();

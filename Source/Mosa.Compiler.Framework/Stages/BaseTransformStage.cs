@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Reflection.Metadata.Ecma335;
-
 namespace Mosa.Compiler.Framework.Stages;
 
 /// <summary>
@@ -19,12 +17,13 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	private readonly List<BaseBlockTransform> blockTransforms = new();
 
 	protected TraceLog Trace;
-
 	protected TraceLog SpecialTrace;
 
 	protected bool EnableTransformOptimizations;
 	protected bool EnableBlockOptimizations;
 	protected bool AreCPURegistersAllocated;
+
+	protected virtual bool AllowTransformHooks => false;
 
 	protected int MaxPasses;
 
@@ -46,6 +45,20 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	{
 		TransformCountStage = $"{Name}.Transforms";
 		OptimizationCountStage = $"{Name}.Optimizations";
+
+		foreach (var list in transforms)
+		{
+			if (list == null)
+				continue;
+
+			if (AllowTransformHooks)
+				foreach (var transform in list)
+					Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, transform.Name);
+		}
+
+		if (AllowTransformHooks)
+			foreach (var transform in blockTransforms)
+				Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, transform.Name);
 	}
 
 	protected override void Finish()
@@ -57,12 +70,11 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		UpdateCounter(TransformCountStage, TransformCount);
 		UpdateCounter(OptimizationCountStage, OptimizationCount);
 
-		MethodCompiler.Compiler.PostTraceLog(SpecialTrace);
-
 		TransformCount = 0;
 		OptimizationCount = 0;
 
 		Trace = null;
+		SpecialTrace = null;
 	}
 
 	protected override void Run()
@@ -73,7 +85,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		AreCPURegistersAllocated = MethodCompiler.AreCPURegistersAllocated;
 
-		SpecialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+		SpecialTrace = CreateTraceLog(TraceType.GlobalDebug, "Special Optimizations", 7);
 
 		Transform.SetLogs(Trace, SpecialTrace);
 
@@ -240,6 +252,12 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		{
 			var transform = instructionTransforms[i];
 
+			if (AllowTransformHooks)
+			{
+				if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
+					continue;
+			}
+
 			var updated = Transform.ApplyTransform(context, transform);
 
 			if (updated)
@@ -252,7 +270,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 				if (MethodCompiler.Statistics)
 					UpdateCounter(transform.Name, 1);
 
-				if (MosaSettings.FullCheckMode)
+				if (MosaSettings.CheckMode)
 					FullCheck(false);
 
 				return true;
@@ -268,6 +286,12 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		foreach (var transform in blockTransforms)
 		{
+			if (AllowTransformHooks)
+			{
+				if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
+					continue;
+			}
+
 			var count = transform.Process(Transform);
 
 			var updated = count != 0;
@@ -275,7 +299,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 			if (updated)
 			{
-				if (MosaSettings.FullCheckMode)
+				if (MosaSettings.CheckMode)
 					FullCheck(false);
 
 				if (MethodCompiler.Statistics)

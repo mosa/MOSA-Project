@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class LoadSignExtend8x32Store8 : BaseTransform
 {
-	public LoadSignExtend8x32Store8() : base(IR.LoadSignExtend8x32, TransformType.Manual | TransformType.Optimization)
+	public static readonly LoadSignExtend8x32Store8 Instance = new();
+
+	private LoadSignExtend8x32Store8() : base(IR.LoadSignExtend8x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

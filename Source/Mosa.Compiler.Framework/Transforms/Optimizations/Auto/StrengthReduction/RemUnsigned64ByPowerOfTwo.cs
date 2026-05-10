@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class RemUnsigned64ByPowerOfTwo : BaseTransform
 {
-	public RemUnsigned64ByPowerOfTwo() : base(IR.RemUnsigned64, TransformType.Auto | TransformType.Optimization)
+	public static readonly RemUnsigned64ByPowerOfTwo Instance = new();
+
+	private RemUnsigned64ByPowerOfTwo() : base(IR.RemUnsigned64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Useless;
 /// </summary>
 public sealed class ZeroExtend8x32Compare32x32 : BaseTransform
 {
-	public ZeroExtend8x32Compare32x32() : base(IR.ZeroExtend8x32, TransformType.Manual | TransformType.Optimization, 85)
+	public static readonly ZeroExtend8x32Compare32x32 Instance = new();
+
+	private ZeroExtend8x32Compare32x32() : base(IR.ZeroExtend8x32, TransformType.Manual | TransformType.Optimization, 85)
 	{
 	}
 

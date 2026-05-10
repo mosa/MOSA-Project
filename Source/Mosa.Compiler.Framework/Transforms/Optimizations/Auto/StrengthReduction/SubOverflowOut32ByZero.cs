@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class SubOverflowOut32ByZero : BaseTransform
 {
-	public SubOverflowOut32ByZero() : base(IR.SubOverflowOut32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly SubOverflowOut32ByZero Instance = new();
+
+	private SubOverflowOut32ByZero() : base(IR.SubOverflowOut32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

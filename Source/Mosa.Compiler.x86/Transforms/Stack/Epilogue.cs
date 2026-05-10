@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.Stack;
 /// </summary>
 public sealed class Epilogue : BaseTransform
 {
-	public Epilogue() : base(IR.Epilogue, TransformType.Manual | TransformType.Transform)
+	public static readonly Epilogue Instance = new();
+
+	private Epilogue() : base(IR.Epilogue, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

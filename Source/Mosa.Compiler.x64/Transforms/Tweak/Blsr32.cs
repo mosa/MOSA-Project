@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// </summary>
 public sealed class Blsr32 : BaseTransform
 {
-	public Blsr32() : base(X64.Blsr32, TransformType.Manual | TransformType.Transform)
+	public static readonly Blsr32 Instance = new();
+
+	private Blsr32() : base(X64.Blsr32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

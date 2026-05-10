@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// </summary>
 public sealed class DivSigned32 : BaseIRTransform
 {
-	public DivSigned32() : base(IR.DivSigned32, TransformType.Manual | TransformType.Transform)
+	public static readonly DivSigned32 Instance = new();
+
+	private DivSigned32() : base(IR.DivSigned32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

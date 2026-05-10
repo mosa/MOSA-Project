@@ -4,7 +4,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification
 
 public sealed class Compare64x32SameLow : BaseTransform
 {
-	public Compare64x32SameLow() : base(IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Compare64x32SameLow Instance = new();
+
+	private Compare64x32SameLow() : base(IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

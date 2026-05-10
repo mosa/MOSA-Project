@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Adc32 : BaseAddressModeTransform
 {
-	public Adc32() : base(X64.Adc32, TransformType.Manual | TransformType.Transform)
+	public static readonly Adc32 Instance = new();
+
+	private Adc32() : base(X64.Adc32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

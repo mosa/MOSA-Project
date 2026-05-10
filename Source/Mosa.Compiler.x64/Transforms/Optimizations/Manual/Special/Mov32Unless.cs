@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 
@@ -6,7 +6,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Special;
 
 public sealed class Mov32Unless : BaseTransform
 {
-	public Mov32Unless() : base(X64.Mov32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Mov32Unless Instance = new();
+
+	private Mov32Unless() : base(X64.Mov32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

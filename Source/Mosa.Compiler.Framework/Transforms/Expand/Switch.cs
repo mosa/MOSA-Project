@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Expand;
 
 public sealed class Switch : BaseTransform
 {
-	public Switch() : base(IR.Switch, TransformType.Manual | TransformType.Transform)
+	public static readonly Switch Instance = new();
+
+	private Switch() : base(IR.Switch, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

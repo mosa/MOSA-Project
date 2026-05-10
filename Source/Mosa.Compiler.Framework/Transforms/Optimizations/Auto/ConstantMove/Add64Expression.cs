@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Add64Expression : BaseTransform
 {
-	public Add64Expression() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add64Expression Instance = new();
+
+	private Add64Expression() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -50,7 +52,9 @@ public sealed class Add64Expression : BaseTransform
 
 public sealed class Add64Expression_v1 : BaseTransform
 {
-	public Add64Expression_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add64Expression_v1 Instance = new();
+
+	private Add64Expression_v1() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -94,7 +98,9 @@ public sealed class Add64Expression_v1 : BaseTransform
 
 public sealed class Add64Expression_v2 : BaseTransform
 {
-	public Add64Expression_v2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add64Expression_v2 Instance = new();
+
+	private Add64Expression_v2() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -138,7 +144,9 @@ public sealed class Add64Expression_v2 : BaseTransform
 
 public sealed class Add64Expression_v3 : BaseTransform
 {
-	public Add64Expression_v3() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add64Expression_v3 Instance = new();
+
+	private Add64Expression_v3() : base(IR.Add64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// </summary>
 public sealed class StoreManagedPointer : BaseIRTransform
 {
-	public StoreManagedPointer() : base(IR.StoreManagedPointer, TransformType.Manual | TransformType.Transform)
+	public static readonly StoreManagedPointer Instance = new();
+
+	private StoreManagedPointer() : base(IR.StoreManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

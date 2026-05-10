@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class SubCarryIn32 : BaseTransform
 {
-	public SubCarryIn32() : base(IR.SubCarryIn32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly SubCarryIn32 Instance = new();
+
+	private SubCarryIn32() : base(IR.SubCarryIn32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

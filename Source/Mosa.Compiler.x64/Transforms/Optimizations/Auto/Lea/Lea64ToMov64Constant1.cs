@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Lea;
 
 public sealed class Lea64ToMov64Constant1 : BaseTransform
 {
-	public Lea64ToMov64Constant1() : base(X64.Lea64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Lea64ToMov64Constant1 Instance = new();
+
+	private Lea64ToMov64Constant1() : base(X64.Lea64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

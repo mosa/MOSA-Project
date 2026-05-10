@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class And32Same : BaseTransform
 {
-	public And32Same() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
+	public static readonly And32Same Instance = new();
+
+	private And32Same() : base(IR.And32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

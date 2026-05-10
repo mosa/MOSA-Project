@@ -1,11 +1,13 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 // NOT WORKING!!!
 public sealed class Compare64x32UnsignedGreater : BaseLowerTo32Transform
 {
-	public Compare64x32UnsignedGreater() : base(IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Compare64x32UnsignedGreater Instance = new();
+
+	private Compare64x32UnsignedGreater() : base(IR.Compare64x32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

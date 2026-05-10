@@ -2,4 +2,5 @@
 
 namespace Mosa.DeviceSystem.Framework;
 
-public abstract class BaseDeviceConfiguration { }
+public abstract class BaseDeviceConfiguration
+{ }

@@ -9,7 +9,7 @@ public static class StaticLoadTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new Load32(),
-		new Load64(),
+		Load32.Instance,
+		Load64.Instance,
 	};
 }

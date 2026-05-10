@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class And32 : BaseTransform
 {
-	public And32() : base(IR.And32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly And32 Instance = new();
+
+	private And32() : base(IR.And32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

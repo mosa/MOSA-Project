@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class MulHu32ByZero : BaseTransform
 {
-	public MulHu32ByZero() : base(IR.MulHu32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly MulHu32ByZero Instance = new();
+
+	private MulHu32ByZero() : base(IR.MulHu32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 
@@ -30,7 +32,9 @@ public sealed class MulHu32ByZero : BaseTransform
 
 public sealed class MulHu32ByZero_v1 : BaseTransform
 {
-	public MulHu32ByZero_v1() : base(IR.MulHu32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly MulHu32ByZero_v1 Instance = new();
+
+	private MulHu32ByZero_v1() : base(IR.MulHu32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

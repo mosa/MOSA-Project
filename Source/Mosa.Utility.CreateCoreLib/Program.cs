@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Diagnostics;
 using CommandLine;
 using ICSharpCode.Decompiler.CSharp.ProjectDecompiler;
 using ICSharpCode.Decompiler.Metadata;
@@ -14,8 +16,8 @@ var copyFiles = options.CopyFiles;
 
 if (string.IsNullOrEmpty(outputDirectory))
 {
-    Console.WriteLine("Invalid output directory. Usage: Mosa.Utility.CreateCoreLib --output/-o <directory>");
-    return;
+	Console.WriteLine("Invalid output directory. Usage: Mosa.Utility.CreateCoreLib --output/-o <directory>");
+	return;
 }
 
 Directory.CreateDirectory(outputDirectory);
@@ -33,58 +35,58 @@ var syntaxTrees = new List<SyntaxTree>();
 foreach (var folder in Directory.EnumerateDirectories(Path.Combine("runtime", "src", "libraries")))
 {
 	// We don't need those namespaces so we exclude them.
-    if (folder.Contains("Microsoft.Bcl.") || folder.Contains("Microsoft.Extensions.")) continue;
+	if (folder.Contains("Microsoft.Bcl.") || folder.Contains("Microsoft.Extensions.")) continue;
 
-    var refDirectory = Path.Combine(folder, "ref");
-    if (!Directory.Exists(refDirectory))
+	var refDirectory = Path.Combine(folder, "ref");
+	if (!Directory.Exists(refDirectory))
 		continue;
 
-    foreach (var file in Directory.GetFiles(refDirectory, "*.cs"))
-    {
+	foreach (var file in Directory.GetFiles(refDirectory, "*.cs"))
+	{
 		// All of these files contain "type forwards", which basically forward certain types to other assemblies.
 		// Since we have a monolithic assembly, we can safely ignore those (though we'll still have to patch a few).
 		// They also cause compilation errors because they're not designed to be compiled, so removing them is a must.
-        if (file.EndsWith(".Forwards.cs") || file.EndsWith(".netframework.cs") || file.EndsWith(".TypeForwards.cs")
-            || file.Contains(".Typeforwards."))
+		if (file.EndsWith(".Forwards.cs") || file.EndsWith(".netframework.cs") || file.EndsWith(".TypeForwards.cs")
+			|| file.Contains(".Typeforwards."))
 			continue;
 
-        var fileName = Path.GetFileName(file);
-        string? text = null;
+		var fileName = Path.GetFileName(file);
+		string? text = null;
 
-        var patch = Patcher.FirstPatches.FirstOrDefault(x => file.EndsWith(x.File));
-        if (patch != default)
-        {
-            Console.WriteLine($"Patching {fileName}...");
-            text = Patcher.Patch(patch);
-        }
+		var patch = Patcher.FirstPatches.FirstOrDefault(x => file.EndsWith(x.File));
+		if (patch != default)
+		{
+			Console.WriteLine($"Patching {fileName}...");
+			text = Patcher.Patch(patch);
+		}
 
-        if (copyFiles)
-        {
-            var outputPath = Path.Combine(outputDirectory, fileName);
+		if (copyFiles)
+		{
+			var outputPath = Path.Combine(outputDirectory, fileName);
 
-            if (text != null)
-                File.WriteAllText(outputPath, text);
-            else
-                File.Copy(file, outputPath, true);
+			if (text != null)
+				File.WriteAllText(outputPath, text);
+			else
+				File.Copy(file, outputPath, true);
 
-            continue;
-        }
+			continue;
+		}
 
-        text ??= File.ReadAllText(file);
-        syntaxTrees.Add(CSharpSyntaxTree.ParseText(text, new CSharpParseOptions(preprocessorSymbols: ["NET", "NET8_0_OR_GREATER"])));
-    }
+		text ??= File.ReadAllText(file);
+		syntaxTrees.Add(CSharpSyntaxTree.ParseText(text, new CSharpParseOptions(preprocessorSymbols: ["NET", "NET8_0_OR_GREATER"])));
+	}
 }
 
 if (copyFiles) return;
 
 var compilation = CSharpCompilation.Create(
-    "System.Runtime",
-    syntaxTrees, null,
-    new CSharpCompilationOptions(
-        OutputKind.DynamicallyLinkedLibrary,
-        allowUnsafe: true,
-        specificDiagnosticOptions: [new KeyValuePair<string, ReportDiagnostic>("SYSLIB5005", ReportDiagnostic.Suppress)]
-    )
+	"System.Runtime",
+	syntaxTrees, null,
+	new CSharpCompilationOptions(
+		OutputKind.DynamicallyLinkedLibrary,
+		allowUnsafe: true,
+		specificDiagnosticOptions: [new KeyValuePair<string, ReportDiagnostic>("SYSLIB5005", ReportDiagnostic.Suppress)]
+	)
 );
 var outputFile = compilation.AssemblyName + ".dll";
 
@@ -92,17 +94,17 @@ Console.WriteLine("Compiling source files...");
 
 using (var stream = File.OpenWrite("System.Runtime.dll"))
 {
-    var result = compilation.Emit(stream);
-    if (!result.Success)
-    {
-        var failures = result.Diagnostics
-            .Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
+	var result = compilation.Emit(stream);
+	if (!result.Success)
+	{
+		var failures = result.Diagnostics
+			.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
 
-        foreach (var diagnostic in failures)
+		foreach (var diagnostic in failures)
 			Console.WriteLine($"{diagnostic.Id}: {diagnostic.GetMessage()}");
 
-        return;
-    }
+		return;
+	}
 }
 
 Console.WriteLine("Decompiling assembly...");
@@ -123,9 +125,9 @@ Directory.Delete(Path.Combine(outputDirectory, "Properties"), true);
 
 foreach (var patch in Patcher.SecondPatches)
 {
-    var file = Path.Combine(outputDirectory, patch.File);
-    Console.WriteLine($"Patching {patch.File}...");
+	var file = Path.Combine(outputDirectory, patch.File);
+	Console.WriteLine($"Patching {patch.File}...");
 
-    var code = Patcher.Patch(patch, outputDirectory);
-    File.WriteAllText(file, code);
+	var code = Patcher.Patch(patch, outputDirectory);
+	File.WriteAllText(file, code);
 }

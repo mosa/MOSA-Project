@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class CallDynamic : BasePlugTransform
 {
-	public CallDynamic() : base(IR.CallDynamic, TransformType.Manual | TransformType.Transform)
+	public static readonly CallDynamic Instance = new();
+
+	private CallDynamic() : base(IR.CallDynamic, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

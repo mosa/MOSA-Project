@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Sub64 : BaseAddressModeTransform
 {
-	public Sub64() : base(X64.Sub64, TransformType.Manual | TransformType.Transform)
+	public static readonly Sub64 Instance = new();
+
+	private Sub64() : base(X64.Sub64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class AddR4x2 : BaseTransform
 {
-	public AddR4x2() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly AddR4x2 Instance = new();
+
+	private AddR4x2() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -49,7 +51,9 @@ public sealed class AddR4x2 : BaseTransform
 
 public sealed class AddR4x2_v1 : BaseTransform
 {
-	public AddR4x2_v1() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly AddR4x2_v1 Instance = new();
+
+	private AddR4x2_v1() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -92,7 +96,9 @@ public sealed class AddR4x2_v1 : BaseTransform
 
 public sealed class AddR4x2_v2 : BaseTransform
 {
-	public AddR4x2_v2() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly AddR4x2_v2 Instance = new();
+
+	private AddR4x2_v2() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -135,7 +141,9 @@ public sealed class AddR4x2_v2 : BaseTransform
 
 public sealed class AddR4x2_v3 : BaseTransform
 {
-	public AddR4x2_v3() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly AddR4x2_v3 Instance = new();
+
+	private AddR4x2_v3() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 

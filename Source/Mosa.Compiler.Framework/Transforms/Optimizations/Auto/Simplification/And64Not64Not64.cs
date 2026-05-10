@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class And64Not64Not64 : BaseTransform
 {
-	public And64Not64Not64() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Not64Not64 Instance = new();
+
+	private And64Not64Not64() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

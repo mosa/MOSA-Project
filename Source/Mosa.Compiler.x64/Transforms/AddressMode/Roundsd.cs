@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Roundsd : BaseAddressModeTransform
 {
-	public Roundsd() : base(X64.Roundsd, TransformType.Manual | TransformType.Transform)
+	public static readonly Roundsd Instance = new();
+
+	private Roundsd() : base(X64.Roundsd, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

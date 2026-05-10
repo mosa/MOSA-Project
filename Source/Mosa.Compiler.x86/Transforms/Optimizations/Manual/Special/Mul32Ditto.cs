@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 
@@ -6,7 +6,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Special;
 
 public sealed class Mul32Ditto : BaseTransform
 {
-	public Mul32Ditto() : base(X86.Mul32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Mul32Ditto Instance = new();
+
+	private Mul32Ditto() : base(X86.Mul32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 
 public sealed class BranchObject : BaseTransform
 {
-	public BranchObject() : base(IR.BranchObject, TransformType.Manual | TransformType.Optimization)
+	public static readonly BranchObject Instance = new();
+
+	private BranchObject() : base(IR.BranchObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

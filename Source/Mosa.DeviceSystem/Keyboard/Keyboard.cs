@@ -60,17 +60,17 @@ public class Keyboard : IKeyboard
 		switch (keyEvent.KeyType)
 		{
 			case KeyType.RegularKey when keyEvent.KeyPress == KeyEvent.KeyPressType.Make:
-			{
-				var key = new Key
 				{
-					KeyType = keyEvent.KeyType,
-					Character = keyEvent.Character,
-					Alt = Alt,
-					Control = Control,
-					Shift = Shift
-				};
-				return key;
-			}
+					var key = new Key
+					{
+						KeyType = keyEvent.KeyType,
+						Character = keyEvent.Character,
+						Alt = Alt,
+						Control = Control,
+						Shift = Shift
+					};
+					return key;
+				}
 			case KeyType.CapsLock: CapsLock = keyEvent.KeyPress == KeyEvent.KeyPressType.Make; break;
 			case KeyType.NumLock: NumLock = keyEvent.KeyPress == KeyEvent.KeyPressType.Make; break;
 			case KeyType.ScrollLock: ScrollLock = keyEvent.KeyPress == KeyEvent.KeyPressType.Make; break;

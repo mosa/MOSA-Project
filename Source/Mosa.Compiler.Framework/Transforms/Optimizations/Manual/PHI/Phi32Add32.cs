@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class Phi32Add32 : BasePhiTransform
 {
-	public Phi32Add32() : base(IR.Phi32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Phi32Add32 Instance = new();
+
+	private Phi32Add32() : base(IR.Phi32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

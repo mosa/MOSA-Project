@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class PhiR4Propagate : BaseTransform
 {
-	public PhiR4Propagate() : base(IR.PhiR4, TransformType.Manual | TransformType.Optimization, 40)
+	public static readonly PhiR4Propagate Instance = new();
+
+	private PhiR4Propagate() : base(IR.PhiR4, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
 

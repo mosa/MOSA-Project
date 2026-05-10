@@ -133,6 +133,12 @@ public sealed class MosaCompiler
 		Compiler.MethodScheduler.Schedule(method);
 	}
 
+	public void Schedule(List<MosaMethod> methods)
+	{
+		Setup();
+		Compiler.MethodScheduler.Schedule(methods);
+	}
+
 	public void Compile(bool skipFinalization = false)
 	{
 		Setup();
@@ -171,5 +177,11 @@ public sealed class MosaCompiler
 
 		// Thread Safe
 		Compiler.CompileMethod(method);
+	}
+
+	public void Dispose()
+	{
+		Compiler?.ClearResources();
+		Compiler = null;
 	}
 }

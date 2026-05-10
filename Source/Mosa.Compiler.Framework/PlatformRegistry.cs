@@ -9,18 +9,6 @@ public static class PlatformRegistry
 	public static void Register()
 	{
 		Registry = new Dictionary<string, BaseArchitecture>();
-
-		foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-		{
-			foreach (var type in assembly.GetTypes())
-			{
-				if (!type.IsAbstract && typeof(BaseArchitecture).IsAssignableFrom(type))
-				{
-					var platform = (BaseArchitecture)Activator.CreateInstance(type);
-					Add(platform);
-				}
-			}
-		}
 	}
 
 	public static void Add(BaseArchitecture platform)

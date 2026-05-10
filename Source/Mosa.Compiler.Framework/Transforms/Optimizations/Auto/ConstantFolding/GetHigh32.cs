@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class GetHigh32 : BaseTransform
 {
-	public GetHigh32() : base(IR.GetHigh32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly GetHigh32 Instance = new();
+
+	private GetHigh32() : base(IR.GetHigh32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

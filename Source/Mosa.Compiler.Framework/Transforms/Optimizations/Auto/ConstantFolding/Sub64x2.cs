@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Sub64x2 : BaseTransform
 {
-	public Sub64x2() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly Sub64x2 Instance = new();
+
+	private Sub64x2() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 

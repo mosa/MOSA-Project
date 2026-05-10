@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class IMul32 : BaseTransform
 {
-	public IMul32() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly IMul32 Instance = new();
+
+	private IMul32() : base(X86.IMul32, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

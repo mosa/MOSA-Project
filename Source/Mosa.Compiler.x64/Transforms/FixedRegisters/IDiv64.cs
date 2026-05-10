@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class IDiv64 : BaseTransform
 {
-	public IDiv64() : base(X64.IDiv64, TransformType.Manual | TransformType.Transform)
+	public static readonly IDiv64 Instance = new();
+
+	private IDiv64() : base(X64.IDiv64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

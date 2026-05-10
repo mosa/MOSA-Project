@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// </summary>
 public sealed class AddCarryIn32 : BaseIRTransform
 {
-	public AddCarryIn32() : base(IR.AddCarryIn32, TransformType.Manual | TransformType.Transform)
+	public static readonly AddCarryIn32 Instance = new();
+
+	private AddCarryIn32() : base(IR.AddCarryIn32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

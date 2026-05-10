@@ -8,7 +8,10 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Size;
 
 public sealed class Lea32By2 : BaseTransform
 {
-	public Lea32By2() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Lea32By2 Instance = new();
+
+
+	private Lea32By2() : base(X86.Lea32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

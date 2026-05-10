@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Move64 : BaseLowerTo32Transform
 {
-	public Move64() : base(IR.Move64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Move64 Instance = new();
+
+	private Move64() : base(IR.Move64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

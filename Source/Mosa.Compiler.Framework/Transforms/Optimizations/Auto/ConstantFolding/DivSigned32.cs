@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class DivSigned32 : BaseTransform
 {
-	public DivSigned32() : base(IR.DivSigned32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly DivSigned32 Instance = new();
+
+	private DivSigned32() : base(IR.DivSigned32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

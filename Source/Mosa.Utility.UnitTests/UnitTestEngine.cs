@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO.Pipes;
 using System.Net.Sockets;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
@@ -34,6 +35,8 @@ public class UnitTestEngine : IDisposable
 
 	public bool IsAborted => Aborted;
 
+	public string CompilationFailure { get; private set; }
+
 	public TypeSystem TypeSystem { get; internal set; }
 
 	public MosaLinker Linker { get; internal set; }
@@ -47,6 +50,7 @@ public class UnitTestEngine : IDisposable
 	protected Process Process;
 
 	private readonly OutputStatusDelegate OutputStatus;
+	private readonly Func<CompilerHooks> CompilerHooksFactory;
 
 	private MosaSettings MosaSettings = new();
 
@@ -68,12 +72,15 @@ public class UnitTestEngine : IDisposable
 	private WatchDog WatchDog;
 
 	private int CompletedUnitTestCount;
+	private int TotalUnitTestCount;
+	private int LastProgressSecond = -1;
 
 	#endregion Private Data Members
 
-	public UnitTestEngine(MosaSettings mosaSettings, OutputStatusDelegate outputStatus)
+	public UnitTestEngine(MosaSettings mosaSettings, OutputStatusDelegate outputStatus, Func<CompilerHooks> compilerHooksFactory = null)
 	{
 		OutputStatus = outputStatus;
+		CompilerHooksFactory = compilerHooksFactory;
 
 		MosaSettings.LoadAppLocations();
 		MosaSettings.SetDefaultSettings();
@@ -110,6 +117,7 @@ public class UnitTestEngine : IDisposable
 
 	private void Initialize()
 	{
+		CompilationFailure = null;
 		Aborted = !Compile();
 
 		if (Aborted)
@@ -217,16 +225,53 @@ public class UnitTestEngine : IDisposable
 		DebugServerEngine.Send(messages);
 	}
 
+	public List<UnitTest> PrepareUnitTests(List<UnitTestInfo> discoveredUnitTests)
+	{
+		var unitTests = new List<UnitTest>(discoveredUnitTests.Count);
+
+		var id = 0;
+
+		foreach (var unitTestInfo in discoveredUnitTests)
+		{
+			LinkerMethodInfo linkerMethodInfo;
+
+			try
+			{
+				linkerMethodInfo = UnitTests.Linker.GetMethodInfo(TypeSystem, Linker, unitTestInfo);
+			}
+			catch (Exception)
+			{
+				OutputStatus($"ERROR: Unable to resolve method: {unitTestInfo.FullMethodName}");
+
+				throw;
+			}
+
+			var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo);
+
+			unitTest.SerializedUnitTest = UnitTestSerializer.SerializeUnitTestMessage(unitTest);
+			unitTest.UnitTestID = ++id;
+
+			unitTests.Add(unitTest);
+		}
+
+		return unitTests;
+	}
+
 	public void QueueUnitTests(List<UnitTest> unitTests)
 	{
 		lock (Queue)
 		{
+			CompletedUnitTestCount = 0;
+			TotalUnitTestCount = 0;
+			LastProgressSecond = -1;
+
 			foreach (var unitTest in unitTests)
 			{
 				if (unitTest.Status == UnitTestStatus.Skipped)
 					continue;
 
 				Queue.Enqueue(unitTest);
+				TotalUnitTestCount++;
 			}
 		}
 	}
@@ -248,60 +293,68 @@ public class UnitTestEngine : IDisposable
 		}
 	}
 
-	public bool Compile()
-	{
-		Stopwatch.Restart();
-
-		OutputStatus($"Search Folder(s): {string.Join(", ", new List<string>(MosaSettings.SearchPaths.ToArray()))}");
-		OutputStatus($"Output file: {MosaSettings.OutputFile}");
-		OutputStatus($"Available CPU Cores: {Environment.ProcessorCount}");
-		OutputStatus($"Max Threads: {MosaSettings.MaxThreads}");
-		OutputStatus($"Platform: {MosaSettings.Platform}");
-
-		var compilerHook = CreateCompilerHook();
-
-		var builder = new Builder(MosaSettings, compilerHook);
-
-		builder.Build();
-
-		Linker = builder.Linker;
-		TypeSystem = builder.TypeSystem;
-
-		MosaSettings = builder.MosaSettings; // Switch to builder settings
-
-		return builder.IsSucccessful;
-	}
-
-	private CompilerHooks CreateCompilerHook()
-	{
-		var compilerHooks = new CompilerHooks
-		{
-			NotifyEvent = NotifyEvent,
-			NotifyProgress = NotifyProgress,
-			NotifyStatus = NotifyStatus,
-		};
-
-		return compilerHooks;
-	}
-
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
-		if (compilerEvent is CompilerEvent.MethodCompileEnd
-			or CompilerEvent.MethodCompileStart
-			or CompilerEvent.Counter
-			or CompilerEvent.SetupStageStart
-			or CompilerEvent.SetupStageEnd
-			or CompilerEvent.FinalizationStageStart
-			or CompilerEvent.FinalizationStageEnd)
+		if (compilerEvent == CompilerEvent.Exception)
+		{
+			if (string.IsNullOrWhiteSpace(CompilationFailure))
+				CompilationFailure = message;
+			else if (!string.IsNullOrWhiteSpace(message) && !string.Equals(CompilationFailure, message, StringComparison.Ordinal))
+				CompilationFailure = $"{CompilationFailure}{Environment.NewLine}{message}";
+		}
+
+		if (!CompilerHooks.IsStandardNotifyEvent(compilerEvent))
 			return;
 
 		if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
 			return;
 
-		var eventname = compilerEvent.ToText();
-		message = string.IsNullOrWhiteSpace(message) ? eventname : $"{eventname}: {message}";
+		OutputStatus(CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message));
+	}
 
-		OutputStatus(message);
+	public bool Compile()
+	{
+		Stopwatch.Restart();
+		CompilationFailure = null;
+
+		var compilerHook = CreateCompilerHook();
+
+		try
+		{
+			var builder = new Builder(MosaSettings, compilerHook);
+
+			builder.Build();
+
+			Linker = builder.Linker;
+			TypeSystem = builder.TypeSystem;
+
+			MosaSettings = builder.MosaSettings; // Switch to builder settings
+
+			return builder.IsSucccessful;
+		}
+		catch (CompilerException ex)
+		{
+			CompilationFailure ??= ex.ToString();
+			OutputStatus($"ERROR: {CompilationFailure}");
+			return false;
+		}
+		catch (Exception ex)
+		{
+			CompilationFailure ??= ex.ToString();
+			OutputStatus($"ERROR: {CompilationFailure}");
+			return false;
+		}
+	}
+
+	private CompilerHooks CreateCompilerHook()
+	{
+		var compilerHooks = CompilerHooksFactory?.Invoke() ?? new CompilerHooks();
+
+		compilerHooks.NotifyEvent ??= NotifyEvent;
+		compilerHooks.NotifyProgress ??= NotifyProgress;
+		compilerHooks.NotifyStatus ??= NotifyStatus;
+
+		return compilerHooks;
 	}
 
 	private void NotifyProgress(int totalMethods, int completedMethods)
@@ -441,7 +494,6 @@ public class UnitTestEngine : IDisposable
 
 				if (StartEngineEx())
 				{
-					//OutputStatus($"Engine started!");
 					return true;
 				}
 				else
@@ -475,7 +527,7 @@ public class UnitTestEngine : IDisposable
 
 		if (ConnectToDebugEngine())
 		{
-			OutputStatus($"Engine connected!");
+			OutputStatus("Engine connected!");
 		}
 		else
 		{
@@ -485,7 +537,7 @@ public class UnitTestEngine : IDisposable
 
 		if (WaitForReady())
 		{
-			OutputStatus($"Engine ready!");
+			OutputStatus("Engine ready!");
 			WatchDog.Restart();
 		}
 		else
@@ -548,7 +600,7 @@ public class UnitTestEngine : IDisposable
 					foreach (var entry in Active)
 					{
 						entry.Value.Status = UnitTestStatus.FailedByCrash;
-						OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(entry.Value)}");
+						OutputStatus($"ERROR: {UnitTestSerializer.FormatUnitTestResult(entry.Value)}");
 					}
 				}
 				else
@@ -598,12 +650,22 @@ public class UnitTestEngine : IDisposable
 
 			CompletedUnitTestCount++;
 
-			if (CompletedUnitTestCount % 1000 == 0 && Stopwatch.Elapsed.Seconds != 0)
+			if (MosaSettings.Diagnostic && Stopwatch.Elapsed.TotalSeconds >= 1)
 			{
-				OutputStatus($"Unit Tests - Count: {CompletedUnitTestCount} Elapsed: {(int)Stopwatch.Elapsed.TotalSeconds} ({CompletedUnitTestCount / Stopwatch.Elapsed.TotalSeconds:F2} per second)");
+				var elapsedSeconds = (int)Stopwatch.Elapsed.TotalSeconds;
+
+				if (elapsedSeconds != LastProgressSecond)
+				{
+					LastProgressSecond = elapsedSeconds;
+
+					var percentage = TotalUnitTestCount > 0 ? (CompletedUnitTestCount * 100.0) / TotalUnitTestCount : 0;
+					var rate = CompletedUnitTestCount / Stopwatch.Elapsed.TotalSeconds;
+
+					OutputStatus($"[Unit Tests] Count: {CompletedUnitTestCount} ({percentage:F1}%) | Elapsed: {elapsedSeconds} secs ({rate:F1}/s)");
+				}
 			}
 
-			UnitTestSystem.ParseResultData(unittest, data);
+			UnitTestSerializer.ParseResultData(unittest, data);
 
 			if (Equals(unittest.Expected, unittest.Result))
 			{
@@ -613,9 +675,20 @@ public class UnitTestEngine : IDisposable
 			{
 				unittest.Status = UnitTestStatus.Failed;
 
-				OutputStatus($"ERROR: {UnitTestSystem.FormatUnitTestResult(unittest)}");
+				OutputStatus($"ERROR: {UnitTestSerializer.FormatUnitTestResult(unittest)}");
 
 				Errors++;
+
+				if (MosaSettings.UnitTestFailFast)
+				{
+					Queue.Clear();
+					foreach (var active in Active.Values)
+					{
+						active.Status = UnitTestStatus.Skipped;
+					}
+					Active.Clear();
+				}
+
 				CheckAbort();
 			}
 		}

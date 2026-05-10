@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class To64 : BaseIRTransform
 {
-	public To64() : base(IR.To64, TransformType.Manual | TransformType.Transform)
+	public static readonly To64 Instance = new();
+
+	private To64() : base(IR.To64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

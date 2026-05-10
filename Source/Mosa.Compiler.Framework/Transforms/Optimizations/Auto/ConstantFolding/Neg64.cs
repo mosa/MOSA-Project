@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Neg64 : BaseTransform
 {
-	public Neg64() : base(IR.Neg64, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly Neg64 Instance = new();
+
+	private Neg64() : base(IR.Neg64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

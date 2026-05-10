@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class SignExtend32x64 : BaseLowerTo32Transform
 {
-	public SignExtend32x64() : base(IR.SignExtend32x64, TransformType.Manual | TransformType.Optimization)
+	public static readonly SignExtend32x64 Instance = new();
+
+	private SignExtend32x64() : base(IR.SignExtend32x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

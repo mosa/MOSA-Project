@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class LoadParamZeroExtend32x64 : BaseLowerTo32Transform
 {
-	public LoadParamZeroExtend32x64() : base(IR.LoadParamZeroExtend32x64, TransformType.Manual | TransformType.Optimization)
+	public static readonly LoadParamZeroExtend32x64 Instance = new();
+
+	private LoadParamZeroExtend32x64() : base(IR.LoadParamZeroExtend32x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

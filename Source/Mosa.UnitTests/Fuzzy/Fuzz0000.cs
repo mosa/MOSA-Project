@@ -1,3 +1,5 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 namespace Mosa.UnitTests.Fuzzy;
 
 public static class Fuzz0000

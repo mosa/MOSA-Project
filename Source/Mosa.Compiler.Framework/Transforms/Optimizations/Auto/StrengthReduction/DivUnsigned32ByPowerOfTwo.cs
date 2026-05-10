@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class DivUnsigned32ByPowerOfTwo : BaseTransform
 {
-	public DivUnsigned32ByPowerOfTwo() : base(IR.DivUnsigned32, TransformType.Auto | TransformType.Optimization)
+	public static readonly DivUnsigned32ByPowerOfTwo Instance = new();
+
+	private DivUnsigned32ByPowerOfTwo() : base(IR.DivUnsigned32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

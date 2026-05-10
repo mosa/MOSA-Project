@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Xor32Max : BaseTransform
 {
-	public Xor32Max() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly Xor32Max Instance = new();
+
+	private Xor32Max() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 
@@ -33,7 +35,9 @@ public sealed class Xor32Max : BaseTransform
 
 public sealed class Xor32Max_v1 : BaseTransform
 {
-	public Xor32Max_v1() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly Xor32Max_v1 Instance = new();
+
+	private Xor32Max_v1() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

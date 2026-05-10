@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Checked;
 
 public sealed class CheckThrowDivideByZero : BaseTransform
 {
-	public CheckThrowDivideByZero() : base(IR.CheckThrowDivideByZero, TransformType.Manual | TransformType.Optimization, 100, true)
+	public static readonly CheckThrowDivideByZero Instance = new();
+
+	private CheckThrowDivideByZero() : base(IR.CheckThrowDivideByZero, TransformType.Manual | TransformType.Optimization, 100, true)
 	{
 	}
 

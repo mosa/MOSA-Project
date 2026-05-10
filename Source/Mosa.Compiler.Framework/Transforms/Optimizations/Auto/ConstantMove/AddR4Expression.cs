@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class AddR4Expression : BaseTransform
 {
-	public AddR4Expression() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
+	public static readonly AddR4Expression Instance = new();
+
+	private AddR4Expression() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -50,7 +52,9 @@ public sealed class AddR4Expression : BaseTransform
 
 public sealed class AddR4Expression_v1 : BaseTransform
 {
-	public AddR4Expression_v1() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
+	public static readonly AddR4Expression_v1 Instance = new();
+
+	private AddR4Expression_v1() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -94,7 +98,9 @@ public sealed class AddR4Expression_v1 : BaseTransform
 
 public sealed class AddR4Expression_v2 : BaseTransform
 {
-	public AddR4Expression_v2() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
+	public static readonly AddR4Expression_v2 Instance = new();
+
+	private AddR4Expression_v2() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -138,7 +144,9 @@ public sealed class AddR4Expression_v2 : BaseTransform
 
 public sealed class AddR4Expression_v3 : BaseTransform
 {
-	public AddR4Expression_v3() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
+	public static readonly AddR4Expression_v3 Instance = new();
+
+	private AddR4Expression_v3() : base(IR.AddR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

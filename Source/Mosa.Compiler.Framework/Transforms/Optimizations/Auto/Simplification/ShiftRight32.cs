@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class ShiftRight32 : BaseTransform
 {
-	public ShiftRight32() : base(IR.ShiftRight32, TransformType.Auto | TransformType.Optimization, 25)
+	public static readonly ShiftRight32 Instance = new();
+
+	private ShiftRight32() : base(IR.ShiftRight32, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
 

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Load64AddressFold : BaseTransform
 {
-	public Load64AddressFold() : base(IR.Load64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Load64AddressFold Instance = new();
+
+	private Load64AddressFold() : base(IR.Load64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

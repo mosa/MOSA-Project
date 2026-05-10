@@ -13,6 +13,8 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 
 	private PatchType NativePatchType;
 
+	public bool EmitBinary { get; set; }
+
 	#endregion Data Members
 
 	protected override void Initialize()
@@ -21,6 +23,11 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 			NativePatchType = PatchType.I32;
 		else
 			NativePatchType = PatchType.I64;
+	}
+
+	protected override void Setup()
+	{
+		EmitBinary = MosaSettings.EmitBinary;
 	}
 
 	protected override void Run()
@@ -32,6 +39,9 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 			return;
 
 		if (!HasProtectedRegions)
+			return;
+
+		if (!EmitBinary)
 			return;
 
 		ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);

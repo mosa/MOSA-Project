@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Mulsd : BaseTransform
 {
-	public Mulsd() : base(X64.Mulsd, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly Mulsd Instance = new();
+
+	private Mulsd() : base(X64.Mulsd, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

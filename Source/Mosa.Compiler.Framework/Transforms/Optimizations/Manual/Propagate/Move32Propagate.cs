@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class Move32Propagate : BaseTransform
 {
-	public Move32Propagate() : base(IR.Move32, TransformType.Manual | TransformType.Optimization, 40)
+	public static readonly Move32Propagate Instance = new();
+
+	private Move32Propagate() : base(IR.Move32, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
 

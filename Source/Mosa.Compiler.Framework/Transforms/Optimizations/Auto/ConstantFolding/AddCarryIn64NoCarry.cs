@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class AddCarryIn64NoCarry : BaseTransform
 {
-	public AddCarryIn64NoCarry() : base(IR.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
+	public static readonly AddCarryIn64NoCarry Instance = new();
+
+	private AddCarryIn64NoCarry() : base(IR.AddCarryIn64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

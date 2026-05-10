@@ -1497,7 +1497,7 @@
 			"Name": "SafePoint",
 			"FamilyName": "IR",
 			"ResultCount": 0,
-			"OperandCount": 0,
+			"OperandCount": 2,
 			"IgnoreDuringCodeGeneration": "true",
 			"UnspecifiedSideEffect": "true"
 		},

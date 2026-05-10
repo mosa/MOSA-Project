@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 
@@ -11,7 +11,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Add64ToLea64 : BaseTransform
 {
-	public Add64ToLea64() : base(X64.Add64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Add64ToLea64 Instance = new();
+
+	private Add64ToLea64() : base(X64.Add64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Compound;
 /// </summary>
 public sealed class StoreParamCompound : BaseCompoundTransform
 {
-	public StoreParamCompound() : base(IR.StoreParamCompound, TransformType.Manual | TransformType.Transform)
+	public static readonly StoreParamCompound Instance = new();
+
+	private StoreParamCompound() : base(IR.StoreParamCompound, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

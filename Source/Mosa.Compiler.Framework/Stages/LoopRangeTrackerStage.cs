@@ -12,16 +12,12 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 {
 	private readonly Counter RangeDetermined = new("LoopRangeTrackerStage.RangeDetermined");
 
-	private TraceLog trace;
+	private TraceLog Trace;
+	private TraceLog GlobalTrace;
 
 	protected override void Initialize()
 	{
 		Register(RangeDetermined);
-	}
-
-	protected override void Finish()
-	{
-		trace = null;
 	}
 
 	protected override void Run()
@@ -39,7 +35,9 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		if (!MethodCompiler.IsInSSAForm)
 			return;
 
-		trace = CreateTraceLog(5);
+		Trace = CreateTraceLog(5);
+
+		GlobalTrace = CreateTraceLog(TraceType.GlobalDebug, "Loop Range Tracker", 7);
 
 		var loops = LoopDetector.FindLoops(BasicBlocks);
 
@@ -47,6 +45,12 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			return;
 
 		ProcessLoops(loops);
+	}
+
+	protected override void Finish()
+	{
+		Trace = null;
+		GlobalTrace = null;
 	}
 
 	private void ProcessLoops(List<Loop> loops)
@@ -73,16 +77,27 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			if (node.OperandCount != 2)
 				continue;
 
-			if (node.Instruction == IR.Phi32)
-				ProcessNode(node, loop, true);
-			else if (node.Instruction == IR.Phi64)
-				ProcessNode(node, loop, false);
+			if (node.Instruction == IR.Phi32 || node.Instruction == IR.Phi64)
+				ProcessNode(node, loop);
 		}
 	}
 
-	private void ProcessNode(Node node, Loop loop, bool is32Bit)
+	private static BasicBlock GetPreHeaderBlock(Loop loop)
 	{
-		var headerblock = node.Block.PreviousBlocks[0];
+		foreach (var block in loop.Header.PreviousBlocks)
+		{
+			if (!loop.LoopBlocks.Contains(block))
+				return block;
+		}
+
+		return null;
+	}
+
+	private void ProcessNode(Node node, Loop loop)
+	{
+		var headerblock = GetPreHeaderBlock(loop);
+		if (headerblock == null)
+			return;
 
 		var result = node.Result;
 		var x = node.Operand1;
@@ -119,6 +134,13 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 		var incrementValueOperand = d.Operand2;
 		var incrementVariableOperand = d.Operand1;
 
+		if ((d.Instruction == IR.Add32 || d.Instruction == IR.Add64)
+			&& incrementVariableOperand.IsResolvedConstant
+			&& !incrementValueOperand.IsResolvedConstant)
+		{
+			(incrementVariableOperand, incrementValueOperand) = (incrementValueOperand, incrementVariableOperand);
+		}
+
 		if (d.Result != y)
 			return;
 
@@ -141,8 +163,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 
 		var signed = signedAnalysis == SignAnalysis.Signed;
 
-		if ((signed && incrementValueOperand.IsNegative)
-			|| (!signed && incrementValueOperand.IsNegative))
+		if (incrementValueOperand.IsNegative)
 		{
 			direction = !direction;
 		}
@@ -155,14 +176,20 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			{
 				if (!signed)
 				{
+					if (end < 0)
+						return;
+
 					var start = startOperand.ConstantUnsigned64;
 
-					trace?.Log($"{result}");
 					result.BitValue.NarrowMin(start).NarrowMax((ulong)end);
 
-					trace?.Log($"{result} Start = {start}");
-					trace?.Log($"{result} End   = {end}");
-					trace?.Log($"{result.BitValue}");
+					Trace?.Log($"{result}");
+					Trace?.Log($"** Start = {start}");
+					Trace?.Log($"** End   = {end}");
+					Trace?.Log($"{result.BitValue}");
+
+					GlobalTrace?.Log($"Method: {Method}");
+					GlobalTrace?.Log($"  {result} range = {start} to {end}");
 
 					RangeDetermined.Increment();
 				}
@@ -170,12 +197,15 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				{
 					var start = startOperand.ConstantSigned64;
 
-					trace?.Log($"{result}");
 					result.BitValue.NarrowSignRange(start, end);
 
-					trace?.Log($"{result} Start = {start}");
-					trace?.Log($"{result} End   = {end}");
-					trace?.Log($"{result.BitValue}");
+					Trace?.Log($"{result}");
+					Trace?.Log($"** Start = {start}");
+					Trace?.Log($"** End   = {end}");
+					Trace?.Log($"{result.BitValue}");
+
+					GlobalTrace?.Log($"Method: {Method}");
+					GlobalTrace?.Log($"  {result} range = {start} to {end}");
 
 					RangeDetermined.Increment();
 				}
@@ -187,14 +217,20 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 			{
 				if (!signed)
 				{
+					if (end < 0)
+						return;
+
 					var start = startOperand.ConstantUnsigned64;
 
-					trace?.Log($"{result}");
 					result.BitValue.NarrowMax(start).NarrowMin((ulong)end);
 
-					trace?.Log($"** Start = {start}");
-					trace?.Log($"** End   = {end}");
-					trace?.Log($"{result.BitValue}");
+					Trace?.Log($"{result}");
+					Trace?.Log($"** Start = {start}");
+					Trace?.Log($"** End   = {end}");
+					Trace?.Log($"{result.BitValue}");
+
+					GlobalTrace?.Log($"Method: {Method}");
+					GlobalTrace?.Log($"  {result} range = {start} to {end}");
 
 					RangeDetermined.Increment();
 				}
@@ -202,12 +238,15 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				{
 					var start = startOperand.ConstantSigned64;
 
-					trace?.Log($"{result}");
 					result.BitValue.NarrowSignRange(start, end);
 
-					trace?.Log($"** Start = {start}");
-					trace?.Log($"** End   = {end}");
-					trace?.Log($"{result.BitValue}");
+					Trace?.Log($"{result}");
+					Trace?.Log($"** Start = {start}");
+					Trace?.Log($"** End   = {end}");
+					Trace?.Log($"{result.BitValue}");
+
+					GlobalTrace?.Log($"Method: {Method}");
+					GlobalTrace?.Log($"  {result} range = {start} to {end}");
 
 					RangeDetermined.Increment();
 				}
@@ -278,7 +317,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				? use.Block.NextBlocks[0]
 				: use.Block.NextBlocks[1];
 
-			// form: x (variable) {>,>=,==} y (constant) -> where branch exits loop
+			// form: x (variable) {>,>=} y (constant) -> where branch exits loop
 
 			// change form - on branch
 			if (loop.LoopBlocks.Contains(target))
@@ -286,11 +325,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				(condition, target, othertarget) = (condition.GetOpposite(), othertarget, target);
 			}
 
-			// change form - on constant to right
-			if (!y.IsResolvedConstant && (condition == ConditionCode.Equal || condition == ConditionCode.NotEqual))
-			{
-				(x, y) = (y, x);
-			}
+			if (loop.LoopBlocks.Contains(target) || !loop.LoopBlocks.Contains(othertarget))
+				continue;
 
 			// change form - on condition
 			if (!y.IsResolvedConstant)
@@ -303,12 +339,6 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				or ConditionCode.GreaterOrEqual
 				or ConditionCode.UnsignedGreater
 				or ConditionCode.UnsignedGreaterOrEqual))
-				continue;
-
-			if (condition == ConditionCode.NotEqual && !incrementValue.IsConstantOne)
-				continue;
-
-			if (condition == ConditionCode.Equal)
 				continue;
 
 			if (x != incrementVariable)
@@ -369,7 +399,7 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				? use.Block.NextBlocks[0]
 				: use.Block.NextBlocks[1];
 
-			// form: x (variable) {<,<=,==} y (constant) -> where branch exits the loop
+			// form: x (variable) {<,<=} y (constant) -> where branch exits the loop
 
 			// change form - on branch
 			if (loop.LoopBlocks.Contains(target))
@@ -377,11 +407,8 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				(condition, target, othertarget) = (condition.GetOpposite(), othertarget, target); // swap
 			}
 
-			// change form - on constant to right
-			if (!y.IsResolvedConstant && (condition == ConditionCode.Equal || condition == ConditionCode.NotEqual))
-			{
-				(x, y) = (y, x);
-			}
+			if (loop.LoopBlocks.Contains(target) || !loop.LoopBlocks.Contains(othertarget))
+				continue;
 
 			// change form - on condition
 			if (!y.IsResolvedConstant)
@@ -394,12 +421,6 @@ public sealed class LoopRangeTrackerStage : BaseMethodCompilerStage
 				or ConditionCode.LessOrEqual
 				or ConditionCode.UnsignedLess
 				or ConditionCode.UnsignedLessOrEqual))
-				continue;
-
-			if (condition == ConditionCode.NotEqual && !incrementValue.IsConstantOne)
-				continue;
-
-			if (condition == ConditionCode.Equal)
 				continue;
 
 			if (x != incrementVariable)

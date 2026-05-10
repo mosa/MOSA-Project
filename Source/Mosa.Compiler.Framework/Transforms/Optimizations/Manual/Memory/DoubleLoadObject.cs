@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleLoadObject : BaseTransform
 {
-	public DoubleLoadObject() : base(IR.LoadObject, TransformType.Manual | TransformType.Optimization)
+	public static readonly DoubleLoadObject Instance = new();
+
+	private DoubleLoadObject() : base(IR.LoadObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

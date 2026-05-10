@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class LoadStoreR4 : BaseTransform
 {
-	public LoadStoreR4() : base(IR.LoadR4, TransformType.Manual | TransformType.Optimization)
+	public static readonly LoadStoreR4 Instance = new();
+
+	private LoadStoreR4() : base(IR.LoadR4, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

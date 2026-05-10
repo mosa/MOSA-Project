@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class MemorySet : BaseRuntimeTransform
 {
-	public MemorySet() : base(IR.MemorySet, TransformType.Manual | TransformType.Transform)
+	public static readonly MemorySet Instance = new();
+
+	private MemorySet() : base(IR.MemorySet, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

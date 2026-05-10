@@ -9,6 +9,6 @@ public static class DevirtualizeTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new CallVirtual(),
+		CallVirtual.Instance,
 	};
 }

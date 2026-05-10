@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Xor64Expression : BaseTransform
 {
-	public Xor64Expression() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Xor64Expression Instance = new();
+
+	private Xor64Expression() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -50,7 +52,9 @@ public sealed class Xor64Expression : BaseTransform
 
 public sealed class Xor64Expression_v1 : BaseTransform
 {
-	public Xor64Expression_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Xor64Expression_v1 Instance = new();
+
+	private Xor64Expression_v1() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -94,7 +98,9 @@ public sealed class Xor64Expression_v1 : BaseTransform
 
 public sealed class Xor64Expression_v2 : BaseTransform
 {
-	public Xor64Expression_v2() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Xor64Expression_v2 Instance = new();
+
+	private Xor64Expression_v2() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -138,7 +144,9 @@ public sealed class Xor64Expression_v2 : BaseTransform
 
 public sealed class Xor64Expression_v3 : BaseTransform
 {
-	public Xor64Expression_v3() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Xor64Expression_v3 Instance = new();
+
+	private Xor64Expression_v3() : base(IR.Xor64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

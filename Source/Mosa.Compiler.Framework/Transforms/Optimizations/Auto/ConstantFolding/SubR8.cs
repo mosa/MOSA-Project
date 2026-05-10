@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class SubR8 : BaseTransform
 {
-	public SubR8() : base(IR.SubR8, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly SubR8 Instance = new();
+
+	private SubR8() : base(IR.SubR8, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

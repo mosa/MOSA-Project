@@ -11,7 +11,7 @@ public static class StackTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		//new Epilogue(),
-		//new Prologue(),
+		//Epilogue.Instance,
+		//Prologue.Instance,
 	};
 }

@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class SetReturnCompound : BaseTransform
 {
-	public SetReturnCompound() : base(IR.SetReturnCompound, TransformType.Manual | TransformType.Transform)
+	public static readonly SetReturnCompound Instance = new();
+
+	private SetReturnCompound() : base(IR.SetReturnCompound, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

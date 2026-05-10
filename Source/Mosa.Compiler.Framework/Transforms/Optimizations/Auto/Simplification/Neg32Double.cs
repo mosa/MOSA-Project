@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Neg32Double : BaseTransform
 {
-	public Neg32Double() : base(IR.Neg32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Neg32Double Instance = new();
+
+	private Neg32Double() : base(IR.Neg32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

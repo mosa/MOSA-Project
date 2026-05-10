@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class StoreLoadObject : BaseTransform
 {
-	public StoreLoadObject() : base(IR.StoreObject, TransformType.Manual | TransformType.Optimization)
+	public static readonly StoreLoadObject Instance = new();
+
+	private StoreLoadObject() : base(IR.StoreObject, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

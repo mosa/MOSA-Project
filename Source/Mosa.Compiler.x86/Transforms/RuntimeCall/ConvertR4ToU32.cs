@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// ConvertR4ToU32
 public sealed class ConvertR4ToU32 : BaseTransform
 {
-	public ConvertR4ToU32() : base(IR.ConvertR4ToU32, TransformType.Manual | TransformType.Transform, -100)
+	public static readonly ConvertR4ToU32 Instance = new();
+
+	private ConvertR4ToU32() : base(IR.ConvertR4ToU32, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
 

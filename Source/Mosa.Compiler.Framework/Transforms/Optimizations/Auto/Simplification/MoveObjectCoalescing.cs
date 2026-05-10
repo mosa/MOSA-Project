@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class MoveObjectCoalescing : BaseTransform
 {
-	public MoveObjectCoalescing() : base(IR.MoveObject, TransformType.Auto | TransformType.Optimization, 25)
+	public static readonly MoveObjectCoalescing Instance = new();
+
+	private MoveObjectCoalescing() : base(IR.MoveObject, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
 

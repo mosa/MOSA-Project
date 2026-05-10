@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class DivR8 : BaseTransform
 {
-	public DivR8() : base(IR.DivR8, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly DivR8 Instance = new();
+
+	private DivR8() : base(IR.DivR8, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

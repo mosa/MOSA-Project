@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 
@@ -6,7 +6,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Mov64ToXor64 : BaseTransform
 {
-	public Mov64ToXor64() : base(X64.Mov64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Mov64ToXor64 Instance = new();
+
+	private Mov64ToXor64() : base(X64.Mov64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

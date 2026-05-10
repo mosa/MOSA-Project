@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class NewArray : BaseRuntimeTransform
 {
-	public NewArray() : base(IR.NewArray, TransformType.Manual | TransformType.Transform)
+	public static readonly NewArray Instance = new();
+
+	private NewArray() : base(IR.NewArray, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

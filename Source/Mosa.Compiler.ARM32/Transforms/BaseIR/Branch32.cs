@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class Branch32 : BaseIRTransform
 {
-	public Branch32() : base(IR.Branch32, TransformType.Manual | TransformType.Transform)
+	public static readonly Branch32 Instance = new();
+
+	private Branch32() : base(IR.Branch32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

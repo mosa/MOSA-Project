@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.FloatingTweaks;
 /// </summary>
 public sealed class ConvertR4ToU64 : BaseTransform
 {
-	public ConvertR4ToU64() : base(IR.ConvertR4ToU64, TransformType.Manual | TransformType.Transform)
+	public static readonly ConvertR4ToU64 Instance = new();
+
+	private ConvertR4ToU64() : base(IR.ConvertR4ToU64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

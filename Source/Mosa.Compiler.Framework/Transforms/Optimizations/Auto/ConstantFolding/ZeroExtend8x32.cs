@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class ZeroExtend8x32 : BaseTransform
 {
-	public ZeroExtend8x32() : base(IR.ZeroExtend8x32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly ZeroExtend8x32 Instance = new();
+
+	private ZeroExtend8x32() : base(IR.ZeroExtend8x32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

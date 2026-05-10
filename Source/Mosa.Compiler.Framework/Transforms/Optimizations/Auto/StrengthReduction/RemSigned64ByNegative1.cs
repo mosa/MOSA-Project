@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class RemSigned64ByNegative1 : BaseTransform
 {
-	public RemSigned64ByNegative1() : base(IR.RemSigned64, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly RemSigned64ByNegative1 Instance = new();
+
+	private RemSigned64ByNegative1() : base(IR.RemSigned64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

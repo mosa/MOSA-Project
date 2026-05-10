@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework;
@@ -8,23 +7,17 @@ namespace Mosa.Compiler.Framework;
 /// <summary>
 /// Physical Registers
 /// </summary>
-public sealed class PhysicalRegisters : IEnumerable<Operand>
+public sealed class PhysicalRegisters
 {
-	#region Data Members
-
-	private readonly List<Operand> registers = new();
-
-	#endregion Data Members
-
 	#region Properties
 
-	public int Count => registers.Count;
-
-	public Operand this[int index] => registers[index];
+	public int Count { get; private set; }
 
 	public bool Is32BitPlatform { get; private set; }
 
 	#endregion Properties
+
+	#region Construction
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PhysicalRegisters" /> class.
@@ -34,11 +27,13 @@ public sealed class PhysicalRegisters : IEnumerable<Operand>
 		Is32BitPlatform = is32BitPlatform;
 	}
 
+	#endregion Construction
+
+	#region Allocation
+
 	public Operand Allocate(PrimitiveType primitiveType, PhysicalRegister register)
 	{
-		var operand = Operand.CreateCPURegister(primitiveType, register, Count + 1);
-
-		registers.Add(operand);
+		var operand = Operand.CreateCPURegister(primitiveType, register, Count++);
 
 		return operand;
 	}
@@ -89,59 +84,5 @@ public sealed class PhysicalRegisters : IEnumerable<Operand>
 		return Is32BitPlatform ? Allocate32(register) : Allocate64(register);
 	}
 
-	public IEnumerator<Operand> GetEnumerator()
-	{
-		foreach (var register in registers)
-		{
-			yield return register;
-		}
-	}
-
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
-
-	internal void Reorder(Operand register, int index)
-	{
-		registers[index - 1] = register;
-		register.Reindex(index);
-	}
-
-	internal void SwapPosition(Operand a, Operand b)
-	{
-		if (a == b)
-			return;
-
-		registers[a.Index - 1] = b;
-		registers[b.Index - 1] = a;
-
-		var t = a.Index;
-		a.Reindex(b.Index);
-		b.Reindex(t);
-	}
-
-	internal void RemoveUnused()
-	{
-		var updated = false;
-
-		for (var i = registers.Count - 1; i >= 0; i--)
-		{
-			var virtualRegister = registers[i];
-
-			if (virtualRegister.IsPhysicalRegister)
-				continue;
-
-			registers.RemoveAt(i);
-			updated = true;
-		}
-
-		if (!updated)
-			return;
-
-		for (var i = 0; i < registers.Count; i++)
-		{
-			registers[i].Reindex(i + 1);
-		}
-	}
+	#endregion Allocation
 }

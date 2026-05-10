@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x86.Transforms.RuntimeCall;
 /// </summary>
 public sealed class RemR8 : BaseTransform
 {
-	public RemR8() : base(IR.RemR8, TransformType.Manual | TransformType.Transform, -100)
+	public static readonly RemR8 Instance = new();
+
+	private RemR8() : base(IR.RemR8, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
 

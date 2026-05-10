@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class SignExtend8x64 : BaseTransform
 {
-	public SignExtend8x64() : base(IR.SignExtend8x64, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly SignExtend8x64 Instance = new();
+
+	private SignExtend8x64() : base(IR.SignExtend8x64, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

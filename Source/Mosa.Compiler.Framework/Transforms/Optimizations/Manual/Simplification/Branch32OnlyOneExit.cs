@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Simplification;
 
 public sealed class Branch32OnlyOneExit : BaseTransform
 {
-	public Branch32OnlyOneExit() : base(IR.Branch32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Branch32OnlyOneExit Instance = new();
+
+	private Branch32OnlyOneExit() : base(IR.Branch32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

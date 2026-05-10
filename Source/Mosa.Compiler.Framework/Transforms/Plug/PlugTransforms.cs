@@ -9,8 +9,8 @@ public static class PlugTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new CallDirect(),
-		new CallStatic(),
-		new CallVirtual(),
+		CallDirect.Instance,
+		CallStatic.Instance,
+		CallVirtual.Instance,
 	};
 }

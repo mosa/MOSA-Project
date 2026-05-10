@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class Throw : BaseExceptionTransform
 {
-	public Throw() : base(IR.Throw, TransformType.Manual | TransformType.Transform)
+	public static readonly Throw Instance = new();
+
+	private Throw() : base(IR.Throw, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

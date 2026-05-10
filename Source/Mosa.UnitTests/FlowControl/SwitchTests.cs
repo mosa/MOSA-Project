@@ -20,6 +20,7 @@ public static class SwitchTests
 			_ => 42
 		};
 	}
+
 	[MosaUnitTest(Series = "I2")]
 	public static short SwitchI2(short a)
 	{
@@ -36,6 +37,7 @@ public static class SwitchTests
 			_ => 42
 		};
 	}
+
 	[MosaUnitTest(Series = "I4")]
 	public static int SwitchI4(int a)
 	{
@@ -52,6 +54,7 @@ public static class SwitchTests
 			_ => 42
 		};
 	}
+
 	[MosaUnitTest(Series = "I8")]
 	public static long SwitchI8(long a)
 	{

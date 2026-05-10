@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Shl32 : BaseTransform
 {
-	public Shl32() : base(X64.Shl32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Shl32 Instance = new();
+
+	private Shl32() : base(X64.Shl32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

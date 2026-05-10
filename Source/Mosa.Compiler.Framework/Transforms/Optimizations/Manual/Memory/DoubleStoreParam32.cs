@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleStoreParam32 : BaseTransform
 {
-	public DoubleStoreParam32() : base(IR.StoreParam32, TransformType.Manual | TransformType.Optimization)
+	public static readonly DoubleStoreParam32 Instance = new();
+
+	private DoubleStoreParam32() : base(IR.StoreParam32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

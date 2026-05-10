@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Addsd : BaseTransform
 {
-	public Addsd() : base(X64.Addsd, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly Addsd Instance = new();
+
+	private Addsd() : base(X64.Addsd, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

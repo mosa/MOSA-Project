@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Add32By1Not32 : BaseTransform
 {
-	public Add32By1Not32() : base(X64.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32By1Not32 Instance = new();
+
+	private Add32By1Not32() : base(X64.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -47,7 +49,9 @@ public sealed class Add32By1Not32 : BaseTransform
 
 public sealed class Add32By1Not32_v1 : BaseTransform
 {
-	public Add32By1Not32_v1() : base(X64.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32By1Not32_v1 Instance = new();
+
+	private Add32By1Not32_v1() : base(X64.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

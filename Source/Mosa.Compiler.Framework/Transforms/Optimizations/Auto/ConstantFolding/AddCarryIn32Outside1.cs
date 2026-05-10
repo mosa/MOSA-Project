@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class AddCarryIn32Outside1 : BaseTransform
 {
-	public AddCarryIn32Outside1() : base(IR.AddCarryIn32, TransformType.Auto | TransformType.Optimization)
+	public static readonly AddCarryIn32Outside1 Instance = new();
+
+	private AddCarryIn32Outside1() : base(IR.AddCarryIn32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

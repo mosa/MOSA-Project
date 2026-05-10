@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// </summary>
 public sealed class Movss : BaseTransform
 {
-	public Movss() : base(X64.Movss, TransformType.Manual | TransformType.Transform)
+	public static readonly Movss Instance = new();
+
+	private Movss() : base(X64.Movss, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

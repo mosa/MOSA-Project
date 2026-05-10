@@ -19,9 +19,11 @@ public abstract class BaseService
 		Initialize();
 	}
 
-	protected virtual void Initialize() { }
+	protected virtual void Initialize()
+	{ }
 
-	public virtual void PostEvent(ServiceEvent serviceEvent) { }
+	public virtual void PostEvent(ServiceEvent serviceEvent)
+	{ }
 
 	//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	[MethodImpl(MethodImplOptions.NoInlining)]

@@ -18,9 +18,9 @@ public sealed class AdvanceTransformStage : Compiler.Framework.Stages.BaseTransf
 	{
 		AddTranforms(FloatingTweakTransforms.List);
 
-		AddTranform(new Move32PropagateConstant());
-		AddTranform(new Move64PropagateConstant());
-		AddTranform(new MoveObjectPropagateConstant());
-		AddTranform(new MoveManagedPointerPropagateConstant());
+		AddTranform(Move32PropagateConstant.Instance);
+		AddTranform(Move64PropagateConstant.Instance);
+		AddTranform(MoveObjectPropagateConstant.Instance);
+		AddTranform(MoveManagedPointerPropagateConstant.Instance);
 	}
 }

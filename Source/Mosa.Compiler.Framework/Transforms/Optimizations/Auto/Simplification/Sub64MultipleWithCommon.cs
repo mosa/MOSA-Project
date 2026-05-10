@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Sub64MultipleWithCommon : BaseTransform
 {
-	public Sub64MultipleWithCommon() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub64MultipleWithCommon Instance = new();
+
+	private Sub64MultipleWithCommon() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -53,7 +55,9 @@ public sealed class Sub64MultipleWithCommon : BaseTransform
 
 public sealed class Sub64MultipleWithCommon_v1 : BaseTransform
 {
-	public Sub64MultipleWithCommon_v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub64MultipleWithCommon_v1 Instance = new();
+
+	private Sub64MultipleWithCommon_v1() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -100,7 +104,9 @@ public sealed class Sub64MultipleWithCommon_v1 : BaseTransform
 
 public sealed class Sub64MultipleWithCommon_v2 : BaseTransform
 {
-	public Sub64MultipleWithCommon_v2() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub64MultipleWithCommon_v2 Instance = new();
+
+	private Sub64MultipleWithCommon_v2() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -147,7 +153,9 @@ public sealed class Sub64MultipleWithCommon_v2 : BaseTransform
 
 public sealed class Sub64MultipleWithCommon_v3 : BaseTransform
 {
-	public Sub64MultipleWithCommon_v3() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub64MultipleWithCommon_v3 Instance = new();
+
+	private Sub64MultipleWithCommon_v3() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

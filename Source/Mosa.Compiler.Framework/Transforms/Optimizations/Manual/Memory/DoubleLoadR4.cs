@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class DoubleLoadR4 : BaseTransform
 {
-	public DoubleLoadR4() : base(IR.LoadR4, TransformType.Manual | TransformType.Optimization)
+	public static readonly DoubleLoadR4 Instance = new();
+
+	private DoubleLoadR4() : base(IR.LoadR4, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

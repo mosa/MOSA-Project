@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class SetReturnManagedPointer : BaseTransform
 {
-	public SetReturnManagedPointer() : base(IR.SetReturnManagedPointer, TransformType.Manual | TransformType.Transform)
+	public static readonly SetReturnManagedPointer Instance = new();
+
+	private SetReturnManagedPointer() : base(IR.SetReturnManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

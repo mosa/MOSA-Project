@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// </summary>
 public sealed class In16 : BaseTransform
 {
-	public In16() : base(X86.In16, TransformType.Manual | TransformType.Transform)
+	public static readonly In16 Instance = new();
+
+	private In16() : base(X86.In16, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

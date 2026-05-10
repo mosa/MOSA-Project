@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Or32Xor32 : BaseTransform
 {
-	public Or32Xor32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Xor32 Instance = new();
+
+	private Or32Xor32() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -40,7 +42,9 @@ public sealed class Or32Xor32 : BaseTransform
 
 public sealed class Or32Xor32_v1 : BaseTransform
 {
-	public Or32Xor32_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Xor32_v1 Instance = new();
+
+	private Or32Xor32_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -74,7 +78,9 @@ public sealed class Or32Xor32_v1 : BaseTransform
 
 public sealed class Or32Xor32_v2 : BaseTransform
 {
-	public Or32Xor32_v2() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Xor32_v2 Instance = new();
+
+	private Or32Xor32_v2() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -108,7 +114,9 @@ public sealed class Or32Xor32_v2 : BaseTransform
 
 public sealed class Or32Xor32_v3 : BaseTransform
 {
-	public Or32Xor32_v3() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Xor32_v3 Instance = new();
+
+	private Or32Xor32_v3() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

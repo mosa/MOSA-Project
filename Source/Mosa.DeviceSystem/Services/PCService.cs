@@ -2,7 +2,6 @@
 
 using Mosa.DeviceSystem.Framework;
 using Mosa.DeviceSystem.HardwareAbstraction;
-using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem.Services;
 

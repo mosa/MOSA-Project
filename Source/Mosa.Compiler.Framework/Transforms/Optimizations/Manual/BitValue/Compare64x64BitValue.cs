@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 /// </summary>
 public sealed class Compare64x64BitValue : BaseTransform
 {
-	public Compare64x64BitValue() : base(IR.Compare64x64, TransformType.Manual | TransformType.Optimization, 35)
+	public static readonly Compare64x64BitValue Instance = new();
+
+	private Compare64x64BitValue() : base(IR.Compare64x64, TransformType.Manual | TransformType.Optimization, 35)
 	{
 	}
 

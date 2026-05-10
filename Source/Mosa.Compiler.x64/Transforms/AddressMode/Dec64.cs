@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Dec64 : BaseAddressModeTransform
 {
-	public Dec64() : base(X64.Dec64, TransformType.Manual | TransformType.Transform)
+	public static readonly Dec64 Instance = new();
+
+	private Dec64() : base(X64.Dec64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

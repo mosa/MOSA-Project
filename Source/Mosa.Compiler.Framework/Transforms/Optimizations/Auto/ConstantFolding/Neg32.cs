@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Neg32 : BaseTransform
 {
-	public Neg32() : base(IR.Neg32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly Neg32 Instance = new();
+
+	private Neg32() : base(IR.Neg32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

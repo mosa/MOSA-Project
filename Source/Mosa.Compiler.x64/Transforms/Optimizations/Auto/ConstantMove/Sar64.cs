@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Sar64 : BaseTransform
 {
-	public Sar64() : base(X64.Sar64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sar64 Instance = new();
+
+	private Sar64() : base(X64.Sar64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

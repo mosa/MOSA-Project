@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Devirtualize;
 
 public sealed class CallVirtual : BaseTransform
 {
-	public CallVirtual() : base(IR.CallVirtual, TransformType.Manual | TransformType.Optimization, 80)
+	public static readonly CallVirtual Instance = new();
+
+	private CallVirtual() : base(IR.CallVirtual, TransformType.Manual | TransformType.Optimization, 80)
 	{
 	}
 

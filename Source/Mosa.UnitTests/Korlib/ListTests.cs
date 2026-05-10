@@ -54,7 +54,7 @@ public static class ListTests
 		list.Add(3);
 		list.Add(4);
 
-		return list[0] == 0 && list[1] == 1 && list[2] == 2 && list[3] == 3 && list[4] == 4 && list[5] == 5;
+		return list[0] == 0 && list[1] == 1 && list[2] == 2 && list[3] == 3 && list[4] == 4;
 	}
 
 	[MosaUnitTest]

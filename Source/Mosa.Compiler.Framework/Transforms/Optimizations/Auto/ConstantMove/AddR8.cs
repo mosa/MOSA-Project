@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class AddR8 : BaseTransform
 {
-	public AddR8() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)
+	public static readonly AddR8 Instance = new();
+
+	private AddR8() : base(IR.AddR8, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

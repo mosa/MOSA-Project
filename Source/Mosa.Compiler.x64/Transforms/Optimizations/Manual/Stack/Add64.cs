@@ -12,7 +12,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Stack;
 /// </summary>
 public sealed class Add64 : BaseTransform
 {
-	public Add64() : base(X64.Add64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Add64 Instance = new();
+
+	private Add64() : base(X64.Add64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

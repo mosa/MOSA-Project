@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Shld64 : BaseAddressModeTransform
 {
-	public Shld64() : base(X64.Shld64, TransformType.Manual | TransformType.Transform)
+	public static readonly Shld64 Instance = new();
+
+	private Shld64() : base(X64.Shld64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

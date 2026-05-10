@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class MulR8x2 : BaseTransform
 {
-	public MulR8x2() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly MulR8x2 Instance = new();
+
+	private MulR8x2() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -49,7 +51,9 @@ public sealed class MulR8x2 : BaseTransform
 
 public sealed class MulR8x2_v1 : BaseTransform
 {
-	public MulR8x2_v1() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly MulR8x2_v1 Instance = new();
+
+	private MulR8x2_v1() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -92,7 +96,9 @@ public sealed class MulR8x2_v1 : BaseTransform
 
 public sealed class MulR8x2_v2 : BaseTransform
 {
-	public MulR8x2_v2() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly MulR8x2_v2 Instance = new();
+
+	private MulR8x2_v2() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -135,7 +141,9 @@ public sealed class MulR8x2_v2 : BaseTransform
 
 public sealed class MulR8x2_v3 : BaseTransform
 {
-	public MulR8x2_v3() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly MulR8x2_v3 Instance = new();
+
+	private MulR8x2_v3() : base(IR.MulR8, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 

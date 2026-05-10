@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Lea;
 
 public sealed class Lea64Shift64 : BaseTransform
 {
-	public Lea64Shift64() : base(X64.Lea64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Lea64Shift64 Instance = new();
+
+	private Lea64Shift64() : base(X64.Lea64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

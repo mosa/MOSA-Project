@@ -11,6 +11,8 @@ namespace Mosa.Compiler.x86.Stages;
 /// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
 public sealed class OptimizationStage : Framework.Stages.BaseTransformStage
 {
+	protected override bool AllowTransformHooks => true;
+
 	public override string Name => "x86." + GetType().Name;
 
 	public OptimizationStage()

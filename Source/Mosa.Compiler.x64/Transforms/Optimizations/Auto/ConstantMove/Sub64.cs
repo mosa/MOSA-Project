@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Sub64 : BaseTransform
 {
-	public Sub64() : base(X64.Sub64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub64 Instance = new();
+
+	private Sub64() : base(X64.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

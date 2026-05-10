@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class AddManagedPointer : BaseIRTransform
 {
-	public AddManagedPointer() : base(IR.AddManagedPointer, TransformType.Manual | TransformType.Transform)
+	public static readonly AddManagedPointer Instance = new();
+
+	private AddManagedPointer() : base(IR.AddManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

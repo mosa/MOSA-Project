@@ -10,7 +10,9 @@ namespace Mosa.Compiler.ARM32.Transforms.RuntimeCall;
 /// </summary>
 public sealed class MulOverflowOut64 : BaseTransform
 {
-	public MulOverflowOut64() : base(IR.MulOverflowOut64, TransformType.Manual | TransformType.Transform, -100)
+	public static readonly MulOverflowOut64 Instance = new();
+
+	private MulOverflowOut64() : base(IR.MulOverflowOut64, TransformType.Manual | TransformType.Transform, -100)
 	{
 	}
 

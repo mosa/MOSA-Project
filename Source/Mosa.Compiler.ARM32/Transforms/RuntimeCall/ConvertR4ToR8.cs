@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.RuntimeCall;
 /// </summary>
 public sealed class ConvertR4ToR8 : BaseTransform
 {
-	public ConvertR4ToR8() : base(IR.ConvertR4ToR8, TransformType.Manual | TransformType.Transform)
+	public static readonly ConvertR4ToR8 Instance = new();
+
+	private ConvertR4ToR8() : base(IR.ConvertR4ToR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

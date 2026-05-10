@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class CompareManagedPointerSameAndNotEqual : BaseTransform
 {
-	public CompareManagedPointerSameAndNotEqual() : base(IR.CompareManagedPointer, TransformType.Auto | TransformType.Optimization)
+	public static readonly CompareManagedPointerSameAndNotEqual Instance = new();
+
+	private CompareManagedPointerSameAndNotEqual() : base(IR.CompareManagedPointer, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

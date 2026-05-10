@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Lea;
 
 public sealed class Lea64RemoveScale : BaseTransform
 {
-	public Lea64RemoveScale() : base(X64.Lea64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Lea64RemoveScale Instance = new();
+
+	private Lea64RemoveScale() : base(X64.Lea64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

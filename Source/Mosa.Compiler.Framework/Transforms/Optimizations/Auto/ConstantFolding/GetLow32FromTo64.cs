@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class GetLow32FromTo64 : BaseTransform
 {
-	public GetLow32FromTo64() : base(IR.GetLow32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly GetLow32FromTo64 Instance = new();
+
+	private GetLow32FromTo64() : base(IR.GetLow32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

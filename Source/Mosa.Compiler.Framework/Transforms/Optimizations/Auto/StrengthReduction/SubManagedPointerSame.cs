@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class SubManagedPointerSame : BaseTransform
 {
-	public SubManagedPointerSame() : base(IR.SubManagedPointer, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly SubManagedPointerSame Instance = new();
+
+	private SubManagedPointerSame() : base(IR.SubManagedPointer, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

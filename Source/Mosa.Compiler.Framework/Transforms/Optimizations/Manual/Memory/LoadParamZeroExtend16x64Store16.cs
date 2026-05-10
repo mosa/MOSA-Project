@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Memory;
 
 public sealed class LoadParamZeroExtend16x64Store16 : BaseTransform
 {
-	public LoadParamZeroExtend16x64Store16() : base(IR.LoadParamZeroExtend16x64, TransformType.Manual | TransformType.Optimization)
+	public static readonly LoadParamZeroExtend16x64Store16 Instance = new();
+
+	private LoadParamZeroExtend16x64Store16() : base(IR.LoadParamZeroExtend16x64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

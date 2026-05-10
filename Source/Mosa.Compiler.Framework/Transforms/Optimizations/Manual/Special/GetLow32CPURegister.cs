@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 /// </summary>
 public sealed class GetLow32CPURegister : BaseTransform
 {
-	public GetLow32CPURegister() : base(IR.GetLow32, TransformType.Manual | TransformType.Optimization)
+	public static readonly GetLow32CPURegister Instance = new();
+
+	private GetLow32CPURegister() : base(IR.GetLow32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

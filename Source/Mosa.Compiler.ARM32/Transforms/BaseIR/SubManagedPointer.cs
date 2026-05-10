@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class SubManagedPointer : BaseIRTransform
 {
-	public SubManagedPointer() : base(IR.SubManagedPointer, TransformType.Manual | TransformType.Transform)
+	public static readonly SubManagedPointer Instance = new();
+
+	private SubManagedPointer() : base(IR.SubManagedPointer, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -1,0 +1,1 @@
+dotnet ../bin/Mosa.Utility.UnitTests.dll -oMax -check -diag -stats -output-asm -output-counters -output-map -output-hash

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Xor32x2 : BaseTransform
 {
-	public Xor32x2() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly Xor32x2 Instance = new();
+
+	private Xor32x2() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -49,7 +51,9 @@ public sealed class Xor32x2 : BaseTransform
 
 public sealed class Xor32x2_v1 : BaseTransform
 {
-	public Xor32x2_v1() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly Xor32x2_v1 Instance = new();
+
+	private Xor32x2_v1() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -92,7 +96,9 @@ public sealed class Xor32x2_v1 : BaseTransform
 
 public sealed class Xor32x2_v2 : BaseTransform
 {
-	public Xor32x2_v2() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly Xor32x2_v2 Instance = new();
+
+	private Xor32x2_v2() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 
@@ -135,7 +141,9 @@ public sealed class Xor32x2_v2 : BaseTransform
 
 public sealed class Xor32x2_v3 : BaseTransform
 {
-	public Xor32x2_v3() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 90)
+	public static readonly Xor32x2_v3 Instance = new();
+
+	private Xor32x2_v3() : base(IR.Xor32, TransformType.Auto | TransformType.Optimization, 90)
 	{
 	}
 

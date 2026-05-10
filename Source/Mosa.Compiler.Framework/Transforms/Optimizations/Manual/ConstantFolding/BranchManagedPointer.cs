@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFolding;
 
 public sealed class BranchManagedPointer : BaseTransform
 {
-	public BranchManagedPointer() : base(IR.BranchManagedPointer, TransformType.Manual | TransformType.Optimization, 100)
+	public static readonly BranchManagedPointer Instance = new();
+
+	private BranchManagedPointer() : base(IR.BranchManagedPointer, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
 

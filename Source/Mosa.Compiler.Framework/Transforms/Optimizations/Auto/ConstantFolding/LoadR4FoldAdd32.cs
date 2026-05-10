@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class LoadR4FoldAdd32 : BaseTransform
 {
-	public LoadR4FoldAdd32() : base(IR.LoadR4, TransformType.Auto | TransformType.Optimization)
+	public static readonly LoadR4FoldAdd32 Instance = new();
+
+	private LoadR4FoldAdd32() : base(IR.LoadR4, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

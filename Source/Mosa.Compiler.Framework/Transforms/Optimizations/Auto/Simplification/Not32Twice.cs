@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Not32Twice : BaseTransform
 {
-	public Not32Twice() : base(IR.Not32, TransformType.Auto | TransformType.Optimization, 25)
+	public static readonly Not32Twice Instance = new();
+
+	private Not32Twice() : base(IR.Not32, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
 

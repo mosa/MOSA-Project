@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Bts64 : BaseAddressModeTransform
 {
-	public Bts64() : base(X64.Bts64, TransformType.Manual | TransformType.Transform)
+	public static readonly Bts64 Instance = new();
+
+	private Bts64() : base(X64.Bts64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

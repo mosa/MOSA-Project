@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Or64 : BaseTransform
 {
-	public Or64() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or64 Instance = new();
+
+	private Or64() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

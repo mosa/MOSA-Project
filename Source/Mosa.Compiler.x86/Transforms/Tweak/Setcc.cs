@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// </summary>
 public sealed class Setcc : BaseTransform
 {
-	public Setcc() : base(X86.Setcc, TransformType.Manual | TransformType.Transform)
+	public static readonly Setcc Instance = new();
+
+	private Setcc() : base(X86.Setcc, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

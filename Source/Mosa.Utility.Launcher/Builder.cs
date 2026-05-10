@@ -86,18 +86,28 @@ public class Builder : BaseLauncher
 
 	private bool Compile()
 	{
+		OutputStatus($"Output file: {MosaSettings.OutputFile}");
+		OutputStatus($"Available Cores: {Environment.ProcessorCount} | Max Threads: {MosaSettings.MaxThreads}");
+		OutputStatus($"Platform: {MosaSettings.Platform}");
 		OutputStatus($"Compiling: {MosaSettings.SourceFiles[0]}");
 
 		var compiler = new MosaCompiler(MosaSettings, CompilerHooks, new ClrModuleLoader(), new ClrTypeResolver());
-		compiler.Load();
-		compiler.Initialize();
-		compiler.Setup();
-		compiler.Compile();
+		try
+		{
+			compiler.Load();
+			compiler.Initialize();
+			compiler.Setup();
+			compiler.Compile();
 
-		Linker = compiler.Linker;
-		TypeSystem = compiler.TypeSystem;
+			Linker = compiler.Linker;
+			TypeSystem = compiler.TypeSystem;
 
-		return compiler.IsSuccess;
+			return compiler.IsSuccess;
+		}
+		finally
+		{
+			compiler.Dispose();
+		}
 	}
 
 	private void BuildImage()
@@ -267,25 +277,34 @@ public class Builder : BaseLauncher
 	{
 		switch (compilerEvent)
 		{
+			case CompilerEvent.Counter:
+				{
+					AddCounters(message);
+					break;
+				}
+			case CompilerEvent.Error
+				or CompilerEvent.Warning
+				//or CompilerEvent.CompilerStart
+				//or CompilerEvent.CompilerEnd
+				//or CompilerEvent.CompilingMethodsStart
+				//or CompilerEvent.CompilingMethodsCompleted
+				//or CompilerEvent.InlineMethodsScheduled
+				//or CompilerEvent.LinkingStart
+				//or CompilerEvent.LinkingEnd
+				or CompilerEvent.Diagnostic:
+				{
+					if (compilerEvent == CompilerEvent.Diagnostic && !MosaSettings.Diagnostic)
+						return;
+
+					OutputStatus(CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message));
+					break;
+				}
+
 			case CompilerEvent.Exception:
 				{
 					var status = $"[Exception] {message}";
 
 					OutputStatus(status);
-					break;
-				}
-			case CompilerEvent.CompilerStart or CompilerEvent.CompilerEnd or CompilerEvent.CompilingMethodsStart or CompilerEvent.CompilingMethodsCompleted or CompilerEvent.InlineMethodsScheduled or CompilerEvent.LinkingStart or CompilerEvent.LinkingEnd or CompilerEvent.Warning or CompilerEvent.Error or CompilerEvent.Diagnostic:
-				{
-					var status = compilerEvent.ToText();
-					if (!string.IsNullOrEmpty(message))
-						status += $" => {message}";
-
-					OutputStatus(status);
-					break;
-				}
-			case CompilerEvent.Counter:
-				{
-					AddCounters(message);
 					break;
 				}
 		}

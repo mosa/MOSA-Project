@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class AddCarryOut64ByZero : BaseTransform
 {
-	public AddCarryOut64ByZero() : base(IR.AddCarryOut64, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly AddCarryOut64ByZero Instance = new();
+
+	private AddCarryOut64ByZero() : base(IR.AddCarryOut64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 
@@ -37,7 +39,9 @@ public sealed class AddCarryOut64ByZero : BaseTransform
 
 public sealed class AddCarryOut64ByZero_v1 : BaseTransform
 {
-	public AddCarryOut64ByZero_v1() : base(IR.AddCarryOut64, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly AddCarryOut64ByZero_v1 Instance = new();
+
+	private AddCarryOut64ByZero_v1() : base(IR.AddCarryOut64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

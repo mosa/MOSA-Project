@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Sub32 : BaseTransform
 {
-	public Sub32() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub32 Instance = new();
+
+	private Sub32() : base(X86.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

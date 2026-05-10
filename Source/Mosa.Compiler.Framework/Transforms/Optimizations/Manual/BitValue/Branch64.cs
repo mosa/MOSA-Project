@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.BitValue;
 
 public sealed class Branch64 : BaseTransform
 {
-	public Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization, 100)
+	public static readonly Branch64 Instance = new();
+
+	private Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
 

@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Xor32 : BaseTransform
 {
-	public Xor32() : base(X64.Xor32, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly Xor32 Instance = new();
+
+	private Xor32() : base(X64.Xor32, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

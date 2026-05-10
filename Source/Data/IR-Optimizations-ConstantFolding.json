@@ -331,7 +331,7 @@
 			"Type": "ConstantFolding",
 			"Name": "ConvertU32ToR#",
 			"SubName": "",
-			"Expression": "IR.ConvertI32ToR# a",
+			"Expression": "IR.ConvertU32ToR# a",
 			"Filter": "IsResolvedConstant(a)",
 			"Result": "(IR.MoveR# [ToR#(To32(a))])",
 			"Priority": "100"

@@ -9,16 +9,16 @@ public static class IRTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new CheckArrayBounds(),
+		CheckArrayBounds.Instance,
 
-		new ThrowIndexOutOfRange(),
-		new ThrowOverflow(),
-		new ThrowDivideByZero(),
+		ThrowIndexOutOfRange.Instance,
+		ThrowOverflow.Instance,
+		ThrowDivideByZero.Instance,
 
-		new CheckThrowIndexOutOfRange(),
-		new CheckThrowOverflow(),
-		new CheckThrowDivideByZero(),
+		CheckThrowIndexOutOfRange.Instance,
+		CheckThrowOverflow.Instance,
+		CheckThrowDivideByZero.Instance,
 
-		new Switch(),
+		Switch.Instance,
 	};
 }

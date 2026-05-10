@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// </summary>
 public sealed class Mov32 : BaseTransform
 {
-	public Mov32() : base(X64.Mov32, TransformType.Manual | TransformType.Transform)
+	public static readonly Mov32 Instance = new();
+
+	private Mov32() : base(X64.Mov32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

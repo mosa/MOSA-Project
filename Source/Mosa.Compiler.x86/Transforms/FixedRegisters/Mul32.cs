@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Mul32 : BaseTransform
 {
-	public Mul32() : base(X86.Mul32, TransformType.Manual | TransformType.Transform)
+	public static readonly Mul32 Instance = new();
+
+	private Mul32() : base(X86.Mul32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

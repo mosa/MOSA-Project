@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class SignExtend8x32 : BaseTransform
 {
-	public SignExtend8x32() : base(IR.SignExtend8x32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly SignExtend8x32 Instance = new();
+
+	private SignExtend8x32() : base(IR.SignExtend8x32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

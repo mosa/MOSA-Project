@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// </summary>
 public sealed class Cmp32 : BaseTransform
 {
-	public Cmp32() : base(X64.Cmp32, TransformType.Manual | TransformType.Transform)
+	public static readonly Cmp32 Instance = new();
+
+	private Cmp32() : base(X64.Cmp32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

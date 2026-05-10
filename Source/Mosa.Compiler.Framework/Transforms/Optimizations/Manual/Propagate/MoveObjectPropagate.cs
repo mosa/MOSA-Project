@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class MoveObjectPropagate : BaseTransform
 {
-	public MoveObjectPropagate() : base(IR.MoveObject, TransformType.Manual | TransformType.Optimization, 40)
+	public static readonly MoveObjectPropagate Instance = new();
+
+	private MoveObjectPropagate() : base(IR.MoveObject, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
 

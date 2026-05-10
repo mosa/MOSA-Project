@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Xor64 : BaseLowerTo32Transform
 {
-	public Xor64() : base(IR.Xor64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Xor64 Instance = new();
+
+	private Xor64() : base(IR.Xor64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

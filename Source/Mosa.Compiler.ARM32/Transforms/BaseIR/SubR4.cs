@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class SubR4 : BaseIRTransform
 {
-	public SubR4() : base(IR.SubR4, TransformType.Manual | TransformType.Transform)
+	public static readonly SubR4 Instance = new();
+
+	private SubR4() : base(IR.SubR4, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

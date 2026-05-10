@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.BaseIR;
 /// </summary>
 public sealed class AddR4 : BaseIRTransform
 {
-	public AddR4() : base(IR.AddR4, TransformType.Manual | TransformType.Transform)
+	public static readonly AddR4 Instance = new();
+
+	private AddR4() : base(IR.AddR4, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

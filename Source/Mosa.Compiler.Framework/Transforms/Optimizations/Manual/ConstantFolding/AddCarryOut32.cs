@@ -9,7 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class AddCarryOut32 : BaseTransform
 {
-	public AddCarryOut32() : base(IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization, 100)
+	public static readonly AddCarryOut32 Instance = new();
+
+	private AddCarryOut32() : base(IR.AddCarryOut32, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
 

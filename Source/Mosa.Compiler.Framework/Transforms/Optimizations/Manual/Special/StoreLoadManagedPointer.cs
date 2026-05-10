@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 
 public sealed class StoreLoadManagedPointer : BaseTransform
 {
-	public StoreLoadManagedPointer() : base(IR.StoreManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public static readonly StoreLoadManagedPointer Instance = new();
+
+	private StoreLoadManagedPointer() : base(IR.StoreManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

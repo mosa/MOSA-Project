@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Shr64ByZero : BaseTransform
 {
-	public Shr64ByZero() : base(X64.Shr64, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly Shr64ByZero Instance = new();
+
+	private Shr64ByZero() : base(X64.Shr64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

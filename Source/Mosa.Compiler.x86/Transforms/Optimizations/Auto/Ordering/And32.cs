@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class And32 : BaseTransform
 {
-	public And32() : base(X86.And32, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly And32 Instance = new();
+
+	private And32() : base(X86.And32, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

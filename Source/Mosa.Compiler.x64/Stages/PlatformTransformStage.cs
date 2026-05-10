@@ -25,10 +25,10 @@ public sealed class PlatformTransformStage : Compiler.Framework.Stages.BaseTrans
 		AddTranforms(AddressModeTransforms.List);
 		AddTranforms(SpecialTransforms.List);
 
-		AddTranform(new Mov32Unless());
-		AddTranform(new Mov64Unless());
-		AddTranform(new Mov32Coalescing());
-		AddTranform(new Mov64Coalescing());
-		AddTranform(new Deadcode());
+		AddTranform(Mov32Unless.Instance);
+		AddTranform(Mov64Unless.Instance);
+		AddTranform(Mov32Coalescing.Instance);
+		AddTranform(Mov64Coalescing.Instance);
+		AddTranform(Deadcode.Instance);
 	}
 }

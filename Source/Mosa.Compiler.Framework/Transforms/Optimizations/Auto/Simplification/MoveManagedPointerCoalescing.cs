@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class MoveManagedPointerCoalescing : BaseTransform
 {
-	public MoveManagedPointerCoalescing() : base(IR.MoveManagedPointer, TransformType.Auto | TransformType.Optimization, 25)
+	public static readonly MoveManagedPointerCoalescing Instance = new();
+
+	private MoveManagedPointerCoalescing() : base(IR.MoveManagedPointer, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
 

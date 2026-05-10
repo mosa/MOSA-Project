@@ -422,7 +422,7 @@ public sealed class MethodCompiler
 
 				CreateInstructionTrace(stage);
 
-				if (Compiler.FullCheckMode)
+				if (Compiler.CheckMode)
 					stage.FullCheck(true);
 
 				stage.CleanUp();
@@ -538,6 +538,11 @@ public sealed class MethodCompiler
 			return MethodTraceLevel.Value >= tracelevel;
 		else
 			return Compiler.IsTraceable(tracelevel);
+	}
+
+	public bool IsGlobalTraceable(int tracelevel)
+	{
+		return Compiler.IsTraceable(tracelevel);
 	}
 
 	private void PostTraceLog(TraceLog traceLog)

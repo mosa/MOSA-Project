@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 
@@ -472,7 +472,7 @@ public static class _ExceptionHandlingTests
 	//	{
 	//		try
 	//		{
-	//			throw new System.Exception();
+	//			throw System.Exception.Instance;
 	//		}
 	//		finally
 	//		{

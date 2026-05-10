@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class And32 : BaseIRTransform
 {
-	public And32() : base(IR.And32, TransformType.Manual | TransformType.Transform)
+	public static readonly And32 Instance = new();
+
+	private And32() : base(IR.And32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

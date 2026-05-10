@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class Add64 : BaseIRTransform
 {
-	public Add64() : base(IR.Add64, TransformType.Manual | TransformType.Transform)
+	public static readonly Add64 Instance = new();
+
+	private Add64() : base(IR.Add64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

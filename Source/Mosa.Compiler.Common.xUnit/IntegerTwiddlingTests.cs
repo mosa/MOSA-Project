@@ -41,15 +41,29 @@ public class IntegerTwiddlingTests
 	[Fact]
 	public void IsSubSignedOverflow()
 	{
-		Assert.True(IntegerTwiddling.IsSubSignedOverflow(int.MinValue, -1));
+		// a - b negative overflow: a < MinValue, b > 0
+		Assert.True(IntegerTwiddling.IsSubSignedOverflow(int.MinValue, 1));
+		// a - b positive overflow: a > MaxValue, b < 0
+		Assert.True(IntegerTwiddling.IsSubSignedOverflow(int.MaxValue, -1));
+		// 0 - MinValue overflows (exceeds MaxValue)
+		Assert.True(IntegerTwiddling.IsSubSignedOverflow(0, int.MinValue));
+		// MinValue - (-1) = MinValue + 1, valid (no overflow)
+		Assert.False(IntegerTwiddling.IsSubSignedOverflow(int.MinValue, -1));
 		Assert.False(IntegerTwiddling.IsSubSignedOverflow(int.MinValue, 0));
 		Assert.False(IntegerTwiddling.IsSubSignedOverflow(0, 0));
-		Assert.False(IntegerTwiddling.IsSubSignedOverflow(0, int.MinValue));
+		Assert.False(IntegerTwiddling.IsSubSignedOverflow(int.MinValue, int.MinValue));
 
-		Assert.True(IntegerTwiddling.IsSubSignedOverflow(long.MinValue, -1L));
+		// a - b negative overflow: a < MinValue, b > 0
+		Assert.True(IntegerTwiddling.IsSubSignedOverflow(long.MinValue, 1L));
+		// a - b positive overflow: a > MaxValue, b < 0
+		Assert.True(IntegerTwiddling.IsSubSignedOverflow(long.MaxValue, -1L));
+		// 0 - MinValue overflows (exceeds MaxValue)
+		Assert.True(IntegerTwiddling.IsSubSignedOverflow(0L, long.MinValue));
+		// MinValue - (-1) = MinValue + 1, valid (no overflow)
+		Assert.False(IntegerTwiddling.IsSubSignedOverflow(long.MinValue, -1L));
 		Assert.False(IntegerTwiddling.IsSubSignedOverflow(long.MinValue, 0L));
 		Assert.False(IntegerTwiddling.IsSubSignedOverflow(0L, 0L));
-		Assert.False(IntegerTwiddling.IsSubSignedOverflow(0L, long.MinValue));
+		Assert.False(IntegerTwiddling.IsSubSignedOverflow(long.MinValue, long.MinValue));
 	}
 
 	[Fact]

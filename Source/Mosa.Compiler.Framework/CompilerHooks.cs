@@ -29,6 +29,10 @@ public class CompilerHooks
 
 	public delegate int? GetMethodTraceLevelHandler(MosaMethod method);
 
+	public delegate void RegisterTransformHandler(string stageName, string transformName);
+
+	public delegate bool IsTransformDisabledHandler(string stageName, string transformName);
+
 	#endregion Delegates definitions
 
 	public NotifyStatusHandler NotifyStatus;
@@ -50,4 +54,25 @@ public class CompilerHooks
 	public ExtendMethodCompilerPipelineHandler ExtendMethodCompilerPipeline;
 
 	public GetMethodTraceLevelHandler GetMethodTraceLevel;
+
+	public RegisterTransformHandler RegisterTransform;
+
+	public IsTransformDisabledHandler IsTransformDisabled;
+
+	#region Standardization
+
+	public static string GetStandardNotifyEventStatus(CompilerEvent compilerEvent, string message)
+	{
+		var eventName = compilerEvent.ToText();
+		return string.IsNullOrWhiteSpace(message) ? eventName : $"{eventName}: {message}";
+	}
+
+	public static bool IsStandardNotifyEvent(CompilerEvent compilerEvent)
+		=> compilerEvent is CompilerEvent.Error
+			or CompilerEvent.Exception
+			or CompilerEvent.Warning
+			or CompilerEvent.Stopped
+			or CompilerEvent.Diagnostic;
+
+	#endregion Standardization
 }

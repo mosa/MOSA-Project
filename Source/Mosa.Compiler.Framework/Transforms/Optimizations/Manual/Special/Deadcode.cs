@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 
 public sealed class Deadcode : BaseTransform
 {
-	public Deadcode() : base(TransformType.Manual | TransformType.Optimization)
+	public static readonly Deadcode Instance = new();
+
+	private Deadcode() : base(TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

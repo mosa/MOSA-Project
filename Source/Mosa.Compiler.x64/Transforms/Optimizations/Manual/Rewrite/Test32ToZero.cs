@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 
@@ -6,7 +6,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Test32ToZero : BaseTransform
 {
-	public Test32ToZero() : base(X64.Test32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Test32ToZero Instance = new();
+
+	private Test32ToZero() : base(X64.Test32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

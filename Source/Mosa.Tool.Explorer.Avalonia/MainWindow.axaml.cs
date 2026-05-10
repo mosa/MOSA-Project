@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using Avalonia.Controls;
+using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -12,13 +13,14 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Stages.Diagnostic;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.MosaTypeSystem.CLR;
+using Mosa.Compiler.Platforms;
 using Mosa.Tool.Explorer.Common;
 using Mosa.Tool.Explorer.Common.CompilerStage;
 using Mosa.Tool.Explorer.Common.Stages;
 using Mosa.Utility.Configuration;
-using Timer = System.Timers.Timer;
 using ExplorerCompilerData = Mosa.Tool.Explorer.Common.CompilerInformation;
 using ExplorerMethodData = Mosa.Tool.Explorer.Common.MethodInformation;
+using Timer = System.Timers.Timer;
 
 namespace Mosa.Tool.Explorer.Avalonia;
 
@@ -68,10 +70,7 @@ public partial class MainWindow : Window
 
 		ClearAll();
 
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
-		//PlatformRegistry.Add(new Compiler.ARM64.Architecture());
+		PlatformRegistrations.Register();
 	}
 
 	private void Control_OnLoaded(object _, RoutedEventArgs e)
@@ -133,7 +132,7 @@ public partial class MainWindow : Window
 		MultiThreading.IsChecked = mosaSettings.Multithreading;
 		TreeFilter.Text = mosaSettings.ExplorerFilter;
 		CodeSizeReduction.IsChecked = mosaSettings.ReduceCodeSize;
-		FullCheckMode.IsChecked = mosaSettings.FullCheckMode;
+		FullCheckMode.IsChecked = mosaSettings.CheckMode;
 
 		Platform.SelectedIndex = mosaSettings.Platform.ToLowerInvariant() switch
 		{
@@ -683,11 +682,12 @@ public partial class MainWindow : Window
 
 	private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 	{
+		if (compilerEvent == CompilerEvent.Diagnostic && !mosaSettings.Diagnostic)
+			return;
+
 		if (compilerEvent != CompilerEvent.Counter)
 		{
-			var newStatus = compilerEvent.ToText();
-			if (!string.IsNullOrWhiteSpace(message))
-				newStatus += $": {message}";
+			var newStatus = CompilerHooks.GetStandardNotifyEventStatus(compilerEvent, message);
 
 			lock (statusLock)
 				status = newStatus;
@@ -1034,7 +1034,7 @@ public partial class MainWindow : Window
 		mosaSettings.InlineMethods = Inline.IsChecked;
 		mosaSettings.InlineExplicit = InlineExplicit.IsChecked;
 		mosaSettings.ReduceCodeSize = CodeSizeReduction.IsChecked;
-		mosaSettings.FullCheckMode = FullCheckMode.IsChecked;
+		mosaSettings.CheckMode = FullCheckMode.IsChecked;
 
 		mosaSettings.TraceLevel = 10;
 		//mosaSettings.InlineMaximum = 12;

@@ -9,7 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.StaticLoad;
 /// </summary>
 public sealed class Load32 : BaseTransform
 {
-	public Load32() : base(IR.Load32, TransformType.Manual | TransformType.Transform, 100)
+	public static readonly Load32 Instance = new();
+
+	private Load32() : base(IR.Load32, TransformType.Manual | TransformType.Transform, 100)
 	{
 	}
 

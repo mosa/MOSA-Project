@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Sub32ToAdd : BaseTransform
 {
-	public Sub32ToAdd() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub32ToAdd Instance = new();
+
+	private Sub32ToAdd() : base(IR.Sub32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

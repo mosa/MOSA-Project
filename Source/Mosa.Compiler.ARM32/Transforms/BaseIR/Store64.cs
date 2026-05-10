@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class Store64 : BaseIRTransform
 {
-	public Store64() : base(IR.Store64, TransformType.Manual | TransformType.Transform)
+	public static readonly Store64 Instance = new();
+
+	private Store64() : base(IR.Store64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -9,4 +9,5 @@ namespace Mosa.DeviceSystem.Framework;
 /// The base class for device configurations. See <see cref="PCIDeviceConfiguration"/>, <see cref="DiskDeviceConfiguration"/>
 /// and <see cref="DiskPartitionConfiguration"/> for implementations of this class.
 /// </summary>
-public abstract class BaseDeviceConfiguration { }
+public abstract class BaseDeviceConfiguration
+{ }

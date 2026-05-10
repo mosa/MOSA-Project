@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Special;
 
 public sealed class Store32AddressOf : BaseTransform
 {
-	public Store32AddressOf() : base(IR.Store32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Store32AddressOf Instance = new();
+
+	private Store32AddressOf() : base(IR.Store32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

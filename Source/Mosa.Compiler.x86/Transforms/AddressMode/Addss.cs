@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// </summary>
 public sealed class Addss : BaseAddressModeTransform
 {
-	public Addss() : base(X86.Addss, TransformType.Manual | TransformType.Transform)
+	public static readonly Addss Instance = new();
+
+	private Addss() : base(X86.Addss, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

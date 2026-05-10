@@ -9,10 +9,10 @@ public static class CompoundTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new LoadCompound(),
-		new LoadParamCompound(),
-		new MoveCompound(),
-		new StoreCompound(),
-		new StoreParamCompound(),
+		LoadCompound.Instance,
+		LoadParamCompound.Instance,
+		MoveCompound.Instance,
+		StoreCompound.Instance,
+		StoreParamCompound.Instance,
 	};
 }

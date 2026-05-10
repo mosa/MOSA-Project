@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Rcr64 : BaseAddressModeTransform
 {
-	public Rcr64() : base(X64.Rcr64, TransformType.Manual | TransformType.Transform)
+	public static readonly Rcr64 Instance = new();
+
+	private Rcr64() : base(X64.Rcr64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

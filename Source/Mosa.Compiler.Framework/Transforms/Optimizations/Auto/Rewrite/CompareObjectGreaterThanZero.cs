@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Rewrite;
 
 public sealed class CompareObjectGreaterThanZero : BaseTransform
 {
-	public CompareObjectGreaterThanZero() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
+	public static readonly CompareObjectGreaterThanZero Instance = new();
+
+	private CompareObjectGreaterThanZero() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -34,7 +36,9 @@ public sealed class CompareObjectGreaterThanZero : BaseTransform
 
 public sealed class CompareObjectGreaterThanZero_v1 : BaseTransform
 {
-	public CompareObjectGreaterThanZero_v1() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
+	public static readonly CompareObjectGreaterThanZero_v1 Instance = new();
+
+	private CompareObjectGreaterThanZero_v1() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

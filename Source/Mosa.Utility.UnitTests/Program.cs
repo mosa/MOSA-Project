@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
+using Mosa.Compiler.Platforms;
 
 namespace Mosa.Utility.UnitTests;
 
@@ -11,7 +11,6 @@ internal static class Program
 		RegisterPlatforms();
 
 		var unitTestSystem = new UnitTestSystem();
-
 		var returncode = unitTestSystem.Start(args);
 
 		Environment.Exit(returncode);
@@ -19,9 +18,6 @@ internal static class Program
 
 	private static void RegisterPlatforms()
 	{
-		PlatformRegistry.Add(new Compiler.x86.Architecture());
-		PlatformRegistry.Add(new Compiler.x64.Architecture());
-		PlatformRegistry.Add(new Compiler.ARM32.Architecture());
-		//PlatformRegistry.Add(new Platform.ARM64.Architecture());
+		PlatformRegistrations.Register();
 	}
 }

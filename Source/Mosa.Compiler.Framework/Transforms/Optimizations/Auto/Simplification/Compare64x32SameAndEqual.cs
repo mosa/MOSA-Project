@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Compare64x32SameAndEqual : BaseTransform
 {
-	public Compare64x32SameAndEqual() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Compare64x32SameAndEqual Instance = new();
+
+	private Compare64x32SameAndEqual() : base(IR.Compare64x32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.FloatingTweaks;
 /// </summary>
 public sealed class RemR8NotSupported : BaseTransform
 {
-	public RemR8NotSupported() : base(IR.RemR8, TransformType.Manual | TransformType.Transform)
+	public static readonly RemR8NotSupported Instance = new();
+
+	private RemR8NotSupported() : base(IR.RemR8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

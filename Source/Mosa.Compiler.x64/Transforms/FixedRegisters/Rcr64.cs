@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Rcr64 : BaseTransform
 {
-	public Rcr64() : base(X64.Rcr64, TransformType.Manual | TransformType.Transform)
+	public static readonly Rcr64 Instance = new();
+
+	private Rcr64() : base(X64.Rcr64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

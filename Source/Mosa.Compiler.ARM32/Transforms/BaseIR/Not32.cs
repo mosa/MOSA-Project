@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class Not32 : BaseIRTransform
 {
-	public Not32() : base(IR.Not32, TransformType.Manual | TransformType.Transform)
+	public static readonly Not32 Instance = new();
+
+	private Not32() : base(IR.Not32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

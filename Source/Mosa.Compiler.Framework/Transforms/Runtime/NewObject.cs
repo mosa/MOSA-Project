@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class NewObject : BaseRuntimeTransform
 {
-	public NewObject() : base(IR.NewObject, TransformType.Manual | TransformType.Transform)
+	public static readonly NewObject Instance = new();
+
+	private NewObject() : base(IR.NewObject, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

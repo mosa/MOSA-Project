@@ -157,5 +157,4 @@ public static class BoxingTests
 		object o = value;
 		return o.Equals(value);
 	}
-
 }

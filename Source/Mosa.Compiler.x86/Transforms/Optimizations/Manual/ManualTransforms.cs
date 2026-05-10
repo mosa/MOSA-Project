@@ -11,30 +11,30 @@ public static class ManualTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new Rewrite.Add32ToInc32(),
-		new Rewrite.Add32ToLea32(),
-		new Rewrite.Cmp32ToTest32(),
-		new Rewrite.Cmp32ToZero(),
-		new Rewrite.Lea32ToInc32(),
-		new Rewrite.Lea32ToDec32(),
-		//new Rewrite.Mov32ToXor32(),
-		new Rewrite.Sub32ToDec32(),
-		new Rewrite.Sub32ToLea32(),
-		new Rewrite.Test32ToZero(),
+		Rewrite.Add32ToInc32.Instance,
+		Rewrite.Add32ToLea32.Instance,
+		Rewrite.Cmp32ToTest32.Instance,
+		Rewrite.Cmp32ToZero.Instance,
+		Rewrite.Lea32ToInc32.Instance,
+		Rewrite.Lea32ToDec32.Instance,
+		//Rewrite.Mov32ToXor32.Instance,
+		Rewrite.Sub32ToDec32.Instance,
+		Rewrite.Sub32ToLea32.Instance,
+		Rewrite.Test32ToZero.Instance,
 
-		new Special.Deadcode(),
-		new Special.Mov32Coalescing(),
-		new Special.Mov32ConstantReuse(),
-		new Special.Mov32Unless(),
-		new Special.Mul32Ditto(),
-		new Special.Bt32Movzx8To32Setcc(),
+		Special.Deadcode.Instance,
+		Special.Mov32Coalescing.Instance,
+		Special.Mov32ConstantReuse.Instance,
+		Special.Mov32Unless.Instance,
+		Special.Mul32Ditto.Instance,
+		Special.Bt32Movzx8To32Setcc.Instance,
 
-		new StrengthReduction.Mul32ByZero(),
-		new StrengthReduction.Mul32WithMov32ByZero(),
+		StrengthReduction.Mul32ByZero.Instance,
+		StrengthReduction.Mul32WithMov32ByZero.Instance,
 
-		new Stack.Add32(),
+		Stack.Add32.Instance,
 
-		new Size.Add32By2ToInc32(),
-		new Size.Lea32By2(),
+		Size.Add32By2ToInc32.Instance,
+		Size.Lea32By2.Instance,
 	};
 }

@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// </summary>
 public sealed class Shl32 : BaseAddressModeTransform
 {
-	public Shl32() : base(X86.Shl32, TransformType.Manual | TransformType.Transform)
+	public static readonly Shl32 Instance = new();
+
+	private Shl32() : base(X86.Shl32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

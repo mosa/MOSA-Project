@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-
 namespace Mosa.Utility.UnitTests.Numbers;
 
 public static class U1

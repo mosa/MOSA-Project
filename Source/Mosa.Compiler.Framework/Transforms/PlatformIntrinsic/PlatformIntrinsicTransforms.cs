@@ -9,6 +9,6 @@ public static class PlatformIntrinsicTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new IntrinsicMethodCall(),
+		IntrinsicMethodCall.Instance,
 	};
 }

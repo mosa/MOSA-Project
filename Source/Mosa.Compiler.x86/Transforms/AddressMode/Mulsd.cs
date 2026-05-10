@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// </summary>
 public sealed class Mulsd : BaseAddressModeTransform
 {
-	public Mulsd() : base(X86.Mulsd, TransformType.Manual | TransformType.Transform)
+	public static readonly Mulsd Instance = new();
+
+	private Mulsd() : base(X86.Mulsd, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

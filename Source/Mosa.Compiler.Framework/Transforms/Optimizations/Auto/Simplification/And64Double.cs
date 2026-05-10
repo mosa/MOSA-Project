@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class And64Double : BaseTransform
 {
-	public And64Double() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Double Instance = new();
+
+	private And64Double() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -40,7 +42,9 @@ public sealed class And64Double : BaseTransform
 
 public sealed class And64Double_v1 : BaseTransform
 {
-	public And64Double_v1() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Double_v1 Instance = new();
+
+	private And64Double_v1() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -74,7 +78,9 @@ public sealed class And64Double_v1 : BaseTransform
 
 public sealed class And64Double_v2 : BaseTransform
 {
-	public And64Double_v2() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Double_v2 Instance = new();
+
+	private And64Double_v2() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -108,7 +114,9 @@ public sealed class And64Double_v2 : BaseTransform
 
 public sealed class And64Double_v3 : BaseTransform
 {
-	public And64Double_v3() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Double_v3 Instance = new();
+
+	private And64Double_v3() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

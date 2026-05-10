@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Specific;
 
 public sealed class And64Add64ToBlsr64 : BaseTransform
 {
-	public And64Add64ToBlsr64() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Add64ToBlsr64 Instance = new();
+
+	private And64Add64ToBlsr64() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -53,7 +55,9 @@ public sealed class And64Add64ToBlsr64 : BaseTransform
 
 public sealed class And64Add64ToBlsr64_v1 : BaseTransform
 {
-	public And64Add64ToBlsr64_v1() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Add64ToBlsr64_v1 Instance = new();
+
+	private And64Add64ToBlsr64_v1() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -98,7 +102,9 @@ public sealed class And64Add64ToBlsr64_v1 : BaseTransform
 
 public sealed class And64Add64ToBlsr64_v2 : BaseTransform
 {
-	public And64Add64ToBlsr64_v2() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Add64ToBlsr64_v2 Instance = new();
+
+	private And64Add64ToBlsr64_v2() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -143,7 +149,9 @@ public sealed class And64Add64ToBlsr64_v2 : BaseTransform
 
 public sealed class And64Add64ToBlsr64_v3 : BaseTransform
 {
-	public And64Add64ToBlsr64_v3() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Add64ToBlsr64_v3 Instance = new();
+
+	private And64Add64ToBlsr64_v3() : base(X64.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

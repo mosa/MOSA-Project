@@ -6,7 +6,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Add32ToInc32 : BaseTransform
 {
-	public Add32ToInc32() : base(X86.Add32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Add32ToInc32 Instance = new();
+
+	private Add32ToInc32() : base(X86.Add32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

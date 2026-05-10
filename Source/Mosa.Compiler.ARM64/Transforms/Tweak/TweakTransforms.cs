@@ -11,7 +11,7 @@ public static class TweakTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		//new Mov(),
-		//new Mvf(),
+		//Mov.Instance,
+		//Mvf.Instance,
 	};
 }

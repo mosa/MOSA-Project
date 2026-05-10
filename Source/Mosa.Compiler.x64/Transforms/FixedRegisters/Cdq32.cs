@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Cdq32 : BaseTransform
 {
-	public Cdq32() : base(X64.Cdq32, TransformType.Manual | TransformType.Transform)
+	public static readonly Cdq32 Instance = new();
+
+	private Cdq32() : base(X64.Cdq32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

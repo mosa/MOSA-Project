@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class Sub64Same : BaseTransform
 {
-	public Sub64Same() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly Sub64Same Instance = new();
+
+	private Sub64Same() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

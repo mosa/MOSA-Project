@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion;
 /// </summary>
 public sealed class LoadParamManagedPointer : BaseCodeMotionTransform
 {
-	public LoadParamManagedPointer() : base(IR.LoadParamManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public static readonly LoadParamManagedPointer Instance = new();
+
+	private LoadParamManagedPointer() : base(IR.LoadParamManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 }

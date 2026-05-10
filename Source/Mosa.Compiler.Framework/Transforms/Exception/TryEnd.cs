@@ -10,7 +10,9 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class TryEnd : BaseExceptionTransform
 {
-	public TryEnd() : base(IR.TryEnd, TransformType.Manual | TransformType.Transform)
+	public static readonly TryEnd Instance = new();
+
+	private TryEnd() : base(IR.TryEnd, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

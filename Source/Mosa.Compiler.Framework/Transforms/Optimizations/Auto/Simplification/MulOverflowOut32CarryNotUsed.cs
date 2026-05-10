@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class MulOverflowOut32CarryNotUsed : BaseTransform
 {
-	public MulOverflowOut32CarryNotUsed() : base(IR.MulOverflowOut32, TransformType.Auto | TransformType.Optimization)
+	public static readonly MulOverflowOut32CarryNotUsed Instance = new();
+
+	private MulOverflowOut32CarryNotUsed() : base(IR.MulOverflowOut32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

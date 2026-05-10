@@ -132,9 +132,11 @@ public class VirtIOGPU : BaseDeviceDriver, IGraphicsDevice
 		virtIODevice.SendHeader(Queues.ControlQueue, linkHeader, 48);
 	}
 
-	public void Disable() { }
+	public void Disable()
+	{ }
 
-	public void Enable() { }
+	public void Enable()
+	{ }
 
 	public void Update(uint x, uint y, uint width, uint height)
 	{

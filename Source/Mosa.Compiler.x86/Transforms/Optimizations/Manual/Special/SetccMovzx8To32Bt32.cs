@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Manual.Special;
 /// </summary>
 public sealed class Bt32Movzx8To32Setcc : BaseTransform
 {
-	public Bt32Movzx8To32Setcc() : base(X86.Bt32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Bt32Movzx8To32Setcc Instance = new();
+
+	private Bt32Movzx8To32Setcc() : base(X86.Bt32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Sub32ToDec32 : BaseTransform
 {
-	public Sub32ToDec32() : base(X64.Sub32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Sub32ToDec32 Instance = new();
+
+	private Sub32ToDec32() : base(X64.Sub32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

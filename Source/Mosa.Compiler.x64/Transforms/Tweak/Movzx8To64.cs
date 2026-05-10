@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x64.Transforms.Tweak;
 /// </summary>
 public sealed class Movzx8To64 : BaseTransform
 {
-	public Movzx8To64() : base(X64.Movzx8To64, TransformType.Manual | TransformType.Transform)
+	public static readonly Movzx8To64 Instance = new();
+
+	private Movzx8To64() : base(X64.Movzx8To64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

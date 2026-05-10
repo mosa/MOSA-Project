@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.BaseIR;
 /// </summary>
 public sealed class StoreObject : BaseIRTransform
 {
-	public StoreObject() : base(IR.StoreObject, TransformType.Manual | TransformType.Transform)
+	public static readonly StoreObject Instance = new();
+
+	private StoreObject() : base(IR.StoreObject, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

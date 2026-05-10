@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class IMul64Constant : BaseTransform
 {
-	public IMul64Constant() : base(X64.IMul64, TransformType.Manual | TransformType.Transform)
+	public static readonly IMul64Constant Instance = new();
+
+	private IMul64Constant() : base(X64.IMul64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

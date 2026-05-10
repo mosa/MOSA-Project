@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Runtime;
 /// </summary>
 public sealed class MemoryCopy : BaseRuntimeTransform
 {
-	public MemoryCopy() : base(IR.MemoryCopy, TransformType.Manual | TransformType.Transform)
+	public static readonly MemoryCopy Instance = new();
+
+	private MemoryCopy() : base(IR.MemoryCopy, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

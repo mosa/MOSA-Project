@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class ShiftRight32ByZero : BaseTransform
 {
-	public ShiftRight32ByZero() : base(IR.ShiftRight32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly ShiftRight32ByZero Instance = new();
+
+	private ShiftRight32ByZero() : base(IR.ShiftRight32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

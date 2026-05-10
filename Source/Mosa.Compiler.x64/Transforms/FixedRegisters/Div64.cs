@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Div64 : BaseTransform
 {
-	public Div64() : base(X64.Div64, TransformType.Manual | TransformType.Transform)
+	public static readonly Div64 Instance = new();
+
+	private Div64() : base(X64.Div64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

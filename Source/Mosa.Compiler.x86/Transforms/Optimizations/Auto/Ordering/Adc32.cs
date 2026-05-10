@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Adc32 : BaseTransform
 {
-	public Adc32() : base(X86.Adc32, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly Adc32 Instance = new();
+
+	private Adc32() : base(X86.Adc32, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

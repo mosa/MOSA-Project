@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class ExceptionStart : BaseExceptionTransform
 {
-	public ExceptionStart() : base(IR.ExceptionStart, TransformType.Manual | TransformType.Transform)
+	public static readonly ExceptionStart Instance = new();
+
+	private ExceptionStart() : base(IR.ExceptionStart, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

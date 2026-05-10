@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class MulSigned32 : BaseTransform
 {
-	public MulSigned32() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly MulSigned32 Instance = new();
+
+	private MulSigned32() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

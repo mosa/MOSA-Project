@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class Compare32x32GreaterOrEqualThanZero : BaseTransform
 {
-	public Compare32x32GreaterOrEqualThanZero() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly Compare32x32GreaterOrEqualThanZero Instance = new();
+
+	private Compare32x32GreaterOrEqualThanZero() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 
@@ -33,7 +35,9 @@ public sealed class Compare32x32GreaterOrEqualThanZero : BaseTransform
 
 public sealed class Compare32x32GreaterOrEqualThanZero_v1 : BaseTransform
 {
-	public Compare32x32GreaterOrEqualThanZero_v1() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly Compare32x32GreaterOrEqualThanZero_v1 Instance = new();
+
+	private Compare32x32GreaterOrEqualThanZero_v1() : base(IR.Compare32x32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

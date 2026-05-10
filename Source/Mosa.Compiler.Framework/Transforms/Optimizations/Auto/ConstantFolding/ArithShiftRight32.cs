@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantFolding;
 
 public sealed class ArithShiftRight32 : BaseTransform
 {
-	public ArithShiftRight32() : base(IR.ArithShiftRight32, TransformType.Auto | TransformType.Optimization, 100)
+	public static readonly ArithShiftRight32 Instance = new();
+
+	private ArithShiftRight32() : base(IR.ArithShiftRight32, TransformType.Auto | TransformType.Optimization, 100)
 	{
 	}
 

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Sub64ToAdd : BaseTransform
 {
-	public Sub64ToAdd() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Sub64ToAdd Instance = new();
+
+	private Sub64ToAdd() : base(IR.Sub64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

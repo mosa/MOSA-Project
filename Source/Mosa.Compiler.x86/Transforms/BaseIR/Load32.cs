@@ -10,7 +10,9 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// </summary>
 public sealed class Load32 : BaseIRTransform
 {
-	public Load32() : base(IR.Load32, TransformType.Manual | TransformType.Transform)
+	public static readonly Load32 Instance = new();
+
+	private Load32() : base(IR.Load32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

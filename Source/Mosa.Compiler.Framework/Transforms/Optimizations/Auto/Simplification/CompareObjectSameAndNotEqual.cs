@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class CompareObjectSameAndNotEqual : BaseTransform
 {
-	public CompareObjectSameAndNotEqual() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
+	public static readonly CompareObjectSameAndNotEqual Instance = new();
+
+	private CompareObjectSameAndNotEqual() : base(IR.CompareObject, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

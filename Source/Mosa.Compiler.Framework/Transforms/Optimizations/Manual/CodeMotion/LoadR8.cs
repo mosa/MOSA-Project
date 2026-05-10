@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.CodeMotion;
 /// </summary>
 public sealed class LoadR8 : BaseCodeMotionTransform
 {
-	public LoadR8() : base(IR.LoadR8, TransformType.Manual | TransformType.Optimization)
+	public static readonly LoadR8 Instance = new();
+
+	private LoadR8() : base(IR.LoadR8, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 }

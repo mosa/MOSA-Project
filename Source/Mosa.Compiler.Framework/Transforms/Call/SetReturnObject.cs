@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Call;
 /// </summary>
 public sealed class SetReturnObject : BaseTransform
 {
-	public SetReturnObject() : base(IR.SetReturnObject, TransformType.Manual | TransformType.Transform)
+	public static readonly SetReturnObject Instance = new();
+
+	private SetReturnObject() : base(IR.SetReturnObject, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

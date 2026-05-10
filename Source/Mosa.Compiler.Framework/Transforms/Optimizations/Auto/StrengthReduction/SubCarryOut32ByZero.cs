@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.StrengthReductio
 
 public sealed class SubCarryOut32ByZero : BaseTransform
 {
-	public SubCarryOut32ByZero() : base(IR.SubCarryOut32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly SubCarryOut32ByZero Instance = new();
+
+	private SubCarryOut32ByZero() : base(IR.SubCarryOut32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

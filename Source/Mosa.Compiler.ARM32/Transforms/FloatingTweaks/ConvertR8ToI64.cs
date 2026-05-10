@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.FloatingTweaks;
 /// </summary>
 public sealed class ConvertR8ToI64 : BaseTransform
 {
-	public ConvertR8ToI64() : base(IR.ConvertR8ToI64, TransformType.Manual | TransformType.Transform)
+	public static readonly ConvertR8ToI64 Instance = new();
+
+	private ConvertR8ToI64() : base(IR.ConvertR8ToI64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.CheckedConversion;
 /// </summary>
 public sealed class CheckedConversionU64ToI64 : BaseCheckedConversionTransform
 {
-	public CheckedConversionU64ToI64() : base(IR.CheckedConversionU64ToI64, TransformType.Manual | TransformType.Transform)
+	public static readonly CheckedConversionU64ToI64 Instance = new();
+
+	private CheckedConversionU64ToI64() : base(IR.CheckedConversionU64ToI64, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

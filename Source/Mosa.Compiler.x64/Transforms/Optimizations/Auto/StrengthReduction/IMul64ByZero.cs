@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class IMul64ByZero : BaseTransform
 {
-	public IMul64ByZero() : base(X64.IMul64, TransformType.Auto | TransformType.Optimization)
+	public static readonly IMul64ByZero Instance = new();
+
+	private IMul64ByZero() : base(X64.IMul64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Or64SignExtend16x64SignExtend16x64 : BaseTransform
 {
-	public Or64SignExtend16x64SignExtend16x64() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or64SignExtend16x64SignExtend16x64 Instance = new();
+
+	private Or64SignExtend16x64SignExtend16x64() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -49,7 +51,9 @@ public sealed class Or64SignExtend16x64SignExtend16x64 : BaseTransform
 
 public sealed class Or64SignExtend16x64SignExtend16x64_v1 : BaseTransform
 {
-	public Or64SignExtend16x64SignExtend16x64_v1() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or64SignExtend16x64SignExtend16x64_v1 Instance = new();
+
+	private Or64SignExtend16x64SignExtend16x64_v1() : base(IR.Or64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

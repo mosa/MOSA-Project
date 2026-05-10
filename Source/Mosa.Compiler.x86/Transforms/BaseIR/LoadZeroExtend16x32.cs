@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// </summary>
 public sealed class LoadZeroExtend16x32 : BaseIRTransform
 {
-	public LoadZeroExtend16x32() : base(IR.LoadZeroExtend16x32, TransformType.Manual | TransformType.Transform)
+	public static readonly LoadZeroExtend16x32 Instance = new();
+
+	private LoadZeroExtend16x32() : base(IR.LoadZeroExtend16x32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

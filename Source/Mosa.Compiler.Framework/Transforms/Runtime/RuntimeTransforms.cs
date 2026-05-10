@@ -9,24 +9,24 @@ public static class RuntimeTransforms
 {
 	public static readonly List<BaseTransform> RuntimeList = new List<BaseTransform>
 	{
-		new MemorySet(),
-		new MemoryCopy(),
-		new IsInstanceOfInterfaceType(),
-		new IsInstanceOfType(),
-		new GetVirtualFunctionPtr(),
-		new Rethrow(),
-		new Box(),
-		new Box32(),
-		new Box64(),
-		new BoxR4(),
-		new BoxR8(),
-		new UnboxAny(),
-		new Unbox(),
+		MemorySet.Instance,
+		MemoryCopy.Instance,
+		IsInstanceOfInterfaceType.Instance,
+		IsInstanceOfType.Instance,
+		GetVirtualFunctionPtr.Instance,
+		Rethrow.Instance,
+		Box.Instance,
+		Box32.Instance,
+		Box64.Instance,
+		BoxR4.Instance,
+		BoxR8.Instance,
+		UnboxAny.Instance,
+		Unbox.Instance,
 	};
 
 	public static readonly List<BaseTransform> NewList = new List<BaseTransform>
 	{
-		new NewObject(),
-		new NewArray(),
+		NewObject.Instance,
+		NewArray.Instance,
 	};
 }

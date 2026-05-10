@@ -7,6 +7,32 @@ namespace Mosa.Compiler.Framework.xUnit;
 public class BitValueTests
 {
 	[Fact]
+	public void IsSame_ReturnsTrue_WhenAllTrackedFieldsMatch()
+	{
+		var a = new BitValue(true).NarrowSetBits(0b0010).NarrowMax(100).NarrowMin(2);
+		var b = new BitValue(true).NarrowSetBits(0b0010).NarrowMax(100).NarrowMin(2);
+
+		Assert.True(a.IsSame(b));
+	}
+
+	[Fact]
+	public void IsSame_ReturnsFalse_WhenOtherIsNull()
+	{
+		var a = new BitValue(true);
+
+		Assert.False(a.IsSame(null));
+	}
+
+	[Fact]
+	public void IsSame_ReturnsFalse_WhenAnyTrackedFieldDiffers()
+	{
+		var a = new BitValue(true).NarrowSetBits(0b0001).NarrowMax(100);
+		var b = new BitValue(true).NarrowSetBits(0b0010).NarrowMax(100);
+
+		Assert.False(a.IsSame(b));
+	}
+
+	[Fact]
 	public void NarrowMax1Then0()
 	{
 		var bitValue = new BitValue(true);

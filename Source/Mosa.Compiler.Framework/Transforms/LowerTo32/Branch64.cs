@@ -1,12 +1,14 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Branch64 : BaseLowerTo32Transform
 {
-	private readonly Branch64Extends branch64Extends = new Branch64Extends(); // BUG?
+	public static readonly Branch64 Instance = new();
 
-	public Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization)
+	private readonly Branch64Extends branch64Extends = Branch64Extends.Instance; // BUG?
+
+	private Branch64() : base(IR.Branch64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

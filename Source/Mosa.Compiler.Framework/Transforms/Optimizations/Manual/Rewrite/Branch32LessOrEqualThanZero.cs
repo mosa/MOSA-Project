@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Rewrite;
 
 public sealed class Branch32LessOrEqualThanZero : BaseTransform
 {
-	public Branch32LessOrEqualThanZero() : base(IR.Branch32, TransformType.Manual | TransformType.Optimization)
+	public static readonly Branch32LessOrEqualThanZero Instance = new();
+
+	private Branch32LessOrEqualThanZero() : base(IR.Branch32, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

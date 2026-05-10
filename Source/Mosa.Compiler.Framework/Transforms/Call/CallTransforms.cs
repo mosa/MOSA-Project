@@ -9,16 +9,16 @@ public static class CallTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new SetReturnObject(),
-		new SetReturnManagedPointer(),
-		new SetReturn32(),
-		new SetReturn64(),
-		new SetReturnR4(),
-		new SetReturnR8(),
-		new SetReturnCompound(),
-		new CallInterface(),
-		new CallStatic(),
-		new CallVirtual(),
-		new CallDynamic(),
+		SetReturnObject.Instance,
+		SetReturnManagedPointer.Instance,
+		SetReturn32.Instance,
+		SetReturn64.Instance,
+		SetReturnR4.Instance,
+		SetReturnR8.Instance,
+		SetReturnCompound.Instance,
+		CallInterface.Instance,
+		CallStatic.Instance,
+		CallVirtual.Instance,
+		CallDynamic.Instance,
 	};
 }

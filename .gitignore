@@ -14,6 +14,8 @@
 [b]in - Copy/
 [b]in - Copy (2)/
 [b]in2/
+/[Tt]emp
+/[Tt]mp
 
 *.[Oo]bj
 *.suo
@@ -52,8 +54,6 @@ MigrationBackup/
 /Source/*/Properties/launchSettings.json
 stderr.txt
 stdout.txt
-
 /docs/CNAME
-
-# Launcher output
 false
+

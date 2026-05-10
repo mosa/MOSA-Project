@@ -9,13 +9,13 @@ public static class ExceptionTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new Throw(),
-		new FinallyStart(),
-		new FinallyEnd(),
-		new ExceptionStart(),
-		new ExceptionEnd(),
-		new Flow(),
-		new TryStart(),
-		new TryEnd(),
+		Throw.Instance,
+		FinallyStart.Instance,
+		FinallyEnd.Instance,
+		ExceptionStart.Instance,
+		ExceptionEnd.Instance,
+		Flow.Instance,
+		TryStart.Instance,
+		TryEnd.Instance,
 	};
 }

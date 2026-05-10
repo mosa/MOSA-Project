@@ -9,7 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class AddCarryOut64 : BaseTransform
 {
-	public AddCarryOut64() : base(IR.AddCarryOut64, TransformType.Manual | TransformType.Optimization, 100)
+	public static readonly AddCarryOut64 Instance = new();
+
+	private AddCarryOut64() : base(IR.AddCarryOut64, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
 

@@ -15,6 +15,7 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 	public const int EpilogueLabel = 0xFFFFF;
 	public const int CompilerBlockStartLabel = 0x10001;
 	public const int ReservedLabel = StartLabel - 1;
+	public const int EndLabelOffset = 0x0F000000;
 
 	#region Data Fields
 
@@ -134,6 +135,11 @@ public sealed class BasicBlock : IComparable<BasicBlock>
 	/// Gets if the block is completely empty.
 	/// </summary>
 	public bool IsCompletelyEmpty { get; private set; } = false;
+
+	/// <summary>
+	/// Gets the label that marks the end of this block's emitted code (set by <see cref="Stages.CodeGenerationStage"/>).
+	/// </summary>
+	public int EndLabel => Label + EndLabelOffset;
 
 	#endregion Properties
 

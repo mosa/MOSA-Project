@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Rcr32 : BaseTransform
 {
-	public Rcr32() : base(X86.Rcr32, TransformType.Manual | TransformType.Transform)
+	public static readonly Rcr32 Instance = new();
+
+	private Rcr32() : base(X86.Rcr32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

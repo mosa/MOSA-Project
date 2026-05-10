@@ -201,6 +201,10 @@ Key namespaces/classes:
 - `Mosa.Compiler.Framework.Context` – represents a position in the instruction stream
 - `Mosa.Compiler.MosaTypeSystem` – MOSA's type system (wraps `dnlib`)
 - `Mosa.Compiler.Framework.IR` – IR instruction definitions
+- `Mosa.Compiler.Framework.Stages.BitTrackerStage` – per-method stage that propagates value range and known-bit information; see **BitTracker Stage** section below
+- `Mosa.Compiler.Framework.Stages.BitTrackerOperations` – stateless, node-free operation logic for BitTrackerStage; unit-tested in `Mosa.Compiler.Framework.xUnit/BitTrackerOperationsTests.cs`
+- `Mosa.Compiler.Framework.BitValue` – the value/bit-range lattice type used throughout the BitTracker subsystem
+- `Mosa.Compiler.Common.IntegerTwiddling` – carry/overflow predicate helpers used by BitTrackerOperations
 
 Optimization levels (set via `-oN`):
 - `-o0` = no optimizations
@@ -229,6 +233,151 @@ When adding new files to existing projects:
 5. If adding a new compiler transform, inherit from `BaseTransform` and register it in the appropriate stage.
 6. If adding new unit tests (xUnit), add them to `Mosa.Compiler.Common.xUnit` or `Mosa.Compiler.Framework.xUnit`.
 7. If adding new bare-metal test cases, add them to `Mosa.UnitTests` following the existing pattern with `[MosaUnitTest]` attributes.
+8. If adding a new setting to `MosaSettings` or `CommandLineArguments`, also add the corresponding entry to `Docs/command-line-arguments.rst`.
+
+---
+
+## BitTracker Stage
+
+`BitTrackerStage` (`Mosa.Compiler.Framework/Stages/BitTrackerStage.cs`) is a per-method optimization stage that propagates **value range and known-bit information** through the instruction stream. This extra knowledge enables downstream constant folding, branch elimination, and instruction simplification.
+
+### Architecture
+
+The stage is split across two files:
+
+| File | Role |
+|---|---|
+| `BitTrackerStage.cs` | Stage driver: iterates virtual registers, calls per-instruction visitors, folds constants, eliminates dead branches |
+| `BitTrackerOperations.cs` | Pure static operation logic: takes `BitValue` operands directly — no `Node` dependency — making it fully unit-testable in isolation |
+
+The stage runs iteratively (up to 10 passes) until all virtual registers are `IsStable`, to handle SSA phi-nodes and other circular dependencies.
+
+### `BitValue` — the information lattice
+
+`BitValue` (`Mosa.Compiler.Framework/BitValue.cs`) tracks what is known about a virtual register's value at compile time. All mutations are monotone — they can only **narrow** the range, never widen it.
+
+Key properties:
+
+| Property | Type | Meaning |
+|---|---|---|
+| `BitsSet` / `BitsSet32` | `ulong` / `uint` | Bits that are definitely 1 |
+| `BitsClear` / `BitsClear32` | `ulong` / `uint` | Bits that are definitely 0 |
+| `BitsKnown` | `ulong` | `BitsSet \| BitsClear` — union of all known bits |
+| `MinValue` / `MaxValue` | `ulong` | Inclusive unsigned value range |
+| `Is32Bit` / `Is64Bit` | `bool` | Whether this is a 32-bit or 64-bit register |
+| `IsResolved` | `bool` | True when `MinValue == MaxValue` or all bits are known |
+| `IsStable` | `bool` | True when no further narrowing is expected |
+| `AreLower32BitsKnown` | `bool` | All 32 low bits known |
+| `AreAll64BitsKnown` | `bool` | All 64 bits known |
+| `IsZero` / `IsOne` / `IsZeroOrOne` | `bool` | Convenience predicates |
+
+Key mutation methods (all return `this` for fluent chaining):
+
+```csharp
+result.SetValue(ulong value)          // Set exact known constant
+result.SetValue(bool value)           // Set 0 or 1
+result.NarrowMin(ulong min)           // Raise the lower bound
+result.NarrowMax(ulong max)           // Lower the upper bound
+result.NarrowSetBits(ulong bits)      // Intersect known-set bits
+result.NarrowClearBits(ulong bits)    // Intersect known-clear bits
+result.NarrowToBoolean()              // Constrain to {0, 1}: MaxValue=1, BitsClear=~1ul
+result.Narrow(BitValue other)         // Apply all narrowing from another BitValue
+result.SetStable()                    // Mark as stable (unconditionally)
+result.SetStable(BitValue a)          // Mark stable only if `a` is stable
+result.SetStable(BitValue a, b)       // Mark stable only if both are stable
+result.SetStable(BitValue a, b, c)    // Mark stable only if all three are stable
+```
+
+Constructors:
+```csharp
+new BitValue(bool is32Bit)              // Unresolved, unstable
+new BitValue(bool is32Bit, ulong value) // Fully known constant, stable
+```
+
+### `IntegerTwiddling` — overflow/carry predicates
+
+`IntegerTwiddling` (`Mosa.Compiler.Common/IntegerTwiddling.cs`) provides all carry/overflow detection used by `BitTrackerOperations`.
+
+| Method | Semantics |
+|---|---|
+| `IsAddUnsignedCarry(uint a, uint b)` | `a + b` overflows 32-bit unsigned |
+| `IsAddUnsignedCarry(ulong a, ulong b)` | `a + b` overflows 64-bit unsigned |
+| `IsAddUnsignedCarry(uint a, uint b, bool carry)` | `a + b + carry` overflows 32-bit unsigned |
+| `IsAddSignedOverflow(int a, int b)` | `a + b` overflows 32-bit signed |
+| `IsAddSignedOverflow(long a, long b)` | `a + b` overflows 64-bit signed |
+| `IsSubUnsignedCarry(uint a, uint b)` | `b > a` (borrow: unsigned subtraction underflows) |
+| `IsSubUnsignedCarry(ulong a, ulong b)` | `b > a` (borrow: 64-bit) |
+| `IsSubSignedOverflow(int a, int b)` | **`a + b` signed overflow** — note: despite the name, this checks signed overflow for the equivalent addition `a + b`, consistent with how x86/x64 OF is computed for SUB. Use it for `SubOverflowOut` instructions. |
+| `IsSubSignedOverflow(long a, long b)` | Same, 64-bit |
+
+> **Important gotcha**: `IsSubSignedOverflow(a, b)` does **not** test whether `a - b` overflows in the intuitive sense. It tests whether `a + b` overflows signed, which matches the hardware overflow flag for subtraction. So `IsSubSignedOverflow(int.MinValue, -1)` returns `true` (int.MinValue + (-1) underflows), while `IsSubSignedOverflow(int.MaxValue, -1)` returns `false`.
+
+### Dual-result instructions
+
+Instructions with two result operands (`result` = value, `result2` = flag) use a dedicated `BitTrackerOperations` method with signature:
+
+```csharp
+public static void XxxOut32(BitValue result, BitValue result2, BitValue value1, BitValue value2)
+```
+
+The handler in `BitTrackerStage` passes both result `BitValue`s:
+
+```csharp
+private static void AddCarryOut32(Node node)
+{
+    BitTrackerOperations.AddCarryOut32(node.Result.BitValue, node.Result2.BitValue,
+        node.Operand1.BitValue, node.Operand2.BitValue);
+}
+```
+
+The flag (`result2`) is modelled at three levels of precision:
+1. **Both operands fully known** → compute exact flag value with `result2.SetValue(bool)`
+2. **Range analysis proves flag impossible** → `result2.SetValue(0)`
+3. **Range analysis proves flag certain** → `result2.SetValue(1)`
+4. **Uncertain** → `result2.NarrowToBoolean().SetStable(value1, value2)`
+
+Currently registered dual-result instructions and their flag semantics:
+
+| Instruction | `result2` flag | Detection method |
+|---|---|---|
+| `AddCarryOut32/64` | Unsigned carry from addition | `IsAddUnsignedCarry` |
+| `AddOverflowOut32/64` | Signed overflow from addition | `IsAddSignedOverflow` |
+| `SubCarryOut32/64` | Unsigned borrow from subtraction (`op2 > op1`) | `IsSubUnsignedCarry` |
+| `SubOverflowOut32/64` | Signed overflow (via `IsSubSignedOverflow`, which checks `a+b` signed overflow) | `IsSubSignedOverflow` |
+
+### Adding a new `BitTrackerOperations` entry
+
+1. Add a `public static void` method to `BitTrackerOperations.cs`. Single-result instructions receive `(BitValue result, BitValue value1, ...)`. Dual-result instructions receive `(BitValue result, BitValue result2, BitValue value1, ...)`.
+2. Add a private static dispatch method in `BitTrackerStage.cs` that unpacks the `Node` and calls the operation.
+3. Register the dispatch method in `BitTrackerStage.Initialize()` with `Register(IR.InstructionName, MethodName)`.
+4. Add a corresponding xUnit test class to `Mosa.Compiler.Framework.xUnit/BitTrackerOperationsTests.cs`. Each class is named `BitTracker_<InstructionName>Tests`. Cover: both operands fully known (no-flag case and flag case), zero/identity operands, range provably no-flag, range always-flag, uncertain range, min/max narrowing.
+
+### Standard operation pattern
+
+```csharp
+public static void Add32(BitValue result, BitValue value1, BitValue value2)
+{
+    if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+    {
+        result.SetValue(value1.BitsSet32 + value2.BitsSet32);  // exact constant
+    }
+    else if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+    {
+        result.Narrow(value2).SetStable(value2);               // identity: 0 + x = x
+    }
+    else if (!IntegerTwiddling.IsAddUnsignedCarry((uint)value1.MaxValue, (uint)value2.MaxValue))
+    {
+        result                                                  // range: no overflow possible
+            .NarrowMin(value1.MinValue + value2.MinValue)
+            .NarrowMax(value1.MaxValue + value2.MaxValue)
+            .SetStable(value1, value2);
+    }
+    else
+    {
+        result.SetStable(value1, value2);                      // unknown, just mark stable
+    }
+}
+```
 
 ---
 
@@ -240,3 +389,115 @@ When adding new files to existing projects:
 - **Tools/ directory**: Contains pre-built third-party tools (QEMU, NASM, 7-zip, etc.) used by the launcher at runtime — do not confuse with `Mosa.Tool.*` source projects.
 - **Nullable disabled**: The project deliberately disables nullable reference type checks (`<Nullable>disable</Nullable>`). Do not enable it per-file without a broader plan.
 - **net10.0 targeting**: The project targets `net10.0` with `<RollForward>major</RollForward>` in `Directory.Build.props`. For local development, the .NET 10 SDK is preferred. The CI installs the .NET 9 SDK and relies on roll-forward.
+
+---
+
+## Linker Metadata Emission Pattern
+
+All runtime metadata tables are emitted as binary linker symbols using a consistent pattern. Every method that emits a table follows these rules:
+
+### Idempotency guard
+Symbols that may be requested multiple times (e.g., method definitions referenced from both a type table and an interface table) must check for an existing symbol before emitting:
+
+```csharp
+var symbol = Linker.GetSymbol(symbolName);
+if (symbol.Size != 0)
+    return symbol;
+```
+
+### Emitting a table
+1. Call `Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, size)` -- pass `0` for `size` when the total is not known up front (the stream grows dynamically).
+2. Wrap the symbol's stream in a `BinaryWriter`.
+3. Write each field in order, annotated with numbered comments (`// 1.`, `// 2.`, etc.) matching the layout in `Docs/runtime-tables.rst`.
+4. For **pointer fields**: always call `Linker.Link(...)` first (registers the fixup at the current stream position), then call `writer.WriteZeroBytes(NativePointerSize)` to advance the stream. The zero bytes are a placeholder -- the linker fills in the real address at link time.
+5. For **scalar fields** (counts, flags, sizes): call `writer.Write(value, NativePointerSize)` directly -- no `Linker.Link` needed.
+6. If a count field appears before the items it counts (and the count is not known in advance), write a zero placeholder, iterate the items, then seek back with `writer.SetPosition(offset)` and overwrite the count.
+
+### Linking to another symbol
+```csharp
+// Conditional pointer field -- null if condition not met, zero placeholder always written
+if (someCondition)
+{
+    Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fromSymbol, writer.GetPosition(), toSymbolOrName, 0);
+}
+writer.WriteZeroBytes(NativePointerSize);
+```
+
+### Key types and members
+- `Linker.DefineSymbol(name, section, alignment, size)` -- creates or retrieves a writable symbol
+- `Linker.GetSymbol(name)` -- retrieves an existing symbol (size == 0 means not yet defined)
+- `Linker.Link(LinkType, PatchType, fromSymbol, offset, toSymbol/name, addend)` -- registers an address fixup
+- `NativePointerSize` -- pointer width in bytes for the current target (4 or 8)
+- `NativePatchType` -- the correct relocation type for the current target
+- `writer.GetPosition()` -- current byte offset into the symbol's stream (used as the fixup offset)
+- `writer.WriteZeroBytes(n)` -- advance stream by `n` zero bytes
+- `writer.SetPosition(offset)` -- seek to a specific offset for back-patching
+- Symbol name constants live in `Mosa.Compiler.Framework.Metadata` (e.g., `Metadata.TypeDefinition`, `Metadata.MethodDefinition`, `Metadata.ProtectedRegionTable`, `Metadata.GCData`)
+
+### Example skeleton
+```csharp
+private LinkerSymbol CreateFooTable(MosaFoo foo)
+{
+    var symbolName = Metadata.FooTable + foo.FullName;
+    var symbol = Linker.GetSymbol(symbolName);
+    if (symbol.Size != 0)
+        return symbol;
+
+    symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+    var writer = new BinaryWriter(symbol.Stream);
+
+    // 1. Count
+    writer.Write((uint)foo.Items.Count, NativePointerSize);
+
+    // 2. Pointer to Name
+    Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer.GetPosition(), nameSymbol, 0);
+    writer.WriteZeroBytes(NativePointerSize);
+
+    return symbol;
+}
+```
+
+---
+
+## Compiler Pipeline Extension Points
+
+The compiler has two nested pipelines, each with a distinct base class.
+
+### Per-application stages (`BaseCompilerStage`)
+Run once for the entire compilation (e.g., emitting global metadata tables, linking symbol tables). Override `Setup()`, `Finalization()`, or both. Register in `Compiler.ExtendCompilerPipeline()` in `Mosa.Compiler.Framework/Compiler.cs`.
+
+```csharp
+public sealed class MyCompilerStage : BaseCompilerStage
+{
+    protected override void Finalization()
+    {
+        // runs after all methods have been compiled
+    }
+}
+```
+
+### Per-method stages (`BaseMethodCompilerStage`)
+Run once per method. Override `Initialize()`, `Run()`, and `Finish()`. Register in `Compiler.ExtendMethodCompilerPipeline()` in `Compiler.cs`.
+
+```csharp
+public class MyMethodStage : BaseMethodCompilerStage
+{
+    protected override void Run()
+    {
+        // operates on BasicBlocks, MethodCompiler, etc.
+    }
+}
+```
+
+### Stage ordering
+- Method pipeline stages that need resolved native code offsets (e.g., safepoint table emission, protected region layout) must be placed **after** `CodeGenerationStage` in the pipeline. Instruction offsets are not valid before that point.
+- Use the existing stages as ordering anchors. In `ExtendMethodCompilerPipeline`, insert after `CodeGenerationStage` for post-codegen work:
+  ```csharp
+  pipeline.InsertAfterFirst<CodeGenerationStage>(new SafePointLayoutStage());
+  ```
+- Per-application stages that emit cross-method tables (e.g., `MetadataStage`) run in `Finalization()` after all per-method work is complete.
+
+### GC Safepoint infrastructure
+The safepoint system spans two stages:
+- `SafePointStage` (`BaseMethodCompilerStage`) -- inserts `IR.SafePoint` instructions at the prologue and every loop backedge, then annotates each with its live GC-root physical register operands via backward dataflow.
+- `SafePointLayoutStage` (`BaseMethodCompilerStage`, post-codegen) -- reads resolved offsets from the instruction stream, collects `SafePointEntry` records into `MethodData.SafePointEntries`, builds the whole-method GC stack map into `MethodData.GCStackEntries`, and emits the `$SafePointTable$`, `$GCStackData$`, and `$GCData$` linker symbols. `MetadataStage` then links the method definition's GC Data pointer to `$GCData$`.

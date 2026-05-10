@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Shr32ZeroValue : BaseTransform
 {
-	public Shr32ZeroValue() : base(X86.Shr32, TransformType.Auto | TransformType.Optimization, 80)
+	public static readonly Shr32ZeroValue Instance = new();
+
+	private Shr32ZeroValue() : base(X86.Shr32, TransformType.Auto | TransformType.Optimization, 80)
 	{
 	}
 

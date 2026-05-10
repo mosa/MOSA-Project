@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.AddressMode;
 /// </summary>
 public sealed class Divsd : BaseAddressModeTransform
 {
-	public Divsd() : base(X64.Divsd, TransformType.Manual | TransformType.Transform)
+	public static readonly Divsd Instance = new();
+
+	private Divsd() : base(X64.Divsd, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

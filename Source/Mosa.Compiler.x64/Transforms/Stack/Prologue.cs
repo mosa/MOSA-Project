@@ -6,7 +6,9 @@ namespace Mosa.Compiler.x64.Transforms.Stack;
 
 public sealed class Prologue : BaseTransform
 {
-	public Prologue() : base(IR.Prologue, TransformType.Manual | TransformType.Transform)
+	public static readonly Prologue Instance = new();
+
+	private Prologue() : base(IR.Prologue, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Phi;
 
 public sealed class PhiManagedPointerUpdate : BasePhiTransform
 {
-	public PhiManagedPointerUpdate() : base(IR.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
+	public static readonly PhiManagedPointerUpdate Instance = new();
+
+	private PhiManagedPointerUpdate() : base(IR.PhiManagedPointer, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

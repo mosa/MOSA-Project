@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.PlatformIntrinsic;
 /// </summary>
 public sealed class IntrinsicMethodCall : BaseTransform
 {
-	public IntrinsicMethodCall() : base(IR.IntrinsicMethodCall, TransformType.Manual | TransformType.Transform, 85)
+	public static readonly IntrinsicMethodCall Instance = new();
+
+	private IntrinsicMethodCall() : base(IR.IntrinsicMethodCall, TransformType.Manual | TransformType.Transform, 85)
 	{
 	}
 

@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class Move64PropagateConstant : BaseTransform
 {
-	public Move64PropagateConstant() : base(IR.Move64, TransformType.Manual | TransformType.Optimization, 40)
+	public static readonly Move64PropagateConstant Instance = new();
+
+	private Move64PropagateConstant() : base(IR.Move64, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
 

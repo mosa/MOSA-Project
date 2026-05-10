@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.BaseIR;
 /// </summary>
 public sealed class Store16 : BaseIRTransform
 {
-	public Store16() : base(IR.Store16, TransformType.Manual | TransformType.Transform)
+	public static readonly Store16 Instance = new();
+
+	private Store16() : base(IR.Store16, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

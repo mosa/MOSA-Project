@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.AddressMode;
 /// </summary>
 public sealed class Sbb32 : BaseAddressModeTransform
 {
-	public Sbb32() : base(X86.Sbb32, TransformType.Manual | TransformType.Transform)
+	public static readonly Sbb32 Instance = new();
+
+	private Sbb32() : base(X86.Sbb32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

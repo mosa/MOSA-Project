@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class And64Same : BaseTransform
 {
-	public And64Same() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
+	public static readonly And64Same Instance = new();
+
+	private And64Same() : base(IR.And64, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

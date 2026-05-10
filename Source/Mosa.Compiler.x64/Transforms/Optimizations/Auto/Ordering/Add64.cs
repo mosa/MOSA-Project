@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x64.Transforms.Optimizations.Auto.Ordering;
 
 public sealed class Add64 : BaseTransform
 {
-	public Add64() : base(X64.Add64, TransformType.Auto | TransformType.Optimization, 10)
+	public static readonly Add64 Instance = new();
+
+	private Add64() : base(X64.Add64, TransformType.Auto | TransformType.Optimization, 10)
 	{
 	}
 

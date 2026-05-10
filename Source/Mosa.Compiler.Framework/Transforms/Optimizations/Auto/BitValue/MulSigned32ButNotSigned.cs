@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.BitValue;
 
 public sealed class MulSigned32ButNotSigned : BaseTransform
 {
-	public MulSigned32ButNotSigned() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization, 20)
+	public static readonly MulSigned32ButNotSigned Instance = new();
+
+	private MulSigned32ButNotSigned() : base(IR.MulSigned32, TransformType.Auto | TransformType.Optimization, 20)
 	{
 	}
 

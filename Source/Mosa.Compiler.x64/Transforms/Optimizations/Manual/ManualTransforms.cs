@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Drawing;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.x64.Transforms.Optimizations.Manual;
@@ -12,37 +11,37 @@ public static class ManualTransforms
 {
 	public static readonly List<BaseTransform> List = new()
 	{
-		new Rewrite.Add32ToInc32(),  // TODO: x64
-		new Rewrite.Add32ToLea32(),
-		new Rewrite.Add64ToLea64(),
-		new Rewrite.Cmp32ToZero(),   // TODO: x64
-		new Rewrite.Cmp32ToTest32(), // TODO: x64
-		new Rewrite.Lea32ToInc32(),
-		new Rewrite.Lea64ToInc64(),
-		new Rewrite.Lea32ToDec32(),
-		new Rewrite.Lea64ToDec64(),
-		new Rewrite.Mov32ToXor32(),
-		new Rewrite.Mov64ToXor64(),
-		new Rewrite.Sub32ToDec32(),  // TODO: x64
-		new Rewrite.Sub32ToLea32(),
-		new Rewrite.Sub64ToLea64(),
-		new Rewrite.Test32ToZero(),
+		Rewrite.Add32ToInc32.Instance,  // TODO: x64
+		Rewrite.Add32ToLea32.Instance,
+		Rewrite.Add64ToLea64.Instance,
+		Rewrite.Cmp32ToZero.Instance,   // TODO: x64
+		Rewrite.Cmp32ToTest32.Instance, // TODO: x64
+		Rewrite.Lea32ToInc32.Instance,
+		Rewrite.Lea64ToInc64.Instance,
+		Rewrite.Lea32ToDec32.Instance,
+		Rewrite.Lea64ToDec64.Instance,
+		Rewrite.Mov32ToXor32.Instance,
+		Rewrite.Mov64ToXor64.Instance,
+		Rewrite.Sub32ToDec32.Instance,  // TODO: x64
+		Rewrite.Sub32ToLea32.Instance,
+		Rewrite.Sub64ToLea64.Instance,
+		Rewrite.Test32ToZero.Instance,
 
-		new Special.Deadcode(),
-		new Special.Mov32ConstantReuse(),
+		Special.Deadcode.Instance,
+		Special.Mov32ConstantReuse.Instance,
 
-		new Special.Mov32Coalescing(),
-		new Special.Mov32Unless(),
-		new Special.Mul32Ditto(),
-		//new Special.Bt32Movzx8To32Setcc(),
+		Special.Mov32Coalescing.Instance,
+		Special.Mov32Unless.Instance,
+		Special.Mul32Ditto.Instance,
+		//Special.Bt32Movzx8To32Setcc.Instance,
 
-		//new StrengthReduction.Mul32ByZero(),
-		//new StrengthReduction.Mul32WithMov32ByZero(),
+		//StrengthReduction.Mul32ByZero.Instance,
+		//StrengthReduction.Mul32WithMov32ByZero.Instance,
 
-		new Stack.Add32(),
-		new Stack.Add64(),
+		Stack.Add32.Instance,
+		Stack.Add64.Instance,
 
-		//new Size.Add32By2ToInc32(),
-		//new Size.Lea32By2(),
+		//Size.Add32By2ToInc32.Instance,
+		//Size.Lea32By2.Instance,
 	};
 }

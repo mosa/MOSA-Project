@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class MoveR8Propagate : BaseTransform
 {
-	public MoveR8Propagate() : base(IR.MoveR8, TransformType.Manual | TransformType.Optimization, 40)
+	public static readonly MoveR8Propagate Instance = new();
+
+	private MoveR8Propagate() : base(IR.MoveR8, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
 

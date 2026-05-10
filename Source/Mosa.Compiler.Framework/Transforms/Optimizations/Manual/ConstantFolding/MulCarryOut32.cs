@@ -9,7 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class MulCarryOut32 : BaseTransform
 {
-	public MulCarryOut32() : base(IR.MulCarryOut32, TransformType.Auto | TransformType.Optimization, 100, true)
+	public static readonly MulCarryOut32 Instance = new();
+
+	private MulCarryOut32() : base(IR.MulCarryOut32, TransformType.Auto | TransformType.Optimization, 100, true)
 	{
 	}
 

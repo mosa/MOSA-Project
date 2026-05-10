@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Not64 : BaseLowerTo32Transform
 {
-	public Not64() : base(IR.Not64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Not64 Instance = new();
+
+	private Not64() : base(IR.Not64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

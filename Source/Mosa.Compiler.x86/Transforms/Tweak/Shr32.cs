@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.Tweak;
 /// </summary>
 public sealed class Shr32 : BaseTransform
 {
-	public Shr32() : base(X86.Shr32, TransformType.Manual | TransformType.Transform)
+	public static readonly Shr32 Instance = new();
+
+	private Shr32() : base(X86.Shr32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

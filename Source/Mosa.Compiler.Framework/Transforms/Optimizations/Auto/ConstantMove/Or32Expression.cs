@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.ConstantMove;
 
 public sealed class Or32Expression : BaseTransform
 {
-	public Or32Expression() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Expression Instance = new();
+
+	private Or32Expression() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -50,7 +52,9 @@ public sealed class Or32Expression : BaseTransform
 
 public sealed class Or32Expression_v1 : BaseTransform
 {
-	public Or32Expression_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Expression_v1 Instance = new();
+
+	private Or32Expression_v1() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -94,7 +98,9 @@ public sealed class Or32Expression_v1 : BaseTransform
 
 public sealed class Or32Expression_v2 : BaseTransform
 {
-	public Or32Expression_v2() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Expression_v2 Instance = new();
+
+	private Or32Expression_v2() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -138,7 +144,9 @@ public sealed class Or32Expression_v2 : BaseTransform
 
 public sealed class Or32Expression_v3 : BaseTransform
 {
-	public Or32Expression_v3() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Or32Expression_v3 Instance = new();
+
+	private Or32Expression_v3() : base(IR.Or32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

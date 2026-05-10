@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class Add32MultipleWithCommon : BaseTransform
 {
-	public Add32MultipleWithCommon() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32MultipleWithCommon Instance = new();
+
+	private Add32MultipleWithCommon() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -53,7 +55,9 @@ public sealed class Add32MultipleWithCommon : BaseTransform
 
 public sealed class Add32MultipleWithCommon_v1 : BaseTransform
 {
-	public Add32MultipleWithCommon_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32MultipleWithCommon_v1 Instance = new();
+
+	private Add32MultipleWithCommon_v1() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -100,7 +104,9 @@ public sealed class Add32MultipleWithCommon_v1 : BaseTransform
 
 public sealed class Add32MultipleWithCommon_v2 : BaseTransform
 {
-	public Add32MultipleWithCommon_v2() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32MultipleWithCommon_v2 Instance = new();
+
+	private Add32MultipleWithCommon_v2() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -147,7 +153,9 @@ public sealed class Add32MultipleWithCommon_v2 : BaseTransform
 
 public sealed class Add32MultipleWithCommon_v3 : BaseTransform
 {
-	public Add32MultipleWithCommon_v3() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32MultipleWithCommon_v3 Instance = new();
+
+	private Add32MultipleWithCommon_v3() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -194,7 +202,9 @@ public sealed class Add32MultipleWithCommon_v3 : BaseTransform
 
 public sealed class Add32MultipleWithCommon_v4 : BaseTransform
 {
-	public Add32MultipleWithCommon_v4() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32MultipleWithCommon_v4 Instance = new();
+
+	private Add32MultipleWithCommon_v4() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -241,7 +251,9 @@ public sealed class Add32MultipleWithCommon_v4 : BaseTransform
 
 public sealed class Add32MultipleWithCommon_v5 : BaseTransform
 {
-	public Add32MultipleWithCommon_v5() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32MultipleWithCommon_v5 Instance = new();
+
+	private Add32MultipleWithCommon_v5() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -288,7 +300,9 @@ public sealed class Add32MultipleWithCommon_v5 : BaseTransform
 
 public sealed class Add32MultipleWithCommon_v6 : BaseTransform
 {
-	public Add32MultipleWithCommon_v6() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32MultipleWithCommon_v6 Instance = new();
+
+	private Add32MultipleWithCommon_v6() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 
@@ -335,7 +349,9 @@ public sealed class Add32MultipleWithCommon_v6 : BaseTransform
 
 public sealed class Add32MultipleWithCommon_v7 : BaseTransform
 {
-	public Add32MultipleWithCommon_v7() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Add32MultipleWithCommon_v7 Instance = new();
+
+	private Add32MultipleWithCommon_v7() : base(IR.Add32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

@@ -9,7 +9,9 @@ namespace Mosa.Compiler.ARM32.Transforms.Tweak;
 /// </summary>
 public sealed class Mov : BaseTransform
 {
-	public Mov() : base(ARM32.Mov, TransformType.Manual | TransformType.Transform)
+	public static readonly Mov Instance = new();
+
+	private Mov() : base(ARM32.Mov, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.Propagate;
 
 public sealed class MoveManagedPointerPropagateConstant : BaseTransform
 {
-	public MoveManagedPointerPropagateConstant() : base(IR.MoveManagedPointer, TransformType.Manual | TransformType.Optimization, 40)
+	public static readonly MoveManagedPointerPropagateConstant Instance = new();
+
+	private MoveManagedPointerPropagateConstant() : base(IR.MoveManagedPointer, TransformType.Manual | TransformType.Optimization, 40)
 	{
 	}
 

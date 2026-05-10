@@ -8,7 +8,9 @@ namespace Mosa.Compiler.x86.Transforms.Optimizations.Auto.StrengthReduction;
 
 public sealed class Inc32Not32 : BaseTransform
 {
-	public Inc32Not32() : base(X86.Inc32, TransformType.Auto | TransformType.Optimization)
+	public static readonly Inc32Not32 Instance = new();
+
+	private Inc32Not32() : base(X86.Inc32, TransformType.Auto | TransformType.Optimization)
 	{
 	}
 

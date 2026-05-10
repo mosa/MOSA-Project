@@ -9,7 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantFoldin
 /// </summary>
 public sealed class SubCarryOut32 : BaseTransform
 {
-	public SubCarryOut32() : base(IR.SubCarryOut32, TransformType.Manual | TransformType.Optimization, 100)
+	public static readonly SubCarryOut32 Instance = new();
+
+	private SubCarryOut32() : base(IR.SubCarryOut32, TransformType.Manual | TransformType.Optimization, 100)
 	{
 	}
 

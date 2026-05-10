@@ -1,10 +1,12 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.Transforms.LowerTo32;
 
 public sealed class Store64 : BaseLowerTo32Transform
 {
-	public Store64() : base(IR.Store64, TransformType.Manual | TransformType.Optimization)
+	public static readonly Store64 Instance = new();
+
+	private Store64() : base(IR.Store64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 

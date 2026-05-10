@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x64.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Shr32 : BaseTransform
 {
-	public Shr32() : base(X64.Shr32, TransformType.Manual | TransformType.Transform)
+	public static readonly Shr32 Instance = new();
+
+	private Shr32() : base(X64.Shr32, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

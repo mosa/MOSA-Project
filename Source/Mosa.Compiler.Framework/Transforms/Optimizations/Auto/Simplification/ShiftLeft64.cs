@@ -6,7 +6,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Auto.Simplification;
 
 public sealed class ShiftLeft64 : BaseTransform
 {
-	public ShiftLeft64() : base(IR.ShiftLeft64, TransformType.Auto | TransformType.Optimization, 25)
+	public static readonly ShiftLeft64 Instance = new();
+
+	private ShiftLeft64() : base(IR.ShiftLeft64, TransformType.Auto | TransformType.Optimization, 25)
 	{
 	}
 

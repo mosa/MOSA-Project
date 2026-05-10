@@ -9,7 +9,9 @@ namespace Mosa.Compiler.Framework.Transforms.Exception;
 /// </summary>
 public sealed class FinallyStart : BaseExceptionTransform
 {
-	public FinallyStart() : base(IR.FinallyStart, TransformType.Manual | TransformType.Transform)
+	public static readonly FinallyStart Instance = new();
+
+	private FinallyStart() : base(IR.FinallyStart, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

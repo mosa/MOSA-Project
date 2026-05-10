@@ -11,6 +11,8 @@ namespace Mosa.Compiler.ARM64.Stages;
 /// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformStage" />
 public sealed class OptimizationStage : Compiler.Framework.Stages.BaseTransformStage
 {
+	protected override bool AllowTransformHooks => true;
+
 	public override string Name => "ARM64." + GetType().Name;
 
 	public OptimizationStage()

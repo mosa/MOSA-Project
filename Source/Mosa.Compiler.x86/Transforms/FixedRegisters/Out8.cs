@@ -9,7 +9,9 @@ namespace Mosa.Compiler.x86.Transforms.FixedRegisters;
 /// </summary>
 public sealed class Out8 : BaseTransform
 {
-	public Out8() : base(X86.Out8, TransformType.Manual | TransformType.Transform)
+	public static readonly Out8 Instance = new();
+
+	private Out8() : base(X86.Out8, TransformType.Manual | TransformType.Transform)
 	{
 	}
 

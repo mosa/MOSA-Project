@@ -7,7 +7,9 @@ namespace Mosa.Compiler.Framework.Transforms.Optimizations.Manual.ConstantMove;
 /// </summary>
 public sealed class MulCarryOut64 : BaseTransform
 {
-	public MulCarryOut64() : base(IR.MulCarryOut64, TransformType.Manual | TransformType.Optimization)
+	public static readonly MulCarryOut64 Instance = new();
+
+	private MulCarryOut64() : base(IR.MulCarryOut64, TransformType.Manual | TransformType.Optimization)
 	{
 	}
 
