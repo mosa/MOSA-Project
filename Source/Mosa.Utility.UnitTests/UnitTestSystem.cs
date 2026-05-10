@@ -104,3 +104,4 @@ public class UnitTestSystem
 		Console.WriteLine($"{Stopwatch.Elapsed.TotalSeconds:00.00} | {status}");
 	}
 }
+

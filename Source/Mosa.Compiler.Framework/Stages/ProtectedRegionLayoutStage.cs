@@ -12,6 +12,7 @@ public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 	#region Data Members
 
 	private PatchType NativePatchType;
+	public bool EmitBinary { get; set; }
 
 	public bool EmitBinary { get; set; }
 
