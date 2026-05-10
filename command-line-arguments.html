@@ -384,11 +384,11 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>%DEFAULT%</p></td>
 </tr>
 <tr class="row-odd"><td><p>-output-counters</p></td>
-<td><p>CompilerDebug.CountersFile</p></td>
+<td><p>CompilerDebug.CounterFile</p></td>
 <td><p>%DEFAULT%</p></td>
 </tr>
 <tr class="row-even"><td><p>-output-time</p></td>
-<td><p>CompilerDebug.CompilerTimeFile</p></td>
+<td><p>CompilerDebug.CompileTimeFile</p></td>
 <td><p>%DEFAULT%</p></td>
 </tr>
 <tr class="row-odd"><td><p>-output-debug</p></td>
@@ -416,11 +416,11 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>%DEFAULT%</p></td>
 </tr>
 <tr class="row-odd"><td><p>-counters</p></td>
-<td><p>CompilerDebug.CountersFile</p></td>
+<td><p>CompilerDebug.CounterFile</p></td>
 <td><p>{value}</p></td>
 </tr>
 <tr class="row-even"><td><p>-counters-filter</p></td>
-<td><p>CompilerDebug.CountersFilter</p></td>
+<td><p>CompilerDebug.CounterFilter</p></td>
 <td><p>{value}</p></td>
 </tr>
 <tr class="row-odd"><td></td>
@@ -435,28 +435,28 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>Optimizations.Inline.Exclude</p></td>
 <td><p>{list}</p></td>
 </tr>
-<tr class="row-even"><td><p>-test-filter</p></td>
-<td><p>CompilerDebug.TestFilter</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>Compiler - Diagnostic:</p></td>
+<tr class="row-odd"><td><p>Compiler - Diagnostic:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-check</p></td>
+<tr class="row-even"><td><p>-check</p></td>
 <td><p>Compiler.CheckMode</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-diagnostic</p></td>
+<tr class="row-odd"><td><p>-diagnostic</p></td>
 <td><p>Compiler.Diagnostic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-diag</p></td>
+<tr class="row-even"><td><p>-diag</p></td>
 <td><p>Compiler.Diagnostic</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-stats</p></td>
+<td><p>CompilerDebug.Statistics</p></td>
 <td><p>true</p></td>
 </tr>
 <tr class="row-even"><td><p>-interrupt-method</p></td>
@@ -779,11 +779,11 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-launch-debugger</p></td>
+<tr class="row-even"><td><p>-launch-gdb</p></td>
 <td><p>Launcher.GDB</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-launch-gdb</p></td>
+<tr class="row-odd"><td><p>-launch-debugger</p></td>
 <td><p>Launcher.Debugger</p></td>
 <td><p>true</p></td>
 </tr>
@@ -795,93 +795,93 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>Launcher.Serial</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-even"><td><p>-output-serial-file</p></td>
-<td><p>Launcher.Serial.File</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-odd"><td><p>-debug</p></td>
+<tr class="row-even"><td><p>-debug</p></td>
 <td><p>Launcher.Serial</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-debug</p></td>
+<tr class="row-odd"><td><p>-debug</p></td>
 <td><p>OS.BootOptions</p></td>
 <td><p>bootoptions=serialdebug</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-timeout</p></td>
+<tr class="row-odd"><td><p>-timeout</p></td>
 <td><p>Emulator.MaxRuntime</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Advanced:</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-plug-kernel</p></td>
-<td><p>Launcher.PlugKernel</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-plug-korlib</p></td>
-<td><p>Launcher.PlugKorlib</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-test</p></td>
-<td><p>Launcher.Test</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-test</p></td>
-<td><p>OS.BootOptions</p></td>
-<td><p>bootoptions=serialdebug</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Debugger:</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-breakpoints</p></td>
-<td><p>Debugger.BreakpointFile</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-even"><td><p>-watch</p></td>
-<td><p>Debugger.WatchFile</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>Unit Tests:</p></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-filter</p></td>
-<td><p>UnitTest.Filter</p></td>
-<td><p>{value}</p></td>
-</tr>
-<tr class="row-even"><td><p>-fail-fast</p></td>
-<td><p>UnitTest.FailFast</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-maxerrors</p></td>
-<td><p>UnitTest.MaxErrors</p></td>
 <td><p>{value}</p></td>
 </tr>
 <tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Bisect:</p></td>
+<tr class="row-odd"><td><p>Advanced:</p></td>
 <td></td>
 <td></td>
+</tr>
+<tr class="row-even"><td><p>-plug-kernel</p></td>
+<td><p>Launcher.PlugKernel</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-plug-korlib</p></td>
+<td><p>Launcher.PlugKorlib</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-test</p></td>
+<td><p>Launcher.Test</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-test</p></td>
+<td><p>OS.BootOptions</p></td>
+<td><p>bootoptions=serialdebug</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Debugger:</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-breakpoints</p></td>
+<td><p>Debugger.BreakpointFile</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-watch</p></td>
+<td><p>Debugger.WatchFile</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Unit Tests:</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-filter</p></td>
+<td><p>UnitTest.Filter</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-fail-fast</p></td>
+<td><p>UnitTest.FailFast</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-maxerrors</p></td>
+<td><p>UnitTest.MaxErrors</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Bisect:</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-bisect</p></td>
+<td><p>UnitTest.Bisector.Plan</p></td>
+<td><p>disable-one</p></td>
 </tr>
 <tr class="row-even"><td><p>-bisect-stage</p></td>
 <td><p>UnitTest.Bisector.Stage</p></td>
@@ -907,44 +907,92 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>UnitTest.Bisector.DisabledTransformsFile</p></td>
 <td><p>{value}</p></td>
 </tr>
+<tr class="row-even"><td><p>-bisect-state</p></td>
+<td><p>UnitTest.Bisector.StateFile</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-bisect-plan</p></td>
+<td><p>UnitTest.Bisector.Plan</p></td>
+<td><p>{value} (disable-one|enable-one|random-combo|failure-inducing|masking)</p></td>
+</tr>
+<tr class="row-even"><td><p>-bisect-order</p></td>
+<td><p>UnitTest.Bisector.Order</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-bisect-iterations</p></td>
+<td><p>UnitTest.Bisector.Iterations</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-even"><td><p>-bisect-seed</p></td>
+<td><p>UnitTest.Bisector.RandomSeed</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td><p>-bisect-reset</p></td>
+<td><p>UnitTest.Bisector.ResetState</p></td>
+<td><p>true</p></td>
+</tr>
 <tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Optimization Levels:</p></td>
+<tr class="row-odd"><td><p>Bisect Supervisor:</p></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-bisect-worker-iteration</p></td>
+<td><p>UnitTest.Bisector.WorkerIteration</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-bisect-working-dir</p></td>
+<td><p>UnitTest.Bisector.Supervisor.WorkingDirectory</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-even"><td><p>-bisect-max-restarts</p></td>
+<td><p>UnitTest.Bisector.Supervisor.MaxRestarts</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Optimization Levels:</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o0</p></td>
+<tr class="row-odd"><td><p>-o0</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o0</p></td>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.Inline</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o0</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
 <td><p>false</p></td>
 </tr>
 <tr class="row-even"><td><p>-o0</p></td>
@@ -956,78 +1004,22 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>false</p></td>
 </tr>
 <tr class="row-even"><td><p>-o0</p></td>
-<td><p>Optimizations.TwoPass</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
 <td><p>false</p></td>
 </tr>
 <tr class="row-odd"><td><p>-o0</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o0</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o0</p></td>
+<td><p>Optimizations.ScanWindow</p></td>
 <td><p>0</p></td>
 </tr>
 <tr class="row-even"><td><p>-o0</p></td>
-<td><p>Optimizations.ScanWindow</p></td>
-<td><p>0</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o0</p></td>
-<td><p>Optimizations.ReduceCodeSize</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-o1</p></td>
-<td><p>Optimizations.Basic</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-o1</p></td>
-<td><p>Optimizations.SSA</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o1</p></td>
-<td><p>Optimizations.ValueNumbering</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-even"><td><p>-o1</p></td>
-<td><p>Optimizations.SCCP</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o1</p></td>
-<td><p>Optimizations.Devirtualization</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-o1</p></td>
-<td><p>Optimizations.LongExpansion</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o1</p></td>
-<td><p>Optimizations.Platform</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-even"><td><p>-o1</p></td>
-<td><p>Optimizations.Inline</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o1</p></td>
-<td><p>Optimizations.LoopInvariantCodeMotion</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-even"><td><p>-o1</p></td>
-<td><p>Optimizations.BitTracker</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o1</p></td>
-<td><p>Optimizations.TwoPass</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-even"><td><p>-o1</p></td>
-<td><p>Optimizations.Inline.Maximum</p></td>
-<td><p>0</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o1</p></td>
-<td><p>Optimizations.ScanWindow</p></td>
-<td><p>30</p></td>
-</tr>
-<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
@@ -1035,59 +1027,67 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.SSA</p></td>
-<td><p>true</p></td>
+<td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
-<td><p>true</p></td>
+<td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-o2</p></td>
+<tr class="row-even"><td><p>-o1</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>30</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o2</p></td>
+<tr class="row-odd"><td><p>-o1</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
@@ -1095,59 +1095,67 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.SCCP</p></td>
-<td><p>true</p></td>
+<td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o3</p></td>
+<tr class="row-odd"><td><p>-o2</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>30</p></td>
 </tr>
-<tr class="row-even"><td><p>-o3</p></td>
+<tr class="row-even"><td><p>-o2</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
@@ -1155,59 +1163,67 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
-<td><p>true</p></td>
+<td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-o4</p></td>
+<tr class="row-even"><td><p>-o3</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>30</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o4</p></td>
+<tr class="row-odd"><td><p>-o3</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
@@ -1215,59 +1231,67 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.Platform</p></td>
-<td><p>true</p></td>
+<td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.BitTracker</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.TwoPass</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o5</p></td>
+<tr class="row-odd"><td><p>-o4</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>30</p></td>
 </tr>
-<tr class="row-even"><td><p>-o5</p></td>
+<tr class="row-even"><td><p>-o4</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
@@ -1275,36 +1299,108 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
+<tr class="row-even"><td><p>-o5</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o6</p></td>
+<tr class="row-odd"><td><p>-o5</p></td>
 <td><p>Optimizations.Inline</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o5</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o5</p></td>
+<td><p>Optimizations.LoopInvariantCodeMotion</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o5</p></td>
+<td><p>Optimizations.BitTracker</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o5</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o5</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o5</p></td>
+<td><p>Optimizations.Inline.Maximum</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>-o5</p></td>
+<td><p>Optimizations.ScanWindow</p></td>
+<td><p>30</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o5</p></td>
+<td><p>Optimizations.ReduceCodeSize</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-o6</p></td>
+<td><p>Optimizations.Basic</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o6</p></td>
+<td><p>Optimizations.SSA</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o6</p></td>
+<td><p>Optimizations.ValueNumbering</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o6</p></td>
+<td><p>Optimizations.SCCP</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o6</p></td>
+<td><p>Optimizations.Devirtualization</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o6</p></td>
+<td><p>Optimizations.LongExpansion</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o6</p></td>
+<td><p>Optimizations.Platform</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o6</p></td>
+<td><p>Optimizations.Inline</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o6</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
 <td><p>true</p></td>
 </tr>
 <tr class="row-even"><td><p>-o6</p></td>
@@ -1316,78 +1412,22 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>false</p></td>
 </tr>
 <tr class="row-even"><td><p>-o6</p></td>
-<td><p>Optimizations.TwoPass</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
 <td><p>false</p></td>
 </tr>
 <tr class="row-odd"><td><p>-o6</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o6</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-even"><td><p>-o6</p></td>
-<td><p>Optimizations.ScanWindow</p></td>
-<td><p>30</p></td>
-</tr>
 <tr class="row-odd"><td><p>-o6</p></td>
-<td><p>Optimizations.ReduceCodeSize</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-o7</p></td>
-<td><p>Optimizations.Basic</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-o7</p></td>
-<td><p>Optimizations.SSA</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o7</p></td>
-<td><p>Optimizations.ValueNumbering</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-o7</p></td>
-<td><p>Optimizations.SCCP</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o7</p></td>
-<td><p>Optimizations.Devirtualization</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-o7</p></td>
-<td><p>Optimizations.LongExpansion</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o7</p></td>
-<td><p>Optimizations.Platform</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-o7</p></td>
-<td><p>Optimizations.Inline</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o7</p></td>
-<td><p>Optimizations.LoopInvariantCodeMotion</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-o7</p></td>
-<td><p>Optimizations.BitTracker</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o7</p></td>
-<td><p>Optimizations.TwoPass</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-even"><td><p>-o7</p></td>
-<td><p>Optimizations.Inline.Maximum</p></td>
-<td><p>10</p></td>
-</tr>
-<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>30</p></td>
 </tr>
-<tr class="row-even"><td><p>-o7</p></td>
+<tr class="row-even"><td><p>-o6</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
@@ -1395,59 +1435,67 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.Inline</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.LoopInvariantCodeMotion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.BitTracker</p></td>
-<td><p>true</p></td>
+<td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.TwoPass</p></td>
-<td><p>true</p></td>
+<td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>10</p></td>
 </tr>
-<tr class="row-even"><td><p>-o8</p></td>
+<tr class="row-even"><td><p>-o7</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>30</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o8</p></td>
+<tr class="row-odd"><td><p>-o7</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
@@ -1455,36 +1503,108 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o8</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o8</p></td>
 <td><p>Optimizations.Inline</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o8</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o8</p></td>
+<td><p>Optimizations.LoopInvariantCodeMotion</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o8</p></td>
+<td><p>Optimizations.BitTracker</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o8</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o8</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o8</p></td>
+<td><p>Optimizations.Inline.Maximum</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o8</p></td>
+<td><p>Optimizations.ScanWindow</p></td>
+<td><p>30</p></td>
+</tr>
+<tr class="row-even"><td><p>-o8</p></td>
+<td><p>Optimizations.ReduceCodeSize</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-o9</p></td>
+<td><p>Optimizations.Basic</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o9</p></td>
+<td><p>Optimizations.SSA</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o9</p></td>
+<td><p>Optimizations.ValueNumbering</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o9</p></td>
+<td><p>Optimizations.SCCP</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o9</p></td>
+<td><p>Optimizations.Devirtualization</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o9</p></td>
+<td><p>Optimizations.LongExpansion</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o9</p></td>
+<td><p>Optimizations.Platform</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o9</p></td>
+<td><p>Optimizations.Inline</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-o9</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
 <td><p>true</p></td>
 </tr>
 <tr class="row-odd"><td><p>-o9</p></td>
@@ -1496,55 +1616,63 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>true</p></td>
 </tr>
 <tr class="row-odd"><td><p>-o9</p></td>
-<td><p>Optimizations.TwoPass</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
 <td><p>true</p></td>
 </tr>
 <tr class="row-even"><td><p>-o9</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>15</p></td>
 </tr>
-<tr class="row-odd"><td><p>-o9</p></td>
+<tr class="row-even"><td><p>-o9</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>50</p></td>
 </tr>
-<tr class="row-even"><td><p>-o9</p></td>
+<tr class="row-odd"><td><p>-o9</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
+<tr class="row-odd"><td><p>-oNone</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oNone</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.Inline</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oNone</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
 <td><p>false</p></td>
 </tr>
 <tr class="row-even"><td><p>-oNone</p></td>
@@ -1556,78 +1684,22 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>false</p></td>
 </tr>
 <tr class="row-even"><td><p>-oNone</p></td>
-<td><p>Optimizations.TwoPass</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
 <td><p>false</p></td>
 </tr>
 <tr class="row-odd"><td><p>-oNone</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-oNone</p></td>
-<td><p>Optimizations.ScanWindow</p></td>
-<td><p>1</p></td>
-</tr>
 <tr class="row-odd"><td><p>-oNone</p></td>
-<td><p>Optimizations.ReduceCodeSize</p></td>
-<td><p>false</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
-<td><p>Optimizations.Basic</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-oMax</p></td>
-<td><p>Optimizations.SSA</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
-<td><p>Optimizations.ValueNumbering</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-oMax</p></td>
-<td><p>Optimizations.SCCP</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
-<td><p>Optimizations.Devirtualization</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-oMax</p></td>
-<td><p>Optimizations.LongExpansion</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
-<td><p>Optimizations.Platform</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-oMax</p></td>
-<td><p>Optimizations.Inline</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
-<td><p>Optimizations.LoopInvariantCodeMotion</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-oMax</p></td>
-<td><p>Optimizations.BitTracker</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
-<td><p>Optimizations.TwoPass</p></td>
-<td><p>true</p></td>
-</tr>
-<tr class="row-even"><td><p>-oMax</p></td>
-<td><p>Optimizations.Inline.Maximum</p></td>
-<td><p>15</p></td>
-</tr>
-<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
-<td><p>50</p></td>
+<td><p>0</p></td>
 </tr>
-<tr class="row-even"><td><p>-oMax</p></td>
+<tr class="row-even"><td><p>-oNone</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>
@@ -1635,36 +1707,108 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oMax</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oMax</p></td>
 <td><p>Optimizations.Inline</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-oMax</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oMax</p></td>
+<td><p>Optimizations.LoopInvariantCodeMotion</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-oMax</p></td>
+<td><p>Optimizations.BitTracker</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oMax</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-oMax</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oMax</p></td>
+<td><p>Optimizations.Inline.Maximum</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-even"><td><p>-oMax</p></td>
+<td><p>Optimizations.ScanWindow</p></td>
+<td><p>50</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oMax</p></td>
+<td><p>Optimizations.ReduceCodeSize</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-oSize</p></td>
+<td><p>Optimizations.Basic</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-oSize</p></td>
+<td><p>Optimizations.SSA</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oSize</p></td>
+<td><p>Optimizations.ValueNumbering</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-oSize</p></td>
+<td><p>Optimizations.SCCP</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oSize</p></td>
+<td><p>Optimizations.Devirtualization</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-oSize</p></td>
+<td><p>Optimizations.LongExpansion</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oSize</p></td>
+<td><p>Optimizations.Platform</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-oSize</p></td>
+<td><p>Optimizations.Inline</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oSize</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
 <td><p>true</p></td>
 </tr>
 <tr class="row-even"><td><p>-oSize</p></td>
@@ -1676,55 +1820,63 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>true</p></td>
 </tr>
 <tr class="row-even"><td><p>-oSize</p></td>
-<td><p>Optimizations.TwoPass</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
 <td><p>true</p></td>
 </tr>
 <tr class="row-odd"><td><p>-oSize</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>true</p></td>
+</tr>
+<tr class="row-even"><td><p>-oSize</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>3</p></td>
 </tr>
-<tr class="row-even"><td><p>-oSize</p></td>
+<tr class="row-odd"><td><p>-oSize</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>50</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oSize</p></td>
+<tr class="row-even"><td><p>-oSize</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.Basic</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.SSA</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.ValueNumbering</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.SCCP</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.Devirtualization</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.LongExpansion</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.Platform</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.Inline</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-even"><td><p>-oFast</p></td>
+<td><p>Optimizations.Inline.Explicit</p></td>
 <td><p>false</p></td>
 </tr>
 <tr class="row-odd"><td><p>-oFast</p></td>
@@ -1736,18 +1888,22 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td><p>false</p></td>
 </tr>
 <tr class="row-odd"><td><p>-oFast</p></td>
-<td><p>Optimizations.TwoPass</p></td>
+<td><p>Optimizations.LoopRangeTracker</p></td>
 <td><p>false</p></td>
 </tr>
 <tr class="row-even"><td><p>-oFast</p></td>
+<td><p>Optimizations.TwoPass</p></td>
+<td><p>false</p></td>
+</tr>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>0</p></td>
 </tr>
-<tr class="row-odd"><td><p>-oFast</p></td>
+<tr class="row-even"><td><p>-oFast</p></td>
 <td><p>Optimizations.ScanWindow</p></td>
 <td><p>5</p></td>
 </tr>
-<tr class="row-even"><td><p>-oFast</p></td>
+<tr class="row-odd"><td><p>-oFast</p></td>
 <td><p>Optimizations.ReduceCodeSize</p></td>
 <td><p>false</p></td>
 </tr>

@@ -65,7 +65,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit tests</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unit tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bisector">Bisector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supervisor">Supervisor</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="create-core-library.html">Create core library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source-code-generator.html">Source code generator</a></li>
 </ul>
@@ -141,6 +145,54 @@ Unit Test Results:
 All unit tests passed successfully!
 </pre></div>
 </div>
+<section id="bisector">
+<h2>Bisector<a class="headerlink" href="#bisector" title="Link to this heading"></a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">Mosa.Utility.UnitTestBisector</span></code> to run bisector plans that can resume after interruption.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>bin/Mosa.Utility.UnitTestBisector.dll<span class="w"> </span>-bisect<span class="w"> </span>-bisect-state<span class="w"> </span>artifact/bisect-state.json
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-bisect</span></code> is an alias for <code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">disable-one</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">-bisect-stage</span></code> option specifies which compiler stage to bisect. The most common stage — and the default — is <code class="docutils literal notranslate"><span class="pre">OptimizationStage</span></code>. You can override it with any <code class="docutils literal notranslate"><span class="pre">BaseTransformStage</span></code> subclass name (short or fully qualified).</p>
+<p>Supported plans:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">disable-one</span></code>: disable one transform at a time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">enable-one</span></code>: enable one transform at a time</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">random-combo</span></code>: randomly enable/disable all transforms each iteration (resumable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">failure-inducing</span></code>: bisect to identify transforms that induce failing runs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">masking</span></code>: bisect to identify transforms whose removal induces failures</p></li>
+</ul>
+<p>Observation scoping with <code class="docutils literal notranslate"><span class="pre">-filter</span></code>:</p>
+<ul class="simple">
+<li><p>when <code class="docutils literal notranslate"><span class="pre">-filter</span></code> is provided, observed transforms are limited to methods selected by that filter</p></li>
+<li><p>without <code class="docutils literal notranslate"><span class="pre">-filter</span></code>, observed transforms come from all compiled methods</p></li>
+</ul>
+<p>With <code class="docutils literal notranslate"><span class="pre">-filter</span></code>, continued passes can still surface additional transforms from the same filtered methods as optimization state changes across iterations.</p>
+<p>Quick usage examples for the new plans:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Failure-inducing analysis (uses default OptimizationStage)</span>
+dotnet<span class="w"> </span>bin/Mosa.Utility.UnitTestBisector.exe<span class="w"> </span>-bisect-plan<span class="w"> </span>failure-inducing<span class="w"> </span>-filter<span class="w"> </span>&lt;UnitTestFilter&gt;
+
+<span class="c1"># Failure-inducing analysis with an explicit stage</span>
+dotnet<span class="w"> </span>bin/Mosa.Utility.UnitTestBisector.exe<span class="w"> </span>-bisect-plan<span class="w"> </span>failure-inducing<span class="w"> </span>-bisect-stage<span class="w"> </span>OptimizationStage<span class="w"> </span>-filter<span class="w"> </span>&lt;UnitTestFilter&gt;
+
+<span class="c1"># Masking analysis</span>
+dotnet<span class="w"> </span>bin/Mosa.Utility.UnitTestBisector.exe<span class="w"> </span>-bisect-plan<span class="w"> </span>masking<span class="w"> </span>-bisect-stage<span class="w"> </span>OptimizationStage<span class="w"> </span>-filter<span class="w"> </span>&lt;UnitTestFilter&gt;
+</pre></div>
+</div>
+<p>Optional ordering for deterministic plans:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-order</span> <span class="pre">original</span></code>: discovery order (default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-order</span> <span class="pre">count</span></code>: prioritize lower-observed transforms first</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-order</span> <span class="pre">random</span></code>: randomized order (seeded via <code class="docutils literal notranslate"><span class="pre">-bisect-seed</span></code>)</p></li>
+</ul>
+<p>For <code class="docutils literal notranslate"><span class="pre">random-combo</span></code>, use <code class="docutils literal notranslate"><span class="pre">-bisect-iterations</span> <span class="pre">&lt;N&gt;</span></code> (default 20) to control how many iterations are run per invocation.</p>
+</section>
+<section id="supervisor">
+<h2>Supervisor<a class="headerlink" href="#supervisor" title="Link to this heading"></a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">Mosa.Utility.UnitTestBisector.Supervisor</span></code> to run one bisector worker iteration per child process and automatically restart until completion.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet<span class="w"> </span>bin/Mosa.Utility.UnitTestBisector.Supervisor.exe<span class="w"> </span>-bisect<span class="w"> </span>-bisect-state<span class="w"> </span>artifact/bisect-state.json<span class="w"> </span>-bisect-worker-iteration
+</pre></div>
+</div>
+</section>
 </section>
 
 

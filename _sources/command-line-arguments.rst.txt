@@ -74,25 +74,25 @@ Below are the command line arguments available:
     -output-nasm,CompilerDebug.NasmFile,%DEFAULT%
     -output-asm,CompilerDebug.AsmFile,%DEFAULT%
     -output-map,CompilerDebug.MapFile,%DEFAULT%
-    -output-counters,CompilerDebug.CountersFile,%DEFAULT%
-    -output-time,CompilerDebug.CompilerTimeFile,%DEFAULT%
+    -output-counters,CompilerDebug.CounterFile,%DEFAULT%
+    -output-time,CompilerDebug.CompileTimeFile,%DEFAULT%
     -output-debug,CompilerDebug.DebugFile,%DEFAULT%
     -output-inlined,CompilerDebug.InlinedFile,%DEFAULT%
     -output-hash,CompilerDebug.PreLinkHashFile,%DEFAULT%
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
     -asm,CompilerDebug.AsmFile,%DEFAULT%
     -map,CompilerDebug.MapFile,%DEFAULT%
-    -counters,CompilerDebug.CountersFile,{value}
-    -counters-filter,CompilerDebug.CountersFilter,{value}
+    -counters,CompilerDebug.CounterFile,{value}
+    -counters-filter,CompilerDebug.CounterFilter,{value}
 
     Compiler - Debug:
     -inline-exclude,Optimizations.Inline.Exclude,{list}
-    -test-filter,CompilerDebug.TestFilter,{value}
 
 	Compiler - Diagnostic:
     -check,Compiler.CheckMode,true
 	-diagnostic,Compiler.Diagnostic,true
 	-diag,Compiler.Diagnostic,true
+	-stats,CompilerDebug.Statistics,true
     -interrupt-method,X86.InterruptMethodName,{value}
 
     Linker:
@@ -173,11 +173,10 @@ Below are the command line arguments available:
     -gdb-port,GDB.Port,{value}
     -gdb-host,GDB.Host,{value}
 
-    -launch-debugger,Launcher.GDB,true
-    -launch-gdb,Launcher.Debugger,true
+    -launch-gdb,Launcher.GDB,true
+    -launch-debugger,Launcher.Debugger,true
 
     -output-serial-connection,Launcher.Serial,{value}
-    -output-serial-file,Launcher.Serial.File,{value}
     -debug,Launcher.Serial,true
     -debug,OS.BootOptions,bootoptions=serialdebug
 
@@ -199,12 +198,24 @@ Below are the command line arguments available:
 	-maxerrors,UnitTest.MaxErrors,{value}
 
 	Bisect:
+	-bisect,UnitTest.Bisector.Plan,disable-one
 	-bisect-stage,UnitTest.Bisector.Stage,{value}
 	-bisect-masking,UnitTest.Bisector.Masking,true
 	-bisect-masking-off,UnitTest.Bisector.Masking,false
 	-bisect-pairwise,UnitTest.Bisector.Pairwise,true
 	-bisect-pairwise-off,UnitTest.Bisector.Pairwise,false
 	-bisect-disabled-file,UnitTest.Bisector.DisabledTransformsFile,{value}
+	-bisect-state,UnitTest.Bisector.StateFile,{value}
+	-bisect-plan,UnitTest.Bisector.Plan,{value} (disable-one|enable-one|random-combo|failure-inducing|masking)
+	-bisect-order,UnitTest.Bisector.Order,{value}
+	-bisect-iterations,UnitTest.Bisector.Iterations,{value}
+	-bisect-seed,UnitTest.Bisector.RandomSeed,{value}
+	-bisect-reset,UnitTest.Bisector.ResetState,true
+
+	Bisect Supervisor:
+	-bisect-worker-iteration,UnitTest.Bisector.WorkerIteration,true
+	-bisect-working-dir,UnitTest.Bisector.Supervisor.WorkingDirectory,{value}
+	-bisect-max-restarts,UnitTest.Bisector.Supervisor.MaxRestarts,{value}
 
     Optimization Levels:
     -o0,Optimizations.Basic,false
@@ -215,8 +226,10 @@ Below are the command line arguments available:
     -o0,Optimizations.LongExpansion,false
     -o0,Optimizations.Platform,false
     -o0,Optimizations.Inline,false
+    -o0,Optimizations.Inline.Explicit,false
     -o0,Optimizations.LoopInvariantCodeMotion,false
     -o0,Optimizations.BitTracker,false
+    -o0,Optimizations.LoopRangeTracker,false
     -o0,Optimizations.TwoPass,false
     -o0,Optimizations.Inline.Maximum,0
     -o0,Optimizations.ScanWindow,0
@@ -230,8 +243,10 @@ Below are the command line arguments available:
     -o1,Optimizations.LongExpansion,false
     -o1,Optimizations.Platform,false
     -o1,Optimizations.Inline,false
+    -o1,Optimizations.Inline.Explicit,false
     -o1,Optimizations.LoopInvariantCodeMotion,false
     -o1,Optimizations.BitTracker,false
+    -o1,Optimizations.LoopRangeTracker,false
     -o1,Optimizations.TwoPass,false
     -o1,Optimizations.Inline.Maximum,0
     -o1,Optimizations.ScanWindow,30
@@ -245,8 +260,10 @@ Below are the command line arguments available:
     -o2,Optimizations.LongExpansion,false
     -o2,Optimizations.Platform,false
     -o2,Optimizations.Inline,false
+    -o2,Optimizations.Inline.Explicit,false
     -o2,Optimizations.LoopInvariantCodeMotion,false
     -o2,Optimizations.BitTracker,false
+    -o2,Optimizations.LoopRangeTracker,false
     -o2,Optimizations.TwoPass,false
     -o2,Optimizations.Inline.Maximum,0
     -o2,Optimizations.ScanWindow,30
@@ -260,8 +277,10 @@ Below are the command line arguments available:
     -o3,Optimizations.LongExpansion,false
     -o3,Optimizations.Platform,false
     -o3,Optimizations.Inline,false
+    -o3,Optimizations.Inline.Explicit,false
     -o3,Optimizations.LoopInvariantCodeMotion,false
     -o3,Optimizations.BitTracker,false
+    -o3,Optimizations.LoopRangeTracker,false
     -o3,Optimizations.TwoPass,false
     -o3,Optimizations.Inline.Maximum,0
     -o3,Optimizations.ScanWindow,30
@@ -275,8 +294,10 @@ Below are the command line arguments available:
     -o4,Optimizations.LongExpansion,true
     -o4,Optimizations.Platform,false
     -o4,Optimizations.Inline,false
+    -o4,Optimizations.Inline.Explicit,false
     -o4,Optimizations.LoopInvariantCodeMotion,false
     -o4,Optimizations.BitTracker,false
+    -o4,Optimizations.LoopRangeTracker,false
     -o4,Optimizations.TwoPass,false
     -o4,Optimizations.Inline.Maximum,0
     -o4,Optimizations.ScanWindow,30
@@ -290,8 +311,10 @@ Below are the command line arguments available:
     -o5,Optimizations.LongExpansion,true
     -o5,Optimizations.Platform,true
     -o5,Optimizations.Inline,false
+    -o5,Optimizations.Inline.Explicit,false
     -o5,Optimizations.LoopInvariantCodeMotion,false
     -o5,Optimizations.BitTracker,false
+    -o5,Optimizations.LoopRangeTracker,false
     -o5,Optimizations.TwoPass,false
     -o5,Optimizations.Inline.Maximum,0
     -o5,Optimizations.ScanWindow,30
@@ -305,8 +328,10 @@ Below are the command line arguments available:
     -o6,Optimizations.LongExpansion,true
     -o6,Optimizations.Platform,true
     -o6,Optimizations.Inline,true
+    -o6,Optimizations.Inline.Explicit,true
     -o6,Optimizations.LoopInvariantCodeMotion,false
     -o6,Optimizations.BitTracker,false
+    -o6,Optimizations.LoopRangeTracker,false
     -o6,Optimizations.TwoPass,false
     -o6,Optimizations.Inline.Maximum,5
     -o6,Optimizations.ScanWindow,30
@@ -320,8 +345,10 @@ Below are the command line arguments available:
     -o7,Optimizations.LongExpansion,true
     -o7,Optimizations.Platform,true
     -o7,Optimizations.Inline,true
+    -o7,Optimizations.Inline.Explicit,true
     -o7,Optimizations.LoopInvariantCodeMotion,true
     -o7,Optimizations.BitTracker,false
+    -o7,Optimizations.LoopRangeTracker,false
     -o7,Optimizations.TwoPass,false
     -o7,Optimizations.Inline.Maximum,10
     -o7,Optimizations.ScanWindow,30
@@ -335,8 +362,10 @@ Below are the command line arguments available:
     -o8,Optimizations.LongExpansion,true
     -o8,Optimizations.Platform,true
     -o8,Optimizations.Inline,true
+    -o8,Optimizations.Inline.Explicit,true
     -o8,Optimizations.LoopInvariantCodeMotion,true
     -o8,Optimizations.BitTracker,true
+    -o8,Optimizations.LoopRangeTracker,true
     -o8,Optimizations.TwoPass,true
     -o8,Optimizations.Inline.Maximum,10
     -o8,Optimizations.ScanWindow,30
@@ -350,8 +379,10 @@ Below are the command line arguments available:
     -o9,Optimizations.LongExpansion,true
     -o9,Optimizations.Platform,true
     -o9,Optimizations.Inline,true
+    -o9,Optimizations.Inline.Explicit,true
     -o9,Optimizations.LoopInvariantCodeMotion,true
     -o9,Optimizations.BitTracker,true
+    -o9,Optimizations.LoopRangeTracker,true
     -o9,Optimizations.TwoPass,true
     -o9,Optimizations.Inline.Maximum,15
     -o9,Optimizations.ScanWindow,50
@@ -365,11 +396,13 @@ Below are the command line arguments available:
     -oNone,Optimizations.LongExpansion,false
     -oNone,Optimizations.Platform,false
     -oNone,Optimizations.Inline,false
+    -oNone,Optimizations.Inline.Explicit,false
     -oNone,Optimizations.LoopInvariantCodeMotion,false
     -oNone,Optimizations.BitTracker,false
+    -oNone,Optimizations.LoopRangeTracker,false
     -oNone,Optimizations.TwoPass,false
     -oNone,Optimizations.Inline.Maximum,0
-    -oNone,Optimizations.ScanWindow,1
+    -oNone,Optimizations.ScanWindow,0
 	-oNone,Optimizations.ReduceCodeSize,false
 
     -oMax,Optimizations.Basic,true
@@ -380,8 +413,10 @@ Below are the command line arguments available:
     -oMax,Optimizations.LongExpansion,true
     -oMax,Optimizations.Platform,true
     -oMax,Optimizations.Inline,true
+    -oMax,Optimizations.Inline.Explicit,true
     -oMax,Optimizations.LoopInvariantCodeMotion,true
     -oMax,Optimizations.BitTracker,true
+    -oMax,Optimizations.LoopRangeTracker,true
     -oMax,Optimizations.TwoPass,true
     -oMax,Optimizations.Inline.Maximum,15
     -oMax,Optimizations.ScanWindow,50
@@ -395,8 +430,10 @@ Below are the command line arguments available:
     -oSize,Optimizations.LongExpansion,true
     -oSize,Optimizations.Platform,true
     -oSize,Optimizations.Inline,true
+    -oSize,Optimizations.Inline.Explicit,true
     -oSize,Optimizations.LoopInvariantCodeMotion,true
     -oSize,Optimizations.BitTracker,true
+    -oSize,Optimizations.LoopRangeTracker,true
     -oSize,Optimizations.TwoPass,true
     -oSize,Optimizations.Inline.Maximum,3
     -oSize,Optimizations.ScanWindow,50
@@ -410,8 +447,10 @@ Below are the command line arguments available:
     -oFast,Optimizations.LongExpansion,false
     -oFast,Optimizations.Platform,false
     -oFast,Optimizations.Inline,false
+    -oFast,Optimizations.Inline.Explicit,false
     -oFast,Optimizations.LoopInvariantCodeMotion,false
     -oFast,Optimizations.BitTracker,false
+    -oFast,Optimizations.LoopRangeTracker,false
     -oFast,Optimizations.TwoPass,false
     -oFast,Optimizations.Inline.Maximum,0
     -oFast,Optimizations.ScanWindow,5

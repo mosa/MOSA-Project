@@ -218,6 +218,9 @@
 <tr class="row-odd"><td><p>AppLocation.VirtualBox</p></td>
 <td><p>Location of the VirtualBox application</p></td>
 </tr>
+<tr class="row-even"><td><p>AppLocation.UnitTestBisector</p></td>
+<td><p>Location of the unit test bisector application used by the bisector supervisor</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -770,6 +773,27 @@
 </tr>
 <tr class="row-even"><td><p>UnitTest.Bisector.DisabledTransformsFile</p></td>
 <td><p>Path to a text file listing transform names to force-disable (one per line) during bisector runs</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnitTest.Bisector.StateFile</p></td>
+<td><p>Path to the bisector state file used to resume interrupted runs</p></td>
+</tr>
+<tr class="row-even"><td><p>UnitTest.Bisector.Plan</p></td>
+<td><p>Bisector plan: disable-one, enable-one, random-combo, failure-inducing, or masking</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnitTest.Bisector.Order</p></td>
+<td><p>Iteration order for bisector plans: original, count, or random</p></td>
+</tr>
+<tr class="row-even"><td><p>UnitTest.Bisector.Iterations</p></td>
+<td><p>Number of random-combo iterations to execute per run</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnitTest.Bisector.RandomSeed</p></td>
+<td><p>Optional random seed for deterministic random ordering/combinations (0 = auto)</p></td>
+</tr>
+<tr class="row-even"><td><p>UnitTest.Bisector.ResetState</p></td>
+<td><p>If true, deletes existing state before starting</p></td>
+</tr>
+<tr class="row-odd"><td><p>UnitTest.Bisector.WorkerIteration</p></td>
+<td><p>If true, executes only one bisector iteration per process run</p></td>
 </tr>
 </tbody>
 </table>
