@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using System.Xml.Linq;
 using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages;

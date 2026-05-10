@@ -23,7 +23,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 	protected bool EnableBlockOptimizations;
 	protected bool AreCPURegistersAllocated;
 
-	protected virtual bool EnableTransformHooks => false;
+	protected virtual bool AllowTransformHooks => false;
 
 	protected int MaxPasses;
 
@@ -51,12 +51,14 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 			if (list == null)
 				continue;
 
-			foreach (var transform in list)
-				Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, transform.Name);
+			if (AllowTransformHooks)
+				foreach (var transform in list)
+					Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, transform.Name);
 		}
 
-		foreach (var transform in blockTransforms)
-			Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, transform.Name);
+		if (AllowTransformHooks)
+			foreach (var transform in blockTransforms)
+				Compiler.CompilerHooks.RegisterTransform?.Invoke(Name, transform.Name);
 	}
 
 	protected override void Finish()
@@ -250,7 +252,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 		{
 			var transform = instructionTransforms[i];
 
-			if (EnableTransformHooks)
+			if (AllowTransformHooks)
 			{
 				if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
 					continue;
@@ -284,7 +286,7 @@ public abstract class BaseTransformStage : BaseMethodCompilerStage
 
 		foreach (var transform in blockTransforms)
 		{
-			if (EnableTransformHooks)
+			if (AllowTransformHooks)
 			{
 				if (Compiler.CompilerHooks.IsTransformDisabled?.Invoke(Name, transform.Name) == true)
 					continue;
