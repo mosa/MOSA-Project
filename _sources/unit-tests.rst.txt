@@ -43,7 +43,7 @@ Supported plans:
 
 - ``-bisect-plan disable-one``: disable one transform at a time
 - ``-bisect-plan enable-one``: enable one transform at a time
-- ``-bisect-plan random-combo``: randomly enable/disable all transforms each iteration (resumable)
+- ``-bisect-plan random``: randomly enable/disable all transforms each iteration (resumable)
 - ``-bisect-plan failure-inducing``: bisect to identify transforms that induce failing runs
 - ``-bisect-plan masking``: bisect to identify transforms whose removal induces failures
 
@@ -73,7 +73,7 @@ Optional ordering for deterministic plans:
 - ``-bisect-order count``: prioritize lower-observed transforms first
 - ``-bisect-order random``: randomized order (seeded via ``-bisect-seed``)
 
-For ``random-combo``, use ``-bisect-iterations <N>`` (default 20) to control how many iterations are run per invocation.
+For ``random``, use ``-bisect-iterations <N>`` (default 20) to control how many iterations are run per invocation.
 
 Supervisor
 ----------

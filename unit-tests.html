@@ -157,7 +157,7 @@ All unit tests passed successfully!
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">disable-one</span></code>: disable one transform at a time</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">enable-one</span></code>: enable one transform at a time</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">random-combo</span></code>: randomly enable/disable all transforms each iteration (resumable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">random</span></code>: randomly enable/disable all transforms each iteration (resumable)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">failure-inducing</span></code>: bisect to identify transforms that induce failing runs</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-bisect-plan</span> <span class="pre">masking</span></code>: bisect to identify transforms whose removal induces failures</p></li>
 </ul>
@@ -184,7 +184,7 @@ dotnet<span class="w"> </span>bin/Mosa.Utility.UnitTestBisector.exe<span class="
 <li><p><code class="docutils literal notranslate"><span class="pre">-bisect-order</span> <span class="pre">count</span></code>: prioritize lower-observed transforms first</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-bisect-order</span> <span class="pre">random</span></code>: randomized order (seeded via <code class="docutils literal notranslate"><span class="pre">-bisect-seed</span></code>)</p></li>
 </ul>
-<p>For <code class="docutils literal notranslate"><span class="pre">random-combo</span></code>, use <code class="docutils literal notranslate"><span class="pre">-bisect-iterations</span> <span class="pre">&lt;N&gt;</span></code> (default 20) to control how many iterations are run per invocation.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">random</span></code>, use <code class="docutils literal notranslate"><span class="pre">-bisect-iterations</span> <span class="pre">&lt;N&gt;</span></code> (default 20) to control how many iterations are run per invocation.</p>
 </section>
 <section id="supervisor">
 <h2>Supervisor<a class="headerlink" href="#supervisor" title="Link to this heading"></a></h2>

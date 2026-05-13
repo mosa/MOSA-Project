@@ -183,37 +183,45 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-threading</p></td>
+<tr class="row-odd"><td><p>-path</p></td>
+<td><p>SearchPaths</p></td>
+<td><p>{list}</p></td>
+</tr>
+<tr class="row-even"><td><p>-postfix</p></td>
+<td><p>FilePostfix</p></td>
+<td><p>{value}</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-threading</p></td>
 <td><p>Compiler.Multithreading</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-even"><td><p>-threading-off</p></td>
+<tr class="row-odd"><td><p>-threading-off</p></td>
 <td><p>Compiler.Multithreading</p></td>
 <td><p>false</p></td>
 </tr>
-<tr class="row-odd"><td><p>-threads</p></td>
+<tr class="row-even"><td><p>-threads</p></td>
 <td><p>Compiler.Multithreading.MaxThreads</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 <td></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>-base</p></td>
+<tr class="row-even"><td><p>-base</p></td>
 <td><p>Compiler.BaseAddress</p></td>
 <td><p>{value}</p></td>
 </tr>
-<tr class="row-even"><td><p>-scanner</p></td>
+<tr class="row-odd"><td><p>-scanner</p></td>
 <td><p>Compiler.MethodScanner</p></td>
 <td><p>true</p></td>
 </tr>
-<tr class="row-odd"><td><p>-no-code</p></td>
+<tr class="row-even"><td><p>-no-code</p></td>
 <td><p>Compiler.Binary</p></td>
 <td><p>false</p></td>
-</tr>
-<tr class="row-even"><td><p>-path</p></td>
-<td><p>SearchPaths</p></td>
-<td><p>{list}</p></td>
 </tr>
 <tr class="row-odd"><td></td>
 <td></td>
@@ -913,7 +921,7 @@ For example, to set the <code class="docutils literal notranslate"><span class="
 </tr>
 <tr class="row-odd"><td><p>-bisect-plan</p></td>
 <td><p>UnitTest.Bisector.Plan</p></td>
-<td><p>{value} (disable-one|enable-one|random-combo|failure-inducing|masking)</p></td>
+<td><p>{value} (disable-one|enable-one|random|failure-inducing|masking)</p></td>
 </tr>
 <tr class="row-even"><td><p>-bisect-order</p></td>
 <td><p>UnitTest.Bisector.Order</p></td>

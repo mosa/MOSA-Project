@@ -24,6 +24,9 @@ Below are the command line arguments available:
     {none},Compiler.SourceFiles,{value}
     -o,Compiler.OutputFile,{value}
 
+    -path,SearchPaths,{list}
+    -postfix,FilePostfix,{value}
+
     -threading,Compiler.Multithreading,true
     -threading-off,Compiler.Multithreading,false
     -threads,Compiler.Multithreading.MaxThreads,{value}
@@ -31,7 +34,6 @@ Below are the command line arguments available:
     -base,Compiler.BaseAddress,{value}
     -scanner,Compiler.MethodScanner,true
     -no-code,Compiler.Binary,false
-    -path,SearchPaths,{list}
 
     -inline,Optimizations.Inline,true
     -inline-off,Optimizations.Inline,false
@@ -206,7 +208,7 @@ Below are the command line arguments available:
 	-bisect-pairwise-off,UnitTest.Bisector.Pairwise,false
 	-bisect-disabled-file,UnitTest.Bisector.DisabledTransformsFile,{value}
 	-bisect-state,UnitTest.Bisector.StateFile,{value}
-	-bisect-plan,UnitTest.Bisector.Plan,{value} (disable-one|enable-one|random-combo|failure-inducing|masking)
+	-bisect-plan,UnitTest.Bisector.Plan,{value} (disable-one|enable-one|random|failure-inducing|masking)
 	-bisect-order,UnitTest.Bisector.Order,{value}
 	-bisect-iterations,UnitTest.Bisector.Iterations,{value}
 	-bisect-seed,UnitTest.Bisector.RandomSeed,{value}

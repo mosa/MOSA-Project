@@ -255,6 +255,7 @@ Common Settings
    :widths: 50, 200
 
     DefaultFolder,Default folder for output files
+    FilePostfix,Postfix string appended to output file names
     SearchPaths,Folder to search for files
     TemporaryFolder,Specifies a temporary folder
 
@@ -275,9 +276,9 @@ Unit Test Settings
 	UnitTest.Bisector.Pairwise,"If true, enables pairwise bisector analysis mode"
 	UnitTest.Bisector.DisabledTransformsFile,Path to a text file listing transform names to force-disable (one per line) during bisector runs
 	UnitTest.Bisector.StateFile,Path to the bisector state file used to resume interrupted runs
-	UnitTest.Bisector.Plan,"Bisector plan: disable-one, enable-one, random-combo, failure-inducing, or masking"
+	UnitTest.Bisector.Plan,"Bisector plan: disable-one, enable-one, random, failure-inducing, or masking"
 	UnitTest.Bisector.Order,"Iteration order for bisector plans: original, count, or random"
-	UnitTest.Bisector.Iterations,Number of random-combo iterations to execute per run
+	UnitTest.Bisector.Iterations,Number of random iterations to execute per run
 	UnitTest.Bisector.RandomSeed,Optional random seed for deterministic random ordering/combinations (0 = auto)
 	UnitTest.Bisector.ResetState,"If true, deletes existing state before starting"
 	UnitTest.Bisector.WorkerIteration,"If true, executes only one bisector iteration per process run"
