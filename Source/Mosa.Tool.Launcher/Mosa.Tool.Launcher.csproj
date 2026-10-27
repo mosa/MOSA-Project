@@ -14,11 +14,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia.Desktop" Version="12.0.3" />
+		<PackageReference Include="Avalonia.Desktop" Version="12.1.4" />
+		<PackageReference Include="Avalonia.Wayland" Version="12.1.4" />
 		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.15" />
-		<PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.3" />
-		<PackageReference Include="Avalonia.Themes.Simple" Version="12.0.3" />
-		<PackageReference Include="Tmds.DBus.Protocol" Version="0.93.0" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.4" />
+		<PackageReference Include="Avalonia.Themes.Simple" Version="12.1.4" />
+		<PackageReference Include="Tmds.DBus.Protocol" Version="0.94.1" />
 	</ItemGroup>
 
 </Project>
